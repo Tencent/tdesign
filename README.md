@@ -49,21 +49,21 @@ TDesign 文档网站计划在 12 月 23 日开源宣发前上线。
 
 TDesign 是一个 multi-repo ，因此 TDesign 有如下仓库：
 
-| 仓库                     | 描述                             | 状态   |
-| ------------------------ | -------------------------------- | ------ |
-| tdesign-vue              | 桌面端 Vue2 实现                 | ✅     |
-| tdesign-vue-next         | 桌面端 Vue3 实现                 | Alpha  |
-| tdesign-react            | 桌面端 React 实现                | Alpha  |
-| tdesign-angular          | 桌面端 Angular 实现              | Alpha  |
-| tdesign-mobile-vue       | 移动端 Vue3 实现                 | Alpha  |
-| tdesign-mobile-react     | 移动端 React 实现                | 待上线 |
-| tdesign-flutter          | 移动端 Flutter 实现              | 待上线 |
-| tdesign-miniprogram      | 微信端小程序实现                 | Alpha  |
-| tdesign-icons            | TDesign 公共图标                 | ✅     |
-| tdesign-common           | TDesign 公共样式                 | ✅     |
-| tdesign-starter-cli      | TDesign 解决方案的脚手架         | ✅     |
-| tdesign-vue-starter      | 基于 tdesign-vue 的解决方案      | ✅     |
-| tdesign-vue-next-starter | 基于 tdesign-vue-next 的解决方案 | Alpha  |
+| 仓库                          | 描述                            | 状态   |
+| ---------------------------- | ------------------------------ | ------ |
+| [tdesign-vue]()              | 桌面端 Vue2 实现                 | ✅     |
+| [tdesign-vue-next]()         | 桌面端 Vue3 实现                 | Alpha  |
+| [tdesign-react]()            | 桌面端 React 实现                | Alpha  |
+| [tdesign-mobile-vue]()       | 移动端 Vue3 实现                 | Alpha  |
+| [tdesign-miniprogram]()      | 微信端小程序实现                  | Alpha  |
+| [tdesign-angular]()          | 桌面端 Angular 实现              | 待上线  |
+| tdesign-mobile-react         | 移动端 React 实现                | 待上线  |
+| tdesign-flutter              | 移动端 Flutter 实现              | 待上线  |
+| tdesign-icons                | TDesign 公共图标                 | ✅     |
+| tdesign-common               | TDesign 公共样式                 | ✅     |
+| tdesign-starter-cli          | TDesign 解决方案的脚手架          | ✅     |
+| tdesign-vue-starter          | 基于 tdesign-vue 的解决方案       | ✅     |
+| tdesign-vue-next-starter     | 基于 tdesign-vue-next 的解决方案  | Alpha  |
 
 ## 贡献者
 
