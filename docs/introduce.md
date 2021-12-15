@@ -41,7 +41,7 @@ TDesign 后续发展详细规划请参阅 [后续计划](/about/roadmap)。
 
 #### 完整
 
-TDesign 官方提供了多种业界主流的开发技术栈支持。目前，TDesign 已经支持了 Vue、Vue3.0、React 和移动端小程序的开发，其他技术栈如 Augular、Flutter 正在开发中。
+TDesign 官方提供了多种业界主流的开发技术栈支持。目前，TDesign 已经支持了 Vue、Vue3、React 和移动端小程序的开发，其他技术栈如 Augular、Flutter 正在开发中。
 
 为了实现开发与设计之间的高效协同，TDesign 中包含了丰富可复用的设计组件资源，如色彩体系、文字系统、动效设计、图标元素、布局结构等，覆盖支持 Axure、Sketch、Figma、Xd 等各大产品设计软件，将设计和开发者从重复劳动中释放出来。
 
