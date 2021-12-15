@@ -24,7 +24,7 @@ TDesign 在创建之初就严格按照开源协作的原则运作，包括源代
 
 | 仓库                          | 描述                            | 状态   |
 | ---------------------------- | ------------------------------ | ------ |
-| [tdesign-vue]()              | 桌面端 Vue2 实现                 | ✅     |
+| [tdesign-vue]()              | 桌面端 Vue2 实现                 | beta   |
 | [tdesign-vue-next]()         | 桌面端 Vue3 实现                 | Alpha  |
 | [tdesign-react]()            | 桌面端 React 实现                | Alpha  |
 | [tdesign-mobile-vue]()       | 移动端 Vue3 实现                 | Alpha  |
