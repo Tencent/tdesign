@@ -33,6 +33,8 @@
   - 支持使用者通过 Design Token 对设计风格进行扩展
   - 提供 Starter Kit 帮助使用者快速上手
 
+## 文档
+
 TDesign 文档网站计划在 12 月 23 日开源宣发前上线。
 
 - [介绍](https://tdesign.tencent.com/about/introduce)
