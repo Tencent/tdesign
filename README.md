@@ -29,7 +29,7 @@ TDesign 是一个 multi-repo ，因此 TDesign 有如下子仓库：
 | 仓库                     | 描述                             | 状态   |
 | ------------------------ | -------------------------------- | ------ |
 | tdesign-vue              | 桌面端 Vue2 实现                 | ✅     |
-| tdesign-vue-next         | 桌面端 Vue2 实现                 | Alpha  |
+| tdesign-vue-next         | 桌面端 Vue3 实现                 | Alpha  |
 | tdesign-react            | 桌面端 React 实现                | Alpha  |
 | tdesign-angular          | 桌面端 Angular 实现              | Alpha  |
 | tdesign-mobile-vue       | 移动端 Vue3 实现                 | Alpha  |
