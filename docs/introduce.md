@@ -14,6 +14,8 @@ TDesign 具有统一的 [设计价值观](https://tdesign.tencent.com/design/val
 
 为了应对这一情况，腾讯内部建立了 [开源协同委员会](https://m.thepaper.cn/yidian_promDetail.jsp?contid=4653692&from=yidian)，参考开源社区的组织方式，将同类项目的不同技术团队聚合在一起，开源共建。TDesign 在这样的背景下应运而生，在腾讯内部以开源协同的方式，共建一个完善、易用的设计体系和组件库产品。
 
+<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-oteam.png" alt="components">
+
 ## TDesign 的发展
 
 TDesign 在创建之初就严格按照开源协作的原则运作，包括源代码在内的协作方案讨论、组件设计及 API 制定的过程也完全在公司内源上开放。也得到了公司内开发和设计同学的广泛关注，无论以什么身份参与，TDesign 都同样遵循平等、公开且严格的原则来对待，很多同学从个人项目中试用组件库开始，到提交第一个 `Bug Issue`，再到提交第一个 `Feature MR`，最后逐步参与到 `MR Review` 和方案制定工作中，成为核心贡献者。在过去的一年中，TDesign 关闭了 1k+ `Issue`，进行了 5k+ 次 `CR`，保持 [每周迭代](https://tdesign.tencent.com/vue/components/changelog) 发布新版本。
@@ -38,12 +40,12 @@ TDesign 在创建之初就严格按照开源协作的原则运作，包括源代
 | tdesign-mobile-react    | React 16.x 技术栈 | `待上线` |
 | tdesign-flutter         | 1.17.0            | `待上线` |
 
+
 同时，TDesign 与腾讯内部在各自的领域具有丰富行业经验业务团队正协作中，提供更多具有业务属性的组件库产品，未来会有包括政务、零售等多个不同风格及组件类型的组件库产品开放出来，敬请期待！
 
 TDesign 后续发展详细规划请参阅 [后续计划](/about/roadmap)。
 
 ### 产品特性
-
 #### 完整
 
 TDesign 官方提供了多种业界主流的开发技术栈支持。目前，TDesign 已经支持了 [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/) 和移动端 [Vue 3](https://tdesign.tencent.com/vue/c)、[微信小程序](https://tdesign.tencent.com/miniprogram/) 的开发，其他技术栈如 Augular、Flutter 正在开发中。
@@ -65,6 +67,8 @@ TDesign 设计体系在形成过程中，提炼了不同业务、场景的设计
 在主题配置方面，TDesign 提供了明亮和 [暗色 ](https://tdesign.tencent.com/design/dark)两种模式，支持一键切换，提升用户的使用体验。后续，TDesign 还会推出针对于不同垂直领域的行业组件，覆盖更多的业务范围。产品团队可以借助内置的行业主题，快速配置对应需求，启动业务开发。
 
 TDesign 同步上线了一款开箱即用的中后台框架 [TDesign Starter Kit]()，开发者可以通过它快速体验组件能功能，也可以将它修改为项目基础脚手架工程，快速实现从 0 到 1 的产品开发上线。
+
+<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-components.png" alt="components">
 
 ## 欢迎加入 TDesign
 
