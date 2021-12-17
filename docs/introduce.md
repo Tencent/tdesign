@@ -1,5 +1,6 @@
 ---
 title: 关于我们
+
 ---
 
 ## TDesign 是什么
@@ -45,8 +46,9 @@ TDesign 在创建之初就严格按照开源协作的原则运作，包括源代
 
 TDesign 后续发展详细规划请参阅 [后续计划](/about/roadmap)。
 
-### 产品特性
-#### 完整
+## 产品特性
+
+### 完整
 
 TDesign 官方提供了多种业界主流的开发技术栈支持。目前，TDesign 已经支持了 [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/) 和移动端 [Vue 3](https://tdesign.tencent.com/vue/c)、[微信小程序](https://tdesign.tencent.com/miniprogram/) 的开发，其他技术栈如 Augular、Flutter 正在开发中。
 
@@ -54,13 +56,13 @@ TDesign 官方提供了多种业界主流的开发技术栈支持。目前，TDe
 
 除了常规设计资源，TDesign 还提供了辅助设计工具如 [Sketch 设计插件](https://tdesign.tencent.com/source)，也支持在 [即时设计、Pixso、墨刀 ](https://tdesign.tencent.com/source)等市面常用设计工具中使用 TDesign 设计物料。
 
-#### 一致
+### 一致
 
 TDesign 将腾讯内部多年设计经验提炼总结为专业的设计指南，其所提供的通用设计解决方案，能够帮助产品经理、设计师、开发者等角色高效完成企业级产品的设计和研发，并保持设计语言和风格的一致，满足用户体验的要求。
 
 基于 TDesign 的设计体系规范，TDesign 同时上线了组件库的桌面端和移动端，提供了多个技术栈实现版本。通过一系列协作流程和辅助工具，保证各技术栈 [组件 API](https://tdesign.tencent.com/apis) 和实现产物一致。借助这些能力，使得项目即便使用了多种不同的技术架构或技术栈，开发者也可通过 TDesign 通用设计组件库进行开发，显著降低学习成本，在构建统一/多端覆盖/跨技术栈的前端应用时更具优势。
 
-#### 易用
+### 易用
 
 TDesign 设计体系在形成过程中，提炼了不同业务、场景的设计经验，提供了通用的 [设计指南]() 以降低使用门槛。对于不同企业产品的品牌定制需求，TDesign 支持使用者对设计风格进行扩展，目前已经将设计样式梳理归纳为 [Design Token](https://tdesign.tencent.com/design/color#header-21)，形成一套企业内部的语义化设计规范，方便后续进行统一的管理和使用扩展。
 
