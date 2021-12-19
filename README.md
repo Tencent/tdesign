@@ -47,17 +47,37 @@ TDesign 文档网站计划在 12 月 23 日开源宣发前上线。
 
 - [介绍](https://tdesign.tencent.com/about/introduce)
 - [参与贡献](https://tdesign.tencent.com/about/contributing)
-- [设计资源](https://tdesign.tencent.com/source)
 - [基础组件](https://tdesign.tencent.com/)
 - [解决方案](https://tdesign.tencent.com/starter/)
+- [中后台设计指南](https://tdesign.tencent.com/design/offices)
+
 
 更多文档在 [TDesign 官网](https://tdesign.tencent.com/)。
 
+## 设计指南
+TDesign 将腾讯内部多年设计经验提炼总结为专业的设计指南，提供的通用设计解决方案。
 
+- [设计价值观](https://tdesign.tencent.com/design/values)
+- [色彩](https://tdesign.tencent.com/design/color)
+- [字体](https://tdesign.tencent.com/design/fonts)
+- [动效](https://tdesign.tencent.com/design/motion)
+- [图标](https://tdesign.tencent.com/design/icon)
+- [布局](https://tdesign.tencent.com/design/layout)
+- [暗黑模式](https://tdesign.tencent.com/design/dark)
+
+更多内容参考每个组件的指南部分，例如：[Button](https://tdesign.tencent.com/vue/components/button?tab=design)。
+
+## 设计资源
+
+为了实现开发与设计之间的高效协同，TDesign 中包含了丰富可复用的设计组件资源：
+
+  - [Figma 设计资源](https://www.figma.com/@tencent)
+  - [Sketch、Axure、Adobe XD 等设计资源](https://tdesign.tencent.com/source)
+  - [TDesign Maker: 一款来自 TDesign 的 Sketch 插件](https://tdesign.tencent.com/source)
 
 ## 仓库
 
-TDesign 是一个 `multi-repo` ， TDesign 有如下仓库：
+TDesign 是一个 `multi-repo`， TDesign 有如下仓库：
 
 ### 主仓库和公共引用
 
