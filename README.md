@@ -13,9 +13,9 @@
 
 在过去，腾讯有许多设计体系和组件库类型的项目，围绕产品做“去中心化”的快速迭代。
 
-2019 年腾讯成立了[开源协同委员会](<(<(https://m.thepaper.cn/yidian_promDetail.jsp?contid=4653692&from=tdesign)>)>)，统筹领域绘制技术蓝图，通过内部开源协同的方式，把同类技术产品的不同团队组织到一起共建。
+2019 年腾讯成立了[开源协同委员会](https://m.thepaper.cn/yidian_promDetail.jsp?contid=4653692&from=tdesign)，通过内部开源协同的方式，把同类技术产品的不同团队组织到一起共建。
 
-现在的 TDesign 正是腾讯开源协同下前端领域和设计领域的协作产物，期待共建出一个完善且通用的设计体系和组件库产品。
+TDesign 正是腾讯开源协同下前端和设计领域的协作产物，期待共建出一个完善且通用的设计体系和组件库产品。
 
 ![introduce-oteam](https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-oteam.png)
 
