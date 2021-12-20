@@ -1,6 +1,5 @@
 ---
 title: 关于我们
-
 ---
 
 ## TDesign 是什么
@@ -41,7 +40,6 @@ TDesign 在创建之初就严格按照开源协作的原则运作，包括源代
 | tdesign-mobile-react    | React 16.x 技术栈 | `待上线` |
 | tdesign-flutter         | 1.17.0            | `待上线` |
 
-
 同时，TDesign 与腾讯内部在各自的领域具有丰富行业经验业务团队正协作中，提供更多具有业务属性的组件库产品，未来会有包括政务、零售等多个不同风格及组件类型的组件库产品开放出来，敬请期待！
 
 TDesign 后续发展详细规划请参阅 [后续计划](/about/roadmap)。
@@ -50,7 +48,7 @@ TDesign 后续发展详细规划请参阅 [后续计划](/about/roadmap)。
 
 ### 完整
 
-TDesign 官方提供了多种业界主流的开发技术栈支持。目前，TDesign 已经支持了 [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/) 和移动端 [Vue 3](https://tdesign.tencent.com/vue/c)、[微信小程序](https://tdesign.tencent.com/miniprogram/) 的开发，其他技术栈如 Augular、Flutter 正在开发中。
+TDesign 官方提供了多种业界主流的开发技术栈支持。目前，TDesign 已经支持了 [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/react) 和移动端 [Vue 3](https://tdesign.tencent.com/vue-mobile/)、[微信小程序](https://tdesign.tencent.com/miniprogram/) 的开发，其他技术栈如 Augular、Flutter 正在开发中。
 
 为了实现开发与设计之间的高效协同，TDesign 中包含了丰富可复用的设计组件资源，如[色彩体系](https://tdesign.tencent.com/design/color)、[文字系统](https://tdesign.tencent.com/design/fonts)、[动效设计](https://tdesign.tencent.com/design/motion)、[图标元素](https://tdesign.tencent.com/design/icon)、[布局结构](https://tdesign.tencent.com/design/layout)等，覆盖支持 [Axure、Sketch、Figma、Adobe XD](https://tdesign.tencent.com/source) 等各大产品设计软件，将设计和开发者从重复劳动中释放出来。
 
