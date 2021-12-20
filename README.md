@@ -5,7 +5,7 @@
 </p>
 <div align="center">
 <p>TDesign 是一套拥有完整的 <a href="https://tdesign.tencent.com/design/values">设计价值观</a> 和 <a href="https://tdesign.tencent.com/design/color">视觉风格指南</a> 的企业级设计体系，同时提供了丰富的 <a href="https://tdesign.tencent.com/source">设计资源</a>。</p>
-<p>TDesign 在设计体系基础上产出基于 Vue、React、小程序等业界主流技术栈的组件库解决方案。</p>
+<p>TDesign 在设计体系基础上产出基于 [Vue](https://tdesign.tencent.com/vue/)、React(https://tdesign.tencent.com/react/)、[小程序](https://tdesign.tencent.com/miniprogram/)等业界主流技术栈的组件库解决方案。</p>
 <p>用于构建设计统一/多端覆盖/跨技术栈的企业级前端应用时，TDesign 更有优势。</p>
 </div>
 

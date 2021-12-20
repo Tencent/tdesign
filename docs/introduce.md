@@ -64,7 +64,7 @@ TDesign 将腾讯内部多年设计经验提炼总结为专业的设计指南，
 
 ### 易用
 
-TDesign 设计体系在形成过程中，提炼了不同业务、场景的设计经验，提供了通用的 [设计指南]() 以降低使用门槛。对于不同企业产品的品牌定制需求，TDesign 支持使用者对设计风格进行扩展，目前已经将设计样式梳理归纳为 [Design Token](https://tdesign.tencent.com/design/color#header-21)，形成一套企业内部的语义化设计规范，方便后续进行统一的管理和使用扩展。
+TDesign 设计体系在形成过程中，提炼了不同业务、场景的设计经验，提供了通用的 [设计指南](https://tdesign.tencent.com/design/offices) 以降低使用门槛。对于不同企业产品的品牌定制需求，TDesign 支持使用者对设计风格进行扩展，目前已经将设计样式梳理归纳为 [Design Token](https://tdesign.tencent.com/design/color#header-21)，形成一套企业内部的语义化设计规范，方便后续进行统一的管理和使用扩展。
 
 在主题配置方面，TDesign 提供了明亮和 [暗色 ](https://tdesign.tencent.com/design/dark)两种模式，支持一键切换，提升用户的使用体验。后续，TDesign 还会推出针对于不同垂直领域的行业组件，覆盖更多的业务范围。产品团队可以借助内置的行业主题，快速配置对应需求，启动业务开发。
 
