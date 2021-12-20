@@ -16,3 +16,6 @@ title: 常见问题
 
 - 受控用法：传入属性 value 既代表受控用法，组件状态完全由属性值控制，无内部状态，如需更新状态，必须传入新的属性值，用户通过交互触发了更新事件 onChange，开发者需要更新 value 后传入组件，组件状态才会更新。
 - 非受控用法：既初始值用法，不传入 value 属性，使用对应的初始值属性 defaultValue 设置组件初始状态，此时组件会在内部维护该状态，用户通过交互触发更新事件 onChange 之后，组件内部直接更新组件状态。
+
+### 如何在设计工具 Sketch 中使用 TDesign
+有两种方式，一是可以使用 TDesign 提供的 Sketch 源文件，它包括桌面端及移动端（近期上线），也可以使用 TDesign 提供的 Sketch 插件，具体使用方式请参考 [《插件使用手册》](https://doc.weixin.qq.com/doc/w3_m_OkshgETGpoGB?scode=AJEAIQdfAAoYvGqGCUAL8AZgbdAFw)。
