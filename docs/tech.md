@@ -78,7 +78,7 @@ feat 与 fix 提交将被用于生成 changelog
 
 ### API 设计规范
 
-为了保证组件库各技术栈实现版本使用体验一致，对于组件 API 命名我们有一套统一的要求，详情请阅读 [api.md](https://github.com/Tencent/tdesign-common/blob/develop/api.md)。
+为了保证组件库各技术栈实现版本使用体验一致，对于组件 API 命名 TDesign 有一套统一的规范，详情请阅读 [api.md](https://github.com/Tencent/tdesign-common/blob/develop/api.md)。
 
 ## 技术选型
 
