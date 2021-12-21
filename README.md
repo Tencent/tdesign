@@ -56,7 +56,7 @@ TDesign 后续发展规划请参阅 [后续计划](https://github.com/Tencent/td
 - 支持使用者通过 [Design Token](https://tdesign.tencent.com/design/color#header-21) 对设计风格进行扩展
 - 提供 [Starter Kit](https://tdesign.tencent.com/starter/) 帮助使用者快速上手
 
-![一致](https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-components.png)
+![image](https://user-images.githubusercontent.com/15634204/146895962-67a3218d-737e-497e-8e08-5c696a5d7d73.png)
 
 ## 文档
 
