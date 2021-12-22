@@ -4,8 +4,8 @@
   </a>
 </p>
 <div align="center">
-<p>TDesign 是一套拥有完整的 <a href="https://tdesign.tencent.com/design/values">设计价值观</a> 和 <a href="https://tdesign.tencent.com/design/color">视觉风格指南</a> 的企业级设计体系，同时提供了丰富的 <a href="https://tdesign.tencent.com/source">设计资源</a>。</p>
-<p>TDesign 在设计体系基础上产出基于 <a href="https://tdesign.tencent.com/vue/">Vue</a>、<a href="https://tdesign.tencent.com/react/">React</a>、<a href="https://tdesign.tencent.com/miniprogram/">小程序</a>等业界主流技术栈的组件库解决方案。</p>
+<p>TDesign 是一套拥有完整的 <a target="_blank" href="https://tdesign.tencent.com/design/values">设计价值观</a> 和 <a target="_blank" href="https://tdesign.tencent.com/design/color">视觉风格指南</a> 的企业级设计体系，同时提供了丰富的 <a target="_blank" href="https://tdesign.tencent.com/source">设计资源</a>。</p>
+<p>TDesign 在设计体系基础上产出基于 <a target="_blank" href="https://tdesign.tencent.com/vue/">Vue</a>、<a target="_blank" href="https://tdesign.tencent.com/react/">React</a>、<a target="_blank" href="https://tdesign.tencent.com/miniprogram/">小程序</a>等业界主流技术栈的组件库解决方案。</p>
 <p>用于构建设计统一/多端覆盖/跨技术栈的企业级前端应用时，TDesign 更有优势。</p>
 </div>
 
@@ -63,8 +63,6 @@ TDesign 后续发展规划请参阅 [后续计划](https://github.com/Tencent/td
 ![image](https://user-images.githubusercontent.com/88708072/147074674-59801625-8f61-49d8-94f3-5addfe2400bf.png)
 
 ## 文档
-
-TDesign 文档网站计划在 12 月 23 日开源宣发前上线。
 
 - [介绍](https://tdesign.tencent.com/about/introduce)
 - [参与贡献](https://tdesign.tencent.com/about/contributing)
