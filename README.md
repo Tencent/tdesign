@@ -45,10 +45,14 @@ TDesign 后续发展规划请参阅 [后续计划](https://github.com/Tencent/td
 - 提供丰富多样的[设计资源](#设计资源)，包括 Figma、Adobe XD、Sketch 等，将设计师从重复劳动中释放出来
 - 提供辅助设计工具如 [Sketch 设计插件](https://tdesign.tencent.com/source)，也支持在即时设计、Pixso、墨刀等市面常用设计工具中使用
 
+![image](https://user-images.githubusercontent.com/88708072/147074442-f1fbc343-f200-456e-9202-5c3f29d5d7dd.png)
+
 #### 一致
 
 - 拥有统一的[设计价值观](https://tdesign.tencent.com/design/values)和[视觉风格](https://tdesign.tencent.com/design/color)，帮助产品在跨端设计和开发过程中保持一致的产品使用体验
 - 各技术栈产物 [API 定义](https://tdesign.tencent.com/apis)和实现保持一致，在构建统一/多端覆盖/跨技术栈的前端应用时更有优势
+
+![image](https://user-images.githubusercontent.com/15634204/146895962-67a3218d-737e-497e-8e08-5c696a5d7d73.png)
 
 #### 易用
 
@@ -56,7 +60,7 @@ TDesign 后续发展规划请参阅 [后续计划](https://github.com/Tencent/td
 - 支持使用者通过 [Design Token](https://tdesign.tencent.com/design/color#header-21) 对设计风格进行扩展
 - 提供 [Starter Kit](https://tdesign.tencent.com/starter/) 帮助使用者快速上手
 
-![image](https://user-images.githubusercontent.com/15634204/146895962-67a3218d-737e-497e-8e08-5c696a5d7d73.png)
+![image](https://user-images.githubusercontent.com/88708072/147074674-59801625-8f61-49d8-94f3-5addfe2400bf.png)
 
 ## 文档
 
