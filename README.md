@@ -10,7 +10,7 @@
 </div>
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/88708072/147124305-fbb74f9f-65b2-44f9-9f1c-e812ce63a547.gif" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;" width="100%">
+  <img src="https://user-images.githubusercontent.com/88708072/147124305-fbb74f9f-65b2-44f9-9f1c-e812ce63a547.gif" alt="TDesign" style="border: 1px solid var(--component-border); border-radius: 6px;" width="100%">
 </p>
 
 ## 为什么会有 TDesign
@@ -21,7 +21,7 @@
 
 TDesign 正是腾讯开源协同下前端和设计领域的协作产物，期待共建出一个完善且通用的设计体系和组件库产品。
 
-![image](https://user-images.githubusercontent.com/88708072/147123720-ec2d2410-7180-45af-b364-4390bc7b9b73.png)
+![image](https://user-images.githubusercontent.com/7600149/147126818-0e5a5b2d-a833-4107-b654-442f3a1098c5.png)
 
 
 ## TDesign 的发展
@@ -50,14 +50,14 @@ TDesign 后续发展规划请参阅 [后续计划](https://github.com/Tencent/td
 - 提供丰富多样的[设计资源](#设计资源)，包括 Figma、Adobe XD、Sketch 等，将设计师从重复劳动中释放出来
 - 提供辅助设计工具如 [Sketch 设计插件](https://tdesign.tencent.com/source)，也支持在腾讯CoDesign、即时设计、Pixso、墨刀等市面常用设计工具中使用
 
-![image](https://user-images.githubusercontent.com/88708072/147074442-f1fbc343-f200-456e-9202-5c3f29d5d7dd.png)
+![image](https://user-images.githubusercontent.com/7600149/147127234-7961b616-90b6-4197-8676-c041c161ac0d.png)
 
 #### 一致
 
 - 拥有统一的[设计价值观](https://tdesign.tencent.com/design/values)和[视觉风格](https://tdesign.tencent.com/design/color)，帮助产品在跨端设计和开发过程中保持一致的产品使用体验
 - 各技术栈产物 [API 定义](https://tdesign.tencent.com/apis)和实现保持一致，在构建统一/多端覆盖/跨技术栈的前端应用时更有优势
 
-![image](https://user-images.githubusercontent.com/15634204/146895962-67a3218d-737e-497e-8e08-5c696a5d7d73.png)
+![image](https://user-images.githubusercontent.com/7600149/147127329-1ecfc38e-4b36-4595-8c41-4958470c9354.png)
 
 #### 易用
 
@@ -65,7 +65,7 @@ TDesign 后续发展规划请参阅 [后续计划](https://github.com/Tencent/td
 - 支持使用者通过 [Design Token](https://tdesign.tencent.com/design/color#header-21) 对设计风格进行扩展
 - 提供 [Starter Kit](https://tdesign.tencent.com/starter/) 帮助使用者快速上手
 
-![image](https://user-images.githubusercontent.com/88708072/147074674-59801625-8f61-49d8-94f3-5addfe2400bf.png)
+![image](https://user-images.githubusercontent.com/7600149/147127377-6f7e95f6-cfa8-459a-86e0-058c545d34f3.png)
 
 ## 文档
 
