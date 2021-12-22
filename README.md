@@ -9,6 +9,10 @@
 <p>用于构建设计统一/多端覆盖/跨技术栈的企业级前端应用时，TDesign 更有优势。</p>
 </div>
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/88708072/147124305-fbb74f9f-65b2-44f9-9f1c-e812ce63a547.gif" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;" width="100%">
+</p>
+
 ## 为什么会有 TDesign
 
 在过去，腾讯有许多设计体系和组件库类型的项目，围绕产品做“去中心化”的快速迭代。
