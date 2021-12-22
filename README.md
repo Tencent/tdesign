@@ -17,7 +17,7 @@
 
 TDesign 正是腾讯开源协同下前端和设计领域的协作产物，期待共建出一个完善且通用的设计体系和组件库产品。
 
-![image](https://user-images.githubusercontent.com/88708072/147122303-5cc60a36-ff11-493a-93af-cee103e97b73.png)
+![image](https://user-images.githubusercontent.com/88708072/147123720-ec2d2410-7180-45af-b364-4390bc7b9b73.png)
 
 
 ## TDesign 的发展
