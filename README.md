@@ -43,7 +43,7 @@ TDesign 后续发展规划请参阅 [后续计划](https://github.com/Tencent/td
 
 - 支持了 [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/react/) 和移动端 [Vue 3](https://tdesign.tencent.com/vue-mobile/)、[微信小程序](https://tdesign.tencent.com/miniprogram/) 的开发，其他技术栈如 Augular、Flutter 正在开发中
 - 提供丰富多样的[设计资源](#设计资源)，包括 Figma、Adobe XD、Sketch 等，将设计师从重复劳动中释放出来
-- 提供辅助设计工具如 [Sketch 设计插件](https://tdesign.tencent.com/source)，也支持在即时设计、Pixso、墨刀等市面常用设计工具中使用
+- 提供辅助设计工具如 [Sketch 设计插件](https://tdesign.tencent.com/source)，也支持在腾讯Codesign、即时设计、Pixso、墨刀等市面常用设计工具中使用
 
 ![image](https://user-images.githubusercontent.com/88708072/147074442-f1fbc343-f200-456e-9202-5c3f29d5d7dd.png)
 
