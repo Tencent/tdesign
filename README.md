@@ -1,17 +1,16 @@
-<p align="center">
+<p>
   <a href="https://tdesign.tencent.com/" target="_blank">
     <img alt="TDesign Logo" width="200" src="https://tdesign.gtimg.com/site/TDesign.png">
   </a>
 </p>
-<div align="center">
-<p>TDesign 是一套拥有完整的 <a target="_blank" href="https://tdesign.tencent.com/design/values">设计价值观</a> 和 <a target="_blank" href="https://tdesign.tencent.com/design/color">视觉风格指南</a> 的企业级设计体系，同时提供了丰富的 <a target="_blank" href="https://tdesign.tencent.com/source">设计资源</a>。</p>
-<p>TDesign 在设计体系基础上产出基于 <a target="_blank" href="https://tdesign.tencent.com/vue/">Vue</a>、<a target="_blank" href="https://tdesign.tencent.com/react/">React</a>、<a target="_blank" href="https://tdesign.tencent.com/miniprogram/">小程序</a>等业界主流技术栈的组件库解决方案。</p>
-<p>用于构建设计统一/多端覆盖/跨技术栈的企业级前端应用时，TDesign 更有优势。</p>
-</div>
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/88708072/147124305-fbb74f9f-65b2-44f9-9f1c-e812ce63a547.gif" alt="TDesign" style="border: 1px solid var(--component-border); border-radius: 6px;" width="100%">
-</p>
+
+TDesign 是一套完整的[企业级设计体系](https://tdesign.tencent.com/design/values)，拥有基于 <a target="_blank" href="https://tdesign.tencent.com/vue/">Vue</a>、<a target="_blank" href="https://tdesign.tencent.com/react/">React</a>、<a target="_blank" href="https://tdesign.tencent.com/miniprogram/">小程序</a>等技术栈的组件库解决方案。
+
+用于构建 [设计统一](#一致)、[跨端多技术栈](#完整) 的前端应用时，TDesign 更有优势。</p>
+
+
+![TDesign](https://user-images.githubusercontent.com/88708072/147124305-fbb74f9f-65b2-44f9-9f1c-e812ce63a547.gif)
 
 ## 仓库
 
@@ -39,7 +38,7 @@ TDesign 是一个 `multi-repo`， TDesign 有如下代码仓库：
 | 仓库                                                                  | 描述              | 状态     |
 | --------------------------------------------------------------------- | ----------------- | -------- |
 | [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram) | 微信小程序        | `Alpha`  |
-| tdesign-mobile-vue  | Vue 3.x 技术栈    | `Alpha`  |
+| tdesign-mobile-vue  | Vue 3.x 技术栈    | `待上线`  |
 | tdesign-mobile-react                                                  | React 16.x 技术栈 | `待上线` |
 | tdesign-flutter                                                       | 1.17.0            | `待上线` |
 
