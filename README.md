@@ -1,12 +1,10 @@
-<p>
-  <a href="https://tdesign.tencent.com/" target="_blank">
-    <img alt="TDesign Logo" width="200" src="https://tdesign.gtimg.com/site/TDesign.png">
-  </a>
-</p>
+<a href="https://tdesign.tencent.com/" target="_blank">
+  <img alt="TDesign Logo" width="200" src="https://tdesign.gtimg.com/site/TDesign.png">
+</a>
 
-TDesign 是一套完整的[企业级设计体系](https://tdesign.tencent.com/design/values)，拥有基于 <a target="_blank" href="https://tdesign.tencent.com/vue/">Vue</a>、<a target="_blank" href="https://tdesign.tencent.com/react/">React</a>、<a target="_blank" href="https://tdesign.tencent.com/miniprogram/">小程序</a>等技术栈的组件库解决方案。
+TDesign 是一套完整的 [企业级设计体系](https://tdesign.tencent.com/design/values)，拥有基于 [Vue](https://tdesign.tencent.com/vue/) / [React](https://tdesign.tencent.com/react/) / [小程序](https://tdesign.tencent.com/miniprogram/) 等技术栈的组件库解决方案。
 
-用于构建 [设计统一](#一致)、[跨端多技术栈](#完整) 的前端应用时，TDesign 更有优势。</p>
+用于构建 [设计统一](#一致) / [跨端多技术栈](#完整) 的前端应用时，TDesign 更有优势。
 
 ![TDesign](https://user-images.githubusercontent.com/88708072/147124305-fbb74f9f-65b2-44f9-9f1c-e812ce63a547.gif)
 
@@ -42,11 +40,11 @@ TDesign 是一个 `multi-repo`， TDesign 有如下代码仓库：
 
 ### 解决方案及周边
 
-| 仓库                                                                            | 描述                             | 状态    |
-| ------------------------------------------------------------------------------- | -------------------------------- | ------- |
-| [tdesign-starter-cli](https://github.com/Tencent/tdesign-starter-cli)           | TDesign 解决方案的脚手架         | ✅      |
-| [tdesign-vue-starter](https://github.com/Tencent/tdesign-vue-starter)           | 基于 tdesign-vue 的解决方案      | ✅      |
-| [tdesign-vue-next-starter](https://github.com/Tencent/tdesign-vue-next-starter) | 基于 tdesign-vue-next 的解决方案 | `Alpha` |
+| 仓库                                                                            | 描述                             |
+| ------------------------------------------------------------------------------- | -------------------------------- |
+| [tdesign-starter-cli](https://github.com/Tencent/tdesign-starter-cli)           | TDesign 解决方案的脚手架         |
+| [tdesign-vue-starter](https://github.com/Tencent/tdesign-vue-starter)           | 基于 tdesign-vue 的解决方案      |
+| [tdesign-vue-next-starter](https://github.com/Tencent/tdesign-vue-next-starter) | 基于 tdesign-vue-next 的解决方案 |
 
 ## 为什么会有 TDesign
 
