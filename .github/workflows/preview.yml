@@ -1,0 +1,86 @@
+name: PREVIEW
+
+on:
+  workflow_call:
+    # inputs:
+      # workflow_run_event:
+      #   required: true
+      #   type: string
+        # default: 'pull_request'
+    # secrets:
+    #   TDESIGN_SURGE_TOKEN:
+    #     required: true
+
+jobs:
+  preview-success:
+    runs-on: ubuntu-latest
+    if: >
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: download pr artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          name: pr
+      - name: save PR id
+        id: pr
+        run: echo "::set-output name=id::$(<pr-id.txt)"
+      - name: download _site artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          workflow_conclusion: success
+          name: _site
+      - run: |
+          unzip _site.zip
+
+      - name: Upload surge service and generate preview URL
+        id: deploy
+        run: |
+          repository=${{github.repository}}
+          project_name=${repository#*/}
+          export DEPLOY_DOMAIN=https://preview-pr${{ steps.pr.outputs.id }}-$project_name.surge.sh
+          npx surge --project ./_site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
+          echo the preview URL is $DEPLOY_DOMAIN
+          echo "::set-output name=url::$$DEPLOY_DOMAIN"
+      - name: update status comment
+        uses: actions-cool/maintain-one-comment@v2.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            PR 预览产物在 ${{steps.deploy.outputs.url}}
+          number: ${{ steps.pr.outputs.id }}
+      - run: |
+          rm -rf _site/
+
+      - name: The job failed
+        if: ${{ failure() }}
+        uses: actions-cool/maintain-one-comment@v2.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            PR 预览生成失败。
+          number: ${{ steps.pr.outputs.id }}
+
+  preview-failed:
+    runs-on: ubuntu-latest
+    if: >
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'failure'
+    steps:
+      - name: download pr artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          name: pr
+      - name: save PR id
+        id: pr
+        run: echo "::set-output name=id::$(<pr-id.txt)"
+      - name: The job failed
+        uses: actions-cool/maintain-one-comment@v2.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            Deploy PR Preview failed， ${{ github.event.workflow_run.conclusion }} at ${{ github.event.workflow_run.workflow_id }}.
+          number: ${{ steps.pr.outputs.id }}

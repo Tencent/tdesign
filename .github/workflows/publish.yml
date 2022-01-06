@@ -1,0 +1,59 @@
+name: PUBLISH
+
+on:
+  workflow_call:
+    # inputs:
+    #   workflow_run_event:
+    #     required: true
+    #     type: string
+        # default: 'pull_request'
+    # secrets:
+    #   TDESIGN_SURGE_TOKEN:
+    #     required: true
+    #   TDESIGN_NPM_TOKEN:
+    #     required: true
+
+jobs:
+  TAG_PUSH:
+    runs-on: ubuntu-latest
+    if: github.event.ref_type == 'tag'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - uses: actions/cache@v2
+        env:
+          cache-name: cache-nodemodules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - run: npm install
+
+      - name: Build site
+        run: npm run site:preview
+      - name: upload surge service
+        id: deploy
+        run: |
+          repository=${{github.repository}}
+          project_name=${repository#*/}
+          export DEPLOY_DOMAIN=https://${{ github.ref_name }}-$project_name.surge.sh
+          npx surge --project _site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
+          echo $DEPLOY_DOMAIN
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - run: npm run build
+      - name: publish
+        id: publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.TDESIGN_NPM_TOKEN }}
+      - if: steps.publish.outputs.type != 'none'
+        run: |
+          echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
+      
