@@ -12,10 +12,10 @@ on:
 jobs:
   call-preview:
     uses: Tencent/tdesign/.github/workflows/preview.yml@main
-    with: 
-      project_name: 'tdesign-main'
-      workflow_run_event: github.event.workflow_run.event
-      workflow_run_conclusion: github.event.workflow_run.conclusion
-      workflow_run_workflow_id: github.event.workflow_run.workflow_id
+    # with: 
+      # project_name: 'tdesign-main'
+      # workflow_run_event: github.event.workflow_run.event
+      # workflow_run_conclusion: github.event.workflow_run.conclusion
+      # workflow_run_workflow_id: github.event.workflow_run.workflow_id
     # secrets:
     #   TDESIGN_SURGE_TOKEN: ${{ secrets.TDESIGN_SURGE_TOKEN }}
