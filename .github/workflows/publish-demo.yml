@@ -1,0 +1,7 @@
+name: TAG_PUSH
+
+on: create
+
+jobs:
+  call-publish:
+    uses: Tencent/tdesign/.github/workflows/publish.yml@main

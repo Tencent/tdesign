@@ -2,15 +2,11 @@ name: PREVIEW
 
 on:
   workflow_call:
-    inputs:
-      workflow_run_event:
-        required: true
-        type: string
+    # inputs:
+      # workflow_run_event:
+      #   required: true
+      #   type: string
         # default: 'pull_request'
-      workflow_run_conclusion:
-        required: true
-        type: string
-        # default: 'true'
     # secrets:
     #   TDESIGN_SURGE_TOKEN:
     #     required: true
@@ -19,13 +15,13 @@ jobs:
   preview-success:
     runs-on: ubuntu-latest
     if: >
-      workflow_run_event == 'pull_request' &&
-      workflow_run_conclusion == 'success'
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success'
     steps:
       - name: download pr artifact
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: ${{ workflow_run_workflow_id }}
+          workflow: ${{ github.event.workflow_run.workflow_id }}
           name: pr
       - name: save PR id
         id: pr
@@ -33,7 +29,7 @@ jobs:
       - name: download _site artifact
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: ${{ workflow_run_workflow_id }}
+          workflow: ${{ github.event.workflow_run.workflow_id }}
           workflow_conclusion: success
           name: _site
       - run: |
@@ -42,18 +38,19 @@ jobs:
       - name: Upload surge service and generate preview URL
         id: deploy
         run: |
-          export DEPLOY_DOMAIN=https://preview-pr${{ steps.pr.outputs.id }}-${{ project_name }}.surge.sh
+          repository=${{github.repository}}
+          project_name=${repository#*/}
+          export DEPLOY_DOMAIN=https://preview-pr${{ steps.pr.outputs.id }}-$project_name.surge.sh
           npx surge --project ./_site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
           echo the preview URL is $DEPLOY_DOMAIN
-
+          echo "::set-output name=url::$$DEPLOY_DOMAIN"
       - name: update status comment
         uses: actions-cool/maintain-one-comment@v2.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            PR 预览产物在 https://preview-pr${{ steps.pr.outputs.id }}-${{ project_name }}.surge.sh
+            PR 预览产物在 ${{steps.deploy.outputs.url}}
           number: ${{ steps.pr.outputs.id }}
-      
       - run: |
           rm -rf _site/
 
@@ -69,13 +66,13 @@ jobs:
   preview-failed:
     runs-on: ubuntu-latest
     if: >
-      workflow_run_event == 'pull_request' &&
-      workflow_run_conclusion == 'failure'
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'failure'
     steps:
       - name: download pr artifact
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: ${{ workflow_run_workflow_id }}
+          workflow: ${{ github.event.workflow_run.workflow_id }}
           name: pr
       - name: save PR id
         id: pr
@@ -85,5 +82,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            Deploy PR Preview failed， {{ workflow_run_conclusion }} at ${{ workflow_run_workflow_id }}.
+            Deploy PR Preview failed， ${{ github.event.workflow_run.conclusion }} at ${{ github.event.workflow_run.workflow_id }}.
           number: ${{ steps.pr.outputs.id }}

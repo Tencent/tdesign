@@ -4,22 +4,24 @@ on:
   workflow_call:
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check_email
+        run: |
+          log_emails=$(git log --pretty=format:"%ae %ce" -1) && if [[ ${log_emails} =~ '@tencent.com' ]];then echo $log_emails && echo "邮箱校验非法" && exit 2;else echo "邮箱校验通过";fi
+        shell: bash
   test:
+    needs: check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
-      - name: check_email
-        run: |
-          log_emails=$(git log --pretty=format:"%ae %ce" -1) && if [[ ${log_emails} =~ '@tencent.com' ]];then echo $log_emails && echo "邮箱校验非法" && exit 2;else echo "邮箱校验通过";fi
-        shell: bash
       - uses: actions/setup-node@v2
         with:
           node-version: 16
-
-      - name: Cache nodemodules
-        uses: actions/cache@v2
+      - uses: actions/cache@v2
         env:
           cache-name: cache-nodemodules
         with:
@@ -29,9 +31,7 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: Install dependencies
-        run: npm install
-        shell: bash
+      - run: npm install
 
       - run: npm run lint
       - run: npm run test
@@ -46,9 +46,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
-
-      - name: Cache nodemodules
-        uses: actions/cache@v2
+      - uses: actions/cache@v2
         env:
           cache-name: cache-nodemodules
         with:
@@ -58,9 +56,7 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: Install dependencies
-        run: npm install
-        shell: bash
+      - run: npm install
 
       - name: Build site
         run: npm run site:preview
