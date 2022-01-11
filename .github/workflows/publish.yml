@@ -2,16 +2,11 @@ name: PUBLISH
 
 on:
   workflow_call:
-    # inputs:
-    #   workflow_run_event:
-    #     required: true
-    #     type: string
-        # default: 'pull_request'
-    # secrets:
-    #   TDESIGN_SURGE_TOKEN:
-    #     required: true
-    #   TDESIGN_NPM_TOKEN:
-    #     required: true
+    secrets:
+      TDESIGN_SURGE_TOKEN:
+        required: true
+      TDESIGN_NPM_TOKEN:
+        required: true
 
 jobs:
   TAG_PUSH:
@@ -43,7 +38,9 @@ jobs:
         run: |
           repository=${{github.repository}}
           project_name=${repository#*/}
-          export DEPLOY_DOMAIN=https://${{ github.ref_name }}-$project_name.surge.sh
+          ref_name=${{ github.ref_name }}
+          tag_name=${ref_name//./_}
+          export DEPLOY_DOMAIN=https://$tag_name-$project_name.surge.sh
           npx surge --project _site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
           echo $DEPLOY_DOMAIN
       - run: echo "🍏 This job's status is ${{ job.status }}."

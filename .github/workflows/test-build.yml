@@ -7,6 +7,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: check_email
         run: |
           log_emails=$(git log --pretty=format:"%ae %ce" -1) && if [[ ${log_emails} =~ '@tencent.com' ]];then echo $log_emails && echo "邮箱校验非法" && exit 2;else echo "邮箱校验通过";fi
@@ -15,7 +16,6 @@ jobs:
     needs: check
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ secrets.TDESIGN_SURGE_TOKEN }}
       - uses: actions/checkout@v2
         with:
           submodules: recursive
