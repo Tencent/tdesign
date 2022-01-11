@@ -15,6 +15,7 @@ jobs:
     needs: check
     runs-on: ubuntu-latest
     steps:
+      - run: echo ${{ secrets.TDESIGN_SURGE_TOKEN }}
       - uses: actions/checkout@v2
         with:
           submodules: recursive
