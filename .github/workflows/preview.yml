@@ -2,14 +2,9 @@ name: PREVIEW
 
 on:
   workflow_call:
-    # inputs:
-      # workflow_run_event:
-      #   required: true
-      #   type: string
-        # default: 'pull_request'
-    # secrets:
-    #   TDESIGN_SURGE_TOKEN:
-    #     required: true
+    secrets:
+      TDESIGN_SURGE_TOKEN:
+        required: true
 
 jobs:
   preview-success:
@@ -44,7 +39,7 @@ jobs:
           export DEPLOY_DOMAIN=https://preview-pr${{ steps.pr.outputs.id }}-$project_name.surge.sh
           npx surge --project ./_site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
           echo the preview URL is $DEPLOY_DOMAIN
-          echo "::set-output name=url::$$DEPLOY_DOMAIN"
+          echo "::set-output name=url::$DEPLOY_DOMAIN"
       - name: update status comment
         uses: actions-cool/maintain-one-comment@v2.0.0
         with:

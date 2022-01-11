@@ -5,3 +5,6 @@ on: create
 jobs:
   call-publish:
     uses: Tencent/tdesign/.github/workflows/publish.yml@main
+    secrets:
+      TDESIGN_SURGE_TOKEN: ${{ secrets.TDESIGN_SURGE_TOKEN }}
+      TDESIGN_NPM_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}
