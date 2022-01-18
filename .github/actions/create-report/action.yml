@@ -1,5 +1,5 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'create report'
+description: 'create report to wx'
 inputs:
   wxhook:
     description: 'wxhook url'
