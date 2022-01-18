@@ -1,0 +1,12 @@
+name: 'Hello World'
+description: 'Greet someone and record the time'
+inputs:
+  wxhook:
+    description: 'wxhook url'
+    required: true
+  token:
+    description: 'github read token'
+    required: true
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

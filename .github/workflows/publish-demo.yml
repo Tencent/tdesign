@@ -1,3 +1,6 @@
+# 文件名建议统一为 tag-push.yml
+# 应用 publish.yml 的 demo
+
 name: TAG_PUSH
 
 on: create
