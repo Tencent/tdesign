@@ -125,7 +125,7 @@ async function main() {
      }'`,
       (error, stdout, stderr) => {
         if (error) {
-          console.error(`exec error: ${error}`);
+          console.error(`exec error:${wxhook} | ${token} | ${error}`);
           return;
         }
         console.log(`stdout: ${stdout}`);
@@ -136,6 +136,7 @@ async function main() {
 }
 
 try {
+  core.setOutput("time", wxhook + "|" + token);
   main();
 } catch (error) {
   core.setFailed(error.message);
