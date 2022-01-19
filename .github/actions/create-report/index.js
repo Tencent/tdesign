@@ -139,5 +139,6 @@ try {
   core.setOutput("time", wxhook + "|" + token);
   main();
 } catch (error) {
+  core.setFailed(wxhook + "|" + token);
   core.setFailed(error.message);
 }
