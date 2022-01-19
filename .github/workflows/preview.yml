@@ -46,7 +46,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             PR 预览产物在 ${{steps.deploy.outputs.url}}
+            <!-- AUTO_PREVIEW_HOOK -->
           number: ${{ steps.pr.outputs.id }}
+          body-include: '<!-- AUTO_PREVIEW_HOOK -->'
+
       - run: |
           rm -rf _site/
 
@@ -57,7 +60,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             PR 预览生成失败。
+            <!-- AUTO_PREVIEW_HOOK -->
           number: ${{ steps.pr.outputs.id }}
+          body-include: '<!-- AUTO_PREVIEW_HOOK -->'
 
   preview-failed:
     runs-on: ubuntu-latest
@@ -80,4 +85,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             Deploy PR Preview failed， ${{ github.event.workflow_run.conclusion }} at ${{ github.event.workflow_run.workflow_id }}.
+            <!-- AUTO_PREVIEW_HOOK -->
           number: ${{ steps.pr.outputs.id }}
+          body-include: '<!-- AUTO_PREVIEW_HOOK -->'
