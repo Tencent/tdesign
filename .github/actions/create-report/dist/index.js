@@ -8547,8 +8547,6 @@ const { exec } = __nccwpck_require__(2081);
 const wxhook = core.getInput("wxhook");
 const token = core.getInput("token");
 
-console.log(wxhook, token);
-
 const octokit = new Octokit({ auth: token });
 
 const ReposEnum = [
@@ -8666,7 +8664,7 @@ async function main() {
      }'`,
       (error, stdout, stderr) => {
         if (error) {
-          console.error(`exec error:${wxhook} | ${token} | ${error}`);
+          console.error(`exec error: ${error}`);
           return;
         }
         console.log(`stdout: ${stdout}`);
@@ -8677,10 +8675,8 @@ async function main() {
 }
 
 try {
-  core.setOutput("time", wxhook + "|" + token);
   main();
 } catch (error) {
-  core.setFailed(wxhook + "|" + token);
   core.setFailed(error.message);
 }
 
