@@ -8,7 +8,7 @@ jobs:
   create-report:
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/actions/create-report@main
+      - uses: ./.github/actions/create-report
         with:
           wxhook: ${{ secrets.WX_HOOK_URL }}
           token: ${{ secrets.GIT_TOKEN_L }}
