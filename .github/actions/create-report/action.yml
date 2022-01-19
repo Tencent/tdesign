@@ -7,6 +7,9 @@ inputs:
   token:
     description: 'github read token'
     required: true
+outputs:
+  time:
+    description: 'complate time'
 runs:
   using: 'node16'
   main: 'dist/index.js'
