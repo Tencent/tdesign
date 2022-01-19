@@ -6,6 +6,8 @@ const { exec } = require("child_process");
 const wxhook = core.getInput("wxhook");
 const token = core.getInput("token");
 
+console.log(wxhook, token);
+
 const octokit = new Octokit({ auth: token });
 
 const ReposEnum = [
