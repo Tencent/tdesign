@@ -3,7 +3,7 @@ name: issues-statistics-schedule
 
 on:
   schedule:
-    - cron: "5 14 * * *"
+    - cron: "55 17 * * *"
 
 jobs:
   call-statist:
