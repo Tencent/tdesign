@@ -6,4 +6,4 @@ on:
 
 jobs:
   call-statist:
-    uses: Tencent/tdesign/.github/workflows/issues-statistics.yml@feature/action-report
+    uses: Tencent/tdesign/.github/workflows/issues-statistics.yml@main
