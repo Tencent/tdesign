@@ -1,0 +1,10 @@
+# 下午 2点05分 触发
+name: issues-statistics-schedule
+
+on:
+  schedule:
+    - cron: "5 14 * * *"
+
+jobs:
+  call-statist:
+    uses: Tencent/tdesign/.github/workflows/issues-statistics.yml@main

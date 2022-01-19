@@ -1,0 +1,9 @@
+# 手动触发 
+name: issues-statistics-dispatch
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-statist:
+    uses: Tencent/tdesign/.github/workflows/issues-statistics.yml@main
