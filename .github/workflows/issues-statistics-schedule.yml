@@ -3,8 +3,11 @@ name: issues-statistics-schedule
 
 on:
   schedule:
-    - cron: "5 14 * * *"
+    - cron: "55 17 * * *"
 
 jobs:
   call-statist:
     uses: Tencent/tdesign/.github/workflows/issues-statistics.yml@main
+    secrets:
+      WX_HOOK_URL: ${{ secrets.WX_HOOK_URL }}
+      GIT_TOKEN_L: ${{ secrets.GIT_TOKEN_L }}

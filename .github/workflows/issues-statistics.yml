@@ -3,6 +3,11 @@ name: issues-day-statistics
 
 on:
   workflow_call:
+    secrets:
+      WX_HOOK_URL:
+        required: true
+      GIT_TOKEN_L:
+        required: true
 
 jobs:
   create-report:
