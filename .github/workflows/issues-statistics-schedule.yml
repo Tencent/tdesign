@@ -1,9 +1,10 @@
-# 下午 2点05分 触发
+# 国际标准时间+8
 name: issues-statistics-schedule
 
 on:
+  workflow_dispatch:
   schedule:
-    - cron: "55 17 * * *"
+    - cron: "0 6 * * *"
 
 jobs:
   call-statist:
