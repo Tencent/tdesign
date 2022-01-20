@@ -1,12 +1,12 @@
 # force copy from tencent/tdesign
-name: Add comment
+name: Issue Help wanted
 on:
   issues:
     types:
       - labeled
 jobs:
   add-comment:
-    if: github.event.label.name == 'help-wanted'
+    if: github.event.label.name == 'help wanted'
     runs-on: ubuntu-latest
     permissions:
       issues: write
