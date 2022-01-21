@@ -10,10 +10,10 @@ jobs:
       uses: andstor/copycat-action@v3
       with:
         personal_token: ${{ secrets.PERSONAL_TOKEN }}
-        src_path: /.
-        src_branch: feature/action-report
-        dst_branch: main
+        src_path: /.github/workflows
+        src_branch: main
         dst_path: /.github/workflows
+        dst_branch: main
         dst_owner: 94dreamer
         dst_repo_name: test-action
         filter: '**/*.temp.yml'
