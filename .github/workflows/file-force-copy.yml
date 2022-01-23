@@ -14,9 +14,9 @@ jobs:
         src_branch: main
         dst_path: /.github/workflows
         dst_branch: main
-        dst_owner: 94dreamer
-        dst_repo_name: test-action
+        dst_owner: Tencent
+        dst_repo_name: tdesign-react
         filter: '**/*.temp.yml'
-        # exclude: */actions/*
         username: 94dreamer
         email: 503633021@qq.com
+        commit_message: 'ci: update files "/.github/workflows" from "Tencent/tdesign"'
