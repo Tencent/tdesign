@@ -1,77 +1,186 @@
+import { h } from 'vue';
+import { Popup } from 'tdesign-vue-next';
+
 export default {
   'zh-CN': {
     lang: 'zh-CN',
-    introTitle: '在你开始之前...',
-    introOne: '首先，虽然我们为了中文用户的方便提供了中文的表单，但在填写时请',
-    introWarningTitle: '不要用 Issue Helper 提使用问题！',
-    introWarningContent: '这只会让 Issue 被立即关闭。如果有使用问题，可以加入官方社区求助：',
-    introTwo: '对于使用中遇到的问题，请使用以下资源：',
+    introTitle: '欢迎你的参与',
+    introCommunity: () =>
+      h(
+        'div',
+        { class: 'content-text' },
+        {
+          default: () => [
+            'TDesign 的 Issue 列表接受 bug 报告或是新功能请求。也可加入官方社区：',
+            h(
+              Popup,
+              {
+                content: () =>
+                  h('img', {
+                    style: {
+                      width: '112px',
+                      height: '112px',
+                      display: 'block',
+                    },
+                    src: '../src/assets/TDesign-IM.png',
+                  }),
+                showArrow: true,
+              },
+              { default: () => h('a', null, '企业微信') }
+            ),
+            '。',
+          ],
+        }
+      ),
+    introOne: () =>
+      h(
+        'div',
+        { class: 'content-text' },
+        {
+          default: () => [
+            '在发布一个 Issue 前，请确保：',
+            h('br'),
+            '1. 在 ',
+            h('a', null, '常见问题'),
+            '、',
+            h('a', null, '更新日志'),
+            ' 和 ',
+            h('a', null, '旧issue列表 '),
+            '中搜索过你的问题。（你的问题可能已有人提出，也可能已在最新版本中被修正）',
+            h('br'),
+            '2. 如果你发现一个已经关闭的旧 issue 在最新版本中仍然存在，不要在旧 issue 下面留言，请建一个新的 issue。',
+          ],
+        }
+      ),
+    introWarningMsg: '注意：不符合issue规定发将会被关闭',
+    introWarningBtn: '什么是 Good Issue？',
     explainTitle: '为什么要有这么严格的 issue 规定？',
-    explain: '维护开源项目是',
-    repoSelectHint: '选择要提交 issue 的库',
+    explain: () =>
+      h(
+        'div',
+        { class: 'content-text' },
+        {
+          default: () => [
+            h(
+              'p',
+              null,
+              '维护开源项目是非常辛苦的工作。随着 TDesign 在社区越来越受欢迎，我们每天都在收到越来越多的问题、bug 报告、功能需求和 Pull Requests。作为一个完全免费使用的开源项目，TDesign 项目的维护人手是有限的。这意味着想要让项目长期的可持续发展，我们必须：'
+            ),
+            h('ol', null, {
+              default: () => [
+                h(
+                  'li',
+                  null,
+                  '给予更具体的工作更高的优先级（比如 bug 的修复和新功能的开发）；'
+                ),
+                h('li', null, '提高 issue 处理的效率。'),
+              ],
+            }),
+            h(
+              'p',
+              null,
+              '针对（1），我们决定将 GitHub issue 列表严格地限制用于有具体目标和内容的工作。问题和讨论应当发送到更适合它们的场合。'
+            ),
+            h(
+              'p',
+              null,
+              '针对（2），我们发现影响 issue 处理效率的最大因素是用户在开 issue 时没有提供足够的信息。这导致我们需要花费大量的时间去跟用户来回沟通，只为了获得一些基本信息好让我们对 issue 进行真正的分析。这正是我们开发 Issue Helper 的理由：我们要确保每个新 issue 都提供了必需的信息，这样能节省维护者和开发者双方的时间。'
+            ),
+            h(
+              'p',
+              null,
+              '最重要的是，请明白一件事：开源项目的用户和维护者之间并不是甲方和乙方的关系，issue 也不是客服。在开 issue 的时候，请抱着一种「一起合作来解决这个问题」的心态，不要期待我们单方面地为你服务。'
+            ),
+          ],
+        }
+      ),
+    explainBtn: '我知道了',
     repos: [
       {
-        name: 'naive-ui',
-        github: 'TuSimple/naive-ui',
-        npm: 'naive-ui',
+        name: 'TDesign',
+        github: 'Tencent/tdesign',
+        npm: '',
+      },
+      {
+        name: 'TDesign-vue',
+        github: 'Tencent/tdesign-vue',
+        npm: 'tdesign-vue',
+      },
+      {
+        name: 'TDesign-vue-next',
+        github: 'Tencent/tdesign-vue-next',
+        npm: 'tdesign-vue-next',
+      },
+      {
+        name: 'TDesign-react',
+        github: 'Tencent/tdesign-react',
+        npm: 'tdesign-react',
+      },
+      {
+        name: 'TDesign-miniprogram',
+        github: 'Tencent/tdesign-miniprogram',
+        npm: 'tdesign-miniprogram',
+      },
+      {
+        name: 'TDesign-starter-cli',
+        github: 'Tencent/tdesign-starter-cli',
+        npm: 'tdesign-starter-cli',
+      },
+      {
+        name: 'TDesign-common',
+        github: 'Tencent/tdesign-common',
+        npm: '',
+      },
+      {
+        name: 'TDesign-vue-starter',
+        github: 'Tencent/tdesign-vue-starter',
+        npm: '',
+      },
+      {
+        name: 'TDesign-vue-next-starter',
+        github: 'Tencent/tdesign-vue-next-starter',
+        npm: '',
+      },
+      {
+        name: 'TDesign-icons',
+        github: 'Tencent/tdesign-icons',
+        npm: '',
       },
     ],
-    issueTypesHint: 'Issue 类别',
-    issueTitleHint: 'Issue 标题',
+    issueTypesLabel: 'Issue 类别',
+    repoSelectLabel: '相关仓库',
+    issueTitleLabel: 'Issue 标题',
+    issueTitlePlaceholder: '[组件名称] 描述问题的标题',
     issueTypes: [
       { label: 'Bug', value: 'Bug' },
       { label: '新功能', value: 'New' },
     ],
-    versionRepositoryHint: '项目版本',
-    versionVueHint: 'Vue版本',
-    versionBrowserHint: '浏览器及其版本',
-    versionSystemHint: '系统及其版本',
-    versionNodeHint: 'Node版本（可选）',
-    firstTipTitle: '版本',
-    firstTip: '请检查在最新项目版本中能否重现此 issue。',
-    reproduceHint: '重现链接',
-    secondTipTitle: '重现链接',
-    secondTip:
-      '请提供一个尽可能精简的 CodePen、CodeSandbox 或是提供一个 GitHub 仓库的链接。请不要乱填一个链接，那只会让你的 issue 被直接关闭。',
-    reproduceHintSamll: '什么是最小化重现，为什么这是必需的？',
-    reproduceTitle: '关于重现',
-    reproduceExplain:
-      '所谓『重现』，就是一段可以运行并展示一个 bug 如何发生的代码。',
-    reproduceExplainTitleOne: '文字是不够的',
-    reproduceExplainParagraphOne:
-      '如果你遇到一个问题，但是只提供了一些文字描述，我们是不可能修复这个 bug 的。首先，文字在描述技术问题时的表达难度和不精确性；其次，问题的真实原因有很多可能，它完全有可能是一个你根本没有提及的因素导致的。重现是唯一能够可靠地让我们理解问题本质的方式。',
-    reproduceExplainTitleTwo: '重现必须是可运行的',
-    keyWords: '截图和视频不是重现。',
-    reproduceExplainParagraphTwo:
-      '它们仅仅证明了 bug 的存在，但却不能提供关于 bug 是如何发生的信息。只有可运行的代码提供了完整的上下文，并让我们可以进行真正的 debug 而不是空想和猜测。当然，在提供的重现的前提下，视频或是 gif 动画可以帮助解释一些比较难用文字描述的交互行为。',
-    reproduceExplainTitleThree: '重现应当尽量精简',
-    reproduceExplainParagraphThree1:
-      '有些用户会直接给我们一整个项目的代码，然后希望我们帮忙找出问题所在。此类请求我们通常不予接受，因为：',
-    reproduceExplainParagraphThree2:
-      '你对你的项目的代码结构可能已经非常熟悉，但我们并不是。阅读、运行、分析一个完全陌生的项目是极其耗费时间和精力的；',
-    reproduceExplainParagraphThree3:
-      '由于涉及了大量业务代码，问题可能是你的代码错误，而不是所使用库的 bug 所导致的。',
-    reproduceExplainParagraphThree4:
-      '一个最小化的重现意味着它精确地定位了 bug 本身 - 它应当只包含能够触发 bug 的最少量的代码。你应当尽可能地剔除任何跟该 bug 无关的部分。',
-    reproduceExplainTitleFour: '如何提供一个重现',
-    reproduceExplainParagraphFour:
-      '提供一个尽可能精简的 CodePen、CodeSandbox 或是提供一个 GitHub 仓库的链接',
-    stepsHint: '重现步骤',
-    thirdTipTitle: '重现步骤',
-    thirdTip:
-      "打开重现后，我们需要执行哪些操作才能让 bug 出现？简洁清晰的重现步骤能够帮助我们更迅速地定位问题所在。请清晰的描述重现该 issue 的步骤，没有清晰重现步骤的 issue 将不会被修复。标有 'need reproduction' 的 issue 如果在 7 天内不提供相关步骤，将直接被关闭。",
-    expectHint: '期望的结果是什么',
-    actualHint: '实际的结果是什么',
-    remarks: '补充说明（可选）',
-    fourthTipTitle: '补充说明',
-    fourthTip: '可以是遇到这个 bug 的业务场景、上下文等信息。',
+    versionRepositoryLabel: '相关版本',
+    versionRepositoryTip: '请检查在最新项目版本中能否重现此 issue。',
+    versionStructureLabel: '框架版本',
+    versionBrowserLabel: '浏览器及其版本',
+    versionBrowserPlaceholder: 'Chrome (89.0.4389.128)',
+    versionSystemLabel: '系统及其版本',
+    versionSystemPlaceholder: 'MacOS (11.2.3)',
+    versionNodeLabel: 'Node版本',
+    reproduceLabel: '重现链接',
+    reproduceTip:
+      '请提供尽可能精简的 CodePen、CodeSandbox 或 GitHub 仓库的链接。请不要填无关链接，否则你的 issue 将被关闭。',
+    stepsLabel: '重现步骤',
+    stepsTip:
+      "请清晰的描述重现该 issue 的步骤，这能帮助我们快速定位问题。没有清晰重现步骤将不会被修复，标有 'need reproduction' 的 issue 在 7 天内不提供相关步骤，将被关闭。",
+    expectLabel: '期望结果',
+    actualLabel: '实际结果',
+    remarksLabel: '补充说明',
+    remarksTip: '可以是遇到这个 bug 的业务场景、上下文等信息。',
+    placeholder: '请输入内容',
     preview: '预览',
     valid: {
       repo: '请选择库名',
       title: '请填写 issue 标题',
       type: '请选择 issue 类别',
       versionRepository: '请选择项目的版本',
-      versionVue: '请选择Vue版本',
+      versionStructure: '请选择框架版本',
       versionBrowser: '请填写浏览器及其版本',
       versionSystem: '请填写系统及其版本',
       reproduce: '请填写重现链接',
@@ -79,22 +188,18 @@ export default {
       expected: '请填写期望的结果',
       actual: '请填写实际的结果',
       functionContent: '请填写这个功能解决的问题',
-      functionalExpectations: '请填写你期望的 API',
+      functionalExpectations: '请填写你建议的方案是什么？',
     },
     loadingText: '加载中',
     noMatchText: '无匹配数据',
     noDataText: '无数据',
     dialog: {
-      title: 'Issue 预览',
+      header: 'Issue 预览',
       button: '创建',
     },
-    functionContent: '这个功能解决了什么问题',
-    functionContentTipTitle: '这个功能解决了什么问题',
+    functionContentLabel: '这个功能解决了什么问题',
     functionContentTip:
-      '请尽可能详尽地说明这个需求的用例和场景。最重要的是：解释清楚是怎样的用户体验需求催生了这个功能上的需求。Naive UI 的一个重要设计原则是保持 API 的简洁和直接。通常来说，我们只考虑添加在现有的 API 下无法轻松实现的功能。新功能的用例也应当足够常见。',
-    functionalExpectations: '你期望的 API 是怎样的',
-    functionalExpectationsTipTitle: '你期望的 API 是怎样的',
-    functionalExpectationsTip:
-      '描述一下你期望这个新功能的 API 是如何使用的，并提供一些代码示例。',
+      '请详尽说明这个需求的用例和场景。最重要的是：解释清楚是怎样的用户体验需求催生了这个功能上的需求。我们将考虑添加在现有 API 无法轻松实现的功能。新功能的用例也应当足够常见。',
+    functionalExpectationsLabel: '你建议的方案是什么？',
   },
 };
