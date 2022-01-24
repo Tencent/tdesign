@@ -13,6 +13,9 @@ jobs:
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
     steps:
+      - run: echo ${{github.repository}}
+      - run: echo ${{github.run_id}}
+      - run: echo ${{github.run_number}}
       - name: download pr artifact
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -45,10 +48,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            PR 预览产物在 ${{steps.deploy.outputs.url}}
+            [<img height="96" alt="完成" src="https://user-images.githubusercontent.com/15634204/150816437-9f5bb788-cd67-4cbc-9897-b82d74e9aa65.png">](${{steps.deploy.outputs.url}})
+            [工作流地址](${{github.server_url}}${{github.repository}}${{github.run_id}})
             <!-- AUTO_PREVIEW_HOOK -->
           number: ${{ steps.pr.outputs.id }}
-          body-include: '<!-- AUTO_PREVIEW_HOOK -->'
+          body-include: "<!-- AUTO_PREVIEW_HOOK -->"
 
       - run: |
           rm -rf _site/
@@ -59,10 +63,10 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            PR 预览生成失败。
+            [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">]()
             <!-- AUTO_PREVIEW_HOOK -->
           number: ${{ steps.pr.outputs.id }}
-          body-include: '<!-- AUTO_PREVIEW_HOOK -->'
+          body-include: "<!-- AUTO_PREVIEW_HOOK -->"
 
   preview-failed:
     runs-on: ubuntu-latest
@@ -84,7 +88,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            Deploy PR Preview failed， ${{ github.event.workflow_run.conclusion }} at ${{ github.event.workflow_run.workflow_id }}.
+            [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">]()
             <!-- AUTO_PREVIEW_HOOK -->
           number: ${{ steps.pr.outputs.id }}
-          body-include: '<!-- AUTO_PREVIEW_HOOK -->'
+          body-include: "<!-- AUTO_PREVIEW_HOOK -->"
