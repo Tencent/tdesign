@@ -7,6 +7,7 @@ import {
   onMounted,
   watch,
   Ref,
+  nextTick,
 } from 'vue';
 import axios from 'axios';
 import content from '../../content';
@@ -20,7 +21,8 @@ export default defineComponent({
     lang: {
       type: String as PropType<'en-US' | 'zh-CN'>,
     },
-    onLangChange: {
+    repo: String,
+    onRepoChange: {
       type: Function,
     },
   },
@@ -29,7 +31,7 @@ export default defineComponent({
     const contentTextRef = computed(() => content[lang.value]);
     const formRef: Ref<any> = ref(null);
     const formDataRef = ref({
-      repo: 'Tencent/tdesign',
+      repo: props.repo,
       title: '',
       type: 'Bug',
       versionRepository: '',
@@ -126,6 +128,8 @@ export default defineComponent({
     });
 
     const fetchVersionOptions = async () => {
+      formDataRef.value.versionRepository = '';
+      versionOptionsRef.value = [];
       if (!hasNpmRef.value) return;
       const res = await axios.get(versionUrl.value);
       versionOptionsRef.value = Object.keys(res.data.versions).map((i) => {
@@ -137,17 +141,26 @@ export default defineComponent({
     onMounted(() => {
       fetchVersionOptions();
     });
+
     watch(
       () => formDataRef.value.repo,
       () => {
         fetchVersionOptions();
+        formRef.value.clearValidate();
+      }
+    );
+
+    watch(
+      () => formDataRef.value.type,
+      () => {
+        formRef.value.clearValidate();
       }
     );
 
     const handlePreview = ({ validateResult, firstError, e }) => {
       e.preventDefault();
       if (validateResult === true) {
-        create(isBugRef, formDataRef);
+        create(isBugRef, formDataRef, contentTextRef);
       } else {
         MessagePlugin.warning(firstError);
       }
@@ -178,7 +191,11 @@ export default defineComponent({
           <t-row gutter={48} class={styles.formItem}>
             <t-col span={6}>
               {/* Issue 类别 */}
-              <t-form-item label={contentText.issueTypesLabel} name="type">
+              <t-form-item
+                label={contentText.issueTypesLabel}
+                name="type"
+                key="type"
+              >
                 <t-radio-group
                   variant="default-filled"
                   v-model={formData.type}
@@ -201,10 +218,15 @@ export default defineComponent({
             </t-col>
             <t-col span={6}>
               {/* 相关仓库 */}
-              <t-form-item label={contentText.repoSelectLabel} name="repo">
+              <t-form-item
+                label={contentText.repoSelectLabel}
+                name="repo"
+                key="repo"
+              >
                 <t-select
                   v-model:value={formData.repo}
                   options={this.repoOptions}
+                  onChange={(value) => this.onRepoChange(value)}
                 />
               </t-form-item>
             </t-col>
@@ -213,7 +235,11 @@ export default defineComponent({
           <t-row gutter={48} class={styles.formItem}>
             <t-col span={12}>
               {/* Issue 标题 */}
-              <t-form-item label={contentText.issueTitleLabel} name="title">
+              <t-form-item
+                label={contentText.issueTitleLabel}
+                name="title"
+                key="title"
+              >
                 <t-input
                   v-model={formData.title}
                   placeholder={contentText.issueTitlePlaceholder}
@@ -229,6 +255,7 @@ export default defineComponent({
                   <t-form-item
                     label={contentText.versionRepositoryLabel}
                     name="versionRepository"
+                    key="versionRepository"
                   >
                     <t-select
                       v-model:value={formData.versionRepository}
@@ -247,8 +274,12 @@ export default defineComponent({
                   <t-form-item
                     label={contentText.versionStructureLabel}
                     name="versionStructure"
+                    key="versionStructure"
                   >
-                    <t-input v-model={formData.versionStructure} placeholder={contentText.placeholder} />
+                    <t-input
+                      v-model={formData.versionStructure}
+                      placeholder={contentText.placeholder}
+                    />
                   </t-form-item>
                 </t-col>
                 <t-col span={6}>
@@ -256,6 +287,7 @@ export default defineComponent({
                   <t-form-item
                     label={contentText.versionBrowserLabel}
                     name="versionBrowser"
+                    key="versionBrowser"
                   >
                     <t-input
                       v-model={formData.versionBrowser}
@@ -271,6 +303,7 @@ export default defineComponent({
                   <t-form-item
                     label={contentText.versionSystemLabel}
                     name="versionSystem"
+                    key="versionSystem"
                   >
                     <t-input
                       v-model={formData.versionSystem}
@@ -283,6 +316,7 @@ export default defineComponent({
                   <t-form-item
                     label={contentText.versionNodeLabel}
                     name="versionNode"
+                    key="versionNode"
                   >
                     <t-input
                       v-model={formData.versionNode}
@@ -298,6 +332,7 @@ export default defineComponent({
                   <t-form-item
                     label={contentText.reproduceLabel}
                     name="reproduce"
+                    key="reproduce"
                   >
                     <t-input
                       v-model={formData.reproduce}
@@ -313,7 +348,11 @@ export default defineComponent({
               <t-row gutter={48} class={styles.formItem}>
                 <t-col span={12}>
                   {/* 重现步骤 */}
-                  <t-form-item label={contentText.stepsLabel} name="steps">
+                  <t-form-item
+                    label={contentText.stepsLabel}
+                    name="steps"
+                    key="steps"
+                  >
                     <t-textarea
                       v-model={formData.steps}
                       autosize={{ minRows: 2, maxRows: 5 }}
@@ -329,7 +368,11 @@ export default defineComponent({
               <t-row gutter={48} class={styles.formItem}>
                 <t-col span={12}>
                   {/* 期望结果 */}
-                  <t-form-item label={contentText.expectLabel} name="expected">
+                  <t-form-item
+                    label={contentText.expectLabel}
+                    name="expected"
+                    key="expected"
+                  >
                     <t-textarea
                       v-model={formData.expected}
                       autosize={{ minRows: 2, maxRows: 5 }}
@@ -342,7 +385,11 @@ export default defineComponent({
               <t-row gutter={48} class={styles.formItem}>
                 <t-col span={12}>
                   {/* 实际结果 */}
-                  <t-form-item label={contentText.actualLabel} name="actual">
+                  <t-form-item
+                    label={contentText.actualLabel}
+                    name="actual"
+                    key="actual"
+                  >
                     <t-textarea
                       v-model={formData.actual}
                       autosize={{ minRows: 2, maxRows: 5 }}
@@ -355,7 +402,11 @@ export default defineComponent({
               <t-row gutter={48}>
                 <t-col span={12}>
                   {/* 补充说明 */}
-                  <t-form-item label={contentText.remarksLabel} name="remarks">
+                  <t-form-item
+                    label={contentText.remarksLabel}
+                    name="remarks"
+                    key="remarks"
+                  >
                     <t-textarea
                       v-model={formData.remarks}
                       autosize={{ minRows: 2, maxRows: 5 }}
@@ -376,6 +427,7 @@ export default defineComponent({
                   <t-form-item
                     label={contentText.functionContentLabel}
                     name="functionContent"
+                    key="functionContent"
                   >
                     <t-textarea
                       v-model={formData.functionContent}
@@ -395,6 +447,7 @@ export default defineComponent({
                   <t-form-item
                     label={contentText.functionalExpectationsLabel}
                     name="functionalExpectations"
+                    key="functionalExpectations"
                   >
                     <t-textarea
                       v-model={formData.functionalExpectations}

@@ -5,48 +5,50 @@ function createComment(type: string) {
   return comment.replace('-->', IssueTypeLabel[type] + ' -->');
 }
 
-function creatIssue(isBugRef, formDataRef) {
+function creatIssue(isBugRef, formDataRef, contentTextRef) {
   return isBugRef.value
-    ? `### ${formDataRef.value.repo} version (版本)
+    ? `### ${contentTextRef.value.versionRepositoryLabel}
 ${formDataRef.value.versionRepository}
 
-### Vue version (Vue 版本)
-${formDataRef.value.versionVue}
+### ${contentTextRef.value.versionStructureLabel}
+${formDataRef.value.versionStructure}
 
-### Browser and its version (浏览器及其版本)
+### ${contentTextRef.value.versionBrowserLabel}
 ${formDataRef.value.versionBrowser}
 
-### System and its version (系统及其版本)
+### ${contentTextRef.value.versionSystemLabel}
 ${formDataRef.value.versionSystem}
 
-### Node version (Node 版本)
+### ${contentTextRef.value.versionNodeLabel}
 ${formDataRef.value.versionNode}
 
-### Reappearance link (重现链接)
+### ${contentTextRef.value.reproduceLabel}
 ${formDataRef.value.reproduce}
 
-### Reappearance steps (重现步骤)
+### ${contentTextRef.value.stepsLabel}
 ${formDataRef.value.steps}
 
-### Expected results (期望的结果)
+### ${contentTextRef.value.expectLabel}
 ${formDataRef.value.expected}
 
-### Actual results (实际的结果)
+### ${contentTextRef.value.actualLabel}
 ${formDataRef.value.actual}
 
-### Remarks (补充说明)
+### ${contentTextRef.value.remarksLabel}
 ${formDataRef.value.remarks}
 `.trim()
-    : `### This function solves the problem (这个功能解决的问题)
+    : `### ${contentTextRef.value.functionContentLabel}
 ${formDataRef.value.functionContent}
-### Expected API (期望的 API)
+
+### ${contentTextRef.value.functionalExpectationsLabel}
 ${formDataRef.value.functionalExpectations}`.trim();
 }
 
-export function create(isBugRef, formDataRef) {
+export function create(isBugRef, formDataRef, contentTextRef) {
   const issueString = `${createComment(formDataRef.value.type)}\n\n${creatIssue(
     isBugRef,
-    formDataRef
+    formDataRef,
+    contentTextRef
   )}\n\n${createComment(formDataRef.value.type)}`;
   const issueUriComponent = encodeURIComponent(issueString).replace(
     /%2B/gi,

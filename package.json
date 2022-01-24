@@ -10,7 +10,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "qs": "^6.10.1",
-    "tdesign-vue-next": "^0.6.4",
+    "tdesign-vue-next": "^0.7.0",
     "vue": "^3.2.12"
   },
   "devDependencies": {

@@ -2,6 +2,7 @@ import qs from 'qs';
 
 export interface QueryType {
   lang?: 'en-US' | 'zh-CN';
+  repo?: string
 }
 
 export const getQuery = () => {

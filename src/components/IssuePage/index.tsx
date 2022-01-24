@@ -8,29 +8,46 @@ import styles from './styles.module.less';
 export default defineComponent({
   name: 'IssuePage',
   setup() {
-    const lang: Ref<'en-US' | 'zh-CN'> = ref('zh-CN');
+    const langRef: Ref<'en-US' | 'zh-CN'> = ref('zh-CN');
+    const repoRef: Ref<string> = ref('Tencent/tdesign');
 
     const setLang = (value: 'en-US' | 'zh-CN') => {
-      lang.value = value;
+      langRef.value = value;
       updateQuery({ lang: value });
+    };
+
+    const setRepo = (value: string) => {
+      repoRef.value = value;
+      updateQuery({ repo: value });
     };
 
     // init
     const param = getQuery();
     if (!param?.lang) {
-      updateQuery({ lang: lang.value });
+      updateQuery({ lang: langRef.value });
     } else {
       setLang(param.lang);
+    }
+
+    if (!param?.repo) {
+      updateQuery({ repo: repoRef.value });
+    } else {
+      setRepo(param.repo);
     }
 
     // back, forward
     window.addEventListener(
       'popstate',
-      () => (lang.value = getQuery()?.lang || 'en-US')
+      () => {
+        langRef.value = getQuery()?.lang || 'zh-CN'
+        repoRef.value = getQuery()?.repo || 'Tencent/tdesign'
+      }
     );
     return {
-      lang,
+      lang: langRef,
+      repo: repoRef,
       setLang,
+      setRepo
     };
   },
   render() {
@@ -39,7 +56,7 @@ export default defineComponent({
       <t-layout class={styles.layout}>
         <PageHead lang={lang} onLangChange={this.setLang} />
         <Intro lang={lang} />
-        <IssueForm lang={lang} />
+        <IssueForm lang={lang} repo={this.repo} onRepoChange={this.setRepo} />
       </t-layout>
     );
   },
