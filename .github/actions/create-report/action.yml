@@ -1,0 +1,12 @@
+name: 'create report'
+description: 'create report to wx'
+inputs:
+  wxhook:
+    description: 'wxhook url'
+    required: true
+  token:
+    description: 'github read token'
+    required: true
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
