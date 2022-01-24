@@ -1,6 +1,15 @@
-name: Copy
+name: Copy to One Repo
+# wanted/duplicate/reply/close
+
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      repo:
+        required: true
+        type: string
+    secrets:
+      PERSONAL_TOKEN:
+        required: true
 
 jobs:
   copy:
@@ -12,10 +21,10 @@ jobs:
         personal_token: ${{ secrets.PERSONAL_TOKEN }}
         src_path: /.github/workflows
         src_branch: main
-        dst_path: /.github/workflows
-        dst_branch: main
+        dst_path: /.github/
+        dst_branch: develop
         dst_owner: Tencent
-        dst_repo_name: tdesign-react
+        dst_repo_name: ${{ inputs.repo }}
         filter: '**/*.temp.yml'
         username: 94dreamer
         email: 503633021@qq.com
