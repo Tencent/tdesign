@@ -8788,7 +8788,8 @@ async function main() {
 
 try {
   if (type === "close") {
-    new DailyClose({ wxhook, token }).run();
+    const dailyClose = new DailyClose({ wxhook, token });
+    dailyClose.run();
   } else {
     main();
   }
