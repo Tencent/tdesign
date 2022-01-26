@@ -1,13 +1,10 @@
-# 生成 github 情况
-name: issues-day-statistics
+# 国际标准时间+8
+name: issues-dailyclose-schedule
 
 on:
-  workflow_call:
-    secrets:
-      WX_HOOK_URL:
-        required: true
-      GIT_TOKEN_L:
-        required: true
+  workflow_dispatch:
+  schedule:
+    - cron: "0 2 * * *"
 
 jobs:
   create-report:
@@ -18,3 +15,4 @@ jobs:
         with:
           wxhook: ${{ secrets.WX_HOOK_URL }}
           token: ${{ secrets.GIT_TOKEN_L }}
+          type: 'close'

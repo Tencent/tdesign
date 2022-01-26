@@ -7,6 +7,9 @@ inputs:
   token:
     description: 'github read token'
     required: true
+  type:
+    description: 'run type'
+    required: false
 outputs:
   time:
     description: 'complate time'

@@ -2,24 +2,14 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const { Octokit } = require("@octokit/rest");
 const { exec } = require("child_process");
+const { ReposEnum } = require("./const");
+const DailyClose = require("./daily-close");
 
 const wxhook = core.getInput("wxhook");
 const token = core.getInput("token");
+const type = core.getInput("type");
 
 const octokit = new Octokit({ auth: token });
-
-const ReposEnum = [
-  "tdesign",
-  "tdesign-vue",
-  "tdesign-vue-next",
-  "tdesign-react",
-  "tdesign-miniprogram",
-  "tdesign-common",
-  "tdesign-starter-cli",
-  "tdesign-vue-starter",
-  "tdesign-vue-next-starter",
-  "tdesign-icons",
-];
 
 function renderMark(data) {
   data.sort((a, b) => b.length - a.length);
@@ -118,7 +108,7 @@ async function main() {
      {
           "msgtype": "markdown",
           "markdown": {
-              "content": "${markdownString}"
+              "content": "${markdownString.replaceAll('"', "'")}"
           }
      }'`,
       (error, stdout, stderr) => {
@@ -134,7 +124,11 @@ async function main() {
 }
 
 try {
-  main();
+  if (type === "close") {
+    new DailyClose({ wxhook, token }).run();
+  } else {
+    main();
+  }
 } catch (error) {
   core.setFailed(error.message);
 }

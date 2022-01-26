@@ -7,8 +7,11 @@ on:
     - cron: "0 6 * * *"
 
 jobs:
-  call-statist:
-    uses: Tencent/tdesign/.github/workflows/issues-statistics.yml@main
-    secrets:
-      WX_HOOK_URL: ${{ secrets.WX_HOOK_URL }}
-      GIT_TOKEN_L: ${{ secrets.GIT_TOKEN_L }}
+  create-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/create-report
+        with:
+          wxhook: ${{ secrets.WX_HOOK_URL }}
+          token: ${{ secrets.GIT_TOKEN_L }}
