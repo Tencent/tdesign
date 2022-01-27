@@ -36,7 +36,6 @@ export default defineComponent({
       type: 'Bug',
       versionRepository: '',
       versionStructure: '',
-      versionBrowser: '',
       versionSystem: '',
       versionNode: '',
       reproduce: '',
