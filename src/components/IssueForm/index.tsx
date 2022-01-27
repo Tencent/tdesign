@@ -132,9 +132,12 @@ export default defineComponent({
       versionOptionsRef.value = [];
       if (!hasNpmRef.value) return;
       const res = await axios.get(versionUrl.value);
-      versionOptionsRef.value = Object.keys(res.data.versions).map((i) => {
-        return { label: i, value: i };
-      });
+      const hasAlphaReg = new RegExp(/-/);
+      versionOptionsRef.value = Object.keys(res.data.versions)
+        .filter((i) => !hasAlphaReg.test(i))
+        .map((i) => {
+          return { label: i, value: i };
+        });
       formDataRef.value.versionRepository = versionOptionsRef.value[0].value;
     };
 
@@ -250,7 +253,7 @@ export default defineComponent({
           {this.isBug ? (
             <>
               <t-row gutter={48} class={styles.formItem}>
-                <t-col span={12}>
+                <t-col span={6}>
                   {/* 相关版本 */}
                   <t-form-item
                     label={contentText.versionRepositoryLabel}
@@ -263,12 +266,7 @@ export default defineComponent({
                     />
                   </t-form-item>
                 </t-col>
-                <div class={[styles.tipContent, styles.contentText]}>
-                  <v-node render={contentText.versionRepositoryTip} />
-                </div>
-              </t-row>
 
-              <t-row gutter={48} class={styles.formItem}>
                 <t-col span={6}>
                   {/* 框架版本 */}
                   <t-form-item
@@ -278,28 +276,19 @@ export default defineComponent({
                   >
                     <t-input
                       v-model={formData.versionStructure}
-                      placeholder={contentText.placeholder}
+                      placeholder={contentText.versionStructurePlaceholder}
                     />
                   </t-form-item>
                 </t-col>
-                <t-col span={6}>
-                  {/* 浏览器及其版本 */}
-                  <t-form-item
-                    label={contentText.versionBrowserLabel}
-                    name="versionBrowser"
-                    key="versionBrowser"
-                  >
-                    <t-input
-                      v-model={formData.versionBrowser}
-                      placeholder={contentText.versionBrowserPlaceholder}
-                    />
-                  </t-form-item>
-                </t-col>
+
+                <div class={[styles.tipContent, styles.contentText]}>
+                  <v-node render={contentText.versionRepositoryTip} />
+                </div>
               </t-row>
 
               <t-row gutter={48} class={styles.formItem}>
                 <t-col span={6}>
-                  {/* 系统及其版本 */}
+                  {/* 系统、浏览器 */}
                   <t-form-item
                     label={contentText.versionSystemLabel}
                     name="versionSystem"
@@ -336,7 +325,7 @@ export default defineComponent({
                   >
                     <t-input
                       v-model={formData.reproduce}
-                      placeholder={contentText.placeholder}
+                      placeholder={contentText.pictureTipPlaceholder}
                     />
                   </t-form-item>
                 </t-col>
@@ -356,7 +345,7 @@ export default defineComponent({
                     <t-textarea
                       v-model={formData.steps}
                       autosize={{ minRows: 2, maxRows: 5 }}
-                      placeholder={contentText.placeholder}
+                      placeholder={contentText.pictureTipPlaceholder}
                     />
                   </t-form-item>
                 </t-col>
