@@ -7,22 +7,7 @@ function createComment(type: string) {
 
 function creatIssue(isBugRef, formDataRef, contentTextRef) {
   return isBugRef.value
-    ? `### ${contentTextRef.value.versionRepositoryLabel}
-${formDataRef.value.versionRepository}
-
-### ${contentTextRef.value.versionStructureLabel}
-${formDataRef.value.versionStructure}
-
-### ${contentTextRef.value.versionBrowserLabel}
-${formDataRef.value.versionBrowser}
-
-### ${contentTextRef.value.versionSystemLabel}
-${formDataRef.value.versionSystem}
-
-### ${contentTextRef.value.versionNodeLabel}
-${formDataRef.value.versionNode}
-
-### ${contentTextRef.value.reproduceLabel}
+    ? `### ${contentTextRef.value.reproduceLabel}
 ${formDataRef.value.reproduce}
 
 ### ${contentTextRef.value.stepsLabel}
@@ -33,9 +18,26 @@ ${formDataRef.value.expected}
 
 ### ${contentTextRef.value.actualLabel}
 ${formDataRef.value.actual}
-
+${
+  formDataRef.value.remarks
+    ? `
 ### ${contentTextRef.value.remarksLabel}
 ${formDataRef.value.remarks}
+`
+    : ``
+}
+| Environment | Info |
+|---|---|
+| ${contentTextRef.value.versionRepositoryLabel} | ${
+        formDataRef.value.versionRepository || '-'
+      } |
+| ${contentTextRef.value.versionStructureLabel} | ${
+        formDataRef.value.versionStructure
+      } |
+| ${contentTextRef.value.versionSystemLabel} | ${
+        formDataRef.value.versionSystem
+      } |
+| ${contentTextRef.value.versionNodeLabel} | ${formDataRef.value.versionNode} |
 `.trim()
     : `### ${contentTextRef.value.functionContentLabel}
 ${formDataRef.value.functionContent}

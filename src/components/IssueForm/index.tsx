@@ -94,7 +94,7 @@ export default defineComponent({
           new Promise((resolve) => {
             resolve(
               val &&
-                /(github|jsfiddle|codepen|jsbin|codesandbox|stackblitz)/gi.test(
+                /(github|jsfiddle|codepen|jsbin|codesandbox|stackblitz|tdesign)/gi.test(
                   val
                 )
             );

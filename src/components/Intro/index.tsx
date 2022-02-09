@@ -8,14 +8,16 @@ export default defineComponent({
     lang: {
       type: String as PropType<'en-US' | 'zh-CN'>,
     },
+    repo: String,
   },
   setup(props) {
     const langRef = toRef(props, 'lang');
-    const contentText = computed(() => content[langRef.value]);
-    const introVisibleRef: Ref<boolean> = ref(false);
-    function handleClose() {
-      introVisibleRef.value = false;
-    }
+    const contentTextRef = computed(() => content[langRef.value]);
+    const introUrlRef = computed(() => ({
+      faqUrl: 'https://tdesign.tencent.com/about/faq',
+      changeLogUrl: `https://github.com/${props.repo}/blob/main/CHANGELOG.md`,
+      issuesUrl: `https://github.com/${props.repo}/issues?q=is%3Aissue`
+    }))
 
     function renderAlertMsg() {
       return h('span', null, {
@@ -23,26 +25,20 @@ export default defineComponent({
           h(
             'span',
             { class: 'intro-warning-tip' },
-            contentText.value.introWarningMsg
+            contentTextRef.value.introWarningMsg
           ),
-          // h(
-          //   'a',
-          //   { onClick: () => (introVisibleRef.value = true) },
-          //   contentText.value.introWarningBtn
-          // ),
         ],
       });
     }
     return {
       lang: langRef,
-      contentText,
-      introVisible: introVisibleRef,
+      contentText: contentTextRef,
+      introUrl: introUrlRef,
       renderAlertMsg,
-      handleClose,
     };
   },
   render() {
-    const { lang, contentText, introVisible } = this;
+    const { contentText } = this;
     return (
       <>
         <div class={styles.introTitleLayout}>
@@ -57,24 +53,12 @@ export default defineComponent({
 
         <div class={styles.contentBox}>
           <v-node
-            render={contentText.introOne}
+            render={() => contentText.introOne(this.introUrl)}
             class={styles.contentParagraph}
           />
 
           <t-alert message={this.renderAlertMsg} theme="warning" />
         </div>
-
-        <t-dialog
-          v-model:visible={introVisible}
-          theme="info"
-          width="735px"
-          cancelBtn={null}
-          confirmBtn={contentText.explainBtn}
-          header={contentText.explainTitle}
-          body={contentText.explain}
-          on-close={this.handleClose}
-          on-confirm={this.handleClose}
-        />
       </>
     );
   },

@@ -51,12 +51,12 @@ export default defineComponent({
     };
   },
   render() {
-    const { lang } = this;
+    const { lang, repo } = this;
     return (
       <t-layout class={styles.layout}>
         <PageHead lang={lang} onLangChange={this.setLang} />
-        <Intro lang={lang} />
-        <IssueForm lang={lang} repo={this.repo} onRepoChange={this.setRepo} />
+        <Intro lang={lang} repo={repo} />
+        <IssueForm lang={lang} repo={repo} onRepoChange={this.setRepo} />
       </t-layout>
     );
   },
