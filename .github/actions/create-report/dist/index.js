@@ -103,7 +103,7 @@ ${data
        -H 'Content-Type: application/json' \
        -d '
        {
-            "chatid": "wrkSFfCgAA-QNmuIjascLNFfmkFVQT5A",
+            "chatid": "wrkSFfCgAA-QNmuIjascLNFfmkFVQT5A|ww3027190586",
             "msgtype": "markdown",
             "markdown": {
                 "content": "${template.replaceAll('"', "'")}"
