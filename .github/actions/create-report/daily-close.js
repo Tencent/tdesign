@@ -4,20 +4,17 @@
 const { Octokit } = require("@octokit/rest");
 const { exec } = require("child_process");
 const { ReposEnum } = require("./const");
+const dayjs = require("dayjs");
 
 class DailyClose {
-  constructor({ wxhook, token }) {
+  constructor({ wxhook, token, octokit }) {
     this.wxhook = wxhook;
-    this.octokit = new Octokit({ auth: token });
+    this.octokit = octokit || new Octokit({ auth: token });
+    this.title = "昨天关闭的 ISSUE/PR";
+    this.chatid = "";
   }
-  title = "昨天关闭的 ISSUE/PR";
-  chatid = "";
   async getData() {
-    const dateString = new Date(new Date().getTime() - 1000 * 60 * 60 * 24)
-      .toLocaleDateString()
-      .split("/")
-      .map((n) => (n < 10 ? "0" + n : n))
-      .join("-");
+    const dateString = dayjs().subtract(1, "day").format("YYYY-MM-DD");
     const allList = await Promise.all(
       ReposEnum.map((repo) =>
         this.octokit.rest.issues
@@ -64,7 +61,12 @@ ${data
 `;
   }
   async run() {
-    const res = await this.getData();
+    let res;
+    try {
+      res = await this.getData();
+    } catch (error) {
+      console.log(error, "error");
+    }
     if (!res) return false;
     const template = await this.render(res);
     exec(
@@ -72,6 +74,7 @@ ${data
        -H 'Content-Type: application/json' \
        -d '
        {
+            "chatid": "wrkSFfCgAA-QNmuIjascLNFfmkFVQT5A",
             "msgtype": "markdown",
             "markdown": {
                 "content": "${template.replaceAll('"', "'")}"

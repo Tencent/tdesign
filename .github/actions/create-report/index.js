@@ -87,7 +87,7 @@ async function getRepoIssuesInfo(repo) {
     });
 }
 
-async function main() {
+async function main({ wxhook, token }) {
   // 调取 参数指定的 ReposEnum 的issue 情况
   // 形成 infoData
   // 灌入模版 生成图表
@@ -106,6 +106,7 @@ async function main() {
      -H 'Content-Type: application/json' \
      -d '
      {
+          "chatid": "wrkSFfCgAA-QNmuIjascLNFfmkFVQT5A",
           "msgtype": "markdown",
           "markdown": {
               "content": "${markdownString.replaceAll('"', "'")}"
@@ -128,7 +129,7 @@ try {
     const dailyClose = new DailyClose({ wxhook, token });
     dailyClose.run();
   } else {
-    main();
+    main({ wxhook });
   }
 } catch (error) {
   core.setFailed(error.message);
