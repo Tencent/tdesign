@@ -1,0 +1,25 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>index</title>
+        <script>
+            (function() {
+                console.log('location.origin', location.origin);
+                if (location.search) {
+                    var params = {};
+                    location.search
+                        .replace(/^\?/, '')
+                        .split('&')
+                        .forEach(s => {
+                            var v = s.split('=');
+                            params[v[0]] = v[1];
+                        });
+                    if (params.page) {
+                        history.replaceState(null, null, decodeURIComponent(params.page));
+                    }
+                }
+            })();
+        </script>
+    </head>
+    <body><script type="text/javascript" src="router.js"></script></body>
+</html>
