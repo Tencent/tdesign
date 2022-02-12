@@ -4,7 +4,6 @@
         <title>index</title>
         <script>
             (function() {
-                console.log('location.origin', location.origin);
                 if (location.search) {
                     var params = {};
                     location.search
@@ -15,6 +14,7 @@
                             params[v[0]] = v[1];
                         });
                     if (params.page) {
+                        console.log(params.page);
                         history.replaceState(null, null, decodeURIComponent(params.page));
                     }
                 }
