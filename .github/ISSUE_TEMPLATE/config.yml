@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Create new issue
+    url: https://Tencent.github.io/tdesign/issue-helper/?lang=zh-CN&repo=Tencent/tdesign
+    about: The issue which is not created via https://Tencent.github.io/tdesign/issue-helper/ will be closed immediately.
