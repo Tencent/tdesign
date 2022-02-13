@@ -121,7 +121,7 @@ export default defineComponent({
       const selectRepo = contentTextRef.value.repos.find(
         (i) => i.github === formDataRef.value.repo
       );
-      return `https://registry.npm.taobao.org/${
+      return `https://data.jsdelivr.com/v1/package/npm/${
         selectRepo.npm && selectRepo.npm
       }`;
     });
