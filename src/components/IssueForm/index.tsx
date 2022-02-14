@@ -132,7 +132,7 @@ export default defineComponent({
       if (!hasNpmRef.value) return;
       const res = await axios.get(versionUrl.value);
       const hasAlphaReg = new RegExp(/-/);
-      versionOptionsRef.value = Object.keys(res.data.versions)
+      versionOptionsRef.value = res.data.versions
         .filter((i) => !hasAlphaReg.test(i))
         .map((i) => {
           return { label: i, value: i };
