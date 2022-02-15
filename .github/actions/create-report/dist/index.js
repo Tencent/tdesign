@@ -56,7 +56,7 @@ class DailyClose {
           .then((res) => {
             res.data.repoName = repo;
             return res.data
-              .filter((item) => item.closed_at.split("T")[0] === dateString)
+              .filter((item) => item.closed_at.split("T")[0] === dateString && item.user.login !== "dependabot[bot]")
               .map((item) => ({
                 ...item,
                 repo: item.repository_url.split("Tencent/")[1],
@@ -64,13 +64,15 @@ class DailyClose {
           })
       )
     );
+    // console.log(JSON.stringify(allList));
     return allList.reduce(function (total, item) {
       return [...total, ...item];
     }, []);
   }
   async render(data) {
     if (!data.length) return "";
-    return `## 昨天关闭的 ISSUE
+    return [
+      `## 昨天关闭的 ISSUE
 
 ${data
   .filter((item) => !item.pull_request)
@@ -78,8 +80,8 @@ ${data
     return `- ${item.repo}：[${item.title}](${item.html_url}) @${item.user.login}`;
   })
   .join("\n")}
-
-## 昨天合并的 PR
+`,
+      `## 昨天合并的 PR
 
 ${data
   .filter((item) => item.pull_request)
@@ -87,7 +89,8 @@ ${data
     return `- ${item.repo}：[${item.title}](${item.html_url}) @${item.user.login}`;
   })
   .join("\n")} 
-`;
+`,
+    ];
   }
   async run() {
     let res;
@@ -97,26 +100,28 @@ ${data
       console.log(error, "error");
     }
     if (!res) return false;
-    const template = await this.render(res);
-    exec(
-      `curl ${this.wxhook} \
-       -H 'Content-Type: application/json' \
-       -d '
-       {
-            "msgtype": "markdown",
-            "markdown": {
-                "content": "${template.replaceAll('"', "'")}"
-            }
-       }'`,
-      (error, stdout, stderr) => {
-        if (error) {
-          console.error(`exec error: ${error}`);
-          return;
+    const templates = await this.render(res);
+    templates.forEach((template) => {
+      exec(
+        `curl ${this.wxhook} \
+         -H 'Content-Type: application/json' \
+         -d '
+         {
+              "msgtype": "markdown",
+              "markdown": {
+                  "content": "${template.replaceAll('"', "'")}"
+              }
+         }'`,
+        (error, stdout, stderr) => {
+          if (error) {
+            console.error(`exec error: ${error}`);
+            return;
+          }
+          console.log(`stdout: ${stdout}`);
+          console.error(`stderr: ${stderr}`);
         }
-        console.log(`stdout: ${stdout}`);
-        console.error(`stderr: ${stderr}`);
-      }
-    );
+      );
+    });
   }
 }
 
