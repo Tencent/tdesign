@@ -5,7 +5,7 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
-    "deploy": "bash scripts/deploy.sh"
+    "build:deploy": "bash scripts/deploy.sh"
   },
   "dependencies": {
     "axios": "^0.21.1",
