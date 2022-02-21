@@ -121,7 +121,7 @@ export default defineComponent({
       const selectRepo = contentTextRef.value.repos.find(
         (i) => i.github === formDataRef.value.repo
       );
-      return `https://data.jsdelivr.com/v1/package/npm/${
+      return `https://mirrors.tencent.com/npm/${
         selectRepo.npm && selectRepo.npm
       }`;
     });
@@ -132,8 +132,9 @@ export default defineComponent({
       if (!hasNpmRef.value) return;
       const res = await axios.get(versionUrl.value);
       const hasAlphaReg = new RegExp(/-/);
-      versionOptionsRef.value = res.data.versions
+      versionOptionsRef.value = Object.keys(res.data.versions)// 对象key转数组
         .filter((i) => !hasAlphaReg.test(i))
+        .reverse()
         .map((i) => {
           return { label: i, value: i };
         });
