@@ -46,6 +46,7 @@ TDesign 是一个 `multi-repo`， TDesign 有如下代码仓库：
 | [tdesign-starter-cli](https://github.com/Tencent/tdesign-starter-cli)           | TDesign 解决方案的脚手架         |
 | [tdesign-vue-starter](https://github.com/Tencent/tdesign-vue-starter)           | 基于 tdesign-vue 的解决方案      |
 | [tdesign-vue-next-starter](https://github.com/Tencent/tdesign-vue-next-starter) | 基于 tdesign-vue-next 的解决方案 |
+| [tdesign-react-starter](https://github.com/Tencent/tdesign-react-starter)       | 基于 tdesign-react 的解决方案    |
 
 ## 为什么会有 TDesign
 
