@@ -65,12 +65,7 @@ class DailyClose {
           })
       )
     );
-    // console.log(JSON.stringify(allList));
     return allList;
-
-    // return allList.reduce(function (total, item) {
-    //   return [...total, ...item];
-    // }, []);
   }
   async render(data) {
     if (data.every((li) => !li.length)) return "";
@@ -80,12 +75,11 @@ class DailyClose {
 ${data
   .filter((repo) => repo.filter((item) => !item.pull_request).length)
   .map((repo) => {
-    return `👉 ${repo.repoName}：
+    return `#### ${repo.repoName}
 ${repo
   .filter((item) => !item.pull_request)
   .map((item) => {
-    // const icon = item.body.indexOf("__FEATURE_REQUEST__") !== -1 ? "🌈" : "🐞";
-    return `${item.title} [@${item.user.login}](${item.html_url})`;
+    return `- ${item.title} [@${item.user.login}](${item.html_url})`;
   })
   .sort()
   .join("\n")}`;
@@ -96,32 +90,11 @@ ${repo
 ${data
   .filter((repo) => repo.filter((item) => item.pull_request).length)
   .map((repo) => {
-    return `👉 ${repo.repoName}：
+    return `#### ${repo.repoName}
 ${repo
   .filter((item) => item.pull_request)
   .map((item) => {
-    // const { title } = item;
-    // let icon = "";
-    // if (title.indexOf("refactor") !== -1) {
-    //   icon = "🛠";
-    // } else if (title.indexOf("docs") !== -1) {
-    //   icon = "📖";
-    // } else if (title.indexOf("feat") !== -1) {
-    //   icon = "🌈";
-    // } else if (title.indexOf("style") !== -1) {
-    //   icon = "🎨";
-    // } else if (title.indexOf("test") !== -1) {
-    //   icon = "⚠️";
-    // } else if (title.indexOf("build") !== -1) {
-    //   icon = "🚇";
-    // } else if (title.indexOf("ci") !== -1) {
-    //   icon = "🔧";
-    // } else if (item.title.indexOf("fix") !== -1) {
-    //   icon = "🐞";
-    // } else {
-    //   icon = "🔍";
-    // }
-    return `${item.title} [@${item.user.login}](${item.html_url})`;
+    return `- ${item.title} [@${item.user.login}](${item.html_url})`;
   })
   .sort()
   .join("\n")}`;
