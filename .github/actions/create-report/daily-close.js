@@ -25,42 +25,79 @@ class DailyClose {
             sort: "updated",
           })
           .then((res) => {
-            res.data.repoName = repo;
-            return res.data
+            const arr = res.data
               .filter((item) => item.closed_at.split("T")[0] === dateString && item.user.login !== "dependabot[bot]")
               .map((item) => ({
                 ...item,
                 repo: item.repository_url.split("Tencent/")[1],
               }));
+            arr.repoName = repo;
+            return arr;
           })
       )
     );
     // console.log(JSON.stringify(allList));
-    return allList.reduce(function (total, item) {
-      return [...total, ...item];
-    }, []);
+    return allList;
+
+    // return allList.reduce(function (total, item) {
+    //   return [...total, ...item];
+    // }, []);
   }
   async render(data) {
-    if (!data.length) return "";
+    if (data.every((li) => !li.length)) return "";
     return [
       `## 昨天关闭的 ISSUE
 
 ${data
+  .filter((repo) => repo.filter((item) => !item.pull_request).length)
+  .map((repo) => {
+    return `👉 ${repo.repoName}：
+${repo
   .filter((item) => !item.pull_request)
   .map((item) => {
-    return `- ${item.repo}：[${item.title}](${item.html_url}) @${item.user.login}`;
+    // const icon = item.body.indexOf("__FEATURE_REQUEST__") !== -1 ? "🌈" : "🐞";
+    return `${item.title} [@${item.user.login}](${item.html_url})`;
   })
-  .join("\n")}
-`,
+  .sort()
+  .join("\n")}`;
+  })
+  .join("\n \n")}`,
       `## 昨天合并的 PR
 
 ${data
+  .filter((repo) => repo.filter((item) => item.pull_request).length)
+  .map((repo) => {
+    return `👉 ${repo.repoName}：
+${repo
   .filter((item) => item.pull_request)
   .map((item) => {
-    return `- ${item.repo}：[${item.title}](${item.html_url}) @${item.user.login}`;
+    // const { title } = item;
+    // let icon = "";
+    // if (title.indexOf("refactor") !== -1) {
+    //   icon = "🛠";
+    // } else if (title.indexOf("docs") !== -1) {
+    //   icon = "📖";
+    // } else if (title.indexOf("feat") !== -1) {
+    //   icon = "🌈";
+    // } else if (title.indexOf("style") !== -1) {
+    //   icon = "🎨";
+    // } else if (title.indexOf("test") !== -1) {
+    //   icon = "⚠️";
+    // } else if (title.indexOf("build") !== -1) {
+    //   icon = "🚇";
+    // } else if (title.indexOf("ci") !== -1) {
+    //   icon = "🔧";
+    // } else if (item.title.indexOf("fix") !== -1) {
+    //   icon = "🐞";
+    // } else {
+    //   icon = "🔍";
+    // }
+    return `${item.title} [@${item.user.login}](${item.html_url})`;
   })
-  .join("\n")} 
-`,
+  .sort()
+  .join("\n")}`;
+  })
+  .join("\n \n")}`,
     ];
   }
   async run() {
@@ -70,6 +107,7 @@ ${data
     } catch (error) {
       console.log(error, "error");
     }
+
     if (!res) return false;
     const templates = await this.render(res);
     templates.forEach((template) => {
