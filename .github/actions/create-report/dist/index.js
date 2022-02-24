@@ -165,13 +165,6 @@ ${repo
 
 module.exports = DailyClose;
 
-const dailyClose = new DailyClose({
-  wxhook: "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=7508fee8-168e-4800-98e6-1be0f3f3a569",
-  token: "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",
-});
-
-dailyClose.run();
-
 
 /***/ }),
 
