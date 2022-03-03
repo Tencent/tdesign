@@ -8,7 +8,7 @@ const ReposEnum = [
   "tdesign-starter-cli",
   "tdesign-vue-starter",
   "tdesign-vue-next-starter",
-  "tdesign-react",
+  "tdesign-react-starter",
   "tdesign-icons",
 ];
 
