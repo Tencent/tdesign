@@ -12,9 +12,10 @@ class DailyClose {
     this.octokit = octokit || new Octokit({ auth: token });
     this.title = "昨天关闭的 ISSUE/PR";
     this.chatid = "";
+    this.dateString = dayjs().subtract(1, "day").format("YYYY-MM-DD");
   }
+
   async getData() {
-    const dateString = dayjs().subtract(1, "day").format("YYYY-MM-DD");
     const allList = await Promise.all(
       ReposEnum.map((repo) =>
         this.octokit.rest.issues
@@ -26,7 +27,7 @@ class DailyClose {
           })
           .then((res) => {
             const arr = res.data
-              .filter((item) => item.closed_at.split("T")[0] === dateString && item.user.login !== "dependabot[bot]")
+              .filter((item) => item.closed_at.split("T")[0] === this.dateString && item.user.login !== "dependabot[bot]")
               .map((item) => ({
                 ...item,
                 repo: item.repository_url.split("Tencent/")[1],
@@ -41,36 +42,36 @@ class DailyClose {
   async render(data) {
     if (data.every((li) => !li.length)) return "";
     return [
-      `## 昨天关闭的 ISSUE
+      `## 关闭的ISSUE（${this.dateString}）
 
 ${data
-  .filter((repo) => repo.filter((item) => !item.pull_request).length)
-  .map((repo) => {
-    return `#### ${repo.repoName}
+        .filter((repo) => repo.filter((item) => !item.pull_request).length)
+        .map((repo) => {
+          return `#### ${repo.repoName}
 ${repo
-  .filter((item) => !item.pull_request)
-  .map((item) => {
-    return `- ${item.title} [@${item.user.login}](${item.html_url})`;
-  })
-  .sort()
-  .join("\n")}`;
-  })
-  .join("\n \n")}`,
-      `## 昨天合并的 PR
+              .filter((item) => !item.pull_request)
+              .map((item) => {
+                return `- ${item.title} [@${item.user.login}](${item.html_url})`;
+              })
+              .sort()
+              .join("\n")}`;
+        })
+        .join("\n \n")}`,
+      `## 合并的PR（${this.dateString}）
 
 ${data
-  .filter((repo) => repo.filter((item) => item.pull_request).length)
-  .map((repo) => {
-    return `#### ${repo.repoName}
+        .filter((repo) => repo.filter((item) => item.pull_request).length)
+        .map((repo) => {
+          return `#### ${repo.repoName}
 ${repo
-  .filter((item) => item.pull_request)
-  .map((item) => {
-    return `- ${item.title} [@${item.user.login}](${item.html_url})`;
-  })
-  .sort()
-  .join("\n")}`;
-  })
-  .join("\n \n")}`,
+              .filter((item) => item.pull_request)
+              .map((item) => {
+                return `- ${item.title} [@${item.user.login}](${item.html_url})`;
+              })
+              .sort()
+              .join("\n")}`;
+        })
+        .join("\n \n")}`,
     ];
   }
   async run() {
