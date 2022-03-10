@@ -1,0 +1,12 @@
+name: Issue Add Assigness
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  call-issue-assigness:
+    uses: Tencent/tdesign/.github/workflows/issue-assignees.yml@main
+    with:
+      project_name: ${{github.event.repository.name}}
+      issue_title: ${{github.event.issue.title}}
