@@ -3,6 +3,7 @@ const ReposEnum = [
   "tdesign-vue",
   "tdesign-vue-next",
   "tdesign-react",
+  "tdesign-mobile-vue",
   "tdesign-miniprogram",
   "tdesign-common",
   "tdesign-starter-cli",

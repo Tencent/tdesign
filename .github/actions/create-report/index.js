@@ -1,5 +1,4 @@
 const core = require("@actions/core");
-const github = require("@actions/github");
 const { Octokit } = require("@octokit/rest");
 const { exec } = require("child_process");
 const { ReposEnum } = require("./const");
@@ -47,22 +46,19 @@ function renderMark(data) {
   return [
     `### Github 响应用户情况
 ${data
-  .map(
-    (repo, index) => `#### ${repo.repoName}
-[未关闭 issue 数量：${repo.filter((n) => !n.pull_request).length}](https://github.com/Tencent/${
-      repo.repoName
-    }/issues?q=is%3Aopen+is%3Aissue) | [未认领 issue 数量：${
-      repo.filter((n) => !n.pull_request && !n.assignee).length
-    }](https://github.com/Tencent/${repo.repoName}/issues?q=is%3Aopen+is%3Aissue+no%3Aassignee) ｜ [未关闭 pr 数量：${
-      repo.filter((n) => n.pull_request).length
-    }](https://github.com/Tencent/${repo.repoName}/pulls?q=is%3Aopen+is%3Apr)
+      .map(
+        (repo, index) => `#### ${repo.repoName}
+[未关闭 issue 数量：${repo.filter((n) => !n.pull_request).length}](https://github.com/Tencent/${repo.repoName
+          }/issues?q=is%3Aopen+is%3Aissue) | [未认领 issue 数量：${repo.filter((n) => !n.pull_request && !n.assignee).length
+          }](https://github.com/Tencent/${repo.repoName}/issues?q=is%3Aopen+is%3Aissue+no%3Aassignee) ｜ [未关闭 pr 数量：${repo.filter((n) => n.pull_request).length
+          }](https://github.com/Tencent/${repo.repoName}/pulls?q=is%3Aopen+is%3Apr)
 `
-  )
-  .join("\n")}`,
+      )
+      .join("\n")}`,
     `#### Issues 未关闭时长 Top10
 ${IssuesList.map((item) => `- **${item.repo}**：[${item.title}](${item.html_url}) ${item.created_time}创建`).join(
-  "\n"
-)}`,
+      "\n"
+    )}`,
     `#### Pull Request 未关闭时长 Top10
 ${PullList.map((item) => `- **${item.repo}**：[${item.title}](${item.html_url}) ${item.created_time}创建`).join("\n")}`,
   ];
