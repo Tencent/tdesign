@@ -58,3 +58,15 @@ jobs:
       repo: tdesign-icons
     secrets:
       PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+  call-preview-10:
+    uses: Tencent/tdesign/.github/workflows/file-copy.yml@main
+    with:
+      repo: tdesign-react-starter
+    secrets:
+      PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+  call-preview-11:
+    uses: Tencent/tdesign/.github/workflows/file-copy.yml@main
+    with:
+      repo: tdesign-mobile-vue
+    secrets:
+      PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
