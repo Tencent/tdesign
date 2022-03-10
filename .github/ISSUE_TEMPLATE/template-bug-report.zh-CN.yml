@@ -6,16 +6,16 @@ body:
     attributes:
       value: |
         # 欢迎你的参与
-        ${{ repo_name }} 的 Issue 列表接受 bug 报告或是新功能请求。也可加入官方社区：<img width="80px" src="https://user-images.githubusercontent.com/15634204/157386871-bf84c2ea-a02f-4c1c-b6fd-577450cdbcf7.png" />
+        t de si g n 的 Issue 列表接受 bug 报告或是新功能请求。也可加入官方社区：<img width="80px" src="https://user-images.githubusercontent.com/15634204/157386871-bf84c2ea-a02f-4c1c-b6fd-577450cdbcf7.png" />
 
         在发布一个 Issue 前，请确保：
-        - 在 [常见问题](https://tdesign.tencent.com/about/faq)、[更新日志](https://github.com/Tencent/${{ repo_name }}/blob/main/CHANGELOG.md) 和 [旧Issue列表](https://github.com/Tencent/${{ repo_name }}/issues?q=is%3Aissue) 中搜索过你的问题。（你的问题可能已有人提出，也可能已在最新版本中被修正）
+        - 在 [常见问题](https://tdesign.tencent.com/about/faq)、[更新日志](https://tdesign.tencent.com/about/release) 和 [旧Issue列表](https://github.com/Tencent/tdesign/issues?q=is%3Aissue) 中搜索过你的问题。（你的问题可能已有人提出，也可能已在最新版本中被修正）
         - 如果你发现一个已经关闭的旧 Issue 在最新版本中仍然存在，不要在旧 Issue 下面留言，请建一个新的 issue。
 
   - type: input
     id: version
     attributes:
-      label: ${{ repo_name }} 版本
+      label: tdesign 版本
       description: 请检查在最新项目版本中能否重现此 issue。
       placeholder: 请填写
     validations:
