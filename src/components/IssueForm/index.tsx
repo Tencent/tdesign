@@ -364,7 +364,7 @@ export default defineComponent({
                     <t-textarea
                       v-model={formData.expected}
                       autosize={{ minRows: 2, maxRows: 5 }}
-                      placeholder={contentText.placeholder}
+                      placeholder={contentText.pictureTipPlaceholder}
                     />
                   </t-form-item>
                 </t-col>
@@ -381,7 +381,7 @@ export default defineComponent({
                     <t-textarea
                       v-model={formData.actual}
                       autosize={{ minRows: 2, maxRows: 5 }}
-                      placeholder={contentText.placeholder}
+                      placeholder={contentText.pictureTipPlaceholder}
                     />
                   </t-form-item>
                 </t-col>
@@ -398,7 +398,7 @@ export default defineComponent({
                     <t-textarea
                       v-model={formData.remarks}
                       autosize={{ minRows: 2, maxRows: 5 }}
-                      placeholder={contentText.placeholder}
+                      placeholder={contentText.pictureTipPlaceholder}
                     />
                   </t-form-item>
                 </t-col>
@@ -420,7 +420,7 @@ export default defineComponent({
                     <t-textarea
                       v-model={formData.functionContent}
                       autosize={{ minRows: 2, maxRows: 5 }}
-                      placeholder={contentText.placeholder}
+                      placeholder={contentText.pictureTipPlaceholder}
                     />
                   </t-form-item>
                 </t-col>
@@ -440,7 +440,7 @@ export default defineComponent({
                     <t-textarea
                       v-model={formData.functionalExpectations}
                       autosize={{ minRows: 2, maxRows: 5 }}
-                      placeholder={contentText.placeholder}
+                      placeholder={contentText.pictureTipPlaceholder}
                     />
                   </t-form-item>
                 </t-col>
