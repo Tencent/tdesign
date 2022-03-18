@@ -22,4 +22,4 @@ title: 后续计划
 - 组件库的无障碍和适老化支持能力（2022 Q3）
 
 
-以上工作都在 GitHub Projects 上公开进行。[view on GitHub](https://github.com/Tencent/tdesign/projects/1?fullscreen=true)
+以上工作都在 GitHub Projects 上公开进行。[view on GitHub](https://github.com/orgs/Tencent/projects/1/views/7)
