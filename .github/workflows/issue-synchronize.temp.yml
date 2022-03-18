@@ -15,4 +15,3 @@ jobs:
           wxhook: ${{ secrets.WX_HOOK_URL }}
           token: ${{ secrets.GIT_TOKEN_L }}
           type: 'issue'
-          data: ${{ github.event.issue }}
