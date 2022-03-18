@@ -1,4 +1,5 @@
 # 国际标准时间+8
+# 每天issue和pr的关闭情况
 name: issues-dailyclose-schedule
 
 on:
@@ -11,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/create-report
+      - uses: 94dreamer/create-report@main
         with:
           wxhook: ${{ secrets.WX_HOOK_URL }}
           token: ${{ secrets.GIT_TOKEN_L }}
