@@ -7,7 +7,9 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: check_email
         run: |
           log_emails=$(git log --pretty=format:"%ae %ce" -1) && if [[ ${log_emails} =~ '@tencent.com' ]];then echo $log_emails && echo "邮箱校验非法" && exit 2;else echo "邮箱 $log_emails 校验通过";fi
