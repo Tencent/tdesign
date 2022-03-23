@@ -1,12 +1,12 @@
 # force copy from tencent/tdesign
-name: Issue Add Assigness
+name: Issue Synchronize
 
 on:
   issues:
     types: [opened, reopened]
 
 jobs:
-  mark-duplicate:
+  synchronize:
     runs-on: ubuntu-latest
     steps:
       # https://docs.github.com/cn/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#issues
