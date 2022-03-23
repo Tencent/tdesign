@@ -8,15 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: check_github_primary_email
+        run: |
+          log_emails=$(git log --pretty=format:"%ae %ce" -1) && if [[ ${log_emails} =~ '@tencent.com' ]];then echo "默认邮箱 $log_emails 校验非法，可以去 https://github.com/settings/emails 更改" && exit 2;else echo "邮箱 $log_emails 校验通过";fi
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: check_local_email
         run: |
           log_emails=$(git log --pretty=format:"%ae %ce" -1) && if [[ ${log_emails} =~ '@tencent.com' ]];then echo "本地提交邮箱 $log_emails 校验非法，需要本地更改重新提交" && exit 2;else echo "邮箱 $log_emails 校验通过";fi
-      - uses: actions/checkout@v3
-      - name: check_github_primary_email
-        run: |
-          log_emails=$(git log --pretty=format:"%ae %ce" -1) && if [[ ${log_emails} =~ '@tencent.com' ]];then echo "默认邮箱 $log_emails 校验非法，可以去 https://github.com/settings/emails 更改" && exit 2;else echo "邮箱 $log_emails 校验通过";fi
+
   test:
     # needs: check
     runs-on: ubuntu-latest
