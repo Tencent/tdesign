@@ -1,0 +1,17 @@
+name: Compressed Size
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  compressed-size:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: 94dreamer/compressed-size-action@master
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          pattern: "./dist/**/*.{js,css}"
