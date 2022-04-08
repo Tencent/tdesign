@@ -42,6 +42,7 @@ jobs:
 
       - run: npm run lint
       - run: npm run test
+      - run: npm run test:coverage
       - run: npx codecov --token=${{ secrets.CODECOV_TOKEN }}
 
   site:
