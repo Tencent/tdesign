@@ -22,6 +22,10 @@ TDesign 使用 Github issues 进行 bug 报告和新 feature 建议。在报告 
 
 对于 bug 反馈和新 feature，我们都提供了相应的 issue 模板，请尽量完善所有信息并提供在线样例，这能让 issue 得到快速响应。
 
+### 认领任务
+
+各仓库下增加了 `help wanted` 的 label 的 issue 是目前在招募贡献者参与的任务，例如 [tdesign-vue issues](https://github.com/Tencent/tdesign-vue/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)，如果想认领该任务，请在 issue 评论区中留言后再着手处理，防止重复认领。
+
 ### 提交 Pull Request
 
 - 请将本项目 fork 至个人空间，clone 至本地后，通过 `git remote add upstream` 指令添加上游库地址，参考 [Configuring a remote for a fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/configuring-a-remote-for-a-fork)
