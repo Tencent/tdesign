@@ -57,13 +57,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.ref_type == 'tag'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
-          path: main
+          ref: main
           submodules: recursive
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16
       - name: update official website
         run: |
           git merge origin/develop
