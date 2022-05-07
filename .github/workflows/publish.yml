@@ -53,4 +53,19 @@ jobs:
       - if: steps.publish.outputs.type != 'none'
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
+  UPDATE_OFFICIAL_WEBSITE:
+    runs-on: ubuntu-latest
+    if: github.event.ref_type == 'tag'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: main
+          submodules: recursive
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: update official website
+        run: |
+          git merge origin/develop
+          git push origin main
       
