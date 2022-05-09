@@ -60,9 +60,12 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: main
+          fetch-depth: 0
           submodules: recursive
       - name: update official website
         run: |
+          git status
+          git fetch origin
           git merge origin/develop
           git push origin main
       
