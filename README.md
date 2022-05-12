@@ -92,7 +92,7 @@ TDesign 后续发展规划请参阅 [后续计划](https://github.com/Tencent/td
 - 拥有统一的[设计价值观](https://tdesign.tencent.com/design/values)和[视觉风格](https://tdesign.tencent.com/design/color)，帮助产品在跨端设计和开发过程中保持一致的产品使用体验
 - 各技术栈产物 [API 定义](https://tdesign.tencent.com/apis)和实现保持一致，在构建统一/多端覆盖/跨技术栈的前端应用时更有优势
 
-![image](https://user-images.githubusercontent.com/7600149/147127329-1ecfc38e-4b36-4595-8c41-4958470c9354.png)
+![image](https://user-images.githubusercontent.com/7600149/168031968-267c60f1-efaa-498d-a230-a6e0a8093402.png)
 
 #### 易用
 
