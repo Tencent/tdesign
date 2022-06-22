@@ -18,15 +18,15 @@ TDesign 是一个 `multi-repo`， TDesign 有如下代码仓库：
 | 仓库                                                            | 描述                 | 状态     |
 | --------------------------------------------------------------- | -------------------- | -------- |
 | [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue 2.x 技术栈       | `Beta`   |
-| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈       | `Alpha`  |
-| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈    | `Alpha`  |
+| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈       | `Beta`  |
+| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈    | `Beta`  |
 | tdesign-angular                                                 | 基于 Angular 10 实现 | `待上线` |
 
 ### 移动端组件库
 
 | 仓库                                                                  | 描述              | 状态     |
 | --------------------------------------------------------------------- | ----------------- | -------- |
-| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram) | 微信小程序        | `Alpha`  |
+| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram) | 微信小程序        | `Beta`  |
 | [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)   | Vue 3.x 技术栈    | `Alpha` |
 | tdesign-mobile-react                                                  | React 16.x 技术栈 | `待上线` |
 | tdesign-flutter                                                       | 1.17.0            | `待上线` |
