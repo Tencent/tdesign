@@ -30,7 +30,7 @@ TDesign 使用 Github issues 进行 bug 报告和新 feature 建议。在报告 
 
 - 请将本项目 fork 至个人空间，clone 至本地后，通过 `git remote add upstream` 指令添加上游库地址，参考 [Configuring a remote for a fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/configuring-a-remote-for-a-fork)
 - 确保 Node 版本在 12.0.0 及以上，建议升级到 16.0.0 及以上
-- 创建 feature/fix 分支，开发过程中可以使用 `git fetch upstream` 或 `git rebase upstream/feature` 来同步上游分支代码
+- 创建 feature/fix 分支，开发过程中可以使用 `git fetch upstream` 和 `git rebase upstream/feature` 来同步上游分支代码
 - 提交代码到 forked 仓库，commit message 撰写请参照 [Angular Commits 规范](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits)
 - 本地执行 `npm run lint` 及 `npm run test` 并保证结果通过，当修改了样式导致 snapshot 不一致的情况，可以通过 `npm run test:update` 指令来更新 snapshot 并提交上来
 - 在上游仓库中发起 PR，如有相关的 issue，请进行 [关联](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)
