@@ -1,4 +1,6 @@
-# Awesome TDesign Resources
+---
+title: 社区资源
+---
 
 [官网地址](https://tdesign.tencent.com/)
 
@@ -24,3 +26,5 @@
 ## 视频教程
 
 - [用腾讯TDesign框架做一个管理系统(Vue3)版](https://www.bilibili.com/video/BV1MZ4y1Q7zu?spm_id_from=333.999.0.0&vd_source=94df280d25d542fbcfaf851754a254de)
+
+如果你有基于 TDesign 的组件二次封装、插件、Library、快速上手模板等资源，或者相关教程文章，欢迎在 [这里](https://github.com/Tencent/tdesign/blob/main/docs/awesome.md) 提 PR 维护到仓库中丰富生态，帮助使用者更好的应用相关能力 🎉。

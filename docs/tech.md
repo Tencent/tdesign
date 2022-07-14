@@ -2,6 +2,7 @@
 title: 整体方案
 ---
 
+请参考 [《TDesign 组件库技术方案指北》](https://mp.weixin.qq.com/s?__biz=Mzg3MjYwODA1OA==&mid=2247515208&idx=1&sn=166d4a5313cadbb80d2a401edf46b455)
 ## 仓库结构说明
 
 每个仓库对应一个组件库技术栈实现，包含各自技术栈实现代码和一个 [tdesign-common](https://github.com/Tencent/tdesign-common) 子仓库，子仓库作为公共库包含：
