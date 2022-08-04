@@ -1,3 +1,12 @@
+---
+name: 新组件
+about: 新组件招募
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 <!--
 参考样例：
 issue label 需要设置为 help wanted，发起招募
