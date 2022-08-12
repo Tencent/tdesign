@@ -9,6 +9,7 @@ jobs:
   mark-duplicate:
     runs-on: ubuntu-latest
     steps:
+      - if: ${{ !startsWith(github.event.issue.title, '【新组件】') }}
       - uses: wow-actions/auto-comment@v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
