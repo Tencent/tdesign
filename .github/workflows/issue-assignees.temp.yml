@@ -9,7 +9,7 @@ jobs:
   mark-duplicate:
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ !startsWith(github.event.issue.title, '【新组件】') && github.event.label.name != 'issueshoot' }}
+      - if: github.event.label.name != 'new component' && github.event.label.name != 'issueshoot'
       - uses: wow-actions/auto-comment@v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -29,7 +29,7 @@ jobs:
         if: steps.assignees.outputs.contributors != ''
         uses: actions-cool/issues-helper@v3
         with:
-          actions: 'add-assignees'
+          actions: "add-assignees"
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           assignees: ${{ steps.assignees.outputs.contributors }}
