@@ -27,17 +27,17 @@ TDesign 在创建之初就严格按照开源协作的原则运作，包括源代
 | 仓库                                                            | 描述                 | 状态     |
 | --------------------------------------------------------------- | -------------------- | -------- |
 | [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue 2.x 技术栈       | `Beta`   |
-| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈       | `Alpha`  |
-| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈    | `Alpha`  |
+| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈       | `Beta`  |
+| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈    | `Beta`  |
 | tdesign-angular                                                 | 基于 Angular 10 实现 | `待上线` |
 
 ### 移动端
 
 | 仓库                                                                  | 描述              | 状态     |
 | --------------------------------------------------------------------- | ----------------- | -------- |
-| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)   | Vue 3.x 技术栈    | `Alpha`  |
-| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram) | 微信小程序        | `Alpha`  |
-| tdesign-mobile-react                                                  | React 16.x 技术栈 | `待上线` |
+| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)   | Vue 3.x 技术栈    | `Beta`  |
+| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram) | 微信小程序        | `Beta`  |
+| tdesign-mobile-react                                                  | React 16.x 技术栈 | `Alpha` |
 | tdesign-flutter                                                       | 1.17.0            | `待上线` |
 
 同时，TDesign 与腾讯内部在各自的领域具有丰富行业经验业务团队正协作中，提供更多具有业务属性的组件库产品，未来会有包括政务、零售等多个不同风格及组件类型的组件库产品开放出来，敬请期待！
