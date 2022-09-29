@@ -2,18 +2,17 @@
 title: 社区资源
 ---
 
-[官网地址](https://tdesign.tencent.com/)
-
-[官方组件库地址](https://github.com/Tencent/tdesign#%E4%BB%93%E5%BA%93)
-
-[Starter Kit](https://github.com/Tencent/tdesign#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E5%91%A8%E8%BE%B9)
-
-[每周 Release 汇总](https://github.com/Tencent/tdesign/releases)
+- [官网地址](https://tdesign.tencent.com/)
+- [官方组件库地址](https://github.com/Tencent/tdesign#%E4%BB%93%E5%BA%93)
+- [Starter Kit](https://github.com/Tencent/tdesign#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E5%91%A8%E8%BE%B9)
+- [每周 Release 汇总](https://github.com/Tencent/tdesign/releases)
 
 ## 📦 插件和工具
 
-- [unplugin-auto-import](https://github.com/antfu/unplugin-auto-import)、[unplugin-vue-components](https://github.com/antfu/unplugin-vue-components) 用于自动引入 TDesign 桌面端 [Vue2](https://github.com/Tencent/tdesign-vue)、[Vue3](https://github.com/Tencent/tdesign-vue-next) 的组件，使用请参考 [自动引入章节](https://tdesign.tencent.com/vue/getting-started#%E8%87%AA%E5%8A%A8%E5%BC%95%E5%85%A5)
-- [formilyjs/tdesign-react](https://github.com/formilyjs/tdesign-react) 结合 Formily & tdesign-react 组件库能力的社区贡献产品
+名称 | 描述
+--|--
+[unplugin-auto-import](https://github.com/antfu/unplugin-auto-import) <br> [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components) | 用于自动引入 TDesign 桌面端 [Vue2](https://github.com/Tencent/tdesign-vue)、[Vue3](https://github.com/Tencent/tdesign-vue-next) 的组件，使用请参考 [自动引入章节](https://tdesign.tencent.com/vue/getting-started#%E8%87%AA%E5%8A%A8%E5%BC%95%E5%85%A5)
+[formilyjs/tdesign-react](https://github.com/formilyjs/tdesign-react) | 结合 Formily & tdesign-react 组件库能力的社区贡献产品
 
 ## 📄 文章
 
