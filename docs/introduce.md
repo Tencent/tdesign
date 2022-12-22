@@ -20,7 +20,7 @@ TDesign 具有统一的 [价值观](https://tdesign.tencent.com/design/values)�
 
 TDesign 在创建之初就严格按照开源协作的原则运作，包括源代码在内的协作方案讨论、组件设计及 API 制定的过程也完全在公司内源上开放。也得到了公司内开发和设计同学的广泛关注，无论以什么身份参与，TDesign 都同样遵循平等、公开且严格的原则来对待，很多同学从个人项目中试用组件库开始，到提交第一个 `Bug Issue`，再到提交第一个 `Feature MR`，最后逐步参与到 `MR Review` 和方案制定工作中，成为核心贡献者。在过去的一年中，TDesign 关闭了 1k+ `Issue`，进行了 5k+ 次 `CR`，保持 [每周迭代](https://tdesign.tencent.com/vue/components/changelog) 发布新版本。
 
-组件库目前支持多个业界主流的开发技术栈，桌面端 Vue2 已发布 `Beta` 版本，桌面端 Vue3、React 和移动端 Vue3 、微信小程序发布 `Alpha` 内测版本：
+组件库目前支持多个业界主流的开发技术栈，桌面端 Vue2、Vue3 已发布 1.x 版本，桌面端 React 和移动端 Vue3、微信小程序已发布 `Beta` 版本，移动端 React、QQ小程序发布 `Alpha` 内测版本：
 
 ### 桌面端
 
