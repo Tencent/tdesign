@@ -26,8 +26,8 @@ TDesign 在创建之初就严格按照开源协作的原则运作，包括源代
 
 | 仓库                                                            | 描述                 | 状态     |
 | --------------------------------------------------------------- | -------------------- | -------- |
-| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue 2.x 技术栈       | `Beta`   |
-| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈       | `Beta`  |
+| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue 2.x 技术栈       | `1.0 LTS`   |
+| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈       | `1.0 LTS`  |
 | [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈    | `Beta`  |
 | tdesign-angular                                                 | 基于 Angular 10 实现 | `待上线` |
 
