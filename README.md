@@ -19,7 +19,7 @@ TDesign 是一个 `multi-repo`， TDesign 有如下代码仓库：
 | --------------------------------------------------------------- | -------------------- | -------- |
 | [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue 2.x 技术栈       | `1.0 LTS`   |
 | [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈       | `1.0 LTS`  |
-| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈    | `Beta`  |
+| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈    | `1.0 LTS`  |
 | tdesign-angular                                                 | 基于 Angular 10 实现 | `待上线` |
 
 ### 移动端组件库
