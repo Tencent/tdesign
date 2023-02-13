@@ -20,7 +20,7 @@ title: 后续计划
 
 提供移动端组件设计指南
 
-发布桌面端 React 正式版本
+发布桌面端 React 正式版本 :heavy_check_mark:
 
 对外开源移动端 Flutter 
 
