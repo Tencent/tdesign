@@ -21,6 +21,7 @@ title: 社区资源
 - [TDesign 组件库技术方案指北](https://mp.weixin.qq.com/s?__biz=Mzg3MjYwODA1OA==&mid=2247515208&idx=1&sn=166d4a5313cadbb80d2a401edf46b455)
 - [TDesign 品牌价值观](https://mp.weixin.qq.com/s?__biz=Mzg3MjYwODA1OA==&mid=2247517235&idx=1&sn=5be239135a325b3cc06073edb7691499)
 - [TDesign 品牌价值观 | 视觉新基础](https://mp.weixin.qq.com/s?__biz=Mzg3MjYwODA1OA==&mid=2247523337&idx=1&sn=388dfff5cb632c8fef15defbe748019c)
+- [使用体验 I 早知道 TDesign 支持 AVIF 图片压缩，我就不用为流量和格式发愁啦！](https://mp.weixin.qq.com/s?__biz=Mzg3MjYwODA1OA==&mid=2247558454&idx=1&sn=60f90b93dc6a8d7975b68471c973987f)
 
 腾讯设计 TDesign [文章合集](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3MjYwODA1OA==&action=getalbum&album_id=2416359157676523521)
 
