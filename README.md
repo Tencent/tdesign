@@ -113,7 +113,7 @@ For TDesign's subsequent development plan, please refer to the [TDesign upcoming
 
 Read more in the official website of [TDesign](https://tdesign.tencent.com/).
 
-## Design Guide
+## Design Guidelines
 
 TDesign distills Tencent's years of internal design experience into professional design guidelines, providing universal design solutions.
 

@@ -4,6 +4,8 @@
   </a>
 </p>
 
+[English](./README.md) | 简体中文
+
 TDesign 是一套完整的 [企业级设计体系](https://tdesign.tencent.com/design/values)，拥有基于 [Vue](https://tdesign.tencent.com/vue/) / [React](https://tdesign.tencent.com/react/) / [小程序](https://tdesign.tencent.com/miniprogram/) 等技术栈的组件库解决方案。  
 用于构建 [设计统一](#一致) / [跨端多技术栈](#完整) 的前端应用时，TDesign 更有优势。
 
