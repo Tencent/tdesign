@@ -8,15 +8,30 @@ We are looking forward to your continued attention and feedback on TDesign. We a
 
 TDesign upcoming iterate plans are as below:
 
-- Continuously enrich component categories
-- Ongoing optimization of component animations (2022 Q1)
-- Release official versions of Vue3 and React mini-program component libraries (2022 Q1)
-- Ongoing optimization of CI/CD infrastructure based on GitHub (2022 Q1)
-- Provide online color configuration capabilities (2022 Q1)
-- Official website generation tool (2022 Q2)
-- TDesign Starter kit for Vue3 technology stack (2022 Q1)
-- TDesign Starter kit for React technology stack (2022 Q2)
-- Internationalization support capabilities for component libraries (2022 Q2)
-- Accessibility and age-adaptation support capabilities for component libraries (2022 Q3)
+**What TDesign is doing**
 
-All of the above work is carried out openly on GitHub Projects. [View on GitHub](https://github.com/orgs/Tencent/projects/1/views/1).
+Add more UI components [📌 New Component Request · Issue #220 · Tencent/tdesign · GitHub](https://github.com/Tencent/tdesign/issues/220)
+
+Upgrade theme generator to support more capabilities, such as `smart colors`, `theme templates`, `global presets`.
+
+Release the stable version of mobile WeChat Mini Program
+
+Provide mobile component design guidelines
+
+:heavy_check_mark: Release stable desktop React version
+
+Open-source mobile Flutter version
+
+Assist community in building desktop Blazor
+
+Accessibility renovation on mobile components, read more details in 📄 [「技术向善，助力 TDesign 无障碍改造」主题活动开始啦 · Issue #1045 · Tencent/tdesign-miniprogram · GitHub](https://github.com/Tencent/tdesign-miniprogram/issues/1045)
+
+Cross-platform intelligent conversion, supporting the conversion of Desktop Vue/Vue next project to Mobile WeChat Mini Program
+
+**What TDesign are planning to do**
+
+- Provide a more comprehensive international multi-language experience and adapt to RTL
+
+- Provide a components market to host more resources from community contributions, such as pro components and page templates
+
+All of the above work is conducted openly on GitHub Projects. [view on GitHub](https://github.com/orgs/Tencent/projects/1/views/1)

@@ -9,17 +9,30 @@ title: 后续计划
 
 接来下 TDesign 将按照如下规划，快速迭代完善：
 
+**我们正在做的**
 
-- 持续丰富组件种类
-- 组件动效的持续优化（2022 Q1）
-- Vue3、React 小程序 组件库发布正式版本（2022 Q1）
-- 持续优化 基于 GitHub 的 CI/CD 基础设施建设（2022 Q1）
-- 提供在线色彩配置能力 （2022 Q1）
-- 官网的生成工具（2022 Q2）
-- TDesign Starter 中后台框架 支持 Vue3 技术栈（2022 Q1）
-- TDesign Starter 中后台框架 支持 React 技术栈（2022 Q2）
-- 组件库的国际化支持能力（2022 Q2）
-- 组件库的无障碍和适老化支持能力（2022 Q3）
+增加新的通用 UI 组件 [📌 新组件招募 · Issue #220 · Tencent/tdesign · GitHub](https://github.com/Tencent/tdesign/issues/220)
 
+升级主题配置生成器，支持智能色彩，主题模版，全局预设等能力
+
+发布移动端微信小程序正式版本
+
+提供移动端组件设计指南
+
+:heavy_check_mark: 发布桌面端 React 正式版本
+
+对外开源移动端 Flutter
+
+协助社区完成桌面端 Blazor 建设
+
+无障碍改造移动端组件，详情参见 📄[「技术向善，助力 TDesign 无障碍改造」主题活动开始啦 · Issue #1045 · Tencent/tdesign-miniprogram · GitHub](https://github.com/Tencent/tdesign-miniprogram/issues/1045)
+
+多端智能转换，支持 Vue/Vue next 等转换为微信小程序
+
+**我们准备做的**
+
+提供更全面的国际化多语言体验，适配 RTL 语言
+
+搭建物料市场，承载更多来自社区贡献的组件、页面模板等资源
 
 以上工作都在 GitHub Projects 上公开进行。[view on GitHub](https://github.com/orgs/Tencent/projects/1/views/1)

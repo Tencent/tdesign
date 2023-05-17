@@ -4,8 +4,6 @@
   </a>
 </p>
 
-简体中文 | [English](./README.md) 
-
 TDesign 是一套完整的 [企业级设计体系](https://tdesign.tencent.com/design/values)，拥有基于 [Vue](https://tdesign.tencent.com/vue/) / [React](https://tdesign.tencent.com/react/) / [小程序](https://tdesign.tencent.com/miniprogram/) 等技术栈的组件库解决方案。  
 用于构建 [设计统一](#一致) / [跨端多技术栈](#完整) 的前端应用时，TDesign 更有优势。
 
@@ -17,21 +15,21 @@ TDesign 是一个 `multi-repo`， TDesign 有如下代码仓库：
 
 ### 桌面端组件库
 
-| 仓库                                                            | 描述                 | 状态     |
-| --------------------------------------------------------------- | -------------------- | -------- |
-| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue 2.x 技术栈       | `Beta`   |
-| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈       | `Beta`  |
-| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈    | `Beta`  |
-| tdesign-angular                                                 | 基于 Angular 10 实现 | `待上线` |
+| 仓库                                                            | 描述                 | 状态      |
+| --------------------------------------------------------------- | -------------------- | --------- |
+| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue 2.x 技术栈       | `1.0 LTS` |
+| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈       | `1.0 LTS` |
+| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈    | `1.0 LTS` |
+| tdesign-angular                                                 | 基于 Angular 10 实现 | `待上线`  |
 
 ### 移动端组件库
 
-| 仓库                                                                  | 描述              | 状态     |
-| --------------------------------------------------------------------- | ----------------- | -------- |
-| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram) | 微信小程序        | `Beta`  |
-| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)   | Vue 3.x 技术栈    | `Beta` |
-| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React 16.x 技术栈 | `Alpha` |
-| tdesign-flutter                                                       | 1.17.0            | `待上线` |
+| 仓库                                                                    | 描述              | 状态      |
+| ----------------------------------------------------------------------- | ----------------- | --------- |
+| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | 微信小程序        | `1.0 LTS` |
+| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue 3.x 技术栈    | `Beta`    |
+| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React 16.x 技术栈 | `Alpha`   |
+| tdesign-flutter                                                         | 1.17.0            | `待上线`  |
 
 ### 基础通用仓库
 
@@ -43,13 +41,13 @@ TDesign 是一个 `multi-repo`， TDesign 有如下代码仓库：
 
 ### 解决方案及周边
 
-| 仓库                                                                            | 描述                             |
-| ------------------------------------------------------------------------------- | -------------------------------- |
-| [tdesign-starter-cli](https://github.com/Tencent/tdesign-starter-cli)           | TDesign 解决方案的脚手架         |
-| [tdesign-vue-starter](https://github.com/Tencent/tdesign-vue-starter)           | 基于 tdesign-vue 的解决方案      |
-| [tdesign-vue-next-starter](https://github.com/Tencent/tdesign-vue-next-starter) | 基于 tdesign-vue-next 的解决方案 |
-| [tdesign-react-starter](https://github.com/Tencent/tdesign-react-starter)       | 基于 tdesign-react 的解决方案    |
-| [tdesign-miniprogram-starter-retail](https://github.com/Tencent/tdesign-miniprogram-starter-retail)       | 基于 tdesign-miniprogram 的零售行业解决方案    |
+| 仓库                                                                                                | 描述                                        |
+| --------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| [tdesign-starter-cli](https://github.com/Tencent/tdesign-starter-cli)                               | TDesign 解决方案的脚手架                    |
+| [tdesign-vue-starter](https://github.com/Tencent/tdesign-vue-starter)                               | 基于 tdesign-vue 的解决方案                 |
+| [tdesign-vue-next-starter](https://github.com/Tencent/tdesign-vue-next-starter)                     | 基于 tdesign-vue-next 的解决方案            |
+| [tdesign-react-starter](https://github.com/Tencent/tdesign-react-starter)                           | 基于 tdesign-react 的解决方案               |
+| [tdesign-miniprogram-starter-retail](https://github.com/Tencent/tdesign-miniprogram-starter-retail) | 基于 tdesign-miniprogram 的零售行业解决方案 |
 
 ## 为什么会有 TDesign
 
@@ -67,7 +65,7 @@ TDesign 在创建之初就秉承开源协作的原则，包括源代码在内的
 
 很多同学从个人项目中试用组件库开始，到提交第一个 `Bug Issue`，再到提交第一个 `Feature MR`，最后逐步参与到 `Code Review` 和方案制定工作中，成为核心贡献者。在过去的一年中，TDesign 关闭了 1k+ `Issue`，进行了 5k+ 次 `CR`，保持 [每周迭代](https://tdesign.tencent.com/vue/components/changelog) 发布新版本。
 
-组件库目前支持[多个端和主流技术栈](#仓库)，桌面端 Vue2、Vue3、React 和移动端 Vue3、微信小程序已发布 `Beta` 版本，移动端 React、QQ小程序发布 `Alpha` 内测版本。
+组件库目前支持[多个端和主流技术栈](#仓库)，桌面端 Vue2、Vue3 已发布 1.x 版本，桌面端 React 和移动端 Vue3、微信小程序已发布 `Beta` 版本，移动端 React、QQ 小程序发布 `Alpha` 内测版本。
 
 ## 为什么开源
 

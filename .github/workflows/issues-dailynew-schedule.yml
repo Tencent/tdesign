@@ -1,11 +1,11 @@
 # 国际标准时间+8
-# 每天issue和pr的待处理情况
-name: issues-statistics-schedule
+# 每天 issue 新增情况
+name: issues-dailyclose-schedule
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 6 * * *"
+    - cron: "0 7 * * *"
 
 jobs:
   create-report:
@@ -16,4 +16,4 @@ jobs:
         with:
           wxhook: ${{ secrets.WX_HOOK_URL }}
           token: ${{ secrets.GIT_TOKEN_L }}
-          type: 'xiaolv'
+          type: 'new'
