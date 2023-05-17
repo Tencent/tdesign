@@ -16,11 +16,11 @@ Each repository corresponds to a component library implemented using a specific 
 - After cloning the source code, please initialize the submodules: `git submodule init && git submodule update`
 - After executing `git submodule update`, the submodule does not point to any branch, but a detached state pointing to a specific commit.
 
-### Developement of Submodule
+### Development of Submodule
 
 Checkout a new branch such as `feature/button` from `develop` branch, first enter the submodule to complete the commit for submodule, then return to the main repository to complete the commit.
 
-### About UI Developement
+### About UI Development
 
 UI development is shared among multiple implementation frameworks such as React, Vue, etc. Components implementation of each framework should reuse the HTML structure from the UI development, and reference the component CSS and demo CSS (which have been imported at the entry point of the repository). UI development can be carried out by a dedicated UI developer or one of the framework component developers.
 

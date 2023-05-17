@@ -40,7 +40,7 @@ If you want to claim a task, please leave a message in the issue comment section
 <img width="100%" alt="image" src="https://user-images.githubusercontent.com/7600149/178892360-b999ecbd-c875-484b-b58f-279daf9815af.png">
 
 Please fork the repository to your personal space before cloning it locally.
-The official repository has access restrictions; Contributors other than adminstrators and writers of repository cannot submit code or create new branches.
+The official repository has access restrictions; Contributors other than administrators and writers of repository cannot submit code or create new branches.
 
 <img width="500" alt="image" src="https://user-images.githubusercontent.com/7600149/178904260-54aac4b4-989c-4572-9262-601f5ebf4af8.png">
 
