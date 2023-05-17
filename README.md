@@ -6,7 +6,7 @@
 
 English | [简体中文](./README-zh_CN.md)
 
-TDesign is a comprehensive [Enterprise Design System](https://tdesign.tencent.com/design/values), and component libraries have been implemented for versions such as [Vue](https://tdesign.tencent.com/vue/), [React](https://tdesign.tencent.com/react/), and [Wechat MiniProgram](https://tdesign.tencent.com/miniprogram/), so that TDesign has advantages when used for building applications with [consistent design](#一致) and [cross-platform, multi-tech stack](#完整) capabilities.
+TDesign is a comprehensive [Enterprise Design System](https://tdesign.tencent.com/design/values), and component libraries have been implemented for versions such as [Vue](https://tdesign.tencent.com/vue/), [React](https://tdesign.tencent.com/react/), and [Wechat MiniProgram](https://tdesign.tencent.com/miniprogram/). TDesign has advantages when used for building applications with [consistent design](#Consistency) and [cross-platform, multi-tech stack](#Comprehensive) capabilities.
 
 ![TDesign](https://user-images.githubusercontent.com/88708072/147124305-fbb74f9f-65b2-44f9-9f1c-e812ce63a547.gif)
 
@@ -14,7 +14,7 @@ TDesign is a comprehensive [Enterprise Design System](https://tdesign.tencent.co
 
 The following are the repositories for TDesign：
 
-### Repositories for desktop components
+### Repositories for Desktop Components
 
 | Repository                                                      | Description                           | Status        |
 | --------------------------------------------------------------- | ------------------------------------- | ------------- |
@@ -23,7 +23,7 @@ The following are the repositories for TDesign：
 | [tdesign-react](https://github.com/Tencent/tdesign-react)       | React UI components lib for TDesign   | `1.0 LTS`     |
 | tdesign-angular                                                 | Angular UI components lib for TDesign | `In Progress` |
 
-### Repositories for mobile components
+### Repositories for Mobile Components
 
 | Repository                                                              | Description                                      | Status        |
 | ----------------------------------------------------------------------- | ------------------------------------------------ | ------------- |
@@ -32,7 +32,7 @@ The following are the repositories for TDesign：
 | [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React Mobile UI components lib for TDesign       | `Alpha`       |
 | tdesign-flutter                                                         | Flutter UI components lib for TDesign            | `In Progress` |
 
-### Repositories for common
+### Repositories for Shared
 
 | Repository                                                  | Description                               |
 | ----------------------------------------------------------- | ----------------------------------------- |
@@ -40,7 +40,7 @@ The following are the repositories for TDesign：
 | [tdesign-icons](https://github.com/Tencent/tdesign-icons)   | A mono repo for TDesign Icons             |
 | [tdesign-common](https://github.com/Tencent/tdesign-common) | TDesign Common Style and Utils            |
 
-### Repositories for out-of-box starter-kit
+### Repositories for Out-of-box Starter Kits
 
 | Repository                                                                                          | Description                                              |
 | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
