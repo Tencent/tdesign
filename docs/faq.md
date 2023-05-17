@@ -2,20 +2,25 @@
 title: 常见问题
 ---
 
-### 何时发版
+### Version Release
 
-目前按照每周一次迭代的发版节奏进行，如果你有线上问题急需解决，请在 issue 中留言要求发布先行版本，先行版本不受迭代版本节奏要求，随时可以发布。
+Currently, TDesign releases new version weekly.
+If you have an urgent online issue to resolve, please leave a message in the issue requesting a pre-release version, which is not subject to iteration requirements and can be published at any time.
 
-### 如何定制主题
+### Customizing Theme
 
-参考 [自定义主题](https://github.com/Tencent/tdesign-common/blob/develop/theme.md)，你可以自由修改全局和各组件抽离的样式变量，只有已有变量无法满足你的定制需求时才考虑通过同名类覆盖的方式重写默认样式，这可以降低你跟随组件库升级的难度。
+Refer to [Customizing Theme](<(https://github.com/Tencent/tdesign-common/blob/develop/theme.md)>), it is recommend to custom theme by modifying global and component-specific style variables. Only consider rewriting default styles using same-named classes if existing variables cannot meet your customization needs. This reduces the difficulty of upgrading with the component library.
 
-### 受控与非受控用法
+### Controlled and Uncontrolled Usage
 
-对于使用时可能需要更新的属性如 value(对应更新事件 onChange)，组件都实现了受控和非受控用法，下面使用 value/onChange 代入说明：
+For component properties that may need to be updated during use, such as `value` (corresponding update event `onChange`), components implement both controlled and uncontrolled usage. The following uses `value/onChange` as an example:
 
-- 受控用法：传入属性 value 既代表受控用法，组件状态完全由属性值控制，无内部状态，如需更新状态，必须传入新的属性值，用户通过交互触发了更新事件 onChange，开发者需要更新 value 后传入组件，组件状态才会更新。
-- 非受控用法：既初始值用法，不传入 value 属性，使用对应的初始值属性 defaultValue 设置组件初始状态，此时组件会在内部维护该状态，用户通过交互触发更新事件 onChange 之后，组件内部直接更新组件状态。
+- `Controlled usage`: Passing in the `value` property signifies controlled usage. The component's state is completely controlled by the property value and has no internal state. To update the state, a new property value must be passed. When users trigger the update event `onChange` through interaction, developers need to update the value and pass it to the component for the component's state to update.
+- `Uncontrolled usage`: This is the initial value usage. Please do not pass in the `value` attribute; instead, use the corresponding initial value attribute `defaultValue` to set the component's initial state. The component will maintain this state internally. After the user triggers the update event `onChange` through interaction, the component will directly update the component's state.
 
-### 如何在设计工具 Sketch 中使用 TDesign
-有两种方式，一是可以使用 TDesign 提供的 Sketch 源文件，它包括桌面端及移动端（近期上线），也可以使用 TDesign 提供的 Sketch 插件，具体使用方式请参考 [《插件使用手册》](https://doc.weixin.qq.com/doc/w3_m_OkshgETGpoGB?scode=AJEAIQdfAAoYvGqGCUAL8AZgbdAFw)。
+### Use TDesign in Sketch
+
+TDesign provides two ways to use TDesign in Sketch.
+
+- Use the Sketch source files provided by TDesign, which include desktop and mobile versions.
+- Alternatively, you can also use the Sketch plugin provided by TDesign. For specific usage, please refer to the [documentation](https://doc.weixin.qq.com/doc/w3_m_OkshgETGpoGB?scode=AJEAIQdfAAoYvGqGCUAL8AZgbdAFw)).

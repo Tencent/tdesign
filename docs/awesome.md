@@ -1,20 +1,20 @@
 ---
-title: 社区资源
+title: Community Resources
 ---
 
-- [官网地址](https://tdesign.tencent.com/)
-- [官方组件库地址](https://github.com/Tencent/tdesign#%E4%BB%93%E5%BA%93)
+- [Official Website](https://tdesign.tencent.com/)
+- [Official Components Website](https://github.com/Tencent/tdesign#%E4%BB%93%E5%BA%93)
 - [Starter Kit](https://github.com/Tencent/tdesign#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E5%91%A8%E8%BE%B9)
-- [每周 Release 汇总](https://github.com/Tencent/tdesign/releases)
+- [Weekly Release](https://github.com/Tencent/tdesign/releases)
 
-## 📦 插件和工具
+## 📦 Plugins and Tools
 
-名称 | 描述
---|--
-[unplugin-auto-import](https://github.com/antfu/unplugin-auto-import) <br> [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components) | 用于自动引入 TDesign 桌面端 [Vue2](https://github.com/Tencent/tdesign-vue)、[Vue3](https://github.com/Tencent/tdesign-vue-next) 的组件，使用请参考 [自动引入章节](https://tdesign.tencent.com/vue/getting-started#%E8%87%AA%E5%8A%A8%E5%BC%95%E5%85%A5)
-[formilyjs/tdesign-react](https://github.com/formilyjs/tdesign-react) | 结合 Formily & tdesign-react 组件库能力的社区贡献产品
+| Name                                                                                                                                                   | Description                                                                                                                                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [unplugin-auto-import](https://github.com/antfu/unplugin-auto-import) <br> [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components) | Import TDesign Desktop [Vue2](https://github.com/Tencent/tdesign-vue)、[Vue3](https://github.com/Tencent/tdesign-vue-next) components automatically, refer to [Component Auto Import](https://tdesign.tencent.com/vue/getting-started#%E8%87%AA%E5%8A%A8%E5%BC%95%E5%85%A5) |
+| [formilyjs/tdesign-react](https://github.com/formilyjs/tdesign-react)                                                                                  | Combination of Formily & tdesign-react                                                                                                                                                                                                                                      |
 
-## 📄 文章
+## 📄 Articles
 
 - [TDesign 的开源故事，看完秒懂](https://mp.weixin.qq.com/s?__biz=Mzg3MjYwODA1OA==&mid=2247509185&idx=1&sn=c7c8042d25be79e4c19c84d9eeceb921)
 - [当你还在追更 Figma 时，TD 已经更新完了](https://mp.weixin.qq.com/s?__biz=Mzg3MjYwODA1OA==&mid=2247509820&idx=1&sn=f874bc3749026a3e3e0eee2e0c006eb9)
@@ -22,12 +22,12 @@ title: 社区资源
 - [TDesign 品牌价值观](https://mp.weixin.qq.com/s?__biz=Mzg3MjYwODA1OA==&mid=2247517235&idx=1&sn=5be239135a325b3cc06073edb7691499)
 - [TDesign 品牌价值观 | 视觉新基础](https://mp.weixin.qq.com/s?__biz=Mzg3MjYwODA1OA==&mid=2247523337&idx=1&sn=388dfff5cb632c8fef15defbe748019c)
 
-腾讯设计 TDesign [文章合集](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3MjYwODA1OA==&action=getalbum&album_id=2416359157676523521)
+Tencent Design [ TDesignArticles](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3MjYwODA1OA==&action=getalbum&album_id=2416359157676523521)
 
-## 🎬 视频教程
+## 🎬 Videos
 
-- [用腾讯TDesign框架做一个管理系统(Vue3)版](https://www.bilibili.com/video/BV1MZ4y1Q7zu?spm_id_from=333.999.0.0&vd_source=94df280d25d542fbcfaf851754a254de)
+- [用腾讯 TDesign 框架做一个管理系统(Vue3)版](https://www.bilibili.com/video/BV1MZ4y1Q7zu?spm_id_from=333.999.0.0&vd_source=94df280d25d542fbcfaf851754a254de)
 
-## 🎈 贡献更多
+## 🎈 Contribution
 
-如果你有基于 TDesign 的组件二次封装、插件、Library、快速上手模板等资源，或者相关教程文章，欢迎在 👉 [这里](https://github.com/Tencent/tdesign/blob/main/docs/awesome.md) 提 PR 维护到仓库中丰富生态，帮助使用者更好的应用相关能力。
+If you have resources such as secondary packaging of components based on TDesign, plugins, libraries, templates, or related tutorial articles, you are welcome to submit a PR to maintain them in the repository and enrich the ecosystem at 👉 [here](https://github.com/Tencent/tdesign/blob/main/docs/awesome.md). This will help users better utilize the related capabilities.

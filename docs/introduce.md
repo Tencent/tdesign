@@ -1,85 +1,108 @@
 ---
-title: 关于我们
+title: About TDesign
 ---
 
-## TDesign 是什么
+## What is TDesign
 
-TDesign 是腾讯各业务团队在服务业务过程中沉淀的一套企业级设计体系。
+TDesign is an enterprise-level design system accumulated by Tencent's various business teams.
 
-TDesign 具有统一的 [价值观](https://tdesign.tencent.com/design/values)，一致的设计语言和视觉风格，帮助用户形成连续、统一的体验认知。在此基础上，TDesign 提供了开箱即用的 [UI 组件库](https://tdesign.tencent.com/vue/)、[设计指南](https://tdesign.tencent.com/vue/components/button?tab=design) 和相关 [设计资产](https://tdesign.tencent.com/source)，以优雅高效的方式将设计和研发从重复劳动中解放出来，同时方便大家在 TDesign 的基础上扩展，更好的的贴近业务需求。
+TDesign features a unified [design values](https://tdesign.tencent.com/design/values), consistent design language, and visual style, helping users form continuous and coherent perceptions of the experience. Based on this, TDesign offers out-of-the-box [UI component libraries](https://tdesign.tencent.com/vue/), [design guidelines](https://tdesign.tencent.com/vue/components/button?tab=design), and [design assets](https://tdesign.tencent.com/source), elegantly and efficiently freeing design and development from repetitive tasks. Simultaneously, it facilitates easy extension on top of TDesign, enabling a better alignment with business requirements.
 
-## 为什么会有 TDesign
+## Why TDesign
 
-过去，腾讯内部众多团队搭建了不同的设计体系和组件库产品，以满足各自的业务诉求，提升研发效能。这些体系各自独立维护，彼此割裂。并且，随着内部业务的规模不断扩大，这种割裂的局面愈发严重。
+Before 2019, there were many internal design system and component library projects within Tencent, centered around product-focused "decentralized" rapid iterations.
 
-为了应对这一情况，腾讯内部建立了 [开源协同委员会](https://m.thepaper.cn/yidian_promDetail.jsp?contid=4653692&from=yidian)，参考开源社区的组织方式，将同类项目的不同技术团队聚合在一起，开源共建。TDesign 在这样的背景下应运而生，在腾讯内部以开源协同的方式，共建一个完善、易用的设计体系和组件库产品。
+In 2019, Tencent established the [Open Source Collaboration Committee](<(https://m.thepaper.cn/yidian_promDetail.jsp?contid=4653692&from=tdesign)>). Through internal open-source collaboration, it organized different teams working on similar technology products to collaborate.
+
+TDesign is the collaborative outcome of frontend and design under Tencent's open-source collaboration, with the aim to jointly build a comprehensive and versatile design system and component library.
 
 <img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-oteam.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
-## TDesign 的发展
+## Development of TDesign
 
-TDesign 在创建之初就严格按照开源协作的原则运作，包括源代码在内的协作方案讨论、组件设计及 API 制定的过程也完全在公司内源上开放。也得到了公司内开发和设计同学的广泛关注，无论以什么身份参与，TDesign 都同样遵循平等、公开且严格的原则来对待，很多同学从个人项目中试用组件库开始，到提交第一个 `Bug Issue`，再到提交第一个 `Feature MR`，最后逐步参与到 `MR Review` 和方案制定工作中，成为核心贡献者。在过去的一年中，TDesign 关闭了 1k+ `Issue`，进行了 5k+ 次 `CR`，保持 [每周迭代](https://tdesign.tencent.com/vue/components/changelog) 发布新版本。
+TDesign was founded with the principles of open-source collaboration from the beginning. The [collaboration scheme discussion](https://github.com/Tencent/tdesign/wiki), [component design](https://github.com/Tencent/tdesign/wiki), and [API design](https://github.com/Tencent/tdesign/wiki), including source code, are fully open within the company, garnering widespread attention from internal developers and designers. TDesign follows an equal, open, and strict policy, regardless of the participants' roles.
 
-组件库目前支持多个业界主流的开发技术栈，桌面端 Vue2 已发布 `Beta` 版本，桌面端 Vue3、React 和移动端 Vue3 、微信小程序发布 `Alpha` 内测版本：
+Many participants started by trying out the component library in their personal projects, advancing to submit their first Issue, then their first Feature MR, and gradually becoming involved in Code Review and solution-formulating tasks, eventually turning into core contributors. In the past year, TDesign has closed 1k+ issues and conducted 5k+ Code Reviews to maintained a [weekly iterative release](<(https://tdesign.tencent.com/vue/components/changelog)>) of new versions.
 
-### 桌面端
+TDesign currently supports [multiple platforms and mainstream front-end UI framework](#仓库). Desktop versions for Vue2, Vue3, and React, as well as mobile versions for WeChat Mini Programs, have been launched as stable versions. Mobile React and QQ Mini Program versions have been released the `Alpha` versions for internal testing.
 
-| 仓库                                                            | 描述                 | 状态     |
-| --------------------------------------------------------------- | -------------------- | -------- |
-| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue 2.x 技术栈       | `Beta`   |
-| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈       | `Beta`  |
-| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈    | `Beta`  |
-| tdesign-angular                                                 | 基于 Angular 10 实现 | `待上线` |
+## Repositories
 
-### 移动端
+### Repositories for Desktop Components
 
-| 仓库                                                                  | 描述              | 状态     |
-| --------------------------------------------------------------------- | ----------------- | -------- |
-| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)   | Vue 3.x 技术栈    | `Beta`  |
-| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram) | 微信小程序        | `Beta`  |
-| tdesign-mobile-react                                                  | React 16.x 技术栈 | `Alpha` |
-| tdesign-flutter                                                       | 1.17.0            | `待上线` |
+| Repository                                                      | Description                           | Status        |
+| --------------------------------------------------------------- | ------------------------------------- | ------------- |
+| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue.js UI components lib for TDesign  | `1.0 LTS`     |
+| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue3.x UI components lib for TDesign  | `1.0 LTS`     |
+| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React UI components lib for TDesign   | `1.0 LTS`     |
+| tdesign-angular                                                 | Angular UI components lib for TDesign | `In Progress` |
 
-同时，TDesign 与腾讯内部在各自的领域具有丰富行业经验业务团队正协作中，提供更多具有业务属性的组件库产品，未来会有包括政务、零售等多个不同风格及组件类型的组件库产品开放出来，敬请期待！
+### Repositories for Mobile Components
 
-TDesign 后续发展详细规划请参阅 [后续计划](/about/roadmap)。
+| Repository                                                              | Description                                      | Status        |
+| ----------------------------------------------------------------------- | ------------------------------------------------ | ------------- |
+| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | Wechat MiniProgram UI components lib for TDesign | `1.0 LTS`     |
+| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue3.x Mobile UI components lib for TDesign      | `Beta`        |
+| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React Mobile UI components lib for TDesign       | `Alpha`       |
+| tdesign-flutter                                                         | Flutter UI components lib for TDesign            | `In Progress` |
 
-## 产品特性
+### Repositories for Common
 
-### 完整
+| Repository                                                  | Description                               |
+| ----------------------------------------------------------- | ----------------------------------------- |
+| [tdesign](https://github.com/Tencent/tdesign)               | TDesign main repository and documentation |
+| [tdesign-icons](https://github.com/Tencent/tdesign-icons)   | A mono repo for TDesign Icons             |
+| [tdesign-common](https://github.com/Tencent/tdesign-common) | TDesign Common Style and Utils            |
 
-TDesign 官方提供了多种业界主流的开发技术栈支持。目前，TDesign 已经支持了 [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/react) 和移动端 [Vue 3](https://tdesign.tencent.com/vue-mobile/)、[微信小程序](https://tdesign.tencent.com/miniprogram/) 的开发，其他技术栈如 Augular、Flutter 正在开发中。
+### Repositories for out-of-box Starter-kit
 
-为了实现开发与设计之间的高效协同，TDesign 中包含了丰富可复用的设计组件资源，如[色彩体系](https://tdesign.tencent.com/design/color)、[文字系统](https://tdesign.tencent.com/design/fonts)、[动效设计](https://tdesign.tencent.com/design/motion)、[图标元素](https://tdesign.tencent.com/design/icon)、[布局结构](https://tdesign.tencent.com/design/layout)等，覆盖支持 [Axure、Sketch、Figma、Adobe XD](https://tdesign.tencent.com/source) 等各大产品设计软件，将设计和开发者从重复劳动中释放出来。
+| Repository                                                                                          | Description                                              |
+| --------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| [tdesign-starter-cli](https://github.com/Tencent/tdesign-starter-cli)                               | CLI tool for TDesign Starter kit                         |
+| [tdesign-vue-starter](https://github.com/Tencent/tdesign-vue-starter)                               | starter-kit for TDesign Vue UI components                |
+| [tdesign-vue-next-starter](https://github.com/Tencent/tdesign-vue-next-starter)                     | starter-kit for TDesign Vue Next UI components           |
+| [tdesign-react-starter](https://github.com/Tencent/tdesign-react-starter)                           | starter-kit for TDesign React UI components              |
+| [tdesign-miniprogram-starter-retail](https://github.com/Tencent/tdesign-miniprogram-starter-retail) | starter-kit for TDesign Wechat Miniprogram UI components |
 
-除了常规设计资源，TDesign 还提供了辅助设计工具如 [Sketch 设计插件](https://tdesign.tencent.com/source)，也支持在 [即时设计、Pixso、墨刀 ](https://tdesign.tencent.com/source)等市面常用设计工具中使用 TDesign 设计物料。
+For TDesign's subsequent development plan, please refer to the [TDesign upcoming plans](/about/roadmap).
+
+## Features
+
+### Comprehensive
+
+TDesign Support [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/react/) components for Desktop Application and [Vue 3](https://tdesign.tencent.com/vue-mobile/)、[Wechat MiniProgram](https://tdesign.tencent.com/miniprogram/) components for Mobile Application.
+
+To imporve collaboration efficiency between developers and designers, TDesign provides a wide variety of reusable design components such as [color systems](https://tdesign.tencent.com/design/color), [font system](https://tdesign.tencent.com/design/fonts), [motion design](https://tdesign.tencent.com/design/motion), [icons](https://tdesign.tencent.com/design/icon), and [layout](https://tdesign.tencent.com/design/layout). These components are compatible with popular design software like [Axure, Sketch, Figma, and Adobe XD](https://tdesign.tencent.com/source).
+
+In addition to regular design resources, TDesign also provides auxiliary design tools such as [Sketch plugins](https://tdesign.tencent.com/source) and supports the use of TDesign design materials in other design tools like [即时设计、Pixso、墨刀 ](https://tdesign.tencent.com/source).
 
 <img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-resources.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
-### 一致
+### Consistency
 
-TDesign 将腾讯内部多年设计经验提炼总结为专业的设计指南，其所提供的通用设计解决方案，能够帮助产品经理、设计师、开发者等角色高效完成企业级产品的设计和研发，并保持设计语言和风格的一致，满足用户体验的要求。
+TDesign distills Tencent's years of design experience into professional design guideline, providing universal design solutions that assist product managers, designers, developers, and other roles in efficiently completing the design and development of enterprise-level products, while maintaining consistent design language and style to meet user experience requirements.
 
-基于 TDesign 的设计体系规范，TDesign 同时上线了组件库的桌面端和移动端，提供了多个技术栈实现版本。通过一系列协作流程和辅助工具，保证各技术栈 [组件 API](https://tdesign.tencent.com/apis) 和实现产物一致。借助这些能力，使得项目即便使用了多种不同的技术架构或技术栈，开发者也可通过 TDesign 通用设计组件库进行开发，显著降低学习成本，在构建统一/多端覆盖/跨技术栈的前端应用时更具优势。
+Based on TDesign's design system standards, TDesign has launched both desktop and mobile versions of the component library, offering multiple tech stack implementations. A series of collaborative workflows and auxiliary tools ensure consistency among the [component APIs](https://tdesign.tencent.com/apis) and implementation outcomes of components across various tech stacks. With these capabilities, even if a project uses different technology architectures or tech stacks, developers can leverage TDesign's universal design component library for development, significantly reduce learning costs, and gain a competitive edge when building unified, cross-platform, and cross-tech stack applications.
 
 <img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-components.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
-### 易用
+### Usability
 
-TDesign 设计体系在形成过程中，提炼了不同业务、场景的设计经验，提供了通用的 [设计指南](https://tdesign.tencent.com/design/offices) 以降低使用门槛。对于不同企业产品的品牌定制需求，TDesign 支持使用者对设计风格进行扩展，目前已经将设计样式梳理归纳为 [Design Token](https://tdesign.tencent.com/design/color#header-21)，形成一套企业内部的语义化设计规范，方便后续进行统一的管理和使用扩展。
+TDesign has distilled design experiences from various businesses and scenarios during the formation of the TDesign design system, providing universal [design guidelines](https://tdesign.tencent.com/design/offices) to lower the barriers to entry. For the brand customization needs of different enterprise products, TDesign allows users to extend design styles. Currently, design styles have been organized and summarized as [Design Tokens](https://tdesign.tencent.com/design/color#header-21), forming a set of semantically-based design standards within the enterprise, facilitating unified management and upcoming expansion.
 
 <img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-easy.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
-在主题配置方面，TDesign 提供了明亮和 [暗色 ](https://tdesign.tencent.com/design/dark)两种模式，支持一键切换，提升用户的使用体验。后续，TDesign 还会推出针对于不同垂直领域的行业组件，覆盖更多的业务范围。产品团队可以借助内置的行业主题，快速配置对应需求，启动业务开发。
+In terms of component theme configuration, TDesign offers bright mode and [dark mode](https://tdesign.tencent.com/design/dark), supporting one-click switching to enhance the user experience. In the future, TDesign will also introduce industry-specific components for various vertical domains, covering a broader range of business areas. Product teams can configure corresponding requirements and start business development using the built-in industry themes.
 
-TDesign 同步上线了一款开箱即用的中后台框架 [TDesign Starter Kit](https://tdesign.tencent.com/starter)，开发者可以通过它快速体验组件能功能，也可以将它修改为项目基础脚手架工程，快速实现从 0 到 1 的产品开发上线。
+TDesign also provides an out-of-box template called [TDesign Starter Kit](https://tdesign.tencent.com/starter). Developers can experience the functionality of components with it, or use it as a base scaffolding project for product development and launch.
 
-## 欢迎加入 TDesign
+## Join TDesign
 
-通过对外开源，TDesign 希望将服务范围扩大至外部团队，同时开源也是一个新的起点，借助社区的力量，TDesign 期望获得与同道交流学习的机会，逐步建立起活跃的社区，以便持续打磨完善组件库和相关生态产品。
-如果你希望参与 TDesign 的开源共建，请先阅读 [《如何贡献》](/about/contributing)，期待你的参与！
+By open sourcing to the public, TDesign aims to expand its services to the entire community. At the same time, open source marks a new beginning for TDesign. With the power of the community, TDesign hopes to create opportunities for exchanges and learning with others in the field, establishing an active community to continuously refine and improve the component library and related products.
 
-❤️ 感谢 TDesign 所有的贡献者，他们是超过 270 位伙伴们：
+If you are interested in participating in the open-source co-construction of TDesign, please read [Contributing](/about/contributing) first. We look forward to your involvement!
+
+❤️ Thanks for all TDesign contributors:
 </br>
 
 <iframe src="https://tdesign.tencent.com/contributor.html" width="100%" height="1000" frameborder="0" scrolling="no" />
