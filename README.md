@@ -4,7 +4,7 @@
   </a>
 </p>
 
-English | [简体中文](./README-zh_CN.md)
+English | [简体中文](./README_zh-CN.md)
 
 TDesign is a comprehensive [Enterprise Design System](https://tdesign.tencent.com/design/values), and component libraries have been implemented for versions such as [Vue](https://tdesign.tencent.com/vue/), [React](https://tdesign.tencent.com/react/), and [Wechat MiniProgram](https://tdesign.tencent.com/miniprogram/). TDesign has advantages when used for building applications with [consistent design](#Consistency) and [cross-platform, multi-tech stack](#Comprehensive) capabilities.
 
