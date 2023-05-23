@@ -1,73 +1,76 @@
 ---
-title: 如何贡献
+title: How to Contribute
 ---
 
-### 提交贡献意向
+### Submit Contribution Intention
 
-请填写[《贡献者加入意向收集》](https://wj.qq.com/s2/9772260/7cbe/)问卷，帮助我们了解你的意向和个人信息，TDesign 团队将在 2 个工作日内联系你。
+Please fill out the [Contributor Joining Intention Collection questionnaire](https://wj.qq.com/s2/9772260/7cbe/) to help us understand your intentions and personal information. TDesign team will contact you within 2 days.
 
-在提交意向和成为我们的一员之前，请务必先阅读以下的行为准则和协作规范指南。
+Before submitting your intentions, please be sure to read the following code of conduct and collaboration guidelines.
 
-### 行为准则
+### Code of Conduct
 
-这里有一份 [行为准则](https://github.com/Tencent/tdesign/blob/main/docs/CODE_OF_CONDUCT.md) 希望你能在任何时候都严格遵守，帮助维护良好的协作与讨论氛围。
+Here is a [Code of Conduct](https://github.com/Tencent/tdesign/blob/main/docs/CODE_OF_CONDUCT.md) that we hope you strictly adhere to at all times to maintain a good atmosphere for collaboration and discussion.
 
-### 透明的开发
+### Development
 
-TDesign 目前的工作都以 issue 的形式在 GitHub 上进行。不管是核心团队的成员还是外部贡献者的 pull request 都需要经过同样流程的 review。
+Currently TDesign's work is carried out in the form of issues on GitHub. Both core team members and external contributors' pull requests are subject to the same review process.
 
-### Issue 反馈
+### Report Issues
 
-TDesign 使用 Github issues 进行 bug 报告和新 feature 建议。在报告 bug 之前，请确保已经搜索过类似的 问题，因为它们可能已经得到解答或正在被修复。对于已存在的 issue，你可以提供想法参与讨论或者评论认领后着手开始处理，仅仅评论 “+1” 并不能帮助问题得到快速解决。
+TDesign uses Github issues for bug reports and new feature suggestions.
+Before reporting a bug, please make sure you have searched for similar problems, as they may have already been answered or are being fixed. For existing issues, you can contribute ideas to the discussion or comment to claim and start working on them. Simply commenting `+1` will not help solve the problem faster.
 
-对于 bug 反馈和新 feature，我们都提供了相应的 issue 模板，请尽量完善所有信息并提供在线样例，这能让 issue 得到快速响应。
+For bug reports and new feature suggestions, we provide corresponding issue templates. Please try to complete all the information and provide an online sample, as this will allow the issue to receive a prompt response.
 
-### 发现任务
+### Discover Tasks
 
 <img width="100%" alt="image" src="https://user-images.githubusercontent.com/7600149/178890236-80533a12-840a-43d1-b061-193a8021272f.png">
 
-各仓库下有很多打了 `help wanted` 的 label 的 issue，都是初步经过筛选能够复现的 Bug 或是正在招募贡献者参与的 feature，例如 [tdesign-vue issues](https://github.com/Tencent/tdesign-vue/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)，你可以点击这个标签筛选出所有 `help wanted` 的 issue。
+There are many issues labeled with `help wanted` that have been initially filtered as reproducible bugs or features for which contributors are being recruited, such as [tdesign-vue issues](https://github.com/Tencent/tdesign-vue/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22). You can click on this label to filter out all issues tagged with "help wanted".
 
 <img width="100%" alt="image" src="https://user-images.githubusercontent.com/7600149/178891977-71e52b65-56c4-439c-aa5d-e279c9395e59.png">
 
-如果想认领该任务，请在 issue 评论区中留言后再着手处理防止重复认领，最好附带预估提交 PR 时间的信息，之后负责跟进的 PMC 同学会将 issue label 改为 `in progress`。
+If you want to claim a task, please leave a message in the issue comment section to prevent duplicate claims, preferably with an estimated PR submission time. Repository owners will change the issue label to `in progress`.
 
-### 提交 Pull Request
+### Submit Pull Request
 
-#### Fork 仓库
+#### Fork Repository
 
 <img width="100%" alt="image" src="https://user-images.githubusercontent.com/7600149/178892360-b999ecbd-c875-484b-b58f-279daf9815af.png">
 
-请将仓库 fork 至个人空间后再 clone 至本地，官方仓库有权限限制，除 PMC 成员外其他同学不能提交代码或新建分支。
+Please fork the repository to your personal space before cloning it locally.
+The official repository has access restrictions; Contributors other than administrators and writers of repository cannot submit code or create new branches.
 
 <img width="500" alt="image" src="https://user-images.githubusercontent.com/7600149/178904260-54aac4b4-989c-4572-9262-601f5ebf4af8.png">
 
-请使用 SSH 方式 clone 仓库，TDesign 的一些仓库使用了 git submodule 方式来额外引入 [Tencent/tdesign-common](https://github.com/Tencent/tdesign-common) 中的公共样式，使用 HTTPS 方式可能会导致后续更新 submodule 目录失败。
+Please clone repository by using SSH since some repositories of TDesign use git submodule to maintain [Tencent/tdesign-common](https://github.com/Tencent/tdesign-common) the shared styles and utils, and using HTTPS may cause subsequent submodule directory updates to fail.
 
-``` Shell
+```Shell
 $ git clone git@github.com:${USER}/${PROJECT}.git
 ```
 
-本地环境请确保 Node 版本在 12.0.0 及以上，建议升级到 16.0.0 及以上，我们一般只保证当前 Node LTS 版本下项目运行正常。
-#### 设置 Git 账户信息
+Please make sure that your local environment has Node version `12.0.0` or above. It is recommended to upgrade to `16.0.0` or higher, as we generally only guarantee that the project runs correctly under the current Node LTS version.
 
-请不要使用公司内部 Git 账号直接提交代码，这可能会在 commit 历史中暴露你的 ID 或公司邮箱等信息，可以通过如下方式设置本地仓库的 Git 信息：
+#### Git Account Configuration
 
-``` Shell
-## cd ${PROJECT} 本地仓库目录
+Please do not use your company's internal Git account to directly submit code, as this may expose your ID or company email information in the commit history. You can set your local repository's Git information with the following method:
+
+```Shell
+## cd ${PROJECT}
 $ git config user.name "your name"
 $ git config user.email "your email address"
 ```
 
-#### 同步代码
+#### Code Synchronization
 
-在每次提交本地代码前，建议都从上游仓库同步最新代码，否则你可能要额外处理很多冲突。GitHub 提供了页面上操作同步上游仓库的能力：
+Before each commit of your local, it is recommended to synchronize the latest code from the upstream repository, otherwise, you may have to deal with many conflicts. GitHub also provides the ability to synchronize the upstream repository directly from the web interface:
 
 <img width="100%" alt="image" src="https://user-images.githubusercontent.com/7600149/178912927-5b1c7bcc-023e-446c-acfd-1e08278740b2.png">
 
-但仍然建议在 clone 仓库至本地后通过添加 upstream 的方式来关联远端上游仓库：
+It is recommended to associate the remote upstream repository by adding `upstream` after cloning it to your local machine: This way, you can directly synchronize the changes from the upstream official repository to your local repository with the following steps:
 
-``` Shell
+```Shell
 $ git remote add upstream https://github.com/Tencent/${PROJECT}.git
 $ git remote -v
 > origin    git@github.com:${USER}/${PROJECT}.git (fetch)
@@ -76,91 +79,91 @@ $ git remote -v
 > upstream    https://github.com/Tencent/${PROJECT}.git (push)
 ```
 
-这样你可以直接在本地通过如下方式将 upstream 官方仓库的改动同步到本地：
+Your can synchronize the change from upstream repository to your local repository by the follow way：
 
-``` Shell
+```Shell
 git fetch upstream
 git rebase upstream/develop
 ```
 
-参考 [Configuring a remote for a fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/configuring-a-remote-for-a-fork)
+Refer tot [Configuring a remote for a fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/configuring-a-remote-for-a-fork)
 
+#### Create Pull Request
 
-#### 创建 PR
+Please create a new feat/fix branch from the develop branch (TDesign repositories use develop as the default latest development branch) after synchronizing the official repository's code,
 
-在同步官方仓库代码后，请从 develop 分支（TDesign 仓库均以 develop 作为默认最新的开发分支）创建新的 feat/fix 分支：
-
-``` Shell
+```Shell
 git checkout develop
 git checkout -b feat/xxx
 ```
 
-feat 指代新特性如新组件或者组件新功能，日常问题修复以 fix 开头。
+`feat` refers to new features such as new components or new functionality for existing components, while regular issue fixes start with `fix`.
 
-#### 在提交代码前
+#### Before submitting commit
 
-参与某个技术栈贡献时，请参照仓库中的 `DEVELOP_GUIDE.md` 来进行本地开发工作。
+When contributing to a specific repository, please refer to the `DEVELOP_GUIDE.md` in the repository for local development.
 
-本地开发完成后，需要执行 `npm run lint` 及 `npm run test` 并保证结果通过。 
-- lint 指令会检查本次提交的代码是否通过了 eslint 检查，某些未通过的代码可以通过执行 `npm run lint:fix` 来自动修复。
-- test 指令会检查本次改动影响了哪些组件的 snapshot，比如改动了 Button 的实现，其他依赖了 Button 的 Dialog/InputNumber 等组件的 snapshot 也可能会有相应变动，请仔细检查这些差异是否符合预期，这可以防止本次修改和相关联组件发生不可预料的变动。确认无误后可以通过 `npm run test:update` 指令来更新 snapshot 并提交上来
+Once the local development is completed, please to execute `npm run lint` and `npm run test` to ensure the results pass.
 
-#### 提交代码
+- The `lint` command will check if the submitted code passes the eslint check. Some non-compliant code can be automatically fixed by executing npm run lint:fix.
+- The `test` command will check which component snapshots have been affected by the changes, for example, if the implementation of the Button has been changed, the snapshots of other components that depend on the Button, such as Dialog/InputNumber, may also change accordingly. Please carefully check whether these differences meet the expectations to prevent unpredictable changes for this modification and the associated components. After confirming that everything is correct, you can execute `npm run test:update` to update the snapshot and submit it.
 
-``` Shell
+#### Submit commit
+
+```Shell
 git add .
 git commit -m "feat: button commit message"
 git push origin feat/xxx
 ```
 
-commit message 撰写请参照 [Angular Commits 规范](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits)，一般来说 commit 信息将遵照下面的约定：
+Please follow [Angular Commits Guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits) to complete the commit message：
 
-- feat：新功能
-- fix：修补 bug
-- docs：文档类变动
-- style：样式
-- refactor：重构
-- test：增加测试
-- chore：构建过程或辅助工具的变动
+- `feat`: new feature
+- `fix`: bug fix
+- `docs`: modification for documentation
+- `style`: modification for UI
+- `refactor`: refactor
+- `test`: add test
+- `chore`：change for bundles, develop tools and workflow
 
-#### 发起 PR
+#### Create Pull Request
 
-提交代码后你个人的 forked 的仓库主页会出现提示是否发起合并，当然你也可以直接在 Pull requests 页点击发起：
+After submitting your code, the homepage of your personal forked repository will prompt whether to initiate a merge.
 
 <img width="100%" alt="image" src="https://user-images.githubusercontent.com/7600149/178922037-bafd6c85-b7be-4b5e-aa67-2b62ffa7a52b.png">
 
-之后会自动跳转到官方仓库 Comparing changes 页面，确认提交内容无误后可以点击 “Create pull request” 按钮。
+Afterward, it will be automatically redirected to the official repository's Comparing Changes page. Ensure that the submitted content is correct, then click the "Create pull request" button.
 
 <img width="100%" alt="image" src="https://user-images.githubusercontent.com/7600149/178922547-ffd23594-f712-4075-bd9d-8bd3e5d80f9a.png">
 
-TDesign 提供了标准的 PR 模板，这是完善 PR 信息的最后一步，需要认真阅读内容正确填写本次 PR 的信息，后续组件库发版时会直接根据 PR 信息生成更新日志：
+TDesign provides a standard PR template, which is the final step in completing the PR information. Please read the content carefully and correctly fill in the information of this PR. The component library will generate update logs directly based on the Pull Request information when releasing a new version:
 
 <img width="500" alt="image" src="https://user-images.githubusercontent.com/7600149/178923906-b0a3046a-0e5e-48eb-86d0-fe7a651da031.png">
 
-参考案例：https://github.com/Tencent/tdesign-vue/pull/1150
+Refer to the pull request example：https://github.com/Tencent/tdesign-vue/pull/1150
 
 <img width="500" alt="image" src="https://user-images.githubusercontent.com/7600149/178924958-8e044f11-551a-485f-b596-e7994300a2c9.png">
 
-关联 issue 后会在对应 issue 中展示本次 PR 的链接信息，有助于将用户反馈与你的代码实现关联起来，方便以后回溯问题：https://github.com/Tencent/tdesign-vue/issues/1143
+After associating the issue, the link information of each Pull Request will be displayed in the corresponding issue. This helps to associate user feedback with your code implementation, making it easier to trace back issues in the future: https://github.com/Tencent/tdesign-vue/issues/1143
 
 <img width="100%" alt="image" src="https://user-images.githubusercontent.com/7600149/178925507-d43dfb11-5628-4b72-a63a-2be11eb4229f.png">
 
-[为什么要关联 issue？](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)
+[Why you nee to link issue？](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)
 
-PR 信息填写完整后就可以点击确认发起本次 PR，这会触发一系列 CI 环节在远端执行 `npm run lint` 及 `npm run test` 等，如果有 CI 失败的情况，请点击 “detail” 查看报错详情：
+After filling in the PR information completely, click Confirm to initiate this PR. This will trigger a series of CI steps to remotely execute npm run lint and npm run test, etc. If there are CI failures, click "detail" to view the error details.
 
 <img width="100%" alt="image" src="https://user-images.githubusercontent.com/7600149/178926235-7f05f4a7-3d29-4d93-9322-37ffcc2c525f.png">
 
-这一般是因为 lint 失败或者 snapshot 未更新，请参照上文“在提交代码前”章节执行
+Usually it is due to lint failures or unupdated snapshots. Please refer to the "Before submitting code" section earlier in this guide.
 
-#### Review PR
+#### Review Pull Request
 
-提交 PR 后会有 PMC 同学来 CR 本次提交的代码，相关信息会评论在 PR 中，请及时关注 CR 评论通知信息：
+Once the Pull Request is submitted, reviewers will review the submitted code. The related information will be commented on in the Pull Request. Please pay attention to the comment notifications, and the such as：
 https://github.com/Tencent/tdesign-vue/pull/1150
 
 <img width="500" alt="image" src="https://user-images.githubusercontent.com/7600149/178926813-9e32e5d6-e62e-4537-9c6f-4ef2748f3451.png">
 
-当所有 Review 通过，CI 正常后 PMC 同学会 approve 并将 PR 合并到开发分支。
-恭喜你 🎉，到这里为止你已经为 TDesign 贡献了第一次代码！希望你再接再厉持续参与，你的名字和 PR 信息将出现在最近一次迭代的 Changelog 中：
+Once all reviews are passed and the CI is in a normal state, the reviewers will approve and merge the PR into the development branch. Congratulations 🎉!
+At this point, you have contributed your first code to TDesign! We hope you continue to actively participate, and your name and PR information will appear in the CHANGELOG of the most recent iteration.
 
 <img width="500" alt="image" src="https://user-images.githubusercontent.com/7600149/178928257-623e9410-26b7-4b72-9779-57d773bf7acd.png">

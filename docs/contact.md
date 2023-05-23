@@ -1,25 +1,27 @@
 ---
-title: 联系我们
+title: Contact
 ---
 
-### 参与贡献
+### Contributing
 
-请参照[《如何贡献》](/about/contributing)文档。
+Please refer to[《How to contribute》](/about/contributing)。
 
-### 社区交流
+### Community and Repositories
 
-如果你发现了一个 Bug，或者可以在 repo 上给对应技术栈实现的 repo 提一个 issue，欢迎：
+Submit an bug issue for the corresponding technology stack implementation in the repo when you find a bug after using TDesign:
 
-- [web-vue](https://github.com/Tencent/tdesign-vue)
-- [web-vue-next](https://github.com/Tencent/tdesign-vue-next)
-- [web-react](https://github.com/Tencent/tdesign-react)
-- [小程序](https://github.com/Tencent/tdesign-miniprogram)
-- [快速上手 starter kit](https://github.com/Tencent/tdesign-vue-starter)
+- [web vue](https://github.com/Tencent/tdesign-vue)
+- [web vue-next](https://github.com/Tencent/tdesign-vue-next)
+- [web react](https://github.com/Tencent/tdesign-react)
+- [Wechat Miniprogram](https://github.com/Tencent/tdesign-miniprogram)
+- [Starter kit for web-vue](https://github.com/Tencent/tdesign-vue-starter)
+- [Starter kit for web-vue-next](https://github.com/Tencent/tdesign-vue-next-starter)
+- [Starter kit for web-react](https://github.com/Tencent/tdesign-react-starter)
 
-### 企业微信群
+### TDesign User Group in WeCom
 
-TDesign 团队会及时在企业微信大群中同步发布版本、问题修复信息，也会有一些关于组件库建设的讨论，欢迎微信或企业微信扫码入群交流：
+TDesign official team will promptly synchronize version releases and issue fixes in the user group, and there will be discussions about the component library's construction. Scan the QR code with WeChat or Wecom to join the group.
 
 <img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/TDesign%20IM.png" alt="IM" width="200">
 
-邮件联系：[tdesign@tencent.com](mailto:tdesign@tencent.com)
+Contact by email：[tdesign@tencent.com](mailto:tdesign@tencent.com)
