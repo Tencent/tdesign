@@ -52,6 +52,7 @@ jobs:
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.TDESIGN_NPM_TOKEN }}
+          tag: ${{ contains(github.ref_name, 'beta') && 'beta' || 'latest' }}
       - if: steps.publish.outputs.type != 'none'
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
