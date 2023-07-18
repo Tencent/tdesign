@@ -79,7 +79,7 @@ In order to accommodate various installation scenarios, we have defined a standa
 
 - Compile each component's TypeScript code separately, generating corresponding JS files and type declaration files
 - Ensure compatibility with modern browsers and support for server-side rendering
-- Component Import/Export method utilizes the ES Modules standard, supports tree-shaking, and separately exports individual components in esm/index.js. The contents are the same as those in `src/index.ts`
+- Use the ES Modules standard for component import/export, supporting tree-shaking; in `esm/index.js`, export each component separately with content identical to `src/index.ts`
 - Generate `style/index.js` within the component folder, linking to the uncompiled less style files
 - The component folder include type declaration files `\*.d.ts`
 - Inject the Babel runtime helpers used in the compiled component code into each component
