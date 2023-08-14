@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "scripts": {
+    "dev:components": "cd packages/components && npm run dev",
+    "dev:site": "cd site && npm run dev",
+    "dev:theme": "cd packages/theme-generator && npm run dev",
+    "build:components": "cd components && npm run build",
+    "site": "npm run build:components && cd site && npm run build",
+    "site:intranet": "npm run build:components && cd site && vite build --mode intranet"
+  },
+  "license": "MIT"
+}

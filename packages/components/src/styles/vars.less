@@ -1,0 +1,135 @@
+:root,
+:root[theme-mode="light"] {
+  --header-height: 64px;
+  --doc-header-height: 252px;
+  --aside-width: 260px;
+  --footer-height: 388px;
+  --border-radius: 3px;
+  --theme-block-light-display: block;
+  --theme-block-dark-display: none;
+
+  --content-max-width: 960px;
+  --content-padding-right: 264px;
+  --content-padding-left-right: 24px;
+
+  @media screen and (max-width: 960px) {
+    --content-padding-right: 0;
+  }
+
+  @media screen and (min-width: 1200px) {
+    --content-padding-left-right: 48px;
+  }
+
+  @media screen and (min-width: 1920px) {
+    --content-max-width: 1200px;
+  }
+
+  --header-box-shadow: inset 0 -1px 0 #e7e7e7;
+  --footer-box-shadow: inset 0 1px 0 #e7e7e7;
+  --aside-box-shadow: inset -1px 0 0 #e7e7e7;
+  --portal-box-shadow: inset 1px 0px 0px #dcdcdc, inset -1px 0px 0px #dcdcdc, inset 0px -1px 0px #dcdcdc, inset 0px 1px 0px #dcdcdc;
+  --table-box-shadow: inset 0px 1px 0px #e7e7e7, inset 0px -1px 0px #e7e7e7, inset -1px 0px 0px #e7e7e7, inset 1px 0px 0px #e7e7e7;
+
+  // 基础/下层 投影 hover 使用的组件包括：表格 /
+  --shadow-1: 0 1px 10px rgba(0, 0, 0, 5%), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%);
+  // 中层投影 下拉 使用的组件包括：下拉菜单 / 气泡确认框 / 选择器 /
+  --shadow-2: 0 3px 14px 2px rgba(0, 0, 0, 5%), 0 8px 10px 1px rgba(0, 0, 0, 6%), 0 5px 5px -3px rgba(0, 0, 0, 10%);
+  // 上层投影（警示/弹窗）使用的组件包括：全局提示 / 消息通知
+  --shadow-3: 0 6px 30px 5px rgba(0, 0, 0, 5%), 0 16px 24px 2px rgba(0, 0, 0, 4%), 0 8px 10px -5px rgba(0, 0, 0, 8%);
+  
+  // 内投影 用于弹窗类组件（气泡确认框 / 全局提示 / 消息通知）的内描边
+  --shadow-inset-top: inset 0 .5px 0 #dcdcdc;
+  --shadow-inset-right: inset .5px 0 0 #dcdcdc;
+  --shadow-inset-bottom: inset 0 -.5px 0 #dcdcdc;
+  --shadow-inset-left: inset -.5px 0 0 #dcdcdc;
+
+  --anim-time-fn-easing: cubic-bezier(.38, 0, .24, 1);
+  --anim-time-fn-ease-out: cubic-bezier(0, 0, .15, 1);
+  --anim-time-fn-ease-in: cubic-bezier(.82, 0, 1, .9);
+  --anim-duration-base: .2s;
+  --anim-duration-moderate: .24s;
+  --anim-duration-slow: .28s;
+
+  // 中性色彩
+  // light模式默认全局中性色彩配置
+  --bg-color-page: #f5f5f5; // 默认页面底层背景
+  --bg-color-secondarypage: #f5f5f5;
+  --bg-color-demo: #fff; // 默认页面 demo 底层背景
+  --bg-color-demo-secondary: #eee;
+  --bg-color-code: #f3f3f3; // 默认页面 code 底层背景
+  --bg-color-code-linear: linear-gradient(180deg, rgba(243, 243, 243, 1) 0%, rgba(243, 243, 243, 0) 100%);
+  --bg-color-footer: #eee; // 页面底部背景
+  --bg-color-secondaryfooter: #e7e7e7;
+  --bg-color-docpage: #fff; // 默认页面文档底层背景
+  --bg-color-container: #fff; // 主要容器背景 默认页面顶层背景
+  --bg-color-container-transparent: rgba(255, 255, 255, .9); // 默认页面次要底层背景透明度
+  --bg-color-secondarycontainer: #f5f5f5; // 次要容器背景
+  --bg-color-component: #eee; // 组件背景 主要容器之上组件背景
+  --bg-color-component-transparent: rgba(238, 238, 238, .8);; // 组件背景透明度
+  --bg-color-tag: #eee; // 标签背景色
+  --bg-color-tab: #eee;
+  --bg-color-table: #fff;
+  --bg-color-thead: #dcdcdc;
+  --bg-color-navigation: #fff;
+  --bg-color-card: #fff;
+  --component-stroke: #eee; // 默认组件分割线
+  --component-border: #e7e7e7; // 默认边框
+
+  // 中性色彩交互 token
+  // 交互状态token
+  --bg-color-demo-hover: rgba(0, 0, 0, .05); // 默认 demo底层背景hover
+  --bg-color-demo-select: rgba(0, 0, 0, .1); // 默认 demo底层背景hover
+  --bg-color-code-hover: #e7e7e7;
+  --bg-color-code-select: #dcdcdc;
+  --bg-color-container-hover: #f3f3f3; // 主要容器背景 默认页面顶层背景hover
+  --bg-color-container-select: #eee; // 主要容器背景 默认页面顶层背景select
+  --bg-color-component-hover: #dcdcdc; // 组件背景hover 主要容器之上组件背景hover
+  --bg-color-component-select: #a6a6a6; // 组件背景hover 主要容器之上组件背景hover
+  --bg-color-tab-select: #fff;
+  --bg-color-table-hover: #f5f5f5;
+  --bg-color-navigation-hover: #f3f3f3;
+  --bg-color-navigation-select: #e7e7e7;
+  --bg-color-card-hover: #f3f3f3;
+  --bg-color-scroll: rgba(0, 0, 0, .14); // 滚动条颜色
+  --bg-color-component-disabled: #eee; // 组件背景 disabled 主要容器之上组件背景disabled
+
+  // 文字&图标色彩
+  // 默认light模式文字和图标色彩配置
+  --text-primary: rgba(0, 0, 0, .9); // 主要文字色彩
+  --text-secondary: rgba(0, 0, 0, .6); // 次要文字色彩
+  --text-placeholder: rgba(0, 0, 0, .4); // 占位符文字色彩
+  --text-disabled: rgba(0, 0, 0, .26); // 文字disabled态
+  --text-anti: #fff; // 文字反色色彩
+  --text-interactive: #0052d9; // 主题色文字色彩
+
+  // 主题色相关
+  // 主题相关配置
+  --brand-main: #0052d9; // 品牌色
+  --brand-main-hover: #366ef4; // 品牌色hover
+  --brand-main-focus: #d9e1ff; // 品牌色 focus
+  --brand-main-disabled: #b5c7ff; // 品牌色disabled
+  --brand-main-light: rgba(0, 82, 217, .1);
+  --error-1: #fff0ed;
+  --error-8: #881f1c;
+  --error-main: #d54941; // 错误色
+  --error-main-hover: #f6685d; // 错误色hover
+  --error-main-disabled: #ffb9b0; // 错误色disabled
+  --error-main-light: rgba(213, 73, 65, .1);
+  --warning-main: #e37318; // 警示色
+  --warning-main-hover: #fa9550; // 警示色hover
+  --warning-main-disabled: #ffb98c; // 警示色disabled
+  --warning-main-light: rgba(227, 115, 24, .1);
+  --success-main: #2ba471; // 成功色
+  --success-main-disabled: rgba(43, 164, 113, .25); // 成功色disabled
+  --success-main-light: rgba(43, 164, 113, .1); // 成功色 light
+
+  // 主题中心相关
+  // light模式中性色配置
+  --bg-color-theme-transparent: rgba(238, 238, 238, .6);
+  --bg-color-theme-secondary: #f3f3f3;
+  --bg-color-theme-surface: #fff;
+  --bg-color-theme-tertiary: #e7e7e7;
+  --theme-component-border: rgba(0, 0, 0, .06);
+  --bg-color-theme-radio: #e7e7e7;
+  --bg-color-theme-radio-active: #fff;
+}
