@@ -145,7 +145,7 @@ const siteConfig = {
             meta: {
               documentTitle: 'About - TDesign'
             },
-            component: () => import('@tdesign/docs/introduce.md')
+            component: () => import('@docs/introduce.md')
           },
           {
             name: 'tech-en',
@@ -154,7 +154,7 @@ const siteConfig = {
             meta: {
               documentTitle: 'Overall - TDesign'
             },
-            component: () => import('@tdesign/docs/tech.md')
+            component: () => import('@docs/tech.md')
           },
           {
             name: 'roadmap-en',
@@ -163,7 +163,7 @@ const siteConfig = {
             meta: {
               documentTitle: 'Roadmap - TDesign'
             },
-            component: () => import('@tdesign/docs/roadmap.md')
+            component: () => import('@docs/roadmap.md')
           },
           {
             name: 'faq-en',
@@ -172,7 +172,7 @@ const siteConfig = {
             meta: {
               documentTitle: 'FAQ - TDesign'
             },
-            component: () => import('@tdesign/docs/faq.md')
+            component: () => import('@docs/faq.md')
           },
           {
             name: 'awesome-en',
@@ -182,7 +182,7 @@ const siteConfig = {
               documentTitle: 'Community Resources - TDesign',
               title: 'Community Resources'
             },
-            component: () => import('@tdesign/docs/awesome.md')
+            component: () => import('@docs/awesome.md')
           },
           {
             name: 'release',
@@ -207,7 +207,7 @@ const siteConfig = {
             meta: {
               documentTitle: '如何贡献 - TDesign'
             },
-            component: () => import('@tdesign/docs/contributing.md')
+            component: () => import('@docs/contributing.md')
           },
           {
             name: 'contributing-en',
@@ -216,7 +216,7 @@ const siteConfig = {
             meta: {
               documentTitle: '从构思到生产：一个组件的诞生 - TDesign'
             },
-            component: () => import('@tdesign/docs/new-component.md')
+            component: () => import('@docs/new-component.md')
           },
           {
             name: 'contact-en',
@@ -225,7 +225,7 @@ const siteConfig = {
             meta: {
               documentTitle: 'Contact Us - TDesign'
             },
-            component: () => import('@tdesign/docs/contact.md')
+            component: () => import('@docs/contact.md')
           }
         ]
       }

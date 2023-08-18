@@ -461,7 +461,7 @@
               <t-icon name="check-circle-filled" />
             </label>
           </td>
-          <td>Is my animation excessivly arrangement?</td>
+          <td>Is my animation excessively arrangement?</td>
           <td></td>
         </tr>
         <tr>

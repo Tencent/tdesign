@@ -6,7 +6,7 @@ on:
   pull_request_target:
     types: [closed]
 
-jobs: 
+jobs:
   modify-services:
     runs-on: ubuntu-latest
     outputs:

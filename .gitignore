@@ -14,3 +14,7 @@ _site
 dist
 results
 static_site
+lib
+
+## test
+coverage

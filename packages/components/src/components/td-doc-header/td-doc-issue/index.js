@@ -25,9 +25,9 @@ function parseUrl() {
   if (location.pathname === "/" && location.hash) {
     urlPath = location.hash.slice(1);
   }
-  const matchs = urlPath.match(/([\w-]+)\/components\/([\w-]+)/) || [];
+  const matches = urlPath.match(/([\w-]+)\/components\/([\w-]+)/) || [];
 
-  return matchs;
+  return matches;
 }
 
 function getCurrentIssueUrl() {

@@ -44,7 +44,7 @@ d<template>
         <div class="info">
           <h2 class="title">教育组件</h2>
           <p class="description">
-            EDeisgn
+            EDesign
             教育行业组件是在教育领域沉淀的具有教育行业属性的复合功能组件。期望通过简单的配置和功能集成的高阶组件，完成教育行业通用页面的搭建和开发，比如常见表单页面、列表页面、组织架构树的创建等，让教育行业 to b 项目开发更快速更便捷。
           </p>
         </div>

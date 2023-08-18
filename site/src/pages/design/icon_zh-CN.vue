@@ -158,24 +158,24 @@
     <p>在确保高识别度的情况下，寻求内部结构以及外部轮廓上的最简</p>
     <div class="legend">
       <div class="item">
-        <img src="./assets/icon/eazy-1-left.png" />
+        <img src="./assets/icon/easy-1-left.png" />
         <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/good.png" />
       </div>
 
       <div class="item">
-        <img src="./assets/icon/eazy-1-right.png" />
+        <img src="./assets/icon/easy-1-right.png" />
         <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/bad.png" />
       </div>
     </div>
 
     <div class="legend">
       <div class="item">
-        <img src="./assets/icon/eazy-1-left-bottom.png" />
+        <img src="./assets/icon/easy-1-left-bottom.png" />
         <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/good.png" />
       </div>
 
       <div class="item">
-        <img src="./assets/icon/eazy-1-right-bottom.png" />
+        <img src="./assets/icon/easy-1-right-bottom.png" />
         <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/bad.png" />
       </div>
     </div>

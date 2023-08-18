@@ -1,5 +1,4 @@
-node_modules
-package-lock.json
-.DS_Store
-coverage
-dist
+lib/site.umd.js
+lib/site.es.js
+lib/style.css
+lib/favicon.icon

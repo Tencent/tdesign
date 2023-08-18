@@ -11,15 +11,16 @@
   },
   "dependencies": {
     "canvas-3d": "^1.0.14",
+    "prismjs": "^1.29.0",
     "lottie-web": "^5.7.0",
     "markdown-it": "^12.3.2",
     "markdown-it-link-attributes": "^4.0.0",
     "tdesign-icons-view": "^0.2.1",
     "tdesign-icons-vue": "^0.1.4",
     "tdesign-site-components": "^0.13.1",
-    "tdesign-vue": "^1.4.0",
+    "tdesign-vue": "1.4.6-naruto",
     "three": "0.127.0",
-    "vue": "2.6.14",
+    "vue": "2.7.14",
     "vue-router": "^3.5.3"
   },
   "devDependencies": {
@@ -50,7 +51,7 @@
     "vite": "^2.7.0",
     "vite-plugin-tdoc": "^2.0.0",
     "vite-plugin-vue2": "^1.9.0",
-    "vue-template-compiler": "2.6.14"
+    "vue-template-compiler": "2.7.14"
   },
   "config": {
     "commitizen": {

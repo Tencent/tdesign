@@ -1,0 +1,69 @@
+{
+  "name": "tdesign-theme-generator",
+  "version": "1.0.15",
+  "description": "TDesign主题配置生成器挂件",
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build --target wc --inline-vue --name td-theme-generator src/Generator.vue",
+    "build:watch": "vue-cli-service build --target wc --inline-vue --name td-theme-generator src/Generator.vue --watch",
+    "lint": "vue-cli-service lint"
+  },
+  "main": "dist/td-theme-generator.js",
+  "files": [
+    "dist/td-theme-generator.js"
+  ],
+  "keywords": [
+    "tdesign",
+    "theme",
+    "generator"
+  ],
+  "contributors": [
+    "uyarn",
+    "mingrutough1",
+    "yilaierwang"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "core-js": "^3.8.3",
+    "cssbeautify": "^0.3.1",
+    "lodash": "^4.17.21",
+    "tdesign-icons-vue": "^0.0.8",
+    "tdesign-vue": "1.4.6-naruto",
+    "tvision-color": "^1.6.0",
+    "vue": "2.7.14"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
+    "raw-loader": "^4.0.2",
+    "vue-loader": "^17.0.0",
+    "vue-svg-loader": "^0.17.0-beta.2",
+    "vue-template-compiler": "2.7.14"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

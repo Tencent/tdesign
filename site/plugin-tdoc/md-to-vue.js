@@ -15,14 +15,15 @@ export default function mdToVue(options) {
     <template>
       <td-doc-content ref="tdDocContent" page-status="hidden">
         ${
-          mdSegment.tdDocHeader ?
-          `
+          mdSegment.tdDocHeader
+            ? `
           <td-doc-header
             slot="doc-header"
             ref="tdDocHeader"
             spline="${mdSegment.spline}"
           >
-          </td-doc-header>` : ''
+          </td-doc-header>`
+            : ''
         }
         <div name="DOC">${mdSegment.docMd}</div>
         <td-doc-footer slot="doc-footer"></td-doc-footer>
@@ -31,7 +32,6 @@ export default function mdToVue(options) {
 
     <script>
       import Prismjs from 'prismjs';
-      import 'prismjs/components/prism-bash.js';
 
       export default {
         computed: {

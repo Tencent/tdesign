@@ -17,10 +17,9 @@ export default ({ mode }) => {
       extensions: ['.js', '.ts', '.mjs', '.vue'],
       alias: {
         '@': path.resolve(__dirname, './src'),
-        '@docs': path.resolve(__dirname, './src/docs'),
+        '@docs': path.resolve(__dirname, '../docs'),
         '@consts': path.resolve(__dirname, './src/consts'),
         '@components': path.resolve(__dirname, './src/components'),
-        '@tdesign': path.resolve(__dirname, './tdesign')
       }
     },
     build: {

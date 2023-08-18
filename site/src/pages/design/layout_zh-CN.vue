@@ -190,7 +190,7 @@ export default {
           range: '768px-991px',
           colWidth: '16px',
           grid: '内容区块根据不同的断点进行堆叠或缩放',
-          divice: '平板'
+          device: '平板'
         },
         {
           cut: 'md',
@@ -198,7 +198,7 @@ export default {
           range: '992px-1199px',
           colWidth: '16px',
           grid: '内容区块根据不同的断点进行堆叠或缩放',
-          divice: '超小尺寸电脑'
+          device: '超小尺寸电脑'
         },
         {
           cut: 'lg',
@@ -206,7 +206,7 @@ export default {
           range: '大于 1200px',
           colWidth: '16px',
           grid: '大于断点值时，始终保持水平排列',
-          divice: '小尺寸电脑'
+          device: '小尺寸电脑'
         }
       ],
       columns: [
@@ -215,7 +215,7 @@ export default {
         { width: 144, ellipsis: true, colKey: 'range', title: '响应区间' },
         { width: 104, colKey: 'colWidth', title: '槽宽' },
         { colKey: 'grid', title: '栅格' },
-        { width: 160, ellipsis: true, colKey: 'divice', title: '显示设备参考' }
+        { width: 160, ellipsis: true, colKey: 'device', title: '显示设备参考' }
       ],
       rowKey: 'default',
       size: 'small'
