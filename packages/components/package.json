@@ -1,0 +1,40 @@
+{
+  "name": "tdesign-site-components",
+  "version": "0.13.6",
+  "main": "lib/site.es.js",
+  "scripts": {
+    "dev": "vite",
+    "watch": "vite build --watch",
+    "build": "vite build --debug",
+    "postbuild": "node ./script/compile-less.js",
+    "test": "jest --coverage"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "homepage": "https://github.com/TDesignOteam/tdesign-site/blob/main/components/README.md",
+  "keywords": [
+    "TDesign",
+    "webcomponents"
+  ],
+  "files": [
+    "lib"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.16.7",
+    "@babel/preset-env": "^7.16.7",
+    "babel-jest": "^27.4.5",
+    "fs-extra": "^10.0.0",
+    "jest": "^27.4.3",
+    "less": "^4.1.1",
+    "vite": "^2.9.1"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.5",
+    "hybrids": "^8.2.0",
+    "nprogress": "^0.2.0",
+    "prismjs": "^1.29.0",
+    "qrcode": "^1.5.1",
+    "tdesign-icons-svg": "0.0.1"
+  }
+}

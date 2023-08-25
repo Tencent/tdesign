@@ -1,0 +1,39 @@
+name: MAIN_PULL_REQUEST
+
+on:
+  push:
+    branches: [main]
+  pull_request_target:
+    types: [closed]
+
+jobs:
+  modify-services:
+    runs-on: ubuntu-latest
+    outputs:
+      services-changed: ${{ steps.services-changed.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 100
+      - uses: marceloprado/has-changed-path@v1
+        id: services-changed
+        with:
+          paths: services
+      - run: echo services changed=${{ steps.services-changed.outputs.changed }}
+
+  upload-services:
+    runs-on: ubuntu-latest
+    needs: modify-services
+    if: needs.modify-services.outputs.services-changed == 'true'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 18
+      - run: node ./services/update-components-notice.js
+      - run: sleep 3s
+      - run: |
+          export DEPLOY_DOMAIN=https://tdesign-site-services.surge.sh
+          npx surge --project ./services --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
+          echo the preview URL is $DEPLOY_DOMAIN
+          echo "::set-output name=url::$DEPLOY_DOMAIN"

@@ -1,3 +1,20 @@
-node_modules/
-package-lock.json
+## MacOS
 .DS_Store
+
+## node_modules
+node_modules
+
+## lock
+yarn.lock
+package-lock.json
+
+## build
+_data
+_site
+dist
+results
+static_site
+lib
+
+## test
+coverage

@@ -1,0 +1,25 @@
+# 国际标准时间+8
+# 每周更新组件发布信息
+name: service-update-schedule
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 5"
+
+jobs:
+  create-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 18
+      - run: node ./services/update-components-notice.js
+      - run: sleep 3s
+      - run: |
+          export DEPLOY_DOMAIN=https://tdesign-site-services.surge.sh
+          npx surge --project ./services --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
+          ls services
+          echo the preview URL is $DEPLOY_DOMAIN
+          echo "::set-output name=url::$DEPLOY_DOMAIN"

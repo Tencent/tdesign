@@ -1,0 +1,35 @@
+import './styles/main.less';
+
+import './components/td-header/index.js';
+import './components/td-header/td-collapse-menu/index.js';
+import './components/td-logo/index.js';
+import './components/td-backtop/index.js';
+import './components/td-avatar/index.js';
+import './components/td-contributors/index.js';
+import './components/td-tooltip/index.js';
+import './components/td-theme-tabs/index.js';
+import './components/td-doc-layout/index.js';
+import './components/td-doc-aside/index.js';
+import './components/td-doc-search/index.js';
+import './components/td-doc-content/index.js';
+import './components/td-doc-header/index.js';
+import './components/td-doc-header/td-doc-issue/index.js';
+import './components/td-doc-footer/index.js';
+import './components/td-doc-popup/index.js';
+import './components/td-doc-badge/index.js';
+import './components/td-doc-phone/index.js';
+import './components/td-doc-tabs/index.js';
+import './components/td-doc-demo/index.js';
+import './components/td-doc-copy/index.js';
+import './components/td-doc-empty/index.js';
+import './components/td-doc-history/index.js';
+import './components/td-doc-usage/index.js';
+import './components/td-code/index.js';
+import './components/td-code-block/index.js';
+import './components/td-stats/index.js';
+import './components/td-message/index.js';
+import './components/td-portal/index.js';
+import './components/td-select/index.js';
+import './components/td-switch/index.js';
+
+export { getLang, registerLocaleChange } from './utils/locale';
