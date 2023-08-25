@@ -3,7 +3,7 @@
   "scripts": {
     "preinstall": "npx -y only-allow pnpm",
     "dev:components": "pnpm run --filter 'tdesign-site-components' dev",
-    "dev:site": "pnpm run --filter 'tdesign-site' dev",
+    "dev:site": "pnpm run build:components && pnpm run --filter 'tdesign-site' dev",
     "dev:theme-generator": "pnpm run --filter 'tdesign-theme-generator' dev",
     "build:components": "pnpm run --filter 'tdesign-site-components' build && pnpm run --filter 'tdesign-site-components' postbuild",
     "site": "npm run build:components && cd site && npm run build",

@@ -6,7 +6,7 @@ on:
   pull_request_target:
     types: [closed]
 
-jobs: 
+jobs:
   modify-components:
     runs-on: ubuntu-latest
     outputs:
@@ -18,7 +18,7 @@ jobs:
       - uses: marceloprado/has-changed-path@v1
         id: components-changed
         with:
-          paths: components/package.json
+          paths: packages/components/package.json
       - run: echo components changed=${{ steps.components-changed.outputs.changed }}
 
   publish-components:
@@ -30,14 +30,13 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 18
-          registry-url: 'https://registry.npmjs.org'
-      - run: cd components && npm install
-      - run: cd components && npm run build
-      - run: cd components && npm publish
+          registry-url: "https://registry.npmjs.org"
+      - run: cd packages/components && npm install
+      - run: cd packages/components && npm run build
+      - run: cd packages/components && npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}
       - run: echo '${{ github.ref }} ...  ${{ github.ref_name }}'
       - if: steps.publish.outputs.type != 'none'
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
-      

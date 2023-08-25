@@ -7,7 +7,7 @@ import fakeArrowIcon from "@images/fake-arrow.svg?raw";
 import translateIcon from "@images/translate.svg?raw";
 import { isIntranet, getLang } from "@utils/index";
 import closeIcon from "@images/close.svg?raw";
-import { getHeaderConfig } from '@config/header.js';
+import { getHeaderConfig } from "@config/header.js";
 
 const headerConfig = getHeaderConfig();
 const { headerList, baseComponentsLinks, baseComponentPrefix } = headerConfig;
@@ -50,25 +50,27 @@ function renderNotice(host) {
 
   let noticeOption = notice[currentSite];
   // 无当前站点公告时，使用全站公告
-  if (!noticeOption?.title) noticeOption = notice['all'];
+  if (!noticeOption?.title) noticeOption = notice["all"];
   if (!noticeOption?.title) return html``;
 
   // 已关闭公告不再提醒
-  if (localStorage.getItem("TDesign_notice_closed") === noticeOption?.title) return html``;
+  if (localStorage.getItem("TDesign_notice_closed") === noticeOption?.title)
+    return html``;
 
-  const changeAsideElTop = (top = '96px') => {
+  const changeAsideElTop = (top = "96px") => {
     // 左侧栏适配
-    const asideEl = document.querySelector('td-doc-aside');
+    const asideEl = document.querySelector("td-doc-aside");
     if (asideEl) {
-      asideEl.style.setProperty('--aside-top', top);
-      asideEl.shadowRoot.querySelector('.TDesign-doc-aside').style.top = top;
+      asideEl.style.setProperty("--aside-top", top);
+      asideEl.shadowRoot.querySelector(".TDesign-doc-aside").style.top = top;
     }
-  }
+  };
 
   const closeNotice = () => {
     if (!host.shadowRoot) return;
-    host.shadowRoot.querySelector(".TDesign-header-notice").style.display = "none";
-    changeAsideElTop('64px');
+    host.shadowRoot.querySelector(".TDesign-header-notice").style.display =
+      "none";
+    changeAsideElTop("64px");
     localStorage.setItem("TDesign_notice_closed", noticeOption?.title);
   };
 
@@ -150,7 +152,7 @@ function renderLinksPopup(host, trigger) {
                     </span>
                     <span class="version">
                       ${item.status
-                        ? `Version：${host.npmVersions[item.npm] || 'alpha'}`
+                        ? `Version：${host.npmVersions[item.npm] || "alpha"}`
                         : "敬请期待"}
                     </span>
                   </div>
@@ -184,7 +186,7 @@ export function gitPath(platform, framework) {
       : `https://github.com/Tencent/tdesign-${platform}-${framework}`;
   } else if (framework === "flutter") {
     // 等待 flutter 仓库迁移到 Tencent Group 下后可以删除
-    return 'https://github.com/TDesignOteam/tdesign-flutter';
+    return "https://github.com/TDesignOteam/tdesign-flutter";
   } else {
     return isIntranet()
       ? `https://git.woa.com/Tdesign/Tdesign-${platform}-${framework}`
@@ -209,18 +211,22 @@ function renderLinks(host, headerList, platform, framework) {
 
   function handleTranslate() {
     const lang = getLang();
-    const nextLang = lang === 'zh' ? 'en' : 'zh';
-    document.dispatchEvent(new CustomEvent('tdesign_site_lang', { detail: nextLang }));
+    const nextLang = lang === "zh" ? "en" : "zh";
+    document.dispatchEvent(
+      new CustomEvent("tdesign_site_lang", { detail: nextLang })
+    );
   }
 
-  const translateLink = host.enabledLocale ? html`
-    <div class="TDesign-header-nav__translate" onclick="${handleTranslate}">
-      <span
-        class="TDesign-header-nav__translate-icon"
-        innerHTML="${translateIcon}"
-      ></span>
-    </div>
-  ` : html``;
+  const translateLink = host.enabledLocale
+    ? html`
+        <div class="TDesign-header-nav__translate" onclick="${handleTranslate}">
+          <span
+            class="TDesign-header-nav__translate-icon"
+            innerHTML="${translateIcon}"
+          ></span>
+        </div>
+      `
+    : html``;
 
   const isBaseActive = () => {
     const [, basePath] = location.pathname.split("/");
