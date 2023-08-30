@@ -2,7 +2,11 @@ lockfileVersion: '6.0'
 
 importers:
 
-  .: {}
+  .:
+    dependencies:
+      prismjs:
+        specifier: ^1.29.0
+        version: 1.29.0
 
   packages/components:
     dependencies:
