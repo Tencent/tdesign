@@ -1,6 +1,6 @@
-# TDesign Site Web Component Libraries
+## TDesign Site Web Component
 
-## Development
+### 🏗️ Develop
 
 ```bash
 # 安装
@@ -10,22 +10,20 @@ npm install
 npm dev
 ```
 
-调试 `index.html` 页面
-
-## Build
+### ⚙️ Build
 
 ```bash
 npm build
 ```
 
-## Usage
+### 📦 Usage
 
 ```javascript
-// 引入 es 代码和通用样式
+// import tdesign-site-components es module and style
 import "tdesign-site-components";
 import "tdesign-site-components/lib/styles/style.css";
 
-// 将 webcomponents 组件拼接成页面
+// splice webcomponents into pages
 <td-doc-layout>
   <td-header slot="header"></td-header>
   <td-doc-aside slot="doc-aside" title="Vue for Web"></td-doc-aside>
@@ -37,7 +35,7 @@ import "tdesign-site-components/lib/styles/style.css";
 
     <td-doc-tabs></td-doc-tabs>
 
-    <div name="DEMO">文档内容</div>
+    <div name="DEMO">Docs Content</div>
 
     <td-doc-demo></td-doc-demo>
 
