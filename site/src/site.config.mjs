@@ -113,7 +113,7 @@ const siteConfig = {
               desc: '在明确系统功能分类和结构后，先选择合适的页面导航和布局，建立基础的中后台框架。',
               spline: 'design-layout'
             },
-            component: () => import('@/docs/design/offices_zh-CN.md')
+            component: () => import('@docs/design/offices_zh-CN.md')
           },
           {
             name: 'offices task',
@@ -125,7 +125,7 @@ const siteConfig = {
               desc: '明确整体框架和页面布局后，根据业务场景，对相关任务流程进行设计。',
               spline: 'design-layout'
             },
-            component: () => import('@/docs/design/offices-task_zh-CN.md')
+            component: () => import('@docs/design/offices-task_zh-CN.md')
           }
         ]
       }

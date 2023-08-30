@@ -9,5 +9,8 @@
     "site": "npm run build:components && cd site && npm run build",
     "site:intranet": "npm run build:components && cd site && vite build --mode intranet"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "prismjs": "^1.29.0"
+  }
 }

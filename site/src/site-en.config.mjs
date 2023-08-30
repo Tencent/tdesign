@@ -113,7 +113,7 @@ const siteConfig = {
               desc: 'Choose suitable page navigation and layout, and establish the basic framework of the middle and back-end after determining the functional classification and structure of the system, ',
               spline: 'design-layout'
             },
-            component: () => import('@/docs/design/offices.md')
+            component: () => import('@docs/design/offices.md')
           },
           {
             name: 'offices task',
@@ -125,7 +125,7 @@ const siteConfig = {
               desc: 'Design the relevant task processes based on the business scenario after clarifying the overall framework and page layout.',
               spline: 'design-layout'
             },
-            component: () => import('@/docs/design/offices-task.md')
+            component: () => import('@docs/design/offices-task.md')
           }
         ]
       }
