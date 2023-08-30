@@ -1,16 +1,18 @@
-# tdesign-theme-generator
+## TDesign Theme Generator Plugin
 
 - TDesign theme generator plugin, which is available in any web application.
 
-## 🏗️ Develop
+### 🏗️ Develop
 
 - `npm run dev`
 
 - `npm run build:watch` execute `npm link` as well to preview in application project
 
+### ⚙️ Build
+
 - `npm run build` build web-component
 
-## 📦 Usage
+### 📦 Usage
 
 1. `npm i tdesign-theme-generator`
 

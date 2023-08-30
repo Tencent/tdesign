@@ -76,7 +76,7 @@ isDesign: true
 
 核心流程：选择要操作的内容 - 进行操作 - 显示操作结果
 
-相关组件：[下拉框](/vue/components/dropdown) 、[多选框](/vue/components/checkbox) 、[输入框](/vue/components/input) 、[选择器](/vue/components/select) 、[按钮](/vue/components/button) 等 、[表格](/vue/components/table)
+相关组件：[下拉框](/vue/components/dropdown) 、[多选框](/vue/components/checkbox) 、[输入框](/vue/components/input) 、[选择器](/vue/components/select) 、[按钮](/vue/components/button) 、[表格](/vue/components/table) 等
 
 <img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/design/20211216192246.png" />
 
@@ -164,7 +164,7 @@ isDesign: true
 
 核心流程：触发导入 - 选择上传文件的方式 - 批量上传文件 - 确认批量文件的上传结果 - 导入文件
 
-相关组件：[按钮](/vue/components/button)、[上传](/vue/components/upload)、[全局提示](/vue/components/message)、[表格](/vue/components/table)、[列表](/vue/components/list))、[对话框](/vue/components/dialog) 等
+相关组件：[按钮](/vue/components/button)、[上传](/vue/components/upload)、[全局提示](/vue/components/message)、[表格](/vue/components/table)、[列表](/vue/components/list)、[对话框](/vue/components/dialog) 等
 
 <img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/design/Data%20import%20c.png" />
 
