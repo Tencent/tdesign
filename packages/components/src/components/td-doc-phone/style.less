@@ -1,5 +1,4 @@
 :host {
-
   --phone-display: block;
   --phone-collapse-display: none;
   --phone-body-height: 520px;
@@ -20,33 +19,6 @@
   top: 316px;
   right: 24px;
   display: var(--phone-display);
-
-  &.hide {
-    visibility: hidden;
-    opacity: 0;
-  }
-
-  &.show {
-    position: fixed;
-    left: 50%;
-    top: 50% !important;
-    transform: translate3d(-50%, -50%, 0);
-    outline-color: var(--text-disabled);
-    transition: transform .2s var(--anim-time-fn-easing), opacity .2s linear, visibility .2s linear;
-    visibility: visible;
-    opacity: 1;
-    z-index: 800;
-    display: block;
-
-    .TDesign-doc-phone__close {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-
-  &.show + &-mask {
-    display: block;
-  }
 
   &__close {
     width: 40px;
@@ -131,8 +103,36 @@
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: 300;
+  z-index: 2500;
   display: none;
+
+  &.show {
+    display: block;
+  }
+
+  &.hide + .TDesign-doc-phone {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  &.show + .TDesign-doc-phone {
+    position: fixed;
+    left: 50%;
+    top: 50% !important;
+    transform: translate3d(-50%, -50%, 0);
+    outline-color: var(--text-disabled);
+    transition: transform .2s var(--anim-time-fn-easing), opacity .2s linear, visibility .2s linear;
+    visibility: visible;
+    opacity: 1;
+    z-index: 2500;
+    display: block;
+
+    .TDesign-doc-phone__close {
+      opacity: 1;
+      visibility: visible;
+      cursor: pointer;
+    }
+  }
 }
 
 .TDesign-doc-phone-collapse {
@@ -149,6 +149,7 @@
   background-color: var(--bg-color-container);
   transition: all .2s var(--anim-time-fn-easing);
   display: var(--phone-collapse-display);
+  cursor: pointer;
 
   .icon svg {
     width: 24px;
