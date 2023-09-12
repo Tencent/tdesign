@@ -7,13 +7,13 @@ import closeIcon from '@images/close.svg?raw';
 
 function toggleCollapsePhone(host) {
   if (!host.shadowRoot) return;
-  const aisdeClassList = host.shadowRoot.querySelector('.TDesign-doc-phone').classList;
-  if (aisdeClassList.contains('hide')) {
-    aisdeClassList.remove('hide');
-    aisdeClassList.add('show');
+  const tdDocPhoneMask = host.shadowRoot.querySelector('.TDesign-doc-phone-mask').classList;
+  if (tdDocPhoneMask.contains('hide')) {
+    tdDocPhoneMask.remove('hide');
+    tdDocPhoneMask.add('show');
   } else {
-    aisdeClassList.remove('show');
-    aisdeClassList.add('hide');
+    tdDocPhoneMask.remove('show');
+    tdDocPhoneMask.add('hide');
   }
 }
 
@@ -21,7 +21,7 @@ export default define({
   tag: 'td-doc-phone',
   headless: false,
   QRCode: () => QRCode,
-  qrCanvas: ({ render }) => render().querySelector("#qrcode"),
+  qrCanvas: ({ render }) => render().querySelector('#qrcode'),
   qrcodeUrl: {
     get: (host, lastValue) => lastValue,
     set: (host, value) => value,
@@ -84,20 +84,20 @@ export default define({
         if (!host.shadowRoot) return;
         const isMobileResponse = window.innerWidth < 960;
 
-        const tdDocPhone = host.shadowRoot.querySelector('.TDesign-doc-phone');
+        const tdDocPhoneMask = host.shadowRoot.querySelector('.TDesign-doc-phone-mask');
         if (isMobileResponse) {
-          tdDocPhone.classList.remove('show');
-          tdDocPhone.classList.add('hide');
+          tdDocPhoneMask.classList.remove('show');
+          tdDocPhoneMask.classList.add('hide');
         } else {
-          tdDocPhone.classList.remove('show');
-          tdDocPhone.classList.remove('hide');
+          tdDocPhoneMask.classList.remove('show');
+          tdDocPhoneMask.classList.remove('hide');
         }
-      };
+      }
 
       document.addEventListener('scroll', handleScroll);
       window.addEventListener('resize', responsePhone);
       window.addEventListener('load', responsePhone);
-      
+
       return () => {
         document.removeEventListener('scroll', handleScroll);
         window.removeEventListener('resize', responsePhone);
@@ -106,29 +106,29 @@ export default define({
     },
   },
   render: ({ fixedStyle, headless }) => html`
-    <div class="TDesign-doc-phone" style=${fixedStyle}>
-      ${headless ? html`` : html`
-        <div class="TDesign-doc-phone__header">
-          <div class="TDesign-doc-phone__header-icons">
-            <td-doc-popup placement="left-start">
-              <span class="icon qrcode" innerHTML=${qrcodeIcon}></span>
-              <div slot="content" class="qrcode-wrapper">
-                <slot name="qrcode">
-                  <canvas id="qrcode"></canvas>
-                </slot>
+      <div class="TDesign-doc-phone-mask" onclick="${toggleCollapsePhone}"></div>
+      <div class="TDesign-doc-phone" style=${fixedStyle}>
+        ${headless ? html`` : html`
+              <div class="TDesign-doc-phone__header">
+                <div class="TDesign-doc-phone__header-icons">
+                  <td-doc-popup placement="left-start">
+                    <span class="icon qrcode" innerHTML=${qrcodeIcon}></span>
+                    <div slot="content" class="qrcode-wrapper">
+                      <slot name="qrcode">
+                        <canvas id="qrcode"></canvas>
+                      </slot>
+                    </div>
+                  </td-doc-popup>
+                </div>
               </div>
-            </td-doc-popup>
-          </div>
+            `}
+        <div class="TDesign-doc-phone__body">
+          <slot></slot>
         </div>
-      `}
-      <div class="TDesign-doc-phone__body">
-        <slot></slot>
+        <div class="TDesign-doc-phone__close" innerHTML="${closeIcon}" onclick="${toggleCollapsePhone}"></div>
       </div>
-      <div class="TDesign-doc-phone__close" innerHTML="${closeIcon}" onclick="${toggleCollapsePhone}"></div>
-    </div>
-    <div class="TDesign-doc-phone-mask" onclick="${toggleCollapsePhone}"></div>
-    <div class="TDesign-doc-phone-collapse" onclick="${toggleCollapsePhone}">
-      <i class="icon" innerHTML="${mobileIcon}"></i>
-    </div>
-  `.css`${style}`,
+      <div class="TDesign-doc-phone-collapse" onclick="${toggleCollapsePhone}">
+        <i class="icon" innerHTML="${mobileIcon}"></i>
+      </div>
+    `.css`${style}`,
 });
