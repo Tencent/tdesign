@@ -4,8 +4,39 @@ title: 社区资源
 
 - [官网地址](https://tdesign.tencent.com/)
 - [官方组件库地址](https://github.com/Tencent/tdesign#%E4%BB%93%E5%BA%93)
-- [Starter Kit](https://github.com/Tencent/tdesign#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E5%91%A8%E8%BE%B9)
-- [每周 Release 汇总](https://github.com/Tencent/tdesign/releases)
+- [版本发布汇总](https://github.com/Tencent/tdesign/releases)
+
+## 🚀 开箱即用的各类模板资源
+
+#### Web Vue 3
+
+- [TDesign Vue3 Starter 官方页面模板](https://tdesign.tencent.com/starter/docs/vue-next/get-started)
+- [Nuxt 服务端渲染模板](https://github.com/yixiaco/tdesign-vue-next-nuxt-starter)
+- [中后台前后端整合方案 + Java(Springcloud 微服务方案)](https://gitee.com/frsimple/springcloud)
+- [中后台前后端整合方案 + Java(SpringBoot + Sa-token 单体服务方案)](https://gitee.com/frsimple/springboot)
+- [携带 BladeX 的基础功能的页面模板](https://github.com/dianjie/tdesign-console)
+- [Javascript 版本的页面模板(Vie + Pinia + vue-router)](https://github.com/ElanYoung/vite-vue-js-starter-template)
+- [Chatgpt 及 Midjourney 的对话程序](https://github.com/anlityli/chatait-free)
+- [简单易上手的后台管理模板](https://github.com/Slash214/SoloCove-TD)
+- [Lite 版本的页面模板](https://github.com/chnykn/tdemo-vue)
+
+#### Web React
+
+- [TDesign React Starter 官方页面模板](https://tdesign.tencent.com/starter/docs/react/get-started)
+- [基于 Refine 和 TDesign 的中后台模板](https://ui.dux.plus/zh/)
+
+#### Web Vue2
+
+- [TDesign Vue2 Starter 官方页面模板](https://tdesign.tencent.com/starter/docs/vue/get-started)
+- [TDesign + unplugin + tailwind 的页面模板](https://github.com/xiaoyi510/vue2-vite-tdesign)
+
+#### Mobile Vue
+
+- [即时通讯页面模版](https://github.com/TDesignOteam/tdesign-mobile-vue-starter-chat)
+
+#### Miniprogram
+
+- [TDesign 微信小程序官方面模板](https://github.com/Tencent/tdesign-miniprogram-starter-retail)
 
 ## 📦 插件和工具
 
@@ -26,7 +57,7 @@ title: 社区资源
 
 ## 🎬 视频教程
 
-- [用腾讯TDesign框架做一个管理系统(Vue3)版](https://www.bilibili.com/video/BV1MZ4y1Q7zu?spm_id_from=333.999.0.0&vd_source=94df280d25d542fbcfaf851754a254de)
+- [用腾讯 TDesign 框架做一个管理系统(Vue3)版](https://www.bilibili.com/video/BV1MZ4y1Q7zu?spm_id_from=333.999.0.0&vd_source=94df280d25d542fbcfaf851754a254de)
 
 ## 🎈 贡献更多
 
