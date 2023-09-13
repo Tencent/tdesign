@@ -593,7 +593,7 @@ export default {
         },
       ],
       mobileSourceList: [
-        { logo: vueLogo, name: 'Vue Next', href: '/mobile-vue/', status: 3 },
+        { logo: vueLogo, name: 'Vue Next', href: '/mobile-vue/', status: 1 },
         { logo: reactLogo, name: 'React', href: '/mobile-react/', status: 2 },
         { logo: flutterLogo, name: 'Flutter', href: '/flutter/', status: 2 },
         { logo: taroLogo, name: 'Taro', href: '/taro/', status: 0 },

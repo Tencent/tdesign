@@ -76,7 +76,7 @@
                                     v-for="item in mobileSourceList" :key="item.name" @click="handleIntroClick(item)">
                                     <img width="20" :src="item.logo" />
                                     <span>{{ item.name }}</span>
-                                    <span v-if="item.status !== 1" :class="{
+                                    <span :class="{
                                         'content-tag': true,
                                         disabled: !item.status,
                                         stable: item.status === 1,
@@ -490,7 +490,7 @@ export default {
         }
       ],
       mobileSourceList: [
-        { logo: vueLogo, name: 'Vue Next', href: '/mobile-vue/', status: 3 },
+        { logo: vueLogo, name: 'Vue Next', href: '/mobile-vue/', status: 1 },
         { logo: reactLogo, name: 'React', href: '/mobile-react/', status: 2 },
         { logo: flutterLogo, name: 'Flutter', href: '/flutter/', status: 2 },
         { logo: taroLogo, name: 'Taro', href: '/taro/', status: 0 }
