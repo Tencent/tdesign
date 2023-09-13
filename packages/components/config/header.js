@@ -63,7 +63,7 @@ const baseComponentsLinks = {
     name: 'Mobile 移动端',
     links: [
       {
-        name: 'Vue Next', icon: vueIcon, path: jumpLocation('/mobile-vue/overview'), npm: 'tdesign-mobile-vue', status: 3,
+        name: 'Vue Next', icon: vueIcon, path: jumpLocation('/mobile-vue/overview'), npm: 'tdesign-mobile-vue', status: 1,
       },
       {
         name: 'React', icon: reactIcon, path: jumpLocation('/mobile-react/overview'), npm: 'tdesign-mobile-react', status: 2,
@@ -125,7 +125,7 @@ export const getHeaderConfig = () => {
         name: isEnglish ? 'Mobile' : 'Mobile 移动端',
         links: [
           {
-            name: 'Vue Next', icon: vueIcon, path: jumpLocation('/mobile-vue/overview'), npm: 'tdesign-mobile-vue', status: 3,
+            name: 'Vue Next', icon: vueIcon, path: jumpLocation('/mobile-vue/overview'), npm: 'tdesign-mobile-vue', status: 1,
           },
           {
             name: 'React', icon: reactIcon, path: jumpLocation('/mobile-react/overview'), npm: 'tdesign-mobile-react', status: 2,
