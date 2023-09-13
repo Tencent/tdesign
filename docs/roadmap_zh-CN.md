@@ -13,14 +13,6 @@ title: 后续计划
 
 增加新的通用 UI 组件 [📌 新组件招募 · Issue #220 · Tencent/tdesign · GitHub](https://github.com/Tencent/tdesign/issues/220)
 
-升级主题配置生成器，支持智能色彩，主题模版，全局预设等能力
-
-发布移动端微信小程序正式版本
-
-提供移动端组件设计指南
-
-:heavy_check_mark: 发布桌面端 React 正式版本
-
 对外开源移动端 Flutter
 
 协助社区完成桌面端 Blazor 建设

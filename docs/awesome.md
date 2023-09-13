@@ -4,8 +4,39 @@ title: Community Resources
 
 - [Official Website](https://tdesign.tencent.com/)
 - [Official Components Website](https://github.com/Tencent/tdesign#%E4%BB%93%E5%BA%93)
-- [Starter Kit](https://github.com/Tencent/tdesign#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E5%91%A8%E8%BE%B9)
-- [Weekly Release](https://github.com/Tencent/tdesign/releases)
+- [Version Release](https://github.com/Tencent/tdesign/releases)
+
+## 🚀 Out-of-box template resources
+
+#### Web Vue 3
+
+- [TDesign Vue3 Official Starter Kit](https://tdesign.tencent.com/starter/docs/vue-next/get-started)
+- [Nuxt 服务端渲染模板](https://github.com/yixiaco/tdesign-vue-next-nuxt-starter)
+- [中后台前后端整合方案 + Java(Springcloud 微服务方案)](https://gitee.com/frsimple/springcloud)
+- [中后台前后端整合方案 + Java(SpringBoot + Sa-token 单体服务方案)](https://gitee.com/frsimple/springboot)
+- [携带 BladeX 的基础功能的页面模板](https://github.com/dianjie/tdesign-console)
+- [Javascript 版本的页面模板(Vie + Pinia + vue-router)](https://github.com/ElanYoung/vite-vue-js-starter-template)
+- [Chatgpt 及 Midjourney 的对话程序](https://github.com/anlityli/chatait-free)
+- [简单易上手的后台管理模板](https://github.com/Slash214/SoloCove-TD)
+- [Lite 版本的页面模板](https://github.com/chnykn/tdemo-vue)
+
+#### Web React
+
+- [TDesign React Official Starter Kit](https://tdesign.tencent.com/starter/docs/react/get-started)
+- [基于 Refine 和 TDesign 的中后台模板](https://ui.dux.plus/zh/)
+
+#### Web Vue2
+
+- [TDesign Vue2 Official Starter Kit](https://tdesign.tencent.com/starter/docs/vue/get-started)
+- [TDesign + unplugin + tailwind 的页面模板](https://github.com/xiaoyi510/vue2-vite-tdesign)
+
+#### Mobile Vue
+
+- [Chat templates](https://github.com/TDesignOteam/tdesign-mobile-vue-starter-chat)
+
+#### Miniprogram
+
+- [TDesign Wechat Miniprogram Official Starter Kit](https://github.com/Tencent/tdesign-miniprogram-starter-retail)
 
 ## 📦 Plugins and Tools
 

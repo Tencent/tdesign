@@ -12,14 +12,6 @@ TDesign upcoming iterate plans are as below:
 
 Add more UI components [📌 New Component Request · Issue #220 · Tencent/tdesign · GitHub](https://github.com/Tencent/tdesign/issues/220)
 
-Upgrade theme generator to support more capabilities, such as `smart colors`, `theme templates`, `global presets`.
-
-Release the stable version of mobile WeChat Mini Program
-
-Provide mobile component design guidelines
-
-:heavy_check_mark: Release stable desktop React version
-
 Open-source mobile Flutter version
 
 Assist community in building desktop Blazor
