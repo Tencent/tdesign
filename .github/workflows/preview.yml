@@ -21,7 +21,7 @@ jobs:
           name: pr
       - name: save PR id
         id: pr
-        run: echo "::set-output name=id::$(<pr-id.txt)"
+        run: echo "id=$(<pr-id.txt)" >> $GITHUB_OUTPUT
       - name: download _site artifact
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -39,7 +39,7 @@ jobs:
           export DEPLOY_DOMAIN=https://preview-pr${{ steps.pr.outputs.id }}-$project_name.surge.sh
           npx surge --project ./_site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
           echo the preview URL is $DEPLOY_DOMAIN
-          echo "::set-output name=url::$DEPLOY_DOMAIN"
+          echo "url=$DEPLOY_DOMAIN" >> $GITHUB_OUTPUT
       - name: update status comment
         uses: actions-cool/maintain-one-comment@v2.0.0
         with:
@@ -79,7 +79,7 @@ jobs:
           name: pr
       - name: save PR id
         id: pr
-        run: echo "::set-output name=id::$(<pr-id.txt)"
+        run: echo "id=$(<pr-id.txt)" >> $GITHUB_OUTPUT
       - name: The job failed
         uses: actions-cool/maintain-one-comment@v2.0.0
         with:
