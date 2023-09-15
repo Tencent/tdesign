@@ -7,10 +7,43 @@
     "dev:theme-generator": "pnpm run --filter 'tdesign-theme-generator' dev",
     "build:components": "pnpm run --filter 'tdesign-site-components' build && pnpm run --filter 'tdesign-site-components' postbuild",
     "site": "npm run build:components && cd site && npm run build",
-    "site:intranet": "npm run build:components && cd site && vite build --mode intranet"
+    "site:intranet": "npm run build:components && cd site && vite build --mode intranet",
+    "prepare": "husky install"
   },
   "license": "MIT",
   "dependencies": {
     "prismjs": "^1.29.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
+    "cz-conventional-changelog": "^3.0.2",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-recommended": "^4.1.0",
+    "eslint-plugin-html": "^7.1.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^8.0.0",
+    "lint-staged": "8.1.5",
+    "prettier": "^3.0.3",
+    "stylelint": "^15.10.3",
+    "stylelint-config-standard": "^34.0.0",
+    "stylelint-config-standard-less": "^2.0.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "lint-staged": {
+    "*.{vue,js,html}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.{less,css}": [
+      "stylelint --fix",
+      "git add"
+    ]
   }
 }
