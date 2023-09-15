@@ -22,14 +22,13 @@ TDesign 是一个 `multi-repo`， TDesign 有如下代码仓库：
 | [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue 2.x 技术栈       | `1.0 LTS` |
 | [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈       | `1.0 LTS` |
 | [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈    | `1.0 LTS` |
-| tdesign-angular                                                 | 基于 Angular 10 实现 | `待上线`  |
 
 ### 移动端组件库
 
 | 仓库                                                                    | 描述              | 状态      |
 | ----------------------------------------------------------------------- | ----------------- | --------- |
 | [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | 微信小程序        | `1.0 LTS` |
-| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue 3.x 技术栈    | `Beta`    |
+| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue 3.x 技术栈    | `1.0 LTS`    |
 | [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React 16.x 技术栈 | `Alpha`   |
 | tdesign-flutter                                                         | 1.17.0            | `待上线`  |
 
@@ -145,12 +144,6 @@ TDesign 将腾讯内部多年设计经验提炼总结为专业的设计指南，
 ## 参与贡献
 
 请参照[《如何贡献》](https://tdesign.tencent.com/about/contributing)文档。
-
-## 反馈
-
-有任何问题，建议通过 [Github issues](https://github.com/Tencent/tdesign/issues) 反馈或扫码加入用户微信群。
-
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/TDesign%20IM.png" width="200" />
 
 ## 开源协议
 
