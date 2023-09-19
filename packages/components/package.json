@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.5",
-    "hybrids": "^8.2.0",
+    "hybrids": "8.2.2",
     "nprogress": "^0.2.0",
     "prismjs": "^1.29.0",
     "qrcode": "^1.5.1",

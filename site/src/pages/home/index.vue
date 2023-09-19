@@ -517,11 +517,11 @@ import flutterLogo from './assets/flutter-logo.svg';
 import sketchLogo from './assets/sketch-logo.svg';
 import miniprogramLogo from './assets/miniprogram-logo.svg';
 import qqLogo from './assets/qq-logo.svg';
-import taroLogo from './assets/taro-logo.png';
+// import taroLogo from './assets/taro-logo.png';
 
 import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, xdWebUrl } from '@consts';
 
-const isIntranet = location.host.includes('oa.com');
+// const isIntranet = location.host.includes('oa.com');
 
 export default {
   name: 'site-home',
@@ -596,7 +596,7 @@ export default {
         { logo: vueLogo, name: 'Vue Next', href: '/mobile-vue/', status: 1 },
         { logo: reactLogo, name: 'React', href: '/mobile-react/', status: 2 },
         { logo: flutterLogo, name: 'Flutter', href: '/flutter/', status: 2 },
-        { logo: taroLogo, name: 'Taro', href: '/taro/', status: 0 },
+        // { logo: taroLogo, name: 'Taro', href: '/taro/', status: 0 },
       ],
       mobileDesignList: [
         { logo: figmaLogo, name: 'Figma', href: figmaMobileUrl, status: 1 },
@@ -606,8 +606,8 @@ export default {
           href: sketchMobileUrl,
           status: 1,
         },
-        { logo: axLogo, name: 'Axure', href: '', status: 0 },
-        { logo: xdLogo, name: 'AdobeXD', href: '', status: 0 },
+        // { logo: axLogo, name: 'Axure', href: '', status: 0 },
+        // { logo: xdLogo, name: 'AdobeXD', href: '', status: 0 },
       ],
       miniSourceList: [
         { logo: miniprogramLogo, name: 'Wechat MiniProgram', href: '/miniprogram/', status: 1 },

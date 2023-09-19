@@ -14,12 +14,12 @@ const siteConfig = {
               documentTitle: 'Values - TDesign',
               title: 'Values',
               desc: 'TDesign adheres to the values of inclusiveness, diversity, evolution, and connectivity.',
-              spline: 'design-value'
+              spline: 'design-value',
             },
             path: '/design/values-en',
-            component: () => import('@/pages/design/values.vue')
-          }
-        ]
+            component: () => import('@/pages/design/values.vue'),
+          },
+        ],
       },
       {
         name: 'global-en',
@@ -32,10 +32,10 @@ const siteConfig = {
               documentTitle: 'Color - TDesign',
               title: 'Color',
               desc: 'Color serves the purpose of conveying information, creating hierarchy, expressing emotions, and building consistency in products.',
-              spline: 'design-color'
+              spline: 'design-color',
             },
             path: '/design/color-en',
-            component: () => import('@/pages/design/color.vue')
+            component: () => import('@/pages/design/color.vue'),
           },
           {
             name: 'fonts-en',
@@ -45,9 +45,9 @@ const siteConfig = {
               documentTitle: 'Fonts - TDesign',
               title: 'Fonts',
               desc: ' Fonts follow the principles of usability, memorability, and aesthetics, making the content more regular and rhythmic.',
-              spline: 'design-font'
+              spline: 'design-font',
             },
-            component: () => import('@/pages/design/fonts.vue')
+            component: () => import('@/pages/design/fonts.vue'),
           },
           {
             name: 'motion-en',
@@ -57,9 +57,9 @@ const siteConfig = {
               documentTitle: 'Motion - TDesign',
               title: 'Motion',
               desc: 'Motion can make the interface clear, fluent, and enhance user perception',
-              spline: 'design-motion'
+              spline: 'design-motion',
             },
-            component: () => import('@/pages/design/motion.vue')
+            component: () => import('@/pages/design/motion.vue'),
           },
           {
             name: 'icon-en',
@@ -69,9 +69,9 @@ const siteConfig = {
               documentTitle: 'Icon - TDesign',
               title: 'Icon',
               desc: 'Icon affects the overall style presentation of UI interfaces.',
-              spline: 'design-icon'
+              spline: 'design-icon',
             },
-            component: () => import('@/pages/design/icon.vue')
+            component: () => import('@/pages/design/icon.vue'),
           },
           {
             name: 'layout-en',
@@ -81,9 +81,9 @@ const siteConfig = {
               documentTitle: 'Layout - TDesign',
               title: 'Layout',
               desc: 'The framework structure used to organize web pages can affect the browsing order of users. A clear layout and data presentation can help users efficiently obtain information.',
-              spline: 'design-layout'
+              spline: 'design-layout',
             },
-            component: () => import('@/pages/design/layout.vue')
+            component: () => import('@/pages/design/layout.vue'),
           },
           {
             name: 'dark-en',
@@ -93,11 +93,11 @@ const siteConfig = {
               documentTitle: 'Dark Mode - TDesign',
               title: 'Dark Mode',
               desc: 'Dark mode is a night-friendly color theme that helps users work more immersively.',
-              spline: 'design-mode'
+              spline: 'design-mode',
             },
-            component: () => import('@/pages/design/dark.vue')
-          }
-        ]
+            component: () => import('@/pages/design/dark.vue'),
+          },
+        ],
       },
       {
         name: 'offices design-en',
@@ -111,9 +111,9 @@ const siteConfig = {
               documentTitle: 'How to building the framework - TDesign',
               title: 'How to building the framework',
               desc: 'Choose suitable page navigation and layout, and establish the basic framework of the middle and back-end after determining the functional classification and structure of the system, ',
-              spline: 'design-layout'
+              spline: 'design-layout',
             },
-            component: () => import('@docs/design/offices.md')
+            component: () => import('@docs/design/offices.md'),
           },
           {
             name: 'offices task',
@@ -123,13 +123,13 @@ const siteConfig = {
               documentTitle: 'Design high-Frequency tasks - TDesign',
               title: 'Design high-Frequency tasks',
               desc: 'Design the relevant task processes based on the business scenario after clarifying the overall framework and page layout.',
-              spline: 'design-layout'
+              spline: 'design-layout',
             },
-            component: () => import('@docs/design/offices-task.md')
-          }
-        ]
-      }
-    ]
+            component: () => import('@docs/design/offices-task.md'),
+          },
+        ],
+      },
+    ],
   },
   about: {
     title: 'About',
@@ -143,36 +143,36 @@ const siteConfig = {
             title: 'About',
             path: '/about/introduce-en',
             meta: {
-              documentTitle: 'About - TDesign'
+              documentTitle: 'About - TDesign',
             },
-            component: () => import('@docs/introduce.md')
+            component: () => import('@docs/introduce.md'),
           },
           {
             name: 'tech-en',
             title: 'Overall',
             path: '/about/tech-en',
             meta: {
-              documentTitle: 'Overall - TDesign'
+              documentTitle: 'Overall - TDesign',
             },
-            component: () => import('@docs/tech.md')
+            component: () => import('@docs/tech.md'),
           },
           {
             name: 'roadmap-en',
             title: 'Roadmap',
             path: '/about/roadmap-en',
             meta: {
-              documentTitle: 'Roadmap - TDesign'
+              documentTitle: 'Roadmap - TDesign',
             },
-            component: () => import('@docs/roadmap.md')
+            component: () => import('@docs/roadmap.md'),
           },
           {
             name: 'faq-en',
             title: 'FAQ',
             path: '/about/faq-en',
             meta: {
-              documentTitle: 'FAQ - TDesign'
+              documentTitle: 'FAQ - TDesign',
             },
-            component: () => import('@docs/faq.md')
+            component: () => import('@docs/faq.md'),
           },
           {
             name: 'awesome-en',
@@ -180,22 +180,22 @@ const siteConfig = {
             path: '/about/awesome-en',
             meta: {
               documentTitle: 'Community Resources - TDesign',
-              title: 'Community Resources'
+              title: 'Community Resources',
             },
-            component: () => import('@docs/awesome.md')
+            component: () => import('@docs/awesome.md'),
           },
           {
             name: 'release',
-            title: 'Weekly Release',
+            title: 'Release Summary',
             path: '/about/release-en',
             meta: {
-              documentTitle: 'weekly release - TDesign',
-              title: 'Weekly release',
-              desc: 'TDesign Weekly release'
+              documentTitle: 'release summary - TDesign',
+              title: 'release',
+              desc: 'TDesign Release Summary',
             },
-            component: () => import('@/pages/about/release.vue')
-          }
-        ]
+            component: () => import('@/pages/about/release.vue'),
+          },
+        ],
       },
       {
         title: 'Join Us',
@@ -205,32 +205,32 @@ const siteConfig = {
             title: 'How to Contribute',
             path: '/about/contributing-en',
             meta: {
-              documentTitle: '如何贡献 - TDesign'
+              documentTitle: '如何贡献 - TDesign',
             },
-            component: () => import('@docs/contributing.md')
+            component: () => import('@docs/contributing.md'),
           },
           {
             name: 'contributing-en',
             title: 'New Component',
             path: '/about/new-component-en',
             meta: {
-              documentTitle: '从构思到生产：一个组件的诞生 - TDesign'
+              documentTitle: '从构思到生产：一个组件的诞生 - TDesign',
             },
-            component: () => import('@docs/new-component.md')
+            component: () => import('@docs/new-component.md'),
           },
           {
             name: 'contact-en',
             title: 'Contact Us',
             path: '/about/contact-en',
             meta: {
-              documentTitle: 'Contact Us - TDesign'
+              documentTitle: 'Contact Us - TDesign',
             },
-            component: () => import('@docs/contact.md')
-          }
-        ]
-      }
-    ]
-  }
-}
+            component: () => import('@docs/contact.md'),
+          },
+        ],
+      },
+    ],
+  },
+};
 
 export default siteConfig;
