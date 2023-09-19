@@ -61,8 +61,8 @@ importers:
         specifier: ^2.11.5
         version: 2.11.5
       hybrids:
-        specifier: ^8.2.0
-        version: 8.2.0
+        specifier: 8.2.2
+        version: 8.2.2
       nprogress:
         specifier: ^0.2.0
         version: 0.2.0
@@ -184,7 +184,7 @@ importers:
         version: 0.1.4(vue@2.7.14)
       tdesign-site-components:
         specifier: ^0.13.1
-        version: 0.13.9
+        version: link:../packages/components
       tdesign-vue:
         specifier: 1.4.6-naruto
         version: 1.4.6-naruto(vue@2.7.14)
@@ -8512,8 +8512,8 @@ packages:
     hasBin: true
     dev: true
 
-  /hybrids@8.2.0:
-    resolution: {integrity: sha512-k8uCHjsKaF8qodgRtJGwVGvP+2L1Iwrrm8oQHbXeChjPTsHBw1QsCGIKIrcZhZ6OXdnWnpZz26b3uDGWPV6fpg==}
+  /hybrids@8.2.2:
+    resolution: {integrity: sha512-xCangE3oItxeWMNKHLa0yn0MHi0MHBtGLIz0Ty7PwdcBBN2sQ0mrBvVSf4lLMyBFNO7x47/2lO13FSJB/SkPyw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dev: false
@@ -13730,17 +13730,6 @@ packages:
       '@babel/runtime': 7.22.10
       classnames: 2.3.2
       vue: 2.7.14
-    dev: false
-
-  /tdesign-site-components@0.13.9:
-    resolution: {integrity: sha512-tuM/uBbiiO1C4N1bcsYzRQ8gw9AqCgaOBfliRO4jhahrgGZxzxLtWglf3VBI12pEf8c9zJUiMaZ/da/RkGWZjA==}
-    dependencies:
-      '@popperjs/core': 2.11.5
-      hybrids: 8.2.0
-      nprogress: 0.2.0
-      prismjs: 1.29.0
-      qrcode: 1.5.1
-      tdesign-icons-svg: 0.0.1
     dev: false
 
   /tdesign-vue@1.4.6-naruto(vue@2.7.14):
