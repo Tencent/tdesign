@@ -1,6 +1,6 @@
 {
   "name": "tdesign-site-components",
-  "version": "0.13.12",
+  "version": "0.13.13",
   "main": "lib/site.es.js",
   "scripts": {
     "dev": "vite",
