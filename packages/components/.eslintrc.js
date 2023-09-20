@@ -9,6 +9,7 @@ module.exports = {
     babelOptions: {
       configFile: path.resolve(__dirname, './babelrc'),
     },
+    ecmaVersion: 2020,
   },
   rules: {},
 };
