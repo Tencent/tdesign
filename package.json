@@ -7,7 +7,7 @@
     "dev:theme-generator": "pnpm run --filter 'tdesign-theme-generator' dev",
     "build:components": "pnpm run --filter 'tdesign-site-components' build && pnpm run --filter 'tdesign-site-components' postbuild",
     "site": "npm run build:components && cd site && npm run build",
-    "site:intranet": "npm run build:components && cd site && vite build --mode intranet",
+    "site:intranet": "npm run build:components && cd site && npm run site:intranet",
     "prepare": "husky install"
   },
   "license": "MIT",
