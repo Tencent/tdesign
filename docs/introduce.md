@@ -35,14 +35,13 @@ TDesign currently supports [multiple platforms and mainstream front-end UI frame
 | [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue.js UI components lib for TDesign  | `1.0 LTS`     |
 | [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue3.x UI components lib for TDesign  | `1.0 LTS`     |
 | [tdesign-react](https://github.com/Tencent/tdesign-react)       | React UI components lib for TDesign   | `1.0 LTS`     |
-| tdesign-angular                                                 | Angular UI components lib for TDesign | `In Progress` |
 
 ### Repositories for Mobile Components
 
 | Repository                                                              | Description                                      | Status        |
 | ----------------------------------------------------------------------- | ------------------------------------------------ | ------------- |
 | [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | Wechat MiniProgram UI components lib for TDesign | `1.0 LTS`     |
-| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue3.x Mobile UI components lib for TDesign      | `Beta`        |
+| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue3.x Mobile UI components lib for TDesign      | `1.0 LTS`     |
 | [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React Mobile UI components lib for TDesign       | `Alpha`       |
 | tdesign-flutter                                                         | Flutter UI components lib for TDesign            | `In Progress` |
 
