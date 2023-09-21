@@ -29,14 +29,13 @@ TDesign 在创建之初就严格按照开源协作的原则运作，包括源代
 | [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue 2.x 技术栈       | `1.0 LTS` |
 | [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈       | `1.0 LTS` |
 | [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈    | `1.0 LTS` |
-| tdesign-angular                                                 | 基于 Angular 10 实现 | `待上线`  |
 
 ### 移动端
 
 | 仓库                                                                  | 描述              | 状态     |
 | --------------------------------------------------------------------- | ----------------- | -------- |
-| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)   | Vue 3.x 技术栈    | `Beta`   |
-| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram) | 微信小程序        | `Beta`   |
+| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)   | Vue 3.x 技术栈    | `1.0 LTS`   |
+| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram) | 微信小程序        | `1.0 LTS`   |
 | tdesign-mobile-react                                                  | React 16.x 技术栈 | `Alpha`  |
 | tdesign-flutter                                                       | 1.17.0            | `待上线` |
 
@@ -48,7 +47,7 @@ TDesign 后续发展详细规划请参阅 [后续计划](/about/roadmap)。
 
 ### 完整
 
-TDesign 官方提供了多种业界主流的开发技术栈支持。目前，TDesign 已经支持了 [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/react) 和移动端 [Vue 3](https://tdesign.tencent.com/vue-mobile/)、[微信小程序](https://tdesign.tencent.com/miniprogram/) 的开发，其他技术栈如 Augular、Flutter 正在开发中。
+TDesign 官方提供了多种业界主流的开发技术栈支持。目前，TDesign 已经支持了 [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/react) 和移动端 [Vue 3](https://tdesign.tencent.com/vue-mobile/)、[微信小程序](https://tdesign.tencent.com/miniprogram/) 的开发，其他技术栈如 Flutter 正在开发中。
 
 为了实现开发与设计之间的高效协同，TDesign 中包含了丰富可复用的设计组件资源，如[色彩体系](https://tdesign.tencent.com/design/color)、[文字系统](https://tdesign.tencent.com/design/fonts)、[动效设计](https://tdesign.tencent.com/design/motion)、[图标元素](https://tdesign.tencent.com/design/icon)、[布局结构](https://tdesign.tencent.com/design/layout)等，覆盖支持 [Axure、Sketch、Figma、Adobe XD](https://tdesign.tencent.com/source) 等各大产品设计软件，将设计和开发者从重复劳动中释放出来。
 
