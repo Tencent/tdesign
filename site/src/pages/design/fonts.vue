@@ -208,7 +208,7 @@
 <script>
 import anchorMixin from '../mixins/anchor';
 
-const fontDownloadUrl = 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/design-source/TCloudNumber.zip';
+const fontDownloadUrl = 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/design-source/TCloudNumber%20v1.010.zip';
 
 function genFontSize(num) {
   const result = [];
