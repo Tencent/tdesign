@@ -1,8 +1,9 @@
 :host {
   --phone-display: block;
   --phone-collapse-display: none;
-  --phone-body-height: 520px;
-
+  --phone-header-height: 48px;
+  --phone-body-height: 667px;
+  
   @media screen and (max-width: 960px) {
     --phone-display: none;
     --phone-collapse-display: flex;
@@ -44,7 +45,7 @@
   }
 
   &__header {
-    height: 48px;
+    height: var(--phone-header-height);
     padding: 8px;
     border-radius: 6px 6px 0 0;
     box-sizing: border-box;
