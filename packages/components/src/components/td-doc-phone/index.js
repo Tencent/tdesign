@@ -4,6 +4,7 @@ import style from './style.less';
 import qrcodeIcon from '@images/qrcode.svg?raw';
 import mobileIcon from '@images/mobile.svg?raw';
 import closeIcon from '@images/close.svg?raw';
+import jumpIcon from '@images/jump.svg?raw';
 
 function toggleCollapsePhone(host) {
   if (!host.shadowRoot) return;
@@ -20,6 +21,7 @@ function toggleCollapsePhone(host) {
 export default define({
   tag: 'td-doc-phone',
   headless: false,
+  href: '',
   QRCode: () => QRCode,
   qrCanvas: ({ render }) => render().querySelector('#qrcode'),
   qrcodeUrl: {
@@ -50,30 +52,38 @@ export default define({
         const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
         // 当底部出现时不要超过底部区域
-        const FOOTER_HEIGHT = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--footer-height'));
+        const FOOTER_HEIGHT = parseFloat(
+          getComputedStyle(document.documentElement).getPropertyValue('--footer-height'),
+        );
         const PHONE_HEIGHT = parseFloat(getComputedStyle(host).getPropertyValue('--phone-body-height'));
         const TD_HEIGHT = 64;
         const maxPhonePos = scrollHeight - FOOTER_HEIGHT - PHONE_HEIGHT - TD_HEIGHT - 64; // 预留底部 64 像素间距
-        const canViewPhoneAndFooter = clientHeight <= (FOOTER_HEIGHT + PHONE_HEIGHT + 64);
+        const canViewPhoneAndFooter = clientHeight <= FOOTER_HEIGHT + PHONE_HEIGHT + 64;
 
         if (scrollTop >= 228) {
-          if ((scrollTop + 88) >= maxPhonePos && canViewPhoneAndFooter) {
+          if (scrollTop + 88 >= maxPhonePos && canViewPhoneAndFooter) {
             Object.assign(host, {
               [key]: {
-                ...host.fixedStyle, position: 'absolute', top: `${maxPhonePos}px`,
+                ...host.fixedStyle,
+                position: 'absolute',
+                top: `${maxPhonePos}px`,
               },
             });
           } else {
             Object.assign(host, {
               [key]: {
-                ...host.fixedStyle, position: 'fixed', top: '152px',
+                ...host.fixedStyle,
+                position: 'fixed',
+                top: '152px',
               },
             });
           }
         } else {
           Object.assign(host, {
             [key]: {
-              ...host.fixedStyle, position: 'absolute', top: '316px',
+              ...host.fixedStyle,
+              position: 'absolute',
+              top: '316px',
             },
           });
         }
@@ -105,10 +115,13 @@ export default define({
       };
     },
   },
-  render: ({ fixedStyle, headless }) => html`
+  render: ({ fixedStyle, headless, href }) =>
+    html`
       <div class="TDesign-doc-phone-mask" onclick="${toggleCollapsePhone}"></div>
       <div class="TDesign-doc-phone" style=${fixedStyle}>
-        ${headless ? html`` : html`
+        ${headless
+          ? html``
+          : html`
               <div class="TDesign-doc-phone__header">
                 <div class="TDesign-doc-phone__header-icons">
                   <td-doc-popup placement="left-start">
@@ -119,6 +132,8 @@ export default define({
                       </slot>
                     </div>
                   </td-doc-popup>
+                  ${href &&
+                  html`<a href="${href}" target="_blank"><span class="icon" innerHTML="${jumpIcon}"></span></a>`}
                 </div>
               </div>
             `}
