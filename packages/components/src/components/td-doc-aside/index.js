@@ -1,13 +1,13 @@
 import { html, dispatch, define } from 'hybrids';
 import style from './style.less';
 import { patchShadowDomIntoDom } from '@utils';
-import menuFoldIcon  from '@images/menu-fold.svg?raw';
-import menuUnfoldIcon  from '@images/menu-unfold.svg?raw';
+import menuFoldIcon from '@images/menu-fold.svg?raw';
+import menuUnfoldIcon from '@images/menu-unfold.svg?raw';
 
 const replaceStateEvent = new CustomEvent('replaceState');
 
 // proxy replaceState event
-const originHistoryEvent = window.history.replaceState; 
+const originHistoryEvent = window.history.replaceState;
 window.history.replaceState = (...args) => {
   originHistoryEvent.apply(window.history, args);
   window.dispatchEvent(replaceStateEvent);
@@ -16,26 +16,27 @@ window.history.replaceState = (...args) => {
 function handleLinkClick(host, e, path) {
   e.preventDefault();
   const shadowRoot = e.target.getRootNode();
+  const target = e.target.classList?.contains('TDesign-doc-sidenav-link') ? e.target : e.target.parentNode;
   const prevActiveNodes = shadowRoot.querySelectorAll('.active');
   prevActiveNodes.forEach((node) => node.classList.remove('active'));
-  e.target.classList.toggle('active');
+  target.classList.toggle('active');
   requestAnimationFrame(() => dispatch(host, 'change', { detail: path }));
 }
 
 function renderNav(host, nav, deep = 0) {
   if (Array.isArray(nav)) return nav.map((item) => renderNav(host, item, deep));
-  
+
   const isActive = location.pathname === nav.path || location.hash.slice(1) === nav.path;
-  
+
   const hasUpdate = () => {
-    const currentSite = location.pathname.split("/")[1];
+    const currentSite = location.pathname.split('/')[1];
     if (!currentSite) return false;
-    
+
     const { updateNotice } = host;
     const { [currentSite]: siteUpdateNotice } = updateNotice;
     if (!siteUpdateNotice) return false;
-    return siteUpdateNotice.some(item => nav.title.includes(item));
-  }
+    return siteUpdateNotice.some((item) => nav.title.includes(item));
+  };
 
   if (nav.children) {
     return html`
@@ -53,8 +54,7 @@ function renderNav(host, nav, deep = 0) {
         class="TDesign-doc-sidenav-link ${isActive ? 'active' : ''}"
         onclick=${(host, e) => handleLinkClick(host, e, nav.path)}
       >
-        ${nav.title}
-        ${hasUpdate() ? html`<span class="TDesign-doc-sidenav-link__tag">Update</span>` : null}
+        ${nav.title} ${hasUpdate() ? html`<span class="TDesign-doc-sidenav-link__tag">Update</span>` : null}
       </a>
     </div>
   `;
@@ -96,7 +96,7 @@ export default define({
         })
         .catch(console.error);
     },
-  },  
+  },
   asideStyle: {
     get: (_host, lastValue) => lastValue || undefined,
     set: (_host, value) => value,
@@ -139,7 +139,7 @@ export default define({
       }
 
       // 监听路由变化
-      function handleRouterChange(e) {
+      function handleRouterChange() {
         if (!host.shadowRoot) return;
 
         const { shadowRoot } = host;
@@ -150,23 +150,23 @@ export default define({
           if (location.pathname === '/' && location.hash) {
             currentRoute = location.hash.slice(1);
           }
-          
+
           const linkNodes = Array.from(shadowRoot.querySelectorAll('.TDesign-doc-sidenav-link'));
           const prevActiveNodes = Array.from(shadowRoot.querySelectorAll('.TDesign-doc-sidenav-link.active'));
-          const nextActiveNode = linkNodes.find(node => {
+          const nextActiveNode = linkNodes.find((node) => {
             const urlObj = new URL(node.href);
             // host & pathname isSame
             return urlObj.host === location.host && urlObj.pathname === currentRoute;
           });
-  
+
           if (!nextActiveNode) return;
-  
-          if (prevActiveNodes.length === 1 && prevActiveNodes.some(node => node.href === nextActiveNode.href)) return;
+
+          if (prevActiveNodes.length === 1 && prevActiveNodes.some((node) => node.href === nextActiveNode.href)) return;
           prevActiveNodes.forEach((node) => node.classList.remove('active'));
           nextActiveNode.classList.toggle('active');
         });
       }
-      
+
       requestAnimationFrame(() => {
         handleResize();
       });
@@ -178,7 +178,7 @@ export default define({
       window.addEventListener('popstate', handleRouterChange);
       window.addEventListener('pushState', handleRouterChange);
       window.addEventListener('replaceState', handleRouterChange);
-      
+
       return () => {
         window.removeEventListener('load', refreshAside);
         window.removeEventListener('resize', handleResize);
