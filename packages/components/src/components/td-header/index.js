@@ -153,11 +153,8 @@ export function gitPath(platform, framework) {
   } else if (platform === 'mobile') {
     // mobile
     return `https://github.com/Tencent/tdesign-${platform}-${framework}`;
-  } else if (framework === 'flutter') {
-    // TODO: 等待 flutter 仓库迁移到 Tencent Group 下后可以删除
-    return 'https://github.com/TDesignOteam/tdesign-flutter';
   } else {
-    // PC端/小程序 不再区分内外网仓库
+    // PC端/小程序/flutter 不再区分内外网仓库
     return `https://github.com/Tencent/tdesign-${framework}`;
   }
 }
