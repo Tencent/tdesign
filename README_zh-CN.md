@@ -30,7 +30,7 @@ TDesign 是一个 `multi-repo`， TDesign 有如下代码仓库：
 | [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | 微信小程序        | `1.0 LTS` |
 | [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue 3.x 技术栈    | `1.0 LTS`    |
 | [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React 16.x 技术栈 | `Alpha`   |
-| tdesign-flutter                                                         | 1.17.0            | `待上线`  |
+| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)                                                        | 1.17.0            | `Alpha`  |
 
 ### 基础通用仓库
 
