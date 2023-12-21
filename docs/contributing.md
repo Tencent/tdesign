@@ -2,11 +2,11 @@
 title: How to Contribute
 ---
 
-### Submit Contribution Intention
+### Getting Involved in Contribution
 
-Please fill out the [Contributor Joining Intention Collection questionnaire](https://wj.qq.com/s2/9772260/7cbe/) to help us understand your intentions and personal information. TDesign team will contact you within 2 days.
+Most of TDesign's collaboration takes place on Github transparently and openly. If you're interested in contributing to the development of TDesign, feel free to fix issues and submit new features at any time. Additionally, our members will continue to observe active contributors in different repositories. If we find that your submissions and contributions align with our ideas most of the time, and there is a possibility of long-term collaboration, we will contact you proactively to further our collaboration on this open-source project. Of course, the project may also occasionally offer you some benefits 🎁.
 
-Before submitting your intentions, please be sure to read the following code of conduct and collaboration guidelines.
+Before starting to contribute, please read the following code of conduct and collaboration guidelines.
 
 ### Code of Conduct
 
