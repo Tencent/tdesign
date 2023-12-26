@@ -34,7 +34,7 @@ export default define({
         // horizon
         initStats("horizon-tracker", {
           "data-account": host.dataAccount,
-          src: "https://horizon-assets.qq.com/analytics.js",
+          src: "https://static.codesign.qq.com/analytics.js",
         });
 
         // tcss
