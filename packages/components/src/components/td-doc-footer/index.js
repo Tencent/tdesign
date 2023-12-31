@@ -9,6 +9,7 @@ import qrcodeIcon from '@images/tdesign-qrcode.svg?raw';
 
 const footerLinks = getFooterConfig();
 const locale = getLocale();
+const currentYear = new Date().getFullYear();
 
 export default define({
   tag: 'td-doc-footer',
@@ -17,7 +18,7 @@ export default define({
   patchDom: {
     get: (_host, lastValue) => lastValue || false,
     set: (_host, value) => value,
-    connect: patchShadowDomIntoDom
+    connect: patchShadowDomIntoDom,
   },
   render: (host) => {
     const mobileBodyStyle = { ...host.mobileBodyStyle };
@@ -32,28 +33,34 @@ export default define({
               <p class="TDesign-doc-footer__qrcode-desc">${locale.footer.weComGroupDesc}</p>
             </div>
 
-            ${footerLinks.map((item) => html`
-              <div class="TDesign-doc-footer__content-block">
-                <p class="title">${item.title}</p>
-                ${item.links.map(link => html`
-                  <a class="link" href="${link.url}" target="${link.target}">
-                    <span>${link.name}</span>
-                  </a>
-                `)}
-              </div>
-            `)}
+            ${footerLinks.map(
+              (item) => html`
+                <div class="TDesign-doc-footer__content-block">
+                  <p class="title">${item.title}</p>
+                  ${item.links.map(
+                    (link) => html`
+                      <a class="link" href="${link.url}" target="${link.target}">
+                        <span>${link.name}</span>
+                      </a>
+                    `,
+                  )}
+                </div>
+              `,
+            )}
           </div>
         </div>
       </div>
       <div class="TDesign-doc-footer__bottom" style="${mobileBodyStyle}">
         <div class="TDesign-doc-footer__inner">
-          <p class="copyright">Copyright &copy; 1998 - 2023 Tencent. All Rights Reserved. ${locale.footer.copyright}</p>
+          <p class="copyright">
+            Copyright &copy; 1998 - ${currentYear} Tencent. All Rights Reserved. ${locale.footer.copyright}
+          </p>
           <div class="TDesign-doc-footer__logos">
             <i class="logo" innerHTML="${committeeIcon}"></i>
             <a class="logo" href="https://cloud.tencent.com/" target="_blank" innerHTML="${tencentCloudIcon}"></a>
           </div>
         </div>
       </div>
-    `.css`${style}`
+    `.css`${style}`;
   },
 });
