@@ -1,9 +1,3 @@
-@media screen and (max-width: 960px) {
-  .TDesign-base-components-links {
-    display: none;
-  }
-}
-
 .TDesign-base-components-links {
   display: flex;
   flex-direction: column;
@@ -100,18 +94,26 @@
     .alpha-tag {
       color: var(--brand-main);
       background: var(--brand-main-light);
-      font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+      font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
     }
+
     .beta-tag,
     .rc-tag {
       color: var(--success-main);
       background: var(--success-main-light);
-      font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+      font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
     }
+
     .stable-tag {
       color: #029CD4;
       background: rgba(2, 156, 212, .1);
-      font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+      font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
     }
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .TDesign-base-components-links {
+    display: none;
   }
 }
