@@ -6,7 +6,7 @@ export const figmaWebStarterUrl = 'https://www.figma.com/community/file/10532792
 
 export const sketchWebUrl = 'https://codesign.qq.com/s/6W3G0m5VKG0lOwL?utm_source=td&utm_medium=td';
 export const sketchMobileUrl = 'https://codesign.qq.com/s/RG6X0kEnMPjxEPB?utm_source=td&utm_medium=td';
-export const sketchMiniprogramUrl = 'https://codesign.qq.com/s/GPEpZGmEg39w3z7?utm_source=td&utm_medium=td';
+export const sketchMiniprogramUrl = 'https://codesign.qq.com/s/RG6X0kEnMPjxEPB?utm_source=td&utm_medium=td';
 
 export const axWebUrl = 'https://codesign.qq.com/s/xDP39q3qYmZwlKp?feature_aside=resource';
 
