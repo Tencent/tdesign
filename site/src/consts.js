@@ -4,13 +4,13 @@ export const figmaWebUrl = 'https://www.figma.com/community/file/105327923612872
 export const figmaMobileUrl = 'https://www.figma.com/community/file/1053279585699097956';
 export const figmaWebStarterUrl = 'https://www.figma.com/community/file/1053279236128724321';
 
-export const sketchWebUrl = 'https://codesign.qq.com/s/Mx86jz774n9brz3?feature_aside=resource';
-
-export const sketchMobileUrl = `${CDN_BASE}/design-source/TDesign_Sketch_Library_Mobile_1.1.0.sketch`;
+export const sketchWebUrl = 'https://codesign.qq.com/s/6W3G0m5VKG0lOwL?utm_source=td&utm_medium=td';
+export const sketchMobileUrl = 'https://codesign.qq.com/s/RG6X0kEnMPjxEPB?utm_source=td&utm_medium=td';
+export const sketchMiniprogramUrl = 'https://codesign.qq.com/s/RG6X0kEnMPjxEPB?utm_source=td&utm_medium=td';
 
 export const axWebUrl = 'https://codesign.qq.com/s/xDP39q3qYmZwlKp?feature_aside=resource';
 
-export const xdWebUrl = 'https://codesign.qq.com/s/NlO1ZnlleX9LMV2?feature_aside=resource';
+export const xdWebUrl = 'https://codesign.qq.com/s/2kY5j3L3bk9ExNd?utm_source=td&utm_medium=td';
 
 export const sourceDownloadUrl =
   'https://oteam-tdesign-1258344706.cos-website.ap-guangzhou.myqcloud.com/api/horizon-data-all.json';
