@@ -89,7 +89,6 @@
       border-top: 1px solid var(--component-border);
 
       &:hover {
-
         &::-webkit-scrollbar-thumb {
           background-color: var(--bg-color-scroll);
         }
@@ -111,6 +110,40 @@
         background-clip: content-box;
         background-color: transparent;
       }
+    }
+  }
+}
+
+.TDesign-doc-demo-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: var(--bg-color-tab);
+  height: calc(var(--block-base-width) * 3);
+  box-sizing: border-box;
+  cursor: pointer;
+  border: 1px solid var(--component-border);
+
+  .item+.item {
+    margin-left: 8px;
+  }
+
+  .item {
+    margin: 4px;
+    padding: 8px calc(var(--block-base-width) * 1.5);
+    font-size: var(--block-base-width);
+    box-sizing: border-box;
+    transition: all var(--anim-time-fn-easing) var(--anim-duration-moderate);
+    border-radius: var(--border-radius);
+    color: var(--text-secondary);
+    position: relative;
+    word-break: keep-all;
+    white-space: nowrap;
+
+    &:hover,
+    &.active {
+      color: var(--text-interactive);
     }
   }
 }

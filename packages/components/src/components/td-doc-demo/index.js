@@ -14,6 +14,8 @@ export default define({
   language: 'jsx',
   showCode: false,
   mode: 'auto', // auto open
+  tsCode: undefined,
+  currentLangIndex: 0,
   theme: {
     get: (host, lastValue) => lastValue || sessionStorage.getItem('--tdesign-theme') || 'light',
     set: (host, value) => value,
@@ -30,10 +32,11 @@ export default define({
     },
   },
   render: (host) => {
-    const {
-      code, language, showCode, mode, theme,
-    } = host;
-    const highlightCode = Prism.highlight(code, Prism.languages[language], language);
+    let { code, language, showCode, mode, theme, tsCode, currentLangIndex } = host;
+
+    const tsCodeShow = currentLangIndex === 1;
+    const currentCode = tsCodeShow ? tsCode : code;
+    const highlightCode = Prism.highlight(currentCode, Prism.languages[language], language);
 
     const showCodeStyle = {
       transitionDuration: '.2s',
@@ -47,11 +50,41 @@ export default define({
         <div class="TDesign-doc-demo__footer">
           <div class="TDesign-doc-demo__btns">
             <slot name="action"></slot>
-            <td-doc-copy code=${code} theme=${mode === 'open' ? 'dark' : 'light'}></td-doc-copy>
-            ${mode === 'open' ? html`` : html`<span class="action code ${showCode ? 'active' : ''}" onclick=${html.set('showCode', !showCode)} innerHTML=${codeIcon}></span>`}
+            <td-doc-copy code=${currentCode} theme=${mode === 'open' ? 'dark' : 'light'}></td-doc-copy>
+            ${
+              mode === 'open'
+                ? html``
+                : html`<span
+                    class="action code ${showCode ? 'active' : ''}"
+                    onclick=${html.set('showCode', !showCode)}
+                    innerHTML=${codeIcon}
+                  ></span>`
+            }
           </div>
           <div class="TDesign-doc-demo__code ${theme}" style="${showCodeStyle}">
+          ${
+            tsCode
+              ? html`<div class="TDesign-doc-demo-tabs">
+                  <span class="TDesign-doc-demo-tabs__block"></span>
+                  <div
+                    data-tab="Javascript"
+                    class="item ${tsCodeShow ? null : 'active'}"
+                    onclick=${html.set('currentLangIndex', 0)}
+                  >
+                    Javascript
+                  </div>
+                  <div
+                    data-tab="TypeScript"
+                    class="item ${tsCodeShow ? 'active' : null}"
+                    onclick=${html.set('currentLangIndex', 1)}
+                  >
+                    TypeScript
+                  </div>
+                </div>`
+              : ''
+          }
             <pre class="language-${language}"><code class="language-${language}" innerHTML="${highlightCode}"></code></pre>
+            </div>
           </div>
         </div>
       </div>
