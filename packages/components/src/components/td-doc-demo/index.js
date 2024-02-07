@@ -15,7 +15,7 @@ export default define({
   showCode: false,
   mode: 'auto', // auto open
   tsCode: undefined,
-  optionalCode: undefined,
+  compositionCode: undefined,
   currentLangIndex: 0,
   theme: {
     get: (host, lastValue) => lastValue || sessionStorage.getItem('--tdesign-theme') || 'light',
@@ -33,11 +33,11 @@ export default define({
     },
   },
   render: (host) => {
-    let { code, language, showCode, mode, theme, tsCode, optionalCode, currentLangIndex } = host;
+    let { code, language, showCode, mode, theme, tsCode, compositionCode, currentLangIndex } = host;
     const codeMap = {
       0: code,
       1: tsCode,
-      2: optionalCode,
+      2: compositionCode,
     };
     const currentCode = codeMap[currentLangIndex];
     const highlightCode = Prism.highlight(currentCode, Prism.languages[language], language);
@@ -67,7 +67,7 @@ export default define({
           </div>
           <div class="TDesign-doc-demo__code ${theme}" style="${showCodeStyle}">
           ${
-            tsCode || optionalCode
+            tsCode || compositionCode
               ? html`<div class="TDesign-doc-demo-tabs">
                   <span class="TDesign-doc-demo-tabs__block"></span>
                   <div
@@ -86,13 +86,13 @@ export default define({
                         TypeScript
                       </div>`
                     : null}
-                  ${optionalCode
+                  ${compositionCode
                     ? html`<div
-                        data-tab="JavaScript(Optional)"
+                        data-tab="JavaScript(composition-api)"
                         class="item ${currentLangIndex === 2 ? 'active' : null}"
                         onclick=${html.set('currentLangIndex', 2)}
                       >
-                        JavaScript(Optional)
+                        JavaScript(composition-api)
                       </div>`
                     : null}
                 </div>`

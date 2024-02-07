@@ -348,7 +348,7 @@ components: {
 </style>
 `;
 
-window.optionalCode = `<template>
+window.compositionCode = `<template>
 <div class="tdesign-demo-shape">
   <div class="tdesign-demo-block">
     <div class="item"><t-button shape="square" variant="outline">次要按钮</t-button></div>
