@@ -348,6 +348,45 @@ components: {
 </style>
 `;
 
+window.optionalCode = `<template>
+<div class="tdesign-demo-shape">
+  <div class="tdesign-demo-block">
+    <div class="item"><t-button shape="square" variant="outline">次要按钮</t-button></div>
+    <div class="item"><t-button shape="round" variant="outline">次要按钮</t-button></div>
+    <div class="item"><t-button shape="circle" variant="outline"><t-icon-calendar slot="icon"/></t-button></div>
+  </div>
+  <div class="tdesign-demo-block">
+    <div class="item"><t-button shape="square" variant="dashed">虚框按钮</t-button></div>
+    <div class="item"><t-button shape="round" variant="dashed">虚框按钮</t-button></div>
+    <div class="item"><t-button shape="circle" variant="dashed"><t-icon-calendar slot="icon"/></t-button></div>
+  </div>
+</div>
+</template>
+<script lang="ts">
+import TIconCalendar from 'tdesign-vue/lib/icon/calendar';
+
+export default {
+components: {
+  TIconCalendar,
+},
+};
+</script>
+<style lang="less" scoped>
+.tdesign-demo-shape {
+.t-button + .t-button {
+  margin-left: 32px;
+}
+.tdesign-demo-block {
+  margin-top: 16px;
+  display: flex;
+  .item {
+    width: 150px;
+  }
+}
+}
+</style>
+`;
+
 window.usageConfig = [
   { name: 'disabled', defaultValue: false, type: 'boolean' },
   { name: 'disabled2', defaultValue: false, type: 'boolean' },

@@ -15,6 +15,7 @@ export default define({
   showCode: false,
   mode: 'auto', // auto open
   tsCode: undefined,
+  optionalCode: undefined,
   currentLangIndex: 0,
   theme: {
     get: (host, lastValue) => lastValue || sessionStorage.getItem('--tdesign-theme') || 'light',
@@ -32,10 +33,13 @@ export default define({
     },
   },
   render: (host) => {
-    let { code, language, showCode, mode, theme, tsCode, currentLangIndex } = host;
-
-    const tsCodeShow = currentLangIndex === 1;
-    const currentCode = tsCodeShow ? tsCode : code;
+    let { code, language, showCode, mode, theme, tsCode, optionalCode, currentLangIndex } = host;
+    const codeMap = {
+      0: code,
+      1: tsCode,
+      2: optionalCode,
+    };
+    const currentCode = codeMap[currentLangIndex];
     const highlightCode = Prism.highlight(currentCode, Prism.languages[language], language);
 
     const showCodeStyle = {
@@ -63,23 +67,34 @@ export default define({
           </div>
           <div class="TDesign-doc-demo__code ${theme}" style="${showCodeStyle}">
           ${
-            tsCode
+            tsCode || optionalCode
               ? html`<div class="TDesign-doc-demo-tabs">
                   <span class="TDesign-doc-demo-tabs__block"></span>
                   <div
                     data-tab="Javascript"
-                    class="item ${tsCodeShow ? null : 'active'}"
+                    class="item ${currentLangIndex === 0 ? 'active' : null}"
                     onclick=${html.set('currentLangIndex', 0)}
                   >
                     Javascript
                   </div>
-                  <div
-                    data-tab="TypeScript"
-                    class="item ${tsCodeShow ? 'active' : null}"
-                    onclick=${html.set('currentLangIndex', 1)}
-                  >
-                    TypeScript
-                  </div>
+                  ${tsCode
+                    ? html`<div
+                        data-tab="TypeScript"
+                        class="item ${currentLangIndex === 1 ? 'active' : null}"
+                        onclick=${html.set('currentLangIndex', 1)}
+                      >
+                        TypeScript
+                      </div>`
+                    : null}
+                  ${optionalCode
+                    ? html`<div
+                        data-tab="JavaScript(Optional)"
+                        class="item ${currentLangIndex === 2 ? 'active' : null}"
+                        onclick=${html.set('currentLangIndex', 2)}
+                      >
+                        JavaScript(Optional)
+                      </div>`
+                    : null}
                 </div>`
               : ''
           }
