@@ -14,8 +14,7 @@ export default define({
   language: 'jsx',
   showCode: false,
   mode: 'auto', // auto open
-  tsCode: undefined,
-  compositionCode: undefined,
+  languageArr: undefined, // multiple languages display
   currentLangIndex: 0,
   theme: {
     get: (host, lastValue) => lastValue || sessionStorage.getItem('--tdesign-theme') || 'light',
@@ -32,15 +31,47 @@ export default define({
       return () => window.removeEventListener('storageChange', themeChange);
     },
   },
+  activeStyleMap: {
+    get: (_host, lastValue) => lastValue || undefined,
+    set: (_host, value) => value,
+    connect: (host, key) => {
+      function handleResize() {
+        if (!host.shadowRoot) {
+          setTimeout(handleResize, 300);
+          return;
+        }
+
+        const items = host.shadowRoot.querySelectorAll('.TDesign-doc-demo-tabs__item');
+        let styleMap = {};
+        items.forEach((item) => {
+          if (!item.offsetWidth) {
+            styleMap = null;
+          } else {
+            const { tab } = item.dataset;
+            styleMap[tab] = {
+              width: `${item.offsetWidth}px`,
+              transform: `translate3d(${item.offsetLeft - 4}px, 0, 0)`,
+            };
+          }
+        });
+        Object.assign(host, { [key]: styleMap });
+      }
+
+      requestAnimationFrame(handleResize);
+
+      window.addEventListener('resize', handleResize);
+
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    },
+  },
   render: (host) => {
-    let { code, language, showCode, mode, theme, tsCode, compositionCode, currentLangIndex } = host;
-    const codeMap = {
-      0: code,
-      1: tsCode,
-      2: compositionCode,
-    };
-    const currentCode = codeMap[currentLangIndex];
+    let { code, language, showCode, mode, theme, currentLangIndex, languageArr, activeStyleMap } = host;
+
+    const currentCode = languageArr?.[currentLangIndex].code || code;
     const highlightCode = Prism.highlight(currentCode, Prism.languages[language], language);
+    const activeStyle = activeStyleMap && languageArr ? activeStyleMap[languageArr[currentLangIndex].name] : {};
 
     const showCodeStyle = {
       transitionDuration: '.2s',
@@ -67,38 +98,23 @@ export default define({
           </div>
           <div class="TDesign-doc-demo__code ${theme}" style="${showCodeStyle}">
           ${
-            tsCode || compositionCode
+            languageArr
               ? html`<div class="TDesign-doc-demo-tabs">
-                  <span class="TDesign-doc-demo-tabs__block"></span>
-                  <div
-                    data-tab="Javascript"
-                    class="item ${currentLangIndex === 0 ? 'active' : null}"
-                    onclick=${html.set('currentLangIndex', 0)}
-                  >
-                    Javascript
-                  </div>
-                  ${tsCode
-                    ? html`<div
-                        data-tab="TypeScript"
-                        class="item ${currentLangIndex === 1 ? 'active' : null}"
-                        onclick=${html.set('currentLangIndex', 1)}
+                  <span class="TDesign-doc-demo-tabs__active" style="${activeStyle}"></span>
+                  ${languageArr.map(
+                    ({ name }, index) =>
+                      html`<div
+                        data-tab=${name}
+                        class="TDesign-doc-demo-tabs__item ${currentLangIndex === index ? 'active' : null}"
+                        onclick=${html.set('currentLangIndex', index)}
                       >
-                        TypeScript
-                      </div>`
-                    : null}
-                  ${compositionCode
-                    ? html`<div
-                        data-tab="JavaScript(composition-api)"
-                        class="item ${currentLangIndex === 2 ? 'active' : null}"
-                        onclick=${html.set('currentLangIndex', 2)}
-                      >
-                        JavaScript(composition-api)
-                      </div>`
-                    : null}
+                        ${name}
+                      </div>`,
+                  )}
                 </div>`
               : ''
           }
-            <pre class="language-${language}"><code class="language-${language}" innerHTML="${highlightCode}"></code></pre>
+              <pre class="language-${language}"><code class="language-${language}" innerHTML="${highlightCode}"></code></pre>
             </div>
           </div>
         </div>

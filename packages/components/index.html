@@ -147,9 +147,12 @@
       };
       document.querySelector('td-doc-header').docInfo = window.docInfo;
       document.querySelector('td-doc-demo').oncopy = (e) => console.log('copy:', e);
+      document.querySelector('td-doc-demo').languageArr = [
+        { name: 'Javascript', code: window.code },
+        { name: 'TypeScript', code: window.tsCode },
+        { name: 'Javascript(composition-api)', code: window.compositionCode },
+      ];
       document.querySelectorAll('td-doc-demo').forEach((e) => (e.code = window.code));
-      document.querySelectorAll('td-doc-demo').forEach((e) => (e.tsCode = window.tsCode));
-      document.querySelectorAll('td-doc-demo').forEach((e) => (e.compositionCode = window.compositionCode));
       document.querySelector('td-contributors').contributors = window.contributors;
       document.querySelector('td-doc-search').docsearchInfo = { indexName: 'tdesign_doc_react' };
       document.querySelector('td-select').options = [1, 2, 3, 4, 5].map((i) => ({ label: i, value: i }));
