@@ -89,7 +89,6 @@ export default define({
 
     const handleClick = (index) => {
       host.currentLangIndex = index;
-
       dispatch(host, 'click', { detail: { index, lang: languageArr[index] } });
     };
 
@@ -99,7 +98,9 @@ export default define({
         <div class="TDesign-doc-demo__footer">
           <div class="TDesign-doc-demo__btns">
             <slot name="action"></slot>
-            <td-doc-copy code=${code} theme=${mode === 'open' ? 'dark' : 'light'}></td-doc-copy>
+            <td-doc-copy code=${
+              host.dataset?.[currentLang] || host.dataset?.[currentLang.toLocaleLowerCase()] || code
+            } theme=${mode === 'open' ? 'dark' : 'light'}></td-doc-copy>
             ${
               mode === 'open'
                 ? html``
