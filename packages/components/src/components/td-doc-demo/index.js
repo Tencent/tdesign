@@ -1,4 +1,4 @@
-import { html, define } from 'hybrids';
+import { html, define, dispatch } from 'hybrids';
 import Prism from 'prismjs';
 import style from './style.less';
 import codeIcon from '@images/code.svg?raw';
@@ -14,8 +14,8 @@ export default define({
   language: 'jsx',
   showCode: false,
   mode: 'auto', // auto open
-  languageArr: undefined, // multiple languages display
   currentLangIndex: 0,
+  languages: undefined, // multiple languages display
   theme: {
     get: (host, lastValue) => lastValue || sessionStorage.getItem('--tdesign-theme') || 'light',
     set: (host, value) => value,
@@ -67,16 +67,28 @@ export default define({
     },
   },
   render: (host) => {
-    let { code, language, showCode, mode, theme, currentLangIndex, languageArr, activeStyleMap } = host;
+    let { code, language, showCode, mode, theme, currentLangIndex, languages, activeStyleMap } = host;
+    const languageArr = typeof languages === 'string' ? languages.split(',') : [];
 
-    const currentCode = languageArr?.[currentLangIndex].code || code;
+    const tabsDisplay =
+      languageArr.length > 0 &&
+      languageArr.filter((lang) => host.dataset?.[lang] || host.dataset?.[lang.toLocaleLowerCase()]).length ==
+        languageArr.length;
+
+    const currentLang = languageArr[currentLangIndex] || '';
+    const currentCode = host.dataset?.[currentLang] || host.dataset?.[currentLang.toLocaleLowerCase()] || code;
     const highlightCode = Prism.highlight(currentCode, Prism.languages[language], language);
-    const activeStyle = activeStyleMap && languageArr ? activeStyleMap[languageArr[currentLangIndex].name] : {};
 
+    const activeStyle = activeStyleMap && languageArr.length ? activeStyleMap[languageArr[currentLangIndex]] : {};
     const showCodeStyle = {
       transitionDuration: '.2s',
       maxHeight: showCode ? '560px' : 0,
       transitionTimingFunction: showCode ? 'cubic-bezier(.82, 0, 1, .9)' : 'ease',
+    };
+
+    const handleClick = (index) => {
+      host.currentLangIndex = index;
+      dispatch(host, 'click', { detail: { index, lang: languageArr[index] } });
     };
 
     return html`
@@ -85,7 +97,7 @@ export default define({
         <div class="TDesign-doc-demo__footer">
           <div class="TDesign-doc-demo__btns">
             <slot name="action"></slot>
-            <td-doc-copy code=${currentCode} theme=${mode === 'open' ? 'dark' : 'light'}></td-doc-copy>
+            <td-doc-copy code=${code} theme=${mode === 'open' ? 'dark' : 'light'}></td-doc-copy>
             ${
               mode === 'open'
                 ? html``
@@ -98,17 +110,17 @@ export default define({
           </div>
           <div class="TDesign-doc-demo__code ${theme}" style="${showCodeStyle}">
           ${
-            languageArr
+            tabsDisplay
               ? html`<div class="TDesign-doc-demo-tabs">
                   <span class="TDesign-doc-demo-tabs__active" style="${activeStyle}"></span>
                   ${languageArr.map(
-                    ({ name }, index) =>
+                    (language, index) =>
                       html`<div
-                        data-tab=${name}
+                        data-tab=${language}
                         class="TDesign-doc-demo-tabs__item ${currentLangIndex === index ? 'active' : null}"
-                        onclick=${html.set('currentLangIndex', index)}
+                        onclick=${() => handleClick(index)}
                       >
-                        ${name}
+                        ${language}
                       </div>`,
                   )}
                 </div>`

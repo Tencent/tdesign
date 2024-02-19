@@ -115,7 +115,7 @@
             </ol>
           </nav>
 
-          <td-doc-demo multiple-lang-config="javascript,typescript">
+          <td-doc-demo>
             <div style="padding: 100px">text</div>
           </td-doc-demo>
           <td-doc-demo show-code mode="open"></td-doc-demo>
@@ -147,11 +147,11 @@
       };
       document.querySelector('td-doc-header').docInfo = window.docInfo;
       document.querySelector('td-doc-demo').oncopy = (e) => console.log('copy:', e);
-      document.querySelector('td-doc-demo').languageArr = [
-        { name: 'Javascript', code: window.code },
-        { name: 'TypeScript', code: window.tsCode },
-        { name: 'Javascript(composition-api)', code: window.compositionCode },
-      ];
+      document.querySelector('td-doc-demo').languages = 'JavaScript,TypeScript,CompositionAPI';
+      document.querySelector('td-doc-demo').dataset['JavaScript'] = window.code;
+      document.querySelector('td-doc-demo').dataset['TypeScript'] = window.tsCode;
+      document.querySelector('td-doc-demo').dataset['CompositionAPI'] = window.compositionCode;
+
       document.querySelectorAll('td-doc-demo').forEach((e) => (e.code = window.code));
       document.querySelector('td-contributors').contributors = window.contributors;
       document.querySelector('td-doc-search').docsearchInfo = { indexName: 'tdesign_doc_react' };
