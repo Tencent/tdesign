@@ -1,3 +1,5 @@
+/* stylelint-disable */
+
 @import "../../styles/prism-theme.less";
 @import "../../styles/prism-theme-dark.less";
 
@@ -89,7 +91,6 @@
       border-top: 1px solid var(--component-border);
 
       &:hover {
-
         &::-webkit-scrollbar-thumb {
           background-color: var(--bg-color-scroll);
         }
@@ -113,4 +114,56 @@
       }
     }
   }
+}
+
+.TDesign-doc-demo-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(var(--block-base-width) * 3);
+  box-sizing: border-box;
+  cursor: pointer;
+  border-top: 1px solid var(--component-border);
+  padding: 4px 0;
+  position: relative;
+
+  &__active {
+    height: 2px;
+    width: 180px;
+    background-color: var(--text-interactive);
+    position: absolute;
+    left: 0;
+    bottom: 1px;
+    transition: all var(--anim-time-fn-easing) var(--anim-duration-moderate);
+  }
+
+  &__item + &__item {
+    margin-left: 8px;
+  }
+
+  &__item {
+    margin: 4px;
+    width: 188px;
+    text-align: center;
+    padding: 4px 0;
+    font-size: var(--block-base-width);
+    box-sizing: border-box;
+    border-radius: var(--border-radius);
+    color: var(--text-secondary);
+    word-break: keep-all;
+    white-space: nowrap;
+    transition: background .2s;
+
+    &:hover,
+    &.active {
+      color: var(--text-interactive);
+
+    }
+
+    &:hover {
+      background: var(--bg-color-demo-hover);
+    }
+
+  }
+
 }
