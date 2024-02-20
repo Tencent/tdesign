@@ -3,7 +3,11 @@
   "site": {},
   "vue": {},
   "react": {},
-  "vue-next": {},
+  "vue-next": {
+    "title": "📢 全量组件新增 TypeScript 示例代码展示，欢迎点击组件示例代码查看并反馈意见",
+    "type": "primary",
+    "closeable": true
+  },
   "vue-mobile": {},
   "miniprogram": {}
 }
