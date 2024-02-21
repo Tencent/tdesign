@@ -1,7 +1,11 @@
 {
   "all": {},
   "site": {},
-  "vue": {},
+  "vue": {
+    "title": "📢 全量组件新增 Composition API 示例代码展示 （需基于Vue2.7），欢迎点击组件示例代码查看并反馈意见",
+    "type": "primary",
+    "closeable": true
+  },
   "react": {},
   "vue-next": {
     "title": "📢 全量组件新增 TypeScript 示例代码展示，欢迎点击组件示例代码查看并反馈意见",
