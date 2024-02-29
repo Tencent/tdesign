@@ -51,7 +51,7 @@ export default define({
             const { tab } = item.dataset;
             styleMap[tab] = {
               width: `${item.offsetWidth}px`,
-              transform: `translate3d(${item.offsetLeft - 4}px, 0, 0)`,
+              transform: `translate3d(${item.offsetLeft}px, 0, 0)`,
             };
           }
         });
