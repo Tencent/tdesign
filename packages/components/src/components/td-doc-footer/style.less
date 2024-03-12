@@ -1,8 +1,10 @@
+/* stylelint-disable */
 :host {
   font-size: 14px;
   color: var(--text-secondary);
   min-height: var(--footer-height);
   box-sizing: border-box;
+
   --footer-logo-position: absolute;
   --footer-inner-position: static;
 }
@@ -13,7 +15,7 @@
   padding-right: var(--content-padding-right);
   background-color: var(--bg-color-footer);
   box-shadow: var(--footer-box-shadow);
-  
+
   &__inner {
     position: var(--footer-inner-position);
     margin: 0 auto;
@@ -70,7 +72,7 @@
 
   &__qrcode {
     width: 192px;
-    padding: 24px;
+    padding: 16px;
     box-sizing: border-box;
     border-radius: 9px;
     background: var(--bg-color-code);
@@ -83,18 +85,80 @@
     top: 40px;
 
     &-title {
-      margin: 0 0 4px 0;
+      margin: 0 0 4px;
       font-size: 16px;
       line-height: 24px;
       font-weight: bold;
       color: var(--text-primary);
     }
-    
+
     &-desc {
       margin: 0;
       font-size: 14px;
       line-height: 22px;
       color: var(--text-secondary);
+    }
+  }
+}
+
+.TDesign-doc-footer__qrcode-trigger {
+  background: linear-gradient(180deg, #4282ec 0%, var(--brand-main) 100%);
+  width: 160px;
+  height: 160px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 8px 0 #0000001a;
+  margin-bottom: 12px;
+
+  > div {
+    height: 48px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: var(--text-primary);
+
+    :hover {
+      color: var(--brand-main);
+      font-weight: bold;
+    }
+
+    > div {
+      background-color: var(--bg-color-container);
+      border-radius: 3px;
+      text-align: left;
+      padding: 4px;
+      display: flex;
+      font-size: 12px;
+      flex-direction: column;
+      box-sizing: border-box;
+      cursor: pointer;
+
+      i {
+        font-size: 20px;
+        text-align: left;
+      }
+    }
+
+    &:nth-child(1) {
+      div {
+        width: 48px;
+      }
+    }
+
+    &:nth-child(2) {
+      div {
+        width: 74px;
+      }
+    }
+
+    &:nth-child(3) {
+      div {
+        width: 152px;
+      }
     }
   }
 }
@@ -105,7 +169,7 @@
   color: var(--text-placeholder);
   padding-right: var(--content-padding-right);
   background: var(--bg-color-secondaryfooter);
-  
+
   .TDesign-doc-footer__inner {
     padding: 0 var(--content-padding-left-right);
     align-items: center;
@@ -166,7 +230,7 @@
 
   .TDesign-doc-footer__bottom {
     height: 112px;
-    
+
     .TDesign-doc-footer__inner {
       flex-direction: column-reverse;
       padding-top: 16px;
