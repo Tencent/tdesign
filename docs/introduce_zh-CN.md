@@ -37,7 +37,7 @@ TDesign 在创建之初就严格按照开源协作的原则运作，包括源代
 | [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)   | Vue 3.x 技术栈    | `1.0 LTS`   |
 | [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram) | 微信小程序        | `1.0 LTS`   |
 | tdesign-mobile-react                                                  | React 16.x 技术栈 | `Alpha`  |
-| tdesign-flutter                                                       | 1.17.0            | `待上线` |
+| tdesign-flutter                                                       | 1.17.0            | `Alpha` |
 
 同时，TDesign 与腾讯内部在各自的领域具有丰富行业经验业务团队正协作中，提供更多具有业务属性的组件库产品，未来会有包括政务、零售等多个不同风格及组件类型的组件库产品开放出来，敬请期待！
 
