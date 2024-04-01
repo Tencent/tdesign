@@ -15,9 +15,8 @@
   justify-content: space-between;
 
   &__block {
-    position: absolute;
     background-color: var(--bg-color-tab-select);
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, .15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .15);
     position: absolute;
     height: calc(100% - 4px);
     transition: all var(--anim-time-fn-easing) var(--anim-duration-moderate);
@@ -55,4 +54,26 @@
       color: #fff;
     }
   }
+}
+
+:root::view-transition-old(root),
+:root::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+:root::view-transition-old(root) {
+  z-index: 1;
+}
+
+:root::view-transition-new(root) {
+  z-index: 999;
+}
+
+:root[theme-mode="dark"]::view-transition-old(root) {
+  z-index: 999;
+}
+
+:root[theme-mode="dark"]::view-transition-new(root) {
+  z-index: 1;
 }
