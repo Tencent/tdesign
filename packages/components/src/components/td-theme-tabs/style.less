@@ -80,20 +80,40 @@
 
 @keyframes light-to-dark {
   from {
-    clip-path: inset(0 100% 0 0);
+    clip-path: polygon(
+      0 0,
+      0 0,
+      calc(tan(8deg) * -100vh) 100%,
+      calc(tan(8deg) * -100vh) 100%
+    );
   }
 
   to {
-    clip-path: inset(0 0 0 0);
+    clip-path: polygon(
+      0 0,
+      calc((tan(8deg) * 100vh) + 100%) 0,
+      100% 100%,
+      calc(tan(8deg) * -100vh) 100%
+    );
   }
 }
 
 @keyframes dark-to-light {
   from {
-    clip-path: inset(0 0 0 100%);
+    clip-path: polygon(
+      calc((tan(8deg) * 100vh) + 100%) 0,
+      calc((tan(8deg) * 100vh) + 100%) 0, 
+      100% 100%,
+      100% 100%
+    );
   }
 
   to {
-    clip-path: inset(0 0 0 0);
+    clip-path: polygon(
+      0 0,
+      calc((tan(8deg) * 100vh) + 100%) 0,
+      100% 100%,
+      calc(tan(8deg) * -100vh) 100%
+    );
   }
 }
