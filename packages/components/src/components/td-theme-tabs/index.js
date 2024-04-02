@@ -19,26 +19,7 @@ function handleTabClick(host, event, currentTheme) {
   if (prevTheme === currentTheme) return;
 
   if (!document.startViewTransition) return toggleTheme(host, currentTheme);
-
-  const transition = document.startViewTransition(() => toggleTheme(host, currentTheme));
-
-  const { clientX: x, clientY: y } = event;
-  const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-
-  transition.ready.then(() => {
-    const isDark = currentTheme === 'dark';
-    const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`];
-    root.animate(
-      {
-        clipPath: isDark ? [...clipPath].reverse() : clipPath,
-      },
-      {
-        duration: 500,
-        easing: 'ease-in',
-        pseudoElement: isDark ? '::view-transition-old(root)' : '::view-transition-new(root)',
-      },
-    );
-  });
+  document.startViewTransition(() => toggleTheme(host, currentTheme));
 }
 
 function initBlockStyleMap(host) {
