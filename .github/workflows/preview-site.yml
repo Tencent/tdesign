@@ -1,6 +1,6 @@
 # 文件名建议统一为 preview-publish
 # 应用 preview.yml 的 demo
-name: pr-spell-check
+name: preview site
 on: [pull_request]
 
 jobs:
