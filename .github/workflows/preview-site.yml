@@ -21,9 +21,9 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - run: npm install
+      - run: pnpm install
       - name: build-site
-        run: npm run site:preview
+        run: pnpm run site:preview
   call-preview:
     uses: Tencent/tdesign/.github/workflows/preview.yml@main
     secrets:
