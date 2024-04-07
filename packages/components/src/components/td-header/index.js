@@ -172,7 +172,7 @@ function renderLinks(host, headerList, platform, framework) {
     document.dispatchEvent(new CustomEvent('tdesign_site_lang', { detail: nextLang }));
   }
 
-  const translateLink = host.enabledLocale
+  const translateLink = !host.disabledLocale
     ? html`
         <div class="TDesign-header-nav__translate" onclick="${handleTranslate}">
           <span class="TDesign-header-nav__translate-icon" innerHTML="${translateIcon}"></span>
@@ -213,7 +213,7 @@ export default define({
   platform: 'web',
   framework: 'vue',
   disabledTheme: false,
-  enabledLocale: true,
+  disabledLocale: false,
   notice: {
     get: (_host, lastValue) => lastValue || {},
     set: (_host, value) => value,
@@ -264,7 +264,6 @@ export default define({
   },
   render: (host) => {
     const { platform, framework, disabledTheme, collapseMenu } = host;
-
     return html`
       ${renderNotice(host)}
       <header class="TDesign-header">
