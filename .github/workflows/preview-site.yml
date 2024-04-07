@@ -7,4 +7,4 @@ on:
 
 jobs:
   call-test-build:
-    uses: Tencent/tdesign/.github/workflows/test-build-site.yml@main
+    uses: Tencent/tdesign/.github/workflows/test-build-site.yml@feat/adjust-transition-css
