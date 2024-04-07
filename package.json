@@ -8,6 +8,7 @@
     "build:components": "pnpm run --filter 'tdesign-site-components' build && pnpm run --filter 'tdesign-site-components' postbuild",
     "site": "npm run build:components && cd site && npm run build",
     "site:intranet": "npm run build:components && cd site && npm run site:intranet",
+    "site:preview": "npm run build:components && cd site && npm run site:preview",
     "prepare": "husky install"
   },
   "license": "MIT",

@@ -5,6 +5,7 @@ import tdocPlugin from './plugin-tdoc/index.js';
 
 const publicPathMap = {
   intranet: '/',
+  preview: '/',
   production: 'https://static.tdesign.tencent.com/',
 };
 
@@ -23,7 +24,7 @@ export default ({ mode }) => {
       },
     },
     build: {
-      outDir: '_site',
+      outDir: mode === 'preview' ? '../_site' : '_site',
       rollupOptions: {
         input: {
           index: path.resolve(__dirname, 'index.html'),
