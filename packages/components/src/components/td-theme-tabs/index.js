@@ -7,10 +7,19 @@ import { watchHtmlMode } from '@utils';
 // const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 const storageChangeEvent = new CustomEvent('storageChange');
 
-function handleTabClick(host, currentTheme) {
+function toggleTheme(host, currentTheme) {
   document.documentElement.removeAttribute('theme-mode');
   Object.assign(host, { theme: currentTheme });
   document.documentElement.setAttribute('theme-mode', currentTheme);
+}
+
+function handleTabClick(host, event, currentTheme) {
+  const root = document.documentElement;
+  const prevTheme = root.getAttribute('theme-mode');
+  if (prevTheme === currentTheme) return;
+
+  if (!document.startViewTransition) return toggleTheme(host, currentTheme);
+  document.startViewTransition(() => toggleTheme(host, currentTheme));
 }
 
 function initBlockStyleMap(host) {
@@ -50,7 +59,7 @@ export default define({
 
       if (lastTheme) {
         document.documentElement.removeAttribute('theme-mode');
-        
+
         Object.assign(host, { [key]: lastTheme });
         document.documentElement.setAttribute('theme-mode', lastTheme);
         invalidate();
@@ -74,8 +83,18 @@ export default define({
     return html`
       <div class="TDesign-theme-tabs">
         <div class="TDesign-theme-tabs__block" style=${blockStyle || {}}></div>
-        <div onclick=${(host) => handleTabClick(host, 'light')} data-theme="light" class="item sun ${theme === 'light' ? 'active' : ''}" innerHTML=${sunIcon}></div>
-        <div onclick=${(host) => handleTabClick(host, 'dark')} data-theme="dark" class="item moon ${theme === 'dark' ? 'active' : ''}" innerHTML=${moonIcon}></div>
+        <div
+          onclick=${(host, e) => handleTabClick(host, e, 'light')}
+          data-theme="light"
+          class="item sun ${theme === 'light' ? 'active' : ''}"
+          innerHTML=${sunIcon}
+        ></div>
+        <div
+          onclick=${(host, e) => handleTabClick(host, e, 'dark')}
+          data-theme="dark"
+          class="item moon ${theme === 'dark' ? 'active' : ''}"
+          innerHTML=${moonIcon}
+        ></div>
       </div>
     `.css`${style}`;
   },

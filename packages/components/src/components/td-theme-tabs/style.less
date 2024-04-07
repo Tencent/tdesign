@@ -15,9 +15,8 @@
   justify-content: space-between;
 
   &__block {
-    position: absolute;
     background-color: var(--bg-color-tab-select);
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, .15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .15);
     position: absolute;
     height: calc(100% - 4px);
     transition: all var(--anim-time-fn-easing) var(--anim-duration-moderate);
@@ -54,5 +53,67 @@
     &.active.moon {
       color: #fff;
     }
+  }
+}
+
+:root::view-transition-group(root) {
+  animation-duration: 1s;
+}
+
+:root::view-transition-new(root),
+:root::view-transition-old(root) {
+  mix-blend-mode: normal;
+}
+
+:root::view-transition-old(root),
+:root[theme-mode='dark']::view-transition-old(root) {
+  animation: none;
+}
+
+:root::view-transition-new(root) {
+  animation-name: dark-to-light;
+}
+
+:root[theme-mode='dark']::view-transition-new(root) {
+  animation-name: light-to-dark;
+}
+
+@keyframes light-to-dark {
+  from {
+    clip-path: polygon(
+      0 0,
+      0 0,
+      calc(tan(8deg) * -100vh) 100%,
+      calc(tan(8deg) * -100vh) 100%
+    );
+  }
+
+  to {
+    clip-path: polygon(
+      0 0,
+      calc((tan(8deg) * 100vh) + 100%) 0,
+      100% 100%,
+      calc(tan(8deg) * -100vh) 100%
+    );
+  }
+}
+
+@keyframes dark-to-light {
+  from {
+    clip-path: polygon(
+      calc((tan(8deg) * 100vh) + 100%) 0,
+      calc((tan(8deg) * 100vh) + 100%) 0, 
+      100% 100%,
+      100% 100%
+    );
+  }
+
+  to {
+    clip-path: polygon(
+      0 0,
+      calc((tan(8deg) * 100vh) + 100%) 0,
+      100% 100%,
+      calc(tan(8deg) * -100vh) 100%
+    );
   }
 }
