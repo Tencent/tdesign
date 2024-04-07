@@ -1,30 +1,10 @@
-# 文件名建议统一为 preview-publish
-# 应用 preview.yml 的 demo
-name: preview site
-on: [pull_request]
+name: MAIN_PULL_REQUEST
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
 
 jobs:
-  build-site:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 18
-      - uses: actions/cache@v2
-        env:
-          cache-name: cache-nodemodules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - run: pnpm install
-      - name: build-site
-        run: pnpm run site:preview
-  call-preview:
-    uses: Tencent/tdesign/.github/workflows/preview.yml@main
-    secrets:
-      TDESIGN_SURGE_TOKEN: ${{ secrets.TDESIGN_SURGE_TOKEN }}
+  call-test-build:
+    uses: Tencent/tdesign/.github/workflows/test-build-site.yml@main
