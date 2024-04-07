@@ -67,7 +67,7 @@ When the batch operation button is the primary or high-frequency operation, rega
 
 Core process: Select the operated content - Perform the Operation - Display the Operation result
 
-Components: [Table](/vue/components/table)、[Button](/vue/components/button)、[Checkbox](/vue/components/checkbox)、[Dropdown](/vue/components/dropdown)、[Meesage](/vue/components/message)
+Components: [Table](/vue/components/table)、[Button](/vue/components/button)、[Checkbox](/vue/components/checkbox)、[Dropdown](/vue/components/dropdown)、[Message](/vue/components/message)
 
 <img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/design/20211216192234.png" />
 
