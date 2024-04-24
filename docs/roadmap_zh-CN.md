@@ -11,20 +11,16 @@ title: 后续计划
 
 **我们正在做的**
 
-增加新的通用 UI 组件 [📌 新组件招募 · Issue #220 · Tencent/tdesign · GitHub](https://github.com/Tencent/tdesign/issues/220)
+持续增加更多的通用 UI 组件 [📌 新组件招募 · Issue #220 · Tencent/tdesign · GitHub](https://github.com/Tencent/tdesign/issues/220)
 
-对外开源移动端 Flutter
+对外开源移动端 Flutter，并持续迭代至稳定版本 [TDesign Flutter](https://github.com/Tencent/tdesign-flutter)
 
-协助社区完成桌面端 Blazor 建设
+小程序组件支持 Skyline 引擎
 
-无障碍改造移动端组件，详情参见 📄[「技术向善，助力 TDesign 无障碍改造」主题活动开始啦 · Issue #1045 · Tencent/tdesign-miniprogram · GitHub](https://github.com/Tencent/tdesign-miniprogram/issues/1045)
-
-多端智能转换，支持 Vue/Vue next 等转换为微信小程序
+提供更全面的国际化多语言体验
 
 **我们准备做的**
 
-提供更全面的国际化多语言体验，适配 RTL 语言
-
 搭建物料市场，承载更多来自社区贡献的组件、页面模板等资源
 
-以上工作都在 GitHub Projects 上公开进行。[view on GitHub](https://github.com/orgs/Tencent/projects/1/views/1)
+以上工作都在 GitHub Projects 上公开进行。[view on GitHub](https://github.com/orgs/Tencent/projects/1)

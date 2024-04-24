@@ -10,20 +10,16 @@ TDesign upcoming iterate plans are as below:
 
 **What TDesign is doing**
 
-Add more UI components [📌 New Component Request · Issue #220 · Tencent/tdesign · GitHub](https://github.com/Tencent/tdesign/issues/220)
+Provide more UI components [📌 New Component Request · Issue #220 · Tencent/tdesign · GitHub](https://github.com/Tencent/tdesign/issues/220)
 
-Open-source mobile Flutter version
+Open-source mobile Flutter version [TDesign Flutter](https://github.com/Tencent/tdesign-flutter)
 
-Assist community in building desktop Blazor
+Support MiniProgram Skyline engine
 
-Accessibility renovation on mobile components, read more details in 📄 [「技术向善，助力 TDesign 无障碍改造」主题活动开始啦 · Issue #1045 · Tencent/tdesign-miniprogram · GitHub](https://github.com/Tencent/tdesign-miniprogram/issues/1045)
-
-Cross-platform intelligent conversion, supporting the conversion of Desktop Vue/Vue next project to Mobile WeChat Mini Program
+Provide comprehensive international multi-language experience
 
 **What TDesign are planning to do**
 
-- Provide a more comprehensive international multi-language experience and adapt to RTL
+Provide a components market to host more resources from community contributions, such as pro components and page templates
 
-- Provide a components market to host more resources from community contributions, such as pro components and page templates
-
-All of the above work is conducted openly on GitHub Projects. [view on GitHub](https://github.com/orgs/Tencent/projects/1/views/1)
+All of the above work is conducted openly on GitHub Projects. [view on GitHub](https://github.com/orgs/Tencent/projects/1)
