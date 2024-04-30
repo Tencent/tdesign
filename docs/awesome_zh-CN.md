@@ -19,6 +19,7 @@ title: 社区资源
 - [Chatgpt 及 Midjourney 的对话程序](https://github.com/anlityli/chatait-free)
 - [简单易上手的后台管理模板](https://github.com/Slash214/SoloCove-TD)
 - [Lite 版本的页面模板](https://github.com/chnykn/tdemo-vue)
+- [Fantastic-admin 开箱即用的管理系统框架](https://github.com/fantastic-admin/basic) - [TDesign版本](https://github.com/fantastic-admin/tdesign-example)
 
 #### Web React
 
