@@ -20,6 +20,7 @@ title: Community Resources
 - [简单易上手的后台管理模板](https://github.com/Slash214/SoloCove-TD)
 - [Lite 版本的页面模板](https://github.com/chnykn/tdemo-vue)
 - [Fantastic-admin 开箱即用的管理系统框架](https://github.com/fantastic-admin/basic) - [TDesign版本](https://github.com/fantastic-admin/tdesign-example)
+- [One-step-admin 快人一步的管理系统框架](https://github.com/one-step-admin/basic) - [TDesign版本](https://github.com/one-step-admin/tdesign-example)
 
 #### Web React
 
