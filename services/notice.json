@@ -1,17 +1,14 @@
 {
-  "all": {},
+  "all": {
+    "title": "TDesign 正在进行有奖征集品牌案例活动，欢迎投稿参与",
+    "actionUrl": "https://github.com/Tencent/tdesign/discussions/493",
+    "type": "primary",
+    "closeable": true
+  },
   "site": {},
-  "vue": {
-    "title": "📢 全量组件新增 Composition API 示例代码展示 （需基于Vue2.7），欢迎点击组件示例代码查看并反馈意见",
-    "type": "primary",
-    "closeable": true
-  },
+  "vue": {},
   "react": {},
-  "vue-next": {
-    "title": "📢 全量组件新增 TypeScript 示例代码展示，欢迎点击组件示例代码查看并反馈意见",
-    "type": "primary",
-    "closeable": true
-  },
+  "vue-next": {},
   "vue-mobile": {},
   "miniprogram": {}
 }
