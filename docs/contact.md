@@ -8,20 +8,19 @@ Please refer to[《How to contribute》](/about/contributing)。
 
 ### Community and Repositories
 
-Submit an bug issue for the corresponding technology stack implementation in the repo when you find a bug after using TDesign:
+We prefer to solve and discuss in the repository, as this allows more people with similar problems to participate. If you find a Bug or have a Feature Request, you can submit an Issue to the corresponding repository.
 
-- [web vue](https://github.com/Tencent/tdesign-vue)
-- [web vue-next](https://github.com/Tencent/tdesign-vue-next)
-- [web react](https://github.com/Tencent/tdesign-react)
-- [Wechat Miniprogram](https://github.com/Tencent/tdesign-miniprogram)
-- [Starter kit for web-vue](https://github.com/Tencent/tdesign-vue-starter)
-- [Starter kit for web-vue-next](https://github.com/Tencent/tdesign-vue-next-starter)
-- [Starter kit for web-react](https://github.com/Tencent/tdesign-react-starter)
+- [TDesign for Vue 2](https://github.com/Tencent/tdesign-vue)
+- [TDesign for Vue 3](https://github.com/Tencent/tdesign-vue-next)
+- [TDesign for React](https://github.com/Tencent/tdesign-react)
+- [TDesign for for WeChat Miniprogram](https://github.com/Tencent/tdesign-miniprogram)
+- [TDesign for for Mobile Vue](https://github.com/Tencent/tdesign-mobile-vue)
+- [TDesign for for Flutter](https://github.com/Tencent/tdesign-flutter)
 
 ### TDesign User Group in WeCom
 
-TDesign official team will promptly synchronize version releases and issue fixes in the user group, and there will be discussions about the component library's construction. Scan the QR code with WeChat or Wecom to join the group.
+TDesign official team will promptly synchronize version releases and issue fixes in the user group, and there will be discussions about the component library's construction. You can scroll to the bottom of the website, choose and scan the QR code according to your technology stack, and join the user group.
 
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/TDesign%20IM.png" alt="IM" width="200">
+### Contact by email
 
-Contact by email：[tdesign@tencent.com](mailto:tdesign@tencent.com)
+[tdesign@tencent.com](mailto:tdesign@tencent.com)
