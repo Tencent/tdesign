@@ -9,6 +9,7 @@ export default {
   layout: `${BASE_URL}/spline/layout/index.html`,
   message: `${BASE_URL}/spline/message/index.html`,
   navigation: `${BASE_URL}/spline/navigation/index.html`,
+  ai: `${BASE_URL}/spline/ai/index.html`,
 
   'design-mode': `${BASE_URL}/spline/design/mode_light/index.html`,
   'design-mode-dark': `${BASE_URL}/spline/design/mode_dark/index.html`,
