@@ -13,9 +13,9 @@ We prefer to solve and discuss in the repository, as this allows more people wit
 - [TDesign for Vue 2](https://github.com/Tencent/tdesign-vue)
 - [TDesign for Vue 3](https://github.com/Tencent/tdesign-vue-next)
 - [TDesign for React](https://github.com/Tencent/tdesign-react)
-- [TDesign for for WeChat Miniprogram](https://github.com/Tencent/tdesign-miniprogram)
-- [TDesign for for Mobile Vue](https://github.com/Tencent/tdesign-mobile-vue)
-- [TDesign for for Flutter](https://github.com/Tencent/tdesign-flutter)
+- [TDesign for WeChat Miniprogram](https://github.com/Tencent/tdesign-miniprogram)
+- [TDesign for Mobile Vue](https://github.com/Tencent/tdesign-mobile-vue)
+- [TDesign for Flutter](https://github.com/Tencent/tdesign-flutter)
 
 ### TDesign User Group in WeCom
 
