@@ -1,15 +1,18 @@
 <template>
   <section class="tdesign-homepage">
     <banner :themeMode="themeMode" />
-
     <section class="main-page">
       <div class="banner-info">
         <div class="banner-info__left">
           <h2 class="name">
             <span class="primary">TDesign</span>
             <br />
-            <span class="sub-title">企业级设计体系</span>
+            <span class="sub-title">为设计&开发者，打造工作美学</span>
           </h2>
+        </div>
+        <div class="banner-booking">
+          <img src="/home/logo.gif" />
+          <div>点击关注 TDesign 公众号</div>
         </div>
       </div>
 
@@ -209,20 +212,28 @@
         </div>
       </div>
     </section>
-
+    <!-- swiper tabs -->
+    <div class="module-board module-board__tabs">
+      <div class="module-board__content" @click="currentTab = 0">
+        <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 0 }]">开放</h3>
+        <div class="line" v-if="currentTab === 0"></div>
+      </div>
+      <div class="module-board__content" @click="currentTab = 1">
+        <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 1 }]">创造</h3>
+        <div class="line" v-if="currentTab === 1"></div>
+      </div>
+      <div class="module-board__content" @click="currentTab = 2">
+        <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 2 }]">共建</h3>
+        <div class="line" v-if="currentTab === 2"></div>
+      </div>
+    </div>
+    <!-- swiper content -->
     <div class="module-board">
-      <div class="module-board__inner">
+      <div class="module-board__inner" :style="`transform: translateX(-${tabTransformWidth}px);`">
         <div class="module-board__card">
-          <div class="module-board__content">
-            <h3 class="tencent-title">开放</h3>
-            <div class="line"></div>
-            <h3 class="title">开源开放，持续迭代</h3>
-            <p class="desc">采用 MIT 许可协议，始终保持开放的心态，期待各方一起共建开源生态。</p>
-          </div>
-
           <div class="module-board__detail">
             <div class="code-board">
-              <t-radio-group class="code-tab" variant="default-filled" v-model="codeFramework">
+              <t-radio-group class="code-tab" variant="default-filled" size="large" v-model="codeFramework">
                 <t-radio-button value="vue">vue</t-radio-button>
                 <t-radio-button value="vue-next">vue-next</t-radio-button>
                 <t-radio-button value="react">react</t-radio-button>
@@ -257,16 +268,11 @@
               </li>
             </ul>
           </div>
+          <h3 class="title">开源开放，持续迭代</h3>
+          <p class="desc">采用 MIT 许可协议，始终保持开放的心态，期待各方一起共建开源生态。</p>
         </div>
 
         <div class="module-board__card">
-          <div class="module-board__content">
-            <h3 class="tencent-title">普适</h3>
-            <div class="line"></div>
-            <h3 class="title">包容多元，灵活易用</h3>
-            <p class="desc">保持设计敏锐感，在繁杂的业务中寻找共性，提供通用的设计解决方案。</p>
-          </div>
-
           <div class="module-board__detail">
             <div class="component-board">
               <div class="component-board-item">
@@ -404,46 +410,42 @@
               </li>
             </ul>
           </div>
+          <h3 class="title">包容多元，灵活易用</h3>
+          <p class="desc">保持设计敏锐感，在繁杂的业务中寻找共性，提供通用的设计解决方案。</p>
         </div>
-      </div>
-    </div>
+        <div class="module-board__card module-contributor">
+          <div class="module-contributor__top">
+            <div class="module-contributor__avatars">
+              <avatar
+                ref="topAvatars"
+                v-for="(item, index) in topContributors"
+                :key="index + 'top'"
+                :href="item | githubUrl"
+                :src="item | githubAvatar"
+              />
+            </div>
+          </div>
 
-    <div class="module-contributor">
-      <div class="module-contributor__top">
-        <div class="module-board__content">
-          <h3 class="tencent-title">共建共享</h3>
-          <div class="line"></div>
-          <h3 class="title">汇集来自 60+ 团队的 270+ 位贡献者</h3>
+          <div class="module-contributor__center">
+            <component-list :themeMode="themeMode" />
+          </div>
+
+          <div class="module-contributor__bottom">
+            <div class="module-contributor__avatars">
+              <avatar
+                ref="bottomAvatars"
+                v-for="(item, index) in bottomContributors"
+                :key="index + 'bottom'"
+                :href="item | githubUrl"
+                :src="item | githubAvatar"
+              />
+            </div>
+          </div>
+          <h3 class="title">汇集来自社区内网 400+ 位贡献者</h3>
           <p class="desc">
             TDesign
             的诞生和发展都受益于开源，在创建之初就按照开源协作的平等、公开、开放的原则运行，通过内部开源的形式将腾讯内部各大优秀和成熟的组件库集合一起共建共享。
           </p>
-        </div>
-
-        <div class="module-contributor__avatars">
-          <avatar
-            ref="topAvatars"
-            v-for="(item, index) in topContributors"
-            :key="index + 'top'"
-            :href="item | githubUrl"
-            :src="item | githubAvatar"
-          />
-        </div>
-      </div>
-
-      <div class="module-contributor__center">
-        <component-list :themeMode="themeMode" />
-      </div>
-
-      <div class="module-contributor__bottom">
-        <div class="module-contributor__avatars">
-          <avatar
-            ref="bottomAvatars"
-            v-for="(item, index) in bottomContributors"
-            :key="index + 'bottom'"
-            :href="item | githubUrl"
-            :src="item | githubAvatar"
-          />
         </div>
       </div>
     </div>
@@ -453,26 +455,42 @@
         <div class="image-rope"></div>
 
         <div class="content">
-          <h3 class="module-title">低成本孵化</h3>
+          <h3 class="module-title">行行可用，企业首选</h3>
           <h3 class="module-title">
-            <span class="tag">
-              500
-              <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <p class="tag">
+              1580
+              <!-- <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M17.4999 28.0001L17.5002 9.03572L23.9394 15.4749L24.2929 15.8284L24.6465 15.4749L26.0607 14.0606L26.4142 13.7071L26.0607 13.3535L16.7781 4.07096L16.4246 4.42452L16.7781 4.07096C16.3485 3.64139 15.6521 3.64138 15.2225 4.07096L15.576 4.42452L15.2225 4.07096L5.9399 13.3535L5.58635 13.7071L5.9399 14.0606L7.35412 15.4749L7.70767 15.8284L8.06122 15.4749L14.5002 9.03585L14.4999 28L14.4999 28.5L14.9999 28.5L16.9999 28.5001L17.4999 28.5001L17.4999 28.0001Z"
                   fill="currentColor"
                   stroke="currentColor"
                 />
-              </svg>
-            </span>
-            不同垂直领域业务
+              </svg> -->
+            </p>
           </h3>
+          <p>不同行业产品已使用</p>
           <p class="module-description">
-            TDesign
-            为产品体验设计的各个环节提供解决方案，做好连接的角色，赋能更多的行业领域，助力提升产品体验，有效提升设计研发效能。
+            从消费产品到金融服务，从B端到C端产品，从大品牌到个人开发者，TDesign都能充分满足低成本，高效有品质感的前端设计和开发工作，助力提升产品体验，有效提升设计研发效能
           </p>
+          <div class="module-brand-wall">
+            <t-space break-line>
+              <div class="brand-content" v-for="({ title, logo }, index) in brandList" :key="index">
+                <t-popup show-arrow :content="title">
+                  <img :src="logo" />
+                </t-popup>
+              </div>
+            </t-space>
+          </div>
         </div>
       </div>
+    </div>
+    <div class="module-setup">
+      <img class="tdesign-flow" src="./assets/tdesign-flow.png" />
+      <p>与TDesign, 共生长</p>
+      <p>
+        不止腾讯生态，更有质感，更稳定，更持续的TDesign助力更多行业和开发者，提升产品体验，提高设计研发效能，用TDesign，更低成本，探索更多可能～
+      </p>
+      <t-button>开始使用</t-button>
     </div>
 
     <td-backtop />
@@ -501,7 +519,9 @@ import qqLogo from './assets/qq-logo.svg';
 
 import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, xdWebUrl } from '@consts';
 
-// const isIntranet = location.host.includes('oa.com');
+const brandUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/brand/list';
+
+// const isIntranet = location.host.includes('woa.com');
 
 export default {
   name: 'site-home',
@@ -533,6 +553,9 @@ export default {
   data() {
     return {
       contributorCount: 8,
+      currentTab: 0,
+      brandList: [],
+      tabTransformWidth: 0,
       contributors: contributors.slice(),
       topContributors: [],
       bottomContributors: [],
@@ -599,14 +622,12 @@ export default {
           { type: 'bash', code: 'npm i tdesign-vue' },
           { type: 'javascript', code: "import Vue from 'vue';" },
           { type: 'javascript', code: "import TDesign from 'tdesign-vue';" },
-          { type: 'javascript', code: "import 'tdesign-vue/es/style/index.css';" },
           { type: 'javascript', code: 'Vue.use(TDesign);' },
         ],
         'vue-next': [
           { type: 'bash', code: 'npm i tdesign-vue-next' },
           { type: 'javascript', code: "import { createApp } from 'vue';" },
           { type: 'javascript', code: "import TDesign from 'tdesign-vue-next';" },
-          { type: 'javascript', code: "import 'tdesign-vue-next/es/style/index.css';" },
           { type: 'javascript', code: 'createApp(App).use(TDesign);' },
         ],
         react: [
@@ -707,6 +728,11 @@ export default {
   },
 
   watch: {
+    currentTab: {
+      handler(tab) {
+        this.tabTransformWidth = tab * this.windowWidth;
+      },
+    },
     codeFramework: {
       immediate: true,
       handler() {
@@ -737,7 +763,7 @@ export default {
   mounted() {
     this.watchHtmlMode();
     this.changeContributors();
-
+    this.getBrandList();
     window.addEventListener('resize', this.handleResize);
   },
 
@@ -749,6 +775,13 @@ export default {
   },
 
   methods: {
+    getBrandList() {
+      fetch(brandUrl).then((data) => {
+        data.json().then((list) => {
+          this.brandList = list;
+        });
+      });
+    },
     handleIntroClick(item) {
       if (!item.status) return;
       window.open(item.href, '_blank');
@@ -769,7 +802,7 @@ export default {
         }
 
         setTimeout(() => {
-          if (this.$refs.topAvatars[r1].$el) {
+          if (this.$refs.topAvatars[r1]?.$el) {
             this.$refs.topAvatars[r1].$el.classList.remove('active');
             this.$refs.bottomAvatars[r2].$el.classList.remove('active');
           }

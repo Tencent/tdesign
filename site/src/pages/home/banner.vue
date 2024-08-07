@@ -2,22 +2,40 @@
   <div class="banner-wrap">
     <div class="banner-img-wrap">
       <div v-show="showCanvas">
-        <div :class="{filtered: !imageLoaded}" class="banner-bg-wrapper __light__">
+        <div :class="{ filtered: !imageLoaded }" class="banner-bg-wrapper __light__">
           <img style="z-index: 10" :class="{ hide: imageLoaded }" src="/home/compressed-banner.png" />
 
-          <img style="z-index: 5" :class="{ hide: !imageLoaded }" src="https://tdesign.gtimg.com/site/images/breathe-top.png" />
-          <img style="z-index: 5" :class="{ hide: !imageLoaded }" class="breathe" src="https://tdesign.gtimg.com/site/images/breathe-bottom.png" />
+          <img
+            style="z-index: 5"
+            :class="{ hide: !imageLoaded }"
+            src="https://tdesign.gtimg.com/site/images/breathe-top.png"
+          />
+          <img
+            style="z-index: 5"
+            :class="{ hide: !imageLoaded }"
+            class="breathe"
+            src="https://tdesign.gtimg.com/site/images/breathe-bottom.png"
+          />
           <canvas class="banner-canvas" ref="canvasLight"></canvas>
           <span class="banner-trigger1 light"></span>
           <!-- <span class="banner-trigger2 light"></span> -->
           <span class="banner-trigger3 light"></span>
           <span class="banner-trigger4 light"></span>
         </div>
-        <div :class="{filtered: !imageLoaded}" class="banner-bg-wrapper __dark__">
+        <div :class="{ filtered: !imageLoaded }" class="banner-bg-wrapper __dark__">
           <img style="z-index: 10" :class="{ hide: imageLoaded }" src="/home/compressed-banner-dark.png" />
 
-          <img style="z-index: 5" :class="{ hide: !imageLoaded }" src="https://tdesign.gtimg.com/site/images/breathe-top-dark.png" />
-          <img style="z-index: 5" :class="{ hide: !imageLoaded }" class="breathe" src="https://tdesign.gtimg.com/site/images/breathe-bottom-dark.png" />
+          <img
+            style="z-index: 5"
+            :class="{ hide: !imageLoaded }"
+            src="https://tdesign.gtimg.com/site/images/breathe-top-dark.png"
+          />
+          <img
+            style="z-index: 5"
+            :class="{ hide: !imageLoaded }"
+            class="breathe"
+            src="https://tdesign.gtimg.com/site/images/breathe-bottom-dark.png"
+          />
           <canvas class="banner-canvas" ref="canvasDark"></canvas>
           <span class="banner-trigger1 dark"></span>
           <!-- <span class="banner-trigger2 dark"></span> -->
@@ -34,100 +52,104 @@
 </template>
 
 <script>
-import Canvas3d from 'canvas-3d'
-import modelData from './assets/banner.glb'
-import hdrData from './assets/banner.hdr'
-import modelDataDark from './assets/banner-dark.glb'
-import hdrDataDark from './assets/banner-dark.hdr'
-import * as THREE from 'three'
+import Canvas3d from 'canvas-3d';
+import modelData from './assets/banner.glb';
+import hdrData from './assets/banner.hdr';
+import modelDataDark from './assets/banner-dark.glb';
+import hdrDataDark from './assets/banner-dark.hdr';
+import * as THREE from 'three';
 // import Stats from './stats.module';
 // const stats = new Stats();
-import { CDN_BASE } from '@consts'
+import { CDN_BASE } from '@consts';
 
-const WIDTH = 1056
-const HEIGHT = 640
-const SCALE = 15.1
+const WIDTH = 1056;
+const HEIGHT = 640;
+const SCALE = 15.1;
 
 export default {
   props: {
     themeMode: {
       type: String,
-      default: 'light'
-    }
+      default: 'light',
+    },
   },
 
-  data () {
+  data() {
     return {
       showCanvas: true,
-      imageLoaded: false
-    }
+      imageLoaded: false,
+    };
   },
 
   watch: {
-    themeMode () {
-      this.initWebgl()
-    }
+    themeMode() {
+      this.initWebgl();
+    },
   },
 
-  mounted () {
+  mounted() {
     // document.body.appendChild(stats.dom);
-    this.initWebgl()
+    this.initWebgl();
 
-    this.reploadImage()
+    this.reploadImage();
   },
 
-  beforeDestroy () {
+  beforeDestroy() {
     // 离开当前页面时，可以调用该方法取消掉requestAnimationFrame
-    this.canvas3dLight && this.canvas3dLight.cancelAnimationFrame()
-    this.canvas3dDark && this.canvas3dDark.cancelAnimationFrame()
+    this.canvas3dLight && this.canvas3dLight.cancelAnimationFrame();
+    this.canvas3dDark && this.canvas3dDark.cancelAnimationFrame();
   },
 
   methods: {
-    reploadImage () {
+    reploadImage() {
       const preloadImages = [
         `${CDN_BASE}/site/images/breathe-top.png`,
         `${CDN_BASE}/site/images/breathe-bottom.png`,
         `${CDN_BASE}/site/images/breathe-top-dark.png`,
-        `${CDN_BASE}/site/images/breathe-bottom-dark.png`
-      ]
-      console.time('preload')
-      Promise.all(preloadImages.map(url => {
-        return new Promise(resolve => {
-          const image = new Image()
-          image.src = url
-          image.onload = resolve
+        `${CDN_BASE}/site/images/breathe-bottom-dark.png`,
+      ];
+      console.time('preload');
+      Promise.all(
+        preloadImages.map((url) => {
+          return new Promise((resolve) => {
+            const image = new Image();
+            image.src = url;
+            image.onload = resolve;
+          });
+        }),
+      )
+        .then(() => {
+          console.timeEnd('preload');
+          this.imageLoaded = true;
         })
-      })).then(() => {
-        console.timeEnd('preload')
-        this.imageLoaded = true
-      }).catch(() => {
-        this.imageLoaded = true
-      })
+        .catch(() => {
+          this.imageLoaded = true;
+        });
     },
-    initWebgl () {
+    initWebgl() {
       // 移动端不渲染 webgl
       if (/(iPhone|iPod|iOS|Android)/i.test(navigator.userAgent)) {
-        this.showCanvas = false
-        return
+        this.showCanvas = false;
+        return;
       }
-      const { themeMode, renderWebgl } = this
+      const { themeMode, renderWebgl } = this;
       if (themeMode === 'dark' || document.documentElement.getAttribute('theme-mode') === 'dark') {
-        this.canvas3dLight && this.canvas3dLight.cancelAnimationFrame()
-        this.canvas3dDark ? this.canvas3dDark.animate() : (this.canvas3dDark = renderWebgl('dark'))
+        this.canvas3dLight && this.canvas3dLight.cancelAnimationFrame();
+        this.canvas3dDark ? this.canvas3dDark.animate() : (this.canvas3dDark = renderWebgl('dark'));
       } else {
-        this.canvas3dDark && this.canvas3dDark.cancelAnimationFrame()
-        this.canvas3dLight ? this.canvas3dLight.animate() : (this.canvas3dLight = renderWebgl('light'))
+        this.canvas3dDark && this.canvas3dDark.cancelAnimationFrame();
+        this.canvas3dLight ? this.canvas3dLight.animate() : (this.canvas3dLight = renderWebgl('light'));
       }
     },
-    renderWebgl (theme = 'light') {
-      const { canvasLight, canvasDark } = this.$refs
+    renderWebgl(theme = 'light') {
+      const { canvasLight, canvasDark } = this.$refs;
 
       const canvas3d = new Canvas3d({
         canvasData: {
           dom: theme === 'light' ? canvasLight : canvasDark,
           width: WIDTH,
           height: HEIGHT,
-          pixelRatio: Math.min(window.devicePixelRatio, 1.5)
+          pixelRatio: Math.min(window.devicePixelRatio, 1.5),
         },
         cameraData: {
           type: 'orthographic',
@@ -135,7 +157,7 @@ export default {
           right: WIDTH / SCALE,
           top: HEIGHT / SCALE,
           bottom: -HEIGHT / SCALE,
-          position: [0, 0, 40]
+          position: [0, 0, 40],
         },
         modelData: {
           url: theme === 'light' ? modelData : modelDataDark,
@@ -146,7 +168,7 @@ export default {
               color: '#8792a6',
               emissive: '#d1d1d1',
               opacity: 1,
-              envMapIntensity: 0.55
+              envMapIntensity: 0.55,
             },
             soft_mid_2: {
               roughness: 0.2,
@@ -154,7 +176,7 @@ export default {
               color: '#91a0ba',
               emissive: '#d1d1d1',
               opacity: 1,
-              envMapIntensity: 0.55
+              envMapIntensity: 0.55,
             },
             soft_light: {
               roughness: 0,
@@ -162,7 +184,7 @@ export default {
               color: '#8792a6',
               emissive: '#cececf',
               opacity: 1,
-              envMapIntensity: 0.71
+              envMapIntensity: 0.71,
             },
             soft_light_2: {
               roughness: 0,
@@ -170,16 +192,16 @@ export default {
               color: '#8792a6',
               emissive: '#cececf',
               opacity: 1,
-              envMapIntensity: 0.79
-            }
-          }
+              envMapIntensity: 0.79,
+            },
+          },
         },
         animationData: {
-          isAnimated: false
+          isAnimated: false,
         },
         hdrData: {
           url: theme === 'light' ? hdrData : hdrDataDark,
-          rotation: [0, 0, 0]
+          rotation: [0, 0, 0],
         },
         // 模型交互
         sceneInteractiveData: {
@@ -189,65 +211,65 @@ export default {
             maxVertical: (0 * Math.PI) / 2,
             minVertical: (0 * -Math.PI) / 2,
             maxHorizon: Math.PI / 5,
-            minHorizon: -Math.PI / 5
+            minHorizon: -Math.PI / 5,
           },
           enterHandle: (e) => {},
           moveHandle: (e) => {},
-          outHandle: (e) => {}
-        }
+          outHandle: (e) => {},
+        },
         // requestAnimationHandler() {
         //   stats.update();
         // },
-      })
+      });
 
       // 可以通过 canvas3d.shouldRender 的返回值决定是否渲染 3d 模型，移动端也会判定为不渲染
       if (canvas3d.shouldRender()) {
-        this.showCanvas = true
+        this.showCanvas = true;
         canvas3d
           .loadAssert()
           .then(() => {
             // 在模型渲染前做一些个性化处理
             // 比如： 在渲染前对模型进行缩放、旋转、位移等操作
-            canvas3d.model.rotation.x = 0.40661688
-            canvas3d.model.rotation.y = 0.80113866
-            canvas3d.model.rotation.z = 0
-            canvas3d.model.position.x = 0.3
-            canvas3d.model.position.y = -2.1
-            canvas3d.model.position.z = 0
+            canvas3d.model.rotation.x = 0.40661688;
+            canvas3d.model.rotation.y = 0.80113866;
+            canvas3d.model.rotation.z = 0;
+            canvas3d.model.position.x = 0.3;
+            canvas3d.model.position.y = -2.1;
+            canvas3d.model.position.z = 0;
           })
           .then(() => {
-            canvas3d.addMesh()
+            canvas3d.addMesh();
             // 动画
-            const animationsOriginal = canvas3d.gltf.animations
-            canvas3d.mixer = new THREE.AnimationMixer(canvas3d.scene)
+            const animationsOriginal = canvas3d.gltf.animations;
+            canvas3d.mixer = new THREE.AnimationMixer(canvas3d.scene);
             // 中间树的第一段动画
-            const treeTrigger = document.querySelector(`.banner-trigger4.${theme}`)
+            const treeTrigger = document.querySelector(`.banner-trigger4.${theme}`);
             const treeAnimationStage1 = animationsOriginal.filter((item) => {
-              return item.name.indexOf('stage1') > -1
-            })
-            const treeActionStage1 = []
+              return item.name.indexOf('stage1') > -1;
+            });
+            const treeActionStage1 = [];
             treeAnimationStage1.forEach((item) => {
-              const stage1Action = canvas3d.mixer.clipAction(item)
-              stage1Action.loop = THREE.LoopOnce
-              treeActionStage1.push(stage1Action)
-              stage1Action.play()
-            })
+              const stage1Action = canvas3d.mixer.clipAction(item);
+              stage1Action.loop = THREE.LoopOnce;
+              treeActionStage1.push(stage1Action);
+              stage1Action.play();
+            });
 
             // 中间树的第二段动画
             const treeAnimationStage2 = animationsOriginal.filter((item) => {
-              return item.name.indexOf('stage2') > -1
-            })
-            const treeActionStage2 = []
+              return item.name.indexOf('stage2') > -1;
+            });
+            const treeActionStage2 = [];
             treeAnimationStage2.forEach((item) => {
-              const stage2Action = canvas3d.mixer.clipAction(item)
-              treeActionStage2.push(stage2Action)
-            })
+              const stage2Action = canvas3d.mixer.clipAction(item);
+              treeActionStage2.push(stage2Action);
+            });
 
             canvas3d.mixer.addEventListener('finished', (e) => {
               treeActionStage2.forEach((item) => {
-                item.play()
-              })
-            })
+                item.play();
+              });
+            });
 
             // 右上角圈圈的动画
             // let ringTrigger = document.querySelector(`.banner-trigger2.${theme}`);
@@ -265,75 +287,75 @@ export default {
             // };
 
             // 左下角球的动画 sphere
-            const sphereTrigger = document.querySelector(`.banner-trigger1.${theme}`)
+            const sphereTrigger = document.querySelector(`.banner-trigger1.${theme}`);
             const sphereAnimation = animationsOriginal.filter((item) => {
-              return item.name === 'spheric'
-            })
+              return item.name === 'spheric';
+            });
             sphereTrigger.onmouseover = () => {
-              if (canvas3d.sphereAnimate) return
+              if (canvas3d.sphereAnimate) return;
               sphereAnimation.forEach((item) => {
-                const action = canvas3d.mixer.clipAction(item)
-                action.play()
-              })
-              canvas3d.sphereAnimate = true
-            }
+                const action = canvas3d.mixer.clipAction(item);
+                action.play();
+              });
+              canvas3d.sphereAnimate = true;
+            };
             // 右下角立方体的动画
-            const cubeTrigger = document.querySelector(`.banner-trigger3.${theme}`)
+            const cubeTrigger = document.querySelector(`.banner-trigger3.${theme}`);
             const cubeAnimation = animationsOriginal.filter((item) => {
-              return item.name === 'Cube2'
-            })
+              return item.name === 'Cube2';
+            });
             cubeTrigger.onmouseover = () => {
-              if (canvas3d.cubeAnimate) return
+              if (canvas3d.cubeAnimate) return;
               cubeAnimation.forEach((item) => {
-                const action = canvas3d.mixer.clipAction(item)
-                action.play()
-              })
-              canvas3d.cubeAnimate = true
-            }
+                const action = canvas3d.mixer.clipAction(item);
+                action.play();
+              });
+              canvas3d.cubeAnimate = true;
+            };
 
             // 默认其他动画
             const defaultAnimation = animationsOriginal.filter((item) => {
-              return item.name.indexOf('default') > -1
-            })
-            const defaultAction = []
+              return item.name.indexOf('default') > -1;
+            });
+            const defaultAction = [];
             defaultAnimation.forEach((item) => {
-              const action = canvas3d.mixer.clipAction(item)
-              defaultAction.push(action)
-              action.play()
-            })
+              const action = canvas3d.mixer.clipAction(item);
+              defaultAction.push(action);
+              action.play();
+            });
 
             // hover 时，中间树的动画加速
             treeTrigger.onmouseover = () => {
               treeActionStage1.forEach((item) => {
-                item.timeScale = 2.2
-              })
+                item.timeScale = 2.2;
+              });
               treeActionStage2.forEach((item) => {
-                item.timeScale = 2.2
-              })
+                item.timeScale = 2.2;
+              });
               defaultAction.forEach((item) => {
-                item.timeScale = 1.1
-              })
-            }
+                item.timeScale = 1.1;
+              });
+            };
             treeTrigger.onmouseout = () => {
               treeActionStage1.forEach((item) => {
-                item.timeScale = 1
-              })
+                item.timeScale = 1;
+              });
               treeActionStage2.forEach((item) => {
-                item.timeScale = 1
-              })
+                item.timeScale = 1;
+              });
               defaultAction.forEach((item) => {
-                item.timeScale = 1
-              })
-            }
-          })
+                item.timeScale = 1;
+              });
+            };
+          });
       } else {
-        console.log('当前环境不适宜渲染3d')
-        this.showCanvas = false
+        console.log('当前环境不适宜渲染3d');
+        this.showCanvas = false;
       }
-      return canvas3d
-    }
-  }
-}
+      return canvas3d;
+    },
+  },
+};
 </script>
 
 <style lang="less">
@@ -348,7 +370,7 @@ export default {
     opacity: 1;
   }
   100% {
-    opacity: .1;
+    opacity: 0.1;
   }
 }
 @-webkit-keyframes breathe {
@@ -356,7 +378,7 @@ export default {
     opacity: 1;
   }
   100% {
-    opacity: .1;
+    opacity: 0.1;
   }
 }
 
@@ -399,8 +421,8 @@ export default {
       transform: translate3d(-50%, 0, 0);
       -webkit-transform: translate3d(-50%, 0, 0);
       pointer-events: none;
-      transition: opacity .2s linear;
-      -webkit-transition: opacity .2s linear;
+      transition: opacity 0.2s linear;
+      -webkit-transition: opacity 0.2s linear;
       will-change: opacity;
 
       &.hide {
@@ -484,7 +506,6 @@ export default {
     z-index: 100;
     border-radius: 82px;
   }
-
 }
 @media screen and (max-width: 960px) {
   .banner-wrap .banner-bg {
