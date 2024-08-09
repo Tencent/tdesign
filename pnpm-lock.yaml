@@ -184,10 +184,10 @@ importers:
         version: 0.1.4(vue@2.7.14)
       tdesign-site-components:
         specifier: ^0.13.1
-        version: link:../packages/components
+        version: 0.13.21
       tdesign-vue:
-        specifier: 1.4.6-naruto
-        version: 1.4.6-naruto(vue@2.7.14)
+        specifier: 1.9.8-naruto
+        version: 1.9.8-naruto(vue@2.7.14)
       three:
         specifier: 0.127.0
         version: 0.127.0
@@ -6050,6 +6050,10 @@ packages:
   /dateformat@3.0.3:
     resolution: {integrity: sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==}
     dev: true
+
+  /dayjs@1.11.10:
+    resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==}
+    dev: false
 
   /dayjs@1.11.9:
     resolution: {integrity: sha512-QvzAURSbQ0pKdIye2txOzNaHmxtUBXerpY0FJsFXUMKbIZeFm5ht1LS/jFsrncjnmtv8HsG0W2g6c0zUjZWmpA==}
@@ -13732,6 +13736,27 @@ packages:
       vue: 2.7.14
     dev: false
 
+  /tdesign-icons-vue@0.2.4(vue@2.7.14):
+    resolution: {integrity: sha512-rgBVBW/Tes+ZFXtmkN0crmQuIszLeL+MqkmDme41dxwObxjFQ+SBkPWn8m+IUrTZ9CX/uNGjFG+QTaC8qcm90g==}
+    peerDependencies:
+      vue: ^2.6.12
+    dependencies:
+      '@babel/runtime': 7.22.10
+      classnames: 2.3.2
+      vue: 2.7.14
+    dev: false
+
+  /tdesign-site-components@0.13.21:
+    resolution: {integrity: sha512-by7Ku7tlvtdqk6fIHrrOgZpsx921Hr8uZNiouLFokEI+Qd7+P480SPR+7zM/3pk28DVZ4kSsZkESeLee6gsSCw==}
+    dependencies:
+      '@popperjs/core': 2.11.5
+      hybrids: 8.2.2
+      nprogress: 0.2.0
+      prismjs: 1.29.0
+      qrcode: 1.5.1
+      tdesign-icons-svg: 0.0.1
+    dev: false
+
   /tdesign-vue@1.4.6-naruto(vue@2.7.14):
     resolution: {integrity: sha512-ubv0J0jNwJFCEfhqlpRb8avX0uoFyQSPCkbhrutpLXBcfENMjJZidTuOHVROLGBXaozHkh5sD6qipg8SG+maDQ==}
     peerDependencies:
@@ -13752,6 +13777,31 @@ packages:
       raf: 3.4.1
       sortablejs: 1.15.0
       tdesign-icons-vue: 0.1.11(vue@2.7.14)
+      tinycolor2: 1.6.0
+      validator: 13.11.0
+      vue: 2.7.14
+    dev: false
+
+  /tdesign-vue@1.9.8-naruto(vue@2.7.14):
+    resolution: {integrity: sha512-78ps9B6vNtcL/JU6OQXmFgk5SGBlOtkWO+nyxxCcQlxKDi1vSj3jxLDXvi2R8Eq6ELwa2XIAiQU8m5lX9AAPnA==}
+    peerDependencies:
+      vue: ~2.7.14
+    dependencies:
+      '@babel/runtime': 7.22.10
+      '@popperjs/core': 2.11.5
+      '@types/clipboard': 2.0.7
+      '@types/lodash': 4.14.182
+      '@types/raf': 3.4.0
+      '@types/sortablejs': 1.15.1
+      '@types/tinycolor2': 1.4.3
+      '@types/validator': 13.11.1
+      clipboard: 2.0.11
+      dayjs: 1.11.10
+      lodash: 4.17.21
+      mitt: 3.0.1
+      raf: 3.4.1
+      sortablejs: 1.15.0
+      tdesign-icons-vue: 0.2.4(vue@2.7.14)
       tinycolor2: 1.6.0
       validator: 13.11.0
       vue: 2.7.14
