@@ -4,7 +4,6 @@
       <div v-show="showCanvas">
         <div :class="{ filtered: !imageLoaded }" class="banner-bg-wrapper __light__">
           <img style="z-index: 10" :class="{ hide: imageLoaded }" src="/home/compressed-banner.png" />
-
           <img
             style="z-index: 5"
             :class="{ hide: !imageLoaded }"
@@ -18,13 +17,11 @@
           />
           <canvas class="banner-canvas" ref="canvasLight"></canvas>
           <span class="banner-trigger1 light"></span>
-          <!-- <span class="banner-trigger2 light"></span> -->
           <span class="banner-trigger3 light"></span>
           <span class="banner-trigger4 light"></span>
         </div>
         <div :class="{ filtered: !imageLoaded }" class="banner-bg-wrapper __dark__">
           <img style="z-index: 10" :class="{ hide: imageLoaded }" src="/home/compressed-banner-dark.png" />
-
           <img
             style="z-index: 5"
             :class="{ hide: !imageLoaded }"
