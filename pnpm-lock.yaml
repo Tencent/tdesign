@@ -183,8 +183,8 @@ importers:
         specifier: ^0.1.4
         version: 0.1.4(vue@2.7.14)
       tdesign-site-components:
-        specifier: ^0.13.1
-        version: 0.13.21
+        specifier: ^0.15.4
+        version: link:../packages/components
       tdesign-vue:
         specifier: 1.9.8-naruto
         version: 1.9.8-naruto(vue@2.7.14)
@@ -13744,17 +13744,6 @@ packages:
       '@babel/runtime': 7.22.10
       classnames: 2.3.2
       vue: 2.7.14
-    dev: false
-
-  /tdesign-site-components@0.13.21:
-    resolution: {integrity: sha512-by7Ku7tlvtdqk6fIHrrOgZpsx921Hr8uZNiouLFokEI+Qd7+P480SPR+7zM/3pk28DVZ4kSsZkESeLee6gsSCw==}
-    dependencies:
-      '@popperjs/core': 2.11.5
-      hybrids: 8.2.2
-      nprogress: 0.2.0
-      prismjs: 1.29.0
-      qrcode: 1.5.1
-      tdesign-icons-svg: 0.0.1
     dev: false
 
   /tdesign-vue@1.4.6-naruto(vue@2.7.14):
