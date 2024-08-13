@@ -9,7 +9,7 @@
             <p class="sub-title">为设计师 & 开发者，打造工作美学</p>
           </h2>
         </div>
-        <t-popup trigger="click" placement="left">
+        <t-popup trigger="click" placement="left" overlay-inner-class-name="wechat-qrcode" :z-index="100">
           <div class="banner-booking">
             <img src="./assets/tdesign-profile.png" />
             <div class="banner-booking__info">{{ windowWidth > 960 ? '点击关注 TDesign 公众号' : '关注公众号' }}</div>
@@ -839,7 +839,6 @@ export default {
 
   methods: {
     handleClickNews(url) {
-      console.log(url, 'rul');
       if (url) window.open(url, '_blank');
     },
     getNews() {
@@ -851,159 +850,7 @@ export default {
     },
     getBrandList() {
       fetch(brandUrl).then((data) => {
-        data.json().then(() => {
-          const list = [
-            {
-              title: '微信支付',
-              logo: 'https://tdesign.gtimg.com/site/brand/wechat-pay.png',
-              width: '212px',
-            },
-            {
-              title: 'UNIMIS-MOM',
-              logo: 'https://tdesign.gtimg.com/site/brand/UNIMIS-MOM.png',
-              width: '96px',
-            },
-            {
-              title: 'codesign',
-              logo: 'https://tdesign.gtimg.com/site/brand/codesign.png',
-              width: '212px',
-            },
-            {
-              title: '未来运动场',
-              logo: 'https://tdesign.gtimg.com/site/brand/future-playground.png',
-              width: '96px',
-            },
-            {
-              title: '腾讯地图',
-              logo: 'https://tdesign.gtimg.com/site/brand/tencent-map.png',
-              width: '212px',
-            },
-            {
-              title: '腾讯混元',
-              logo: 'https://tdesign.gtimg.com/site/brand/hunyuan.png',
-              width: '96px',
-            },
-            {
-              title: 'iwiki',
-              logo: 'https://tdesign.gtimg.com/site/brand/iwiki.png',
-              width: '188px',
-            },
-            {
-              title: '可奕换电',
-              logo: 'https://tdesign.gtimg.com/site/brand/keyi.png',
-              width: '96px',
-            },
-            {
-              title: '智研',
-              logo: 'https://tdesign.gtimg.com/site/brand/zhiyan.png',
-              width: '96px',
-            },
-            {
-              title: '基础设施数据总线',
-              logo: 'https://tdesign.gtimg.com/site/brand/cmdb.png',
-              width: '184px',
-            },
-            {
-              title: '内测之家',
-              logo: 'https://tdesign.gtimg.com/site/brand/neice.png',
-              width: '96px',
-            },
-            {
-              title: '国家税务总局',
-              logo: 'https://tdesign.gtimg.com/site/brand/swzj.png',
-              width: '364px',
-            },
-            {
-              title: '沃尔玛',
-              logo: 'https://tdesign.gtimg.com/site/brand/walmart.png',
-              width: '96px',
-            },
-            {
-              title: '国泰君安',
-              logo: 'https://tdesign.gtimg.com/site/brand/gtja.png',
-              width: '308px',
-            },
-            {
-              title: '李宁',
-              logo: 'https://tdesign.gtimg.com/site/brand/lining.png',
-              width: '96px',
-            },
-            {
-              title: '新华书店',
-              logo: 'https://tdesign.gtimg.com/site/brand/xinhua.png',
-              width: '96px',
-            },
-            {
-              title: '腾讯行政',
-              logo: 'https://tdesign.gtimg.com/site/brand/tencent-xz.png',
-              width: '216px',
-            },
-            {
-              title: '上海慈善基金会',
-              logo: 'https://tdesign.gtimg.com/site/brand/scf.png',
-              width: '96px',
-            },
-            {
-              title: '凯迪仕',
-              logo: 'https://tdesign.gtimg.com/site/brand/kds.png',
-              width: '255px',
-            },
-            {
-              title: '青燕和示',
-              logo: 'https://tdesign.gtimg.com/site/brand/qyhs.png',
-              width: '224px',
-            },
-            {
-              title: '生活温州',
-              logo: 'https://tdesign.gtimg.com/site/brand/wenzhou-life.png',
-              width: '96px',
-            },
-            {
-              title: '国久大数据',
-              logo: 'https://tdesign.gtimg.com/site/brand/guojiu.png',
-              width: '256px',
-            },
-            {
-              title: '腾讯游戏-心悦俱乐部',
-              logo: 'https://tdesign.gtimg.com/site/brand/xinyue.png',
-              width: '204px',
-            },
-            {
-              title: '储蓄题库',
-              logo: 'https://tdesign.gtimg.com/site/brand/cctk.png',
-              width: '96px',
-            },
-            {
-              title: 'HIFULL-创禾聚力开发',
-              logo: 'https://tdesign.gtimg.com/site/brand/hifull.png',
-              width: '204px',
-            },
-            {
-              title: '金相世界',
-              logo: 'https://tdesign.gtimg.com/site/brand/jinxiang.png',
-              width: '96px',
-            },
-            {
-              title: '腾讯视频',
-              logo: 'https://tdesign.gtimg.com/site/brand/qq-video.png',
-              width: '216px',
-            },
-            {
-              title: 'Argus 海外监控平台',
-              logo: 'https://tdesign.gtimg.com/site/brand/argus.png',
-              width: '212px',
-            },
-            {
-              title: '琳景储值助手',
-              logo: 'https://tdesign.gtimg.com/site/brand/linjing.png',
-              width: '96px',
-            },
-            {
-              title: '微信小游戏开发平台',
-              logo: 'https://tdesign.gtimg.com/site/brand/wechat-game.png',
-              width: '96px',
-            },
-          ];
+        data.json().then((list) => {
           this.brandList = list;
         });
       });

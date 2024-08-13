@@ -224,7 +224,7 @@
         transition: all 0.2s linear;
 
         .name {
-          font-size: 48px;
+          font-size: 64px;
           line-height: 64px;
           letter-spacing: -2px;
           white-space: nowrap;
@@ -234,7 +234,7 @@
           }
           .sub-title {
             font-size: 24px;
-            line-height: 32px;
+            line-height: 64px;
 
             @media screen and (max-width: 480px) {
               width: 200px;
@@ -563,7 +563,7 @@
     .desc {
       font-size: 20px;
       line-height: 28px;
-      margin: 16px 0 64px;
+      margin: 24px 0 0;
     }
   }
 
@@ -885,7 +885,7 @@
     }
 
     .module-description {
-      margin-top: 12px;
+      margin-top: 24px;
       font-size: 16px;
       line-height: 24px;
       max-width: 1000px;
@@ -974,7 +974,7 @@
     }
     .brand-content {
       height: 96px;
-      padding: 30px;
+      padding: 28px;
       box-sizing: border-box;
       border-radius: 6px;
       border: 1px solid transparent;
@@ -984,8 +984,7 @@
       align-items: center;
       justify-content: center;
       img {
-        max-height: 36px;
-        max-width: 100%;
+        transform: scale(0.25);
       }
     }
   }
@@ -1177,4 +1176,8 @@
       }
     }
   }
+}
+
+.wechat-qrcode {
+  display: flex;
 }
