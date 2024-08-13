@@ -1,18 +1,29 @@
 <template>
   <section class="tdesign-homepage">
     <banner :themeMode="themeMode" />
-
     <section class="main-page">
       <div class="banner-info">
         <div class="banner-info__left">
           <h2 class="name">
-            <span class="primary">TDesign</span>
-            <br />
-            <span class="sub-title">企业级设计体系</span>
+            <p class="primary">TDesign</p>
+            <p class="sub-title">为设计师 & 开发者，打造工作美学</p>
           </h2>
         </div>
+        <t-popup trigger="click" placement="left" overlay-inner-class-name="wechat-qrcode" :z-index="100">
+          <div class="banner-booking">
+            <img src="./assets/tdesign-profile.png" />
+            <div class="banner-booking__info">{{ windowWidth > 960 ? '点击关注 TDesign 公众号' : '关注公众号' }}</div>
+          </div>
+          <template #content><img width="100" src="https://tdesign.gtimg.com/site/wechat-account.png" /></template>
+        </t-popup>
       </div>
-
+      <div class="module-news">
+        <div v-for="(news, index) in newsList" :key="index" @click="() => handleClickNews(news.url)">
+          <t-card :title="news.title" :description="news.desc" :style="{ cursor: news.url ? 'pointer' : null }"
+            ><template #footer>{{ news.date }}</template>
+          </t-card>
+        </div>
+      </div>
       <div class="module-intro">
         <div class="item web">
           <div class="steps-image" @mouseenter="stepsStart($event, 0)" @mouseleave="stepsEnd($event, 0)"></div>
@@ -209,25 +220,39 @@
         </div>
       </div>
     </section>
-
+    <!-- swiper tabs -->
+    <div class="module-board module-board__tabs">
+      <div class="module-board__content" @click="currentTab = 0">
+        <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 0 }]">开放</h3>
+        <div class="line" v-if="currentTab === 0"></div>
+      </div>
+      <div class="module-board__content" @click="currentTab = 1">
+        <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 1 }]">创造</h3>
+        <div class="line" v-if="currentTab === 1"></div>
+      </div>
+      <div class="module-board__content" @click="currentTab = 2">
+        <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 2 }]">共建</h3>
+        <div class="line" v-if="currentTab === 2"></div>
+      </div>
+    </div>
+    <!-- swiper content -->
     <div class="module-board">
-      <div class="module-board__inner">
-        <div class="module-board__card">
-          <div class="module-board__content">
-            <h3 class="tencent-title">开放</h3>
-            <div class="line"></div>
-            <h3 class="title">开源开放，持续迭代</h3>
-            <p class="desc">采用 MIT 许可协议，始终保持开放的心态，期待各方一起共建开源生态。</p>
-          </div>
-
+      <div class="module-board__inner" :style="`transform: translateX(-${tabTransformWidth}px);`">
+        <div
+          :class="[
+            'module-board__card',
+            {
+              'module-board__card--active': currentTab === 0,
+            },
+          ]"
+        >
           <div class="module-board__detail">
             <div class="code-board">
-              <t-radio-group class="code-tab" variant="default-filled" v-model="codeFramework">
+              <t-radio-group class="code-tab" variant="default-filled" size="large" v-model="codeFramework">
                 <t-radio-button value="vue">vue</t-radio-button>
                 <t-radio-button value="vue-next">vue-next</t-radio-button>
                 <t-radio-button value="react">react</t-radio-button>
                 <t-radio-button value="miniprogram">mini-program</t-radio-button>
-                <!-- <t-radio-button value="vue-mobile">vue-mobile</t-radio-button> -->
               </t-radio-group>
 
               <ul class="code-list">
@@ -257,16 +282,20 @@
               </li>
             </ul>
           </div>
+          <div class="module-board__card-desc" v-if="currentTab === 0">
+            <h3 class="title">开源开放，持续迭代</h3>
+            <p class="desc">采用 MIT 许可协议，始终保持开放的心态，期待各方一起共建开源生态。</p>
+          </div>
         </div>
 
-        <div class="module-board__card">
-          <div class="module-board__content">
-            <h3 class="tencent-title">普适</h3>
-            <div class="line"></div>
-            <h3 class="title">包容多元，灵活易用</h3>
-            <p class="desc">保持设计敏锐感，在繁杂的业务中寻找共性，提供通用的设计解决方案。</p>
-          </div>
-
+        <div
+          :class="[
+            'module-board__card',
+            {
+              'module-board__card--active': currentTab === 1,
+            },
+          ]"
+        >
           <div class="module-board__detail">
             <div class="component-board">
               <div class="component-board-item">
@@ -404,46 +433,55 @@
               </li>
             </ul>
           </div>
+          <div class="module-board__card-desc" v-if="currentTab === 1">
+            <h3 class="title">包容多元，灵活易用</h3>
+            <p class="desc">保持设计敏锐感，在繁杂的业务中寻找共性，提供通用的设计解决方案。</p>
+          </div>
         </div>
-      </div>
-    </div>
+        <div
+          v-show="currentTab === 2"
+          :class="[
+            'module-board__card',
+            'module-contributor',
+            {
+              'module-board__card--active': currentTab === 2,
+            },
+          ]"
+        >
+          <div class="module-contributor__top">
+            <div class="module-contributor__avatars">
+              <avatar
+                ref="topAvatars"
+                v-for="(item, index) in topContributors"
+                :key="index + 'top'"
+                :href="item | githubUrl"
+                :src="item | githubAvatar"
+              />
+            </div>
+          </div>
 
-    <div class="module-contributor">
-      <div class="module-contributor__top">
-        <div class="module-board__content">
-          <h3 class="tencent-title">共建共享</h3>
-          <div class="line"></div>
-          <h3 class="title">汇集来自 60+ 团队的 270+ 位贡献者</h3>
-          <p class="desc">
-            TDesign
-            的诞生和发展都受益于开源，在创建之初就按照开源协作的平等、公开、开放的原则运行，通过内部开源的形式将腾讯内部各大优秀和成熟的组件库集合一起共建共享。
-          </p>
-        </div>
+          <div class="module-contributor__center">
+            <component-list :themeMode="themeMode" />
+          </div>
 
-        <div class="module-contributor__avatars">
-          <avatar
-            ref="topAvatars"
-            v-for="(item, index) in topContributors"
-            :key="index + 'top'"
-            :href="item | githubUrl"
-            :src="item | githubAvatar"
-          />
-        </div>
-      </div>
-
-      <div class="module-contributor__center">
-        <component-list :themeMode="themeMode" />
-      </div>
-
-      <div class="module-contributor__bottom">
-        <div class="module-contributor__avatars">
-          <avatar
-            ref="bottomAvatars"
-            v-for="(item, index) in bottomContributors"
-            :key="index + 'bottom'"
-            :href="item | githubUrl"
-            :src="item | githubAvatar"
-          />
+          <div class="module-contributor__bottom">
+            <div class="module-contributor__avatars">
+              <avatar
+                ref="bottomAvatars"
+                v-for="(item, index) in bottomContributors"
+                :key="index + 'bottom'"
+                :href="item | githubUrl"
+                :src="item | githubAvatar"
+              />
+            </div>
+          </div>
+          <div class="module-board__card-desc">
+            <h3 class="title">汇集来自社区内网 400+ 位贡献者</h3>
+            <p class="desc">
+              TDesign
+              的诞生和发展都受益于开源，在创建之初就按照开源协作的平等、公开、开放的原则运行，通过内部开源的形式将腾讯内部各大优秀和成熟的组件库集合一起共建共享。
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -453,26 +491,60 @@
         <div class="image-rope"></div>
 
         <div class="content">
-          <h3 class="module-title">低成本孵化</h3>
+          <h3 class="module-top-title">行行可用，企业首选</h3>
           <h3 class="module-title">
-            <span class="tag">
-              500
-              <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <p class="tag">
+              1580
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
-                  d="M17.4999 28.0001L17.5002 9.03572L23.9394 15.4749L24.2929 15.8284L24.6465 15.4749L26.0607 14.0606L26.4142 13.7071L26.0607 13.3535L16.7781 4.07096L16.4246 4.42452L16.7781 4.07096C16.3485 3.64139 15.6521 3.64138 15.2225 4.07096L15.576 4.42452L15.2225 4.07096L5.9399 13.3535L5.58635 13.7071L5.9399 14.0606L7.35412 15.4749L7.70767 15.8284L8.06122 15.4749L14.5002 9.03585L14.4999 28L14.4999 28.5L14.9999 28.5L16.9999 28.5001L17.4999 28.5001L17.4999 28.0001Z"
-                  fill="currentColor"
-                  stroke="currentColor"
+                  d="M21.7498 35.0002L21.7502 10.9929L30.0125 19.2552L30.366 19.6088L30.7196 19.2552L32.4873 17.4875L32.8409 17.1339L32.4873 16.7804L20.8841 5.17715L20.5306 5.53071L20.8841 5.17715C20.396 4.689 19.6045 4.689 19.1164 5.17715L19.4674 5.52823L19.1164 5.17715L7.51315 16.7804L7.15959 17.1339L7.51315 17.4875L9.28091 19.2552L9.63447 19.6088L9.98802 19.2552L18.2502 10.9931L18.2498 35.0001L18.2498 35.5001L18.7498 35.5001L21.2498 35.5001L21.7498 35.5002L21.7498 35.0002Z"
+                  fill="#0052D9"
+                  stroke="#0052D9"
+                  style="
+                    fill: #0052d9;
+                    fill: color(display-p3 0 0.3216 0.851);
+                    fill-opacity: 1;
+                    stroke: #0052d9;
+                    stroke: color(display-p3 0 0.3216 0.851);
+                    stroke-opacity: 1;
+                  "
                 />
               </svg>
-            </span>
-            不同垂直领域业务
+            </p>
           </h3>
+          <p class="module-sub-title">不同行业产品已使用</p>
           <p class="module-description">
-            TDesign
-            为产品体验设计的各个环节提供解决方案，做好连接的角色，赋能更多的行业领域，助力提升产品体验，有效提升设计研发效能。
+            从消费产品到金融服务，从B端到C端产品，从大品牌到个人开发者，TDesign都能充分满足低成本，高效有品质感的前端设计和开发工作，助力提升产品体验，有效提升设计研发效能
           </p>
+          <div class="module-brand-wall">
+            <div class="mask left" />
+            <div class="mask middle" />
+            <div class="mask right" />
+
+            <t-space break-line :size="14">
+              <div
+                class="brand-content"
+                v-for="({ title, logo, width }, index) in brandList"
+                :key="index"
+                :style="`width:${width}`"
+              >
+                <t-popup show-arrow :content="title">
+                  <img :src="logo" />
+                </t-popup>
+              </div>
+            </t-space>
+          </div>
         </div>
       </div>
+    </div>
+    <div class="module-setup">
+      <img class="__light__ tdesign-flow" src="./assets/tdesign-flow-light.gif" alt="logo" />
+      <img class="__dark__ tdesign-flow" src="./assets/tdesign-flow-dark.gif" alt="logo" />
+      <p class="module-title">与TDesign, 共生长</p>
+      <p class="module-description">
+        不止腾讯生态，更有质感，更稳定，更持续的TDesign助力更多行业和开发者，提升产品体验，提高设计研发效能，用TDesign，更低成本，探索更多可能
+      </p>
+      <t-button href="https://github.com/Tencent/tdesign">开始使用</t-button>
     </div>
 
     <td-backtop />
@@ -497,11 +569,11 @@ import flutterLogo from './assets/flutter-logo.svg';
 import sketchLogo from './assets/sketch-logo.svg';
 import miniprogramLogo from './assets/miniprogram-logo.svg';
 import qqLogo from './assets/qq-logo.svg';
-// import taroLogo from './assets/taro-logo.png';
 
 import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, xdWebUrl } from '@consts';
 
-// const isIntranet = location.host.includes('oa.com');
+const brandUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/brand/list';
+const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
 
 export default {
   name: 'site-home',
@@ -533,6 +605,10 @@ export default {
   data() {
     return {
       contributorCount: 8,
+      currentTab: 0,
+      brandList: [],
+      newsList: [],
+      tabTransformWidth: 0,
       contributors: contributors.slice(),
       topContributors: [],
       bottomContributors: [],
@@ -540,6 +616,7 @@ export default {
       themeMode: 'light',
       stepsTimers: [],
       stepsCounts: [0, 0, 0],
+      tabTimer: null,
       // status 1 上线、2 alpha、3 beta、0 待上线
       sourceList: [
         { logo: vueLogo, name: 'Vue', href: '/vue/', status: 1 },
@@ -576,7 +653,6 @@ export default {
         { logo: vueLogo, name: 'Vue Next', href: '/mobile-vue/', status: 1 },
         { logo: reactLogo, name: 'React', href: '/mobile-react/', status: 2 },
         { logo: flutterLogo, name: 'Flutter', href: '/flutter/', status: 2 },
-        // { logo: taroLogo, name: 'Taro', href: '/taro/', status: 0 },
       ],
       mobileDesignList: [
         { logo: figmaLogo, name: 'Figma', href: figmaMobileUrl, status: 1 },
@@ -586,8 +662,6 @@ export default {
           href: sketchMobileUrl,
           status: 1,
         },
-        // { logo: axLogo, name: 'Axure', href: '', status: 0 },
-        // { logo: xdLogo, name: 'AdobeXD', href: '', status: 0 },
       ],
       miniSourceList: [
         { logo: miniprogramLogo, name: '微信小程序', href: '/miniprogram/', status: 1 },
@@ -599,14 +673,12 @@ export default {
           { type: 'bash', code: 'npm i tdesign-vue' },
           { type: 'javascript', code: "import Vue from 'vue';" },
           { type: 'javascript', code: "import TDesign from 'tdesign-vue';" },
-          { type: 'javascript', code: "import 'tdesign-vue/es/style/index.css';" },
           { type: 'javascript', code: 'Vue.use(TDesign);' },
         ],
         'vue-next': [
           { type: 'bash', code: 'npm i tdesign-vue-next' },
           { type: 'javascript', code: "import { createApp } from 'vue';" },
           { type: 'javascript', code: "import TDesign from 'tdesign-vue-next';" },
-          { type: 'javascript', code: "import 'tdesign-vue-next/es/style/index.css';" },
           { type: 'javascript', code: 'createApp(App).use(TDesign);' },
         ],
         react: [
@@ -621,7 +693,6 @@ export default {
           { type: 'javascript', code: '<t-tag theme="primary">重要</t-tag>' },
           { type: 'javascript', code: '' },
         ],
-        // 'vue-mobile': [],
       },
       componentModel: {
         selectValue: ['1'],
@@ -707,6 +778,19 @@ export default {
   },
 
   watch: {
+    currentTab: {
+      handler(tab) {
+        if (this.windowWidth >= 888) {
+          if (tab === 0) this.tabTransformWidth = 0;
+          else if (tab === 1) this.tabTransformWidth = 1048;
+          else this.tabTransformWidth = 1048 + 480 + this.windowWidth * 0.5;
+        } else {
+          if (tab === 0) this.tabTransformWidth = 0;
+          else if (tab === 1) this.tabTransformWidth = this.windowWidth - 20;
+          else this.tabTransformWidth = this.windowWidth * 2;
+        }
+      },
+    },
     codeFramework: {
       immediate: true,
       handler() {
@@ -737,18 +821,40 @@ export default {
   mounted() {
     this.watchHtmlMode();
     this.changeContributors();
-
+    this.getBrandList();
+    this.getNews();
     window.addEventListener('resize', this.handleResize);
+    this.tabTimer = setInterval(() => {
+      this.currentTab = this.currentTab === 2 ? 0 : this.currentTab + 1;
+    }, 4000);
   },
 
   beforeDestroy() {
     clearInterval(this.randomTimer);
     clearInterval(this.avatarTimer);
+    clearInterval(this.tabTimer);
     this.observer.disconnect();
     window.removeEventListener('resize', this.handleResize);
   },
 
   methods: {
+    handleClickNews(url) {
+      if (url) window.open(url, '_blank');
+    },
+    getNews() {
+      fetch(newsUrl).then((data) => {
+        data.json().then((list) => {
+          this.newsList = list;
+        });
+      });
+    },
+    getBrandList() {
+      fetch(brandUrl).then((data) => {
+        data.json().then((list) => {
+          this.brandList = list;
+        });
+      });
+    },
     handleIntroClick(item) {
       if (!item.status) return;
       window.open(item.href, '_blank');
@@ -769,7 +875,7 @@ export default {
         }
 
         setTimeout(() => {
-          if (this.$refs.topAvatars[r1].$el) {
+          if (this.$refs.topAvatars[r1]?.$el) {
             this.$refs.topAvatars[r1].$el.classList.remove('active');
             this.$refs.bottomAvatars[r2].$el.classList.remove('active');
           }
@@ -806,6 +912,7 @@ export default {
     },
     handleResize() {
       this.windowWidth = window.innerWidth;
+      this.currentTab = 0;
     },
     watchHtmlMode() {
       this.themeMode = document.documentElement.getAttribute('theme-mode') || 'light';
