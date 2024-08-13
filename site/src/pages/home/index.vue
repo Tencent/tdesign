@@ -7,7 +7,6 @@
         <div class="banner-info__left">
           <h2 class="name">
             <span class="primary">TDesign</span>
-            <br />
             <span class="sub-title">Enterprise Design System</span>
           </h2>
         </div>

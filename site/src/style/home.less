@@ -154,7 +154,7 @@
       }
     }
     .module-brand-wall {
-      opacity: 0.8;
+      opacity: 0.85;
     }
   }
 }
@@ -192,7 +192,12 @@
       cursor: pointer;
       img {
         height: 108px;
+
+        @media screen and (max-width: 960px) {
+          height: 92px;
+        }
       }
+
       &__info {
         border-radius: 25px;
         background-color: var(--bg-color-card);
@@ -204,7 +209,7 @@
     .banner-info {
       position: relative;
       max-width: 1440px;
-      margin: 0 auto 64px;
+      margin: 0 auto 28px;
       box-sizing: border-box;
       display: flex;
       justify-content: space-between;
@@ -226,6 +231,15 @@
 
           .primary {
             color: var(--brand-main);
+          }
+          .sub-title {
+            font-size: 24px;
+            line-height: 32px;
+
+            @media screen and (max-width: 480px) {
+              width: 200px;
+              text-wrap: wrap;
+            }
           }
         }
 
@@ -252,11 +266,17 @@
   margin-bottom: 48px;
   display: flex;
   margin: 0 auto 48px auto;
+  > div {
+    flex: 1 0 324px;
+    display: inline-block;
+    &:not(:last-child) {
+      margin-right: 16px;
+    }
+  }
+
   .t-card {
     background-color: var(--bg-color-card);
     height: 148px;
-    display: inline-block;
-    flex: 1 0 324px;
     border-color: transparent;
     padding: 20px 24px;
     box-sizing: border-box;
@@ -264,6 +284,7 @@
   .t-card__description {
     margin: 8px 0;
     height: 44px;
+    color: var(--text-primary);
   }
   .t-card__header,
   .t-card__footer {
@@ -272,9 +293,7 @@
 
   .t-card__footer {
     text-align: right;
-  }
-  .t-card:not(:last-child) {
-    margin-right: 16px;
+    color: var(--text-placeholder);
   }
 }
 .module-intro {
@@ -505,11 +524,19 @@
       flex-direction: column;
       align-items: center;
 
+      @media screen and (max-width: 960px) {
+        max-width: 100%;
+      }
+
       &:not(.module-board__card--active) {
         opacity: 40%;
       }
       &:first-child {
         margin-right: 160px;
+
+        @media screen and (max-width: 888px) {
+          margin-right: 40px;
+        }
       }
 
       &:last-child {
@@ -544,6 +571,10 @@
     display: inline-block;
     margin-right: 100px;
 
+    @media screen and (max-width: 960px) {
+      margin-right: 56px;
+    }
+
     .tencent-title {
       font-size: 48px;
       font-family: 'tencentW7';
@@ -569,6 +600,10 @@
     border-radius: 6px;
     overflow: hidden;
     width: 888px;
+
+    @media screen and (max-width: 960px) {
+      max-width: calc(100vw - 48px);
+    }
 
     .code-board {
       padding: var(--inner-padding-left-right);
@@ -599,6 +634,9 @@
             border-radius: 3px;
           }
         }
+      }
+      .t-radio-group {
+        flex-wrap: nowrap;
       }
     }
 
@@ -689,7 +727,7 @@
     .desc-list {
       background: var(--bg-color-card);
       padding: var(--inner-padding-left-right);
-
+      list-style: none;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       column-gap: 32px;
@@ -766,20 +804,31 @@
   background-color: var(--bg-color-banner-linear);
   padding: 0 var(--outer-padding-left-right);
   margin: 0 auto;
-  width: 100%;
 
   &__inner {
     position: relative;
     max-width: 1440px;
     margin: 0 auto;
     box-sizing: border-box;
-    padding: 0 80px;
     border-radius: 6px;
     overflow: hidden;
     color: var(--text-primary);
+    width: 100%;
+
+    @media screen and (max-width: 1440px) {
+      max-width: 1344px;
+    }
 
     @media screen and (max-width: 1200px) {
-      padding: 24px 0;
+      max-width: 1104px;
+    }
+
+    @media screen and (max-width: 960px) {
+      max-width: 912px;
+    }
+
+    @media screen and (max-width: 360px) {
+      max-width: 312px;
     }
   }
 
@@ -798,8 +847,9 @@
     }
     .module-top-title {
       color: var(--text-primary);
-      font-size: 32px;
-      line-height: 40px;
+      font-size: 24px;
+      line-height: 32px;
+      font-weight: 400;
     }
     .module-title {
       font-weight: 600;
@@ -862,10 +912,13 @@
     display: flex;
     flex-wrap: wrap;
     position: relative;
-    width: 1440px;
+    width: 100%;
     margin: 48px 0 0 0;
     box-sizing: border-box;
 
+    @media screen and (max-width: 1440px) {
+      padding: 24px;
+    }
     .mask {
       position: absolute;
       width: 600px;
@@ -879,6 +932,10 @@
         bottom: 0;
         background: radial-gradient(50% 50% at 50% 50%, rgba(242, 243, 255, 1) 0%, rgba(242, 243, 255, 0) 100%);
         animation: maskRun5 20s linear infinite;
+
+        @media screen and (max-width: 1200px) {
+          top: 0;
+        }
       }
 
       &.middle {
@@ -886,6 +943,11 @@
         top: 0px;
         background: radial-gradient(50% 50% at 50% 50%, rgba(227, 249, 233, 1) 0%, rgba(227, 249, 233, 0) 100%);
         animation: maskRun4 20s linear infinite;
+
+        @media screen and (max-width: 1200px) {
+          left: 0;
+          top: 200px;
+        }
       }
 
       &.right {
@@ -893,11 +955,19 @@
         bottom: 0;
         background: radial-gradient(50% 50% at 50% 50%, rgba(255, 240, 237, 1) 0%, rgba(255, 240, 237, 0) 100%);
         animation: maskRun5 20s linear infinite;
+
+        @media screen and (max-width: 1200px) {
+          right: 0;
+        }
       }
+    }
+    .t-space {
+      justify-content: center;
+      max-width: 100%;
     }
     .t-space-item {
       z-index: 10;
-      transition: transform .2s;
+      transition: transform 0.2s;
     }
     .t-space-item:hover {
       transform: scale(1.05);
@@ -924,6 +994,7 @@
   align-items: center;
   color: var(--text-primary);
   background-color: var(--bg-color-card);
+  padding: 0 var(--outer-padding-left-right);
 
   .tdesign-flow {
     width: 336px;

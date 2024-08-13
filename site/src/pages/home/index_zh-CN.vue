@@ -5,23 +5,24 @@
       <div class="banner-info">
         <div class="banner-info__left">
           <h2 class="name">
-            <span class="primary">TDesign</span>
-            <br />
-            <span class="sub-title">为设计师 & 开发者，打造工作美学</span>
+            <p class="primary">TDesign</p>
+            <p class="sub-title">为设计师 & 开发者，打造工作美学</p>
           </h2>
         </div>
         <t-popup trigger="click" placement="left">
           <div class="banner-booking">
-            <img src="/home/logo.gif" />
-            <div class="banner-booking__info">点击关注 TDesign 公众号</div>
+            <img src="./assets/tdesign-profile.png" />
+            <div class="banner-booking__info">{{ windowWidth > 960 ? '点击关注 TDesign 公众号' : '关注公众号' }}</div>
           </div>
           <template #content><img width="100" src="https://tdesign.gtimg.com/site/wechat-account.png" /></template>
         </t-popup>
       </div>
       <div class="module-news">
-        <t-card v-for="(news, index) in newsList" :key="index" :title="news.title" :description="news.desc"
-          ><template #footer>{{ news.date }}</template>
-        </t-card>
+        <div v-for="(news, index) in newsList" :key="index" @click="() => handleClickNews(news.url)">
+          <t-card :title="news.title" :description="news.desc" :style="{ cursor: news.url ? 'pointer' : null }"
+            ><template #footer>{{ news.date }}</template>
+          </t-card>
+        </div>
       </div>
       <div class="module-intro">
         <div class="item web">
@@ -541,9 +542,9 @@
       <img class="__dark__ tdesign-flow" src="./assets/tdesign-flow-dark.gif" alt="logo" />
       <p class="module-title">与TDesign, 共生长</p>
       <p class="module-description">
-        不止腾讯生态，更有质感，更稳定，更持续的TDesign助力更多行业和开发者，提升产品体验，提高设计研发效能，用TDesign，更低成本，探索更多可能～
+        不止腾讯生态，更有质感，更稳定，更持续的TDesign助力更多行业和开发者，提升产品体验，提高设计研发效能，用TDesign，更低成本，探索更多可能
       </p>
-      <t-button>开始使用</t-button>
+      <t-button href="https://github.com/Tencent/tdesign">开始使用</t-button>
     </div>
 
     <td-backtop />
@@ -573,8 +574,6 @@ import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, x
 
 const brandUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/brand/list';
 const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
-
-// const isIntranet = location.host.includes('woa.com');
 
 export default {
   name: 'site-home',
@@ -617,6 +616,7 @@ export default {
       themeMode: 'light',
       stepsTimers: [],
       stepsCounts: [0, 0, 0],
+      tabTimer: null,
       // status 1 上线、2 alpha、3 beta、0 待上线
       sourceList: [
         { logo: vueLogo, name: 'Vue', href: '/vue/', status: 1 },
@@ -780,9 +780,15 @@ export default {
   watch: {
     currentTab: {
       handler(tab) {
-        if (tab === 0) this.tabTransformWidth = 0;
-        else if (tab === 1) this.tabTransformWidth = 1048;
-        else this.tabTransformWidth = 1048 + 480 + this.windowWidth * 0.5;
+        if (this.windowWidth >= 888) {
+          if (tab === 0) this.tabTransformWidth = 0;
+          else if (tab === 1) this.tabTransformWidth = 1048;
+          else this.tabTransformWidth = 1048 + 480 + this.windowWidth * 0.5;
+        } else {
+          if (tab === 0) this.tabTransformWidth = 0;
+          else if (tab === 1) this.tabTransformWidth = this.windowWidth - 20;
+          else this.tabTransformWidth = this.windowWidth * 2;
+        }
       },
     },
     codeFramework: {
@@ -818,27 +824,186 @@ export default {
     this.getBrandList();
     this.getNews();
     window.addEventListener('resize', this.handleResize);
+    this.tabTimer = setInterval(() => {
+      this.currentTab = this.currentTab === 2 ? 0 : this.currentTab + 1;
+    }, 4000);
   },
 
   beforeDestroy() {
     clearInterval(this.randomTimer);
     clearInterval(this.avatarTimer);
+    clearInterval(this.tabTimer);
     this.observer.disconnect();
     window.removeEventListener('resize', this.handleResize);
   },
 
   methods: {
+    handleClickNews(url) {
+      console.log(url, 'rul');
+      if (url) window.open(url, '_blank');
+    },
     getNews() {
       fetch(newsUrl).then((data) => {
         data.json().then((list) => {
           this.newsList = list;
-          //  this.newsList = !isIntranet ? list : list.filter((news) => !news.isIntranet);
         });
       });
     },
     getBrandList() {
       fetch(brandUrl).then((data) => {
-        data.json().then((list) => {
+        data.json().then(() => {
+          const list = [
+            {
+              title: '微信支付',
+              logo: 'https://tdesign.gtimg.com/site/brand/wechat-pay.png',
+              width: '212px',
+            },
+            {
+              title: 'UNIMIS-MOM',
+              logo: 'https://tdesign.gtimg.com/site/brand/UNIMIS-MOM.png',
+              width: '96px',
+            },
+            {
+              title: 'codesign',
+              logo: 'https://tdesign.gtimg.com/site/brand/codesign.png',
+              width: '212px',
+            },
+            {
+              title: '未来运动场',
+              logo: 'https://tdesign.gtimg.com/site/brand/future-playground.png',
+              width: '96px',
+            },
+            {
+              title: '腾讯地图',
+              logo: 'https://tdesign.gtimg.com/site/brand/tencent-map.png',
+              width: '212px',
+            },
+            {
+              title: '腾讯混元',
+              logo: 'https://tdesign.gtimg.com/site/brand/hunyuan.png',
+              width: '96px',
+            },
+            {
+              title: 'iwiki',
+              logo: 'https://tdesign.gtimg.com/site/brand/iwiki.png',
+              width: '188px',
+            },
+            {
+              title: '可奕换电',
+              logo: 'https://tdesign.gtimg.com/site/brand/keyi.png',
+              width: '96px',
+            },
+            {
+              title: '智研',
+              logo: 'https://tdesign.gtimg.com/site/brand/zhiyan.png',
+              width: '96px',
+            },
+            {
+              title: '基础设施数据总线',
+              logo: 'https://tdesign.gtimg.com/site/brand/cmdb.png',
+              width: '184px',
+            },
+            {
+              title: '内测之家',
+              logo: 'https://tdesign.gtimg.com/site/brand/neice.png',
+              width: '96px',
+            },
+            {
+              title: '国家税务总局',
+              logo: 'https://tdesign.gtimg.com/site/brand/swzj.png',
+              width: '364px',
+            },
+            {
+              title: '沃尔玛',
+              logo: 'https://tdesign.gtimg.com/site/brand/walmart.png',
+              width: '96px',
+            },
+            {
+              title: '国泰君安',
+              logo: 'https://tdesign.gtimg.com/site/brand/gtja.png',
+              width: '308px',
+            },
+            {
+              title: '李宁',
+              logo: 'https://tdesign.gtimg.com/site/brand/lining.png',
+              width: '96px',
+            },
+            {
+              title: '新华书店',
+              logo: 'https://tdesign.gtimg.com/site/brand/xinhua.png',
+              width: '96px',
+            },
+            {
+              title: '腾讯行政',
+              logo: 'https://tdesign.gtimg.com/site/brand/tencent-xz.png',
+              width: '216px',
+            },
+            {
+              title: '上海慈善基金会',
+              logo: 'https://tdesign.gtimg.com/site/brand/scf.png',
+              width: '96px',
+            },
+            {
+              title: '凯迪仕',
+              logo: 'https://tdesign.gtimg.com/site/brand/kds.png',
+              width: '255px',
+            },
+            {
+              title: '青燕和示',
+              logo: 'https://tdesign.gtimg.com/site/brand/qyhs.png',
+              width: '224px',
+            },
+            {
+              title: '生活温州',
+              logo: 'https://tdesign.gtimg.com/site/brand/wenzhou-life.png',
+              width: '96px',
+            },
+            {
+              title: '国久大数据',
+              logo: 'https://tdesign.gtimg.com/site/brand/guojiu.png',
+              width: '256px',
+            },
+            {
+              title: '腾讯游戏-心悦俱乐部',
+              logo: 'https://tdesign.gtimg.com/site/brand/xinyue.png',
+              width: '204px',
+            },
+            {
+              title: '储蓄题库',
+              logo: 'https://tdesign.gtimg.com/site/brand/cctk.png',
+              width: '96px',
+            },
+            {
+              title: 'HIFULL-创禾聚力开发',
+              logo: 'https://tdesign.gtimg.com/site/brand/hifull.png',
+              width: '204px',
+            },
+            {
+              title: '金相世界',
+              logo: 'https://tdesign.gtimg.com/site/brand/jinxiang.png',
+              width: '96px',
+            },
+            {
+              title: '腾讯视频',
+              logo: 'https://tdesign.gtimg.com/site/brand/qq-video.png',
+              width: '216px',
+            },
+            {
+              title: 'Argus 海外监控平台',
+              logo: 'https://tdesign.gtimg.com/site/brand/argus.png',
+              width: '212px',
+            },
+            {
+              title: '琳景储值助手',
+              logo: 'https://tdesign.gtimg.com/site/brand/linjing.png',
+              width: '96px',
+            },
+            {
+              title: '微信小游戏开发平台',
+              logo: 'https://tdesign.gtimg.com/site/brand/wechat-game.png',
+              width: '96px',
+            },
+          ];
           this.brandList = list;
         });
       });
@@ -900,6 +1065,7 @@ export default {
     },
     handleResize() {
       this.windowWidth = window.innerWidth;
+      this.currentTab = 0;
     },
     watchHtmlMode() {
       this.themeMode = document.documentElement.getAttribute('theme-mode') || 'light';
