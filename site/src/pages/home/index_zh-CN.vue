@@ -575,6 +575,8 @@ import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, x
 const brandUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/brand/list';
 const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
 
+const isIntranet = location.host.includes('woa.com'); // 部分动态或内容只能通过内网访问
+
 export default {
   name: 'site-home',
   components: {
@@ -844,7 +846,7 @@ export default {
     getNews() {
       fetch(newsUrl).then((data) => {
         data.json().then((list) => {
-          this.newsList = list;
+          this.newsList = isIntranet ? list : list.filter((v) => !v.isIntranet);
         });
       });
     },
