@@ -878,20 +878,24 @@
 
       .tag {
         font-size: 96px;
-        line-height: 0.8;
+        line-height: 1;
         color: transparent;
         background-image: linear-gradient(to left, #0052d9 4.04%, #0df 72.99%, #00bfff 96.59%);
         background-clip: text;
         margin-right: 16px;
         display: inline-flex;
         align-items: flex-start;
-        margin: 26px 0 42px 0;
+        margin: 24px 0 32px 0;
+        position: relative;
 
         svg {
           margin-left: 4px;
           margin-top: 2px;
           width: 32px;
           height: 32px;
+          position: absolute;
+          right: -32px;
+          top: 10px;
         }
       }
     }
