@@ -262,7 +262,7 @@
 
 .module-news {
   max-width: 1440px;
-  overflow-x: scroll;
+  overflow-x: auto;
   margin-bottom: 48px;
   display: flex;
   margin: 0 auto 48px auto;
@@ -273,7 +273,25 @@
       margin-right: 16px;
     }
   }
+  
+  &:hover {
 
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--bg-color-scroll);
+    }
+  }
+
+  &::-webkit-scrollbar {
+    width: 12px;
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    border: 4px solid transparent;
+    background-clip: content-box;
+    background-color: transparent;
+  }
   .t-card {
     background-color: var(--bg-color-card);
     height: 148px;
