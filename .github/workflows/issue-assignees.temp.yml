@@ -42,7 +42,7 @@ jobs:
 
       - name: 通知贡献者
         if: steps.assignees.outputs.contributors != ''
-        uses: actions-cool/maintain-one-comment@v2.0.0
+        uses: actions-cool/maintain-one-comment@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
