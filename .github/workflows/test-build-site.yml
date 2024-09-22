@@ -11,11 +11,11 @@ jobs:
       - uses: pnpm/action-setup@v3
         with:
           version: 8
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         env:
           cache-name: cache-nodemodules
         with:
