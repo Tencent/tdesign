@@ -6,6 +6,8 @@
     "dev:site": "pnpm run build:components && pnpm run --filter 'tdesign-site' dev",
     "dev:theme-generator": "pnpm run --filter 'tdesign-theme-generator' dev",
     "build:components": "pnpm run --filter 'tdesign-site-components' build && pnpm run --filter 'tdesign-site-components' postbuild",
+    "build:theme-generator": "pnpm run --filter 'tdesign-theme-generator' build",
+    "build-watch:theme-generator": "pnpm run --filter 'tdesign-theme-generator' build:watch",
     "site": "npm run build:components && cd site && npm run build",
     "site:intranet": "npm run build:components && cd site && npm run site:intranet",
     "site:preview": "npm run build:components && cd site && npm run site:preview",
@@ -26,10 +28,13 @@
     "eslint-plugin-prettier": "^5.0.0",
     "husky": "^8.0.0",
     "lint-staged": "8.1.5",
-    "prettier": "^3.0.3",
+    "prettier": "^2.8.8",
     "stylelint": "^15.10.3",
     "stylelint-config-standard": "^34.0.0",
     "stylelint-config-standard-less": "^2.0.0"
+  },
+  "engines": {
+    "pnpm": ">=9.0.0"
   },
   "config": {
     "commitizen": {
