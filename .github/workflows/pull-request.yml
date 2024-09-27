@@ -12,7 +12,7 @@ jobs:
     outputs:
       services-changed: ${{ steps.services-changed.outputs.changed }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 100
       - uses: marceloprado/has-changed-path@v1
@@ -26,8 +26,8 @@ jobs:
     needs: modify-services
     if: needs.modify-services.outputs.services-changed == 'true'
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
       - run: node ./services/update-components-notice.js

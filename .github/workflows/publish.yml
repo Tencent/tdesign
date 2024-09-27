@@ -15,13 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.ref_type == 'tag'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         env:
           cache-name: cache-nodemodules
         with:
@@ -49,7 +49,7 @@ jobs:
       - run: npm run build
       - name: publish
         id: publish
-        uses: JS-DevTools/npm-publish@v1
+        uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.TDESIGN_NPM_TOKEN }}
           tag: ${{ contains(github.ref_name, 'beta') && 'beta' || 'latest' }}
@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.ref_type == 'tag'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
