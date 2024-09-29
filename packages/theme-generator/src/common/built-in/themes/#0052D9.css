@@ -209,21 +209,21 @@
     var(--td-line-height-body-medium) var(--td-font-family);
   --td-font-body-large: var(--td-font-size-body-large) /
     var(--td-line-height-body-large) var(--td-font-family);
-  --td-font-title-small: var(--td-font-size-title-small) /
+  --td-font-title-small: 600 var(--td-font-size-title-small) /
     var(--td-line-height-title-small) var(--td-font-family);
-  --td-font-title-medium: var(--td-font-size-title-medium) /
+  --td-font-title-medium: 600 var(--td-font-size-title-medium) /
     var(--td-line-height-title-medium) var(--td-font-family);
-  --td-font-title-large: var(--td-font-size-title-large) /
+  --td-font-title-large: 600 var(--td-font-size-title-large) /
     var(--td-line-height-title-large) var(--td-font-family);
-  --td-font-headline-small: var(--td-font-size-headline-small) /
+  --td-font-headline-small: 600 var(--td-font-size-headline-small) /
     var(--td-line-height-headline-small) var(--td-font-family);
-  --td-font-headline-medium: var(--td-font-size-headline-medium) /
+  --td-font-headline-medium: 600 var(--td-font-size-headline-medium) /
     var(--td-line-height-headline-medium) var(--td-font-family);
-  --td-font-headline-large: var(--td-font-size-headline-large) /
+  --td-font-headline-large: 600 var(--td-font-size-headline-large) /
     var(--td-line-height-headline-large) var(--td-font-family);
-  --td-font-display-medium: var(--td-font-size-display-medium) /
+  --td-font-display-medium: 600 var(--td-font-size-display-medium) /
     var(--td-line-height-display-medium) var(--td-font-family);
-  --td-font-display-large: var(--td-font-size-display-large) /
+  --td-font-display-large: 600 var(--td-font-size-display-large) /
     var(--td-line-height-display-large) var(--td-font-family);
 
   /* 字体颜色 */
