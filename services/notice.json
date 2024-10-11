@@ -2,11 +2,7 @@
   "all": {},
   "site": {},
   "vue": {},
-  "react": {
-    "title": "📢 全量组件新增 TypeScript 示例，欢迎体验并反馈问题",
-    "type": "primary",
-    "closeable": true
-  },
+  "react": {},
   "vue-next": {},
   "vue-mobile": {},
   "miniprogram": {}
