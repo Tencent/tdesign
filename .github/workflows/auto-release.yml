@@ -1,0 +1,26 @@
+on:
+  schedule:
+    # 相关语法 https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07 would run a command on the first and fifteenth of each month
+    - cron: '0 16 1,8,15,22 * *'
+
+jobs:
+  test_schedule:
+    if: github.repository == 'Tencent/tdesign'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          # https://nodejs.org/en/learn/typescript/run-natively#running-typescript-code-with-nodejs
+          node-version: "22.6.0"
+          # https://docs.npmjs.com/cli/v7/using-npm/config#strict-peer-deps
+      - name: Install Dependencies
+        run: npm install @types/node @actions/github --legacy-peer-deps
+      - name: run JavaScript
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+        run: |
+          git submodule update --init --remote
+          node --experimental-strip-types scripts/auto-release.ts
