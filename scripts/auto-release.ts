@@ -214,7 +214,7 @@ console.log('身份验证成功');
 
 try {
   octokit.rest.repos.createRelease({
-    owner: "tdesign-helper",
+    owner: "Tencent",
     repo: "tdesign",
     tag_name: tag, // 添加缺少的 tag_name 参数
     name: title, // 可选参数，使用 title 作为发布名称
