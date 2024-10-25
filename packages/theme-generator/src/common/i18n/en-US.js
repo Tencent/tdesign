@@ -1,7 +1,8 @@
 export default {
   copied: "copied",
   dock: {
-    recommendTitle: "Official recommendation",
+    officialRecommendation: "Official recommendation",
+    customUpload: "Custom upload",
     adjustText: "Variables",
     recoverConfirm: 'Are you sure to recover TDesign default theme?',
     downloadTips: 'current theme has been downloaded',

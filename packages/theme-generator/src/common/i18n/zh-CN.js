@@ -1,7 +1,8 @@
 export default {
   copied: "已复制",
   dock: {
-    recommendTitle: "官方推荐",
+    officialRecommendation: "官方推荐",
+    customUpload: "自定义上传",
     adjustText: "主参数调节",
     recoverConfirm: "你确定恢复 TDesign 的默认主题吗?",
     downloadTips: "已下载当前主题配置文件",

@@ -4,9 +4,11 @@
 
 ### 🏗️ Develop
 
-- `npm run dev`
-
+- `npm install`
+- `npm run build`
+- `npm link`
 - `npm run build:watch` execute `npm link` as well to preview in application project
+- Use `npm link tdesign-theme-generator` in the `site` branch of `tdesign-vue-next-starter`
 
 ### ⚙️ Build
 
