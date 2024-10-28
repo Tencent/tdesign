@@ -22,5 +22,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git submodule update --init --remote
           node --experimental-strip-types scripts/auto-release.ts
