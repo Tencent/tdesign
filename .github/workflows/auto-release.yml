@@ -17,10 +17,10 @@ jobs:
           node-version: "22.6.0"
           # https://docs.npmjs.com/cli/v7/using-npm/config#strict-peer-deps
       - name: Install Dependencies
-        run: npm install @types/node @actions/github --legacy-peer-deps
+        run: npm install @actions/github --legacy-peer-deps
       - name: run JavaScript
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git submodule update --init --remote
           node --experimental-strip-types scripts/auto-release.ts
