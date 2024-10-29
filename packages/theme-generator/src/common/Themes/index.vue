@@ -8,14 +8,10 @@
     </div>
 
     <div class="recommend-theme__flex" v-if="recommendThemes[selectedThemeModel].id === 'CUSTOM'">
-      <div v-for="(theme, themeIdx) in recommendThemesOptions" :key="themeIdx">
-        <t-upload v-if="recommendThemesOptions.length - 1 === themeIdx" :request-method="requestMethod"
-          :show-upload-progress="false" :before-upload="uploadNewTheme">
-          <template #fileListDisplay>
-            <span />
-          </template>
-          <div class="recommend-theme__flex-theme" :style="{
-            'background-color': theme.value,
+      <div v-for="(theme, themeIdx) in customUploadTheme" :key="themeIdx">
+        <div>
+          <div class="recommend-theme__flex-theme" @click="generateUploadTheme(theme)" :style="{
+            'background-color': '#0052D9',
           }">
             <div v-html="theme.subtitle" />
             <div v-if="currentTheme && currentTheme.value === theme.value" class="recommend-theme__flex-theme--active">
@@ -23,33 +19,42 @@
             </div>
           </div>
           <p :style="{
-            margin: '4px 0',
+            'margin': '4px 0',
             'text-align': 'center',
             'font-size': '12px',
             'line-height': '20px',
+            'width': '78px',
+            'white-space': 'nowrap',
+            'overflow': 'hidden',
+            'text-overflow': 'ellipsis',
           }">
-            {{ isEn ? theme.enName : theme.name }}
-          </p>
-        </t-upload>
-        <div v-else>
-          <div class="recommend-theme__flex-theme" @click="generateNewTheme(theme)" :style="{
-            'background-color': theme.value,
-          }">
-            <div v-html="theme.subtitle" />
-            <div v-if="currentTheme && currentTheme.value === theme.value" class="recommend-theme__flex-theme--active">
-              <picked-svg />
-            </div>
-          </div>
-          <p :style="{
-            margin: '4px 0',
-            'text-align': 'center',
-            'font-size': '12px',
-            'line-height': '20px',
-          }">
-            {{ isEn ? theme.enName : theme.name }}
+            {{ theme.name }}
           </p>
         </div>
       </div>
+      <t-upload v-if="customUploadTheme.length < 4" :request-method="requestMethod" :show-upload-progress="false"
+        :before-upload="uploadNewTheme" accept="text/css">
+        <template #fileListDisplay>
+          <span />
+        </template>
+        <div class="recommend-theme__flex-theme" :style="{
+          'background-color': recommendThemesOptions[0].value,
+        }">
+          <div v-html="recommendThemesOptions[0].subtitle" />
+          <div v-if="currentTheme && currentTheme.value === recommendThemesOptions[0].value"
+            class="recommend-theme__flex-theme--active">
+            <picked-svg />
+          </div>
+        </div>
+        <p :style="{
+          margin: '4px 0',
+          'text-align': 'center',
+          'font-size': '12px',
+          'line-height': '20px',
+        }">
+          {{ isEn ? recommendThemesOptions[0].enName : recommendThemesOptions[0].name }}
+        </p>
+      </t-upload>
     </div>
 
     <div class="recommend-theme__flex" v-else>
@@ -78,7 +83,8 @@
 <script>
 import { Upload as TUpload, MessagePlugin } from "tdesign-vue";
 import { RECOMMEND_THEMES } from "./const";
-import { generateNewTheme, appendStyleSheet } from "../utils";
+import TencentSafe from "!raw-loader!./svg/TencentSafe";
+import { generateNewTheme } from "../utils";
 import PickedSvg from "./PickedSvg.vue";
 import langMixin from "../i18n/mixin";
 
@@ -98,20 +104,11 @@ export default {
       selectedThemeModel: 0,
       uploadMethod: 'requestSuccessMethod',
       uploadThemeFile: [],
-      customUploadTheme: [
-        {
-          name: "占位测试",
-          subtitle: null,
-          value: "#133BFF",
-        }
-      ],
+      customUploadTheme: [],
     };
   },
   computed: {
     recommendThemesOptions() {
-      if (this.recommendThemes[this.selectedThemeModel].id === 'CUSTOM') {
-        return [...this.customUploadTheme, ...this.recommendThemes[this.selectedThemeModel].options];
-      }
       return this.recommendThemes[this.selectedThemeModel].options;
     },
     requestMethod() {
@@ -144,31 +141,29 @@ export default {
       generateNewTheme(theme.value);
       this.$emit("changeTabTheme", theme);
     },
+    generateUploadTheme(theme) {
+      document.getElementById('custom-theme').innerText = theme.theme;
+      this.$emit("changeTabTheme", theme);
+    },
     selectThemeModel(idx) {
       this.selectedThemeModel = idx;
     },
     uploadNewTheme(file) {
-      console.log('todo', file);
-      // 读取文件
       const fileReader = new FileReader();
       fileReader.readAsText(file.raw);
       fileReader.onload = (e) => {
         const theme = e.target.result;
-        console.log('文件内容');
-        const themeId = `custom-theme-${this.customUploadTheme.length}`;
-        const existSheet = document.getElementById(themeId);
-        if (!existSheet) {
-          const styleSheet = document.createElement('style');
-          styleSheet.id = themeId;
-          styleSheet.type = 'text/css';
-          styleSheet.textContent = theme;
-          document.head.appendChild(styleSheet);
-        }
+        const themeId = file.name.split('.')[0];
 
-        document.documentElement.setAttribute('theme-color', themeId);
-
+        let themeMap = new Map(this.customUploadTheme.map(item => [item.name, item]));
+        themeMap.set(themeId, {
+          name: themeId,
+          value: themeId,
+          theme: theme,
+          subtitle: TencentSafe,
+        });
+        this.customUploadTheme = Array.from(themeMap.values());
       };
-      // todo上传多个文件
       return false;
     },
   },

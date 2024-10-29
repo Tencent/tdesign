@@ -72,7 +72,7 @@ export const RECOMMEND_THEMES = [
       {
         name: "自定义上传",
         enName: 'Custom Upload',
-        subtitle: GovService,
+        subtitle: TencentSafe,
         value: "#623BFF",
       }
     ]
