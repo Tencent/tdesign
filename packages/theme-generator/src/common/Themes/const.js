@@ -65,18 +65,18 @@ export const RECOMMEND_THEMES = [
       // },
     ],
   },
-  {
-    id: "CUSTOM",
-    title: "customUpload",
-    options: [
-      {
-        name: "自定义上传",
-        enName: 'Custom Upload',
-        subtitle: TencentSafe,
-        value: "#623BFF",
-      }
-    ]
-  }
+  // {
+  //   id: "CUSTOM",
+  //   title: "customUpload",
+  //   options: [
+  //     {
+  //       name: "自定义上传",
+  //       enName: 'Custom Upload',
+  //       subtitle: TencentSafe,
+  //       value: "#623BFF",
+  //     }
+  //   ]
+  // }
   // {
   //   title: "业务推荐",
   //   options: [
@@ -99,3 +99,16 @@ export const RECOMMEND_THEMES = [
   //   ],
   // },
 ];
+
+export const UPLOAD_THEMES = {
+  id: "CUSTOM",
+  title: "customUpload",
+  options: [
+    {
+      name: "自定义上传",
+      enName: 'Custom Upload',
+      subtitle: TencentSafe,
+      value: "#623BFF",
+    }
+  ]
+}

@@ -1,13 +1,33 @@
 <template>
   <div class="recommend-theme">
     <div class="recommend-theme__title-group">
-      <div :key="idx" v-for="(type, idx) in recommendThemes" class="recommend-theme__title"
-        @click="selectThemeModel(idx)" :style="{ 'font-weight': selectedThemeModel === idx ? 'bold' : 'normal' }">
+      <div :key="idx" v-for="(type, idx) in [...recommendThemes, upload_themes]" class="recommend-theme__title"
+        @click="selectThemeModel(type.id)"
+        :style="{ 'font-weight': selectedThemeModel === type.id ? 'bold' : 'normal' }">
         {{ lang.dock[type.title] }}
       </div>
     </div>
-
-    <div class="recommend-theme__flex" v-if="recommendThemes[selectedThemeModel].id === 'CUSTOM'">
+    <div class="recommend-theme__flex" v-if="selectedThemeModel !== 'CUSTOM'">
+      <div v-for="(theme, themeIdx) in recommendThemesOptions" :key="themeIdx" @click="generateNewTheme(theme)">
+        <div class="recommend-theme__flex-theme" :style="{
+          'background-color': theme.value,
+        }">
+          <div v-html="theme.subtitle" />
+          <div v-if="currentTheme && currentTheme.value === theme.value" class="recommend-theme__flex-theme--active">
+            <picked-svg />
+          </div>
+        </div>
+        <p :style="{
+          margin: '4px 0',
+          'text-align': 'center',
+          'font-size': '12px',
+          'line-height': '20px',
+        }">
+          {{ isEn ? theme.enName : theme.name }}
+        </p>
+      </div>
+    </div>
+    <div class="recommend-theme__flex" v-else>
       <div v-for="(theme, themeIdx) in customUploadTheme" :key="themeIdx">
         <div>
           <div class="recommend-theme__flex-theme" @click="generateUploadTheme(theme)" :style="{
@@ -38,10 +58,10 @@
           <span />
         </template>
         <div class="recommend-theme__flex-theme" :style="{
-          'background-color': recommendThemesOptions[0].value,
+          'background-color': upload_themes.options[0].value,
         }">
-          <div v-html="recommendThemesOptions[0].subtitle" />
-          <div v-if="currentTheme && currentTheme.value === recommendThemesOptions[0].value"
+          <div v-html="upload_themes.options[0].subtitle" />
+          <div v-if="currentTheme && currentTheme.value === upload_themes.options[0].value"
             class="recommend-theme__flex-theme--active">
             <picked-svg />
           </div>
@@ -52,41 +72,21 @@
           'font-size': '12px',
           'line-height': '20px',
         }">
-          {{ isEn ? recommendThemesOptions[0].enName : recommendThemesOptions[0].name }}
+          {{ isEn ? upload_themes.options[0].enName : upload_themes.options[0].name }}
         </p>
       </t-upload>
-    </div>
-
-    <div class="recommend-theme__flex" v-else>
-      <div v-for="(theme, themeIdx) in recommendThemesOptions" :key="themeIdx" @click="generateNewTheme(theme)">
-        <div class="recommend-theme__flex-theme" :style="{
-          'background-color': theme.value,
-        }">
-          <div v-html="theme.subtitle" />
-          <div v-if="currentTheme && currentTheme.value === theme.value" class="recommend-theme__flex-theme--active">
-            <picked-svg />
-          </div>
-        </div>
-        <p :style="{
-          margin: '4px 0',
-          'text-align': 'center',
-          'font-size': '12px',
-          'line-height': '20px',
-        }">
-          {{ isEn ? theme.enName : theme.name }}
-        </p>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { Upload as TUpload, MessagePlugin } from "tdesign-vue";
-import { RECOMMEND_THEMES } from "./const";
+import { RECOMMEND_THEMES, UPLOAD_THEMES } from "./const";
 import TencentSafe from "!raw-loader!./svg/TencentSafe";
 import { generateNewTheme } from "../utils";
 import PickedSvg from "./PickedSvg.vue";
 import langMixin from "../i18n/mixin";
+import { builtInThemeMap } from '../built-in/theme-map';
 
 export default {
   emit: ["changeTabTheme"],
@@ -99,9 +99,10 @@ export default {
     return {
       MessagePlugin,
       recommendThemes: RECOMMEND_THEMES,
+      upload_themes: UPLOAD_THEMES,
       isThemeTabVisible: false,
       isDrawerVisible: false,
-      selectedThemeModel: 0,
+      selectedThemeModel: 'OFFICIAL',
       uploadMethod: 'requestSuccessMethod',
       uploadThemeFile: [],
       customUploadTheme: [],
@@ -109,7 +110,7 @@ export default {
   },
   computed: {
     recommendThemesOptions() {
-      return this.recommendThemes[this.selectedThemeModel].options;
+      return this.recommendThemes.find(i => i.id === this.selectedThemeModel)?.options;
     },
     requestMethod() {
       return {
@@ -118,19 +119,73 @@ export default {
       }[this.uploadMethod];
     },
   },
+  mounted() {
+    this.createCacheCssLocal();
+  },
   methods: {
-    // file 为等待上传的文件信息，用于提供给上传接口。file.raw 表示原始文件
-    requestSuccessMethod(file /** UploadFile */) {
+    createCacheCssLocal() {
+      const localCustomThemes = localStorage.getItem('customThemes');
+      const localThemesArr = JSON.parse(localCustomThemes) ?? [];
+
+      this.recommendThemes.forEach((item) => {
+        const currentTypeIndex = localThemesArr.findIndex(type => type.id === item.id);
+
+        if (currentTypeIndex !== -1) {
+          item.options.forEach((option) => {
+            const currentThemeIndex = localThemesArr[currentTypeIndex].options.findIndex(theme => theme.value === option.value);
+            const themeCss = builtInThemeMap[option.value];
+
+            if (currentThemeIndex !== -1) {
+              localThemesArr[currentTypeIndex].options[currentThemeIndex].theme = themeCss;
+            } else {
+              localThemesArr[currentTypeIndex].options.push({
+                value: option.value,
+                theme: themeCss,
+              });
+            }
+          });
+        } else {
+          const themes = item.options.map((option) => {
+            return {
+              value: option.value,
+              theme: builtInThemeMap[option.value],
+            }
+          });
+          localThemesArr.push({
+            id: item.id,
+            options: themes,
+          });
+        }
+      });
+      localStorage.setItem('customThemes', JSON.stringify(localThemesArr));
+    },
+    updateCacheCssLocal(id, value, theme) {
+      const localCustomThemes = localStorage.getItem('customThemes');
+      let localThemesArr = JSON.parse(localCustomThemes) ?? [];
+
+      const currentTypeIndex = localThemesArr?.findIndex(item => item.id === id);
+
+      if (currentTypeIndex === -1) {
+        localThemesArr.push({ id: id, options: [] });
+      }
+
+      const currentOption = localThemesArr[localThemesArr.length - 1].options;
+      const currentThemeIndex = currentOption.findIndex(item => item.value === value);
+      if (currentThemeIndex !== -1) {
+        currentOption[currentThemeIndex].theme = theme;
+      } else {
+        currentOption.push({ value: value, theme: theme });
+      }
+      localStorage.setItem('customThemes', JSON.stringify(localThemesArr));
+    },
+    requestSuccessMethod(file) {
       return new Promise((resolve) => {
-        // 控制上传进度
-        //todo 这里要变成数组
         MessagePlugin.success('上传成功');
         this.uploadThemeFile.push(file);
         resolve({ status: 'success', response: { files: [...this.uploadThemeFile, file] } });
       });
     },
-    requestFailMethod(file /** UploadFile */) {
-      console.log(file);
+    requestFailMethod(file) {
       return new Promise((resolve) => {
         // resolve 参数为关键代码
         MessagePlugin.error('上传失败，请检查文件是否符合规范');
@@ -145,8 +200,8 @@ export default {
       document.getElementById('custom-theme').innerText = theme.theme;
       this.$emit("changeTabTheme", theme);
     },
-    selectThemeModel(idx) {
-      this.selectedThemeModel = idx;
+    selectThemeModel(id) {
+      this.selectedThemeModel = id;
     },
     uploadNewTheme(file) {
       const fileReader = new FileReader();
@@ -154,21 +209,19 @@ export default {
       fileReader.onload = (e) => {
         const theme = e.target.result;
         const themeId = file.name.split('.')[0];
+        this.updateCacheCssLocal('CUSTOM', themeId, theme);
 
-        let themeMap = new Map(this.customUploadTheme.map(item => [item.name, item]));
-        themeMap.set(themeId, {
-          name: themeId,
-          value: themeId,
-          theme: theme,
-          subtitle: TencentSafe,
-        });
-        this.customUploadTheme = Array.from(themeMap.values());
+        // let themeMap = new Map(this.customUploadTheme.map(item => [item.name, item]));
+        // themeMap.set(themeId, {
+        //   name: themeId,
+        //   value: themeId,
+        //   theme: theme,
+        //   subtitle: TencentSafe,
+        // });
+        // this.customUploadTheme = Array.from(themeMap.values());
       };
       return false;
     },
-  },
-  mounted() {
-    this.selectThemeModel(this.selectedThemeModel);
   },
 };
 </script>
