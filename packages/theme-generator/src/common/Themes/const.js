@@ -12,22 +12,23 @@ import TencentSafe from "!raw-loader!./svg/TencentSafe";
 
 export const defaultTheme = {
   name: "默认主题",
-  enName:'TDesign',
+  enName: 'TDesign',
   subtitle: TDesignOriginal,
-  subtitleText:'TDesign Original',
+  subtitleText: 'TDesign Original',
   value: "#0052D9",
 };
 
 export const RECOMMEND_THEMES = [
   {
-    title: "官方推荐",
+    id: "OFFICIAL",
+    title: "officialRecommendation",
     options: [
       defaultTheme,
       {
         name: "腾讯云",
-        enName:'TCloud',
+        enName: 'TCloud',
         subtitle: TencentCloud,
-        subtitleText:'Tencent Cloud',
+        subtitleText: 'Tencent Cloud',
         value: "#006EFF",
       },
       // {
@@ -65,6 +66,18 @@ export const RECOMMEND_THEMES = [
     ],
   },
   // {
+  //   id: "CUSTOM",
+  //   title: "customUpload",
+  //   options: [
+  //     {
+  //       name: "自定义上传",
+  //       enName: 'Custom Upload',
+  //       subtitle: TencentSafe,
+  //       value: "#623BFF",
+  //     }
+  //   ]
+  // }
+  // {
   //   title: "业务推荐",
   //   options: [
   //     {
@@ -86,3 +99,16 @@ export const RECOMMEND_THEMES = [
   //   ],
   // },
 ];
+
+export const UPLOAD_THEMES = {
+  id: "CUSTOM",
+  title: "customUpload",
+  options: [
+    {
+      name: "自定义上传",
+      enName: 'Custom Upload',
+      subtitle: TencentSafe,
+      value: "#623BFF",
+    }
+  ]
+}
