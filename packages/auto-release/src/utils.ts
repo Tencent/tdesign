@@ -129,5 +129,7 @@ export function createRelease(tag: string, title: string, content: string) {
     } catch (error) {
       console.error('Error:', error);
     }
+  } else {
+    console.log('非CI环境,不运行创建 github release');
   }
 }
