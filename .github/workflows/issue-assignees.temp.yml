@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - if: github.event.label.name != 'new component' && github.event.label.name != 'issueshoot'
-      - uses: wow-actions/auto-comment@v1
+        uses: wow-actions/auto-comment@v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           issuesOpened: |
@@ -29,7 +29,7 @@ jobs:
         if: steps.assignees.outputs.contributors != ''
         uses: actions-cool/issues-helper@v3
         with:
-          actions: "add-assignees"
+          actions: 'add-assignees'
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           assignees: ${{ steps.assignees.outputs.contributors }}
@@ -50,4 +50,4 @@ jobs:
             确认有效后将下一步计划和可能需要的时间回复给 @${{ github.event.issue.user.login }} 。
             <!-- AUTO_ASSIGENEES_NOTIFY_HOOK -->
           number: ${{ github.event.issue.number }}
-          body-include: "<!-- AUTO_ASSIGENEES_NOTIFY_HOOK -->"
+          body-include: '<!-- AUTO_ASSIGENEES_NOTIFY_HOOK -->'
