@@ -15,6 +15,5 @@ dist
 results
 static_site
 lib
-!packages/auto-release/dist
 ## test
 coverage
