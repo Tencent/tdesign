@@ -11,6 +11,7 @@
     "site": "npm run build:components && cd site && npm run build",
     "site:intranet": "npm run build:components && cd site && npm run site:intranet",
     "site:preview": "npm run build:components && cd site && npm run site:preview",
+    "auto-release": "pnpm run --filter 'tdesign-auto-release' start",
     "prepare": "husky install"
   },
   "license": "MIT",
@@ -29,6 +30,7 @@
     "husky": "^8.0.0",
     "lint-staged": "8.1.5",
     "prettier": "^2.8.8",
+    "rimraf": "^3.0.2",
     "stylelint": "^15.10.3",
     "stylelint-config-standard": "^34.0.0",
     "stylelint-config-standard-less": "^2.0.0"
