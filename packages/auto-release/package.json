@@ -2,7 +2,7 @@
   "name": "tdesign-auto-release",
   "private": true,
   "version": "1.0.0",
-  "description": "",
+  "description": "the project for TDesign weekly versions collection and auto release",
   "main": "dist/index.js",
   "scripts": {
     "prebuild": "rimraf dist/*",
