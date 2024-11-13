@@ -47,7 +47,7 @@ export function getReleaseData() {
   let START_DATE = '';
   let END_DATE = '';
 
-  const today = new Date();
+  const today = new Date('2024-06-01');
 
   // 获取昨天的日期并且只取年月日格式化成'yyyy-mm-dd'
   const someDaysAgo = new Date(today);
@@ -62,20 +62,19 @@ export function getReleaseData() {
   console.log(`今天是:${today},开始日期:${START_DATE},结束日期:${END_DATE}`);
 
   // release tag & 标题
-  let monthShort = today.toLocaleString('en-US', { month: 'short' });
-
-  const tagYear = today.getFullYear();
-  let tagMonth = today.getMonth() + 1;
   let tagDay = today.getDate();
+  console.log('today', tagDay);
+
+  const tagYear = (today.getMonth() === 0 && today.getDate() === 1) ? today.getFullYear() - 1 : today.getFullYear();
+  const tagMonth = (today.getMonth() === 0 && tagDay === 1) ? 12 : today.getMonth() + (tagDay === 1 ? 0 : 1);
+
+  const monthShort = new Date(tagYear, tagMonth - 1).toLocaleString('en-US', { month: 'short' });
 
   let times = '1st';
 
-  console.log('today', today.getDate());
-  switch (today.getDate()) {
+  switch (tagDay) {
     case 1:
       tagDay = 28;
-      tagMonth = today.getMonth();
-      monthShort = new Date(today.getFullYear(), today.getMonth() - 1).toLocaleString('en-US', { month: 'short' });
       times = '4th';
       break;
     case 8:
