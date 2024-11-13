@@ -12,11 +12,11 @@
   },
   "dependencies": {
     "canvas-3d": "^1.0.14",
-    "prismjs": "^1.29.0",
     "lottie-web": "^5.7.0",
     "markdown-it": "^12.3.2",
     "markdown-it-link-attributes": "^4.0.0",
-    "tdesign-icons-view": "^0.2.1",
+    "prismjs": "^1.29.0",
+    "tdesign-icons-view": "^0.3.2",
     "tdesign-icons-vue": "^0.1.4",
     "tdesign-site-components": "^0.15.4",
     "tdesign-vue": "1.9.8-naruto",
