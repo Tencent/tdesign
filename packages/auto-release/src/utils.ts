@@ -61,16 +61,21 @@ export function getReleaseData() {
   }
   console.log(`今天是:${today},开始日期:${START_DATE},结束日期:${END_DATE}`);
 
-  // 标题
-  const monthShort = today.toLocaleString('en-US', { month: 'short' });
-  const year = today.getFullYear();
-  let times = '1st';
+  // release tag & 标题
+  let monthShort = today.toLocaleString('en-US', { month: 'short' });
+
+  const tagYear = today.getFullYear();
+  let tagMonth = today.getMonth() + 1;
   let tagDay = today.getDate();
+
+  let times = '1st';
 
   console.log('today', today.getDate());
   switch (today.getDate()) {
     case 1:
       tagDay = 28;
+      tagMonth = today.getMonth();
+      monthShort = new Date(today.getFullYear(), today.getMonth() - 1).toLocaleString('en-US', { month: 'short' });
       times = '4th';
       break;
     case 8:
@@ -86,12 +91,12 @@ export function getReleaseData() {
       times = '3rd';
       break;
     default:
-      times = '1st';
+      console.error('日期不在指定范围内');
       break;
   }
 
-  const tag = `v${today.getFullYear()}.${today.getMonth() + 1}.${tagDay}`;
-  const title = `TDesign Weekly Release (${monthShort} ${times} ${year})`;
+  const tag = `v${tagYear}.${tagMonth}.${tagDay}`;
+  const title = `TDesign Weekly Release (${monthShort} ${times} ${tagYear})`;
 
   console.log('tag', tag);
   console.log('title', title);
