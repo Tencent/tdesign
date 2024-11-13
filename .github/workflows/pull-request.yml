@@ -8,6 +8,7 @@ on:
 
 jobs:
   modify-services:
+    if: github.repository == 'Tencent/tdesign'
     runs-on: ubuntu-latest
     outputs:
       services-changed: ${{ steps.services-changed.outputs.changed }}
