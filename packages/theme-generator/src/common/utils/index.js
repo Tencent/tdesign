@@ -42,6 +42,7 @@ export function appendStyleSheet(themeId) {
 }
 
 // generator new theme variables and insert into document
+/** @deprecated */
 export function generateNewTheme(hex, remainInput = true) {
   // hex 主题色
   let styleSheet = appendStyleSheet(customTheme);

@@ -1,37 +1,19 @@
 <template>
   <div class="recommend-theme">
+
     <div class="recommend-theme__title-group">
-      <div :key="idx" v-for="(type, idx) in [...recommendThemes, upload_themes]" class="recommend-theme__title"
+      <div :key="idx" v-for="(type, idx) in recommendThemes" class="recommend-theme__title"
         @click="selectThemeModel(type.id)"
-        :style="{ 'font-weight': selectedThemeModel === type.id ? 'bold' : 'normal' }">
+        :style="{ 'font-weight': selectedThemeModelId === type.id ? 'bold' : 'normal' }">
         {{ lang.dock[type.title] }}
       </div>
     </div>
-    <div class="recommend-theme__flex" v-if="selectedThemeModel !== 'CUSTOM'">
-      <div v-for="(theme, themeIdx) in recommendThemesOptions" :key="themeIdx" @click="generateNewTheme(theme)">
-        <div class="recommend-theme__flex-theme" :style="{
-          'background-color': theme.value,
-        }">
-          <div v-html="theme.subtitle" />
-          <div v-if="currentTheme && currentTheme.value === theme.value" class="recommend-theme__flex-theme--active">
-            <picked-svg />
-          </div>
-        </div>
-        <p :style="{
-          margin: '4px 0',
-          'text-align': 'center',
-          'font-size': '12px',
-          'line-height': '20px',
-        }">
-          {{ isEn ? theme.enName : theme.name }}
-        </p>
-      </div>
-    </div>
-    <div class="recommend-theme__flex" v-else>
-      <div v-for="(theme, themeIdx) in customUploadTheme" :key="themeIdx">
-        <div>
-          <div class="recommend-theme__flex-theme" @click="generateUploadTheme(theme)" :style="{
-            'background-color': '#0052D9',
+
+    <div :key="idx" v-for="(type, idx) in recommendThemes">
+      <div class="recommend-theme__flex" v-if="type.id === selectedThemeModelId">
+        <div v-for="(theme, themeIdx) in type.options" :key="themeIdx" @click=" generateNewTheme(theme)">
+          <div class="recommend-theme__flex-theme" :style="{
+            'background-color': theme?.subBgColor || uploadThemesConfig.options.subBgColor,
           }">
             <div v-html="theme.subtitle" />
             <div v-if="currentTheme && currentTheme.value === theme.value" class="recommend-theme__flex-theme--active">
@@ -48,42 +30,37 @@
             'overflow': 'hidden',
             'text-overflow': 'ellipsis',
           }">
-            {{ theme.name }}
+            {{ isEn ? theme.enName : theme.name }}
           </p>
         </div>
-      </div>
-      <t-upload v-if="customUploadTheme.length < 4" :request-method="requestMethod" :show-upload-progress="false"
-        :before-upload="uploadNewTheme" accept="text/css">
-        <template #fileListDisplay>
-          <span />
-        </template>
-        <div class="recommend-theme__flex-theme" :style="{
-          'background-color': upload_themes.options[0].value,
-        }">
-          <div v-html="upload_themes.options[0].subtitle" />
-          <div v-if="currentTheme && currentTheme.value === upload_themes.options[0].value"
-            class="recommend-theme__flex-theme--active">
-            <picked-svg />
+
+        <t-upload v-if="type.id === uploadThemesConfig.id" :show-upload-progress="false" :before-upload="uploadNewTheme"
+          accept="text/css">
+          <template #fileListDisplay>
+            <span />
+          </template>
+          <div class="recommend-theme__flex-theme" :style="{
+            'background-color': '#0052D9',
+          }">
+            <div v-html="uploadThemesConfig.options.subtitle" />
           </div>
-        </div>
-        <p :style="{
-          margin: '4px 0',
-          'text-align': 'center',
-          'font-size': '12px',
-          'line-height': '20px',
-        }">
-          {{ isEn ? upload_themes.options[0].enName : upload_themes.options[0].name }}
-        </p>
-      </t-upload>
+          <p :style="{
+            margin: '4px 0',
+            'text-align': 'center',
+            'font-size': '12px',
+            'line-height': '20px',
+          }">
+            {{ isEn ? uploadThemesConfig.options.enName : uploadThemesConfig.options.name }}
+          </p>
+        </t-upload>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { Upload as TUpload, MessagePlugin } from "tdesign-vue";
-import { RECOMMEND_THEMES, UPLOAD_THEMES } from "./const";
-import TencentSafe from "!raw-loader!./svg/TencentSafe";
-import { generateNewTheme } from "../utils";
+import { RECOMMEND_THEMES, UPLOAD_THEMES, UPLOAD_LIMIT_EXCEEDED_MESSAGE } from "./const";
 import PickedSvg from "./PickedSvg.vue";
 import langMixin from "../i18n/mixin";
 import { builtInThemeMap } from '../built-in/theme-map';
@@ -98,25 +75,17 @@ export default {
   data() {
     return {
       MessagePlugin,
-      recommendThemes: RECOMMEND_THEMES,
-      upload_themes: UPLOAD_THEMES,
+      recommendThemesConfig: RECOMMEND_THEMES,
+      uploadThemesConfig: UPLOAD_THEMES,
+      recommendThemes: [],
       isThemeTabVisible: false,
       isDrawerVisible: false,
-      selectedThemeModel: 'OFFICIAL',
-      uploadMethod: 'requestSuccessMethod',
-      uploadThemeFile: [],
-      customUploadTheme: [],
+      selectedThemeModelId: 'OFFICIAL',
     };
   },
   computed: {
     recommendThemesOptions() {
-      return this.recommendThemes.find(i => i.id === this.selectedThemeModel)?.options;
-    },
-    requestMethod() {
-      return {
-        requestSuccessMethod: this.requestSuccessMethod,
-        requestFailMethod: this.requestFailMethod,
-      }[this.uploadMethod];
+      return this.recommendThemesConfig.find(i => i.id === this.selectedThemeModelId)?.options;
     },
   },
   mounted() {
@@ -127,98 +96,116 @@ export default {
       const localCustomThemes = localStorage.getItem('customThemes');
       const localThemesArr = JSON.parse(localCustomThemes) ?? [];
 
-      this.recommendThemes.forEach((item) => {
+      this.recommendThemesConfig.forEach((item) => {
         const currentTypeIndex = localThemesArr.findIndex(type => type.id === item.id);
 
-        if (currentTypeIndex !== -1) {
-          item.options.forEach((option) => {
-            const currentThemeIndex = localThemesArr[currentTypeIndex].options.findIndex(theme => theme.value === option.value);
-            const themeCss = builtInThemeMap[option.value];
+        if (currentTypeIndex === -1) {
 
-            if (currentThemeIndex !== -1) {
-              localThemesArr[currentTypeIndex].options[currentThemeIndex].theme = themeCss;
-            } else {
-              localThemesArr[currentTypeIndex].options.push({
-                value: option.value,
-                theme: themeCss,
-              });
-            }
-          });
-        } else {
           const themes = item.options.map((option) => {
             return {
+              name: option.name,
+              enName: option.enName,
+              subtitle: option.subtitle,
+              subtitleText: option.subtitleText,
+              subBgColor: option.subBgColor,
               value: option.value,
               theme: builtInThemeMap[option.value],
             }
           });
           localThemesArr.push({
             id: item.id,
+            title: item.title,
             options: themes,
+          });
+        } else {
+          item.options.forEach((option) => {
+            const currentThemeIndex = localThemesArr[currentTypeIndex].options.findIndex(theme => theme.value === option.value);
+            const themeCss = builtInThemeMap[option.value];
+            if (currentThemeIndex === -1) {
+              localThemesArr[currentTypeIndex].options.push({
+                name: option.name,
+                enName: option.enName,
+                subtitle: option.subtitle,
+                subBgColor: option.subBgColor,
+                subtitleText: option.subtitleText,
+                value: option.value,
+                theme: themeCss,
+              });
+            } else {
+              localThemesArr[currentTypeIndex].options[currentThemeIndex].theme = themeCss;
+            }
           });
         }
       });
+
+      const uploadThemes = localThemesArr.find(item => item.id === this.uploadThemesConfig.id);
+      if (!uploadThemes) {
+        localThemesArr.push({
+          id: this.uploadThemesConfig.id,
+          title: this.uploadThemesConfig.title,
+          options: [],
+        });
+      }
+
+      // 初始化主题选择
+      this.recommendThemes = localThemesArr;
       localStorage.setItem('customThemes', JSON.stringify(localThemesArr));
     },
-    updateCacheCssLocal(id, value, theme) {
+    updateCacheCssLocal(id, title, option) {
       const localCustomThemes = localStorage.getItem('customThemes');
       let localThemesArr = JSON.parse(localCustomThemes) ?? [];
 
       const currentTypeIndex = localThemesArr?.findIndex(item => item.id === id);
 
       if (currentTypeIndex === -1) {
-        localThemesArr.push({ id: id, options: [] });
+        localThemesArr.push({
+          id,
+          title,
+          options: []
+        });
       }
 
       const currentOption = localThemesArr[localThemesArr.length - 1].options;
-      const currentThemeIndex = currentOption.findIndex(item => item.value === value);
-      if (currentThemeIndex !== -1) {
-        currentOption[currentThemeIndex].theme = theme;
+      const currentThemeIndex = currentOption.findIndex(item => item.value === option?.value);
+
+      if (currentThemeIndex === -1) {
+        currentOption.push(option);
       } else {
-        currentOption.push({ value: value, theme: theme });
+        currentOption[currentThemeIndex] = option;
       }
+
+      this.recommendThemes = localThemesArr;
       localStorage.setItem('customThemes', JSON.stringify(localThemesArr));
     },
-    requestSuccessMethod(file) {
-      return new Promise((resolve) => {
-        MessagePlugin.success('上传成功');
-        this.uploadThemeFile.push(file);
-        resolve({ status: 'success', response: { files: [...this.uploadThemeFile, file] } });
-      });
-    },
-    requestFailMethod(file) {
-      return new Promise((resolve) => {
-        // resolve 参数为关键代码
-        MessagePlugin.error('上传失败，请检查文件是否符合规范');
-        resolve({ status: 'fail', error: '上传失败，请检查文件是否符合规范' });
-      });
-    },
     generateNewTheme(theme) {
-      generateNewTheme(theme.value);
-      this.$emit("changeTabTheme", theme);
-    },
-    generateUploadTheme(theme) {
       document.getElementById('custom-theme').innerText = theme.theme;
       this.$emit("changeTabTheme", theme);
     },
     selectThemeModel(id) {
-      this.selectedThemeModel = id;
+      this.selectedThemeModelId = id;
     },
     uploadNewTheme(file) {
+      const uploadThemes = this.recommendThemes.find(item => item.id === this.uploadThemesConfig.id);
+      if (uploadThemes.options.length > 3) {
+        //后续改为横向 scroll 滚动展示,可以提高上传数量
+        MessagePlugin.success("超过上传数量限制,最大上传数量为3个");
+        return false;
+      }
+
       const fileReader = new FileReader();
       fileReader.readAsText(file.raw);
       fileReader.onload = (e) => {
         const theme = e.target.result;
         const themeId = file.name.split('.')[0];
-        this.updateCacheCssLocal('CUSTOM', themeId, theme);
-
-        // let themeMap = new Map(this.customUploadTheme.map(item => [item.name, item]));
-        // themeMap.set(themeId, {
-        //   name: themeId,
-        //   value: themeId,
-        //   theme: theme,
-        //   subtitle: TencentSafe,
-        // });
-        // this.customUploadTheme = Array.from(themeMap.values());
+        this.updateCacheCssLocal(this.uploadThemesConfig.id, this.uploadThemesConfig.title, {
+          name: themeId,
+          enName: themeId,
+          subtitle: this.uploadThemesConfig.options.subtitle,
+          subtitleText: this.uploadThemesConfig.options.subtitleText,
+          subBgColor: this.uploadThemesConfig.options.subBgColor,
+          value: themeId,
+          theme: theme,
+        });
       };
       return false;
     },
