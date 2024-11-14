@@ -47,7 +47,7 @@ export function getReleaseData() {
   let START_DATE = '';
   let END_DATE = '';
 
-  const today = new Date('2024-06-01');
+  const today = new Date();
 
   // 获取昨天的日期并且只取年月日格式化成'yyyy-mm-dd'
   const someDaysAgo = new Date(today);
