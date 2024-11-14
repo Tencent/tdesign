@@ -38,10 +38,10 @@ export function getReleaseData() {
   /**
    * @description 检查日期是否在指定日期范围内
    *  在每个月的1号、8号、15号、22号生成
-   *  1号生成上个月的22号到最后一天的版本
-   *  8号生成这个月的1号到7号的版本
-   *  15号生成这个月的8号到14号的版本
-   *  22号生成这个月的15号到21号的版本
+   *  1号(原应在29号)：生成上个月的22号 - 最后一天的版本(原应在28号)
+   *  8号：生成这个月的1号 - 7号的版本
+   *  15号：生成这个月的8号 - 14号的版本
+   *  22号：生成这个月的15号 - 21号的版本
    */
 
   let START_DATE = '';
@@ -61,32 +61,41 @@ export function getReleaseData() {
   }
   console.log(`今天是:${today},开始日期:${START_DATE},结束日期:${END_DATE}`);
 
-  // 标题
-  const monthShort = today.toLocaleString('en-US', { month: 'short' });
-  const year = today.getFullYear();
+  // release tag & 标题
+  let tagDay = today.getDate();
+  console.log('today', tagDay);
+
+  const tagYear = (today.getMonth() === 0 && today.getDate() === 1) ? today.getFullYear() - 1 : today.getFullYear();
+  const tagMonth = (today.getMonth() === 0 && tagDay === 1) ? 12 : today.getMonth() + (tagDay === 1 ? 0 : 1);
+
+  const monthShort = new Date(tagYear, tagMonth - 1).toLocaleString('en-US', { month: 'short' });
+
   let times = '1st';
 
-  console.log('today', today.getDate());
-  switch (today.getDate()) {
+  switch (tagDay) {
     case 1:
+      tagDay = 28;
       times = '4th';
       break;
     case 8:
+      tagDay = 7;
       times = '1st';
       break;
     case 15:
+      tagDay = 14;
       times = '2nd';
       break;
     case 22:
+      tagDay = 21;
       times = '3rd';
       break;
     default:
-      times = '1st';
+      console.error('日期不在指定范围内');
       break;
   }
 
-  const tag = `v${today.getFullYear()}.${today.getMonth() + 1}.${today.getDate()}`;
-  const title = `TDesign Weekly Release (${monthShort} ${times} ${year})`;
+  const tag = `v${tagYear}.${tagMonth}.${tagDay}`;
+  const title = `TDesign Weekly Release (${monthShort} ${times} ${tagYear})`;
 
   console.log('tag', tag);
   console.log('title', title);
