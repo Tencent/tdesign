@@ -231,6 +231,8 @@ export default define({
     set: (_host, value) => value,
     connect: (host) => {
       allComponentsNpmUrl.forEach((item) => {
+        // flutter is not a npm package
+        if (item === 'tdesign-flutter') return;
         fetch(`https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/npm/versions/${item}`)
           .then((res) => res.json())
           .then((res) => {
