@@ -231,7 +231,7 @@ export default define({
     set: (_host, value) => value,
     connect: (host) => {
       allComponentsNpmUrl.forEach((item) => {
-        fetch(`https://mirrors.tencent.com/npm/${item}`)
+        fetch(`https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/npm/versions/${item}`)
           .then((res) => res.json())
           .then((res) => {
             const latestVersion = res?.['dist-tags']?.['latest'];
