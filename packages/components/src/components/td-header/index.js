@@ -230,20 +230,14 @@ export default define({
     get: (_host, lastValue) => lastValue || {},
     set: (_host, value) => value,
     connect: (host) => {
-      allComponentsNpmUrl.forEach((item) => {
-        // flutter is not a npm package
-        if (item === 'tdesign-flutter') return;
-        fetch(`https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/npm/versions/${item}`)
-          .then((res) => res.json())
-          .then((res) => {
-            const latestVersion = res?.['dist-tags']?.['latest'];
-            host.npmVersions = {
-              ...host.npmVersions,
-              [item]: latestVersion,
-            };
-          })
-          .catch(console.error);
-      });
+      fetch(`https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/npm/latest-versions`)
+        .then((res) => res.json())
+        .then((res) => {
+          host.npmVersions = {
+            ...res,
+          };
+        })
+        .catch(console.error);
     },
   },
   collapseMenu: {
