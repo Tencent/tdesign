@@ -1,5 +1,6 @@
 [default.extend-words]
 hd = "hd"
+metalness="metalness"
 
 [files]
-extend-exclude = ["**/lib/**","**/spline/**","contributor.html","README.md","README_zh-CN.md","docsearch.min.js","*.svg","**/public/**"]
+extend-exclude = ["**/lib/**","**/spline/**","contributor.html","README.md","README_zh-CN.md","docsearch.min.js","*.svg","**/public/**","pnpm-lock.yaml"]

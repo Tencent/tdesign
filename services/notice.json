@@ -1,14 +1,14 @@
 {
-  "all": {
-    "title": "📢 图标资源更新至 2000 个，增强图标模块的搜索体验，欢迎体验并反馈问题",
-    "type": "primary",
-    "actionUrl": "https://tdesign.tencent.com/design/icon#header-69",
-    "closeable": true
-  },
+  "all": {},
   "site": {},
   "vue": {},
   "react": {},
-  "vue-next": {},
+  "vue-next": {
+    "title": "📢 新增 Chat 对话组件，欢迎使用体验并反馈问题",
+    "type": "primary",
+    "actionUrl": "https://tdesign.tencent.com/chat",
+    "closeable": true
+  },
   "vue-mobile": {},
   "miniprogram": {}
 }

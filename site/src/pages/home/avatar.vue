@@ -40,7 +40,7 @@ export default {
     width: var(--avatar-size);
     height: var(--avatar-size);
     transition: all 1s;
-    // fix safari border-radiu overflow bug
+    // fix safari border-radius overflow bug
     mask-image: -webkit-radial-gradient(white, black);
     -webkit-mask-image: -webkit-radial-gradient(white, black);
 
