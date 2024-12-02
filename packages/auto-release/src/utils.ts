@@ -133,7 +133,6 @@ export function createRelease(tag: string, title: string, content: string) {
         tag_name: tag, // 添加缺少的 tag_name 参数
         name: title, // 可选参数，使用 title 作为发布名称
         body: content, // 可选参数，发布说明内容
-        draft: true, // 可选参数，是否为草稿
       });
     } catch (error) {
       console.error('Error:', error);
