@@ -11,7 +11,7 @@ jobs:
       - name: check_github_primary_email
         run: |
           log_emails=$(git log --pretty=format:"%ae %ce" -1)
-          if [[ ${log_emails} =~ 'tdesign-bot@tencent.com' ]];then 
+          if [[ ${log_emails} =~ 'tdesign@tencent.com' ]];then 
             echo "$log_emails 跳过验证"
             exit 0
           fi
@@ -27,7 +27,7 @@ jobs:
       - name: check_local_email
         run: |
           log_emails=$(git log --pretty=format:"%ae %ce" -1)
-          if [[ ${log_emails} =~ 'tdesign-bot@tencent.com' ]];then 
+          if [[ ${log_emails} =~ 'tdesign@tencent.com' ]];then 
             echo "$log_emails 跳过验证"
             exit 0
           fi
