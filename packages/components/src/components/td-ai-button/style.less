@@ -1,0 +1,42 @@
+/* stylelint-disable */
+.TDesign-ai-button {
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0 2px 4px -1px rgba(0, 255, 240, .12), 0 4px 5px 0 rgba(0, 71, 255, .08),
+    0 1px 10px 0 rgba(0, 102, 255, .05);
+  cursor: pointer;
+  background: conic-gradient(#00c3ff, #4ceb1b, #0062ff, #a07cf3, #00c3ff);
+  height: 32px;
+  font-size: 14px;
+  padding: 2px;
+
+  > span {
+    background-color: var(--bg-color-container);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-radius: 4px;
+    padding: 0 8px;
+  }
+
+  &__text {
+    position: relative;
+    color: #00c3ff;
+    font-weight: 600;
+    padding-right: 0;
+    padding: 0 0 0 8px;
+
+    &::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 8px;
+      z-index: 10;
+      color: #a07cf3;
+      mask: linear-gradient(to bottom, transparent, #000);
+      mask: linear-gradient(to bottom, transparent, #000);
+      white-space: nowrap;
+    }
+  }
+}
