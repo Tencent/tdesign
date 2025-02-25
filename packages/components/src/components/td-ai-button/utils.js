@@ -7,6 +7,12 @@ let regExp = {
   vue: /```vue(?:\w+)?\s*([\s\S]*?)```/g,
 };
 
+let frameworkKeys = {
+  react: 'tdesign-react',
+  vue: 'tdesign-vue-next',
+  miniprogram: 'tdesign-miniprogram',
+};
+
 const appendChildAsync = (parent, child) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -34,6 +40,7 @@ const createAISearchSDK = (framework, demoRequestBody) => {
           background: 'linear-gradient(117deg, #E4FFEE 0%, #B3EAFF 17.08%, #EAE7FF 45.83%, #FFF2F9 83.33%)',
         },
         knowledgeBase: '#TDesign',
+        keywords: frameworkKeys[framework],
       });
       sdk.sendMessage({
         prompt: '',
@@ -86,11 +93,9 @@ const createTooltips = (generateDemo, selectedText) => {
     unmountTooltips();
     let prompt = '';
     if (generateDemo) {
-      prompt = `请为我生成 TDesign 的${framework}框架的${component}的${selectedText}的代码示例`;
+      prompt = `请为我生成${component}的${selectedText}的代码示例`;
     } else {
-      prompt = component
-        ? `请为我解释${selectedText}在 TDesign 中的${framework}框架的${component}的定义`
-        : `请为我解释${selectedText}在 TDesign 中的${framework}框架的定义`;
+      prompt = component ? `请为我解释${component}的${selectedText}的定义` : `请为我解释${selectedText}的定义`;
     }
     sendMessage(prompt);
   });
@@ -143,15 +148,14 @@ const webChatInteraction = (framework, demoRequestBody) => {
     unmountTooltips();
 
     // 移除节点
-
     if (preSelectedText && preSelectedText === selectedText) return;
+
     preSelectedText = selectedText;
     const target = event.target;
     const isGenerateDemo =
       ['api'].includes(urlParams.get('tab')) &&
       target.tagName === 'TD' &&
-      target.parentNode.firstChild === target &&
-      target.nodeType === 1;
+      Array.from(target.parentNode.childNodes).filter((node) => node.nodeType === 1)[0] === target;
     const popper = createTooltips(isGenerateDemo, selectedText);
     createPopper(event.target, popper, {
       placement: 'top',
