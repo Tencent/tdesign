@@ -18,7 +18,7 @@ const appendChildAsync = (parent, child) => {
     setTimeout(() => {
       parent.appendChild(child);
       resolve();
-    }, 200);
+    }, 100);
   });
 };
 
@@ -93,7 +93,7 @@ const createTooltips = (generateDemo, selectedText) => {
     unmountTooltips();
     let prompt = '';
     if (generateDemo) {
-      prompt = `请为我生成${component}的${selectedText}的代码示例`;
+      prompt = `请为我生成 ${component} 组件的 ${selectedText} 的 script setup 代码示例`;
     } else {
       prompt = component ? `请为我解释${component}的${selectedText}的定义` : `请为我解释${selectedText}的定义`;
     }
