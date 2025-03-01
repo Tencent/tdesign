@@ -5,7 +5,7 @@ export const submodules = {
   },
   'tdesign-vue-next': {
     title: '## Vue3 for Web 发布',
-    changelogUrl: 'https://raw.githubusercontent.com/Tencent/tdesign-vue-next/refs/heads/main/CHANGELOG.md',
+    changelogUrl: 'https://raw.githubusercontent.com/Tencent/tdesign-vue-next/refs/heads/main/packages/tdesign-vue-next/CHANGELOG.md',
   },
   'tdesign-react': {
     title: '## React for Web 发布 ',
