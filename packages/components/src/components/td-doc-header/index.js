@@ -27,7 +27,8 @@ function iframeOnload(host) {
   const iframeEl = host.shadowRoot.getElementById('__iframe__');
   clearTimeout(timer);
   timer = setTimeout(() => {
-    iframeEl && (iframeEl.style = `
+    iframeEl &&
+      (iframeEl.style = `
       max-height: 280px;
       transition: max-height .25s .2s var(--anim-time-fn-easing);
       -webkit-transition: max-height .25s .2s var(--anim-time-fn-easing);
@@ -47,7 +48,7 @@ export default define({
     },
     observe: (host) => {
       clearTimeout(observeTimer);
-      const themeMode = document.documentElement.getAttribute('theme-mode') || 'light';
+      const themeMode = localStorage.getItem('--tdesign-theme') || 'light';
       observeTimer = setTimeout(() => {
         handleModeChange(themeMode, host);
       }, 600);
@@ -65,7 +66,7 @@ export default define({
       titleElement.id = '__td_doc_title__';
       titleElement.innerText = value.title;
       host.appendChild(titleElement);
-    }
+    },
   },
   fixedTitle: {
     get: (_host, lastValue) => lastValue || undefined,
@@ -90,12 +91,20 @@ export default define({
         if (scrollTop >= 228) {
           if (title.style.position !== 'fixed') {
             Object.assign(title.style, {
-              position: 'fixed', top: tabs ? '16px' : '28px', fontSize: '24px', lineHeight: '32px', opacity: 1, visibility: 'visible',
+              position: 'fixed',
+              top: tabs ? '16px' : '28px',
+              fontSize: '24px',
+              lineHeight: '32px',
+              opacity: 1,
+              visibility: 'visible',
             });
             Object.assign(background.style, { position: 'fixed', top: '0', left: asideWidth });
-            tabs && Object.assign(tabs.style, {
-              position: 'fixed', top: '64px', zIndex: 500,
-            });
+            tabs &&
+              Object.assign(tabs.style, {
+                position: 'fixed',
+                top: '64px',
+                zIndex: 500,
+              });
             Object.assign(issue.style, { position: 'fixed', top: '24px', right: '24px' });
           }
         } else if (scrollTop > 192 && scrollTop < 228) {
@@ -103,7 +112,7 @@ export default define({
             Object.assign(title.style, { opacity: 0, visibility: 'hidden' });
             Object.assign(thumb.style, { opacity: 0, visibility: 'hidden' });
             Object.assign(describe.style, { opacity: 0, visibility: 'hidden' });
-  
+
             Object.assign(background.style, { position: 'absolute', top: 'unset', left: '0' });
             tabs && Object.assign(tabs.style, { position: 'absolute', top: '228px' });
             Object.assign(issue.style, { position: 'absolute', top: 'calc(100% - 48px - 12px)' });
@@ -111,7 +120,11 @@ export default define({
         } else {
           if (title.style.position === 'fixed' || title.style.visibility === 'hidden') {
             Object.assign(title.style, {
-              position: 'unset', fontSize: '48px', lineHeight: '56px', opacity: 1, visibility: 'visible',
+              position: 'unset',
+              fontSize: '48px',
+              lineHeight: '56px',
+              opacity: 1,
+              visibility: 'visible',
             });
             Object.assign(describe.style, { opacity: 1, visibility: 'visible' });
             Object.assign(background.style, { position: 'absolute', top: 'unset', left: '0' });
@@ -133,12 +146,9 @@ export default define({
     const splineUrl = splineConfig[spline];
 
     return html`
-      ${splineUrl ? html`
-        <iframe id="__iframe__"
-          class="TDesign-doc-header__thumb"
-          onload="${iframeOnload}"
-        ></iframe>` : html``
-      }
+      ${splineUrl
+        ? html` <iframe id="__iframe__" class="TDesign-doc-header__thumb" onload="${iframeOnload}"></iframe>`
+        : html``}
       <div class="TDesign-doc-header" style="${mobileBodyStyle}">
         <div class="TDesign-doc-header__inner">
           <div class="TDesign-doc-header__badge">
@@ -146,12 +156,14 @@ export default define({
           </div>
           <div class="TDesign-doc-header__content">
             <div class="TDesign-doc-header__info">
-              ${docInfo ? html`
-                <h1 class="TDesign-doc-header__info-title">${docInfo.title}</h1>
-                <div class="TDesign-doc-header__info-describe">
-                  <div innerHTML="${docInfo.desc}"></div>
-                </div>
-              ` : html``}
+              ${docInfo
+                ? html`
+                    <h1 class="TDesign-doc-header__info-title">${docInfo.title}</h1>
+                    <div class="TDesign-doc-header__info-describe">
+                      <div innerHTML="${docInfo.desc}"></div>
+                    </div>
+                  `
+                : html``}
             </div>
           </div>
         </div>

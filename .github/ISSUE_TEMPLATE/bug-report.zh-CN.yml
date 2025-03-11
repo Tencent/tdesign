@@ -13,10 +13,19 @@ body:
         - 如果你发现一个已经关闭的旧 Issue 在最新版本中仍然存在，不要在旧 Issue 下面留言，请建一个新的 issue。
 
   - type: input
+    id: framework
+    attributes:
+      label: tdesign 技术栈
+      description: tdesign-vue / tdesign-vue-next / tdesign-react / tdesign-mobile-vue / tdesign-mobile-react / tdesign-miniprogram
+      placeholder: 请填写
+    validations:
+      required: true
+
+  - type: input
     id: version
     attributes:
-      label: tdesign 版本
-      description: 请检查在最新项目版本中能否重现此 issue。
+      label: tdesign 技术栈版本
+      description: 请检查在对应技术栈最新项目版本中能否重现此 issue。
       placeholder: 请填写
     validations:
       required: true
