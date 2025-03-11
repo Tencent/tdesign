@@ -18,18 +18,18 @@ export default define({
   languages: undefined, // multiple languages display
   currentRenderCode: '',
   theme: {
-    get: (host, lastValue) => lastValue || sessionStorage.getItem('--tdesign-theme') || 'light',
+    get: (host, lastValue) => lastValue || localStorage.getItem('--tdesign-theme') || 'light',
     set: (host, value) => value,
     connect(host, key, invalidate) {
       function themeChange() {
-        const theme = sessionStorage.getItem('--tdesign-theme');
+        const theme = localStorage.getItem('--tdesign-theme');
         Object.assign(host, { [key]: theme });
         invalidate();
       }
 
-      window.addEventListener('storageChange', themeChange);
+      window.addEventListener('localStorage', themeChange);
 
-      return () => window.removeEventListener('storageChange', themeChange);
+      return () => window.removeEventListener('localStorage', themeChange);
     },
   },
   activeStyleMap: {

@@ -48,14 +48,14 @@ export default define({
     get: (_host, lastValue) => lastValue || 'light',
     set: (_host, value) => {
       if (value) {
-        sessionStorage.setItem('--tdesign-theme', value);
+        localStorage.setItem('--tdesign-theme', value);
         window.dispatchEvent(storageChangeEvent);
       }
 
       return value;
     },
     connect: (host, key, invalidate) => {
-      const lastTheme = sessionStorage.getItem('--tdesign-theme');
+      const lastTheme = localStorage.getItem('--tdesign-theme');
 
       if (lastTheme) {
         document.documentElement.removeAttribute('theme-mode');
