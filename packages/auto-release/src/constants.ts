@@ -9,7 +9,7 @@ export const submodules = {
   },
   'tdesign-react': {
     title: '## React for Web 发布 ',
-    changelogUrl: 'https://raw.githubusercontent.com/Tencent/tdesign-react/refs/heads/main/CHANGELOG.md',
+    changelogUrl: 'https://raw.githubusercontent.com/Tencent/tdesign-react/refs/heads/main/packages/tdesign-react/CHANGELOG.md',
   },
   'tdesign-miniprogram': {
     title: '## Miniprogram for WeChat 发布',
