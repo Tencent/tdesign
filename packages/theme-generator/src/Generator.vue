@@ -54,7 +54,7 @@ export default {
     };
   },
   mounted() {
-    generateNewTheme("#0052D9");
+    generateNewTheme(defaultTheme.value);
   },
   methods: {
     handleChangeTheme(theme) {
