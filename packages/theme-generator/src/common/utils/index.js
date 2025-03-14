@@ -41,6 +41,21 @@ export function appendStyleSheet(themeId) {
   return styleSheet;
 }
 
+function extractThemeString(cssStr) {
+  const darkRegex = /:root(?:\[.*?\])?\[theme-mode="dark"\]\s*\{[^}]*\}/;
+
+  const darkMatch = cssStr.match(darkRegex);
+  const darkTheme = darkMatch?.[0] || '';
+
+  // 移除 dark 的 CSS，剩下的归为 light
+  const lightTheme = cssStr.replace(darkTheme, '').trim();
+
+  return {
+    light: lightTheme,
+    dark: darkTheme,
+  };
+}
+
 // generator new theme variables and insert into document
 export function generateNewTheme(hex, remainInput = true) {
   // hex 主题色
@@ -49,12 +64,15 @@ export function generateNewTheme(hex, remainInput = true) {
 
   const { brandColorIdx, colorPalette, styleSheetString } = generateTokenList(hex, false, 10, remainInput);
   if (builtInThemeMap[hex]) {
-    styleSheet.innerText = builtInThemeMap[hex];
-    document.head.removeChild(darkStyleSheet);
+    // 内置主题
+    const { light, dark } = extractThemeString(builtInThemeMap[hex]);
+    styleSheet.textContent = light;
+    darkStyleSheet.textContent = dark;
   } else {
+    // 动态生成
     const darkCssTokenString = generateTokenList(hex, true).styleSheetString;
-    styleSheet.innerText = styleSheetString;
-    darkStyleSheet.innerText = darkCssTokenString;
+    styleSheet.textContent = styleSheetString;
+    darkStyleSheet.textContent = darkCssTokenString;
   }
 
   document.documentElement.setAttribute('theme-color', customTheme);
@@ -157,6 +175,7 @@ export function handleDownload() {
   let cssVariablesString = styleSheet?.innerText?.replaceAll(`[theme-color="${customTheme}"]`, '');
   let darkCssVariablesString = darkStyleSheet?.innerText?.replaceAll(`[theme-color="${customTheme}"]`, '');
 
+  // 合并为一个文件导出
   const finalCssVariablesString = builtInThemeMap[hex]
     ? cssVariablesString
     : `${cssVariablesString}${darkCssVariablesString}`;
