@@ -10,24 +10,34 @@ import TencentHealthcare from "!raw-loader!./svg/TencentHealthcare";
 import TencentGames from "!raw-loader!./svg/TencentGames";
 import TencentSafe from "!raw-loader!./svg/TencentSafe";
 
+// export const UPLOAD_LIMIT_EXCEEDED_MESSAGE = {
+//   en: "Upload limit exceeded",
+//   zh: "超过上传数量"
+// };
+
 export const defaultTheme = {
+  id: "DEFAULT",
   name: "默认主题",
-  enName:'TDesign',
+  enName: 'TDesign',
   subtitle: TDesignOriginal,
-  subtitleText:'TDesign Original',
+  subtitleText: 'TDesign Original',
+  subBgColor: '#0052D9',
   value: "#0052D9",
 };
 
+/** 确保 id,title  唯一 */
 export const RECOMMEND_THEMES = [
   {
-    title: "官方推荐",
+    id: "OFFICIAL",
+    title: "officialRecommendation",
     options: [
       defaultTheme,
       {
         name: "腾讯云",
-        enName:'TCloud',
+        enName: 'TCloud',
         subtitle: TencentCloud,
-        subtitleText:'Tencent Cloud',
+        subtitleText: 'Tencent Cloud',
+        subBgColor: '#006EFF',
         value: "#006EFF",
       },
       // {
@@ -65,6 +75,18 @@ export const RECOMMEND_THEMES = [
     ],
   },
   // {
+  //   id: "CUSTOM",
+  //   title: "customUpload",
+  //   options: [
+  //     {
+  //       name: "自定义上传",
+  //       enName: 'Custom Upload',
+  //       subtitle: TencentSafe,
+  //       value: "#623BFF",
+  //     }
+  //   ]
+  // }
+  // {
   //   title: "业务推荐",
   //   options: [
   //     {
@@ -86,3 +108,17 @@ export const RECOMMEND_THEMES = [
   //   ],
   // },
 ];
+
+export const UPLOAD_THEMES = {
+  id: "CUSTOM",
+  title: "customUpload",
+  options: {
+    id: "CUSTOM",
+    name: "自定义上传",
+    enName: 'Custom Upload',
+    subtitle: TencentSafe,
+    subtitleText: 'Tencent Cloud',
+    subBgColor: '#623BFF',
+    value: "#623BFF",
+  }
+}
