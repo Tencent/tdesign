@@ -1,7 +1,7 @@
 name: 反馈新功能
 description: 通过 github 模板进行新功能反馈。
 title: "[组件名称] 描述问题的标题"
-labels: [💪🏻 enhancement, 🕵🏼‍♀️ pending-unconfirmed]
+labels: [💪🏻 enhancement, 🕵🏼‍♀️ unconfirmed]
 body:
   - type: markdown
     attributes:
