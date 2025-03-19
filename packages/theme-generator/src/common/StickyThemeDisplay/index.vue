@@ -1,5 +1,5 @@
 <template>
-  <div class="sticky-theme" :style="stickyThemeStyle" v-if="!!theme" ref="stickyTheme">
+  <div class="sticky-theme" :style="stickyThemeStyle" v-if="!!theme">
     <div class="theme-status"></div>
     <div v-if="isAnimating" class="theme-status eight-deg-slide"></div>
     <div class="theme-text">
@@ -49,14 +49,6 @@ export default {
       this.styleObserver.observe(document.documentElement, {
         attributes: true,
         attributeFilter: ['style', 'class'],
-      });
-
-      document.querySelectorAll('style').forEach((styleEl) => {
-        this.styleObserver.observe(styleEl, {
-          childList: true,
-          characterData: true,
-          subtree: true,
-        });
       });
     },
     checkBrandColorChange() {
