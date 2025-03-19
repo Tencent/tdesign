@@ -241,17 +241,32 @@ export function handleAttach() {
 }
 
 // modify custom-theme token/variable value
-export function modifyToken(tokenIdxName, res) {
-  const styleSheet = document.getElementById(CUSTOM_THEME_ID);
-  if (!styleSheet) return;
-  const reg = new RegExp(`${tokenIdxName}: (.*)`);
+export function modifyToken(tokenIdxName, newVal) {
+  // 获取所有可能包含 token 的样式表
+  const styleSheets = document.querySelectorAll(
+    // eslint-disable-next-line prettier/prettier
+    `#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, [id^="${COMMON_THEME_ID}-"]`
+  );
 
-  const curSize = styleSheet.innerText.match(reg)?.[1]?.split?.(';')?.[0];
-  if (!curSize) {
+  let tokenFound = false;
+
+  styleSheets.forEach((styleSheet) => {
+    const reg = new RegExp(`${tokenIdxName}:\\s*(.*?);`);
+    const match = styleSheet.innerText.match(reg);
+
+    if (match) {
+      const currentVal = match[1];
+      styleSheet.innerText = styleSheet.innerText.replace(
+        `${tokenIdxName}: ${currentVal}`,
+        `${tokenIdxName}: ${newVal}`,
+      );
+      tokenFound = true;
+    }
+  });
+
+  if (!tokenFound) {
     console.warn(`CSS variable: ${tokenIdxName} is not exist`);
-    return;
   }
-  styleSheet.innerText = styleSheet.innerText.replace(`${tokenIdxName}: ${curSize}`, `${tokenIdxName}: ${res}`);
 }
 
 // get current stylesheet
