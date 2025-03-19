@@ -11,23 +11,18 @@
       <div class="color-content__main">
         <p class="color-content__title">{{ lang.color.themeColor }}</p>
         <t-row :gutter="[4, 4]" :style="{ marginLeft: '0' }">
-          <t-col
-            v-for="(theme, idx) in themes.slice(0, 3)"
-            :key="idx"
-            :span="3"
-            :style="{ padding: '0' }"
-          >
+          <t-col v-for="(theme, idx) in themes.slice(0, 3)" :key="idx" :span="3" :style="{ padding: '0' }">
             <div
               :class="{
                 'color-content__block': true,
                 'is-active':
-                  currentThemeColor === theme.value && !isMoreVisible,
+                  currentThemeColor.toLocaleLowerCase() === theme.value.toLocaleLowerCase() && !isMoreVisible,
               }"
               :style="{ paddingBottom: '4px', color: 'var(--text-secondary)' }"
             >
               <div
                 @click="generateNewTheme(theme.value)"
-                :class="{ 'is-active': currentThemeColor === theme.value }"
+                :class="{ 'is-active': currentThemeColor.toLocaleLowerCase() === theme.value.toLocaleLowerCase() }"
               >
                 <div
                   :style="{
@@ -77,12 +72,7 @@
                       position: 'relative',
                     }"
                   >
-                    <canvas
-                      id="canvas"
-                      class="recommend-block"
-                      width="24px"
-                      height="24px"
-                    ></canvas>
+                    <canvas id="canvas" class="recommend-block" width="24px" height="24px"></canvas>
                   </div>
                 </div>
               </div>
@@ -174,14 +164,9 @@
               <div class="color-content__custom-bottom">
                 <div>
                   <p>{{ lang.color.customizeTitle }}</p>
-                  <p :style="{ color: 'var(--text-secondary)' }">
-                    HEX: {{ currentDisplayThemeColor }}
-                  </p>
+                  <p :style="{ color: 'var(--text-secondary)' }">HEX: {{ currentDisplayThemeColor }}</p>
                 </div>
-                <edit-1-icon
-                  size="20"
-                  :style="{ marginRight: '8px', color: 'var(--text-primary)' }"
-                />
+                <edit-1-icon size="20" :style="{ marginRight: '8px', color: 'var(--text-primary)' }" />
               </div>
             </div>
           </div>
@@ -336,17 +321,17 @@ import {
   Divider as TDivider,
   Tooltip as TTooltip,
   Switch as TSwitch,
-} from "tdesign-vue";
-import { Edit1Icon, HelpCircleIcon, FileCopyIcon } from "tdesign-icons-vue";
-import { Color } from "tvision-color";
-import ColorColumn from "../ColorColumn/index.vue";
-import ColorCollapse from "./ColorCollapse.vue";
-import ColorPicker from "../../../common/ColorPicker/ColorPicker.vue";
-import {
-  handleAttach,
-  generateNewTheme,
-  generateTokenList,
-} from "../../../common/utils";
+} from 'tdesign-vue';
+import { Edit1Icon, HelpCircleIcon, FileCopyIcon } from 'tdesign-icons-vue';
+import { Color } from 'tvision-color';
+
+import ColorColumn from '../ColorColumn/index.vue';
+import ColorCollapse from './ColorCollapse.vue';
+
+import ColorPicker from '../../../common/ColorPicker/ColorPicker.vue';
+import { DEFAULT_THEME } from '../../../common/Themes/const';
+import { handleAttach, generateNewTheme, generateTokenList } from '../../../common/utils';
+
 import {
   DEFAULT_COLOR,
   BRAND_COLOR_MAP,
@@ -354,15 +339,14 @@ import {
   WARNING_COLOR_MAP,
   SUCCESS_COLOR_MAP,
   GRAY_COLOR_MAP,
-  DEFAULT_THEME,
   RECOMMEND_COLOR,
   SCENE_COLOR,
-} from "../../utils/const";
-import { colorAnimation } from "../../../common/utils/animation";
-import langMixin from "../../../common/i18n/mixin";
+} from '../../utils/const';
+import { colorAnimation } from '../../../common/utils/animation';
+import langMixin from '../../../common/i18n/mixin';
 
 export default {
-  name: "ColorContent",
+  name: 'ColorContent',
   props: {
     top: Number,
     isRefresh: Boolean,
@@ -387,78 +371,55 @@ export default {
       themes: DEFAULT_COLOR,
       recommendThemes: RECOMMEND_COLOR,
       sceneThemes: SCENE_COLOR,
-      currentThemeColor: DEFAULT_THEME,
-      currentDisplayThemeColor: DEFAULT_THEME,
+      currentThemeColor: DEFAULT_THEME.value,
+      currentDisplayThemeColor: DEFAULT_THEME.value,
       currentBrandIdx: 6,
-      colorPalette: [""], //主题色色阶
-      initColorPalette: [""],
-      successColorPalette: [""], //成功色色阶
-      initSuccessColorPalette: [""],
-      warningColorPalette: [""], //告警色色阶
-      initWarningColorPalette: [""],
-      errorColorPalette: [""], // 错误色色阶
-      initErrorColorPalette: [""],
-      grayColorPalette: [""], // 中性色色阶
-      initGrayColorPalette: [""],
-      activeTab: "color",
+      colorPalette: [''], //主题色色阶
+      initColorPalette: [''],
+      successColorPalette: [''], //成功色色阶
+      initSuccessColorPalette: [''],
+      warningColorPalette: [''], //告警色色阶
+      initWarningColorPalette: [''],
+      errorColorPalette: [''], // 错误色色阶
+      initErrorColorPalette: [''],
+      grayColorPalette: [''], // 中性色色阶
+      initGrayColorPalette: [''],
+      activeTab: 'color',
       isMoreVisible: false,
-      generateMode: "remain",
+      generateMode: 'remain',
       isGeneratedNeutralColor: false,
-      initDefaultGrayColorPalette: [""], // 默认的中性色色阶
+      initDefaultGrayColorPalette: [''], // 默认的中性色色阶
     };
   },
   computed: {
     isRemainGenerateMode() {
-      return this.generateMode === "remain";
+      return this.generateMode === 'remain';
     },
     themeColorRgb() {
-      return `(${Color.colorTransform(
-        this.currentDisplayThemeColor,
-        "hex",
-        "rgb"
-      ).join(",")})`;
+      return `(${Color.colorTransform(this.currentDisplayThemeColor, 'hex', 'rgb').join(',')})`;
     },
     themeColorHsv() {
-      return `(${Color.colorTransform(
-        this.currentDisplayThemeColor,
-        "hex",
-        "hsv"
-      ).join(",")})`;
+      return `(${Color.colorTransform(this.currentDisplayThemeColor, 'hex', 'hsv').join(',')})`;
     },
     isColorPaletteChange() {
-      return (
-        JSON.stringify(this.colorPalette) !==
-        JSON.stringify(this.initColorPalette)
-      );
+      return JSON.stringify(this.colorPalette) !== JSON.stringify(this.initColorPalette);
     },
     isSuccessPaletteChange() {
-      return (
-        JSON.stringify(this.successColorPalette) !==
-        JSON.stringify(this.initSuccessColorPalette)
-      );
+      return JSON.stringify(this.successColorPalette) !== JSON.stringify(this.initSuccessColorPalette);
     },
     isWarningPaletteChange() {
-      return (
-        JSON.stringify(this.warningColorPalette) !==
-        JSON.stringify(this.initWarningColorPalette)
-      );
+      return JSON.stringify(this.warningColorPalette) !== JSON.stringify(this.initWarningColorPalette);
     },
     isErrorPaletteChange() {
-      return (
-        JSON.stringify(this.errorColorPalette) !==
-        JSON.stringify(this.initErrorColorPalette)
-      );
+      return JSON.stringify(this.errorColorPalette) !== JSON.stringify(this.initErrorColorPalette);
     },
     isGrayPaletteChange() {
-      return (
-        JSON.stringify(this.grayColorPalette) !==
-        JSON.stringify(this.initGrayColorPalette)
-      );
+      return JSON.stringify(this.grayColorPalette) !== JSON.stringify(this.initGrayColorPalette);
     },
     contentStyle() {
       const clientHeight = window.innerHeight;
       return {
-        overflowY: "scroll",
+        overflowY: 'scroll',
         height: `${clientHeight - (this.top || 0) - 96}px`,
       };
     },
@@ -468,7 +429,7 @@ export default {
     this.setDefaultPalette();
     const currentThemeColor = window
       .getComputedStyle(document.documentElement)
-      .getPropertyValue("--td-brand-color")
+      .getPropertyValue('--td-brand-color')
       .toLocaleLowerCase()
       .trim();
     this.currentThemeColor = currentThemeColor;
@@ -480,12 +441,11 @@ export default {
     currentThemeColor(currentColor) {
       this.setPalette();
       this.isGeneratedNeutralColor = false;
-      if (this.isRemainGenerateMode)
-        this.currentDisplayThemeColor = currentColor;
+      if (this.isRemainGenerateMode) this.currentDisplayThemeColor = currentColor;
       else
         this.currentDisplayThemeColor = window
           .getComputedStyle(document.documentElement)
-          .getPropertyValue("--td-brand-color")
+          .getPropertyValue('--td-brand-color')
           .toLocaleLowerCase()
           .trim();
     },
@@ -501,7 +461,7 @@ export default {
       else
         this.currentDisplayThemeColor = window
           .getComputedStyle(document.documentElement)
-          .getPropertyValue("--td-brand-color")
+          .getPropertyValue('--td-brand-color')
           .toLocaleLowerCase()
           .trim();
     },
@@ -512,27 +472,22 @@ export default {
     },
     changeMainColor(v, type) {
       // 改变某个功能色的主题色
-      const { colorPalette } = generateTokenList(
-        v,
-        false,
-        type !== "gray" ? 10 : 14,
-        this.isRemainGenerateMode
-      );
+      const { colorPalette } = generateTokenList(v, false, type !== 'gray' ? 10 : 14, this.isRemainGenerateMode);
       let newPalette = [];
       let newInitPalette = [];
-      if (type === "error") {
+      if (type === 'error') {
         newPalette = this.errorColorPalette;
         newInitPalette = this.initErrorColorPalette;
       }
-      if (type === "success") {
+      if (type === 'success') {
         newPalette = this.successColorPalette;
         newInitPalette = this.initSuccessColorPalette;
       }
-      if (type === "warning") {
+      if (type === 'warning') {
         newPalette = this.warningColorPalette;
         newInitPalette = this.initWarningColorPalette;
       }
-      if (type === "gray") {
+      if (type === 'gray') {
         newPalette = this.grayColorPalette;
         newInitPalette = this.initGrayColorPalette;
       }
@@ -559,57 +514,43 @@ export default {
       this.initColorPalette = JSON.parse(JSON.stringify(colorPalette));
       this.colorPalette = colorPalette;
 
-      const successPalette = this.getCurrentPalette("success");
+      const successPalette = this.getCurrentPalette('success');
       this.initSuccessColorPalette = JSON.parse(JSON.stringify(successPalette));
       this.successColorPalette = successPalette;
 
-      const warningPalette = this.getCurrentPalette("warning");
+      const warningPalette = this.getCurrentPalette('warning');
       this.initWarningColorPalette = JSON.parse(JSON.stringify(warningPalette));
       this.warningColorPalette = warningPalette;
 
-      const errorColorPalette = this.getCurrentPalette("error");
-      this.initErrorColorPalette = JSON.parse(
-        JSON.stringify(errorColorPalette)
-      );
+      const errorColorPalette = this.getCurrentPalette('error');
+      this.initErrorColorPalette = JSON.parse(JSON.stringify(errorColorPalette));
       this.errorColorPalette = errorColorPalette;
 
-      const grayColorPalette = this.getCurrentPalette("gray");
+      const grayColorPalette = this.getCurrentPalette('gray');
       this.initGrayColorPalette = JSON.parse(JSON.stringify(grayColorPalette));
 
       this.grayColorPalette = grayColorPalette;
     },
     setDefaultPalette() {
-      const grayColorPalette = this.getCurrentPalette("gray");
-      this.initDefaultGrayColorPalette = JSON.parse(
-        JSON.stringify(grayColorPalette)
-      );
+      const grayColorPalette = this.getCurrentPalette('gray');
+      this.initDefaultGrayColorPalette = JSON.parse(JSON.stringify(grayColorPalette));
     },
     handleAttach,
     handleChangeGenerateNeutralColor(generated) {
       if (generated) {
         // 关联生成
-        this.generatedNeutralColors = Color.getNeutralColor(
-          this.currentThemeColor
-        );
-        this.generatedNeutralColors.map((color, idx) =>
-          this.changeGradation(color, idx, "gray")
-        );
+        this.generatedNeutralColors = Color.getNeutralColor(this.currentThemeColor);
+        this.generatedNeutralColors.map((color, idx) => this.changeGradation(color, idx, 'gray'));
 
-        const grayColorPalette = this.getCurrentPalette("gray");
-        this.initGrayColorPalette = JSON.parse(
-          JSON.stringify(grayColorPalette)
-        );
+        const grayColorPalette = this.getCurrentPalette('gray');
+        this.initGrayColorPalette = JSON.parse(JSON.stringify(grayColorPalette));
       } else {
         // 不关联生成
-        this.initGrayColorPalette = JSON.parse(
-          JSON.stringify(this.initDefaultGrayColorPalette)
-        );
-        this.grayColorPalette = JSON.parse(
-          JSON.stringify(this.initDefaultGrayColorPalette)
-        );
+        this.initGrayColorPalette = JSON.parse(JSON.stringify(this.initDefaultGrayColorPalette));
+        this.grayColorPalette = JSON.parse(JSON.stringify(this.initDefaultGrayColorPalette));
 
         this.$nextTick(() => {
-          this.recoverGradation("gray");
+          this.recoverGradation('gray');
         });
       }
     },
@@ -621,15 +562,13 @@ export default {
       let palette;
       const modifiedPalette = this.getCurrentPalette(type);
 
-      if (type === "brand") palette = this.initColorPalette;
-      if (type === "error") palette = this.initErrorColorPalette;
-      if (type === "success") palette = this.initSuccessColorPalette;
-      if (type === "warning") palette = this.initWarningColorPalette;
-      if (type === "gray") palette = this.initGrayColorPalette;
+      if (type === 'brand') palette = this.initColorPalette;
+      if (type === 'error') palette = this.initErrorColorPalette;
+      if (type === 'success') palette = this.initSuccessColorPalette;
+      if (type === 'warning') palette = this.initWarningColorPalette;
+      if (type === 'gray') palette = this.initGrayColorPalette;
 
-      const diffPalette = palette.filter(
-        (v, i) => JSON.stringify(v) !== JSON.stringify(modifiedPalette[i])
-      );
+      const diffPalette = palette.filter((v, i) => JSON.stringify(v) !== JSON.stringify(modifiedPalette[i]));
       diffPalette.forEach((v) => {
         if (v instanceof Array) {
           this.changeGradation(v[0].value, v[0].idx, type);
@@ -640,24 +579,24 @@ export default {
     },
     changeGradation(hex, idx, type) {
       const tokenIdxName = `--td-${type}-color-${idx + 1}`;
-      const styleSheet = document.getElementById("custom-theme");
-      if (type === "brand") {
+      const styleSheet = document.getElementById('custom-theme');
+      if (type === 'brand') {
         if (this.colorPalette[idx] instanceof Array) {
           this.colorPalette[idx].map((v) => (v.value = hex));
         } else {
           this.colorPalette[idx].value = hex;
         }
       }
-      if (type === "error") {
+      if (type === 'error') {
         this.errorColorPalette[idx].value = hex;
       }
-      if (type === "success") {
+      if (type === 'success') {
         this.successColorPalette[idx].value = hex;
       }
-      if (type === "warning") {
+      if (type === 'warning') {
         this.warningColorPalette[idx].value = hex;
       }
-      if (type === "gray") {
+      if (type === 'gray') {
         if (this.grayColorPalette[idx] instanceof Array) {
           this.grayColorPalette[idx].map((v) => (v.value = hex));
         } else {
@@ -666,72 +605,62 @@ export default {
       }
       if (styleSheet) {
         const reg = new RegExp(`${tokenIdxName}: (.*)`);
-        const curHex = styleSheet.innerText.match(reg)[1].split(";")[0];
-        styleSheet.innerText = styleSheet.innerText.replace(
-          `${tokenIdxName}: ${curHex}`,
-          `${tokenIdxName}: ${hex}`
-        );
+        const curHex = styleSheet.innerText.match(reg)[1].split(';')[0];
+        styleSheet.innerText = styleSheet.innerText.replace(`${tokenIdxName}: ${curHex}`, `${tokenIdxName}: ${hex}`);
       }
     },
-    getCurrentPalette(type = "brand") {
+    getCurrentPalette(type = 'brand') {
       let colorMap;
       let duplicateMap = [];
       // 获取匹配色表
-      if (type === "brand") {
+      if (type === 'brand') {
         colorMap = BRAND_COLOR_MAP;
         const brandIdx = this.currentBrandIdx;
         const hoverIdx = brandIdx > 0 ? brandIdx - 1 : brandIdx;
         const activeIdx = brandIdx > 8 ? brandIdx : brandIdx + 1;
         duplicateMap = [
-          { name: "--td-brand-color-hover", type: "hover", idx: hoverIdx },
-          { name: "--td-brand-color", type: "main", idx: brandIdx },
-          { name: "--td-brand-color-active", type: "active", idx: activeIdx },
+          { name: '--td-brand-color-hover', type: 'hover', idx: hoverIdx },
+          { name: '--td-brand-color', type: 'main', idx: brandIdx },
+          { name: '--td-brand-color-active', type: 'active', idx: activeIdx },
         ];
         colorMap = colorMap.concat(duplicateMap);
       }
-      if (type === "error") colorMap = ERROR_COLOR_MAP;
-      if (type === "success") colorMap = SUCCESS_COLOR_MAP;
-      if (type === "warning") colorMap = WARNING_COLOR_MAP;
-      if (type === "gray") colorMap = GRAY_COLOR_MAP;
+      if (type === 'error') colorMap = ERROR_COLOR_MAP;
+      if (type === 'success') colorMap = SUCCESS_COLOR_MAP;
+      if (type === 'warning') colorMap = WARNING_COLOR_MAP;
+      if (type === 'gray') colorMap = GRAY_COLOR_MAP;
 
       let docStyle = getComputedStyle(document.documentElement);
 
-      let currentPalette = [...new Array(type === "gray" ? 14 : 10).keys()].map(
-        (v, i) => {
-          const color = colorMap.filter((v) => v.idx === i);
-          if (color.length) {
-            if (color.length === 1)
-              return {
-                ...color[0],
-                value: docStyle.getPropertyValue(`--td-${type}-color-${i + 1}`),
-              };
-            return color.map((v) => ({
-              ...v,
-              value: docStyle.getPropertyValue(
-                `--td-${type}-color-${v.idx + 1}`
-              ),
-            }));
-          }
-          return {
-            value: docStyle.getPropertyValue(`--td-${type}-color-${i + 1}`),
-          };
+      let currentPalette = [...new Array(type === 'gray' ? 14 : 10).keys()].map((v, i) => {
+        const color = colorMap.filter((v) => v.idx === i);
+        if (color.length) {
+          if (color.length === 1)
+            return {
+              ...color[0],
+              value: docStyle.getPropertyValue(`--td-${type}-color-${i + 1}`),
+            };
+          return color.map((v) => ({
+            ...v,
+            value: docStyle.getPropertyValue(`--td-${type}-color-${v.idx + 1}`),
+          }));
         }
-      );
+        return {
+          value: docStyle.getPropertyValue(`--td-${type}-color-${i + 1}`),
+        };
+      });
 
       return currentPalette;
     },
     generateNewTheme(hex) {
       this.currentThemeColor = hex;
-      this.currentBrandIdx = generateNewTheme(
-        hex,
-        this.isRemainGenerateMode
-      ).brandColorIdx;
+      this.currentBrandIdx = generateNewTheme(hex, this.isRemainGenerateMode).brandColorIdx;
     },
   },
 };
 </script>
 <style scoped lang="less">
-/deep/ .t-popup[data-popper-placement="bottom-end"] .t-popup__arrow {
+/deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;
 }
 
@@ -870,8 +799,7 @@ export default {
     }
     &-top {
       padding: 4px 8px;
-      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-        "Liberation Mono", monospace;
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 
       > p {
         color: var(--td-font-white-3);
@@ -897,8 +825,7 @@ export default {
           font-weight: 600;
         }
         &:last-child {
-          font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-            "Liberation Mono", monospace;
+          font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
         }
       }
     }

@@ -1,34 +1,40 @@
-import TDesignOriginal from "!raw-loader!./svg/TDesignOriginal";
-import TencentCloud from "!raw-loader!./svg/TencentCloud";
-import TencentQuestionnaire from "!raw-loader!./svg/TencentQuestionnaire";
-import GovService from "!raw-loader!./svg/GovService";
-import SmartRetail from "!raw-loader!./svg/SmartRetail";
-import WeChatPay from "!raw-loader!./svg/WeChatPay";
-import CulturalTourism from "!raw-loader!./svg/CulturalTourism";
-import TencentEducation from "!raw-loader!./svg/TencentEducation";
-import TencentHealthcare from "!raw-loader!./svg/TencentHealthcare";
-import TencentGames from "!raw-loader!./svg/TencentGames";
-import TencentSafe from "!raw-loader!./svg/TencentSafe";
+import TDesignOriginal from '!raw-loader!./svg/TDesignOriginal';
+import TencentCloud from '!raw-loader!./svg/TencentCloud';
+// import TencentQuestionnaire from '!raw-loader!./svg/TencentQuestionnaire';
+// import GovService from '!raw-loader!./svg/GovService';
+// import SmartRetail from '!raw-loader!./svg/SmartRetail';
+// import WeChatPay from '!raw-loader!./svg/WeChatPay';
+// import CulturalTourism from '!raw-loader!./svg/CulturalTourism';
+// import TencentEducation from '!raw-loader!./svg/TencentEducation';
+// import TencentHealthcare from '!raw-loader!./svg/TencentHealthcare';
+// import TencentGames from '!raw-loader!./svg/TencentGames';
+// import TencentSafe from '!raw-loader!./svg/TencentSafe';
 
-export const defaultTheme = {
-  name: "默认主题",
-  enName:'TDesign',
+export const CUSTOM_THEME_TEXT = {
+  name: '自定义主题',
+  enName: 'Custom',
+  subtitleText: 'Custom Theme',
+};
+
+export const DEFAULT_THEME = {
+  name: '默认主题',
+  enName: 'TDesign',
   subtitle: TDesignOriginal,
-  subtitleText:'TDesign Original',
-  value: "#0052D9",
+  subtitleText: 'TDesign Original',
+  value: '#0052D9',
 };
 
 export const RECOMMEND_THEMES = [
   {
-    title: "官方推荐",
+    title: '官方推荐',
     options: [
-      defaultTheme,
+      DEFAULT_THEME,
       {
-        name: "腾讯云",
-        enName:'TCloud',
+        name: '腾讯云',
+        enName: 'TCloud',
         subtitle: TencentCloud,
-        subtitleText:'Tencent Cloud',
-        value: "#006EFF",
+        subtitleText: 'Tencent Cloud',
+        value: '#006EFF',
       },
       // {
       //   name: "微信支付",

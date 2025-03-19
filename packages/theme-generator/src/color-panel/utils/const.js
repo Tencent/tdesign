@@ -1,164 +1,162 @@
-import TencentBlue from "!raw-loader!../assets/TencentBlue"; //腾讯蓝
-import HyacinthBlue from "!raw-loader!../assets/HyacinthBlue"; //风信子蓝
-import PetelotiiYellow from "!raw-loader!../assets/PetelotiiYellow"; //金茶花黄
+import TencentBlue from '!raw-loader!../assets/TencentBlue'; //腾讯蓝
+import HyacinthBlue from '!raw-loader!../assets/HyacinthBlue'; //风信子蓝
+import PetelotiiYellow from '!raw-loader!../assets/PetelotiiYellow'; //金茶花黄
 
-import AgapanthusPurple from "!raw-loader!../assets/AgapanthusPurple"; // 百子莲紫
-import YulaniaPink from "!raw-loader!../assets/YulaniaPink";
-import DavidiaGreen from "!raw-loader!../assets/DavidiaGreen"; // 珙桐绿
-import MarigoldOrange from "!raw-loader!../assets/MarigoldOrange"; // 万寿菊橙
-import PlumbagoBlue from "!raw-loader!../assets/PlumbagoBlue"; // 花丹蓝
-import MultifloraRed from "!raw-loader!../assets/MultifloraRed"; // 蔷薇红
-import TaxusRed from "!raw-loader!../assets/TaxusRed"; // 豆衫红
-import ViridifloraGreen from "!raw-loader!../assets/ViridifloraGreen"; // 鸢尾绿
+import AgapanthusPurple from '!raw-loader!../assets/AgapanthusPurple'; // 百子莲紫
+import YulaniaPink from '!raw-loader!../assets/YulaniaPink';
+import DavidiaGreen from '!raw-loader!../assets/DavidiaGreen'; // 珙桐绿
+import MarigoldOrange from '!raw-loader!../assets/MarigoldOrange'; // 万寿菊橙
+import PlumbagoBlue from '!raw-loader!../assets/PlumbagoBlue'; // 花丹蓝
+import MultifloraRed from '!raw-loader!../assets/MultifloraRed'; // 蔷薇红
+import TaxusRed from '!raw-loader!../assets/TaxusRed'; // 豆衫红
+import ViridifloraGreen from '!raw-loader!../assets/ViridifloraGreen'; // 鸢尾绿
 
-import WeChatGreen from "!raw-loader!../assets/WeChatGreen"; //微信绿
-import TCloudBlack from "!raw-loader!../assets/TCloudBlack"; // 腾云黑
-import TourismPurple from "!raw-loader!../assets/TourismPurple"; // 文旅紫
-import GovRed from "!raw-loader!../assets/GovRed"; // 政务红
+import WeChatGreen from '!raw-loader!../assets/WeChatGreen'; //微信绿
+import TCloudBlack from '!raw-loader!../assets/TCloudBlack'; // 腾云黑
+import TourismPurple from '!raw-loader!../assets/TourismPurple'; // 文旅紫
+import GovRed from '!raw-loader!../assets/GovRed'; // 政务红
 
-export const DEFAULT_THEME = "#0052D9";
-export const GREEN_THEME = "#DDCC00";
 export const DEFAULT_COLOR = [
   {
-    name: "腾讯蓝",
+    name: '腾讯蓝',
     subtitle: TencentBlue,
-    value: DEFAULT_THEME,
+    value: '#0052D9',
   },
   {
-    name: "风信子蓝",
+    name: '风信子蓝',
     subtitle: HyacinthBlue,
-    value: "#0894FA",
+    value: '#0894FA',
   },
   {
-    name: "金花茶黄",
+    name: '金花茶黄',
     subtitle: PetelotiiYellow,
-    value: "#F3B814",
+    value: '#F3B814',
   },
 ];
 
 export const RECOMMEND_COLOR = [
   {
-    name: "珙桐绿",
+    name: '珙桐绿',
     subtitle: DavidiaGreen,
-    value: "#45C58B",
+    value: '#45C58B',
   },
   {
-    name: "鸢尾绿",
+    name: '鸢尾绿',
     subtitle: ViridifloraGreen,
-    value: "#0ED6CA",
+    value: '#0ED6CA',
   },
   {
-    name: "花丹蓝",
+    name: '花丹蓝',
     subtitle: PlumbagoBlue,
-    value: "#53B1FD",
+    value: '#53B1FD',
   },
   {
-    name: "百子莲紫",
+    name: '百子莲紫',
     subtitle: AgapanthusPurple,
-    value: "#7A5AF8",
+    value: '#7A5AF8',
   },
   {
-    name: "",
+    name: '',
     subtitle: YulaniaPink,
-    value: "#EF45B3",
+    value: '#EF45B3',
   },
   {
-    name: "豆衫红",
+    name: '豆衫红',
     subtitle: TaxusRed,
-    value: "#F54343",
+    value: '#F54343',
   },
 
   {
-    name: "蔷薇红",
+    name: '蔷薇红',
     subtitle: MultifloraRed,
-    value: "#FF5479",
+    value: '#FF5479',
   },
   {
-    name: "万寿菊橙",
+    name: '万寿菊橙',
     subtitle: MarigoldOrange,
-    value: "#FD853A",
+    value: '#FD853A',
   },
 ];
 
 export const SCENE_COLOR = [
   {
-    name: "微信绿",
+    name: '微信绿',
     subtitle: WeChatGreen,
-    value: "#07C160",
+    value: '#07C160',
   },
   {
-    name: "腾云黑",
+    name: '腾云黑',
     subtitle: TCloudBlack,
-    value: "#262626",
+    value: '#262626',
   },
   {
-    name: "文旅紫",
+    name: '文旅紫',
     subtitle: TourismPurple,
-    value: "#623BFF",
+    value: '#623BFF',
   },
   {
-    name: "政务红",
+    name: '政务红',
     subtitle: GovRed,
-    value: "#EE1C25",
+    value: '#EE1C25',
   },
 ];
 
 export const BRAND_COLOR_MAP = [
-  { name: "--td-brand-color-light", type: "light", idx: 0 },
-  { name: "--td-brand-color-focus", type: "focus", idx: 1 },
-  { name: "--td-brand-color-disabled", type: "disabled", idx: 2 },
+  { name: '--td-brand-color-light', type: 'light', idx: 0 },
+  { name: '--td-brand-color-focus', type: 'focus', idx: 1 },
+  { name: '--td-brand-color-disabled', type: 'disabled', idx: 2 },
 ];
 
 export const ERROR_COLOR_MAP = [
-  { name: "--td-error-color-light", type: "light", idx: 0 },
-  { name: "--td-error-color-focus", type: "focus", idx: 1 },
-  { name: "--td-error-color-disabled", type: "disabled", idx: 2 },
-  { name: "--td-error-color-hover", type: "hover", idx: 4 },
-  { name: "--td-error-color", type: "main", idx: 5 },
-  { name: "--td-error-color-active", type: "active", idx: 6 },
+  { name: '--td-error-color-light', type: 'light', idx: 0 },
+  { name: '--td-error-color-focus', type: 'focus', idx: 1 },
+  { name: '--td-error-color-disabled', type: 'disabled', idx: 2 },
+  { name: '--td-error-color-hover', type: 'hover', idx: 4 },
+  { name: '--td-error-color', type: 'main', idx: 5 },
+  { name: '--td-error-color-active', type: 'active', idx: 6 },
 ];
 
 export const WARNING_COLOR_MAP = [
-  { name: "--td-warning-color-light", type: "light", idx: 0 },
-  { name: "--td-warning-color-focus", type: "focus", idx: 1 },
-  { name: "--td-warning-color-disabled", type: "disabled", idx: 2 },
-  { name: "--td-warning-color-hover", type: "hover", idx: 3 },
-  { name: "--td-warning-color", type: "main", idx: 4 },
-  { name: "--td-warning-color-active", type: "active", idx: 5 },
+  { name: '--td-warning-color-light', type: 'light', idx: 0 },
+  { name: '--td-warning-color-focus', type: 'focus', idx: 1 },
+  { name: '--td-warning-color-disabled', type: 'disabled', idx: 2 },
+  { name: '--td-warning-color-hover', type: 'hover', idx: 3 },
+  { name: '--td-warning-color', type: 'main', idx: 4 },
+  { name: '--td-warning-color-active', type: 'active', idx: 5 },
 ];
 
 export const SUCCESS_COLOR_MAP = [
-  { name: "--td-success-color-light", type: "light", idx: 0 },
-  { name: "--td-success-color-focus", type: "focus", idx: 1 },
-  { name: "--td-success-color-disabled", type: "disabled", idx: 2 },
-  { name: "--td-success-color-hover", type: "hover", idx: 3 },
-  { name: "--td-success-color", type: "main", idx: 4 },
-  { name: "--td-success-color-active", type: "active", idx: 5 },
+  { name: '--td-success-color-light', type: 'light', idx: 0 },
+  { name: '--td-success-color-focus', type: 'focus', idx: 1 },
+  { name: '--td-success-color-disabled', type: 'disabled', idx: 2 },
+  { name: '--td-success-color-hover', type: 'hover', idx: 3 },
+  { name: '--td-success-color', type: 'main', idx: 4 },
+  { name: '--td-success-color-active', type: 'active', idx: 5 },
 ];
 
 export const GRAY_COLOR_MAP = [
-  { name: "--td-bg-color-container-hover", type: "", idx: 0 },
-  { name: "--td-bg-color-secondarycontainer", type: "", idx: 0 },
-  { name: "--td-bg-color-secondarycontainer-hover", type: "", idx: 1 },
-  { name: "--td-bg-color-component-disabled", type: "", idx: 1 },
-  { name: "--td-bg-color-page", type: "", idx: 1 },
-  { name: "--td-bg-color-container-active", type: "", idx: 2 },
-  { name: "--td-bg-color-component", type: "", idx: 2 },
-  { name: "--td-component-stroke", type: "", idx: 2 },
-  { name: "--td-bg-color-secondarycontainer-active", type: "main", idx: 3 },
-  { name: "--td-bg-color-component-hover", type: "", idx: 3 },
-  { name: "--td-component-border", type: "", idx: 3 },
-  { name: "--td-bg-color-component-active", type: "", idx: 5 },
+  { name: '--td-bg-color-container-hover', type: '', idx: 0 },
+  { name: '--td-bg-color-secondarycontainer', type: '', idx: 0 },
+  { name: '--td-bg-color-secondarycontainer-hover', type: '', idx: 1 },
+  { name: '--td-bg-color-component-disabled', type: '', idx: 1 },
+  { name: '--td-bg-color-page', type: '', idx: 1 },
+  { name: '--td-bg-color-container-active', type: '', idx: 2 },
+  { name: '--td-bg-color-component', type: '', idx: 2 },
+  { name: '--td-component-stroke', type: '', idx: 2 },
+  { name: '--td-bg-color-secondarycontainer-active', type: 'main', idx: 3 },
+  { name: '--td-bg-color-component-hover', type: '', idx: 3 },
+  { name: '--td-component-border', type: '', idx: 3 },
+  { name: '--td-bg-color-component-active', type: '', idx: 5 },
 ];
 
 export const FONT_COLOR_MAP = [
-  { name: "--td-text-color-primary", from: "--td-font-gray-1" },
-  { name: "--td-text-color-secondary", from: "--td-font-gray-2" },
-  { name: "--td-text-color-placeholder", from: "--td-font-gray-3" },
-  { name: "--td-text-color-disabled", from: "--td-font-gray-4" },
-  { name: "--td-text-color-anti", value: "#fff" },
-  { name: "--td-text-color-brand", from: "--td-brand-color" },
-  { name: "--td-text-color-link", from: "--td-brand-color" },
+  { name: '--td-text-color-primary', from: '--td-font-gray-1' },
+  { name: '--td-text-color-secondary', from: '--td-font-gray-2' },
+  { name: '--td-text-color-placeholder', from: '--td-font-gray-3' },
+  { name: '--td-text-color-disabled', from: '--td-font-gray-4' },
+  { name: '--td-text-color-anti', value: '#fff' },
+  { name: '--td-text-color-brand', from: '--td-brand-color' },
+  { name: '--td-text-color-link', from: '--td-brand-color' },
 ];
 
 // 亮色模式下的功能色、中性色等

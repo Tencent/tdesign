@@ -7,6 +7,7 @@
       @click-setting="handleClickSetting"
       :drawerVisible="visible"
       :showSetting="showSetting"
+      :device="device"
     />
     <panel-drawer
       :drawerVisible="visible"
@@ -14,16 +15,17 @@
       :refresh="refresh"
       @panel-drawer-visible="handleDrawerVisible"
       :propsTop="propsTop"
+      :device="device"
     />
   </div>
 </template>
 
 <script>
-import PanelDrawer from "./panel-drawer/index.vue";
-import Dock from "./dock/index.vue";
+import PanelDrawer from './panel-drawer/index.vue';
+import Dock from './dock/index.vue';
 
-import { defaultTheme } from "./common/Themes/const";
-import { generateNewTheme } from "./common/utils";
+import { generateNewTheme } from './common/utils';
+import { DEFAULT_THEME } from './common/Themes/const';
 
 const activeTabMap = {
   color: 0,
@@ -43,6 +45,10 @@ export default {
     showSetting: {
       type: [Boolean, String],
     },
+    device: {
+      type: String,
+      default: 'web',
+    },
   },
   data() {
     return {
@@ -50,11 +56,11 @@ export default {
       refresh: false,
       visible: 0,
       activeTabIdx: activeTabMap.color,
-      theme: defaultTheme,
+      theme: DEFAULT_THEME,
     };
   },
   mounted() {
-    generateNewTheme(defaultTheme.value);
+    generateNewTheme(DEFAULT_THEME.value);
   },
   methods: {
     handleChangeTheme(theme) {
@@ -68,10 +74,10 @@ export default {
     },
     handleDrawerVisible(v) {
       this.visible = v;
-      this.$emit("panel-drawer-visible", v);
+      this.$emit('panel-drawer-visible', v);
     },
     handleClickSetting() {
-      this.$emit("click-setting");
+      this.$emit('click-setting');
       this.visible = false;
     },
   },
@@ -79,8 +85,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../node_modules/tdesign-vue/dist/tdesign.css";
-@import "../node_modules/tdesign-vue/dist/reset.css";
+@import '../node_modules/tdesign-vue/dist/tdesign.css';
+@import '../node_modules/tdesign-vue/dist/reset.css';
 
 @media screen and (max-width: 960px) {
   .theme-generator {

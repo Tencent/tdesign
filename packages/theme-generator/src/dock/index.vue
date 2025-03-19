@@ -27,6 +27,7 @@
             @changeTabTheme="handleChangeTabTheme"
             v-if="isThemeTabVisible && isThemeTabContentDisplay"
             :currentTheme="currentTheme"
+            :device="device"
           />
         </transition>
       </div>
@@ -129,19 +130,17 @@ import {
   Popconfirm as TPopconfirm,
   MessagePlugin,
 } from "tdesign-vue";
-import Themes from "../common/Themes/index.vue";
-import { defaultTheme } from "../common/Themes/const";
+
 import DownloadSvg from "./svg/DownloadSvg.vue";
 import RecoverSvg from "./svg/RecoverSvg.vue";
 import PaletteSvg from "./svg/PaletteSvg.vue";
 import AdjustSvg from "./svg/AdjustSvg.vue";
 import SettingSvg from "./svg/SettingSvg.vue";
+
 import langMixin from "../common/i18n/mixin";
-import {
-  handleDownload,
-  generateNewTheme,
-  handleAttach,
-} from "../common/utils";
+import Themes from "../common/Themes/index.vue";
+import { CUSTOM_THEME_TEXT, DEFAULT_THEME } from "../common/Themes/const";
+import { exportCustomTheme, generateNewTheme, handleAttach, getBuiltInThemes } from "../common/utils";
 
 export default {
   components: {
@@ -158,14 +157,17 @@ export default {
   props: {
     drawerVisible: { type: [Boolean, Number] },
     showSetting: { type: [Boolean, String] },
+    device: {
+      type: String,
+      default: 'web',
+    },
   },
   mixins: [langMixin],
   data() {
     return {
       isThemeTabVisible: false,
       isCustomizeDrawerVisible: false,
-      tabTitle: defaultTheme.name,
-      currentTheme: defaultTheme,
+      currentTheme: DEFAULT_THEME,
       isThemeTabContentDisplay: false,
       dockY: null,
       dockX: 0,
@@ -205,6 +207,7 @@ export default {
   mounted() {
     this.dockY = 24;
     this.dockX = innerWidth / 2;
+    this.setupStyleChangeObserver();
   },
   methods: {
     dragStart(e) {
@@ -235,7 +238,7 @@ export default {
     },
     handleAttach,
     handleDownload() {
-      handleDownload();
+      exportCustomTheme();
       MessagePlugin.success(this.lang.dock.downloadTips);
     },
     triggerSettingDrawer() {
@@ -277,10 +280,39 @@ export default {
       this.$emit("change-theme", theme);
     },
     recoverTheme() {
-      generateNewTheme("#0052D9");
-      this.currentTheme = defaultTheme;
+      generateNewTheme(DEFAULT_THEME.value, undefined, this.device);
+      this.currentTheme = DEFAULT_THEME;
 
       this.$emit("refresh-content");
+    },
+    setupStyleChangeObserver() {
+      const styleObserver = new MutationObserver((mutationsList) => {
+        mutationsList.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+            const currentStyle = mutation.target.getAttribute('style');
+            const brandColorMatch = currentStyle.match(/--brand-main:\s*([^;]+)/);
+            if (!brandColorMatch) return;
+
+            const mainColor = brandColorMatch[1];
+            const existedTheme = getBuiltInThemes(this.device, mainColor);
+            const theme = existedTheme[0] ? existedTheme[0].options[0] : CUSTOM_THEME_TEXT;
+
+            this.currentTheme = theme;
+            this.$emit("change-theme", theme);
+          }
+        });
+      });
+
+      styleObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['style'],
+        childList: false,
+        subtree: false,
+      });
+
+      this.$once('hook:beforeDestroy', () => {
+        styleObserver.disconnect();
+      });
     },
   },
 };

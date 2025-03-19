@@ -1,9 +1,47 @@
-import builtIn0052D9 from "!raw-loader!../built-in/themes/#0052D9.css"; // 0052D9
-import builtIn006EFF from "!raw-loader!../built-in/themes/#006EFF.css"; // 006EFF
+import WebTDesignLight from '!raw-loader!../built-in/themes/web/TDesign/light.css';
+import WebTDesignDark from '!raw-loader!../built-in/themes/web/TDesign/dark.css';
+import WebTCloudLight from '!raw-loader!../built-in/themes/web/TCloud/light.css';
+import WebTCloudDark from '!raw-loader!../built-in/themes/web/TCloud/dark.css';
+import WebTCloudExtra from '!raw-loader!../built-in/themes/web/TCloud/extra.css';
+import WebFont from '!raw-loader!../built-in/themes/web/common/font.css';
+import WebRadius from '!raw-loader!../built-in/themes/web/common/radius.css';
+import WebSize from '!raw-loader!../built-in/themes/web/common/size.css';
 
+import MobileTDesignLight from '!raw-loader!../built-in/themes/mobile/TDesign/light.css';
+import MobileTDesignDark from '!raw-loader!../built-in/themes/mobile/TDesign/dark.css';
+import MobileFont from '!raw-loader!../built-in/themes/mobile/common/font.css';
+import MobileRadius from '!raw-loader!../built-in/themes/mobile/common/radius.css';
+import MobileSpacer from '!raw-loader!../built-in/themes/mobile/common/spacer.css';
 
-export const builtInThemeMap = {
-    "#0052D9": builtIn0052D9, // TDesign
-    // "#07C160": builtIn07C160,
-    "#006EFF": builtIn006EFF, // TCloud
+/**
+ * 主题文件夹名字需要和 `RECOMMEND_THEMES` 中的 `enName` 对应
+ */
+export const BUILT_IN_THEMES = {
+  web: {
+    TDesign: {
+      light: WebTDesignLight,
+      dark: WebTDesignDark,
+    },
+    TCloud: {
+      light: WebTCloudLight,
+      dark: WebTCloudDark,
+      extra: WebTCloudExtra,
+    },
+    common: {
+      font: WebFont,
+      radius: WebRadius,
+      size: WebSize,
+    },
+  },
+  mobile: {
+    TDesign: {
+      light: MobileTDesignLight,
+      dark: MobileTDesignDark,
+    },
+    common: {
+      font: MobileFont,
+      radius: MobileRadius,
+      spacer: MobileSpacer,
+    },
+  },
 };
