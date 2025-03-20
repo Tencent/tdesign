@@ -1,0 +1,9 @@
+:root {
+    --td-shadow-1: 0 2px 3px rgba(0, 0, 0, .2);
+    --td-shadow-2: 0 2px 4px 0 rgba(54, 58, 80, .32);
+    --td-shadow-3: 0 0 20px 0 rgba(19, 41, 75, .2);
+    --td-shadow-inset-top: inset 0 .5px 0 #e7eaef;
+    --td-shadow-inset-right: inset .5px 0 0 #e7eaef;
+    --td-shadow-inset-bottom: inset 0 -.5px 0 #e7eaef;
+    --td-shadow-inset-left: inset -.5px 0 0 #e7eaef;
+}
