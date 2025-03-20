@@ -1,19 +1,19 @@
 export * from 'tdesign-vue/es/_common/js/color-picker';
 
-import { Color } from 'tvision-color';
 import cssbeautify from 'cssbeautify';
+import { Color } from 'tvision-color';
 
 import GENERATOR_VARIABLES from '!raw-loader!./vars.css';
 export const GENERATOR_ID = 'TDESIGN_GENERATOR_SYMBOL';
 
+import { DARK_FUNCTION_COLOR, LIGHT_FUNCTION_COLOR } from '../../color-panel/utils/const';
 import { BUILT_IN_THEMES } from '../built-in/theme-map';
 import { DEFAULT_THEME, RECOMMEND_THEMES } from '../Themes/const';
-import { LIGHT_FUNCTION_COLOR, DARK_FUNCTION_COLOR } from '../../color-panel/utils/const';
 
 export const CUSTOM_THEME_ID = 'custom-theme';
 export const CUSTOM_DARK_ID = 'custom-theme-dark';
 export const CUSTOM_EXTRA_ID = 'custom-theme-extra';
-export const COMMON_THEME_ID = 'common-theme';
+export const CUSTOM_COMMON_ID_PREFIX = 'custom-theme-common';
 
 export function initVariables() {
   let styleSheet;
@@ -110,7 +110,7 @@ export function generateCommonTheme(device = 'web') {
   if (!commonThemes) return;
 
   Object.entries(commonThemes).forEach(([key, theme]) => {
-    const commonId = `${COMMON_THEME_ID}-${key}`;
+    const commonId = `${CUSTOM_COMMON_ID_PREFIX}-${key}`;
     if (document.getElementById(commonId)) return;
     const commonStyleSheet = appendStyleSheet(commonId);
     commonStyleSheet.textContent = theme;
@@ -199,7 +199,7 @@ export function exportCustomTheme() {
   const styleSheet = document.getElementById(CUSTOM_THEME_ID);
   const darkStyleSheet = document.getElementById(CUSTOM_DARK_ID);
   const extraStyleSheet = document.getElementById(CUSTOM_EXTRA_ID);
-  const commonStyleSheet = document.querySelectorAll(`[id^="${COMMON_THEME_ID}-"]`);
+  const commonStyleSheet = document.querySelectorAll(`[id^="${CUSTOM_COMMON_ID_PREFIX}-"]`);
 
   const cssString = styleSheet?.innerText?.replaceAll(`[theme-color="${CUSTOM_THEME_ID}"]`, '');
   const darkCssString = darkStyleSheet?.innerText?.replaceAll(`[theme-color="${CUSTOM_THEME_ID}"]`, '');
@@ -245,7 +245,7 @@ export function modifyToken(tokenIdxName, newVal) {
   // 获取所有可能包含 token 的样式表
   const styleSheets = document.querySelectorAll(
     // eslint-disable-next-line prettier/prettier
-    `#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, [id^="${COMMON_THEME_ID}-"]`
+    `#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, [id^="${CUSTOM_COMMON_ID_PREFIX}-"]`,
   );
 
   let tokenFound = false;
