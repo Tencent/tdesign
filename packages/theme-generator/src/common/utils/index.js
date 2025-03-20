@@ -90,10 +90,14 @@ export function generateNewTheme(hex, remainInput = true, device = 'web') {
     darkStyleSheet.textContent = dark;
 
     if (extra) {
-      let extraStyleSheet = appendStyleSheet(CUSTOM_EXTRA_ID);
+      const extraStyleSheet = appendStyleSheet(CUSTOM_EXTRA_ID);
       extraStyleSheet.textContent = extra;
+    } else {
+      document.getElementById(CUSTOM_EXTRA_ID)?.remove();
     }
   } else {
+    document.getElementById(CUSTOM_EXTRA_ID)?.remove();
+
     // 动态生成
     const darkCssTokenString = generateTokenList(hex, true).styleSheetString;
     styleSheet.textContent = styleSheetString;
