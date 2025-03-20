@@ -330,7 +330,7 @@ import ColorCollapse from './ColorCollapse.vue';
 
 import ColorPicker from '../../../common/ColorPicker/ColorPicker.vue';
 import { DEFAULT_THEME } from '../../../common/Themes/const';
-import { handleAttach, generateNewTheme, generateTokenList } from '../../../common/utils';
+import { CUSTOM_THEME_ID, handleAttach, generateNewTheme, generateTokenList } from '../../../common/utils';
 
 import {
   DEFAULT_COLOR,
@@ -579,7 +579,7 @@ export default {
     },
     changeGradation(hex, idx, type) {
       const tokenIdxName = `--td-${type}-color-${idx + 1}`;
-      const styleSheet = document.getElementById('custom-theme');
+      const styleSheet = document.getElementById(CUSTOM_THEME_ID);
       if (type === 'brand') {
         if (this.colorPalette[idx] instanceof Array) {
           this.colorPalette[idx].map((v) => (v.value = hex));
