@@ -199,44 +199,64 @@ export function generateTokenList(hex, isDark = false, step = 10, remainInput = 
 }
 
 // handle export and download theme
-export function exportCustomTheme() {
+export function exportCustomTheme(device = 'web') {
   const styleSheet = document.getElementById(CUSTOM_THEME_ID);
   const darkStyleSheet = document.getElementById(CUSTOM_DARK_ID);
   const extraStyleSheet = document.getElementById(CUSTOM_EXTRA_ID);
   const commonStyleSheet = document.querySelectorAll(`[id^="${CUSTOM_COMMON_ID_PREFIX}-"]`);
 
-  const cssString = styleSheet?.innerText?.replaceAll(`[theme-color="${CUSTOM_THEME_ID}"]`, '');
-  const darkCssString = darkStyleSheet?.innerText?.replaceAll(`[theme-color="${CUSTOM_THEME_ID}"]`, '');
-  const extraCssString = extraStyleSheet?.innerText || '';
+  const extractRootContent = (css) => {
+    // 匹配 {} 内的内容
+    const match = css.match(/{([^}]*)}/);
+    return match ? match[1].trim() : '';
+  };
+
+  const cssString = extractRootContent(styleSheet?.innerText);
+  const darkCssString = extractRootContent(darkStyleSheet?.innerText);
   const commonCssString = Array.from(commonStyleSheet)
-    .map((sheet) => {
-      // 去掉单独的 `:root` 和 `{}`
-      return sheet.innerText.replace(/^\s*:root\s*{([\s\S]*?)}\s*$/, '$1').trim();
-    })
+    .map((sheet) => extractRootContent(sheet.innerText))
     .join('\n');
+  const extraCssString = extraStyleSheet?.innerText || '';
 
-  // 合并为一个文件导出
-  const finalCssString = `
-    ${cssString}
-    ${darkCssString}
-    :root {
-      ${commonCssString}
-    }
-    ${extraCssString}
-  `;
+  const isMobile = device === 'mobile';
 
-  if (window._horizon) {
-    const hex = window
-      .getComputedStyle(document.documentElement)
-      .getPropertyValue('--td-brand-color')
-      .toLocaleUpperCase()
-      .trim();
-    window._horizon.send('主题生成器主题下载', 'click', hex.replace('#', ''));
+  let finalCssString;
+  if (isMobile) {
+    finalCssString = `
+      @media (prefers-color-scheme: light) {
+        page {
+          ${cssString}
+        }
+      }
+      @media (prefers-color-scheme: dark) {
+        page {
+          ${darkCssString}
+        }
+      }
+      page {
+        ${commonCssString}
+      }
+      ${extraCssString}
+    `;
+  } else {
+    finalCssString = `
+      :root, :root[theme-mode="light"] {
+        ${cssString}
+      }
+      :root[theme-mode="dark"] {
+        ${darkCssString}
+      }
+      :root {
+        ${commonCssString}
+      }
+      ${extraCssString}
+    `;
   }
 
-  const beautifyCssString = cssbeautify(finalCssString);
+  const beautifyCssString = cssbeautify(finalCssString.trim());
   const blob = new Blob([beautifyCssString], { type: 'text' });
-  downloadFile(blob, 'theme.css');
+  const fileSuffix = isMobile ? 'wxss' : 'css';
+  downloadFile(blob, `custom-theme.${fileSuffix}`);
 }
 
 // set attach node, to resolve web component shadow root dom issue
@@ -248,7 +268,6 @@ export function handleAttach() {
 export function modifyToken(tokenIdxName, newVal) {
   // 获取所有可能包含 token 的样式表
   const styleSheets = document.querySelectorAll(
-    // eslint-disable-next-line prettier/prettier
     `#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, [id^="${CUSTOM_COMMON_ID_PREFIX}-"]`,
   );
 
