@@ -1,27 +1,28 @@
-import { Color } from 'tvision-color';
-import cssbeautify from 'cssbeautify';
-import { LIGHT_FUNCTION_COLOR, DARK_FUNCTION_COLOR } from '../../color-panel/utils/const';
-
-import generatorVariables from '!raw-loader!./vars.css'; // variables for generator
-import defaultDarkVariables from '!raw-loader!./default-dark';
-
-import { builtInThemeMap } from '../built-in/theme-map';
-
 export * from 'tdesign-vue/es/_common/js/color-picker';
 
-export const generatorSymbol = 'TDESIGN_GENERATOR_SYMBOL';
+import cssbeautify from 'cssbeautify';
+import { Color } from 'tvision-color';
 
-export const customTheme = 'custom-theme';
-export const customDarkTheme = 'custom-dark-theme';
+import GENERATOR_VARIABLES from '!raw-loader!./vars.css';
+export const GENERATOR_ID = 'TDESIGN_GENERATOR_SYMBOL';
+
+import { DARK_FUNCTION_COLOR, LIGHT_FUNCTION_COLOR } from '../../color-panel/utils/const';
+import { BUILT_IN_THEMES } from '../built-in/theme-map';
+import { DEFAULT_THEME, RECOMMEND_THEMES } from '../Themes/const';
+
+export const CUSTOM_THEME_ID = 'custom-theme';
+export const CUSTOM_DARK_ID = 'custom-theme-dark';
+export const CUSTOM_EXTRA_ID = 'custom-theme-extra';
+export const CUSTOM_COMMON_ID_PREFIX = 'custom-theme-common';
 
 export function initVariables() {
   let styleSheet;
-  let themeStylesheet = document.getElementById(generatorSymbol);
+  let themeStylesheet = document.getElementById(GENERATOR_ID);
 
   if (!themeStylesheet) {
     styleSheet = document.createElement('style');
-    styleSheet.id = generatorSymbol;
-    styleSheet.innerText = generatorVariables;
+    styleSheet.id = GENERATOR_ID;
+    styleSheet.innerText = GENERATOR_VARIABLES;
     document.head.appendChild(styleSheet);
   }
 }
@@ -41,25 +42,83 @@ export function appendStyleSheet(themeId) {
   return styleSheet;
 }
 
+export function getBuiltInThemes(device = 'web', hex) {
+  const themeCopy = JSON.parse(JSON.stringify(RECOMMEND_THEMES));
+
+  const filtered = themeCopy
+    .map((group) => {
+      group.options = group.options.filter((theme) => {
+        const availableCss = BUILT_IN_THEMES[device]?.[theme.enName];
+
+        if (hex && hex.toLocaleLowerCase() !== theme.value.toLocaleLowerCase()) return false;
+
+        if (availableCss) {
+          theme.css = {
+            light: availableCss.light,
+            dark: availableCss.dark,
+            ...(availableCss.extra && { extra: availableCss.extra }),
+          };
+          return true;
+        }
+        return false;
+      });
+
+      return group;
+    })
+    .filter((group) => group.options.length > 0);
+
+  return filtered;
+}
+
 // generator new theme variables and insert into document
-export function generateNewTheme(hex, remainInput = true) {
-  // hex 主题色
-  let styleSheet = appendStyleSheet(customTheme);
-  let darkStyleSheet = appendStyleSheet(customDarkTheme);
+export function generateNewTheme(hex, remainInput = true, device = 'web') {
+  generateCommonTheme(device);
+
+  const styleSheet = appendStyleSheet(CUSTOM_THEME_ID);
+  const darkStyleSheet = appendStyleSheet(CUSTOM_DARK_ID);
 
   const { brandColorIdx, colorPalette, styleSheetString } = generateTokenList(hex, false, 10, remainInput);
-  if (builtInThemeMap[hex]) {
-    styleSheet.innerText = builtInThemeMap[hex];
-    document.head.removeChild(darkStyleSheet);
+
+  const builtInTheme = getBuiltInThemes(device, hex);
+
+  if (builtInTheme.length > 0) {
+    // 内置主题
+    const theme = builtInTheme[0].options[0]; // 条件筛选后只有一个
+    const { light, dark, extra } = theme.css;
+
+    styleSheet.textContent = light;
+    darkStyleSheet.textContent = dark;
+
+    if (extra) {
+      const extraStyleSheet = appendStyleSheet(CUSTOM_EXTRA_ID);
+      extraStyleSheet.textContent = extra;
+    } else {
+      document.getElementById(CUSTOM_EXTRA_ID)?.remove();
+    }
   } else {
+    document.getElementById(CUSTOM_EXTRA_ID)?.remove();
+
+    // 动态生成
     const darkCssTokenString = generateTokenList(hex, true).styleSheetString;
-    styleSheet.innerText = styleSheetString;
-    darkStyleSheet.innerText = darkCssTokenString;
+    styleSheet.textContent = styleSheetString;
+    darkStyleSheet.textContent = darkCssTokenString;
   }
 
-  document.documentElement.setAttribute('theme-color', customTheme);
+  document.documentElement.setAttribute('theme-color', CUSTOM_THEME_ID);
   updateBrandMain(hex);
   return { brandColorIdx, colorPalette };
+}
+
+export function generateCommonTheme(device = 'web') {
+  const commonThemes = BUILT_IN_THEMES[device]?.common;
+  if (!commonThemes) return;
+
+  Object.entries(commonThemes).forEach(([key, theme]) => {
+    const commonId = `${CUSTOM_COMMON_ID_PREFIX}-${key}`;
+    if (document.getElementById(commonId)) return;
+    const commonStyleSheet = appendStyleSheet(commonId);
+    commonStyleSheet.textContent = theme;
+  });
 }
 
 // update `--brand-main` variable when update theme
@@ -72,20 +131,23 @@ export function updateBrandMain(hex) {
 export function generateTokenList(hex, isDark = false, step = 10, remainInput = true) {
   const lowCaseHex = hex.toLocaleLowerCase();
   const root = isDark
-    ? `:root[theme-color="${customTheme}"][theme-mode="dark"]`
-    : `:root[theme-color="${customTheme}"],:root[theme-color="${customTheme}"][theme-mode="light"]`;
+    ? `:root[theme-color="${CUSTOM_THEME_ID}"][theme-mode="dark"]`
+    : `:root[theme-color="${CUSTOM_THEME_ID}"],:root[theme-color="${CUSTOM_THEME_ID}"][theme-mode="light"]`;
+
   let colorPalette;
   let brandColorIdx;
 
   const [{ colors, primary }] = Color.getColorGradations({
     colors: [lowCaseHex],
     step: step,
-    remainInput, // remain input or not
+    remainInput,
   });
+
   colorPalette = colors;
   brandColorIdx = primary;
+
   if (isDark) {
-    if (lowCaseHex === '#0052d9') {
+    if (lowCaseHex === DEFAULT_THEME.value.toLocaleLowerCase()) {
       colorPalette = [
         '#1b2f51',
         '#173463',
@@ -110,12 +172,6 @@ export function generateTokenList(hex, isDark = false, step = 10, remainInput = 
 
     colorPalette[0] = `${colorPalette[brandColorIdx]}20`;
   }
-  const existSheet = document.getElementById(customTheme);
-  // combine font/radius/shadow/size into new theme sheet
-  const fontConfig = existSheet.innerText.match(/\/\* 字体配置 \*\/(.*)\/\* end 字体配置 \*\//)?.[0];
-  const radiusConfig = existSheet.innerText.match(/\/\* 圆角配置 \*\/(.*)\/\* end 圆角配置 \*\//)?.[0];
-  const shadowConfig = existSheet.innerText.match(/\/\* 阴影配置 \*\/(.*)\/\* end 阴影配置 \*\//)?.[0];
-  const sizeConfig = existSheet.innerText.match(/\/\* 尺寸配置 \*\/(.*)\/\* end 尺寸配置 \*\//)?.[0];
 
   // TODO: 功能色、中性色未通过t-vision生成 先固定住
   const styleSheetString = `${root}{
@@ -137,40 +193,70 @@ export function generateTokenList(hex, isDark = false, step = 10, remainInput = 
     --td-brand-color-9: ${colorPalette[8]}; 
     --td-brand-color-10: ${colorPalette[9]};
     ${isDark ? DARK_FUNCTION_COLOR : LIGHT_FUNCTION_COLOR}
-    ${isDark ? defaultDarkVariables : fontConfig}
-    ${radiusConfig}${shadowConfig}${sizeConfig}
     }`;
 
   return { styleSheetString, brandColorIdx, colorPalette };
 }
 
 // handle export and download theme
-export function handleDownload() {
-  const styleSheet = document.getElementById(customTheme);
-  const darkStyleSheet = document.getElementById(customDarkTheme);
-  const hex = window
-    .getComputedStyle(document.documentElement)
-    .getPropertyValue('--td-brand-color')
-    .toLocaleUpperCase()
-    .trim();
+export function exportCustomTheme(device = 'web') {
+  const styleSheet = document.getElementById(CUSTOM_THEME_ID);
+  const darkStyleSheet = document.getElementById(CUSTOM_DARK_ID);
+  const extraStyleSheet = document.getElementById(CUSTOM_EXTRA_ID);
+  const commonStyleSheet = document.querySelectorAll(`[id^="${CUSTOM_COMMON_ID_PREFIX}-"]`);
 
-  let cssVariablesString = styleSheet?.innerText?.replaceAll(`[theme-color="${customTheme}"]`, '');
-  let darkCssVariablesString = darkStyleSheet?.innerText?.replaceAll(`[theme-color="${customTheme}"]`, '');
+  const extractRootContent = (css) => {
+    // 匹配 {} 内的内容
+    const match = css.match(/{([^}]*)}/);
+    return match ? match[1].trim() : '';
+  };
 
-  const finalCssVariablesString = builtInThemeMap[hex]
-    ? cssVariablesString
-    : `${cssVariablesString}${darkCssVariablesString}`;
-  if (window._horizon) {
-    window._horizon.send('主题生成器主题下载', 'click', hex.replace('#', ''));
+  const cssString = extractRootContent(styleSheet?.innerText);
+  const darkCssString = extractRootContent(darkStyleSheet?.innerText);
+  const commonCssString = Array.from(commonStyleSheet)
+    .map((sheet) => extractRootContent(sheet.innerText))
+    .join('\n');
+  const extraCssString = extraStyleSheet?.innerText || '';
+
+  const isMobile = device === 'mobile';
+
+  let finalCssString;
+  if (isMobile) {
+    finalCssString = `
+      @media (prefers-color-scheme: light) {
+        page {
+          ${cssString}
+        }
+      }
+      @media (prefers-color-scheme: dark) {
+        page {
+          ${darkCssString}
+        }
+      }
+      page {
+        ${commonCssString}
+      }
+      ${extraCssString}
+    `;
+  } else {
+    finalCssString = `
+      :root, :root[theme-mode="light"] {
+        ${cssString}
+      }
+      :root[theme-mode="dark"] {
+        ${darkCssString}
+      }
+      :root {
+        ${commonCssString}
+      }
+      ${extraCssString}
+    `;
   }
-  const beautifyCssVariablesString = cssbeautify(finalCssVariablesString);
-  const blob = new Blob([beautifyCssVariablesString], { type: 'text' });
-  const cssUrl = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.download = 'theme.css';
-  a.target = '_blank';
-  a.href = cssUrl;
-  a.click();
+
+  const beautifyCssString = cssbeautify(finalCssString.trim());
+  const blob = new Blob([beautifyCssString], { type: 'text' });
+  const fileSuffix = isMobile ? 'wxss' : 'css';
+  downloadFile(blob, `custom-theme.${fileSuffix}`);
 }
 
 // set attach node, to resolve web component shadow root dom issue
@@ -179,23 +265,36 @@ export function handleAttach() {
 }
 
 // modify custom-theme token/variable value
-export function modifyToken(tokenIdxName, res) {
-  const styleSheet = document.getElementById(customTheme);
-  if (!styleSheet) return;
-  const reg = new RegExp(`${tokenIdxName}: (.*)`);
+export function modifyToken(tokenIdxName, newVal) {
+  // 获取所有可能包含 token 的样式表
+  const styleSheets = document.querySelectorAll(
+    `#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, [id^="${CUSTOM_COMMON_ID_PREFIX}-"]`,
+  );
 
-  const curSize = styleSheet.innerText.match(reg)?.[1]?.split?.(';')?.[0];
-  if (!curSize) {
+  let tokenFound = false;
+
+  styleSheets.forEach((styleSheet) => {
+    const reg = new RegExp(`${tokenIdxName}:\\s*(.*?);`);
+    const match = styleSheet.innerText.match(reg);
+
+    if (match) {
+      const currentVal = match[1];
+      styleSheet.innerText = styleSheet.innerText.replace(
+        `${tokenIdxName}: ${currentVal}`,
+        `${tokenIdxName}: ${newVal}`,
+      );
+      tokenFound = true;
+    }
+  });
+
+  if (!tokenFound) {
     console.warn(`CSS variable: ${tokenIdxName} is not exist`);
-    return;
   }
-  styleSheet.innerText = styleSheet.innerText.replace(`${tokenIdxName}: ${curSize}`, `${tokenIdxName}: ${res}`);
 }
 
 // get current stylesheet
 export function getCustomThemeSheet() {
-  const styleSheet = document.getElementById(customTheme);
-
+  const styleSheet = document.getElementById(CUSTOM_THEME_ID);
   return styleSheet;
 }
 
@@ -204,4 +303,13 @@ export function replacePercentages(str) {
   return str.replace(/(\d+(\.\d+)?)%/g, (match, number) => {
     return `${parseFloat(number) / 100}`;
   });
+}
+
+export function downloadFile(blob, fileName) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.download = fileName;
+  a.target = '_blank';
+  a.href = url;
+  a.click();
 }

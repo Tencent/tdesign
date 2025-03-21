@@ -4,9 +4,9 @@
     <SegmentSelection
       :style="{ margin: '8px 0' }"
       v-if="tokenType === 'plus'"
-      :selectOptions="selectOptions"
-      :suspendedLabels="lineHeightLabels"
       v-model="step"
+      :selectOptions="lineHeightOptions"
+      :suspendedLabels="lineHeightLabels"
       :disabled="segmentSelectionDisabled"
       @enable="segmentSelectionDisabled = false"
     >
@@ -20,14 +20,9 @@
     <!-- Token List -->
     <div class="font-panel__token-list">
       <t-radio-group variant="default-filled" v-model="tokenType">
-        <t-radio-button value="plus">{{
-          lang.font.lineHeightFixedMode
-        }}</t-radio-button>
-        <t-radio-button value="time">{{
-          lang.font.lineHeightSteppedMode
-        }}</t-radio-button>
+        <t-radio-button value="plus">{{ lang.font.lineHeightFixedMode }}</t-radio-button>
+        <t-radio-button value="time">{{ lang.font.lineHeightSteppedMode }}</t-radio-button>
       </t-radio-group>
-
       <t-list v-if="tokenType === 'plus'">
         <t-popup
           placement="left"
@@ -41,13 +36,9 @@
           <t-list-item
             :style="{
               transition: 'border-color .2s',
-              border: isHover
-                ? '1px solid var(--brand-main-hover)'
-                : '1px solid transparent',
+              border: isHover ? '1px solid var(--brand-main-hover)' : '1px solid transparent',
             }"
-            ><div class="code">
-              line-height = font size + {{ lineHeightValue }}
-            </div>
+            ><div class="code">line-height = font size + {{ lineHeightValue }}</div>
             <div>
               {{ lang.font.lineHeightFixedDesc }}
             </div></t-list-item
@@ -75,13 +66,9 @@
         >
           <t-list-item
             :style="{
-              border: isHover
-                ? '1px solid var(--brand-main-hover)'
-                : '1px solid transparent',
+              border: isHover ? '1px solid var(--brand-main-hover)' : '1px solid transparent',
             }"
-            ><div class="code">
-              line-height = font size * {{ lineHeightValue }}
-            </div>
+            ><div class="code">line-height = font size * {{ lineHeightValue }}</div>
             <div>
               {{ lang.font.lineHeightSteppedDesc }}
             </div></t-list-item
@@ -105,32 +92,17 @@
 import {
   List as TList,
   ListItem as TListItem,
-  RadioGroup as TRadioGroup,
-  RadioButton as TRadioButton,
   Popup as TPopup,
-} from "tdesign-vue";
-import { handleAttach, modifyToken } from "../../common/utils";
-import {
-  lineHeightSteps,
-  lineHeightLabels,
-  lineHeightStepsArray,
-} from "../built-in/line-height";
-import SizeSlider from "../../common/SizeSlider/index.vue";
-import SegmentSelection from "../../common/SegmentSelection/index.vue";
-import langMixin from "../../common/i18n/mixin";
-
-// eslint-disable-next-line no-unused-vars
-const STEP_MAP = [
-  { label: "超小", enLabel: "mini", value: 1 },
-  { label: "小", enLabel: "small", value: 2 },
-  { label: "默认", enLabel: "default", value: 3 },
-  { label: "大", enLabel: "large", value: 4 },
-  { label: "特大", enLabel: "max", value: 5 },
-  { label: "自定义", enLabel: "customized", value: 6, disabled: true },
-];
-
+  RadioButton as TRadioButton,
+  RadioGroup as TRadioGroup,
+} from 'tdesign-vue';
+import langMixin from '../../common/i18n/mixin';
+import SegmentSelection from '../../common/SegmentSelection/index.vue';
+import SizeSlider from '../../common/SizeSlider/index.vue';
+import { handleAttach } from '../../common/utils';
+import { LINE_HEIGHT_OPTIONS, LINE_HEIGHT_STEPS, updateLineHeightTokens } from '../built-in/line-height';
 export default {
-  name: "FontSizeAdjust",
+  name: 'FontSizeAdjust',
   components: {
     TList,
     TListItem,
@@ -143,41 +115,28 @@ export default {
   mixins: [langMixin],
   data() {
     return {
-      step: 3,
       isHover: null,
-      selectOptions: STEP_MAP,
-      tokenType: "plus", // plus or time
-      lineHeightValue: null,
-      lineHeightSteps,
-      lineHeightLabels,
+      tokenType: 'plus', // 固定（plus） or 递增（time）
+      step: 3, // 默认
+      lineHeightSteps: LINE_HEIGHT_STEPS,
+      lineHeightValue: this.lineHeightSteps[this.step],
+      lineHeightOptions: LINE_HEIGHT_OPTIONS,
+      lineHeightLabels: Object.fromEntries(
+        LINE_HEIGHT_OPTIONS.filter((item) => item.value !== undefined).map((item, index) => [index + 1, item.label]),
+      ),
       segmentSelectionDisabled: false,
     };
   },
   watch: {
     step(v) {
-      if (!lineHeightSteps[v]) return;
-      const newLineHeight = lineHeightSteps[v];
-      modifyToken("--td-line-height-common", `${newLineHeight}px`);
-      this.lineHeightValue = newLineHeight;
+      if (!this.lineHeightSteps[v]) return;
+      const lineHeightValue = this.lineHeightSteps[v];
+      this.lineHeightValue = lineHeightValue;
+      updateLineHeightTokens(this.lineHeightValue, this.tokenType);
     },
     tokenType(v) {
-      const styleSheet = document.getElementById("custom-theme");
-      if (!styleSheet) return;
-      if (v === "plus") {
-        styleSheet.innerText = styleSheet.innerText.replaceAll(
-          `* var(--td-line-height-common)`,
-          `+ var(--td-line-height-common)`
-        );
-        modifyToken("--td-line-height-common", "8px");
-        this.lineHeightValue = 8;
-      } else {
-        modifyToken("--td-line-height-common", 1.5);
-        this.lineHeightValue = 1.5;
-        styleSheet.innerText = styleSheet.innerText.replaceAll(
-          `+ var(--td-line-height-common)`,
-          `* var(--td-line-height-common)`
-        );
-      }
+      this.lineHeightValue = v === 'plus' ? 8 : 1.5;
+      updateLineHeightTokens(this.lineHeightValue, v);
     },
   },
   methods: {
@@ -187,22 +146,12 @@ export default {
     },
     handleChangeFontSize(v) {
       this.lineHeightValue = v;
-      const isTimeCalc = this.tokenType === "time";
-      const res = isTimeCalc ? v : `${v}px`;
-      modifyToken("--td-line-height-common", res);
-      if (!isTimeCalc && !lineHeightStepsArray.includes(res)) {
+      updateLineHeightTokens(v, this.tokenType);
+      const isTimeCalc = this.tokenType === 'time';
+      if (!isTimeCalc && !Object.values(this.lineHeightSteps).includes(v)) {
         this.segmentSelectionDisabled = true;
       }
     },
-  },
-  mounted() {
-    // mounted后将当前的字体相关枚举存储
-    const computedStyle = window.getComputedStyle(document.documentElement);
-    this.computedStyle = computedStyle;
-    // token模式列表
-    this.lineHeightValue =
-      parseInt(computedStyle.getPropertyValue("--td-line-height-common"), 10) ||
-      8;
   },
 };
 </script>
@@ -212,13 +161,12 @@ export default {
     font-size: 14px;
     line-height: 32px;
     font-weight: 600;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     margin: 0;
 
     &::before,
     &::after {
-      content: "";
+      content: '';
       height: 3px;
       width: 100%;
       background-color: rgba(227, 77, 89, 0.2);
@@ -238,13 +186,12 @@ export default {
     font-size: 14px;
     line-height: 32px;
     font-weight: 600;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     margin: 0;
 
     &::before,
     &::after {
-      content: "";
+      content: '';
       height: 5px;
       width: 100%;
       background-color: rgba(227, 77, 89, 0.2);
@@ -265,8 +212,7 @@ export default {
     border-radius: 9px;
     background-color: var(--bg-color-theme-secondary);
     .code {
-      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-        "Liberation Mono", monospace;
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
       margin-bottom: 8px;
     }
     /deep/ .t-radio-group {

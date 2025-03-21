@@ -5,11 +5,7 @@
         {{ lang.dock.recommendTitle }}
       </div>
       <div class="recommend-theme__flex">
-        <div
-          v-for="(theme, themeIdx) in type.options"
-          :key="themeIdx"
-          @click="generateNewTheme(theme)"
-        >
+        <div v-for="(theme, themeIdx) in type.options" :key="themeIdx" @click="generateNewTheme(theme)">
           <div
             class="recommend-theme__flex-theme"
             :style="{
@@ -17,10 +13,7 @@
             }"
           >
             <div v-html="theme.subtitle" />
-            <div
-              v-if="currentTheme && currentTheme.value === theme.value"
-              class="recommend-theme__flex-theme--active"
-            >
+            <div v-if="currentTheme && currentTheme.value === theme.value" class="recommend-theme__flex-theme--active">
               <picked-svg />
             </div>
           </div>
@@ -41,20 +34,23 @@
 </template>
 
 <script>
-import { RECOMMEND_THEMES } from "./const";
-import { generateNewTheme } from "../utils";
-import PickedSvg from "./PickedSvg.vue";
-import langMixin from "../i18n/mixin";
+import PickedSvg from './PickedSvg.vue';
+import langMixin from '../i18n/mixin';
+import { getBuiltInThemes, generateNewTheme } from '../utils';
 
 export default {
-  emit: ["changeTabTheme"],
+  emit: ['changeTabTheme'],
   props: {
     currentTheme: Object,
+    device: {
+      type: String,
+      default: 'web',
+    },
   },
   mixins: [langMixin],
   data() {
     return {
-      recommendThemes: RECOMMEND_THEMES,
+      recommendThemes: getBuiltInThemes(this.device),
       isThemeTabVisible: false,
       isDrawerVisible: false,
     };
@@ -64,8 +60,8 @@ export default {
   },
   methods: {
     generateNewTheme(theme) {
-      generateNewTheme(theme.value);
-      this.$emit("changeTabTheme", theme);
+      generateNewTheme(theme.value, undefined, this.device);
+      this.$emit('changeTabTheme', theme);
     },
   },
 };
@@ -147,5 +143,4 @@ export default {
     }
   }
 }
-
 </style>

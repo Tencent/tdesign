@@ -3,7 +3,7 @@
     <div class="switch-tabs__panel">
       <div class="border" :style="{ top: `${activeTabIdx * 88}px` }"></div>
       <div
-        v-for="(tab, index) in tabs"
+        v-for="(tab, index) in filteredTabs"
         :key="index"
         :class="[
           'switch-tabs__panel-content',
@@ -22,20 +22,30 @@
   </div>
 </template>
 <script>
-import ColorSvg from "./ColorSvg.vue";
-import FontSvg from "./FontSvg.vue";
-import RadiusSvg from "./RadiusSvg.vue";
-import BoxshadowSvg from "./BoxshadowSvg.vue";
-import SizeSvg from "./SizeSvg.vue";
+import ColorSvg from './ColorSvg.vue';
+import FontSvg from './FontSvg.vue';
+import RadiusSvg from './RadiusSvg.vue';
+import BoxshadowSvg from './BoxshadowSvg.vue';
+import SizeSvg from './SizeSvg.vue';
 import langMixin from '../i18n/mixin';
 
 export default {
-  name: "SwitchTabs",
+  name: 'SwitchTabs',
   props: {
     activeTabIdx: Number,
+    device: {
+      type: String,
+      default: 'web',
+    },
+  },
+  computed: {
+    filteredTabs() {
+      // 移动端不显示尺寸配置
+      return this.device === 'mobile' ? this.tabs.filter((tab) => tab.title !== this.lang.size.title) : this.tabs;
+    },
   },
   components: { ColorSvg, FontSvg, RadiusSvg, BoxshadowSvg, SizeSvg },
-  emit: ["changeActiveTab"],
+  emit: ['changeActiveTab'],
   mixins: [langMixin],
   data() {
     return {
@@ -44,7 +54,7 @@ export default {
   },
   methods: {
     handleClickPanel(idx) {
-      this.$emit("changeActiveTab", idx);
+      this.$emit('changeActiveTab', idx);
     },
   },
   mounted() {
@@ -71,7 +81,6 @@ export default {
         image: SizeSvg,
       },
     ];
-   
   },
 };
 </script>
