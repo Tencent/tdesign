@@ -21,11 +21,11 @@
 </template>
 
 <script>
-import PanelDrawer from './panel-drawer/index.vue';
-import Dock from './dock/index.vue';
-
-import { generateNewTheme } from './common/utils';
 import { DEFAULT_THEME } from './common/Themes/const';
+import { generateNewTheme } from './common/utils';
+
+import Dock from './dock/index.vue';
+import PanelDrawer from './panel-drawer/index.vue';
 
 const activeTabMap = {
   color: 0,
@@ -36,6 +36,7 @@ const activeTabMap = {
 };
 
 export default {
+  name: 'ThemeGenerator',
   components: {
     PanelDrawer,
     Dock,
@@ -60,7 +61,7 @@ export default {
     };
   },
   mounted() {
-    generateNewTheme(DEFAULT_THEME.value);
+    generateNewTheme(DEFAULT_THEME.value, undefined, this.device);
   },
   methods: {
     handleChangeTheme(theme) {
