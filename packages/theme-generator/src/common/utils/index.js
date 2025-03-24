@@ -7,7 +7,7 @@ import GENERATOR_VARIABLES from '!raw-loader!./vars.css';
 export const GENERATOR_ID = 'TDESIGN_GENERATOR_SYMBOL';
 
 import { DARK_FUNCTION_COLOR, LIGHT_FUNCTION_COLOR } from '../../color-panel/utils/const';
-import { BUILT_IN_THEMES } from '../built-in/theme-map';
+import { BUILT_IN_THEMES, MOBILE_MISSING_TOKENS } from '../built-in/theme-map';
 import { DEFAULT_THEME, RECOMMEND_THEMES } from '../Themes/const';
 
 export const CUSTOM_THEME_ID = 'custom-theme';
@@ -253,6 +253,12 @@ export function exportCustomTheme(device = 'web') {
     `;
   }
 
+  finalCssString = removeCssProperties(finalCssString, ['--brand-main']);
+
+  if (isMobile) {
+    finalCssString = removeCssProperties(finalCssString, MOBILE_MISSING_TOKENS);
+  }
+
   const beautifyCssString = cssbeautify(finalCssString.trim());
   const blob = new Blob([beautifyCssString], { type: 'text' });
   const fileSuffix = isMobile ? 'wxss' : 'css';
@@ -312,4 +318,20 @@ export function downloadFile(blob, fileName) {
   a.target = '_blank';
   a.href = url;
   a.click();
+}
+
+/**
+ * @param {*} properties array or string
+ */
+export function removeCssProperties(cssText, properties) {
+  if (!Array.isArray(properties)) {
+    properties = [properties];
+  }
+
+  properties.forEach((property) => {
+    const reg = new RegExp(`${property}:\\s*.*?;`, 'g');
+    cssText = cssText.replace(reg, '');
+  });
+
+  return cssText;
 }
