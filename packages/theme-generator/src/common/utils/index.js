@@ -256,7 +256,7 @@ export function exportCustomTheme(device = 'web') {
   const beautifyCssString = cssbeautify(finalCssString.trim());
   const blob = new Blob([beautifyCssString], { type: 'text' });
   const fileSuffix = isMobile ? 'wxss' : 'css';
-  downloadFile(blob, `custom-theme.${fileSuffix}`);
+  downloadFile(blob, `theme.${fileSuffix}`);
 }
 
 // set attach node, to resolve web component shadow root dom issue
