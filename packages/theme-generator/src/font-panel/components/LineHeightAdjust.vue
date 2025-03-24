@@ -102,7 +102,7 @@ import SizeSlider from '../../common/SizeSlider/index.vue';
 import { handleAttach } from '../../common/utils';
 import { LINE_HEIGHT_OPTIONS, LINE_HEIGHT_STEPS, updateLineHeightTokens } from '../built-in/line-height';
 export default {
-  name: 'FontSizeAdjust',
+  name: 'LineHeightAdjust',
   components: {
     TList,
     TListItem,
@@ -118,25 +118,22 @@ export default {
       isHover: null,
       tokenType: 'plus', // 固定（plus） or 递增（time）
       step: 3, // 默认
-      lineHeightSteps: LINE_HEIGHT_STEPS,
-      lineHeightValue: this.lineHeightSteps[this.step],
+      lineHeightValue: LINE_HEIGHT_STEPS[3],
       lineHeightOptions: LINE_HEIGHT_OPTIONS,
-      lineHeightLabels: Object.fromEntries(
-        LINE_HEIGHT_OPTIONS.filter((item) => item.value !== undefined).map((item, index) => [index + 1, item.label]),
-      ),
+      lineHeightLabels: Object.fromEntries(LINE_HEIGHT_OPTIONS.map((item, index) => [index + 1, item.label])),
       segmentSelectionDisabled: false,
     };
   },
   watch: {
     step(v) {
-      if (!this.lineHeightSteps[v]) return;
-      const lineHeightValue = this.lineHeightSteps[v];
+      if (!LINE_HEIGHT_STEPS[v]) return;
+      const lineHeightValue = LINE_HEIGHT_STEPS[v];
       this.lineHeightValue = lineHeightValue;
       updateLineHeightTokens(this.lineHeightValue, this.tokenType);
     },
-    tokenType(v) {
-      this.lineHeightValue = v === 'plus' ? 8 : 1.5;
-      updateLineHeightTokens(this.lineHeightValue, v);
+    tokenType(type) {
+      this.lineHeightValue = type === 'plus' ? 8 : 1.5;
+      updateLineHeightTokens(this.lineHeightValue, type);
     },
   },
   methods: {
@@ -148,7 +145,7 @@ export default {
       this.lineHeightValue = v;
       updateLineHeightTokens(v, this.tokenType);
       const isTimeCalc = this.tokenType === 'time';
-      if (!isTimeCalc && !Object.values(this.lineHeightSteps).includes(v)) {
+      if (!isTimeCalc && !Object.values(LINE_HEIGHT_STEPS).includes(v)) {
         this.segmentSelectionDisabled = true;
       }
     },
@@ -229,7 +226,6 @@ export default {
     /deep/ .t-radio-group__bg-block {
       border-radius: 5px;
       width: calc(50% - 2px) !important;
-      background-color: var(--bg-color-theme-radio-active);
     }
     /deep/ .t-list-item {
       margin-bottom: 4px;
