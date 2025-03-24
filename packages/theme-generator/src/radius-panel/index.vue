@@ -11,23 +11,17 @@
       <div class="radius-content__main">
         <p class="radius-content__title">{{ lang.borerRadius.radiusSize }}</p>
         <SegmentSelection
-          :selectOptions="selectOptions"
-          :suspendedLabels="RadiusLabels"
+          :selectOptions="radiusOptions"
+          :suspendedLabels="radiusLabels"
           v-model="step"
           :disabled="segmentSelectionDisabled"
           @enable="segmentSelectionDisabled = false"
         >
           <template v-slot:left>
-            <div
-              class="radius-content__round-tag-left"
-              :class="{ disabled: segmentSelectionDisabled }"
-            ></div>
+            <div class="radius-content__round-tag-left" :class="{ disabled: segmentSelectionDisabled }"></div>
           </template>
           <template v-slot:right>
-            <div
-              class="radius-content__round-tag-right"
-              :class="{ disabled: segmentSelectionDisabled }"
-            ></div>
+            <div class="radius-content__round-tag-right" :class="{ disabled: segmentSelectionDisabled }"></div>
           </template>
         </SegmentSelection>
         <div class="radius-content__list">
@@ -46,10 +40,7 @@
               <t-list-item
                 :style="{
                   transition: 'border-color .2s',
-                  border:
-                    hoverIdx === idx
-                      ? '1px solid var(--brand-main)'
-                      : '1px solid transparent',
+                  border: hoverIdx === idx ? '1px solid var(--brand-main)' : '1px solid transparent',
                 }"
                 ><div class="radius-content__list-item">
                   <div
@@ -62,10 +53,8 @@
                     <div class="radius-content__list-item-title">
                       <!-- 不展示--td-前缀 -->
                       {{
-                        `${token.token.replace("--td-", "")}：${
-                          token.value === "50%"
-                            ? token.value
-                            : `${formattedRadius(token.value)}`
+                        `${token.token.replace('--td-', '')}：${
+                          token.value === '50%' ? token.value : `${formattedRadius(token.value)}`
                         }`
                       }}
                     </div>
@@ -91,25 +80,17 @@
 </template>
 
 <script>
-import {
-  List as TList,
-  ListItem as TListItem,
-  Popup as TPopup,
-} from "tdesign-vue";
-import isNumber from "lodash/isNumber";
-import SizeSlider from "../common/SizeSlider/index.vue";
-import SegmentSelection from "../common/SegmentSelection/index.vue";
-import { handleAttach, modifyToken } from "../common/utils";
-import {
-  Radius_MAP,
-  RadiusLabels,
-  RadiusSteps,
-  RadiusStepArray,
-} from "./built-in/border-radius";
-import langMixin from "../common/i18n/mixin";
+import isNumber from 'lodash/isNumber';
+import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue';
+
+import langMixin from '../common/i18n/mixin';
+import SegmentSelection from '../common/SegmentSelection/index.vue';
+import SizeSlider from '../common/SizeSlider/index.vue';
+import { CUSTOM_COMMON_ID_PREFIX, handleAttach, modifyToken } from '../common/utils';
+import { RADIUS_OPTIONS, RADIUS_STEP_ARRAY } from './built-in/border-radius';
 
 export default {
-  name: "RadiusPanel",
+  name: 'RadiusPanel',
   components: {
     TList,
     TListItem,
@@ -125,46 +106,45 @@ export default {
     return {
       step: 3,
       hoverIdx: null,
-      selectOptions: Radius_MAP,
-      RadiusSteps,
-      RadiusLabels,
+      radiusOptions: RADIUS_OPTIONS,
+      radiusLabels: Object.fromEntries(RADIUS_OPTIONS.map((item, index) => [index + 1, item.label])),
       segmentSelectionDisabled: false,
       radiusTypeList: [
         {
-          token: "--td-radius-small",
+          token: '--td-radius-small',
           value: null,
-          enDesc: "internal scenes of basic components.",
-          desc: "适用于基础组件内部场景",
+          enDesc: 'internal scenes of basic components.',
+          desc: '适用于基础组件内部场景',
         },
         {
-          token: "--td-radius-default",
+          token: '--td-radius-default',
           value: null,
-          enDesc: "basic components",
-          desc: "适用于所有基础组件",
+          enDesc: 'basic components',
+          desc: '适用于所有基础组件',
         },
         {
-          token: "--td-radius-medium",
+          token: '--td-radius-medium',
           value: null,
-          enDesc: "popup and card-type components",
-          desc: "适用于弹出类型和卡片类型组件",
+          enDesc: 'popup and card-type components',
+          desc: '适用于弹出类型和卡片类型组件',
         },
         {
-          token: "--td-radius-large",
+          token: '--td-radius-large',
           value: null,
-          enDesc: "dialog-type components",
-          desc: "适用于对话框类型组件",
+          enDesc: 'dialog-type components',
+          desc: '适用于对话框类型组件',
         },
         {
-          token: "--td-radius-extraLarge",
+          token: '--td-radius-extraLarge',
           value: null,
-          enDesc: "extra-large display-type components",
-          desc: "适用于超大型展示型组件",
+          enDesc: 'extra-large display-type components',
+          desc: '适用于超大型展示型组件',
         },
         {
-          token: "--td-radius-circle",
+          token: '--td-radius-circle',
           value: null,
-          enDesc: "Circular Components",
-          desc: "适用于圆形组件",
+          enDesc: 'Circular Components',
+          desc: '适用于圆形组件',
         },
       ],
     };
@@ -173,7 +153,7 @@ export default {
     contentStyle() {
       const clientHeight = window.innerHeight;
       return {
-        overflowY: "scroll",
+        overflowY: 'scroll',
         height: `${clientHeight - (this.top || 0) - 96}px`,
       };
     },
@@ -181,13 +161,11 @@ export default {
   watch: {
     radiusTypeList(list) {
       const currentRadiusList = list.map((v) => v.value);
-      const existStep = RadiusStepArray.find((steps) => {
+      const existStep = RADIUS_STEP_ARRAY.find((steps) => {
         const arr = steps.filter((v, i) => {
-          const step = typeof v === "number" ? `${v}px` : v;
+          const step = typeof v === 'number' ? `${v}px` : v;
           const currentRadius =
-            typeof currentRadiusList[i] === "number"
-              ? `${currentRadiusList[i]}px`
-              : currentRadiusList[i].trim();
+            typeof currentRadiusList[i] === 'number' ? `${currentRadiusList[i]}px` : currentRadiusList[i]?.trim();
           return step === currentRadius;
         });
         return arr.length === steps.length;
@@ -196,15 +174,14 @@ export default {
       if (!existStep) this.segmentSelectionDisabled = true;
     },
     step(val) {
-      if (!RadiusStepArray[val - 1]) return;
+      if (!RADIUS_STEP_ARRAY[val - 1]) return;
       this.radiusTypeList = this.radiusTypeList.map((item, index) => {
-        const preVal = RadiusStepArray?.[val - 1]?.[index];
-        const formattedVal =
-          typeof preVal === "number" ? `${preVal}px` : preVal;
+        const preVal = RADIUS_STEP_ARRAY?.[val - 1]?.[index];
+        const formattedVal = typeof preVal === 'number' ? `${preVal}px` : preVal;
         modifyToken(item.token, formattedVal);
         return {
           ...item,
-          value: RadiusStepArray[val - 1][index],
+          value: RADIUS_STEP_ARRAY[val - 1][index],
         };
       });
     },
@@ -213,44 +190,41 @@ export default {
     handleAttach,
     handleVisibleChange(v, ctx, idx) {
       if (v) this.hoverIdx = idx;
-      if (!v && ctx.trigger === "document" && this.hoverIdx === idx)
-        this.hoverIdx = null;
+      if (!v && ctx.trigger === 'document' && this.hoverIdx === idx) this.hoverIdx = null;
     },
     handleChangeRadius(val, idx) {
       this.radiusTypeList.splice(idx, 1, {
         ...this.radiusTypeList[idx],
         value: val,
       });
-      modifyToken(this.radiusTypeList[idx]["token"], `${val}px`);
+      modifyToken(this.radiusTypeList[idx]['token'], `${val}px`);
 
-      if (val !== RadiusStepArray[this.step - 1]?.[idx]) {
+      if (val !== RADIUS_STEP_ARRAY[this.step - 1]?.[idx]) {
         this.segmentSelectionDisabled = true;
       }
     },
     formattedRadius(radius) {
-      if (radius === "50%") return "50%";
+      if (radius === '50%') return '50%';
       if (isNumber(radius)) return `${radius}px`;
       return radius;
     },
-    getCurrentRadiusToken() {
-      let docStyle = getComputedStyle(document.documentElement);
-      let currentRadiusToken = this.radiusTypeList.map((v, i) => {
-        return {
-          ...v,
-          value:
-            v.value ?? docStyle.getPropertyValue(this.radiusTypeList[i].token),
-        };
-      });
-
-      return currentRadiusToken;
-    },
-    setRadiusTokenList() {
-      this.radiusTypeList = this.getCurrentRadiusToken();
+    initRadiusToken() {
+      const radiusStyle = document.getElementById(`${CUSTOM_COMMON_ID_PREFIX}-radius`).innerText;
+      // 过滤不存在的 Token
+      this.radiusTypeList = this.radiusTypeList
+        .map((v) => {
+          const regex = new RegExp(`${v.token}\\s*:\\s*([^;]+);`);
+          const match = regex.exec(radiusStyle);
+          if (match) v.value = match[1].trim();
+          return v;
+        })
+        .filter((v) => v.value !== null);
     },
   },
   mounted() {
-    // update radius token list on mounted when switch new theme
-    this.setRadiusTokenList();
+    this.$nextTick(() => {
+      this.initRadiusToken();
+    });
   },
 };
 </script>
@@ -335,8 +309,7 @@ export default {
         font-size: 12px;
         line-height: 18px;
         color: var(--text-primary);
-        font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-          "Liberation Mono", monospace;
+        font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -356,8 +329,7 @@ export default {
     }
     span {
       font-size: 14px;
-      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-        "Liberation Mono", monospace;
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
     /deep/ .t-radio-group {
       width: 228px;
