@@ -245,7 +245,14 @@ const LIGHT_FONT_COLOR = `--td-font-white-1: #ffffff;
 --td-font-gray-1: rgba(0, 0, 0, 0.9);
 --td-font-gray-2: rgba(0, 0, 0, 0.6);
 --td-font-gray-3: rgba(0, 0, 0, 0.4);
---td-font-gray-4: rgba(0, 0, 0, 0.26);`;
+--td-font-gray-4: rgba(0, 0, 0, 0.26);
+--td-text-color-primary: var(--td-font-gray-1);
+--td-text-color-secondary: var(--td-font-gray-2);
+--td-text-color-placeholder: var(--td-font-gray-3);
+--td-text-color-disabled: var(--td-font-gray-4);
+--td-text-color-anti: #fff;
+--td-text-color-brand: var(--td-brand-color);
+--td-text-color-link: var(--td-brand-color);`;
 
 const LIGHT_SCROLLBAR_COLOR = `--td-brand-color-light-hover: var(--td-brand-color-2);
 --td-warning-color-light-hover: var(--td-warning-color-2);
@@ -261,6 +268,9 @@ const LIGHT_SCROLLBAR_COLOR = `--td-brand-color-light-hover: var(--td-brand-colo
 --td-bg-color-specialcomponent: #fff;
 --td-border-level-1-color: var(--td-gray-color-3);
 --td-border-level-2-color: var(--td-gray-color-4);
+--td-shadow-1: 0 1px 10px rgba(0, 0, 0, 5%), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%);
+--td-shadow-2: 0 3px 14px 2px rgba(0, 0, 0, 5%), 0 8px 10px 1px rgba(0, 0, 0, 6%), 0 5px 5px -3px rgba(0, 0, 0, 10%);
+--td-shadow-3: 0 6px 30px 5px rgba(0, 0, 0, 5%), 0 16px 24px 2px rgba(0, 0, 0, 4%), 0 8px 10px -5px rgba(0, 0, 0, 8%);
 --td-shadow-inset-top: inset 0 0.5px 0 #dcdcdc;
 --td-shadow-inset-right: inset 0.5px 0 0 #dcdcdc;
 --td-shadow-inset-bottom: inset 0 -0.5px 0 #dcdcdc;
@@ -268,11 +278,7 @@ const LIGHT_SCROLLBAR_COLOR = `--td-brand-color-light-hover: var(--td-brand-colo
 --td-mask-active: rgba(0, 0, 0, 0.6);
 --td-mask-disabled: rgba(255, 255, 255, 0.6);`;
 
-const LIGHT_SHADOW_COLOR = `--td-shadow-1: 0 1px 10px rgba(0, 0, 0, 5%), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%);
---td-shadow-2: 0 3px 14px 2px rgba(0, 0, 0, 5%), 0 8px 10px 1px rgba(0, 0, 0, 6%), 0 5px 5px -3px rgba(0, 0, 0, 10%);
---td-shadow-3: 0 6px 30px 5px rgba(0, 0, 0, 5%), 0 16px 24px 2px rgba(0, 0, 0, 4%), 0 8px 10px -5px rgba(0, 0, 0, 8%);`;
-
-export const LIGHT_FUNCTION_COLOR = `${LIGHT_WARNING_COLOR} ${LIGHT_ERROR_COLOR} ${LIGHT_SUCCESS_COLOR} ${LIGHT_GRAY_COLOR} ${LIGHT_FONT_COLOR} ${LIGHT_SCROLLBAR_COLOR} ${LIGHT_SHADOW_COLOR}`;
+export const LIGHT_FUNCTION_COLOR = `${LIGHT_WARNING_COLOR} ${LIGHT_ERROR_COLOR} ${LIGHT_SUCCESS_COLOR} ${LIGHT_GRAY_COLOR} ${LIGHT_FONT_COLOR} ${LIGHT_SCROLLBAR_COLOR}`;
 
 // 暗色模式下的功能色、中性色等
 const DARK_ERROR_COLOR = `--td-error-color-1: #472324;
@@ -344,10 +350,30 @@ const DARK_FONT_COLOR = `--td-font-white-1: rgba(255, 255, 255, 0.9);
 --td-font-gray-1: rgba(0, 0, 0, 0.9);
 --td-font-gray-2: rgba(0, 0, 0, 0.6);
 --td-font-gray-3: rgba(0, 0, 0, 0.4);
---td-font-gray-4: rgba(0, 0, 0, 0.26);`;
+--td-font-gray-4: rgba(0, 0, 0, 0.26);
+--td-text-color-primary: var(--td-font-white-1);
+--td-text-color-secondary: var(--td-font-white-2);
+--td-text-color-placeholder: var(--td-font-white-3);
+--td-text-color-disabled: var(--td-font-white-4);
+--td-text-color-anti: #fff;
+--td-text-color-brand: var(--td-brand-color);
+--td-text-color-link: var(--td-brand-color);`;
 
-const DARK_SHADOW_COLOR = `--td-shadow-1: 0 4px 6px rgba(0, 0, 0, 6%), 0 1px 10px rgba(0, 0, 0, 8%), 0 2px 4px rgba(0, 0, 0, 12%);
---td-shadow-2: 0 8px 10px rgba(0, 0, 0, 12%), 0 3px 14px rgba(0, 0, 0, 10%), 0 5px 5px rgba(0, 0, 0, 16%);
---td-shadow-3: 0 16px 24px rgba(0, 0, 0, 14%), 0 6px 30px rgba(0, 0, 0, 12%), 0 8px 10px rgba(0, 0, 0, 20%);`;
+const DARK_SCROLLBAR_COLOR = `--td-shadow-1: 0 4px 6px rgba(0, 0, 0, 0.06), 0 1px 10px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.12);
+  --td-shadow-2: 0 8px 10px rgba(0, 0, 0, 0.12), 0 3px 14px rgba(0, 0, 0, 0.10), 0 5px 5px rgba(0, 0, 0, 0.16);
+  --td-shadow-3: 0 16px 24px rgba(0, 0, 0, 0.14), 0 6px 30px rgba(0, 0, 0, 0.12), 0 8px 10px rgba(0, 0, 0, 0.20);
+  --td-shadow-inset-top: inset 0 0.5px 0 #5e5e5e;
+  --td-shadow-inset-right: inset 0.5px 0 0 #5e5e5e;
+  --td-shadow-inset-bottom: inset 0 -0.5px 0 #5e5e5e;
+  --td-shadow-inset-left: inset -0.5px 0 0 #5e5e5e;
+  --td-table-shadow-color: rgba(0, 0, 0, 55%);
+  --td-scrollbar-color: rgba(255, 255, 255, 10%);
+  --td-scrollbar-hover-color: rgba(255, 255, 255, 30%);
+  --td-scroll-track-color: #333;
+  --td-bg-color-specialcomponent: transparent;
+  --td-border-level-1-color: var(--td-gray-color-11);
+  --td-border-level-2-color: var(--td-gray-color-9);
+  --td-mask-active: rgba(0, 0, 0, 0.4);
+  --td-mask-disabled: rgba(0, 0, 0, 0.6);`;
 
-export const DARK_FUNCTION_COLOR = `${DARK_WARNING_COLOR} ${DARK_ERROR_COLOR} ${DARK_SUCCESS_COLOR} ${DARK_GRAY_COLOR} ${DARK_FONT_COLOR} ${DARK_SHADOW_COLOR}`;
+export const DARK_FUNCTION_COLOR = `${DARK_WARNING_COLOR} ${DARK_ERROR_COLOR} ${DARK_SUCCESS_COLOR} ${DARK_GRAY_COLOR} ${DARK_FONT_COLOR} ${DARK_SCROLLBAR_COLOR}`;
