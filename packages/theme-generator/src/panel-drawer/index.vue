@@ -11,11 +11,7 @@
   >
     <sticky-theme-display :theme="theme" v-if="!!theme" />
     <div style="display: flex">
-      <switch-tabs
-        :device="device"
-        :activeTabIdx="activeTabIdx"
-        @changeActiveTab="changeActiveTab"
-      />
+      <switch-tabs :activeTabIdx="activeTabIdx" @changeActiveTab="changeActiveTab" />
       <color-content
         :top="top"
         :is-refresh="refresh"
@@ -52,15 +48,16 @@
 
 <script>
 import { Drawer as TDrawer } from 'tdesign-vue';
+
 import ColorContent from '../color-panel/components/ColorContent/index.vue'; //色彩配置
 import FontContent from '../font-panel/index.vue'; // 字体配置
 import RadiusContent from '../radius-panel/index.vue'; // 字体配置
 import ShadowContent from '../shadow-panel/index.vue'; // 阴影配置
 import SizeContent from '../size-panel/index.vue'; // 阴影配置
-import { initVariables } from '../common/utils';
 
 import StickyThemeDisplay from '../common/StickyThemeDisplay/index.vue';
 import SwitchTabs from '../common/SwitchTabs/index.vue';
+import { initVariables } from '../common/utils';
 
 const activeTabMap = {
   color: 0,
@@ -71,6 +68,7 @@ const activeTabMap = {
 };
 
 export default {
+  name: 'PanelDrawer',
   components: {
     TDrawer,
     SwitchTabs,
@@ -94,10 +92,6 @@ export default {
     },
     drawerVisible: {
       type: [String, Number, Boolean],
-    },
-    device: {
-      type: String,
-      default: 'web',
     },
   },
   data() {

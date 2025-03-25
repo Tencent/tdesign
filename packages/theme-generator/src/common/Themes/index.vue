@@ -12,7 +12,7 @@
               'background-color': theme.value,
             }"
           >
-            <div v-html="theme.subtitle" />
+            <div v-html="theme.subtitle"></div>
             <div v-if="currentTheme && currentTheme.value === theme.value" class="recommend-theme__flex-theme--active">
               <picked-svg />
             </div>
@@ -34,19 +34,17 @@
 </template>
 
 <script>
-import PickedSvg from './PickedSvg.vue';
 import langMixin from '../i18n/mixin';
-import { getBuiltInThemes, generateNewTheme } from '../utils';
+import { generateNewTheme, getBuiltInThemes } from '../utils';
+import PickedSvg from './PickedSvg.vue';
 
 export default {
+  name: 'RecommendThemes',
   emit: ['changeTabTheme'],
   props: {
     currentTheme: Object,
-    device: {
-      type: String,
-      default: 'web',
-    },
   },
+  inject: ['device'],
   mixins: [langMixin],
   data() {
     return {

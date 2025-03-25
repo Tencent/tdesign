@@ -7,7 +7,6 @@
       @click-setting="handleClickSetting"
       :drawerVisible="visible"
       :showSetting="showSetting"
-      :device="device"
     />
     <panel-drawer
       :drawerVisible="visible"
@@ -15,7 +14,6 @@
       :refresh="refresh"
       @panel-drawer-visible="handleDrawerVisible"
       :propsTop="propsTop"
-      :device="device"
     />
   </div>
 </template>
@@ -50,6 +48,11 @@ export default {
       type: String,
       default: 'web',
     },
+  },
+  provide() {
+    return {
+      device: this.device,
+    };
   },
   data() {
     return {

@@ -19,7 +19,6 @@
             @changeTabTheme="handleChangeTabTheme"
             v-if="isThemeTabVisible && isThemeTabContentDisplay"
             :currentTheme="currentTheme"
-            :device="device"
           />
         </transition>
       </div>
@@ -136,11 +135,8 @@ export default {
   props: {
     drawerVisible: { type: [Boolean, Number] },
     showSetting: { type: [Boolean, String] },
-    device: {
-      type: String,
-      default: 'web',
-    },
   },
+  inject: ['device'],
   mixins: [langMixin],
   data() {
     return {

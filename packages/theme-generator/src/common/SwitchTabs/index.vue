@@ -22,22 +22,19 @@
   </div>
 </template>
 <script>
+import langMixin from '../i18n/mixin';
+import BoxshadowSvg from './BoxshadowSvg.vue';
 import ColorSvg from './ColorSvg.vue';
 import FontSvg from './FontSvg.vue';
 import RadiusSvg from './RadiusSvg.vue';
-import BoxshadowSvg from './BoxshadowSvg.vue';
 import SizeSvg from './SizeSvg.vue';
-import langMixin from '../i18n/mixin';
 
 export default {
   name: 'SwitchTabs',
   props: {
     activeTabIdx: Number,
-    device: {
-      type: String,
-      default: 'web',
-    },
   },
+  inject: ['device'],
   computed: {
     filteredTabs() {
       // 移动端不显示尺寸配置
