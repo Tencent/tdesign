@@ -21,7 +21,7 @@
               :style="{ paddingBottom: '4px', color: 'var(--text-secondary)' }"
             >
               <div
-                @click="generateNewTheme(theme.value)"
+                @click="handleNewColorGeneration(theme.value)"
                 :class="{ 'is-active': currentThemeColor.toLocaleLowerCase() === theme.value.toLocaleLowerCase() }"
               >
                 <div
@@ -88,7 +88,7 @@
                     v-for="(theme, idx) in recommendThemes"
                   >
                     <div
-                      @click="generateNewTheme(theme.value)"
+                      @click="handleNewColorGeneration(theme.value)"
                       :class="{
                         'is-active': currentThemeColor === theme.value,
                       }"
@@ -118,7 +118,7 @@
                     v-for="(theme, idx) in sceneThemes"
                   >
                     <div
-                      @click="generateNewTheme(theme.value)"
+                      @click="handleNewColorGeneration(theme.value)"
                       :class="{
                         'is-active': currentThemeColor === theme.value,
                       }"
@@ -314,36 +314,35 @@
   </div>
 </template>
 <script lang="jsx">
+import { Edit1Icon, FileCopyIcon, HelpCircleIcon } from 'tdesign-icons-vue';
 import {
-  Row as TRow,
   Col as TCol,
-  Popup as TPopup,
   Divider as TDivider,
-  Tooltip as TTooltip,
+  Popup as TPopup,
+  Row as TRow,
   Switch as TSwitch,
+  Tooltip as TTooltip,
 } from 'tdesign-vue';
-import { Edit1Icon, HelpCircleIcon, FileCopyIcon } from 'tdesign-icons-vue';
 import { Color } from 'tvision-color';
 
 import ColorColumn from '../ColorColumn/index.vue';
 import ColorCollapse from './ColorCollapse.vue';
 
 import ColorPicker from '../../../common/ColorPicker/ColorPicker.vue';
+import langMixin from '../../../common/i18n/mixin';
 import { DEFAULT_THEME } from '../../../common/Themes/const';
-import { CUSTOM_THEME_ID, handleAttach, generateNewTheme, generateTokenList } from '../../../common/utils';
-
+import { CUSTOM_THEME_ID, generateNewTheme, generateTokenList, handleAttach } from '../../../common/utils';
+import { colorAnimation } from '../../../common/utils/animation';
 import {
-  DEFAULT_COLOR,
   BRAND_COLOR_MAP,
+  DEFAULT_COLOR,
   ERROR_COLOR_MAP,
-  WARNING_COLOR_MAP,
-  SUCCESS_COLOR_MAP,
   GRAY_COLOR_MAP,
   RECOMMEND_COLOR,
   SCENE_COLOR,
+  SUCCESS_COLOR_MAP,
+  WARNING_COLOR_MAP,
 } from '../../utils/const';
-import { colorAnimation } from '../../../common/utils/animation';
-import langMixin from '../../../common/i18n/mixin';
 
 export default {
   name: 'ColorContent',
@@ -556,7 +555,7 @@ export default {
     },
     changeColor(hex) {
       this.currentThemeColor = hex;
-      this.generateNewTheme(hex, this.isRemainGenerateMode);
+      this.handleNewColorGeneration(hex, this.isRemainGenerateMode);
     },
     recoverGradation(type) {
       let palette;
@@ -652,8 +651,9 @@ export default {
 
       return currentPalette;
     },
-    generateNewTheme(hex) {
+    handleNewColorGeneration(hex) {
       this.currentThemeColor = hex;
+      // 改变颜色无所谓是否传递 device
       this.currentBrandIdx = generateNewTheme(hex, this.isRemainGenerateMode).brandColorIdx;
     },
   },

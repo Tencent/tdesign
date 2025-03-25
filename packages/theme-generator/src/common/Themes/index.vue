@@ -5,7 +5,7 @@
         {{ lang.dock.recommendTitle }}
       </div>
       <div class="recommend-theme__flex">
-        <div v-for="(theme, themeIdx) in type.options" :key="themeIdx" @click="generateNewTheme(theme)">
+        <div v-for="(theme, themeIdx) in type.options" :key="themeIdx" @click="handleNewThemeGeneration(theme)">
           <div
             class="recommend-theme__flex-theme"
             :style="{
@@ -57,7 +57,7 @@ export default {
     PickedSvg,
   },
   methods: {
-    generateNewTheme(theme) {
+    handleNewThemeGeneration(theme) {
       generateNewTheme(theme.value, undefined, this.device);
       this.$emit('changeTabTheme', theme);
     },
