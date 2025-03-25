@@ -16,15 +16,8 @@ export const CUSTOM_EXTRA_ID = 'custom-theme-extra';
 export const CUSTOM_COMMON_ID_PREFIX = 'custom-theme-common';
 
 export function initVariables() {
-  let styleSheet;
-  let themeStylesheet = document.getElementById(GENERATOR_ID);
-
-  if (!themeStylesheet) {
-    styleSheet = document.createElement('style');
-    styleSheet.id = GENERATOR_ID;
-    styleSheet.innerText = GENERATOR_VARIABLES;
-    document.head.appendChild(styleSheet);
-  }
+  const siteStylesheet = appendStyleSheet(GENERATOR_ID);
+  siteStylesheet.textContent = GENERATOR_VARIABLES;
 }
 
 export function appendStyleSheet(themeId) {
