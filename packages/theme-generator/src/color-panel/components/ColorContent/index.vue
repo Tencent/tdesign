@@ -351,6 +351,7 @@ export default {
     isRefresh: Boolean,
   },
   mixins: [langMixin],
+  inject: ['device'],
   components: {
     TRow,
     TCol,
@@ -653,8 +654,7 @@ export default {
     },
     handleNewColorGeneration(hex) {
       this.currentThemeColor = hex;
-      // 改变颜色无所谓是否传递 device
-      this.currentBrandIdx = generateNewTheme(hex, this.isRemainGenerateMode).brandColorIdx;
+      this.currentBrandIdx = generateNewTheme(hex, this.isRemainGenerateMode, this.device).brandColorIdx;
     },
   },
 };
