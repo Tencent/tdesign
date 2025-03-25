@@ -109,17 +109,31 @@ export function generateNewTheme(hex, remainInput = true, device = 'web') {
   return { brandColorIdx, colorPalette };
 }
 
-export function generateCommonTheme(device = 'web') {
-  const commonThemes = BUILT_IN_THEMES[device]?.common;
-  if (!commonThemes) return;
+export const generateCommonTheme = (() => {
+  let previousDevice = 'web'; // 闭包保存
 
-  Object.entries(commonThemes).forEach(([key, theme]) => {
-    const commonId = `${CUSTOM_COMMON_ID_PREFIX}-${key}`;
-    if (document.getElementById(commonId)) return;
-    const commonStyleSheet = appendStyleSheet(commonId);
-    commonStyleSheet.textContent = theme;
-  });
-}
+  return function (device = 'web') {
+    const commonThemes = BUILT_IN_THEMES[device]?.common;
+    if (!commonThemes) return;
+
+    // device 变化时，清除之前的样式
+    if (previousDevice !== device) {
+      const existingStyles = Array.from(document.querySelectorAll(`[id^="${CUSTOM_COMMON_ID_PREFIX}-"]`));
+      existingStyles.forEach((style) => {
+        style.parentNode.removeChild(style);
+      });
+    }
+
+    Object.entries(commonThemes).forEach(([key, theme]) => {
+      const commonId = `${CUSTOM_COMMON_ID_PREFIX}-${key}`;
+      if (document.getElementById(commonId)) return; // 不重复生成
+      const commonStyleSheet = appendStyleSheet(commonId);
+      commonStyleSheet.textContent = theme;
+    });
+
+    previousDevice = device;
+  };
+})();
 
 // update `--brand-main` variable when update theme
 export function updateBrandMain(hex) {
