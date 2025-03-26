@@ -1,7 +1,7 @@
 <template>
   <div class="sticky-theme" :style="stickyThemeStyle" v-if="!!theme">
     <div class="theme-status"></div>
-    <div v-if="isAnimating" class="theme-status eight-deg-slide"></div>
+    <div v-if="isAnimating" class="theme-status color-transition"></div>
     <div class="theme-text">
       <p class="theme-text-title">{{ title }}</p>
       <p class="theme-text-subtitle">{{ subtitleText }}</p>
@@ -9,9 +9,9 @@
   </div>
 </template>
 <script>
-import langMixin from "../i18n/mixin";
+import langMixin from '../i18n/mixin';
 export default {
-  name: "StickyExport",
+  name: 'StickyExport',
   props: {
     top: Number,
     theme: {
@@ -105,8 +105,7 @@ export default {
     font-weight: 700;
     color: #fff;
     margin: 0 0 10px 0;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
 
   &-subtitle {
@@ -117,27 +116,13 @@ export default {
   }
 }
 
-.eight-deg-slide {
-  animation: dark-to-light 1s ease;
+.color-transition {
+  animation: prev-to-current 1s ease;
 }
 
-:root[theme-mode='dark'] .eight-deg-slide {
-  animation: light-to-dark 1s ease;
-}
-
-@keyframes light-to-dark {
+@keyframes prev-to-current {
   from {
     clip-path: polygon(0 0, 0 0, calc(tan(8deg) * -100vh) 100%, calc(tan(8deg) * -100vh) 100%);
-  }
-
-  to {
-    clip-path: polygon(0 0, calc((tan(8deg) * 100vh) + 100%) 0, 100% 100%, calc(tan(8deg) * -100vh) 100%);
-  }
-}
-
-@keyframes dark-to-light {
-  from {
-    clip-path: polygon(calc((tan(8deg) * 100vh) + 100%) 0, calc((tan(8deg) * 100vh) + 100%) 0, 100% 100%, 100% 100%);
   }
 
   to {
