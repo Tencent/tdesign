@@ -136,7 +136,9 @@ export default {
     },
   },
   mounted() {
-    this.setFontPalette();
+    this.$nextTick(() => {
+      this.setFontPalette();
+    });
   },
 };
 </script>

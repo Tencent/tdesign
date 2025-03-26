@@ -425,15 +425,15 @@ export default {
     },
   },
   mounted() {
-    this.setPalette();
-    this.setDefaultPalette();
-    const currentThemeColor = window
-      .getComputedStyle(document.documentElement)
-      .getPropertyValue('--td-brand-color')
-      .toLocaleLowerCase()
-      .trim();
-    this.currentThemeColor = currentThemeColor;
     this.$nextTick(() => {
+      this.setPalette();
+      this.setDefaultPalette();
+      const currentThemeColor = window
+        .getComputedStyle(document.documentElement)
+        .getPropertyValue('--td-brand-color')
+        .toLocaleLowerCase()
+        .trim();
+      this.currentThemeColor = currentThemeColor;
       colorAnimation();
     });
   },
