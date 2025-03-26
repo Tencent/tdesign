@@ -572,14 +572,16 @@ export default {
       diffPalette.forEach((v) => {
         if (v instanceof Array) {
           this.changeGradation(v[0].value, v[0].idx, type);
-
           return;
-        } else this.changeGradation(v.value, v.idx, type);
+        } else {
+          this.changeGradation(v.value, v.idx, type);
+        }
       });
     },
     changeGradation(hex, idx, type) {
       const tokenIdxName = `--td-${type}-color-${idx + 1}`;
       const styleSheet = document.getElementById(CUSTOM_THEME_ID);
+      if (!this.colorPalette[idx]) return;
       if (type === 'brand') {
         if (this.colorPalette[idx] instanceof Array) {
           this.colorPalette[idx].map((v) => (v.value = hex));
