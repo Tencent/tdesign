@@ -46,7 +46,7 @@
             <template #icon>
               <palette-svg />
             </template>
-            <div v-if="!isCustomizeDrawerVisible" style="margin-left: 8px">
+            <div v-if="!isCustomizeDrawerVisible" style="margin-left: 8px; width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
               {{ isEn ? currentTheme.enName : currentTheme.name }}
             </div>
           </t-button>
