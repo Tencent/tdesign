@@ -15,6 +15,13 @@ export const CUSTOM_DARK_ID = 'custom-theme-dark';
 export const CUSTOM_EXTRA_ID = 'custom-theme-extra';
 export const CUSTOM_COMMON_ID_PREFIX = 'custom-theme-common';
 
+export const isMiniProgram = (device) => device === 'mini-program';
+export const isMobile = (device) => device === 'mobile' || isMiniProgram(device);
+
+export function normalizeDeviceType(device) {
+  return isMobile(device) ? 'mobile' : 'web';
+}
+
 export function initVariables() {
   const siteStylesheet = appendStyleSheet(GENERATOR_ID);
   siteStylesheet.textContent = GENERATOR_VARIABLES;
@@ -35,14 +42,17 @@ export function appendStyleSheet(themeId) {
   return styleSheet;
 }
 
-export function getBuiltInThemes(device = 'web', hex) {
+export function getBuiltInThemes(device = 'web', hex = undefined) {
   const themeCopy = JSON.parse(JSON.stringify(RECOMMEND_THEMES));
 
   const filtered = themeCopy
     .map((group) => {
       group.options = group.options.filter((theme) => {
-        const availableCss = BUILT_IN_THEMES[device]?.[theme.enName];
+        const deviceType = normalizeDeviceType(device);
+        const availableCss = BUILT_IN_THEMES[deviceType]?.[theme.enName];
 
+        /* 这里的 && 不能简写为 hex.?，有时初始化不需要传入 hex，但是需要继续执行
+           可选链生成 `undefined !== theme.value.toLocaleLowerCase()` 为 true，会直接返回 */
         if (hex && hex.toLocaleLowerCase() !== theme.value.toLocaleLowerCase()) return false;
 
         if (availableCss) {
@@ -106,7 +116,8 @@ export const generateCommonTheme = (() => {
   let previousDevice = 'web'; // 闭包保存
 
   return function (device = 'web') {
-    const commonThemes = BUILT_IN_THEMES[device]?.common;
+    const deviceType = normalizeDeviceType(device);
+    const commonThemes = BUILT_IN_THEMES[deviceType]?.common;
     if (!commonThemes) return;
 
     // device 变化时，清除之前的样式
@@ -124,7 +135,7 @@ export const generateCommonTheme = (() => {
       commonStyleSheet.textContent = theme;
     });
 
-    previousDevice = device;
+    previousDevice = deviceType;
   };
 })();
 
@@ -225,10 +236,8 @@ export function exportCustomTheme(device = 'web') {
     .join('\n');
   const extraCssString = extraStyleSheet?.innerText || '';
 
-  const isMobile = device === 'mobile';
-
   let finalCssString;
-  if (isMobile) {
+  if (isMiniProgram(device)) {
     finalCssString = `
       @media (prefers-color-scheme: light) {
         page {
@@ -268,7 +277,7 @@ export function exportCustomTheme(device = 'web') {
 
   const beautifyCssString = cssbeautify(finalCssString.trim());
   const blob = new Blob([beautifyCssString], { type: 'text' });
-  const fileSuffix = isMobile ? 'wxss' : 'css';
+  const fileSuffix = isMiniProgram(device) ? 'wxss' : 'css';
   downloadFile(blob, `theme.${fileSuffix}`);
 }
 

@@ -22,13 +22,14 @@
   </div>
 </template>
 <script>
-import langMixin from '../i18n/mixin';
 import BoxshadowSvg from './BoxshadowSvg.vue';
 import ColorSvg from './ColorSvg.vue';
 import FontSvg from './FontSvg.vue';
 import RadiusSvg from './RadiusSvg.vue';
 import SizeSvg from './SizeSvg.vue';
 
+import langMixin from '../i18n/mixin';
+import { isMobile } from '../utils';
 export default {
   name: 'SwitchTabs',
   props: {
@@ -38,7 +39,7 @@ export default {
   computed: {
     filteredTabs() {
       // 移动端不显示尺寸配置
-      return this.device === 'mobile' ? this.tabs.filter((tab) => tab.title !== this.lang.size.title) : this.tabs;
+      return isMobile(this.device) ? this.tabs.filter((tab) => tab.title !== this.lang.size.title) : this.tabs;
     },
   },
   components: { ColorSvg, FontSvg, RadiusSvg, BoxshadowSvg, SizeSvg },

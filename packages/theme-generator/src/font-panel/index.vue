@@ -12,7 +12,7 @@
         <p class="font-content__title">{{ lang.font.fontSize }}</p>
         <size-adjust />
       </div>
-      <common-collapse v-if="device !== 'mobile'">
+      <common-collapse v-if="!isMobile(device)">
         <template #round>
           <div
             class="block"
@@ -74,7 +74,7 @@ import SizeAdjust from './components/SizeAdjust.vue';
 
 import { FONT_COLOR_MAP } from '../color-panel/utils/const';
 import langMixin from '../common/i18n/mixin';
-import { modifyToken } from '../common/utils';
+import { isMobile, modifyToken } from '../common/utils';
 
 export default {
   name: 'FontPanel',
@@ -111,6 +111,7 @@ export default {
     },
   },
   methods: {
+    isMobile,
     changeGradation(hex, idx) {
       const tokenIdxName = this.textColorPalette[idx].name;
       this.textColorPalette[idx].value = hex;
