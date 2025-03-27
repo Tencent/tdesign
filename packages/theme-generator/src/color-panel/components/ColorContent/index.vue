@@ -330,7 +330,7 @@ import ColorCollapse from './ColorCollapse.vue';
 
 import ColorPicker from '../../../common/ColorPicker/ColorPicker.vue';
 import langMixin from '../../../common/i18n/mixin';
-import { DEFAULT_THEME } from '../../../common/Themes/const';
+import { DEFAULT_THEME } from '../../../common/themes';
 import { CUSTOM_THEME_ID, generateNewTheme, generateTokenList, handleAttach } from '../../../common/utils';
 import { colorAnimation } from '../../../common/utils/animation';
 import {

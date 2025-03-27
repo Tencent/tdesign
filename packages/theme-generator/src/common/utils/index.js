@@ -8,7 +8,7 @@ export const GENERATOR_ID = 'TDESIGN_GENERATOR_SYMBOL';
 
 import { DARK_FUNCTION_COLOR, LIGHT_FUNCTION_COLOR } from '../../color-panel/utils/const';
 import { BUILT_IN_THEMES, MOBILE_MISSING_TOKENS } from '../built-in/theme-map';
-import { DEFAULT_THEME, RECOMMEND_THEMES } from '../Themes/const';
+import { DEFAULT_THEME, RECOMMEND_THEMES } from '../themes';
 
 export const CUSTOM_THEME_ID = 'custom-theme';
 export const CUSTOM_DARK_ID = 'custom-theme-dark';

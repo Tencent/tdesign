@@ -15,7 +15,7 @@
     >
       <div class="dock__theme-tab" :style="{ height: !isThemeTabVisible ? '0px' : '140px' }">
         <transition name="fade">
-          <themes
+          <recommend-themes
             @changeTabTheme="handleChangeTabTheme"
             v-if="isThemeTabVisible && isThemeTabContentDisplay"
             :currentTheme="currentTheme"
@@ -108,6 +108,8 @@
 <script>
 import { MessagePlugin, Button as TButton, Popconfirm as TPopconfirm, Popup as TPopup } from 'tdesign-vue';
 
+import RecommendThemes from '../recommend-themes/index.vue';
+
 import AdjustSvg from './svg/AdjustSvg.vue';
 import DownloadSvg from './svg/DownloadSvg.vue';
 import PaletteSvg from './svg/PaletteSvg.vue';
@@ -115,8 +117,7 @@ import RecoverSvg from './svg/RecoverSvg.vue';
 import SettingSvg from './svg/SettingSvg.vue';
 
 import langMixin from '../common/i18n/mixin';
-import { CUSTOM_THEME_TEXT, DEFAULT_THEME } from '../common/Themes/const';
-import Themes from '../common/Themes/index.vue';
+import { CUSTOM_THEME_TEXT, DEFAULT_THEME } from '../common/themes';
 import { exportCustomTheme, generateNewTheme, getBuiltInThemes, handleAttach } from '../common/utils';
 
 export default {
@@ -125,7 +126,7 @@ export default {
     TButton,
     TPopup,
     TPopconfirm,
-    Themes,
+    RecommendThemes,
     DownloadSvg,
     RecoverSvg,
     PaletteSvg,

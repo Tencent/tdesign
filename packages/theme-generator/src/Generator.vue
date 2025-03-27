@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { DEFAULT_THEME } from './common/Themes/const';
+import { DEFAULT_THEME } from './common/themes';
 import { generateNewTheme } from './common/utils';
 
 import Dock from './dock/index.vue';

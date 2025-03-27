@@ -1,14 +1,14 @@
-import TDesignOriginal from '!raw-loader!./svg/TDesignOriginal';
-import TencentCloud from '!raw-loader!./svg/TencentCloud';
-// import TencentQuestionnaire from '!raw-loader!./svg/TencentQuestionnaire';
-// import GovService from '!raw-loader!./svg/GovService';
-// import SmartRetail from '!raw-loader!./svg/SmartRetail';
-// import WeChatPay from '!raw-loader!./svg/WeChatPay';
-// import CulturalTourism from '!raw-loader!./svg/CulturalTourism';
-// import TencentEducation from '!raw-loader!./svg/TencentEducation';
-// import TencentHealthcare from '!raw-loader!./svg/TencentHealthcare';
-// import TencentGames from '!raw-loader!./svg/TencentGames';
-// import TencentSafe from '!raw-loader!./svg/TencentSafe';
+import TDesignOriginal from '!raw-loader!./built-in/svg/TDesignOriginal';
+import TencentCloud from '!raw-loader!./built-in/svg/TencentCloud';
+// import TencentQuestionnaire from '!raw-loader!./built-in/svg/TencentQuestionnaire';
+// import GovService from '!raw-loader!./built-in/svg/GovService';
+// import SmartRetail from '!raw-loader!./built-in/svg/SmartRetail';
+// import WeChatPay from '!raw-loader!./built-in/svg/WeChatPay';
+// import CulturalTourism from '!raw-loader!./built-in/svg/CulturalTourism';
+// import TencentEducation from '!raw-loader!./built-in/svg/TencentEducation';
+// import TencentHealthcare from '!raw-loader!./built-in/svg/TencentHealthcare';
+// import TencentGames from '!raw-loader!./built-in/svg/TencentGames';
+// import TencentSafe from '!raw-loader!./built-in/svg/TencentSafe';
 
 export const CUSTOM_THEME_TEXT = {
   name: '自定义主题',
