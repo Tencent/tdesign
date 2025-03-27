@@ -325,14 +325,12 @@ import {
 } from 'tdesign-vue';
 import { Color } from 'tvision-color';
 
-import ColorColumn from '../ColorColumn/index.vue';
-import ColorCollapse from './ColorCollapse.vue';
-
-import ColorPicker from '../../../common/ColorPicker/ColorPicker.vue';
+import ColorPicker from '../../../common/ColorPicker/index.vue';
 import langMixin from '../../../common/i18n/mixin';
-import { DEFAULT_THEME } from '../../../common/themes';
-import { CUSTOM_THEME_ID, generateNewTheme, generateTokenList, handleAttach } from '../../../common/utils';
+import { CUSTOM_THEME_ID, DEFAULT_THEME, generateNewTheme, generateTokenList } from '../../../common/themes';
+import { handleAttach } from '../../../common/utils';
 import { colorAnimation } from '../../../common/utils/animation';
+
 import {
   BRAND_COLOR_MAP,
   DEFAULT_COLOR,
@@ -343,6 +341,9 @@ import {
   SUCCESS_COLOR_MAP,
   WARNING_COLOR_MAP,
 } from '../../utils/const';
+
+import ColorColumn from '../ColorColumn/index.vue';
+import ColorCollapse from './ColorCollapse.vue';
 
 export default {
   name: 'ColorContent',

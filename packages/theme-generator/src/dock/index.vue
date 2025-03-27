@@ -117,8 +117,14 @@ import RecoverSvg from './svg/RecoverSvg.vue';
 import SettingSvg from './svg/SettingSvg.vue';
 
 import langMixin from '../common/i18n/mixin';
-import { CUSTOM_THEME_TEXT, DEFAULT_THEME } from '../common/themes';
-import { exportCustomTheme, generateNewTheme, getBuiltInThemes, handleAttach } from '../common/utils';
+import {
+  CUSTOM_THEME_TEXT,
+  DEFAULT_THEME,
+  exportCustomTheme,
+  generateNewTheme,
+  getBuiltInThemes,
+} from '../common/themes';
+import { handleAttach } from '../common/utils';
 
 export default {
   name: 'DockIndex',

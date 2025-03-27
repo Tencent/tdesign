@@ -74,7 +74,7 @@ import SizeAdjust from './components/SizeAdjust.vue';
 
 import { FONT_COLOR_MAP } from '../color-panel/utils/const';
 import langMixin from '../common/i18n/mixin';
-import { isMobile, modifyToken } from '../common/utils';
+import { isMobile, modifyToken } from '../common/themes';
 
 export default {
   name: 'FontPanel',

@@ -57,7 +57,7 @@ import SizeContent from '../size-panel/index.vue'; // 阴影配置
 
 import StickyThemeDisplay from '../common/StickyThemeDisplay/index.vue';
 import SwitchTabs from '../common/SwitchTabs/index.vue';
-import { initVariables } from '../common/utils';
+import { initVariables } from '../common/themes';
 
 const activeTabMap = {
   color: 0,

@@ -18,47 +18,24 @@
             :style="{
               height: '48px',
               transition: 'border-color .2s',
-              border:
-                hoverIdx === idx
-                  ? '1px solid var(--brand-main-hover)'
-                  : '1px solid transparent',
+              border: hoverIdx === idx ? '1px solid var(--brand-main-hover)' : '1px solid transparent',
             }"
             ><div :style="{ display: 'flex', justifyContent: 'space-between' }">
               <div>
                 <div>{{ token.label }}</div>
-                <div :style="{ color: 'var(--text-secondary)' }">
-                  {{ token.remark }} : {{ token.value }}
-                </div>
+                <div :style="{ color: 'var(--text-secondary)' }">{{ token.remark }} : {{ token.value }}</div>
               </div>
               <div :style="{ display: 'flex', alignItems: 'center' }">
-                <size-adjust-svg
-                  v-if="type === 'comp-size'"
-                  :size="token.value"
-                />
-                <horizontal-padding-adjust-svg
-                  v-else-if="type === 'comp-padding-lr'"
-                  :size="token.value"
-                />
-                <vertical-padding-adjust-svg
-                  v-else-if="type === 'comp-padding-tb'"
-                  :size="token.value"
-                />
-                <margin-adjust-svg
-                  v-else-if="type === 'comp-margin'"
-                  :size="token.value"
-                />
-                <popup-padding-adjust-svg
-                  v-else-if="type === 'popup-padding'"
-                  :size="token.value"
-                />
+                <size-adjust-svg v-if="type === 'comp-size'" :size="token.value" />
+                <horizontal-padding-adjust-svg v-else-if="type === 'comp-padding-lr'" :size="token.value" />
+                <vertical-padding-adjust-svg v-else-if="type === 'comp-padding-tb'" :size="token.value" />
+                <margin-adjust-svg v-else-if="type === 'comp-margin'" :size="token.value" />
+                <popup-padding-adjust-svg v-else-if="type === 'popup-padding'" :size="token.value" />
               </div>
             </div>
           </t-list-item>
           <template #content
-            ><size-slider
-              title="size"
-              :sizeValue="token.value"
-              @changeFontSize="(v) => handleChangeSize(v, idx)"
+            ><size-slider title="size" :sizeValue="token.value" @changeFontSize="(v) => handleChangeSize(v, idx)"
           /></template>
         </t-popup>
       </t-list>
@@ -66,33 +43,27 @@
   </div>
 </template>
 <script lang="jsx">
-import {
-  List as TList,
-  ListItem as TListItem,
-  Popup as TPopup,
-} from "tdesign-vue";
-import {
-  handleAttach,
-  modifyToken,
-  getCustomThemeSheet,
-} from "../../common/utils";
-import { sizeSteps, sizeLabels } from "../built-in/size-map";
-import SizeSlider from "../../common/SizeSlider/index.vue";
+import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue';
 
-import SizeAdjustSvg from "../svg/SizeAdjustSvg.vue";
-import MarginAdjustSvg from "../svg/MarginAdjustSvg.vue";
+import SizeSlider from '../../common/SizeSlider/index.vue';
+import { CUSTOM_THEME_ID, modifyToken } from '../../common/themes';
+import { handleAttach } from '../../common/utils';
 
-import VerticalPaddingAdjustSvg from "../svg/VerticalPaddingAdjustSvg.vue";
-import HorizontalPaddingAdjustSvg from "../svg/HorizontalPaddingAdjustSvg.vue";
-import PopupPaddingAdjustSvg from "../svg/PopupPaddingAdjustSvg.vue";
+import HorizontalPaddingAdjustSvg from '../svg/HorizontalPaddingAdjustSvg.vue';
+import MarginAdjustSvg from '../svg/MarginAdjustSvg.vue';
+import PopupPaddingAdjustSvg from '../svg/PopupPaddingAdjustSvg.vue';
+import SizeAdjustSvg from '../svg/SizeAdjustSvg.vue';
+import VerticalPaddingAdjustSvg from '../svg/VerticalPaddingAdjustSvg.vue';
+
+import { sizeLabels, sizeSteps } from '../built-in/size-map';
 
 const STEP_MAP = [
-  { label: "默认", value: 3 },
-  { label: "自定义", value: 6, disabled: true },
+  { label: '默认', value: 3 },
+  { label: '自定义', value: 6, disabled: true },
 ];
 
 export default {
-  name: "SizeAdjust",
+  name: 'SizeAdjust',
   components: {
     TList,
     TListItem,
@@ -145,18 +116,16 @@ export default {
     handleAttach,
     handleVisibleChange(v, ctx, idx) {
       if (v) this.hoverIdx = idx;
-      if (!v && ctx.trigger === "document" && this.hoverIdx === idx)
-        this.hoverIdx = null;
+      if (!v && ctx.trigger === 'document' && this.hoverIdx === idx) this.hoverIdx = null;
     },
     handleChangeSize(v, idx) {
       const res = `${v}px`;
       const tokenName = `--td-${this.tokenTypeList[idx].label}`;
-      const styleSheet = getCustomThemeSheet();
+      const styleSheet = document.getElementById(CUSTOM_THEME_ID);
       if (!styleSheet) return;
 
       // token 需要修改所有对应该token的值
-      if (parseInt(this.initTokenList[idx].value, 10) !== parseInt(res, 10))
-        this.segmentSelectionDisabled = true;
+      if (parseInt(this.initTokenList[idx].value, 10) !== parseInt(res, 10)) this.segmentSelectionDisabled = true;
       // 修改state
       this.tokenTypeList[idx].value = res;
       modifyToken(tokenName, res);
@@ -187,8 +156,7 @@ export default {
 
     span {
       font-size: 14px;
-      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-        "Liberation Mono", monospace;
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
     /deep/ .t-radio-group {
       width: 228px;
@@ -209,8 +177,7 @@ export default {
       border-radius: 6px;
       cursor: pointer;
       background-color: var(--bg-color-theme-surface);
-      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-        "Liberation Mono", monospace;
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
       padding: 4px 6px;
       font-size: 12px;
       line-height: 20px;

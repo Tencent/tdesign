@@ -29,7 +29,7 @@ import RadiusSvg from './RadiusSvg.vue';
 import SizeSvg from './SizeSvg.vue';
 
 import langMixin from '../i18n/mixin';
-import { isMobile } from '../utils';
+import { isMobile } from '../themes';
 export default {
   name: 'SwitchTabs',
   props: {

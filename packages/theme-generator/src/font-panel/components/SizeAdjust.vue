@@ -110,10 +110,13 @@ import {
   RadioButton as TRadioButton,
   RadioGroup as TRadioGroup,
 } from 'tdesign-vue';
+
 import SegmentSelection from '../../common/SegmentSelection/index.vue';
 import SizeSlider from '../../common/SizeSlider/index.vue';
 import langMixin from '../../common/i18n/mixin';
-import { getCustomThemeSheet, handleAttach, modifyToken } from '../../common/utils';
+import { CUSTOM_THEME_ID, modifyToken } from '../../common/themes';
+import { handleAttach } from '../../common/utils';
+
 import { fontSizeLabels, fontSizeSteps } from '../built-in/font-size';
 
 const STEP_MAP = [
@@ -242,7 +245,7 @@ export default {
     },
     handleChangeFontSize(v, type, tokenIdxName, idx) {
       const res = `${v}px`;
-      const styleSheet = getCustomThemeSheet();
+      const styleSheet = document.getElementById(CUSTOM_THEME_ID);
       if (!styleSheet) return;
 
       if (type === 'list') {
