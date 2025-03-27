@@ -328,7 +328,10 @@ export function downloadFile(blob, fileName) {
 }
 
 /**
- * @param {*} properties array or string
+ * Removes specified CSS properties from a CSS string
+ * @param {string} cssText
+ * @param {string | string[]} properties
+ * @returns {string}
  */
 export function removeCssProperties(cssText, properties) {
   if (!Array.isArray(properties)) {
