@@ -1,10 +1,6 @@
 <template>
   <div :style="{ width: '100%' }">
-    <t-radio-group
-      class="font-color__type-radio"
-      variant="default-filled"
-      v-model="colorType"
-    >
+    <t-radio-group class="font-color__type-radio" variant="default-filled" v-model="colorType">
       <!-- <t-radio-button :value="0" disabled>弱对比</t-radio-button> -->
       <t-radio-button :value="1">{{ lang.font.colorDefault }}</t-radio-button>
       <!-- <t-radio-button :value="2" disabled>高对比</t-radio-button> -->
@@ -21,25 +17,12 @@
         v-if="flattenPalette.find((v) => v.idx === activeIdx)"
         class="active-tab"
         :style="{
-          top: `${
-            flattenPalette
-              .filter((v) => !!v.name)
-              .findIndex((v) => v.idx === activeIdx) *
-              56 +
-            8
-          }px`,
-          height: `${
-            flattenPalette
-              .filter((v) => !!v.name)
-              .filter((v) => v.idx === activeIdx).length * 56
-          }px`,
+          top: `${flattenPalette.filter((v) => !!v.name).findIndex((v) => v.idx === activeIdx) * 56 + 8}px`,
+          height: `${flattenPalette.filter((v) => !!v.name).filter((v) => v.idx === activeIdx).length * 56}px`,
         }"
       ></div>
 
-      <div
-        v-for="(color, idx) in flattenPalette.filter((v) => !!v.name)"
-        :key="idx"
-      >
+      <div v-for="(color, idx) in flattenPalette.filter((v) => !!v.name)" :key="idx">
         <t-popup
           placement="left"
           showArrow
@@ -71,11 +54,7 @@
             <!-- <edit-1-icon /> -->
           </div>
           <template #content>
-            <color-picker
-              :value="color.value"
-              @change="(hex) => changeColor(hex, idx)"
-              :enable-alpha="true"
-            />
+            <color-picker :value="color.value" @change="(hex) => changeColor(hex, idx)" :enable-alpha="true" />
           </template>
         </t-popup>
         <div v-if="color.name" class="font-color__vertical-list-content">
@@ -91,25 +70,21 @@
   </div>
 </template>
 <script>
-import flatten from "lodash/flatten";
-import {
-  Popup as TPopup,
-  RadioGroup as TRadioGroup,
-  RadioButton as TRadioButton,
-} from "tdesign-vue";
-import { Edit1Icon } from "tdesign-icons-vue";
-import ColorPicker from "../../common/ColorPicker/ColorPicker.vue";
-import { handleAttach } from "../../common/utils";
-import langMixin from "../../common/i18n/mixin";
+import flatten from 'lodash/flatten';
+import { Edit1Icon } from 'tdesign-icons-vue';
+import { Popup as TPopup, RadioButton as TRadioButton, RadioGroup as TRadioGroup } from 'tdesign-vue';
+import ColorPicker from '../../common/ColorPicker/index.vue';
+import langMixin from '../../common/i18n/mixin';
+import { handleAttach } from '../../common/utils';
 export default {
-  name: "FontColorAdjust",
+  name: 'FontColorAdjust',
   props: {
     type: String,
     colorPalette: Array,
     paletteChange: Boolean,
     originColorPalette: Array,
   },
-  emit: ["recoverGradation", "changeGradation"],
+  emit: ['recoverGradation', 'changeGradation'],
   mixins: [langMixin],
   components: {
     TPopup,
@@ -127,7 +102,7 @@ export default {
   },
   watch: {
     colorType(v) {
-      if (v === "custom") return;
+      if (v === 'custom') return;
     },
   },
   computed: {
@@ -147,10 +122,10 @@ export default {
       this.activeIdx = idx;
     },
     handleRecover() {
-      this.$emit("recoverGradation", this.type);
+      this.$emit('recoverGradation', this.type);
     },
     changeColor(hex, idx) {
-      this.$emit("changeGradation", hex, idx, this.type);
+      this.$emit('changeGradation', hex, idx, this.type);
     },
   },
 };
@@ -212,8 +187,7 @@ export default {
         &:hover {
           transform: scale(1.2);
           border-radius: 3px;
-          box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.05),
-            0px 4px 5px rgba(0, 0, 0, 0.08),
+          box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.05), 0px 4px 5px rgba(0, 0, 0, 0.08),
             0px 2px 4px -1px rgba(0, 0, 0, 0.12);
         }
       }
@@ -227,8 +201,7 @@ export default {
     font-size: 14px;
     line-height: 22px;
     border-radius: 9px;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     cursor: pointer;
     position: relative;
 
@@ -242,7 +215,7 @@ export default {
       }
 
       &::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         left: 0;

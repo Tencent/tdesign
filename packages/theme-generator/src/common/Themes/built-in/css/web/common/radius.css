@@ -1,0 +1,9 @@
+:root {
+    --td-radius-small: 2px;
+    --td-radius-default: 3px;
+    --td-radius-medium: 6px;
+    --td-radius-large: 9px;
+    --td-radius-extraLarge: 12px;
+    --td-radius-round: 999px;
+    --td-radius-circle: 50%;
+}

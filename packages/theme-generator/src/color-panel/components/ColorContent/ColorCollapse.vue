@@ -37,14 +37,10 @@
       </t-popup>
       <div class="color-collapse__text">
         <div class="color-collapse__title" @click="isActive = !isActive">
-          {{ title }} 
+          {{ title }}
         </div>
         <slot name="subTitle"></slot>
-        <div
-          class="color-collapse__subtitle"
-          :style="{ color: 'var(--text-secondary)' }"
-          v-if="!$slots.subTitle"
-        >
+        <div class="color-collapse__subtitle" :style="{ color: 'var(--text-secondary)' }" v-if="!$slots.subTitle">
           HEX: {{ mainColorVal }}
           <t-popup
             placement="top"
@@ -62,10 +58,7 @@
         </div>
       </div>
       <div @click="isActive = !isActive">
-        <arrow-icon
-          :isActive="isActive"
-          overlayClassName="color-collapse__arrow"
-        />
+        <arrow-icon :isActive="isActive" overlayClassName="color-collapse__arrow" />
       </div>
     </div>
     <transition
@@ -77,35 +70,34 @@
       @leave="leave"
       @afterLeave="afterLeave"
     >
-      <slot v-if="isActive" />
+      <slot v-if="isActive"></slot>
     </transition>
   </div>
 </template>
 <script>
-import flatten from "lodash/flatten";
-import { collapseAnimation } from "../../../common/utils/animation";
-import { FileCopyIcon, Edit1Icon } from "tdesign-icons-vue";
-import { Popup as TPopup } from "tdesign-vue";
-import ArrowIcon from "tdesign-vue/es/common-components/fake-arrow";
-import { handleAttach } from "../../../common/utils";
-import ColorPicker from "../../../common/ColorPicker/ColorPicker.vue";
-import langMixin  from "../../../common/i18n/mixin";
+import flatten from 'lodash/flatten';
+import { Edit1Icon, FileCopyIcon } from 'tdesign-icons-vue';
+import { Popup as TPopup } from 'tdesign-vue';
+import ArrowIcon from 'tdesign-vue/es/common-components/fake-arrow';
+
+import ColorPicker from '../../../common/ColorPicker/index.vue';
+import langMixin from '../../../common/i18n/mixin';
+import { handleAttach } from '../../../common/utils';
+import { collapseAnimation } from '../../../common/utils/animation';
 
 export default {
-  name: "ColorCollapse",
+  name: 'ColorCollapse',
   props: {
     title: String,
     colorPalette: Array,
     type: String,
-    disableSelfDefine: Boolean
+    disableSelfDefine: Boolean,
   },
-  mixins:[langMixin],
+  mixins: [langMixin],
   components: { FileCopyIcon, ArrowIcon, TPopup, Edit1Icon, ColorPicker },
   computed: {
     mainColorVal() {
-      return this.flattenPalette.find(
-        (v) => v.type === "main" || v.type === "gray"
-      )?.value;
+      return this.flattenPalette.find((v) => v.type === 'main' || v.type === 'gray')?.value;
     },
     flattenPalette() {
       return flatten(this.colorPalette);
@@ -118,18 +110,18 @@ export default {
       isHover: false,
     };
   },
-  emit: ["changeMainColor"],
+  emit: ['changeMainColor'],
   methods: {
     handleAttach,
     changeColor(hex) {
-      this.$emit("changeMainColor", hex, this.type);
+      this.$emit('changeMainColor', hex, this.type);
     },
     copyHex(hex) {
-      let input = document.createElement("input");
+      let input = document.createElement('input');
       input.value = hex;
       document.body.appendChild(input);
       input.select();
-      document.execCommand("Copy");
+      document.execCommand('Copy');
       input.remove();
     },
   },
@@ -156,7 +148,7 @@ export default {
       position: relative;
 
       &::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         left: 0;
@@ -196,8 +188,7 @@ export default {
     display: flex;
     align-items: center;
     color: var(--text-secondary);
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     /deep/ .t-icon {
       margin-left: 4px;
       cursor: pointer;

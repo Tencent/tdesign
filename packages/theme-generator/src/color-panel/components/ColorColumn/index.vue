@@ -6,52 +6,33 @@
           v-for="(color, idx) in flattenPalette.filter(
             (v, i) =>
               v &&
-              ((flattenPalette[i + 1] &&
-                v.value !== flattenPalette[i + 1].value) ||
-                i === flattenPalette.length - 1)
+              ((flattenPalette[i + 1] && v.value !== flattenPalette[i + 1].value) || i === flattenPalette.length - 1),
           )"
           :key="idx"
           :style="{ background: color.value }"
           @click="() => handleClickIdx(idx)"
         />
       </div>
-      <div v-else class="unlink" @click="handleRecover">
-        <link-unlink-icon size="20px" />色阶断开，点击恢复上次结果
-      </div>
+      <div v-else class="unlink" @click="handleRecover"><link-unlink-icon size="20px" />色阶断开，点击恢复上次结果</div>
     </div>
 
     <div class="color-content__vertical-list">
       <span
         class="current-arrow"
         :style="{
-          left: `${
-            activeIdx * (type === 'gray' ? 16 : 23) + (type === 'gray' ? 5 : 8)
-          }px`,
+          left: `${activeIdx * (type === 'gray' ? 16 : 23) + (type === 'gray' ? 5 : 8)}px`,
         }"
       ></span>
       <div
         v-if="flattenPalette.find((v) => v.idx === activeIdx)"
         class="active-tab"
         :style="{
-          top: `${
-            flattenPalette
-              .filter((v) => !!v.name)
-              .findIndex((v) => v.idx === activeIdx) *
-              44 +
-            4
-          }px`,
-          height: `${
-            flattenPalette
-              .filter((v) => !!v.name)
-              .filter((v) => v.idx === activeIdx).length * 44
-          }px`,
+          top: `${flattenPalette.filter((v) => !!v.name).findIndex((v) => v.idx === activeIdx) * 44 + 4}px`,
+          height: `${flattenPalette.filter((v) => !!v.name).filter((v) => v.idx === activeIdx).length * 44}px`,
         }"
       ></div>
 
-      <div
-        v-for="(color, idx) in flattenPalette.filter((v) => !!v.name)"
-        :key="idx"
-      >
+      <div v-for="(color, idx) in flattenPalette.filter((v) => !!v.name)" :key="idx">
         <t-popup
           placement="left"
           showArrow
@@ -82,20 +63,13 @@
             </transition>
           </div>
           <template #content>
-            <color-picker
-              :value="color.value"
-              @change="(hex) => changeColor(hex, color.idx)"
-            />
+            <color-picker :value="color.value" @change="(hex) => changeColor(hex, color.idx)" />
           </template>
         </t-popup>
-        <div
-          v-if="color.name"
-          @click="() => handleClickIdx(color.idx)"
-          class="color-content__vertical-list-content"
-        >
+        <div v-if="color.name" @click="() => handleClickIdx(color.idx)" class="color-content__vertical-list-content">
           <div class="color-content__vertical-list-title" :title="color.name">
             <!-- 不展示--td-前缀 -->
-            {{ color.name.replace('--td-','') }}
+            {{ color.name.replace('--td-', '') }}
           </div>
           <div class="color-content__vertical-list-subtitle">
             <span>{{ type }}{{ color.idx + 1 }}</span
@@ -104,8 +78,7 @@
           <error-circle-icon
             class="error-icon"
             v-if="
-              flattenPalette[activeIdx].value === color.value &&
-              color.value !== originFlattenPalette[activeIdx].value
+              flattenPalette[activeIdx].value === color.value && color.value !== originFlattenPalette[activeIdx].value
             "
           />
         </div>
@@ -114,21 +87,21 @@
   </div>
 </template>
 <script>
-import flatten from "lodash/flatten";
-import { Popup as TPopup } from "tdesign-vue";
-import { LinkUnlinkIcon, Edit1Icon, ErrorCircleIcon } from "tdesign-icons-vue";
-import ColorPicker from "../../../common/ColorPicker/ColorPicker.vue";
-import { handleAttach } from "../../../common/utils";
+import flatten from 'lodash/flatten';
+import { Popup as TPopup } from 'tdesign-vue';
+import { LinkUnlinkIcon, Edit1Icon, ErrorCircleIcon } from 'tdesign-icons-vue';
+import ColorPicker from '../../../common/ColorPicker/index.vue';
+import { handleAttach } from '../../../common/utils';
 
 export default {
-  name: "ColorColumn",
+  name: 'ColorColumn',
   props: {
     type: String,
     colorPalette: Array,
     paletteChange: Boolean,
     originColorPalette: Array,
   },
-  emit: ["recoverGradation", "changeGradation"],
+  emit: ['recoverGradation', 'changeGradation'],
   components: {
     TPopup,
     ColorPicker,
@@ -159,10 +132,10 @@ export default {
       this.activeIdx = idx;
     },
     handleRecover() {
-      this.$emit("recoverGradation", this.type);
+      this.$emit('recoverGradation', this.type);
     },
     changeColor(hex, idx) {
-      this.$emit("changeGradation", hex, idx, this.type);
+      this.$emit('changeGradation', hex, idx, this.type);
     },
   },
 };
@@ -205,8 +178,7 @@ export default {
         &:hover {
           transform: scale(1.2);
           border-radius: 3px;
-          box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.05),
-            0px 4px 5px rgba(0, 0, 0, 0.08),
+          box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.05), 0px 4px 5px rgba(0, 0, 0, 0.08),
             0px 2px 4px -1px rgba(0, 0, 0, 0.12);
         }
       }
@@ -237,8 +209,7 @@ export default {
     font-size: 12px;
     line-height: 18px;
     border-radius: 9px;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     cursor: pointer;
     position: relative;
     &-content {
@@ -254,7 +225,7 @@ export default {
       }
 
       &::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         left: 0;
