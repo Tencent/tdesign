@@ -1,3 +1,4 @@
+export * from './iframe';
 export * from './preset';
 export * from './token';
 
@@ -7,7 +8,7 @@ import { Color } from 'tvision-color';
 import GENERATOR_VARIABLES from '!raw-loader!./built-in/css/vars.css';
 const GENERATOR_ID = 'TDESIGN_GENERATOR_SYMBOL';
 
-import { appendStyleSheet, downloadFile, removeCssProperties } from '../utils';
+import { appendStyleSheet, downloadFile, extractRootContent, removeCssProperties } from '../utils';
 import { BUILT_IN_THEMES, DEFAULT_THEME, RECOMMEND_THEMES } from './preset';
 import { DARK_FUNCTION_COLOR, LIGHT_FUNCTION_COLOR, MOBILE_MISSING_TOKENS } from './token';
 
@@ -127,9 +128,7 @@ export const generateCommonTheme = (() => {
 
 export function generateTokenList(hex, isDark = false, step = 10, remainInput = true) {
   const lowCaseHex = hex.toLocaleLowerCase();
-  const root = isDark
-    ? `:root[theme-color="${CUSTOM_THEME_ID}"][theme-mode="dark"]`
-    : `:root[theme-color="${CUSTOM_THEME_ID}"],:root[theme-color="${CUSTOM_THEME_ID}"][theme-mode="light"]`;
+  const root = isDark ? `:root[theme-mode="dark"]` : `:root,:root[theme-mode="light"]`;
 
   let colorPalette;
   let brandColorIdx;
@@ -172,13 +171,6 @@ export function generateTokenList(hex, isDark = false, step = 10, remainInput = 
 
   // TODO: 功能色、中性色未通过t-vision生成 先固定住
   const styleSheetString = `${root}{
-    --brand-main: var(--td-brand-color-${brandColorIdx + 1});
-    --td-brand-color-light: var(--td-brand-color-1);
-    --td-brand-color-focus: var(--td-brand-color-2);
-    --td-brand-color-disabled: var(--td-brand-color-3);
-    --td-brand-color-hover: var(--td-brand-color-${brandColorIdx > 0 ? brandColorIdx : brandColorIdx + 1});
-    --td-brand-color: var(--td-brand-color-${brandColorIdx + 1});
-    --td-brand-color-active:var(--td-brand-color-${brandColorIdx > 8 ? brandColorIdx + 1 : brandColorIdx + 2});
     --td-brand-color-1: ${colorPalette[0]};
     --td-brand-color-2: ${colorPalette[1]};
     --td-brand-color-3: ${colorPalette[2]};
@@ -189,6 +181,12 @@ export function generateTokenList(hex, isDark = false, step = 10, remainInput = 
     --td-brand-color-8: ${colorPalette[7]};
     --td-brand-color-9: ${colorPalette[8]}; 
     --td-brand-color-10: ${colorPalette[9]};
+    --td-brand-color-light: var(--td-brand-color-1);
+    --td-brand-color-focus: var(--td-brand-color-2);
+    --td-brand-color-disabled: var(--td-brand-color-3);
+    --td-brand-color-hover: var(--td-brand-color-${brandColorIdx > 0 ? brandColorIdx : brandColorIdx + 1});
+    --td-brand-color: var(--td-brand-color-${brandColorIdx + 1});
+    --td-brand-color-active:var(--td-brand-color-${brandColorIdx > 8 ? brandColorIdx + 1 : brandColorIdx + 2});
     ${isDark ? DARK_FUNCTION_COLOR : LIGHT_FUNCTION_COLOR}
     }`;
 
@@ -200,12 +198,6 @@ export function exportCustomTheme(device = 'web') {
   const darkStyleSheet = document.getElementById(CUSTOM_DARK_ID);
   const extraStyleSheet = document.getElementById(CUSTOM_EXTRA_ID);
   const commonStyleSheet = document.querySelectorAll(`[id^="${CUSTOM_COMMON_ID_PREFIX}-"]`);
-
-  const extractRootContent = (css) => {
-    // 匹配 {} 内的内容
-    const match = css.match(/{([^}]*)}/);
-    return match ? match[1].trim() : '';
-  };
 
   const cssString = extractRootContent(styleSheet?.innerText);
   const darkCssString = extractRootContent(darkStyleSheet?.innerText);
@@ -246,8 +238,6 @@ export function exportCustomTheme(device = 'web') {
       ${extraCssString}
     `;
   }
-
-  finalCssString = removeCssProperties(finalCssString, ['--brand-main']);
 
   if (isMobile) {
     finalCssString = removeCssProperties(finalCssString, MOBILE_MISSING_TOKENS);

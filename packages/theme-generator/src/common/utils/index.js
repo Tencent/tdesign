@@ -46,3 +46,9 @@ export function removeCssProperties(cssText, properties) {
 
   return cssText;
 }
+
+export function extractRootContent(cssText) {
+  // 匹配 {} 内的内容
+  const match = cssText.match(/{([^}]*)}/);
+  return match ? match[1].trim() : '';
+}
