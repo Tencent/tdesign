@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { DEFAULT_THEME, generateNewTheme } from './common/themes';
+import { DEFAULT_THEME, generateNewTheme, syncThemeToIframe } from './common/themes';
 
 import Dock from './dock/index.vue';
 import PanelDrawer from './panel-drawer/index.vue';
@@ -64,6 +64,7 @@ export default {
   },
   mounted() {
     generateNewTheme(DEFAULT_THEME.value, undefined, this.device);
+    syncThemeToIframe(this.device);
   },
   methods: {
     handleChangeTheme(theme) {
