@@ -295,8 +295,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '../../node_modules/tdesign-vue/dist/tdesign.css';
-
 @keyframes toConic {
   0% {
     background-position: 0 0;

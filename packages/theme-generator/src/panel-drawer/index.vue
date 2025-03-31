@@ -152,7 +152,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '../../node_modules/tdesign-vue/dist/tdesign.css';
 /deep/ .t-drawer__mask {
   background: none;
 }

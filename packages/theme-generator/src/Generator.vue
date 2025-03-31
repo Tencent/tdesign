@@ -89,8 +89,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '../node_modules/tdesign-vue/dist/tdesign.css';
-@import '../node_modules/tdesign-vue/dist/reset.css';
+@import './styles/reset.css';
+@import './styles/tdesign.css';
 
 @media screen and (max-width: 960px) {
   .theme-generator {
