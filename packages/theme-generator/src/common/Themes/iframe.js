@@ -179,24 +179,20 @@ export function syncThemeToIframe(device) {
   const observer = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
       if (mutation.type === 'childList') {
-        const docContent = document.querySelector('td-doc-phone');
-        if (docContent) {
-          let previewIframe = docContent.querySelector('iframe');
-          if (isMiniProgram(device)) {
-            // 小程序实际的 iframe 嵌套在里面
-            previewIframe?.addEventListener('load', () => {
-              previewIframe = previewIframe.contentDocument.querySelector('iframe');
-              previewIframe?.setAttribute('device', device);
-              watchThemeChange(previewIframe);
-            });
-          } else {
-            // 必须分开，否则会绑定到错误的 iframe 上
-            previewIframe?.setAttribute('device', device);
-            watchThemeChange(previewIframe);
-          }
-
-          // 检测到预览窗出现后就停止监听，专注于监听主题变化即可
-          observer.disconnect();
+        const docPhone = document.querySelector('td-doc-phone');
+        const previewIframe = docPhone?.querySelector('iframe');
+        if (!previewIframe) return;
+        if (isMiniProgram(device)) {
+          // 小程序实际的 iframe 嵌套在里面
+          previewIframe.addEventListener('load', () => {
+            const miniIframe = previewIframe.contentDocument?.querySelector('iframe');
+            if (!miniIframe) return;
+            miniIframe.setAttribute('device', device);
+            watchThemeChange(miniIframe);
+          });
+        } else {
+          previewIframe.setAttribute('device', device);
+          watchThemeChange(previewIframe);
         }
       }
     }
