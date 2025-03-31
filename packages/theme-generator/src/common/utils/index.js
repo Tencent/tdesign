@@ -1,5 +1,14 @@
 export * from 'tdesign-vue/es/_common/js/color-picker';
 
+import GENERATOR_VARIABLES from '!raw-loader!./vars.css';
+const GENERATOR_ID = 'TDESIGN_GENERATOR_SYMBOL';
+
+export function initVariables() {
+  const siteStylesheet = appendStyleSheet(GENERATOR_ID);
+  // 给生成器本身使用的样式变量，避免和 td 冲突
+  siteStylesheet.textContent = GENERATOR_VARIABLES;
+}
+
 export function appendStyleSheet(themeId) {
   let styleSheet;
   const existSheet = document.getElementById(themeId);

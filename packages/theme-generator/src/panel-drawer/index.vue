@@ -57,7 +57,7 @@ import SizeContent from '../size-panel/index.vue'; // 阴影配置
 
 import StickyThemeDisplay from '../common/StickyThemeDisplay/index.vue';
 import SwitchTabs from '../common/SwitchTabs/index.vue';
-import { initVariables } from '../common/themes';
+import { initVariables } from '../common/utils';
 
 const activeTabMap = {
   color: 0,
@@ -123,7 +123,7 @@ export default {
     },
   },
   mounted() {
-    initVariables(); // 插入主题生成器variables
+    initVariables();
 
     if (this.propsTop) {
       this.top = parseInt(this.propsTop, 10);

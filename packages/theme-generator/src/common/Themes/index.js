@@ -5,9 +5,6 @@ export * from './token';
 import cssbeautify from 'cssbeautify';
 import { Color } from 'tvision-color';
 
-import GENERATOR_VARIABLES from '!raw-loader!./built-in/css/vars.css';
-const GENERATOR_ID = 'TDESIGN_GENERATOR_SYMBOL';
-
 import { appendStyleSheet, downloadFile, extractRootContent, removeCssProperties } from '../utils';
 import { BUILT_IN_THEMES, DEFAULT_THEME, RECOMMEND_THEMES } from './preset';
 import { DARK_FUNCTION_COLOR, LIGHT_FUNCTION_COLOR, MOBILE_MISSING_TOKENS } from './token';
@@ -22,12 +19,6 @@ export const isMobile = (device) => device === 'mobile' || isMiniProgram(device)
 
 export function normalizeDeviceType(device) {
   return isMobile(device) ? 'mobile' : 'web';
-}
-
-export function initVariables() {
-  const siteStylesheet = appendStyleSheet(GENERATOR_ID);
-  // 给生成器本身使用的样式变量，避免和 td 冲突
-  siteStylesheet.textContent = GENERATOR_VARIABLES;
 }
 
 export function getBuiltInThemes(device = 'web', hex = undefined) {
