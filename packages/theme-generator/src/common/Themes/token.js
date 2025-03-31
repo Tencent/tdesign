@@ -235,4 +235,5 @@ export const MOBILE_MISSING_TOKENS = [
   '--td-error-color-light-hover',
   '--td-success-color-light-hover',
   '--td-bg-color-secondarycomponent-hover',
+  '--td-bg-color-container-select',
 ];
