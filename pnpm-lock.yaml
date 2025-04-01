@@ -138,8 +138,8 @@ importers:
         specifier: ^0.0.8
         version: 0.0.8(vue@2.7.14)
       tdesign-vue:
-        specifier: 1.4.6-naruto
-        version: 1.4.6-naruto(vue@2.7.14)
+        specifier: 1.11.1-naruto
+        version: 1.11.1-naruto(vue@2.7.14)
       tvision-color:
         specifier: ^1.6.0
         version: 1.6.0
@@ -3117,9 +3117,6 @@ packages:
   dayjs@1.11.10:
     resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==}
 
-  dayjs@1.11.13:
-    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
-
   de-indent@1.0.2:
     resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
 
@@ -5155,6 +5152,9 @@ packages:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
     engines: {node: '>=10'}
 
+  lodash-es@4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+
   lodash._reinterpolate@3.0.0:
     resolution: {integrity: sha512-xYHt68QRoYGjeeM/XOE1uJtvXQAgvszfBhjV4yvsQH0u2i9I6cI6c6/eG4Hh3UAOVn0y/xAXwmTzEay49Q//HA==}
 
@@ -7020,6 +7020,11 @@ packages:
     peerDependencies:
       vue: ^2.6.12
 
+  tdesign-icons-vue@0.3.4:
+    resolution: {integrity: sha512-ZENwP8xRwRTvSEI1G5EfxXT0SlsiSSvFqoTpa9bGZ3E1pV8Snr0563d+vWMnt4YpFL7bUIY9RXccj4rUEgm3eg==}
+    peerDependencies:
+      vue: ^2.6.12
+
   tdesign-site-components@0.15.7:
     resolution: {integrity: sha512-1T3MGAuIRdRIif5wqLNU8r3GoLoIr0I20eleA6XLDPz1NA8ZzDSPQ+KoBO87lyJTPy4677dA3sHGvVJKJcRifA==}
 
@@ -7028,8 +7033,8 @@ packages:
     peerDependencies:
       vue: ~2.7.14
 
-  tdesign-vue@1.4.6-naruto:
-    resolution: {integrity: sha512-ubv0J0jNwJFCEfhqlpRb8avX0uoFyQSPCkbhrutpLXBcfENMjJZidTuOHVROLGBXaozHkh5sD6qipg8SG+maDQ==}
+  tdesign-vue@1.11.1-naruto:
+    resolution: {integrity: sha512-87A+mLLTaCzu+Kzzt1Nf5XOnOYU49T/WKiMwONVsn1tri2nofhuB/rZkfXR7xFSkuAzOVrjnN6y3MlfnR0yQYA==}
     peerDependencies:
       vue: ~2.7.14
 
@@ -11127,8 +11132,6 @@ snapshots:
 
   dayjs@1.11.10: {}
 
-  dayjs@1.11.13: {}
-
   de-indent@1.0.2: {}
 
   debounce@1.2.1: {}
@@ -13588,6 +13591,8 @@ snapshots:
     dependencies:
       p-locate: 5.0.0
 
+  lodash-es@4.17.21: {}
+
   lodash._reinterpolate@3.0.0: {}
 
   lodash.debounce@4.0.8: {}
@@ -15555,6 +15560,12 @@ snapshots:
       classnames: 2.5.1
       vue: 2.7.14
 
+  tdesign-icons-vue@0.3.4(vue@2.7.14):
+    dependencies:
+      '@babel/runtime': 7.25.6
+      classnames: 2.5.1
+      vue: 2.7.14
+
   tdesign-site-components@0.15.7:
     dependencies:
       '@popperjs/core': 2.11.8
@@ -15585,23 +15596,22 @@ snapshots:
       validator: 13.12.0
       vue: 2.7.14
 
-  tdesign-vue@1.4.6-naruto(vue@2.7.14):
+  tdesign-vue@1.11.1-naruto(vue@2.7.14):
     dependencies:
       '@babel/runtime': 7.25.6
       '@popperjs/core': 2.11.8
       '@types/clipboard': 2.0.7
-      '@types/lodash': 4.14.182
       '@types/raf': 3.4.3
       '@types/sortablejs': 1.15.8
       '@types/tinycolor2': 1.4.6
       '@types/validator': 13.12.2
       clipboard: 2.0.11
-      dayjs: 1.11.13
-      lodash: 4.17.21
+      dayjs: 1.11.10
+      lodash-es: 4.17.21
       mitt: 3.0.1
       raf: 3.4.1
       sortablejs: 1.15.3
-      tdesign-icons-vue: 0.1.11(vue@2.7.14)
+      tdesign-icons-vue: 0.3.4(vue@2.7.14)
       tinycolor2: 1.6.0
       validator: 13.12.0
       vue: 2.7.14
