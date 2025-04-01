@@ -137,6 +137,7 @@ export default {
     },
   },
   mounted() {
+    // 确保 custom-theme 被 append 后再同步
     this.$nextTick(() => {
       this.setFontPalette();
     });

@@ -3,19 +3,26 @@ export * from 'tdesign-vue/es/_common/js/color-picker';
 import GENERATOR_VARIABLES from '!raw-loader!./vars.css';
 const GENERATOR_ID = 'TDESIGN_GENERATOR_SYMBOL';
 
+/**
+ * 初始化给生成器本身使用的样式变量，避免和 TDeisgn 冲突
+ */
 export function initVariables() {
   const siteStylesheet = appendStyleSheet(GENERATOR_ID);
-  // 给生成器本身使用的样式变量，避免和 td 冲突
   siteStylesheet.textContent = GENERATOR_VARIABLES;
 }
 
-export function appendStyleSheet(themeId) {
+/**
+ * 按照指定的 Id 生成样式表
+ * - 如果存在，则返回已存在的样式表
+ * - 如果不存在，则创建一个新的样式表
+ */
+export function appendStyleSheet(styleId) {
   let styleSheet;
-  const existSheet = document.getElementById(themeId);
+  const existSheet = document.getElementById(styleId);
 
   if (!existSheet) {
     styleSheet = document.createElement('style');
-    styleSheet.id = themeId;
+    styleSheet.id = styleId;
     styleSheet.type = 'text/css';
     document.head.appendChild(styleSheet);
   } else {
@@ -24,16 +31,27 @@ export function appendStyleSheet(themeId) {
   return styleSheet;
 }
 
+/**
+ * 解决 `Popup` 组件脱离 Shadow DOM 的问题
+ */
 export function handleAttach() {
   return document.querySelector('td-theme-generator')?.shadowRoot?.querySelector?.('.theme-generator') || document.body;
 }
 
+/**
+ * 将百分比字符串转换为浮点数字符串
+ * - e.g. `"50%"` -> `"0.5"`
+ */
 export function replacePercentages(str) {
   return str.replace(/(\d+(\.\d+)?)%/g, (match, number) => {
     return `${parseFloat(number) / 100}`;
   });
 }
 
+/**
+ * 将指定内容导出为文件
+ * - e.g. `new Blob(['Hello, world!'], { type: 'text/plain' })`
+ */
 export function downloadFile(blob, fileName) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -43,6 +61,10 @@ export function downloadFile(blob, fileName) {
   a.click();
 }
 
+/**
+ * 从 CSS 文本中移除指定的 Token 字符串 / 数组
+ * - e.g. `"--td-xxx-1"` or `["--td-xxx-2", "--td-xxx-3"]`
+ */
 export function removeCssProperties(cssText, properties) {
   if (!Array.isArray(properties)) {
     properties = [properties];
@@ -56,6 +78,9 @@ export function removeCssProperties(cssText, properties) {
   return cssText;
 }
 
+/**
+ * 从 CSS 文本中提取 `:root` 中的内容
+ */
 export function extractRootContent(cssText) {
   // 匹配 {} 内的内容
   const match = cssText.match(/{([^}]*)}/);
