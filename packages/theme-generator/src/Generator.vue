@@ -89,8 +89,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import './styles/reset.css';
-@import './styles/tdesign.css';
+@import './styles/reset.min.css';
+@import './styles/tdesign.min.css';
 
 @media screen and (max-width: 960px) {
   .theme-generator {
