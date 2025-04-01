@@ -23,14 +23,7 @@
 - 如果遇到参数无法正常传递的情况，可以尝试以下类似方式引入组件：
 
   ```js
-  mounted() {
-      this.initThemeGenerator();
-  },
-  methods: {
-      initThemeGenerator() {
-          const generator = document.createElement('td-theme-generator');
-          generator.setAttribute('device', 'mobile');
-          document.body.appendChild(generator);
-      }
-  }
+    const generator = document.createElement('td-theme-generator');
+    generator.setAttribute('device', 'mobile');
+    document.body.appendChild(generator);
   ```

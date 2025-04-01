@@ -25,14 +25,7 @@
 - If you encounter issues where parameters cannot be passed correctly, you can try the following method to introduce the component:
 
   ```js
-  mounted() {
-      this.initThemeGenerator();
-  },
-  methods: {
-      initThemeGenerator() {
-          const generator = document.createElement('td-theme-generator');
-          generator.setAttribute('device', 'mobile');
-          document.body.appendChild(generator);
-      }
-  }
+    const generator = document.createElement('td-theme-generator');
+    generator.setAttribute('device', 'mobile');
+    document.body.appendChild(generator);
   ```
