@@ -4,11 +4,32 @@ import GENERATOR_VARIABLES from '!raw-loader!./vars.css';
 const GENERATOR_ID = 'TDESIGN_GENERATOR_SYMBOL';
 
 /**
- * 初始化给生成器本身使用的样式变量，避免和 TDeisgn 冲突
+ * 初始化给生成器本身使用的样式变量，避免和 TDesign 冲突
  */
-export function initVariables() {
+export function initGeneratorVars() {
   const siteStylesheet = appendStyleSheet(GENERATOR_ID);
   siteStylesheet.textContent = GENERATOR_VARIABLES;
+}
+
+/**
+ * 同步亮暗模式给 Web Component
+ */
+export function syncThemeToGenerator() {
+  const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'theme-mode') {
+        const generator = document.querySelector('td-theme-generator');
+        if (!generator) return;
+        const themeMode = document.documentElement.getAttribute('theme-mode');
+        generator.setAttribute('theme-mode', themeMode);
+      }
+    }
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['theme-mode'],
+  });
 }
 
 /**
