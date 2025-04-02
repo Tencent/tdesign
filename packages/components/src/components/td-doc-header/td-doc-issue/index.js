@@ -16,6 +16,7 @@ const issueUrlMap = {
   'mobile-react': `https://github.com/Tencent/tdesign-mobile-react/issues`,
   miniprogram: `https://github.com/Tencent/tdesign-miniprogram/issues`,
   flutter: `https://github.com/Tencent/tdesing-flutter/issues`,
+  chat: `https://github.com/Tencent/tdesign-vue-next/issues`,
 };
 
 function parseUrl() {
