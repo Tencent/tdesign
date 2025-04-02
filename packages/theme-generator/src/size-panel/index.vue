@@ -154,7 +154,7 @@ import VerticalPaddingSvg from './svg/VerticalPaddingSvg.vue';
 import { FONT_COLOR_MAP } from '../color-panel/utils/const';
 
 import langMixin from '../common/i18n/mixin';
-import { modifyToken } from '../common/themes';
+import { modifyToken } from '../common/Themes';
 import {
   compMarginArr,
   compPaddingLRArr,

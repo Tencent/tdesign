@@ -35,7 +35,7 @@
 
 <script>
 import langMixin from '../common/i18n/mixin';
-import { generateNewTheme, getBuiltInThemes } from '../common/themes';
+import { generateNewTheme, getBuiltInThemes } from '../common/Themes';
 import PickedSvg from './PickedSvg.vue';
 
 export default {

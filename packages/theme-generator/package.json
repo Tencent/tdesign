@@ -1,6 +1,6 @@
 {
   "name": "tdesign-theme-generator",
-  "version": "1.0.17",
+  "version": "1.1.0",
   "description": "TDesign主题配置生成器挂件",
   "scripts": {
     "dev": "vue-cli-service serve",

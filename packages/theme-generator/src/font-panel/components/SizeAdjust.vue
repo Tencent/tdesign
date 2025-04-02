@@ -114,7 +114,7 @@ import {
 import SegmentSelection from '../../common/SegmentSelection/index.vue';
 import SizeSlider from '../../common/SizeSlider/index.vue';
 import langMixin from '../../common/i18n/mixin';
-import { CUSTOM_THEME_ID, modifyToken } from '../../common/themes';
+import { CUSTOM_THEME_ID, modifyToken } from '../../common/Themes';
 import { handleAttach } from '../../common/utils';
 
 import { fontSizeLabels, fontSizeSteps } from '../built-in/font-size';

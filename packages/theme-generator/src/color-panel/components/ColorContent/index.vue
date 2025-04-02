@@ -327,7 +327,7 @@ import { Color } from 'tvision-color';
 
 import ColorPicker from '../../../common/ColorPicker/index.vue';
 import langMixin from '../../../common/i18n/mixin';
-import { CUSTOM_THEME_ID, DEFAULT_THEME, generateNewTheme, generateTokenList } from '../../../common/themes';
+import { CUSTOM_THEME_ID, DEFAULT_THEME, generateNewTheme, generateTokenList } from '../../../common/Themes';
 import { handleAttach } from '../../../common/utils';
 import { colorAnimation } from '../../../common/utils/animation';
 

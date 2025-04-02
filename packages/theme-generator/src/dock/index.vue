@@ -123,7 +123,7 @@ import {
   exportCustomTheme,
   generateNewTheme,
   getBuiltInThemes,
-} from '../common/themes';
+} from '../common/Themes';
 import { handleAttach } from '../common/utils';
 
 export default {

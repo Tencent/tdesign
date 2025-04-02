@@ -86,7 +86,7 @@ import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-v
 import langMixin from '../common/i18n/mixin';
 import SegmentSelection from '../common/SegmentSelection/index.vue';
 import SizeSlider from '../common/SizeSlider/index.vue';
-import { CUSTOM_COMMON_ID_PREFIX, modifyToken } from '../common/themes';
+import { CUSTOM_COMMON_ID_PREFIX, modifyToken } from '../common/Themes';
 import { handleAttach } from '../common/utils';
 
 import { RADIUS_OPTIONS, RADIUS_STEP_ARRAY } from './built-in/border-radius';

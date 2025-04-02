@@ -65,7 +65,7 @@ import { Select as TSelect, Slider as TSlider } from 'tdesign-vue';
 import ShadowCard from './components/ShadowCard.vue';
 
 import langMixin from '../common/i18n/mixin';
-import { modifyToken } from '../common/themes';
+import { modifyToken } from '../common/Themes';
 import { handleAttach, replacePercentages } from '../common/utils';
 import { ShadowSelect, ShadowSelectDetail, ShadowSelectType, ShadowTypeDetail, ShadowTypeMap } from './const';
 export default {

@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { DEFAULT_THEME, generateNewTheme, syncThemeToIframe } from './common/themes';
+import { DEFAULT_THEME, generateNewTheme, syncThemeToIframe } from './common/Themes';
 
 import Dock from './dock/index.vue';
 import PanelDrawer from './panel-drawer/index.vue';
