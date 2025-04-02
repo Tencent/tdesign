@@ -19,11 +19,10 @@
 </template>
 
 <script>
-import PanelDrawer from "./panel-drawer/index.vue";
-import Dock from "./dock/index.vue";
+import { DEFAULT_THEME, generateNewTheme, syncThemeToIframe } from './common/Themes';
 
-import { defaultTheme } from "./common/Themes/const";
-import { generateNewTheme } from "./common/utils";
+import Dock from './dock/index.vue';
+import PanelDrawer from './panel-drawer/index.vue';
 
 const activeTabMap = {
   color: 0,
@@ -34,6 +33,7 @@ const activeTabMap = {
 };
 
 export default {
+  name: 'ThemeGenerator',
   components: {
     PanelDrawer,
     Dock,
@@ -43,6 +43,15 @@ export default {
     showSetting: {
       type: [Boolean, String],
     },
+    device: {
+      type: String,
+      default: 'web',
+    },
+  },
+  provide() {
+    return {
+      device: this.device,
+    };
   },
   data() {
     return {
@@ -50,11 +59,12 @@ export default {
       refresh: false,
       visible: 0,
       activeTabIdx: activeTabMap.color,
-      theme: defaultTheme,
+      theme: DEFAULT_THEME,
     };
   },
   mounted() {
-    generateNewTheme("#0052D9");
+    generateNewTheme(DEFAULT_THEME.value, undefined, this.device);
+    syncThemeToIframe(this.device);
   },
   methods: {
     handleChangeTheme(theme) {
@@ -68,10 +78,10 @@ export default {
     },
     handleDrawerVisible(v) {
       this.visible = v;
-      this.$emit("panel-drawer-visible", v);
+      this.$emit('panel-drawer-visible', v);
     },
     handleClickSetting() {
-      this.$emit("click-setting");
+      this.$emit('click-setting');
       this.visible = false;
     },
   },
@@ -79,8 +89,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../node_modules/tdesign-vue/dist/tdesign.css";
-@import "../node_modules/tdesign-vue/dist/reset.css";
+@import './styles/reset.min.css';
+@import './styles/tdesign.min.css';
 
 @media screen and (max-width: 960px) {
   .theme-generator {

@@ -1,163 +1,4 @@
-import AgapanthusPurple from '!raw-loader!../assets/AgapanthusPurple'; // 百子莲紫
-import DavidiaGreen from '!raw-loader!../assets/DavidiaGreen'; // 珙桐绿
-import GovRed from '!raw-loader!../assets/GovRed'; // 政务红
-import HyacinthBlue from '!raw-loader!../assets/HyacinthBlue'; //风信子蓝
-import MarigoldOrange from '!raw-loader!../assets/MarigoldOrange'; // 万寿菊橙
-import MultifloraRed from '!raw-loader!../assets/MultifloraRed'; // 蔷薇红
-import PetelotiiYellow from '!raw-loader!../assets/PetelotiiYellow'; //金茶花黄
-import PlumbagoBlue from '!raw-loader!../assets/PlumbagoBlue'; // 花丹蓝
-import TaxusRed from '!raw-loader!../assets/TaxusRed'; // 豆衫红
-import TCloudBlack from '!raw-loader!../assets/TCloudBlack'; // 腾云黑
-import TencentBlue from '!raw-loader!../assets/TencentBlue'; //腾讯蓝
-import TourismPurple from '!raw-loader!../assets/TourismPurple'; // 文旅紫
-import ViridifloraGreen from '!raw-loader!../assets/ViridifloraGreen'; // 鸢尾绿
-import WeChatGreen from '!raw-loader!../assets/WeChatGreen'; //微信绿
-import YulaniaPink from '!raw-loader!../assets/YulaniaPink';
-
-export const DEFAULT_COLOR = [
-  {
-    name: '腾讯蓝',
-    subtitle: TencentBlue,
-    value: '#0052D9',
-  },
-  {
-    name: '风信子蓝',
-    subtitle: HyacinthBlue,
-    value: '#0894FA',
-  },
-  {
-    name: '金花茶黄',
-    subtitle: PetelotiiYellow,
-    value: '#F3B814',
-  },
-];
-
-export const RECOMMEND_COLOR = [
-  {
-    name: '珙桐绿',
-    subtitle: DavidiaGreen,
-    value: '#45C58B',
-  },
-  {
-    name: '鸢尾绿',
-    subtitle: ViridifloraGreen,
-    value: '#0ED6CA',
-  },
-  {
-    name: '花丹蓝',
-    subtitle: PlumbagoBlue,
-    value: '#53B1FD',
-  },
-  {
-    name: '百子莲紫',
-    subtitle: AgapanthusPurple,
-    value: '#7A5AF8',
-  },
-  {
-    name: '',
-    subtitle: YulaniaPink,
-    value: '#EF45B3',
-  },
-  {
-    name: '豆衫红',
-    subtitle: TaxusRed,
-    value: '#F54343',
-  },
-
-  {
-    name: '蔷薇红',
-    subtitle: MultifloraRed,
-    value: '#FF5479',
-  },
-  {
-    name: '万寿菊橙',
-    subtitle: MarigoldOrange,
-    value: '#FD853A',
-  },
-];
-
-export const SCENE_COLOR = [
-  {
-    name: '微信绿',
-    subtitle: WeChatGreen,
-    value: '#07C160',
-  },
-  {
-    name: '腾云黑',
-    subtitle: TCloudBlack,
-    value: '#262626',
-  },
-  {
-    name: '文旅紫',
-    subtitle: TourismPurple,
-    value: '#623BFF',
-  },
-  {
-    name: '政务红',
-    subtitle: GovRed,
-    value: '#EE1C25',
-  },
-];
-
-export const BRAND_COLOR_MAP = [
-  { name: '--td-brand-color-light', type: 'light', idx: 0 },
-  { name: '--td-brand-color-focus', type: 'focus', idx: 1 },
-  { name: '--td-brand-color-disabled', type: 'disabled', idx: 2 },
-];
-
-export const ERROR_COLOR_MAP = [
-  { name: '--td-error-color-light', type: 'light', idx: 0 },
-  { name: '--td-error-color-focus', type: 'focus', idx: 1 },
-  { name: '--td-error-color-disabled', type: 'disabled', idx: 2 },
-  { name: '--td-error-color-hover', type: 'hover', idx: 4 },
-  { name: '--td-error-color', type: 'main', idx: 5 },
-  { name: '--td-error-color-active', type: 'active', idx: 6 },
-];
-
-export const WARNING_COLOR_MAP = [
-  { name: '--td-warning-color-light', type: 'light', idx: 0 },
-  { name: '--td-warning-color-focus', type: 'focus', idx: 1 },
-  { name: '--td-warning-color-disabled', type: 'disabled', idx: 2 },
-  { name: '--td-warning-color-hover', type: 'hover', idx: 3 },
-  { name: '--td-warning-color', type: 'main', idx: 4 },
-  { name: '--td-warning-color-active', type: 'active', idx: 5 },
-];
-
-export const SUCCESS_COLOR_MAP = [
-  { name: '--td-success-color-light', type: 'light', idx: 0 },
-  { name: '--td-success-color-focus', type: 'focus', idx: 1 },
-  { name: '--td-success-color-disabled', type: 'disabled', idx: 2 },
-  { name: '--td-success-color-hover', type: 'hover', idx: 3 },
-  { name: '--td-success-color', type: 'main', idx: 4 },
-  { name: '--td-success-color-active', type: 'active', idx: 5 },
-];
-
-export const GRAY_COLOR_MAP = [
-  { name: '--td-bg-color-container-hover', type: '', idx: 0 },
-  { name: '--td-bg-color-secondarycontainer', type: '', idx: 0 },
-  { name: '--td-bg-color-secondarycontainer-hover', type: '', idx: 1 },
-  { name: '--td-bg-color-component-disabled', type: '', idx: 1 },
-  { name: '--td-bg-color-page', type: '', idx: 1 },
-  { name: '--td-bg-color-container-active', type: '', idx: 2 },
-  { name: '--td-bg-color-component', type: '', idx: 2 },
-  { name: '--td-component-stroke', type: '', idx: 2 },
-  { name: '--td-bg-color-secondarycontainer-active', type: 'main', idx: 3 },
-  { name: '--td-bg-color-component-hover', type: '', idx: 3 },
-  { name: '--td-component-border', type: '', idx: 3 },
-  { name: '--td-bg-color-component-active', type: '', idx: 5 },
-];
-
-export const FONT_COLOR_MAP = [
-  { name: '--td-text-color-primary', from: '--td-font-gray-1' },
-  { name: '--td-text-color-secondary', from: '--td-font-gray-2' },
-  { name: '--td-text-color-placeholder', from: '--td-font-gray-3' },
-  { name: '--td-text-color-disabled', from: '--td-font-gray-4' },
-  { name: '--td-text-color-anti', value: '#fff' },
-  { name: '--td-text-color-brand', from: '--td-brand-color' },
-  { name: '--td-text-color-link', from: '--td-brand-color' },
-];
-
-// 亮色模式下的功能色、中性色等
+/* --- 亮色模式 --- */
 const LIGHT_WARNING_COLOR = `--td-warning-color-1: #fef3e6;
 --td-warning-color-2: #f9e0c7;
 --td-warning-color-3: #f7c797;
@@ -280,7 +121,7 @@ const LIGHT_SCROLLBAR_COLOR = `--td-brand-color-light-hover: var(--td-brand-colo
 
 export const LIGHT_FUNCTION_COLOR = `${LIGHT_WARNING_COLOR} ${LIGHT_ERROR_COLOR} ${LIGHT_SUCCESS_COLOR} ${LIGHT_GRAY_COLOR} ${LIGHT_FONT_COLOR} ${LIGHT_SCROLLBAR_COLOR}`;
 
-// 暗色模式下的功能色、中性色等
+/* --- 暗色模式 --- */
 const DARK_ERROR_COLOR = `--td-error-color-1: #472324;
 --td-error-color-2: #5e2a2d;
 --td-error-color-3: #703439;
@@ -377,3 +218,22 @@ const DARK_SCROLLBAR_COLOR = `--td-shadow-1: 0 4px 6px rgba(0, 0, 0, 0.06), 0 1p
   --td-mask-disabled: rgba(0, 0, 0, 0.6);`;
 
 export const DARK_FUNCTION_COLOR = `${DARK_WARNING_COLOR} ${DARK_ERROR_COLOR} ${DARK_SUCCESS_COLOR} ${DARK_GRAY_COLOR} ${DARK_FONT_COLOR} ${DARK_SCROLLBAR_COLOR}`;
+
+/**
+ * 移动端缺失的 Token
+ */
+export const MOBILE_MISSING_TOKENS = [
+  '--td-brand-color-hover',
+  '--td-warning-color-hover',
+  '--td-error-color-hover',
+  '--td-success-color-hover',
+  '--td-bg-color-container-hover',
+  '--td-bg-color-secondarycontainer-hover',
+  '--td-bg-color-component-hover',
+  '--td-brand-color-light-hover',
+  '--td-warning-color-light-hover',
+  '--td-error-color-light-hover',
+  '--td-success-color-light-hover',
+  '--td-bg-color-secondarycomponent-hover',
+  '--td-bg-color-container-select',
+];

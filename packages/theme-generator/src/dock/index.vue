@@ -1,10 +1,5 @@
 <template>
-  <t-popup
-    hide-empty-popup
-    :attach="handleAttach"
-    :visible="isThemeTabVisible"
-    @visible-change="handleVisibleChange"
-  >
+  <t-popup hide-empty-popup :attach="handleAttach" :visible="isThemeTabVisible" @visible-change="handleVisibleChange">
     <div
       class="dock"
       :style="{
@@ -18,12 +13,9 @@
       }"
       @mousedown="dragStart"
     >
-      <div
-        class="dock__theme-tab"
-        :style="{ height: !isThemeTabVisible ? '0px' : '140px' }"
-      >
+      <div class="dock__theme-tab" :style="{ height: !isThemeTabVisible ? '0px' : '140px' }">
         <transition name="fade">
-          <themes
+          <recommend-themes
             @changeTabTheme="handleChangeTabTheme"
             v-if="isThemeTabVisible && isThemeTabContentDisplay"
             :currentTheme="currentTheme"
@@ -69,17 +61,8 @@
             </div>
           </t-button>
         </div>
-        <div
-          v-if="showSetting"
-          class="setting-btn"
-          :style="{ width: '48px', marginLeft: '4px' }"
-        >
-          <t-button
-            variant="outline"
-            shape="square"
-            size="large"
-            @click="triggerSettingDrawer"
-          >
+        <div v-if="showSetting" class="setting-btn" :style="{ width: '48px', marginLeft: '4px' }">
+          <t-button variant="outline" shape="square" size="large" @click="triggerSettingDrawer">
             <template #icon>
               <setting-svg />
             </template>
@@ -123,32 +106,33 @@
 </template>
 
 <script>
+import { MessagePlugin, Button as TButton, Popconfirm as TPopconfirm, Popup as TPopup } from 'tdesign-vue';
+
+import RecommendThemes from '../recommend-themes/index.vue';
+
+import AdjustSvg from './svg/AdjustSvg.vue';
+import DownloadSvg from './svg/DownloadSvg.vue';
+import PaletteSvg from './svg/PaletteSvg.vue';
+import RecoverSvg from './svg/RecoverSvg.vue';
+import SettingSvg from './svg/SettingSvg.vue';
+
+import langMixin from '../common/i18n/mixin';
 import {
-  Button as TButton,
-  Popup as TPopup,
-  Popconfirm as TPopconfirm,
-  MessagePlugin,
-} from "tdesign-vue";
-import Themes from "../common/Themes/index.vue";
-import { defaultTheme } from "../common/Themes/const";
-import DownloadSvg from "./svg/DownloadSvg.vue";
-import RecoverSvg from "./svg/RecoverSvg.vue";
-import PaletteSvg from "./svg/PaletteSvg.vue";
-import AdjustSvg from "./svg/AdjustSvg.vue";
-import SettingSvg from "./svg/SettingSvg.vue";
-import langMixin from "../common/i18n/mixin";
-import {
-  handleDownload,
+  CUSTOM_THEME_TEXT,
+  DEFAULT_THEME,
+  exportCustomTheme,
   generateNewTheme,
-  handleAttach,
-} from "../common/utils";
+  getBuiltInThemes,
+} from '../common/Themes';
+import { handleAttach } from '../common/utils';
 
 export default {
+  name: 'DockIndex',
   components: {
     TButton,
     TPopup,
     TPopconfirm,
-    Themes,
+    RecommendThemes,
     DownloadSvg,
     RecoverSvg,
     PaletteSvg,
@@ -159,13 +143,13 @@ export default {
     drawerVisible: { type: [Boolean, Number] },
     showSetting: { type: [Boolean, String] },
   },
+  inject: ['device'],
   mixins: [langMixin],
   data() {
     return {
       isThemeTabVisible: false,
       isCustomizeDrawerVisible: false,
-      tabTitle: defaultTheme.name,
-      currentTheme: defaultTheme,
+      currentTheme: DEFAULT_THEME,
       isThemeTabContentDisplay: false,
       dockY: null,
       dockX: 0,
@@ -177,19 +161,17 @@ export default {
   computed: {
     operationWidth() {
       if (!this.showSetting) {
-        if (this.isThemeTabVisible || this.isCustomizeDrawerVisible)
-          return "400px";
-        return "256px";
+        if (this.isThemeTabVisible || this.isCustomizeDrawerVisible) return '400px';
+        return '256px';
       } else {
-        if (this.isThemeTabVisible || this.isCustomizeDrawerVisible)
-          return "456px";
-        return "312px";
+        if (this.isThemeTabVisible || this.isCustomizeDrawerVisible) return '456px';
+        return '312px';
       }
     },
     generateBtnWidth() {
-      if (this.isThemeTabVisible) return "216px";
-      if (this.isCustomizeDrawerVisible) return "48px";
-      return "184px";
+      if (this.isThemeTabVisible) return '216px';
+      if (this.isCustomizeDrawerVisible) return '48px';
+      return '184px';
     },
   },
   watch: {
@@ -205,6 +187,7 @@ export default {
   mounted() {
     this.dockY = 24;
     this.dockX = innerWidth / 2;
+    this.setupStyleChangeObserver();
   },
   methods: {
     dragStart(e) {
@@ -212,8 +195,8 @@ export default {
       this.startX = e.clientX;
       this.isDragging = true;
 
-      document.addEventListener("mouseup", this.handleMouseup, true);
-      document.addEventListener("mousemove", this.handleMousemove, true);
+      document.addEventListener('mouseup', this.handleMouseup, true);
+      document.addEventListener('mousemove', this.handleMousemove, true);
     },
     handleMousemove(e) {
       if (!this.isDragging) return false;
@@ -230,65 +213,88 @@ export default {
     },
     handleMouseup() {
       this.isDragging = false;
-      document.removeEventListener("mouseup", this.handleMouseup, true);
-      document.removeEventListener("mousemove", this.handleMousemove, true);
+      document.removeEventListener('mouseup', this.handleMouseup, true);
+      document.removeEventListener('mousemove', this.handleMousemove, true);
     },
     handleAttach,
     handleDownload() {
-      handleDownload();
+      exportCustomTheme(this.device);
       MessagePlugin.success(this.lang.dock.downloadTips);
     },
     triggerSettingDrawer() {
-      this.$emit("click-setting");
+      this.$emit('click-setting');
     },
     handleLeaveTheme() {
-      this.$refs.btn.classList.add("is-mouseleave");
+      this.$refs.btn.classList.add('is-mouseleave');
       setTimeout(() => {
-        this.$refs.btn.classList.remove("is-mouseleave");
+        this.$refs.btn.classList.remove('is-mouseleave');
       }, 500);
     },
     handleClickCustomize() {
-      this.$emit("trigger-visible");
+      this.$emit('trigger-visible');
       this.isCustomizeDrawerVisible = true;
       this.isThemeTabVisible = false;
       if (window._horizon) {
-        window._horizon.send("主题生成器自定义按钮", "click");
+        window._horizon.send('主题生成器自定义按钮', 'click');
       }
     },
     handleClickTheme() {
       this.isThemeTabVisible = true;
       this.isCustomizeDrawerVisible = false;
       if (window._horizon) {
-        window._horizon.send("主题生成器主题按钮", "click");
+        window._horizon.send('主题生成器主题按钮', 'click');
       }
     },
     handleVisibleChange(visible, ctx) {
-      if (
-        !visible &&
-        ctx.trigger === "document" &&
-        ctx.e.target?.localName !== "td-theme-generator"
-      ) {
+      if (!visible && ctx.trigger === 'document' && ctx.e.target?.localName !== 'td-theme-generator') {
         this.isThemeTabVisible = visible;
       }
     },
     handleChangeTabTheme(theme) {
       this.currentTheme = theme;
-      this.$emit("refresh-content");
-      this.$emit("change-theme", theme);
+      this.$emit('refresh-content');
+      this.$emit('change-theme', theme);
     },
     recoverTheme() {
-      generateNewTheme("#0052D9");
-      this.currentTheme = defaultTheme;
+      generateNewTheme(DEFAULT_THEME.value, undefined, this.device);
+      this.currentTheme = DEFAULT_THEME;
 
-      this.$emit("refresh-content");
+      this.$emit('refresh-content');
+    },
+    setupStyleChangeObserver() {
+      const styleObserver = new MutationObserver((mutationsList) => {
+        mutationsList.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+            const currentStyle = mutation.target.getAttribute('style');
+            const brandColorMatch = currentStyle.match(/--brand-main:\s*([^;]+)/);
+            if (!brandColorMatch) return;
+
+            const mainColor = brandColorMatch[1];
+            const existedTheme = getBuiltInThemes(this.device, mainColor);
+            const theme = existedTheme[0] ? existedTheme[0].options[0] : CUSTOM_THEME_TEXT;
+
+            this.currentTheme = theme;
+            this.$emit('change-theme', theme);
+          }
+        });
+      });
+
+      styleObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['style'],
+        childList: false,
+        subtree: false,
+      });
+
+      this.$once('hook:beforeDestroy', () => {
+        styleObserver.disconnect();
+      });
     },
   },
 };
 </script>
 
 <style lang="less" scoped>
-@import "../../node_modules/tdesign-vue/dist/tdesign.css";
-
 @keyframes toConic {
   0% {
     background-position: 0 0;

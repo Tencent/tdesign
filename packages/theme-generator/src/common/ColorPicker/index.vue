@@ -2,16 +2,8 @@
   <div class="t-color-picker__panel" ref="refPanel">
     <div class="t-color-picker__body">
       <saturation-block :color="color" @change="handleChange" />
-      <slider-block
-        :color="color"
-        @change="handleSliderChange"
-        :value="color.hue"
-      />
-      <alpha-block
-        v-if="enableAlpha"
-        :color="color"
-        @change="handleAlphaChange"
-      />
+      <slider-block :color="color" @change="handleSliderChange" :value="color.hue" />
+      <alpha-block v-if="enableAlpha" :color="color" @change="handleAlphaChange" />
       <div class="t-color-picker__format">
         <t-select
           :options="
@@ -24,6 +16,7 @@
           "
           v-model="format"
           @change="handleChangeFormat"
+          :popup-props="{ attach: handleAttach }"
         />
         <t-input @blur="handleInputChange" v-model="inputValue" />
       </div>
@@ -31,17 +24,18 @@
   </div>
 </template>
 <script>
-import { Color as TVColor } from "tvision-color";
-import { Input as TInput, Select as TSelect } from "tdesign-vue";
-import SaturationBlock from "./Saturation.vue";
-import SliderBlock from "./Slider.vue";
-import AlphaBlock from "./Alpha.vue";
+import { Input as TInput, Select as TSelect } from 'tdesign-vue';
+import { Color as TVColor } from 'tvision-color';
 
-import { Color, getColorObject } from "../utils";
+import AlphaBlock from './Alpha.vue';
+import SaturationBlock from './Saturation.vue';
+import SliderBlock from './Slider.vue';
 
-const DEFAULT_COLOR = "#001F97";
+import { Color, getColorObject, handleAttach } from '../utils';
+
+const DEFAULT_COLOR = '#001F97';
 export default {
-  name: "ColorPicker",
+  name: 'ColorPicker',
   components: {
     SaturationBlock,
     SliderBlock,
@@ -53,46 +47,47 @@ export default {
     value: String,
     enableAlpha: Boolean,
   },
-  emit: ["change"],
+  emit: ['change'],
   data() {
     return {
       color: {},
-      format: this.enableAlpha ? "rgb" : "hex",
-      inputValue: "",
+      format: this.enableAlpha ? 'rgb' : 'hex',
+      inputValue: '',
     };
   },
   methods: {
+    handleAttach,
     handleAlphaChange(alpha) {
       this.color.alpha = alpha;
       const { rgba } = getColorObject(this.color);
       this.inputValue = rgba;
-      this.$emit("change", rgba);
+      this.$emit('change', rgba);
     },
     handleSliderChange(hue) {
       this.color.hue = hue;
       const { hex, rgb, rgba } = getColorObject(this.color);
       if (this.enableAlpha) {
         this.inputValue = rgba;
-        this.$emit("change", rgba);
+        this.$emit('change', rgba);
       } else {
-        this.inputValue = this.format === "hex" ? hex : rgb;
-        this.$emit("change", hex);
+        this.inputValue = this.format === 'hex' ? hex : rgb;
+        this.$emit('change', hex);
       }
     },
     handleChangeFormat(v) {
-      if (v === "hex") {
-        const hex = TVColor.colorTransform(this.inputValue, "rgb", "hex");
+      if (v === 'hex') {
+        const hex = TVColor.colorTransform(this.inputValue, 'rgb', 'hex');
         this.inputValue = hex;
       } else {
-        const rgb = TVColor.colorTransform(this.inputValue, "hex", "rgb");
-        this.inputValue = `rgb(${rgb.join(",")})`;
+        const rgb = TVColor.colorTransform(this.inputValue, 'hex', 'rgb');
+        this.inputValue = `rgb(${rgb.join(',')})`;
       }
     },
     handleInputChange(v) {
       const newColor = new Color(v);
       this.color = newColor;
 
-      this.$emit("change", v);
+      this.$emit('change', v);
     },
     handleChange({ saturation, value }) {
       const { saturation: sat, value: val } = this.color;
@@ -107,9 +102,9 @@ export default {
         return;
       }
       const { hex, rgb } = getColorObject(this.color);
-      this.inputValue = this.format === "hex" ? hex : rgb;
+      this.inputValue = this.format === 'hex' ? hex : rgb;
 
-      this.$emit("change", this.inputValue);
+      this.$emit('change', this.inputValue);
     },
   },
   mounted() {
@@ -117,7 +112,7 @@ export default {
     if (this.enableAlpha) {
       this.inputValue = this.color.rgba;
     } else {
-      this.inputValue = this.format === "hex" ? this.color.hex : this.color.rgb;
+      this.inputValue = this.format === 'hex' ? this.color.hex : this.color.rgb;
     }
   },
 };

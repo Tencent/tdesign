@@ -9,7 +9,7 @@
   >
     <div class="size-content__content" :style="contentStyle">
       <div class="size-content__main">
-        <p class="size-content__title">{{  lang.size.basicSize }}</p>
+        <p class="size-content__title">{{ lang.size.basicSize }}</p>
         <size-display />
       </div>
       <!-- 组件大小 -->
@@ -31,7 +31,7 @@
             <size-svg />
           </div>
         </template>
-        <template #title>{{  lang.size.componentSize }}</template>
+        <template #title>{{ lang.size.componentSize }}</template>
         <template #subTitle>size</template>
         <template #content>
           <size-adjust :tokenList="compSizeArr" type="comp-size" />
@@ -141,29 +141,30 @@
   </div>
 </template>
 <script lang="jsx">
-import CommonCollapse from "../common/Collapse/index.vue";
-import SizeDisplay from "./components/SizeDisplay.vue";
-import SizeAdjust from "./components/SizeAdjust.vue";
+import CommonCollapse from '../common/Collapse/index.vue';
+import SizeAdjust from './components/SizeAdjust.vue';
+import SizeDisplay from './components/SizeDisplay.vue';
 
-import SizeSvg from "./svg/SizeSvg.vue";
-import HorizontalPaddingSvg from "./svg/HorizontalPaddingSvg.vue";
-import VerticalPaddingSvg from "./svg/VerticalPaddingSvg.vue";
-import PopupPaddingSvg from "./svg/PopupPaddingSvg.vue";
-import MarginSvg from "./svg/MarginSvg.vue";
+import HorizontalPaddingSvg from './svg/HorizontalPaddingSvg.vue';
+import MarginSvg from './svg/MarginSvg.vue';
+import PopupPaddingSvg from './svg/PopupPaddingSvg.vue';
+import SizeSvg from './svg/SizeSvg.vue';
+import VerticalPaddingSvg from './svg/VerticalPaddingSvg.vue';
 
-import { modifyToken } from "../common/utils";
-import { FONT_COLOR_MAP } from "../color-panel/utils/const";
+import { FONT_COLOR_MAP } from '../color-panel/utils/const';
+
+import langMixin from '../common/i18n/mixin';
+import { modifyToken } from '../common/Themes';
 import {
-  compSizeArr,
+  compMarginArr,
   compPaddingLRArr,
   compPaddingTBArr,
   compPopupPaddingArr,
-  compMarginArr,
-} from "./built-in/size-map";
-import langMixin from "../common/i18n/mixin";
+  compSizeArr,
+} from './built-in/size-map';
 
 export default {
-  name: "SizePanel",
+  name: 'SizePanel',
   props: {
     top: Number,
   },
@@ -181,8 +182,8 @@ export default {
   mixins: [langMixin],
   data() {
     return {
-      textColorPalette: [""],
-      initTextColorPalette: [""],
+      textColorPalette: [''],
+      initTextColorPalette: [''],
       compSizeArr,
       compPaddingLRArr,
       compPaddingTBArr,
@@ -197,15 +198,12 @@ export default {
   },
   computed: {
     isTextPaletteChange() {
-      return (
-        JSON.stringify(this.textColorPalette) !==
-        JSON.stringify(this.initTextColorPalette)
-      );
+      return JSON.stringify(this.textColorPalette) !== JSON.stringify(this.initTextColorPalette);
     },
     contentStyle() {
       const clientHeight = window.innerHeight;
       return {
-        overflowY: "scroll",
+        overflowY: 'scroll',
         height: `${clientHeight - (this.top || 0) - 96}px`,
       };
     },
@@ -224,8 +222,7 @@ export default {
       let currentPalette = [...new Array(7).keys()].map((v, i) => {
         return {
           ...colorMap[i],
-          value:
-            colorMap[i].value ?? docStyle.getPropertyValue(colorMap[i].from),
+          value: colorMap[i].value ?? docStyle.getPropertyValue(colorMap[i].from),
         };
       });
 
@@ -235,7 +232,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
-/deep/ .t-popup[data-popper-placement="bottom-end"] .t-popup__arrow {
+/deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;
 }
 
@@ -374,8 +371,7 @@ export default {
     }
     &-top {
       padding: 10px 12px;
-      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-        "Liberation Mono", monospace;
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 
       > p {
         color: var(--td-font-white-3);
@@ -401,8 +397,7 @@ export default {
           font-weight: 600;
         }
         &:last-child {
-          font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-            "Liberation Mono", monospace;
+          font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
         }
       }
     }
