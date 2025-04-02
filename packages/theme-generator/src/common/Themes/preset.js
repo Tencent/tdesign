@@ -25,7 +25,6 @@ import MobileTDesignLight from '!raw-loader!./built-in/css/mobile/TDesign/light.
 import MobileFont from '!raw-loader!./built-in/css/mobile/common/font.css';
 import MobileRadius from '!raw-loader!./built-in/css/mobile/common/radius.css';
 import MobileShadow from '!raw-loader!./built-in/css/mobile/common/shadow.css';
-import MobileSpacer from '!raw-loader!./built-in/css/mobile/common/spacer.css';
 
 export const CUSTOM_THEME_TEXT = {
   name: '自定义主题',
@@ -140,7 +139,6 @@ export const BUILT_IN_THEMES = {
       font: MobileFont,
       radius: MobileRadius,
       shadow: MobileShadow,
-      spacer: MobileSpacer,
     },
   },
 };
