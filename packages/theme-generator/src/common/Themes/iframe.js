@@ -158,28 +158,35 @@ function watchThemeTokenChange(iframe) {
  * 集中处理主题变化（亮暗模式与样式 Token）
  */
 function watchThemeChange(iframe) {
+  // 同一个 iframe 只监听一次
+  if (iframe.dataset.observed === 'true') return;
+  iframe.dataset.observed = 'true';
+
   const observers = {};
 
-  const device = iframe.getAttribute('device');
-  if (isMiniProgram(device)) {
+  observers.themeMode = watchThemeModeChange(iframe);
+  observers.themeToken = watchThemeTokenChange(iframe);
+
+  iframe.onload = () => {
     observers.themeMode = watchThemeModeChange(iframe);
     observers.themeToken = watchThemeTokenChange(iframe);
-  } else {
-    iframe.onload = () => {
-      observers.themeMode = watchThemeModeChange(iframe);
-      observers.themeToken = watchThemeTokenChange(iframe);
-    };
+  };
 
-    iframe.unload = () => {
-      Object.entries(observers).forEach(([, observer]) => {
-        if (Array.isArray(observer)) {
-          observer.forEach((obs) => obs.disconnect());
-        } else {
-          observer.disconnect();
-        }
+  iframe.unload = () => {
+    Object.values(observers)
+      .flat()
+      .forEach((observer) => {
+        observer.disconnect();
       });
-    };
-  }
+  };
+}
+
+/**
+ * 监听前统一设置标识符
+ */
+function beforeWatchThemeChange(iframe, device) {
+  iframe.setAttribute('device', device);
+  watchThemeChange(iframe);
 }
 
 /**
@@ -195,23 +202,46 @@ export function syncThemeToIframe(device) {
         const docPhone = document.querySelector('td-doc-phone');
         const previewIframe = docPhone?.querySelector('iframe');
         if (!previewIframe) return;
+
         if (isMiniProgram(device)) {
           // 小程序实际的 iframe 嵌套在里面
           previewIframe.onload = () => {
-            const miniIframe = previewIframe.contentDocument?.querySelector('iframe');
-            if (!miniIframe) return;
-            miniIframe.setAttribute('device', device);
-            watchThemeChange(miniIframe);
+            watchNestedIframes(previewIframe.contentDocument, device);
           };
         } else {
-          previewIframe.setAttribute('device', device);
-          watchThemeChange(previewIframe);
+          beforeWatchThemeChange(previewIframe, device);
         }
       }
     }
   });
 
   observer.observe(document, {
+    childList: true,
+    subtree: true,
+  });
+}
+
+/**
+ * 处理微信小程序预览 iframe 不止一个的情况
+ */
+function watchNestedIframes(iframeDocument, device) {
+  if (!iframeDocument) return;
+
+  const handleWatch = () => {
+    const nestedIframes = iframeDocument.querySelectorAll('iframe');
+    nestedIframes.forEach((iframe) => {
+      if (!iframe.id?.startsWith('webview')) return;
+      beforeWatchThemeChange(iframe, device);
+    });
+  };
+
+  handleWatch();
+
+  const observer = new MutationObserver(() => {
+    handleWatch();
+  });
+
+  observer.observe(iframeDocument, {
     childList: true,
     subtree: true,
   });
