@@ -14,6 +14,19 @@
     "actionUrl": "https://tdesign.tencent.com/chat/changelog#%F0%9F%8C%88-0-2-0-2025-03-08",
     "closeable": true
   },
-  "vue-mobile": {},
-  "miniprogram": {}
+  "vue-mobile": {
+    "title": "📢 站点接入主题生成器，支持自定义CSS 变量",
+    "type": "primary",
+    "closeable": true
+  },
+  "react-mobile": {
+    "title": "📢 站点接入主题生成器，支持自定义CSS 变量",
+    "type": "primary",
+    "closeable": true
+  },
+  "miniprogram": {
+    "title": "📢 站点接入主题生成器，支持自定义CSS 变量",
+    "type": "primary",
+    "closeable": true
+  }
 }
