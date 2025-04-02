@@ -99,7 +99,7 @@ export const generateCommonTheme = (() => {
     if (!commonThemes) return;
 
     // device 变化时，清除之前的样式
-    if (previousDevice !== device) {
+    if (previousDevice !== deviceType) {
       const existingStyles = Array.from(document.querySelectorAll(`[id^="${CUSTOM_COMMON_ID_PREFIX}-"]`));
       existingStyles.forEach((style) => {
         style.parentNode.removeChild(style);
