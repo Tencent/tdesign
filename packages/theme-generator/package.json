@@ -28,7 +28,7 @@
     "cssbeautify": "^0.3.1",
     "lodash": "^4.17.21",
     "tdesign-icons-vue": "^0.0.8",
-    "tdesign-vue": "1.11.1-naruto",
+    "tdesign-vue": "1.9.4-naruto",
     "tvision-color": "^1.6.0",
     "vue": "2.7.14"
   },
