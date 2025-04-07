@@ -65,8 +65,8 @@ import { Select as TSelect, Slider as TSlider } from 'tdesign-vue';
 import ShadowCard from './components/ShadowCard.vue';
 
 import langMixin from '../common/i18n/mixin';
-import { modifyToken } from '../common/Themes';
-import { handleAttach, replacePercentages } from '../common/utils';
+import { getOptionFromLocal, modifyToken, storeOptionToLocal } from '../common/Themes';
+import { handleAttach } from '../common/utils';
 import { ShadowSelect, ShadowSelectDetail, ShadowSelectType, ShadowTypeDetail, ShadowTypeMap } from './const';
 export default {
   name: 'ShadowPanel',
@@ -89,8 +89,6 @@ export default {
   },
   created() {
     this.shadowTypeDetail = ShadowTypeDetail;
-    // 判断是否是提供的值，并设置 step
-    this.checkStep();
   },
   computed: {
     contentStyle() {
@@ -120,6 +118,7 @@ export default {
   watch: {
     step: {
       handler(nVal) {
+        storeOptionToLocal('shadow', nVal);
         // 自定义时去当前系统值
         if (nVal === ShadowSelectType.Self_Defined) {
           // this.shadowPalette = this.getCurrentPalette();
@@ -139,41 +138,24 @@ export default {
         const newShadow = shadow.join(',');
         if (newShadow === current.join(',')) continue;
         const { name } = ShadowTypeMap[index];
-        modifyToken(name, newShadow);
-      }
 
-      // 如果 palette 中的值不是定义好的任何一个则变为自定义
-      const newPalette = nVal.map((v) => v.join(', '));
-      const isSelfDefined = !this.selectOptions.find((v) => {
-        const currentStr = replacePercentages(JSON.stringify(newPalette));
-        const optionStr = replacePercentages(JSON.stringify(ShadowSelectDetail[v.value]));
-        return currentStr === optionStr;
-      });
-      if (isSelfDefined) this.step = ShadowSelectType.Self_Defined;
+        if (this.step === ShadowSelectType.Self_Defined) {
+          modifyToken(name, newShadow);
+        }
+      }
     },
   },
   methods: {
     handleAttach,
+    initStep() {
+      const shadowStep = getOptionFromLocal('shadow');
+      if (shadowStep) {
+        this.step = shadowStep;
+      }
+    },
     handleSliderChange(v) {
       if (this.forbidden) return;
       this.step = v;
-    },
-    checkStep() {
-      const shadowPalette = this.getCurrentPalette();
-      const shadowSteps = Object.entries(ShadowSelectDetail);
-      for (let index = 0; index < shadowSteps.length; index++) {
-        const [step, shadows] = shadowSteps[index];
-        let isEqual = true;
-        for (let id = 0; id < shadows.length; id++) {
-          const shadow = shadows[id];
-          const currentShadow = shadowPalette[id];
-          if (shadow !== currentShadow.join(',')) {
-            isEqual = false;
-            break;
-          }
-        }
-        if (isEqual) return step;
-      }
     },
     // 拆分 box-shadow 的值 0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%)
     splitShadowValue(data) {
@@ -197,6 +179,7 @@ export default {
       return currentPalette;
     },
     change(value, index) {
+      this.step = ShadowSelectType.Self_Defined;
       const val = [...this.shadowPalette];
       val[index] = value;
       this.shadowPalette = val;
@@ -208,6 +191,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
+      this.initStep();
       this.setCurrentPalette();
     });
   },
