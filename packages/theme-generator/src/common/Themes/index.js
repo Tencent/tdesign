@@ -248,7 +248,7 @@ export function exportCustomTheme(device = 'web') {
   downloadFile(blob, `theme.${fileSuffix}`);
 }
 
-export function modifyToken(tokenName, newVal) {
+export function modifyToken(tokenName, newVal, saveToLocal = true) {
   // 获取所有可能包含 token 的样式表
   const styleSheets = document.querySelectorAll(
     `#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, [id^="${CUSTOM_COMMON_ID_PREFIX}-"]`,
@@ -265,7 +265,10 @@ export function modifyToken(tokenName, newVal) {
     const currentVal = match[1];
     styleSheet.innerText = styleSheet.innerText.replace(`${tokenName}: ${currentVal}`, `${tokenName}: ${newVal}`);
     tokenFound = true;
-    storeTokenToLocal(tokenName, newVal);
+
+    if (saveToLocal) {
+      storeTokenToLocal(tokenName, newVal);
+    }
   });
 
   if (!tokenFound) {
@@ -301,6 +304,20 @@ export function storeTokenToLocal(tokenName, newVal) {
   const tokenObj = JSON.parse(tokens);
   tokenObj[tokenName] = newVal;
   localStorage.setItem(CUSTOM_TOKEN_ID, JSON.stringify(tokenObj));
+}
+
+export function clearLocalOption(optionName) {
+  const options = localStorage.getItem(CUSTOM_OPTIONS_ID);
+  if (!options) return;
+
+  const optionObj = JSON.parse(options);
+  delete optionObj[optionName];
+
+  if (Object.keys(optionObj).length === 0) {
+    localStorage.removeItem(CUSTOM_OPTIONS_ID);
+  } else {
+    localStorage.setItem(CUSTOM_OPTIONS_ID, JSON.stringify(optionObj));
+  }
 }
 
 export function applyTokenFromLocal() {
