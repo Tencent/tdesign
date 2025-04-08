@@ -111,10 +111,10 @@ import {
   RadioGroup as TRadioGroup,
 } from 'tdesign-vue';
 
+import langMixin from '../../common/i18n/mixin';
 import SegmentSelection from '../../common/SegmentSelection/index.vue';
 import SizeSlider from '../../common/SizeSlider/index.vue';
-import langMixin from '../../common/i18n/mixin';
-import { CUSTOM_THEME_ID, modifyToken } from '../../common/Themes';
+import { CUSTOM_THEME_ID, getOptionFromLocal, modifyToken, storeOptionToLocal } from '../../common/Themes';
 import { handleAttach } from '../../common/utils';
 
 import { fontSizeLabels, fontSizeSteps } from '../built-in/font-size';
@@ -187,10 +187,10 @@ export default {
     step(v) {
       // 改变阶梯
       if (!fontSizeSteps[v]) return;
+      storeOptionToLocal('font', v);
+
       const newSteps = fontSizeSteps[v];
       newSteps.map(({ name, value }) => {
-        modifyToken(name, value);
-        // 同时将它从 token 模式中修改
         const i = this.tokenTypeList.findIndex((v) => v.label === name);
         if (i !== -1) this.tokenTypeList[i].value = value;
       });
@@ -214,6 +214,12 @@ export default {
   },
   methods: {
     handleAttach,
+    initStep() {
+      const fontStep = getOptionFromLocal('font');
+      if (fontStep) {
+        this.step = fontStep;
+      }
+    },
     handleVisibleChange(v, ctx, idx) {
       if (v) this.hoverIdx = idx;
       if (!v && ctx.trigger === 'document' && this.hoverIdx === idx) this.hoverIdx = null;
@@ -282,6 +288,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
+      this.initStep();
       this.handleInitFontSize();
 
       // radio group 在此场景下初始化无法正确算出 left 需强行计算
