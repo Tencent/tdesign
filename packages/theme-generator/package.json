@@ -22,6 +22,14 @@
     "mingrutough1",
     "yilaierwang"
   ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tencent/tdesign.git"
+  },
+  "homepage": "https://github.com/Tencent/tdesign/blob/main/packages/theme-generator/README.md",
   "license": "ISC",
   "dependencies": {
     "core-js": "^3.8.3",
