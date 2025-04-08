@@ -86,8 +86,7 @@ import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-v
 import langMixin from '../common/i18n/mixin';
 import SegmentSelection from '../common/SegmentSelection/index.vue';
 import SizeSlider from '../common/SizeSlider/index.vue';
-
-import { CUSTOM_COMMON_ID_PREFIX, getOptionFromLocal, modifyToken, storeOptionToLocal } from '../common/Themes';
+import { CUSTOM_COMMON_ID_PREFIX, CUSTOM_EXTRA_ID, modifyToken } from '../common/Themes';
 import { handleAttach } from '../common/utils';
 
 import { RADIUS_OPTIONS, RADIUS_STEP_ARRAY } from './built-in/border-radius';
@@ -178,9 +177,10 @@ export default {
     },
     step(val) {
       if (!RADIUS_STEP_ARRAY[val - 1]) return;
-      storeOptionToLocal('radius', val);
-
       this.radiusTypeList = this.radiusTypeList.map((item, index) => {
+        const preVal = RADIUS_STEP_ARRAY?.[val - 1]?.[index];
+        const formattedVal = typeof preVal === 'number' ? `${preVal}px` : preVal;
+        modifyToken(item.token, formattedVal);
         return {
           ...item,
           value: RADIUS_STEP_ARRAY[val - 1][index],
@@ -190,12 +190,6 @@ export default {
   },
   methods: {
     handleAttach,
-    initStep() {
-      const radiusStep = getOptionFromLocal('radius');
-      if (radiusStep) {
-        this.step = radiusStep;
-      }
-    },
     handleVisibleChange(v, ctx, idx) {
       if (v) this.hoverIdx = idx;
       if (!v && ctx.trigger === 'document' && this.hoverIdx === idx) this.hoverIdx = null;
@@ -235,7 +229,6 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.initStep();
       this.initRadiusToken();
     });
   },

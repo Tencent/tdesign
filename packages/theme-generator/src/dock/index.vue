@@ -118,7 +118,6 @@ import SettingSvg from './svg/SettingSvg.vue';
 
 import langMixin from '../common/i18n/mixin';
 import {
-  clearLocalTheme,
   CUSTOM_THEME_TEXT,
   DEFAULT_THEME,
   exportCustomTheme,
@@ -258,8 +257,8 @@ export default {
     },
     recoverTheme() {
       generateNewTheme(DEFAULT_THEME.value, undefined, this.device);
-      clearLocalTheme();
       this.currentTheme = DEFAULT_THEME;
+
       this.$emit('refresh-content');
     },
     setupStyleChangeObserver() {

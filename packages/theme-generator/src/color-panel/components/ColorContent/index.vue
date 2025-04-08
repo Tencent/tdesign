@@ -327,7 +327,7 @@ import { Color } from 'tvision-color';
 
 import ColorPicker from '../../../common/ColorPicker/index.vue';
 import langMixin from '../../../common/i18n/mixin';
-import { DEFAULT_THEME, generateNewTheme, generateTokenList, modifyToken } from '../../../common/Themes';
+import { CUSTOM_THEME_ID, DEFAULT_THEME, generateNewTheme, generateTokenList } from '../../../common/Themes';
 import { handleAttach } from '../../../common/utils';
 import { colorAnimation } from '../../../common/utils/animation';
 
@@ -580,6 +580,8 @@ export default {
       });
     },
     changeGradation(hex, idx, type) {
+      const tokenIdxName = `--td-${type}-color-${idx + 1}`;
+      const styleSheet = document.getElementById(CUSTOM_THEME_ID);
       if (!this.colorPalette[idx]) return;
       if (type === 'brand') {
         if (this.colorPalette[idx] instanceof Array) {
@@ -604,9 +606,11 @@ export default {
           this.grayColorPalette[idx].value = hex;
         }
       }
-
-      const tokenName = `--td-${type}-color-${idx + 1}`;
-      modifyToken(tokenName, hex);
+      if (styleSheet) {
+        const reg = new RegExp(`${tokenIdxName}: (.*)`);
+        const curHex = styleSheet.innerText.match(reg)[1].split(';')[0];
+        styleSheet.innerText = styleSheet.innerText.replace(`${tokenIdxName}: ${curHex}`, `${tokenIdxName}: ${hex}`);
+      }
     },
     getCurrentPalette(type = 'brand') {
       let colorMap;

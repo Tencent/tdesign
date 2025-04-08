@@ -17,7 +17,7 @@ export const LINE_HEIGHT_OPTIONS = [
   { label: '自定义', enLabel: 'customized', value: 6, disabled: true },
 ];
 
-export function updateLineHeightTokens(commonVal, type = 'plus', isCustom) {
+export function updateLineHeightTokens(commonVal, type = 'plus') {
   const LINE_HEIGHT_VAR = [
     'link-small',
     'link-medium',
@@ -55,6 +55,6 @@ export function updateLineHeightTokens(commonVal, type = 'plus', isCustom) {
       result = fontSizeNum * commonValNum;
     }
 
-    modifyToken(lineHeightToken, result + 'px', isCustom);
+    modifyToken(lineHeightToken, result + 'px');
   });
 }

@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { applyThemeFromLocal, DEFAULT_THEME, generateNewTheme, syncThemeToIframe } from './common/Themes';
+import { DEFAULT_THEME, generateNewTheme, syncThemeToIframe } from './common/Themes';
 
 import Dock from './dock/index.vue';
 import PanelDrawer from './panel-drawer/index.vue';
@@ -65,7 +65,6 @@ export default {
   mounted() {
     generateNewTheme(DEFAULT_THEME.value, undefined, this.device);
     syncThemeToIframe(this.device);
-    applyThemeFromLocal(this.device);
   },
   methods: {
     handleChangeTheme(theme) {
@@ -127,10 +126,5 @@ export default {
 }
 .t-radio-button__label {
   font-size: 14px;
-}
-
-.t-slider__button {
-  width: 16px;
-  height: 16px;
 }
 </style>
