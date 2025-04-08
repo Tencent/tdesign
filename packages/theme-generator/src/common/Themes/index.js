@@ -53,16 +53,17 @@ export function getBuiltInThemes(device = 'web', hex = undefined) {
 }
 
 export function generateNewTheme(hex, remainInput = true, device = 'web') {
-  generateCommonTheme(device);
-
   const styleSheet = appendStyleSheet(CUSTOM_THEME_ID);
   const darkStyleSheet = appendStyleSheet(CUSTOM_DARK_ID);
 
   const { brandColorIdx, colorPalette, styleSheetString } = generateTokenList(hex, false, 10, remainInput);
 
   const builtInTheme = getBuiltInThemes(device, hex);
+  const hasBuiltInTheme = builtInTheme.length > 0;
 
-  if (builtInTheme.length > 0) {
+  generateCommonTheme(device, hasBuiltInTheme);
+
+  if (hasBuiltInTheme) {
     // 内置主题
     const theme = builtInTheme[0].options[0]; // 条件筛选后只有一个
     const { light, dark, extra } = theme.css;
@@ -73,6 +74,10 @@ export function generateNewTheme(hex, remainInput = true, device = 'web') {
     if (extra) {
       const extraStyleSheet = appendStyleSheet(CUSTOM_EXTRA_ID);
       extraStyleSheet.textContent = extra;
+      // 有自己一套特有样式的，不应用 Common Token
+      document.querySelectorAll(`[id^="${CUSTOM_COMMON_ID_PREFIX}-"]`).forEach((sheet) => {
+        sheet.remove();
+      });
     } else {
       document.getElementById(CUSTOM_EXTRA_ID)?.remove();
     }
@@ -93,7 +98,7 @@ export function generateNewTheme(hex, remainInput = true, device = 'web') {
 export const generateCommonTheme = (() => {
   let previousDevice = 'web'; // 闭包保存
 
-  return function (device = 'web') {
+  return function (device = 'web', forceRefresh = false) {
     const deviceType = normalizeDeviceType(device);
     const commonThemes = BUILT_IN_THEMES[deviceType]?.common;
     if (!commonThemes) return;
@@ -108,7 +113,7 @@ export const generateCommonTheme = (() => {
 
     Object.entries(commonThemes).forEach(([key, theme]) => {
       const commonId = `${CUSTOM_COMMON_ID_PREFIX}-${key}`;
-      if (document.getElementById(commonId)) return; // 不重复生成
+      if (document.getElementById(commonId) && !forceRefresh) return; // 不覆盖之前的内容
       const commonStyleSheet = appendStyleSheet(commonId);
       commonStyleSheet.textContent = theme;
     });
@@ -210,9 +215,7 @@ export function exportCustomTheme(device = 'web') {
           ${darkCssString}
         }
       }
-      page {
-        ${commonCssString}
-      }
+      ${commonCssString ? `page {\n${commonCssString}\n}` : ''}
       ${extraCssString}
     `;
   } else {
@@ -223,9 +226,7 @@ export function exportCustomTheme(device = 'web') {
       :root[theme-mode="dark"] {
         ${darkCssString}
       }
-      :root {
-        ${commonCssString}
-      }
+      ${commonCssString ? `:root {\n${commonCssString}\n}` : ''}
       ${extraCssString}
     `;
   }
@@ -243,7 +244,7 @@ export function exportCustomTheme(device = 'web') {
 export function modifyToken(tokenIdxName, newVal) {
   // 获取所有可能包含 token 的样式表
   const styleSheets = document.querySelectorAll(
-    `#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, [id^="${CUSTOM_COMMON_ID_PREFIX}-"]`,
+    `#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, #${CUSTOM_EXTRA_ID}, [id^="${CUSTOM_COMMON_ID_PREFIX}-"]`,
   );
 
   let tokenFound = false;
