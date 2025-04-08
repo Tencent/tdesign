@@ -99,7 +99,6 @@ import {
 import langMixin from '../../common/i18n/mixin';
 import SegmentSelection from '../../common/SegmentSelection/index.vue';
 import SizeSlider from '../../common/SizeSlider/index.vue';
-import { getOptionFromLocal, storeOptionToLocal } from '../../common/Themes';
 import { handleAttach } from '../../common/utils';
 import { LINE_HEIGHT_OPTIONS, LINE_HEIGHT_STEPS, updateLineHeightTokens } from '../built-in/line-height';
 export default {
@@ -128,36 +127,17 @@ export default {
   watch: {
     step(v) {
       if (!LINE_HEIGHT_STEPS[v]) return;
-      storeOptionToLocal('line-height', v);
       const lineHeightValue = LINE_HEIGHT_STEPS[v];
       this.lineHeightValue = lineHeightValue;
-
-      const isCustom = v === 6;
-      updateLineHeightTokens(this.lineHeightValue, this.tokenType, isCustom);
+      updateLineHeightTokens(this.lineHeightValue, this.tokenType);
     },
     tokenType(type) {
-      const isTimeCalc = type === 'time';
-      this.lineHeightValue = !isTimeCalc ? 8 : 1.5;
+      this.lineHeightValue = type === 'plus' ? 8 : 1.5;
       updateLineHeightTokens(this.lineHeightValue, type);
-      if (isTimeCalc) {
-        storeOptionToLocal('line-height', 'time');
-      } else {
-        storeOptionToLocal('line-height', 3);
-      }
     },
   },
   methods: {
     handleAttach,
-    initStep() {
-      const lineHeightStep = getOptionFromLocal('line-height');
-      if (lineHeightStep) {
-        if (typeof lineHeightStep === 'number') {
-          this.step = lineHeightStep;
-        } else {
-          this.tokenType = 'time';
-        }
-      }
-    },
     handleVisibleChange(v) {
       this.isHover = v;
     },
@@ -169,11 +149,6 @@ export default {
         this.segmentSelectionDisabled = true;
       }
     },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.initStep();
-    });
   },
 };
 </script>

@@ -39,11 +39,11 @@
 </template>
 
 <script>
-import { Select as TSelect, Slider as TSlider } from 'tdesign-vue';
-import { handleAttach } from '../../common/utils';
-import langMixin from '../i18n/mixin';
+import { Slider as TSlider, Select as TSelect } from "tdesign-vue";
+import { handleAttach } from "../../common/utils";
+import langMixin from "../i18n/mixin";
 export default {
-  name: 'SegmentSelection',
+  name: "SegmentSelection",
   components: {
     TSlider,
     TSelect,
@@ -73,11 +73,8 @@ export default {
     };
   },
   watch: {
-    value(val) {
-      this.step = val;
-    },
     step(newStep) {
-      this.$emit('input', newStep);
+      this.$emit("input", newStep);
     },
     disabled(val) {
       if (val) {
@@ -88,7 +85,7 @@ export default {
   methods: {
     handleAttach,
     handleSelectChange() {
-      this.$emit('enable');
+      this.$emit("enable");
     },
     handleVisibleChange(val) {
       if (val && this.disabled) {
@@ -203,4 +200,5 @@ export default {
     }
   }
 }
+
 </style>
