@@ -139,9 +139,8 @@ export default {
         if (newShadow === current.join(',')) continue;
         const { name } = ShadowTypeMap[index];
 
-        if (this.step === ShadowSelectType.Self_Defined) {
-          modifyToken(name, newShadow);
-        }
+        const isCustom = this.step === ShadowSelectType.Self_Defined;
+        modifyToken(name, newShadow, isCustom);
       }
     },
   },
@@ -149,7 +148,9 @@ export default {
     handleAttach,
     initStep() {
       const shadowStep = getOptionFromLocal('shadow');
-      if (shadowStep) {
+      /*  超轻的 step 对应 0，直接写 if(shadowStep)
+          会被判为 if(0) -> false，导致进不去这个条件 */
+      if (shadowStep >= 0) {
         this.step = shadowStep;
       }
     },

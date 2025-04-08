@@ -185,7 +185,13 @@ export default {
       if (!RADIUS_STEP_ARRAY[val - 1]) return;
       storeOptionToLocal('radius', val);
 
+      const isCustom = val === 6;
+
       this.radiusTypeList = this.radiusTypeList.map((item, index) => {
+        const preVal = RADIUS_STEP_ARRAY?.[val - 1]?.[index];
+        const formattedVal = typeof preVal === 'number' ? `${preVal}px` : preVal;
+        modifyToken(item.token, formattedVal, isCustom);
+
         return {
           ...item,
           value: RADIUS_STEP_ARRAY[val - 1][index],

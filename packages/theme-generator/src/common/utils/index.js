@@ -107,3 +107,21 @@ export function extractRootContent(cssText) {
   const match = cssText.match(/{([^}]*)}/);
   return match ? match[1].trim() : '';
 }
+
+/**
+ * 删除 localStorage 中指定对象的指定属性
+ */
+export function clearLocalItem(storageKey, itemKey) {
+  const storedData = localStorage.getItem(storageKey);
+  if (!storedData) return;
+
+  const dataObj = JSON.parse(storedData);
+  delete dataObj[itemKey];
+
+  if (Object.keys(dataObj).length === 0) {
+    // 如果删除后对象为空，则移除整个项
+    localStorage.removeItem(storageKey);
+  } else {
+    localStorage.setItem(storageKey, JSON.stringify(dataObj));
+  }
+}

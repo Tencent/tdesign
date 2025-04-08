@@ -5,7 +5,7 @@ export * from './token';
 import cssbeautify from 'cssbeautify';
 import { Color } from 'tvision-color';
 
-import { appendStyleSheet, downloadFile, extractRootContent, removeCssProperties } from '../utils';
+import { appendStyleSheet, clearLocalItem, downloadFile, extractRootContent, removeCssProperties } from '../utils';
 import { BUILT_IN_THEMES, DEFAULT_THEME, RECOMMEND_THEMES } from './preset';
 import { DARK_FUNCTION_COLOR, LIGHT_FUNCTION_COLOR, MOBILE_MISSING_TOKENS } from './token';
 
@@ -269,6 +269,9 @@ export function modifyToken(tokenName, newVal, saveToLocal = true) {
 
     if (saveToLocal) {
       storeTokenToLocal(tokenName, newVal);
+    } else {
+      // 确保没有遗留的 Token
+      clearLocalItem(CUSTOM_TOKEN_ID, tokenName);
     }
   });
 
@@ -308,17 +311,7 @@ export function storeTokenToLocal(tokenName, newVal) {
 }
 
 export function clearLocalOption(optionName) {
-  const options = localStorage.getItem(CUSTOM_OPTIONS_ID);
-  if (!options) return;
-
-  const optionObj = JSON.parse(options);
-  delete optionObj[optionName];
-
-  if (Object.keys(optionObj).length === 0) {
-    localStorage.removeItem(CUSTOM_OPTIONS_ID);
-  } else {
-    localStorage.setItem(CUSTOM_OPTIONS_ID, JSON.stringify(optionObj));
-  }
+  clearLocalItem(CUSTOM_TOKEN_ID, optionName);
 }
 
 export function applyTokenFromLocal() {
