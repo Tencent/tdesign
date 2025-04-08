@@ -17,14 +17,12 @@ import WebTDesignDark from '!raw-loader!./built-in/css/web/TDesign/dark.css';
 import WebTDesignLight from '!raw-loader!./built-in/css/web/TDesign/light.css';
 import WebFont from '!raw-loader!./built-in/css/web/common/font.css';
 import WebRadius from '!raw-loader!./built-in/css/web/common/radius.css';
-import WebShadow from '!raw-loader!./built-in/css/web/common/shadow.css';
 import WebSize from '!raw-loader!./built-in/css/web/common/size.css';
 
 import MobileTDesignDark from '!raw-loader!./built-in/css/mobile/TDesign/dark.css';
 import MobileTDesignLight from '!raw-loader!./built-in/css/mobile/TDesign/light.css';
 import MobileFont from '!raw-loader!./built-in/css/mobile/common/font.css';
 import MobileRadius from '!raw-loader!./built-in/css/mobile/common/radius.css';
-import MobileShadow from '!raw-loader!./built-in/css/mobile/common/shadow.css';
 
 export const CUSTOM_THEME_TEXT = {
   name: '自定义主题',
@@ -126,7 +124,6 @@ export const BUILT_IN_THEMES = {
     common: {
       font: WebFont,
       radius: WebRadius,
-      shadow: WebShadow,
       size: WebSize,
     },
   },
@@ -138,7 +135,6 @@ export const BUILT_IN_THEMES = {
     common: {
       font: MobileFont,
       radius: MobileRadius,
-      shadow: MobileShadow,
     },
   },
 };
