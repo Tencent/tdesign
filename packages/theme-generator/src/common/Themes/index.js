@@ -53,16 +53,17 @@ export function getBuiltInThemes(device = 'web', hex = undefined) {
 }
 
 export function generateNewTheme(hex, remainInput = true, device = 'web') {
-  generateCommonTheme(device);
-
   const styleSheet = appendStyleSheet(CUSTOM_THEME_ID);
   const darkStyleSheet = appendStyleSheet(CUSTOM_DARK_ID);
 
   const { brandColorIdx, colorPalette, styleSheetString } = generateTokenList(hex, false, 10, remainInput);
 
   const builtInTheme = getBuiltInThemes(device, hex);
+  const hasBuiltInTheme = builtInTheme.length > 0;
 
-  if (builtInTheme.length > 0) {
+  generateCommonTheme(device, hasBuiltInTheme);
+
+  if (hasBuiltInTheme) {
     // 内置主题
     const theme = builtInTheme[0].options[0]; // 条件筛选后只有一个
     const { light, dark, extra } = theme.css;
@@ -97,7 +98,7 @@ export function generateNewTheme(hex, remainInput = true, device = 'web') {
 export const generateCommonTheme = (() => {
   let previousDevice = 'web'; // 闭包保存
 
-  return function (device = 'web') {
+  return function (device = 'web', forceRefresh = false) {
     const deviceType = normalizeDeviceType(device);
     const commonThemes = BUILT_IN_THEMES[deviceType]?.common;
     if (!commonThemes) return;
@@ -112,7 +113,7 @@ export const generateCommonTheme = (() => {
 
     Object.entries(commonThemes).forEach(([key, theme]) => {
       const commonId = `${CUSTOM_COMMON_ID_PREFIX}-${key}`;
-      if (document.getElementById(commonId)) return; // 不重复生成
+      if (document.getElementById(commonId) && !forceRefresh) return; // 不覆盖之前的内容
       const commonStyleSheet = appendStyleSheet(commonId);
       commonStyleSheet.textContent = theme;
     });
