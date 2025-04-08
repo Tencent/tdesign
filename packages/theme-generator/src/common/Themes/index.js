@@ -73,6 +73,10 @@ export function generateNewTheme(hex, remainInput = true, device = 'web') {
     if (extra) {
       const extraStyleSheet = appendStyleSheet(CUSTOM_EXTRA_ID);
       extraStyleSheet.textContent = extra;
+      // 有自己一套特有样式的，不应用 Common Token
+      document.querySelectorAll(`[id^="${CUSTOM_COMMON_ID_PREFIX}-"]`).forEach((sheet) => {
+        sheet.remove();
+      });
     } else {
       document.getElementById(CUSTOM_EXTRA_ID)?.remove();
     }
@@ -210,9 +214,7 @@ export function exportCustomTheme(device = 'web') {
           ${darkCssString}
         }
       }
-      page {
-        ${commonCssString}
-      }
+      ${commonCssString ? `page {\n${commonCssString}\n}` : ''}
       ${extraCssString}
     `;
   } else {
@@ -223,9 +225,7 @@ export function exportCustomTheme(device = 'web') {
       :root[theme-mode="dark"] {
         ${darkCssString}
       }
-      :root {
-        ${commonCssString}
-      }
+      ${commonCssString ? `:root {\n${commonCssString}\n}` : ''}
       ${extraCssString}
     `;
   }
@@ -243,7 +243,7 @@ export function exportCustomTheme(device = 'web') {
 export function modifyToken(tokenIdxName, newVal) {
   // 获取所有可能包含 token 的样式表
   const styleSheets = document.querySelectorAll(
-    `#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, [id^="${CUSTOM_COMMON_ID_PREFIX}-"]`,
+    `#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, #${CUSTOM_EXTRA_ID}, [id^="${CUSTOM_COMMON_ID_PREFIX}-"]`,
   );
 
   let tokenFound = false;

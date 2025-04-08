@@ -86,7 +86,7 @@ import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-v
 import langMixin from '../common/i18n/mixin';
 import SegmentSelection from '../common/SegmentSelection/index.vue';
 import SizeSlider from '../common/SizeSlider/index.vue';
-import { CUSTOM_COMMON_ID_PREFIX, modifyToken } from '../common/Themes';
+import { CUSTOM_COMMON_ID_PREFIX, CUSTOM_EXTRA_ID, modifyToken } from '../common/Themes';
 import { handleAttach } from '../common/utils';
 
 import { RADIUS_OPTIONS, RADIUS_STEP_ARRAY } from './built-in/border-radius';
@@ -211,12 +211,16 @@ export default {
       return radius;
     },
     initRadiusToken() {
-      const radiusStyle = document.getElementById(`${CUSTOM_COMMON_ID_PREFIX}-radius`).innerText;
+      let radiusStyle = document.getElementById(`${CUSTOM_COMMON_ID_PREFIX}-radius`);
+      if (!radiusStyle) {
+        radiusStyle = document.getElementById(CUSTOM_EXTRA_ID);
+      }
+
       // 过滤不存在的 Token
       this.radiusTypeList = this.radiusTypeList
         .map((v) => {
           const regex = new RegExp(`${v.token}\\s*:\\s*([^;]+);`);
-          const match = regex.exec(radiusStyle);
+          const match = regex.exec(radiusStyle.innerText);
           if (match) v.value = match[1].trim();
           return v;
         })
