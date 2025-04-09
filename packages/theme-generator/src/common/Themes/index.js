@@ -311,7 +311,7 @@ export function storeTokenToLocal(tokenName, newVal) {
 }
 
 export function clearLocalOption(optionName) {
-  clearLocalItem(CUSTOM_TOKEN_ID, optionName);
+  clearLocalItem(CUSTOM_OPTIONS_ID, optionName);
 }
 
 export function applyTokenFromLocal() {
