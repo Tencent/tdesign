@@ -141,7 +141,7 @@ export default {
       const localLineHeight = getOptionFromLocal('line-height');
       const lineHeightParts = localLineHeight?.split('_');
 
-      if (type === lineHeightParts[0]) {
+      if (type === lineHeightParts?.[0]) {
         const suffixVal = lineHeightParts[1];
         this.lineHeightValue = suffixVal;
       } else {
