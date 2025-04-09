@@ -25,10 +25,11 @@
   </div>
 </template>
 <script>
-import { Slider as TSlider, InputNumber as TInputNumber } from "tdesign-vue";
-import { handleAttach } from "../../common/utils";
+import { InputNumber as TInputNumber, Slider as TSlider } from 'tdesign-vue';
+import { handleAttach } from '../../common/utils';
 
 export default {
+  name: 'SizeSlider',
   props: {
     sizeValue: [String, Number],
     title: String,
@@ -45,7 +46,7 @@ export default {
     TSlider,
     TInputNumber,
   },
-  emit: ["changeFontSize"],
+  emit: ['changeFontSize'],
   data() {
     return {
       size: null,
@@ -58,6 +59,7 @@ export default {
     handleAttach,
     handleInputChange(v) {
       if (
+        v === this.size ||
         v < this.min ||
         v > this.max ||
         this.disabled ||
@@ -65,13 +67,11 @@ export default {
       )
         return;
       this.size = v;
-      this.$emit("changeFontSize", v);
+      this.$emit('changeFontSize', v);
     },
   },
   mounted() {
-    this.size = this.needInteger
-      ? parseInt(this.sizeValue, 10)
-      : this.sizeValue;
+    this.size = this.needInteger ? parseInt(this.sizeValue, 10) : this.sizeValue;
   },
 };
 </script>
