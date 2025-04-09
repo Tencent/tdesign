@@ -55,6 +55,6 @@ export function updateLineHeightTokens(commonVal, type = 'plus') {
       result = fontSizeNum * commonValNum;
     }
 
-    modifyToken(lineHeightToken, result + 'px');
+    modifyToken(lineHeightToken, result + 'px', false);
   });
 }

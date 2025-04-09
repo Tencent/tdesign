@@ -111,10 +111,10 @@ import {
   RadioGroup as TRadioGroup,
 } from 'tdesign-vue';
 
+import langMixin from '../../common/i18n/mixin';
 import SegmentSelection from '../../common/SegmentSelection/index.vue';
 import SizeSlider from '../../common/SizeSlider/index.vue';
-import langMixin from '../../common/i18n/mixin';
-import { CUSTOM_THEME_ID, modifyToken } from '../../common/Themes';
+import { CUSTOM_THEME_ID, getOptionFromLocal, modifyToken, updateLocalOption } from '../../common/Themes';
 import { handleAttach } from '../../common/utils';
 
 import { fontSizeLabels, fontSizeSteps } from '../built-in/font-size';
@@ -187,10 +187,14 @@ export default {
     step(v) {
       // 改变阶梯
       if (!fontSizeSteps[v]) return;
+
+      // 默认值（v=3)的时候不存
+      updateLocalOption('font', v, v !== 3);
+
+      const isCustom = v === 6;
       const newSteps = fontSizeSteps[v];
       newSteps.map(({ name, value }) => {
-        modifyToken(name, value);
-        // 同时将它从 token 模式中修改
+        modifyToken(name, value, isCustom);
         const i = this.tokenTypeList.findIndex((v) => v.label === name);
         if (i !== -1) this.tokenTypeList[i].value = value;
       });
@@ -214,6 +218,12 @@ export default {
   },
   methods: {
     handleAttach,
+    initStep() {
+      const fontStep = getOptionFromLocal('font');
+      if (fontStep >= 0) {
+        this.step = fontStep;
+      }
+    },
     handleVisibleChange(v, ctx, idx) {
       if (v) this.hoverIdx = idx;
       if (!v && ctx.trigger === 'document' && this.hoverIdx === idx) this.hoverIdx = null;
@@ -222,7 +232,7 @@ export default {
       // 将当前的字体相关枚举存储
       const computedStyle = window.getComputedStyle(document.documentElement);
       this.computedStyle = computedStyle;
-      // token模式列表
+      // token 模式列表
       this.tokenTypeList = this.tokenTypeList.map((v) => ({
         label: v.label,
         value: computedStyle.getPropertyValue(v.label),
@@ -243,10 +253,20 @@ export default {
       });
       this.initLadderList = JSON.parse(JSON.stringify(this.ladderTypeList));
     },
-    handleChangeFontSize(v, type, tokenIdxName, idx) {
+    handleChangeFontSize(v, type, tokenName, idx) {
       const res = `${v}px`;
       const styleSheet = document.getElementById(CUSTOM_THEME_ID);
       if (!styleSheet) return;
+
+      if (Array.isArray(tokenName)) {
+        // 阶梯模式传进来的是数组
+        tokenName.forEach((token) => {
+          modifyToken(token, res);
+        });
+      } else {
+        // Token 模式传进来的是单个
+        modifyToken(tokenName, res);
+      }
 
       if (type === 'list') {
         // 阶梯模式需要修改所有对应该梯度的值
@@ -256,13 +276,11 @@ export default {
         if (parseInt(this.initLadderList[idx].value, 10) !== parseInt(res, 10)) this.segmentSelectionDisabled = true;
 
         fontSizeList.map((tokenName) => {
-          // token 需要修改所有对应该 token 的值
-          modifyToken(tokenName, res);
-          // 同时将它从 token 模式中修改
           const i = this.tokenTypeList.findIndex((v) => v.label === tokenName);
           if (i !== -1) this.tokenTypeList[i].value = res;
         });
       }
+
       if (type === 'token') {
         // token 需要修改所有对应该 token 的值
         if (parseInt(this.initTokenList[idx].value, 10) !== parseInt(res, 10)) this.segmentSelectionDisabled = true;
@@ -271,9 +289,9 @@ export default {
         // 同时将它从阶梯中移除
         const preVal = this.initTokenList[idx].value;
         if (res !== preVal) {
-          const preListIdx = this.ladderTypeList.findIndex((v) => v.tokens.includes(tokenIdxName));
+          const preListIdx = this.ladderTypeList.findIndex((v) => v.tokens.includes(tokenName));
           if (preListIdx !== -1) {
-            const resIdx = this.ladderTypeList?.[preListIdx].tokens?.indexOf(tokenIdxName);
+            const resIdx = this.ladderTypeList?.[preListIdx].tokens?.indexOf(tokenName);
             this.ladderTypeList[preListIdx].tokens?.splice(resIdx, 1);
           }
         }
@@ -282,6 +300,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
+      this.initStep();
       this.handleInitFontSize();
 
       // radio group 在此场景下初始化无法正确算出 left 需强行计算

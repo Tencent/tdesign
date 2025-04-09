@@ -5,14 +5,18 @@ export * from './token';
 import cssbeautify from 'cssbeautify';
 import { Color } from 'tvision-color';
 
-import { appendStyleSheet, downloadFile, extractRootContent, removeCssProperties } from '../utils';
+import { appendStyleSheet, clearLocalItem, downloadFile, extractRootContent, removeCssProperties } from '../utils';
 import { BUILT_IN_THEMES, DEFAULT_THEME, RECOMMEND_THEMES } from './preset';
 import { DARK_FUNCTION_COLOR, LIGHT_FUNCTION_COLOR, MOBILE_MISSING_TOKENS } from './token';
 
+/* stylesheet 的 ID */
 export const CUSTOM_THEME_ID = 'custom-theme';
-export const CUSTOM_DARK_ID = 'custom-theme-dark';
-export const CUSTOM_EXTRA_ID = 'custom-theme-extra';
-export const CUSTOM_COMMON_ID_PREFIX = 'custom-theme-common';
+export const CUSTOM_DARK_ID = `${CUSTOM_THEME_ID}-dark`;
+export const CUSTOM_EXTRA_ID = `${CUSTOM_THEME_ID}-extra`;
+export const CUSTOM_COMMON_ID_PREFIX = `${CUSTOM_THEME_ID}-common`;
+/* localStorage 的 key */
+export const CUSTOM_OPTIONS_ID = `${CUSTOM_THEME_ID}-options`;
+export const CUSTOM_TOKEN_ID = `${CUSTOM_THEME_ID}-tokens`;
 
 export const isMiniProgram = (device) => device === 'mini-program';
 export const isMobile = (device) => device === 'mobile' || isMiniProgram(device);
@@ -53,6 +57,8 @@ export function getBuiltInThemes(device = 'web', hex = undefined) {
 }
 
 export function generateNewTheme(hex, remainInput = true, device = 'web') {
+  updateLocalOption('color', hex, hex !== DEFAULT_THEME.value);
+
   const styleSheet = appendStyleSheet(CUSTOM_THEME_ID);
   const darkStyleSheet = appendStyleSheet(CUSTOM_DARK_ID);
 
@@ -62,7 +68,6 @@ export function generateNewTheme(hex, remainInput = true, device = 'web') {
   const hasBuiltInTheme = builtInTheme.length > 0;
 
   generateCommonTheme(device, hasBuiltInTheme);
-
   if (hasBuiltInTheme) {
     // 内置主题
     const theme = builtInTheme[0].options[0]; // 条件筛选后只有一个
@@ -138,6 +143,9 @@ export function generateTokenList(hex, isDark = false, step = 10, remainInput = 
   colorPalette = colors;
   brandColorIdx = primary;
 
+  if (lowCaseHex === DEFAULT_THEME.value.toLocaleLowerCase()) {
+    brandColorIdx = 8;
+  }
   if (isDark) {
     if (lowCaseHex === DEFAULT_THEME.value.toLocaleLowerCase()) {
       colorPalette = [
@@ -154,7 +162,6 @@ export function generateTokenList(hex, isDark = false, step = 10, remainInput = 
       ];
       brandColorIdx = 8;
     } else {
-      // eslint-disable-next-line no-use-before-define
       colorPalette.reverse().map((color) => {
         const [h, s, l] = Color.colorTransform(color, 'hex', 'hsl');
         return Color.colorTransform([h, Number(s) - 4, l], 'hsl', 'hex');
@@ -241,7 +248,7 @@ export function exportCustomTheme(device = 'web') {
   downloadFile(blob, `theme.${fileSuffix}`);
 }
 
-export function modifyToken(tokenIdxName, newVal) {
+export function modifyToken(tokenName, newVal, saveToLocal = true) {
   // 获取所有可能包含 token 的样式表
   const styleSheets = document.querySelectorAll(
     `#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, #${CUSTOM_EXTRA_ID}, [id^="${CUSTOM_COMMON_ID_PREFIX}-"]`,
@@ -250,20 +257,81 @@ export function modifyToken(tokenIdxName, newVal) {
   let tokenFound = false;
 
   styleSheets.forEach((styleSheet) => {
-    const reg = new RegExp(`${tokenIdxName}:\\s*(.*?);`);
+    const reg = new RegExp(`${tokenName}:\\s*(.*?);`);
     const match = styleSheet.innerText.match(reg);
 
-    if (match) {
-      const currentVal = match[1];
-      styleSheet.innerText = styleSheet.innerText.replace(
-        `${tokenIdxName}: ${currentVal}`,
-        `${tokenIdxName}: ${newVal}`,
-      );
-      tokenFound = true;
+    if (!match || match[1] === newVal) return;
+
+    const currentVal = match[1];
+    styleSheet.innerText = styleSheet.innerText.replace(`${tokenName}: ${currentVal}`, `${tokenName}: ${newVal}`);
+    tokenFound = true;
+
+    if (saveToLocal) {
+      storeTokenToLocal(tokenName, newVal);
+    } else {
+      // 确保没有遗留的 Token
+      clearLocalItem(CUSTOM_TOKEN_ID, tokenName);
     }
   });
 
   if (!tokenFound) {
-    console.warn(`CSS variable: ${tokenIdxName} is not exist`);
+    console.warn(`CSS variable: ${tokenName} is not exist`);
   }
+}
+
+export function applyMainColorFromLocal(device) {
+  const options = localStorage.getItem(CUSTOM_OPTIONS_ID);
+  if (!options) return;
+  const typeObj = JSON.parse(options);
+  const hex = typeObj.color;
+  if (!hex) return;
+  generateNewTheme(hex, false, device);
+}
+
+export function updateLocalOption(optionName, value, storeToLocal = true) {
+  if (storeToLocal) {
+    const options = localStorage.getItem(CUSTOM_OPTIONS_ID) || '{}';
+    const optionObj = JSON.parse(options);
+    optionObj[optionName] = value;
+    localStorage.setItem(CUSTOM_OPTIONS_ID, JSON.stringify(optionObj));
+  } else {
+    // 一般如果选择了默认选项，则清除掉之前的存储
+    clearLocalItem(CUSTOM_OPTIONS_ID, optionName);
+  }
+}
+
+export function getOptionFromLocal(optionName) {
+  const options = localStorage.getItem(CUSTOM_OPTIONS_ID);
+  if (!options) return;
+  const optionObj = JSON.parse(options);
+  return optionObj[optionName];
+}
+
+export function storeTokenToLocal(tokenName, newVal) {
+  const tokens = localStorage.getItem(CUSTOM_TOKEN_ID) || '{}';
+  const tokenObj = JSON.parse(tokens);
+  tokenObj[tokenName] = newVal;
+  localStorage.setItem(CUSTOM_TOKEN_ID, JSON.stringify(tokenObj));
+}
+
+export function applyTokenFromLocal() {
+  const token = localStorage.getItem(CUSTOM_TOKEN_ID);
+  if (!token) return;
+
+  const tokenObj = JSON.parse(token);
+  Object.entries(tokenObj).forEach(([key, value]) => {
+    modifyToken(key, value, false);
+  });
+}
+
+export function applyThemeFromLocal(device) {
+  // 先应用颜色
+  applyMainColorFromLocal(device);
+  // 再应用 token -> 避免修改过的颜色被覆盖掉
+  applyTokenFromLocal();
+}
+
+export function clearLocalTheme() {
+  localStorage.removeItem(CUSTOM_OPTIONS_ID);
+  localStorage.removeItem(CUSTOM_TOKEN_ID);
 }

@@ -190,7 +190,7 @@
               }"
             >
               <span>{{ lang.color.remainText }}</span>
-              <t-tooltip content="保留选中的主题色，不做改动">
+              <t-tooltip :content="lang.color.remainTip">
                 <help-circle-icon
                   size="14px"
                   :style="{
@@ -216,7 +216,7 @@
               }"
             >
               <span>{{ lang.color.aiRecommendation }}</span>
-              <t-tooltip content="选中的主题色若无法做主题色，会做调整">
+              <t-tooltip :content="lang.color.aiTip">
                 <help-circle-icon
                   size="14px"
                   :style="{
@@ -327,7 +327,14 @@ import { Color } from 'tvision-color';
 
 import ColorPicker from '../../../common/ColorPicker/index.vue';
 import langMixin from '../../../common/i18n/mixin';
-import { CUSTOM_THEME_ID, DEFAULT_THEME, generateNewTheme, generateTokenList } from '../../../common/Themes';
+import {
+  DEFAULT_THEME,
+  generateNewTheme,
+  generateTokenList,
+  getOptionFromLocal,
+  modifyToken,
+  updateLocalOption,
+} from '../../../common/Themes';
 import { handleAttach } from '../../../common/utils';
 import { colorAnimation } from '../../../common/utils/animation';
 
@@ -372,8 +379,8 @@ export default {
       themes: DEFAULT_COLOR,
       recommendThemes: RECOMMEND_COLOR,
       sceneThemes: SCENE_COLOR,
-      currentThemeColor: DEFAULT_THEME.value,
-      currentDisplayThemeColor: DEFAULT_THEME.value,
+      currentThemeColor: getOptionFromLocal('color') ?? DEFAULT_THEME.value,
+      currentDisplayThemeColor: getOptionFromLocal('color') ?? DEFAULT_THEME.value,
       currentBrandIdx: 6,
       colorPalette: [''], //主题色色阶
       initColorPalette: [''],
@@ -387,7 +394,7 @@ export default {
       initGrayColorPalette: [''],
       activeTab: 'color',
       isMoreVisible: false,
-      generateMode: 'remain',
+      generateMode: getOptionFromLocal('recommend') ? 'recommend' : 'remain',
       isGeneratedNeutralColor: false,
       initDefaultGrayColorPalette: [''], // 默认的中性色色阶
     };
@@ -436,12 +443,17 @@ export default {
         .trim();
       this.currentThemeColor = currentThemeColor;
       colorAnimation();
+      const isNeutralColor = getOptionFromLocal('neutral');
+      if (isNeutralColor == true) {
+        this.isGeneratedNeutralColor = true;
+        this.handleChangeGenerateNeutralColor(true);
+      }
     });
   },
   watch: {
     currentThemeColor(currentColor) {
       this.setPalette();
-      this.isGeneratedNeutralColor = false;
+      this.handleChangeGenerateNeutralColor(this.isGeneratedNeutralColor);
       if (this.isRemainGenerateMode) this.currentDisplayThemeColor = currentColor;
       else
         this.currentDisplayThemeColor = window
@@ -458,6 +470,7 @@ export default {
       this.setPalette();
     },
     isRemainGenerateMode(remain) {
+      updateLocalOption('recommend', !remain, !remain);
       if (remain) this.currentDisplayThemeColor = this.currentThemeColor;
       else
         this.currentDisplayThemeColor = window
@@ -541,7 +554,7 @@ export default {
       if (generated) {
         // 关联生成
         this.generatedNeutralColors = Color.getNeutralColor(this.currentThemeColor);
-        this.generatedNeutralColors.map((color, idx) => this.changeGradation(color, idx, 'gray'));
+        this.generatedNeutralColors.map((color, idx) => this.changeGradation(color, idx, 'gray', false));
 
         const grayColorPalette = this.getCurrentPalette('gray');
         this.initGrayColorPalette = JSON.parse(JSON.stringify(grayColorPalette));
@@ -554,6 +567,8 @@ export default {
           this.recoverGradation('gray');
         });
       }
+
+      updateLocalOption('neutral', generated, generated);
     },
     changeColor(hex) {
       this.currentThemeColor = hex;
@@ -572,16 +587,14 @@ export default {
       const diffPalette = palette.filter((v, i) => JSON.stringify(v) !== JSON.stringify(modifiedPalette[i]));
       diffPalette.forEach((v) => {
         if (v instanceof Array) {
-          this.changeGradation(v[0].value, v[0].idx, type);
+          this.changeGradation(v[0].value, v[0].idx, type, false);
           return;
         } else {
-          this.changeGradation(v.value, v.idx, type);
+          this.changeGradation(v.value, v.idx, type, false);
         }
       });
     },
-    changeGradation(hex, idx, type) {
-      const tokenIdxName = `--td-${type}-color-${idx + 1}`;
-      const styleSheet = document.getElementById(CUSTOM_THEME_ID);
+    changeGradation(hex, idx, type, saveToLocal = true) {
       if (!this.colorPalette[idx]) return;
       if (type === 'brand') {
         if (this.colorPalette[idx] instanceof Array) {
@@ -606,11 +619,9 @@ export default {
           this.grayColorPalette[idx].value = hex;
         }
       }
-      if (styleSheet) {
-        const reg = new RegExp(`${tokenIdxName}: (.*)`);
-        const curHex = styleSheet.innerText.match(reg)[1].split(';')[0];
-        styleSheet.innerText = styleSheet.innerText.replace(`${tokenIdxName}: ${curHex}`, `${tokenIdxName}: ${hex}`);
-      }
+
+      const tokenName = `--td-${type}-color-${idx + 1}`;
+      modifyToken(tokenName, hex, saveToLocal);
     },
     getCurrentPalette(type = 'brand') {
       let colorMap;

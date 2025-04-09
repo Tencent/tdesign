@@ -99,6 +99,7 @@ import {
 import langMixin from '../../common/i18n/mixin';
 import SegmentSelection from '../../common/SegmentSelection/index.vue';
 import SizeSlider from '../../common/SizeSlider/index.vue';
+import { getOptionFromLocal, updateLocalOption } from '../../common/Themes';
 import { handleAttach } from '../../common/utils';
 import { LINE_HEIGHT_OPTIONS, LINE_HEIGHT_STEPS, updateLineHeightTokens } from '../built-in/line-height';
 export default {
@@ -116,6 +117,8 @@ export default {
   data() {
     return {
       isHover: null,
+      /* 存入 local 的 line-height 结构为 ${tokenType}_${lineHeightValue}
+         例如：plus_8 和 time_1.5  */
       tokenType: 'plus', // 固定（plus） or 递增（time）
       step: 3, // 默认
       lineHeightValue: LINE_HEIGHT_STEPS[3],
@@ -127,28 +130,64 @@ export default {
   watch: {
     step(v) {
       if (!LINE_HEIGHT_STEPS[v]) return;
-      const lineHeightValue = LINE_HEIGHT_STEPS[v];
-      this.lineHeightValue = lineHeightValue;
+      this.lineHeightValue = LINE_HEIGHT_STEPS[v];
+
+      updateLocalOption('line-height', `plus_${this.lineHeightValue}`, v !== 3);
       updateLineHeightTokens(this.lineHeightValue, this.tokenType);
     },
     tokenType(type) {
-      this.lineHeightValue = type === 'plus' ? 8 : 1.5;
+      const defaultVal = type === 'time' ? 1.5 : 8;
+
+      const localLineHeight = getOptionFromLocal('line-height');
+      const lineHeightParts = localLineHeight?.split('_');
+
+      if (type === lineHeightParts?.[0]) {
+        const suffixVal = lineHeightParts[1];
+        this.lineHeightValue = suffixVal;
+      } else {
+        this.lineHeightValue = defaultVal;
+      }
+      updateLocalOption('line-height', `${type}_${this.lineHeightValue}`, this.step == 3);
       updateLineHeightTokens(this.lineHeightValue, type);
     },
   },
   methods: {
     handleAttach,
+    initStep() {
+      const localLineHeight = getOptionFromLocal('line-height');
+      if (!localLineHeight) return;
+      const lineHeightParts = localLineHeight.split('_');
+      if (lineHeightParts[0].startsWith('time')) {
+        this.tokenType = 'time';
+        return;
+      }
+
+      const suffixVal = lineHeightParts[1];
+      const stepKey = Number(Object.keys(LINE_HEIGHT_STEPS).find((key) => LINE_HEIGHT_STEPS[key] == suffixVal));
+
+      if (stepKey >= 0) this.step = stepKey;
+      this.lineHeightValue = suffixVal;
+    },
     handleVisibleChange(v) {
       this.isHover = v;
     },
     handleChangeFontSize(v) {
       this.lineHeightValue = v;
-      updateLineHeightTokens(v, this.tokenType);
+
       const isTimeCalc = this.tokenType === 'time';
+
+      updateLineHeightTokens(v, this.tokenType);
+      updateLocalOption('line-height', `${isTimeCalc ? 'time' : 'plus'}_${v}`);
+
       if (!isTimeCalc && !Object.values(LINE_HEIGHT_STEPS).includes(v)) {
         this.segmentSelectionDisabled = true;
       }
     },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.initStep();
+    });
   },
 };
 </script>
