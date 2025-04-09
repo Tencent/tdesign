@@ -328,13 +328,12 @@ import { Color } from 'tvision-color';
 import ColorPicker from '../../../common/ColorPicker/index.vue';
 import langMixin from '../../../common/i18n/mixin';
 import {
-  clearLocalOption,
   DEFAULT_THEME,
   generateNewTheme,
   generateTokenList,
   getOptionFromLocal,
   modifyToken,
-  storeOptionToLocal,
+  updateLocalOption,
 } from '../../../common/Themes';
 import { handleAttach } from '../../../common/utils';
 import { colorAnimation } from '../../../common/utils/animation';
@@ -554,24 +553,21 @@ export default {
       if (generated) {
         // 关联生成
         this.generatedNeutralColors = Color.getNeutralColor(this.currentThemeColor);
-        this.generatedNeutralColors.map((color, idx) => this.changeGradation(color, idx, 'gray'));
+        this.generatedNeutralColors.map((color, idx) => this.changeGradation(color, idx, 'gray', false));
 
         const grayColorPalette = this.getCurrentPalette('gray');
         this.initGrayColorPalette = JSON.parse(JSON.stringify(grayColorPalette));
-
-        storeOptionToLocal('neutral', true);
       } else {
         // 不关联生成
         this.initGrayColorPalette = JSON.parse(JSON.stringify(this.initDefaultGrayColorPalette));
         this.grayColorPalette = JSON.parse(JSON.stringify(this.initDefaultGrayColorPalette));
 
-        // 清除本地存储
-        clearLocalOption('neutral');
-
         this.$nextTick(() => {
           this.recoverGradation('gray');
         });
       }
+
+      updateLocalOption('neutral', generated, generated);
     },
     changeColor(hex) {
       this.currentThemeColor = hex;

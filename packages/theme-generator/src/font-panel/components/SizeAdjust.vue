@@ -114,7 +114,7 @@ import {
 import langMixin from '../../common/i18n/mixin';
 import SegmentSelection from '../../common/SegmentSelection/index.vue';
 import SizeSlider from '../../common/SizeSlider/index.vue';
-import { CUSTOM_THEME_ID, getOptionFromLocal, modifyToken, storeOptionToLocal } from '../../common/Themes';
+import { CUSTOM_THEME_ID, getOptionFromLocal, modifyToken, updateLocalOption } from '../../common/Themes';
 import { handleAttach } from '../../common/utils';
 
 import { fontSizeLabels, fontSizeSteps } from '../built-in/font-size';
@@ -187,7 +187,9 @@ export default {
     step(v) {
       // 改变阶梯
       if (!fontSizeSteps[v]) return;
-      storeOptionToLocal('font', v);
+
+      // 默认值（v=3)的时候不存
+      updateLocalOption('font', v, v !== 3);
 
       const isCustom = v === 6;
       const newSteps = fontSizeSteps[v];

@@ -91,7 +91,7 @@ import {
   CUSTOM_EXTRA_ID,
   getOptionFromLocal,
   modifyToken,
-  storeOptionToLocal,
+  updateLocalOption,
 } from '../common/Themes';
 import { handleAttach } from '../common/utils';
 
@@ -183,10 +183,9 @@ export default {
     },
     step(val) {
       if (!RADIUS_STEP_ARRAY[val - 1]) return;
-      storeOptionToLocal('radius', val);
+      updateLocalOption('radius', val, val !== 3);
 
       const isCustom = val === 6;
-
       this.radiusTypeList = this.radiusTypeList.map((item, index) => {
         const preVal = RADIUS_STEP_ARRAY?.[val - 1]?.[index];
         const formattedVal = typeof preVal === 'number' ? `${preVal}px` : preVal;

@@ -65,7 +65,7 @@ import { Select as TSelect, Slider as TSlider } from 'tdesign-vue';
 import ShadowCard from './components/ShadowCard.vue';
 
 import langMixin from '../common/i18n/mixin';
-import { getOptionFromLocal, modifyToken, storeOptionToLocal } from '../common/Themes';
+import { getOptionFromLocal, modifyToken, updateLocalOption } from '../common/Themes';
 import { handleAttach } from '../common/utils';
 import { ShadowSelect, ShadowSelectDetail, ShadowSelectType, ShadowTypeDetail, ShadowTypeMap } from './const';
 export default {
@@ -118,7 +118,7 @@ export default {
   watch: {
     step: {
       handler(nVal) {
-        storeOptionToLocal('shadow', nVal);
+        updateLocalOption('shadow', nVal, nVal !== ShadowSelectType.Default);
         // 自定义时去当前系统值
         if (nVal === ShadowSelectType.Self_Defined) {
           // this.shadowPalette = this.getCurrentPalette();

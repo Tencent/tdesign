@@ -93,7 +93,7 @@ export function generateNewTheme(hex, remainInput = true, device = 'web') {
     styleSheet.textContent = styleSheetString;
     darkStyleSheet.textContent = darkCssTokenString;
 
-    storeOptionToLocal('color', hex);
+    updateLocalOption('color', hex, hex !== DEFAULT_THEME.value);
   }
 
   document.documentElement.setAttribute('theme-color', CUSTOM_THEME_ID);
@@ -289,11 +289,16 @@ export function applyMainColorFromLocal(device) {
   generateNewTheme(hex, false, device);
 }
 
-export function storeOptionToLocal(optionName, value) {
-  const options = localStorage.getItem(CUSTOM_OPTIONS_ID) || '{}';
-  const optionObj = JSON.parse(options);
-  optionObj[optionName] = value;
-  localStorage.setItem(CUSTOM_OPTIONS_ID, JSON.stringify(optionObj));
+export function updateLocalOption(optionName, value, storeToLocal = true) {
+  if (storeToLocal) {
+    const options = localStorage.getItem(CUSTOM_OPTIONS_ID) || '{}';
+    const optionObj = JSON.parse(options);
+    optionObj[optionName] = value;
+    localStorage.setItem(CUSTOM_OPTIONS_ID, JSON.stringify(optionObj));
+  } else {
+    // 一般如果选择了默认选项，则清除掉之前的存储
+    clearLocalItem(CUSTOM_OPTIONS_ID, optionName);
+  }
 }
 
 export function getOptionFromLocal(optionName) {
@@ -310,17 +315,13 @@ export function storeTokenToLocal(tokenName, newVal) {
   localStorage.setItem(CUSTOM_TOKEN_ID, JSON.stringify(tokenObj));
 }
 
-export function clearLocalOption(optionName) {
-  clearLocalItem(CUSTOM_OPTIONS_ID, optionName);
-}
-
 export function applyTokenFromLocal() {
   const token = localStorage.getItem(CUSTOM_TOKEN_ID);
   if (!token) return;
 
   const tokenObj = JSON.parse(token);
   Object.entries(tokenObj).forEach(([key, value]) => {
-    modifyToken(key, value);
+    modifyToken(key, value, false);
   });
 }
 

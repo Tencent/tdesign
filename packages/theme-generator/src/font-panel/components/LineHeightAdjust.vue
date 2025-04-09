@@ -99,7 +99,7 @@ import {
 import langMixin from '../../common/i18n/mixin';
 import SegmentSelection from '../../common/SegmentSelection/index.vue';
 import SizeSlider from '../../common/SizeSlider/index.vue';
-import { getOptionFromLocal, storeOptionToLocal } from '../../common/Themes';
+import { getOptionFromLocal, updateLocalOption } from '../../common/Themes';
 import { handleAttach } from '../../common/utils';
 import { LINE_HEIGHT_OPTIONS, LINE_HEIGHT_STEPS, updateLineHeightTokens } from '../built-in/line-height';
 export default {
@@ -128,7 +128,9 @@ export default {
   watch: {
     step(v) {
       if (!LINE_HEIGHT_STEPS[v]) return;
-      storeOptionToLocal('line-height', v);
+
+      updateLocalOption('line-height', v, v !== 3);
+
       const lineHeightValue = LINE_HEIGHT_STEPS[v];
       this.lineHeightValue = lineHeightValue;
 
@@ -140,9 +142,10 @@ export default {
       this.lineHeightValue = !isTimeCalc ? 8 : 1.5;
       updateLineHeightTokens(this.lineHeightValue, type);
       if (isTimeCalc) {
-        storeOptionToLocal('line-height', 'time');
+        updateLocalOption('line-height', 'time');
       } else {
-        storeOptionToLocal('line-height', 3);
+        // 恢复默认的固定模式
+        updateLocalOption('line-height', 3, false);
       }
     },
   },
