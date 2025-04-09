@@ -117,6 +117,8 @@ export default {
   data() {
     return {
       isHover: null,
+      /* 存入 local 的 line-height 结构为 ${tokenType}_${lineHeightValue}
+         例如：plus_8 和 time_1.5  */
       tokenType: 'plus', // 固定（plus） or 递增（time）
       step: 3, // 默认
       lineHeightValue: LINE_HEIGHT_STEPS[3],
@@ -128,46 +130,55 @@ export default {
   watch: {
     step(v) {
       if (!LINE_HEIGHT_STEPS[v]) return;
+      this.lineHeightValue = LINE_HEIGHT_STEPS[v];
 
-      updateLocalOption('line-height', v, v !== 3);
-
-      const lineHeightValue = LINE_HEIGHT_STEPS[v];
-      this.lineHeightValue = lineHeightValue;
-
-      const isCustom = v === 6;
-      updateLineHeightTokens(this.lineHeightValue, this.tokenType, isCustom);
+      updateLocalOption('line-height', `plus_${this.lineHeightValue}`, v !== 3);
+      updateLineHeightTokens(this.lineHeightValue, this.tokenType);
     },
     tokenType(type) {
-      const isTimeCalc = type === 'time';
-      this.lineHeightValue = !isTimeCalc ? 8 : 1.5;
-      updateLineHeightTokens(this.lineHeightValue, type);
-      if (isTimeCalc) {
-        updateLocalOption('line-height', 'time');
+      const defaultVal = type === 'time' ? 1.5 : 8;
+
+      const localLineHeight = getOptionFromLocal('line-height');
+      const lineHeightParts = localLineHeight?.split('_');
+
+      if (type === lineHeightParts[0]) {
+        const suffixVal = lineHeightParts[1];
+        this.lineHeightValue = suffixVal;
       } else {
-        // 恢复默认的固定模式
-        updateLocalOption('line-height', 3, false);
+        this.lineHeightValue = defaultVal;
       }
+      updateLocalOption('line-height', `${type}_${this.lineHeightValue}`, this.step == 3);
+      updateLineHeightTokens(this.lineHeightValue, type);
     },
   },
   methods: {
     handleAttach,
     initStep() {
-      const lineHeightStep = getOptionFromLocal('line-height');
-      if (lineHeightStep) {
-        if (typeof lineHeightStep === 'number') {
-          this.step = lineHeightStep;
-        } else {
-          this.tokenType = 'time';
-        }
+      const localLineHeight = getOptionFromLocal('line-height');
+      if (!localLineHeight) return;
+      const lineHeightParts = localLineHeight.split('_');
+      if (lineHeightParts[0].startsWith('time')) {
+        this.tokenType = 'time';
+        return;
       }
+
+      const suffixVal = lineHeightParts[1];
+      const stepKey = Number(Object.keys(LINE_HEIGHT_STEPS).find((key) => LINE_HEIGHT_STEPS[key] == suffixVal));
+
+      if (stepKey >= 0) this.step = stepKey;
+      this.lineHeightValue = suffixVal;
     },
     handleVisibleChange(v) {
       this.isHover = v;
     },
     handleChangeFontSize(v) {
       this.lineHeightValue = v;
-      updateLineHeightTokens(v, this.tokenType);
+
       const isTimeCalc = this.tokenType === 'time';
+
+      updateLineHeightTokens(v, this.tokenType);
+      updateLocalOption('line-height', `${isTimeCalc ? 'time' : 'plus'}_${v}`);
+
       if (!isTimeCalc && !Object.values(LINE_HEIGHT_STEPS).includes(v)) {
         this.segmentSelectionDisabled = true;
       }
