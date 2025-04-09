@@ -124,6 +124,7 @@ import {
   exportCustomTheme,
   generateNewTheme,
   getBuiltInThemes,
+  getOptionFromLocal,
 } from '../common/Themes';
 import { handleAttach } from '../common/utils';
 
@@ -150,7 +151,7 @@ export default {
     return {
       isThemeTabVisible: false,
       isCustomizeDrawerVisible: false,
-      currentTheme: DEFAULT_THEME,
+      currentTheme: getOptionFromLocal('color') ?? DEFAULT_THEME.value,
       isThemeTabContentDisplay: false,
       dockY: null,
       dockX: 0,

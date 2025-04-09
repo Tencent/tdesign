@@ -379,8 +379,8 @@ export default {
       themes: DEFAULT_COLOR,
       recommendThemes: RECOMMEND_COLOR,
       sceneThemes: SCENE_COLOR,
-      currentThemeColor: DEFAULT_THEME.value,
-      currentDisplayThemeColor: DEFAULT_THEME.value,
+      currentThemeColor: getOptionFromLocal('color') ?? DEFAULT_THEME.value,
+      currentDisplayThemeColor: getOptionFromLocal('color') ?? DEFAULT_THEME.value,
       currentBrandIdx: 6,
       colorPalette: [''], //主题色色阶
       initColorPalette: [''],

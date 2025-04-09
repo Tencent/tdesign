@@ -57,6 +57,8 @@ export function getBuiltInThemes(device = 'web', hex = undefined) {
 }
 
 export function generateNewTheme(hex, remainInput = true, device = 'web') {
+  updateLocalOption('color', hex, hex !== DEFAULT_THEME.value);
+
   const styleSheet = appendStyleSheet(CUSTOM_THEME_ID);
   const darkStyleSheet = appendStyleSheet(CUSTOM_DARK_ID);
 
@@ -66,7 +68,6 @@ export function generateNewTheme(hex, remainInput = true, device = 'web') {
   const hasBuiltInTheme = builtInTheme.length > 0;
 
   generateCommonTheme(device, hasBuiltInTheme);
-
   if (hasBuiltInTheme) {
     // 内置主题
     const theme = builtInTheme[0].options[0]; // 条件筛选后只有一个
@@ -92,8 +93,6 @@ export function generateNewTheme(hex, remainInput = true, device = 'web') {
     const darkCssTokenString = generateTokenList(hex, true).styleSheetString;
     styleSheet.textContent = styleSheetString;
     darkStyleSheet.textContent = darkCssTokenString;
-
-    updateLocalOption('color', hex, hex !== DEFAULT_THEME.value);
   }
 
   document.documentElement.setAttribute('theme-color', CUSTOM_THEME_ID);
