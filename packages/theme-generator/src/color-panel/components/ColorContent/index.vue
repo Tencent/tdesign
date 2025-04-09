@@ -394,7 +394,7 @@ export default {
       initGrayColorPalette: [''],
       activeTab: 'color',
       isMoreVisible: false,
-      generateMode: 'remain',
+      generateMode: getOptionFromLocal('recommend') ? 'recommend' : 'remain',
       isGeneratedNeutralColor: false,
       initDefaultGrayColorPalette: [''], // 默认的中性色色阶
     };
@@ -470,6 +470,7 @@ export default {
       this.setPalette();
     },
     isRemainGenerateMode(remain) {
+      updateLocalOption('recommend', !remain, !remain);
       if (remain) this.currentDisplayThemeColor = this.currentThemeColor;
       else
         this.currentDisplayThemeColor = window
