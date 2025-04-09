@@ -327,7 +327,15 @@ import { Color } from 'tvision-color';
 
 import ColorPicker from '../../../common/ColorPicker/index.vue';
 import langMixin from '../../../common/i18n/mixin';
-import { DEFAULT_THEME, generateNewTheme, generateTokenList, modifyToken } from '../../../common/Themes';
+import {
+  clearLocalOption,
+  DEFAULT_THEME,
+  generateNewTheme,
+  generateTokenList,
+  getOptionFromLocal,
+  modifyToken,
+  storeOptionToLocal,
+} from '../../../common/Themes';
 import { handleAttach } from '../../../common/utils';
 import { colorAnimation } from '../../../common/utils/animation';
 
@@ -436,12 +444,17 @@ export default {
         .trim();
       this.currentThemeColor = currentThemeColor;
       colorAnimation();
+      const isNeutralColor = getOptionFromLocal('neutral');
+      if (isNeutralColor == true) {
+        this.isGeneratedNeutralColor = true;
+        this.handleChangeGenerateNeutralColor(true);
+      }
     });
   },
   watch: {
     currentThemeColor(currentColor) {
       this.setPalette();
-      this.isGeneratedNeutralColor = false;
+      this.handleChangeGenerateNeutralColor(this.isGeneratedNeutralColor);
       if (this.isRemainGenerateMode) this.currentDisplayThemeColor = currentColor;
       else
         this.currentDisplayThemeColor = window
@@ -545,10 +558,15 @@ export default {
 
         const grayColorPalette = this.getCurrentPalette('gray');
         this.initGrayColorPalette = JSON.parse(JSON.stringify(grayColorPalette));
+
+        storeOptionToLocal('neutral', true);
       } else {
         // 不关联生成
         this.initGrayColorPalette = JSON.parse(JSON.stringify(this.initDefaultGrayColorPalette));
         this.grayColorPalette = JSON.parse(JSON.stringify(this.initDefaultGrayColorPalette));
+
+        // 清除本地存储
+        clearLocalOption('neutral');
 
         this.$nextTick(() => {
           this.recoverGradation('gray');
@@ -572,14 +590,14 @@ export default {
       const diffPalette = palette.filter((v, i) => JSON.stringify(v) !== JSON.stringify(modifiedPalette[i]));
       diffPalette.forEach((v) => {
         if (v instanceof Array) {
-          this.changeGradation(v[0].value, v[0].idx, type);
+          this.changeGradation(v[0].value, v[0].idx, type, false);
           return;
         } else {
-          this.changeGradation(v.value, v.idx, type);
+          this.changeGradation(v.value, v.idx, type, false);
         }
       });
     },
-    changeGradation(hex, idx, type) {
+    changeGradation(hex, idx, type, saveToLocal = true) {
       if (!this.colorPalette[idx]) return;
       if (type === 'brand') {
         if (this.colorPalette[idx] instanceof Array) {
@@ -606,7 +624,7 @@ export default {
       }
 
       const tokenName = `--td-${type}-color-${idx + 1}`;
-      modifyToken(tokenName, hex);
+      modifyToken(tokenName, hex, saveToLocal);
     },
     getCurrentPalette(type = 'brand') {
       let colorMap;
