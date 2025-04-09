@@ -202,7 +202,7 @@ export default {
     handleAttach,
     initStep() {
       const radiusStep = getOptionFromLocal('radius');
-      if (radiusStep) {
+      if (radiusStep >= 0) {
         this.step = radiusStep;
       }
     },

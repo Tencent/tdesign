@@ -220,7 +220,7 @@ export default {
     handleAttach,
     initStep() {
       const fontStep = getOptionFromLocal('font');
-      if (fontStep) {
+      if (fontStep >= 0) {
         this.step = fontStep;
       }
     },
