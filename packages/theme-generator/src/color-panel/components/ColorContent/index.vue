@@ -190,7 +190,7 @@
               }"
             >
               <span>{{ lang.color.remainText }}</span>
-              <t-tooltip content="保留选中的主题色，不做改动">
+              <t-tooltip :content="lang.color.remainTip">
                 <help-circle-icon
                   size="14px"
                   :style="{
@@ -216,7 +216,7 @@
               }"
             >
               <span>{{ lang.color.aiRecommendation }}</span>
-              <t-tooltip content="选中的主题色若无法做主题色，会做调整">
+              <t-tooltip :content="lang.color.aiTip">
                 <help-circle-icon
                   size="14px"
                   :style="{
