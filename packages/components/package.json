@@ -12,7 +12,11 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "homepage": "https://github.com/TDesignOteam/tdesign-site/blob/main/components/README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tencent/tdesign.git"
+  },
+  "homepage": "https://github.com/Tencent/tdesign/blob/main/packages/components/README.md",
   "keywords": [
     "TDesign",
     "webcomponents"
