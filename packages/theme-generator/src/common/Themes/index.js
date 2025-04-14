@@ -213,12 +213,12 @@ export function exportCustomTheme(device = 'web') {
   if (isMiniProgram(device)) {
     finalCssString = `
       @media (prefers-color-scheme: light) {
-        page {
+        page, .page {
           ${cssString}
         }
       }
       @media (prefers-color-scheme: dark) {
-        page {
+        page, .page {
           ${darkCssString}
         }
       }
