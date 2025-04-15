@@ -202,8 +202,8 @@ importers:
         specifier: ^1.29.0
         version: 1.29.0
       tdesign-icons-view:
-        specifier: ^0.3.2
-        version: 0.3.2
+        specifier: ^0.3.5
+        version: 0.3.5
       tdesign-icons-vue:
         specifier: ^0.1.4
         version: 0.1.11(vue@2.7.14)
@@ -6994,8 +6994,8 @@ packages:
   tdesign-icons-svg@0.0.1:
     resolution: {integrity: sha512-4l05CgPXwI33Y6hU8ytKYIIXVznR22x6blhhtB6MntSHj2xrA+Unx4U/qy+Do/lCMtYao9q1wVkaZvxNjuX7jw==}
 
-  tdesign-icons-view@0.3.2:
-    resolution: {integrity: sha512-oo4M2jdr6AxEAnmUhHSkUX8dPt5DtMCEfFrRruDE2EKT2VtgELGKUQStPQktgbFBcOmYEkJCxGS0duHShmv3iQ==}
+  tdesign-icons-view@0.3.5:
+    resolution: {integrity: sha512-LhahUyxAC1u6B5hoj1aqq16TQiOU8NvIPKAOceC269ZawarVt8eEpTPRWmpbJS8+U0OnUaxB4jDtMQi8J6NcGA==}
 
   tdesign-icons-vue@0.0.8:
     resolution: {integrity: sha512-lxKeMlrRrMuD0AIVIvciK/0GryTJPsOH00LNSPjUkPFznlxua/7N4F39bWJhjHa67/zcPyeHSFvyLjwXi53OCg==}
@@ -7012,8 +7012,8 @@ packages:
     peerDependencies:
       vue: ^2.6.12
 
-  tdesign-icons-vue@0.3.2:
-    resolution: {integrity: sha512-FW1hqOoIBjnPzTOcGvWidVrWvyf0wHafxt7eAciz62hLU/Ix8TZ1AtFcG3QOafT0vpFPaBcCMVNNXvE5PSzuIA==}
+  tdesign-icons-vue@0.3.4:
+    resolution: {integrity: sha512-ZENwP8xRwRTvSEI1G5EfxXT0SlsiSSvFqoTpa9bGZ3E1pV8Snr0563d+vWMnt4YpFL7bUIY9RXccj4rUEgm3eg==}
     peerDependencies:
       vue: ^2.6.12
 
@@ -15517,11 +15517,11 @@ snapshots:
 
   tdesign-icons-svg@0.0.1: {}
 
-  tdesign-icons-view@0.3.2:
+  tdesign-icons-view@0.3.5:
     dependencies:
       core-js: 3.38.1
       lodash: 4.17.21
-      tdesign-icons-vue: 0.3.2(vue@2.7.14)
+      tdesign-icons-vue: 0.3.4(vue@2.7.14)
       tdesign-vue: 1.10.5-naruto(vue@2.7.14)
       tvision-color: 1.6.0
       vue: 2.7.14
@@ -15544,7 +15544,7 @@ snapshots:
       classnames: 2.5.1
       vue: 2.7.14
 
-  tdesign-icons-vue@0.3.2(vue@2.7.14):
+  tdesign-icons-vue@0.3.4(vue@2.7.14):
     dependencies:
       '@babel/runtime': 7.25.6
       classnames: 2.5.1
