@@ -112,11 +112,11 @@ jobs:
 
       - run: pnpm install
 
-      - name: install tdesign-site-components form pkg-pr-new
+      - name: install tdesign-site-components from pkg-pr-new
         run : pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
         working-directory: packages/tdesign-react/site
       
-      - name: install tdesign-theme-generator form pkg-pr-new
+      - name: install tdesign-theme-generator from pkg-pr-new
         run : pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
         working-directory: packages/tdesign-react/site
   
@@ -144,11 +144,11 @@ jobs:
 
       - run: pnpm install
 
-      - name: install tdesign-site-components form pkg-pr-new
+      - name: install tdesign-site-components from pkg-pr-new
         run : pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
         working-directory: packages/tdesign-vue-next/site
       
-      - name: install tdesign-theme-generator form pkg-pr-new
+      - name: install tdesign-theme-generator from pkg-pr-new
         run : pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
         working-directory: packages/tdesign-vue-next/site
   
@@ -176,11 +176,11 @@ jobs:
 
       - run: pnpm install
 
-      - name: install tdesign-site-components form pkg-pr-new
+      - name: install tdesign-site-components from pkg-pr-new
         run : pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
         working-directory: packages/tdesign-vue-next-chat/site
       
-      - name: install tdesign-theme-generator form pkg-pr-new
+      - name: install tdesign-theme-generator from pkg-pr-new
         run : pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
         working-directory: packages/tdesign-vue-next-chat/site
   
