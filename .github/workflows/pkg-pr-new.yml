@@ -1,0 +1,26 @@
+name: Publish_Any_Commit
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    if: github.repository == 'Tencent/tdesign'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+  
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: pnpm install
+
+      - run: pnpm run --filter 'tdesign-site-components' --filter 'tdesign-theme-generator' build
+
+      - run: pnpm dlx pkg-pr-new publish './packages/components' './packages/theme-generator'

@@ -1,7 +1,7 @@
 {
   "private": true,
+  "packageManager": "pnpm@9.15.9",
   "scripts": {
-    "preinstall": "npx -y only-allow pnpm",
     "dev:components": "pnpm run --filter 'tdesign-site-components' dev",
     "dev:site": "pnpm run build:components && pnpm run --filter 'tdesign-site' dev",
     "dev:theme-generator": "pnpm run --filter 'tdesign-theme-generator' dev",
