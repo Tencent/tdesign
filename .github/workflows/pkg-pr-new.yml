@@ -23,4 +23,4 @@ jobs:
 
       - run: pnpm run --filter 'tdesign-site-components' --filter 'tdesign-theme-generator' build
 
-      - run: pnpm dlx pkg-pr-new publish './packages/components' './packages/theme-generator' --compact
+      - run: pnpm dlx pkg-pr-new publish './packages/components' './packages/theme-generator'
