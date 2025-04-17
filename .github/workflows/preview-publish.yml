@@ -285,9 +285,7 @@ jobs:
         with:
           script: |
             const pr_id = ${{ needs.preview-context.outputs.pr_id }};
-            const tdesign_vue_next_domain = "${{ needs.preview-context.outputs.tdesign_vue_next_domain }}";
-            const tdesign_vue_next_chat_domain = "${{ needs.preview-context.outputs.tdesign_vue_next_chat_domain }}";
-
+          
             const { data: { jobs } } = await github.rest.actions.listJobsForWorkflowRun({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -296,32 +294,25 @@ jobs:
             })
             
             const tdesign = {
-              "tdesign-site": { status: "", report_url: "" },
-              "tdesign-vue": { status: "", report_url: "" },
-              "tdesign-react": { status: "", report_url: "" },
-              "tdesign-vue-next": { status: "", report_url: "" },
-              "tdesign-vue-next-chat": { status: "", report_url: "" },
-              "tdesign-mobile-vue": { status: "", report_url: "" },
-              "tdesign-mobile-react": { status: "", report_url: "" },
-              "tdesign-miniprogram": { status: "", report_url: "" },
+              "tdesign-site": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_site_domain }}"  },
+              "tdesign-vue": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_vue_domain }}" },
+              "tdesign-react": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_react_domain }}"  },
+              "tdesign-vue-next": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_vue_next_domain }}"  },
+              "tdesign-vue-next-chat": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_vue_next_chat_domain }}"  },
+              "tdesign-mobile-vue": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_mobile_vue_domain }}"  },
+              "tdesign-mobile-react": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_mobile_react_domain }}"  },
+              "tdesign-miniprogram": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_miniprogram_domain }}"  },
             };
             const preview_success = `<img width="300" alt="完成" src="https://user-images.githubusercontent.com/15634204/150816437-9f5bb788-cd67-4cbc-9897-b82d74e9aa65.png" />`;
             const preview_failure = `<img width="300" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png" />`;
             jobs
               .filter((job) => job.name.startsWith("tdesign-"))
               .map((job) => {
-                tdesign[job.name].status = preview_failure;
-                tdesign[job.name].report_url = job.html_url;
-
                 if (job.conclusion === "success") {
                   tdesign[job.name].status = preview_success;
-                  if (job.name === "tdesign-vue-next") {
-                    
-                    tdesign[job.name].report_url = tdesign_vue_next_domain;
-                  }
-                  if (job.name === "tdesign-vue-next-chat") {
-                    tdesign[job.name].report_url = tdesign_vue_next_chat_domain;
-                  }
+                }else{
+                  tdesign[job.name].status = preview_failure;
+                  tdesign[job.name].report_url = job.html_url;
                 }
               });
 
