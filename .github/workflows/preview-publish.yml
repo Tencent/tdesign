@@ -85,9 +85,9 @@ jobs:
 
       - run: npm install
 
-      - run : npm i ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
 
-      - run : npm i ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
 
       - run: npm run site:preview
       - run: |
@@ -206,9 +206,9 @@ jobs:
 
       - run: npm install
 
-      - run : npm i ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
 
-      - run : npm i ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
 
       - run: npm run site:preview
       - run: |
@@ -231,9 +231,9 @@ jobs:
 
       - run: npm install
 
-      - run : npm i ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
 
-      - run : npm i ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
 
       - run: npm run site:preview
       - run: |
@@ -256,9 +256,9 @@ jobs:
 
       - run: npm install
 
-      - run : npm i ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
 
-      - run : npm i ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
 
       - run: npm run site:intranet
       - run: |
