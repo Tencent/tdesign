@@ -1,0 +1,35 @@
+name: Preview_Build
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  tdesign-site:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.event.number }} > pr-id.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pr-id
+          path: pr-id.txt
+          retention-days: 5
+
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: pnpm install
+
+      - run: pnpm run site:preview
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tdesign-site
+          path: _site
+          retention-days: 5

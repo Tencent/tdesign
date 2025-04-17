@@ -1,0 +1,348 @@
+name: Preview_Publish
+
+on:
+  workflow_run:
+    workflows: 
+      - Preview_Build
+      - Publish_Any_Commit
+
+    types:
+      - completed
+
+jobs:
+  preview-context:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    outputs: 
+      pr_id: ${{ steps.pr.outputs.id }}
+      tdesign_site_domain: ${{ steps.site-domain.outputs.tdesign_site_domain }}
+      tdesign_vue_domain: ${{ steps.site-domain.outputs.tdesign_vue_domain }}
+      tdesign_react_domain: ${{ steps.site-domain.outputs.tdesign_react_domain }}
+      tdesign_vue_next_domain: ${{ steps.site-domain.outputs.tdesign_vue_next_domain }}
+      tdesign_vue_next_chat_domain: ${{ steps.site-domain.outputs.tdesign_vue_next_chat_domain }}
+      tdesign_mobile_vue_domain: ${{ steps.site-domain.outputs.tdesign_mobile_vue_domain }}
+      tdesign_mobile_react_domain: ${{ steps.site-domain.outputs.tdesign_mobile_react_domain }}
+      tdesign_miniprogram_domain: ${{ steps.site-domain.outputs.tdesign_miniprogram_domain }}
+      pkg_tdesign_site_components: ${{ steps.pkg.outputs.pkg_tdesign_site_components }}
+      pkg_tdesign_theme_generator: ${{ steps.pkg.outputs.pkg_tdesign_theme_generator }}
+    steps:
+      - name: Download pr id
+        uses: dawidd6/action-download-artifact@v8
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          run_id: ${{ github.event.workflow_run.id }}
+          name: pr-id
+          
+      - name: Set pr id
+        id : pr
+        run: echo "id=$(cat pr-id.txt)" >> $GITHUB_OUTPUT
+
+      - name: site-domain
+        id: site-domain
+        run: |
+          echo "tdesign_site_domain=https://preview-tdesign-site-pr-${{ steps.pr.outputs.id }}-tdesign.surge.sh" >> $GITHUB_OUTPUT
+          echo "tdesign_vue_domain=https://preview-tdesign-vue-pr-${{ steps.pr.outputs.id }}-tdesign.surge.sh" >> $GITHUB_OUTPUT
+          echo "tdesign_react_domain=https://preview-tdesign-react-pr-${{ steps.pr.outputs.id }}-tdesign.surge.sh" >> $GITHUB_OUTPUT
+          echo "tdesign_vue_next_domain=https://preview-tdesign-vue-next-pr-${{ steps.pr.outputs.id }}-tdesign.surge.sh" >> $GITHUB_OUTPUT
+          echo "tdesign_vue_next_chat_domain=https://preview-tdesign-vue-next-chat-pr-${{ steps.pr.outputs.id }}-tdesign.surge.sh" >> $GITHUB_OUTPUT
+          echo "tdesign_mobile_vue_domain=https://preview-tdesign-mobile-vue-pr-${{ steps.pr.outputs.id }}-tdesign.surge.sh" >> $GITHUB_OUTPUT
+          echo "tdesign_mobile_react_domain=https://preview-tdesign-mobile-react-pr-${{ steps.pr.outputs.id }}-tdesign.surge.sh" >> $GITHUB_OUTPUT
+          echo "tdesign_miniprogram_domain=https://preview-tdesign-miniprogram-pr-${{ steps.pr.outputs.id }}-tdesign.surge.sh" >> $GITHUB_OUTPUT
+      - name: pkg-pr-new
+        id: pkg
+        run: |
+          echo "pkg_tdesign_site_components=https://pkg.pr.new/Tencent/tdesign/tdesign-site-components@${{ steps.pr.outputs.id }}" >> $GITHUB_OUTPUT
+          echo "pkg_tdesign_theme_generator=https://pkg.pr.new/Tencent/tdesign/tdesign-theme-generator@${{ steps.pr.outputs.id }}" >> $GITHUB_OUTPUT    
+
+  
+  tdesign-site:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    needs: preview-context
+    steps:
+      - uses: dawidd6/action-download-artifact@v8
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          run_id: ${{ github.event.workflow_run.id }}
+          name: tdesign-site
+      - run: |
+          export DEPLOY_DOMAIN=${{ needs.preview-context.outputs.tdesign_site_domain }}
+          npx surge --project ./ --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}  
+  
+  tdesign-vue:
+    if: github.event.workflow_run.conclusion == 'success'
+    needs: preview-context
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: Tencent/tdesign-vue
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: npm install
+
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
+
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
+
+      - run: npm run site:preview
+      - run: |
+          export DEPLOY_DOMAIN=${{ needs.preview-context.outputs.tdesign_vue_domain }}
+          npx surge --project _site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
+
+  tdesign-react:
+    if: github.event.workflow_run.conclusion == 'success'
+    needs: preview-context
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: Tencent/tdesign-react
+          submodules: recursive
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: pnpm install
+
+      - name: install tdesign-site-components from pkg-pr-new
+        run : pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
+        working-directory: packages/tdesign-react/site
+      
+      - name: install tdesign-theme-generator from pkg-pr-new
+        run : pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
+        working-directory: packages/tdesign-react/site
+  
+      - run: pnpm run site:preview
+
+      - run: |
+          export DEPLOY_DOMAIN=${{ needs.preview-context.outputs.tdesign_react_domain }}
+          npx surge --project packages/tdesign-react/site/dist --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
+      
+  tdesign-vue-next:
+    if: github.event.workflow_run.conclusion == 'success'
+    needs: preview-context
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: Tencent/tdesign-vue-next
+          submodules: recursive
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: pnpm install
+
+      - name: install tdesign-site-components from pkg-pr-new
+        run : pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
+        working-directory: packages/tdesign-vue-next/site
+      
+      - name: install tdesign-theme-generator from pkg-pr-new
+        run : pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
+        working-directory: packages/tdesign-vue-next/site
+  
+      - run: pnpm run site:preview
+
+      - run: |
+          export DEPLOY_DOMAIN=${{ needs.preview-context.outputs.tdesign_vue_next_domain }}
+          npx surge --project packages/tdesign-vue-next/site/dist --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
+  
+  tdesign-vue-next-chat:
+    if: github.event.workflow_run.conclusion == 'success'
+    needs: preview-context
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: Tencent/tdesign-vue-next
+          submodules: recursive
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: pnpm install
+
+      - name: install tdesign-site-components from pkg-pr-new
+        run : pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
+        working-directory: packages/tdesign-vue-next-chat/site
+      
+      - name: install tdesign-theme-generator from pkg-pr-new
+        run : pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
+        working-directory: packages/tdesign-vue-next-chat/site
+  
+      - run: pnpm run site:preview
+
+      - run: |
+          export DEPLOY_DOMAIN=${{ needs.preview-context.outputs.tdesign_vue_next_chat_domain }}
+          npx surge --project packages/tdesign-vue-next-chat/site/dist --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}            
+     
+  tdesign-mobile-vue:
+    if: github.event.workflow_run.conclusion == 'success'
+    needs: preview-context
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: Tencent/tdesign-mobile-vue
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: npm install
+
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
+
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
+
+      - run: npm run site:preview
+      - run: |
+          export DEPLOY_DOMAIN=${{ needs.preview-context.outputs.tdesign_mobile_vue_domain }}
+          npx surge --project _site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
+
+  tdesign-mobile-react:
+    if: github.event.workflow_run.conclusion == 'success'
+    needs: preview-context
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: Tencent/tdesign-mobile-react
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: npm install
+
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
+
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
+
+      - run: npm run site:preview
+      - run: |
+          export DEPLOY_DOMAIN=${{ needs.preview-context.outputs.tdesign_mobile_react_domain }}
+          npx surge --project _site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
+    
+  tdesign-miniprogram:
+    if: github.event.workflow_run.conclusion == 'success'
+    needs: preview-context
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: Tencent/tdesign-miniprogram
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: npm install
+
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
+
+      - run : npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
+
+      - run: npm run site:intranet
+      - run: |
+          export DEPLOY_DOMAIN=${{ needs.preview-context.outputs.tdesign_miniprogram_domain }}
+          npx surge --project _site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}       
+          
+  preview-comment:
+    if: always()
+    needs:
+      - preview-context
+      - tdesign-vue
+      - tdesign-react
+      - tdesign-site
+      - tdesign-mobile-vue
+      - tdesign-mobile-react
+      - tdesign-miniprogram
+      - tdesign-vue-next
+      - tdesign-vue-next-chat
+    runs-on: ubuntu-latest
+    steps:
+      - name: jobs report
+        id: report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr_id = ${{ needs.preview-context.outputs.pr_id }};
+          
+            const { data: { jobs } } = await github.rest.actions.listJobsForWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId,
+              per_page: 100
+            })
+            
+            const tdesign = {
+              "tdesign-site": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_site_domain }}"  },
+              "tdesign-vue": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_vue_domain }}" },
+              "tdesign-react": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_react_domain }}"  },
+              "tdesign-vue-next": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_vue_next_domain }}"  },
+              "tdesign-vue-next-chat": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_vue_next_chat_domain }}"  },
+              "tdesign-mobile-vue": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_mobile_vue_domain }}"  },
+              "tdesign-mobile-react": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_mobile_react_domain }}"  },
+              "tdesign-miniprogram": { status: "", report_url: "${{ needs.preview-context.outputs.tdesign_miniprogram_domain }}"  },
+            };
+            const preview_success = `<img width="300" alt="完成" src="https://user-images.githubusercontent.com/15634204/150816437-9f5bb788-cd67-4cbc-9897-b82d74e9aa65.png" />`;
+            const preview_failure = `<img width="300" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png" />`;
+            jobs
+              .filter((job) => job.name.startsWith("tdesign-"))
+              .map((job) => {
+                if (job.conclusion === "success") {
+                  tdesign[job.name].status = preview_success;
+                }else{
+                  tdesign[job.name].status = preview_failure;
+                  tdesign[job.name].report_url = job.html_url;
+                }
+              });
+
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            const comment = `
+              # TDesign Component Site Preview [Open](${runUrl})
+              | Component | Preview |
+              | --------- | :--: |
+              ${Object.keys(tdesign)
+                .map((component) => {
+                  const preview_text = `[${tdesign[component].status}](${tdesign[component].report_url})`;
+                  let package_name = component;
+                  if (component === "tdesign-vue-next-chat") {
+                    package_name = "@tdesign-vue-next/chat";
+                  }
+
+                  return `| ${package_name} | ${preview_text} | `;
+                })
+                .join("\n")}
+
+              <!-- AUTO_PREVIEW_HOOK -->
+              `;
+            
+            core.setOutput('comment', comment);
+      
+      - name: comment
+        uses: actions-cool/maintain-one-comment@v3
+        with:
+            token: ${{ secrets.TDESIGN_BOT_TOKEN }}
+            number: ${{needs.preview-context.outputs.pr_id}}
+            body: ${{ steps.report.outputs.comment }}
+            body-include: '<!-- AUTO_PREVIEW_HOOK -->'
