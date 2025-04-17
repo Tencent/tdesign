@@ -31,5 +31,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: tdesign-site
-          path: site/_site
+          path: _site
           retention-days: 5
