@@ -18,7 +18,7 @@
     "prismjs": "^1.29.0",
     "tdesign-icons-view": "^0.3.5",
     "tdesign-icons-vue": "^0.1.4",
-    "tdesign-site-components": "^0.15.7",
+    "tdesign-site-components": "workspace:^",
     "tdesign-vue": "1.9.8-naruto",
     "three": "0.127.0",
     "vue": "2.7.14",
@@ -49,9 +49,9 @@
     "rimraf": "^3.0.2",
     "standard-version": "^7.0.1",
     "typescript": "^4.5.2",
-    "vite": "^2.7.0",
+    "vite": "^6.3.1",
     "vite-plugin-tdoc": "^2.0.0",
-    "vite-plugin-vue2": "^1.9.0",
+    "@vitejs/plugin-vue2": "^2.3.3",
     "vue-template-compiler": "2.7.14"
   },
   "config": {
