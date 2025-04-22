@@ -15,7 +15,7 @@ jobs:
           node-version: 18
       - uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 9.15.9
       - name: Install Dependencies
         run: pnpm install
       - name: run auto release
