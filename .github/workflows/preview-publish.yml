@@ -320,10 +320,10 @@ jobs:
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
 
             const comment = `
-              # TDesign Component Site [Open](${runUrl})
+              # TDesign Component Site Preview CI [Open](${runUrl})
 
               <details>
-              <summary> Preview (${Object.keys(tdesign).length})</summary>
+              <summary> Sites (${Object.keys(tdesign).length})</summary>
 
               | Component | Preview |
               | --------- | :--: |
