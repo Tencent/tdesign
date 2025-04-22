@@ -46,10 +46,12 @@ jobs:
 
       - run: pnpm install
 
-      - run: pnpm run site:intranet
+      - run: pnpm run site:preview
+
+      - run: cp _site/index.html _site/404.html"
 
       - uses: actions/upload-artifact@v4
         with:
           name: tdesign-site
-          path: site/_site
+          path: _site
           retention-days: 5
