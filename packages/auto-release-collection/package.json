@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "prebuild": "rimraf dist/*",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
     "lint": "eslint --ext .ts src",
     "build": "tsc",
