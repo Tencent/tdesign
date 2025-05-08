@@ -26,11 +26,11 @@
                 <div :style="{ color: 'var(--text-secondary)' }">{{ token.remark }} : {{ token.value }}</div>
               </div>
               <div :style="{ display: 'flex', alignItems: 'center' }">
-                <size-adjust-svg v-if="type === 'comp-size'" :size="token.value" />
-                <horizontal-padding-adjust-svg v-else-if="type === 'comp-padding-lr'" :size="token.value" />
-                <vertical-padding-adjust-svg v-else-if="type === 'comp-padding-tb'" :size="token.value" />
-                <margin-adjust-svg v-else-if="type === 'comp-margin'" :size="token.value" />
-                <popup-padding-adjust-svg v-else-if="type === 'popup-padding'" :size="token.value" />
+                <size-adjust-svg v-if="type === 'comp-size'" :size="parseSize(token.value)" />
+                <horizontal-padding-adjust-svg v-else-if="type === 'comp-padding-lr'" :size="parseSize(token.value)" />
+                <vertical-padding-adjust-svg v-else-if="type === 'comp-padding-tb'" :size="parseSize(token.value)" />
+                <margin-adjust-svg v-else-if="type === 'comp-margin'" :size="parseSize(token.value)" />
+                <popup-padding-adjust-svg v-else-if="type === 'popup-padding'" :size="parseSize(token.value)" />
               </div>
             </div>
           </t-list-item>
@@ -129,6 +129,13 @@ export default {
       // 修改state
       this.tokenTypeList[idx].value = res;
       modifyToken(tokenName, res);
+    },
+    parseSize(val) {
+      if (typeof val === 'string') {
+        const num = parseFloat(val);
+        return isNaN(num) ? 0 : num;
+      }
+      return val;
     },
   },
   mounted() {
