@@ -151,7 +151,10 @@ export default {
       flex: 1;
       text-align: center;
       width: 25%;
-      padding: 4px 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     /deep/ .t-radio-group__bg-block {
