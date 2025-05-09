@@ -11,7 +11,7 @@
     "site": "npm run build:components && cd site && npm run build",
     "site:intranet": "npm run build:components && cd site && npm run site:intranet",
     "site:preview": "npm run build:components && cd site && npm run site:preview",
-    "auto-release": "pnpm run --filter 'tdesign-auto-release' start",
+    "auto-release-collection": "pnpm run --filter 'auto-release-collection' start",
     "prepare": "husky install"
   },
   "license": "MIT",

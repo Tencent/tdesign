@@ -58,7 +58,7 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0(postcss@8.4.47)(stylelint@15.11.0(typescript@4.9.5))
 
-  packages/auto-release:
+  packages/auto-release-collection:
     dependencies:
       '@actions/github':
         specifier: ^6.0.0
@@ -73,9 +73,9 @@ importers:
       nodemon:
         specifier: ^3.1.7
         version: 3.1.7
-      ts-node:
-        specifier: ^10.9.2
-        version: 10.9.2(@types/node@22.9.0)(typescript@4.9.5)
+      tsx:
+        specifier: ^4.19.3
+        version: 4.19.3
       typescript:
         specifier: ^4.9.5
         version: 4.9.5
@@ -240,7 +240,7 @@ importers:
         version: 5.62.0(eslint@7.32.0)(typescript@4.9.5)
       '@vitejs/plugin-vue2':
         specifier: ^2.3.3
-        version: 2.3.3(vite@6.3.1(@types/node@22.9.0)(jiti@1.21.6)(less@4.2.0)(terser@5.33.0))(vue@2.7.14)
+        version: 2.3.3(vite@6.3.1(@types/node@22.9.0)(jiti@1.21.6)(less@4.2.0)(terser@5.33.0)(tsx@4.19.3))(vue@2.7.14)
       autoprefixer:
         specifier: ^10.4.0
         version: 10.4.20(postcss@8.4.47)
@@ -300,7 +300,7 @@ importers:
         version: 4.9.5
       vite:
         specifier: ^6.3.1
-        version: 6.3.1(@types/node@22.9.0)(jiti@1.21.6)(less@4.2.0)(terser@5.33.0)
+        version: 6.3.1(@types/node@22.9.0)(jiti@1.21.6)(less@4.2.0)(terser@5.33.0)(tsx@4.19.3)
       vite-plugin-tdoc:
         specifier: ^2.0.0
         version: 2.0.4(@types/markdown-it@12.2.3)
@@ -4211,6 +4211,9 @@ packages:
     resolution: {integrity: sha512-g0QYk1dZBxGwk+Ngc+ltRH2IBp2f7zBkBMBJZCDerh6EhlhSR6+9irMCuT/09zD6qkarHUSn529sK/yL4S27mg==}
     engines: {node: '>= 0.4'}
 
+  get-tsconfig@4.10.0:
+    resolution: {integrity: sha512-kGzZ3LWWQcGIAmg6iWvXn0ei6WDtV26wzHRMwDSzmAbcXrTEXxHy6IehI6/4eT6VRKyMP1eF1VqwrVUmE/LR7A==}
+
   get-value@2.0.6:
     resolution: {integrity: sha512-Ln0UQDlxH1BapMu3GPtf7CuYNwRZf2gwCuPqbyG6pB8WfmFpzqcy4xtAaAMUhnNqjMKTiCPZG2oMT3YSx8U2NA==}
     engines: {node: '>=0.10.0'}
@@ -6514,6 +6517,9 @@ packages:
     resolution: {integrity: sha512-zFa12V4OLtT5XUX/Q4VLvTfBf+Ok0SPc1FNGM/z9ctUdiU618qwKpWnd0CHs3+RqROfyEg/DhuHbMWYqcgljEw==}
     engines: {node: '>=8'}
 
+  resolve-pkg-maps@1.0.0:
+    resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
+
   resolve-url@0.2.1:
     resolution: {integrity: sha512-ZuF55hVUQaaczgOIwqWzkEcEidmlD/xl44x1UZnhOXcYuFN2S6+rcxpG+C1N3So0wvNI3DmJICUFfu2SxhBmvg==}
     deprecated: https://github.com/lydell/resolve-url#deprecated
@@ -7306,6 +7312,11 @@ packages:
     engines: {node: '>= 6'}
     peerDependencies:
       typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
+
+  tsx@4.19.3:
+    resolution: {integrity: sha512-4H8vUNGNjQ4V2EOoGw005+c+dGuPSnhpPBPHBtsZdGZBk/iJb4kguGlPWaZTZ3q5nMtFOEsY0nRDlh9PJyd6SQ==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
 
   tunnel@0.0.6:
     resolution: {integrity: sha512-1h/Lnq9yajKY2PEbBadPXj3VxsDDu844OnaAo52UVmIzIvwwtBPIuNvkjuzBlTWpfJyUbG3ez0KSBibQkj4ojg==}
@@ -8875,6 +8886,7 @@ snapshots:
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
+    optional: true
 
   '@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1)':
     dependencies:
@@ -9196,6 +9208,7 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+    optional: true
 
   '@leichtgewicht/ip-codec@2.0.5': {}
 
@@ -9389,13 +9402,17 @@ snapshots:
 
   '@trysound/sax@0.2.0': {}
 
-  '@tsconfig/node10@1.0.11': {}
+  '@tsconfig/node10@1.0.11':
+    optional: true
 
-  '@tsconfig/node12@1.0.11': {}
+  '@tsconfig/node12@1.0.11':
+    optional: true
 
-  '@tsconfig/node14@1.0.3': {}
+  '@tsconfig/node14@1.0.3':
+    optional: true
 
-  '@tsconfig/node16@1.0.4': {}
+  '@tsconfig/node16@1.0.4':
+    optional: true
 
   '@types/babel__core@7.20.5':
     dependencies:
@@ -9520,6 +9537,7 @@ snapshots:
   '@types/node@22.9.0':
     dependencies:
       undici-types: 6.19.8
+    optional: true
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -9660,9 +9678,9 @@ snapshots:
       '@typescript-eslint/types': 5.62.0
       eslint-visitor-keys: 3.4.3
 
-  '@vitejs/plugin-vue2@2.3.3(vite@6.3.1(@types/node@22.9.0)(jiti@1.21.6)(less@4.2.0)(terser@5.33.0))(vue@2.7.14)':
+  '@vitejs/plugin-vue2@2.3.3(vite@6.3.1(@types/node@22.9.0)(jiti@1.21.6)(less@4.2.0)(terser@5.33.0)(tsx@4.19.3))(vue@2.7.14)':
     dependencies:
-      vite: 6.3.1(@types/node@22.9.0)(jiti@1.21.6)(less@4.2.0)(terser@5.33.0)
+      vite: 6.3.1(@types/node@22.9.0)(jiti@1.21.6)(less@4.2.0)(terser@5.33.0)(tsx@4.19.3)
       vue: 2.7.14
 
   '@vue/babel-helper-vue-jsx-merge-props@1.4.0': {}
@@ -10290,7 +10308,8 @@ snapshots:
 
   arch@2.2.0: {}
 
-  arg@4.1.3: {}
+  arg@4.1.3:
+    optional: true
 
   argparse@1.0.10:
     dependencies:
@@ -11175,7 +11194,8 @@ snapshots:
       typescript: 4.9.5
     optional: true
 
-  create-require@1.1.1: {}
+  create-require@1.1.1:
+    optional: true
 
   cross-env@6.0.3:
     dependencies:
@@ -11491,7 +11511,8 @@ snapshots:
 
   diff-sequences@27.5.1: {}
 
-  diff@4.0.2: {}
+  diff@4.0.2:
+    optional: true
 
   dijkstrajs@1.0.3: {}
 
@@ -12539,6 +12560,10 @@ snapshots:
       call-bind: 1.0.7
       es-errors: 1.3.0
       get-intrinsic: 1.2.4
+
+  get-tsconfig@4.10.0:
+    dependencies:
+      resolve-pkg-maps: 1.0.0
 
   get-value@2.0.6: {}
 
@@ -13979,7 +14004,8 @@ snapshots:
     dependencies:
       semver: 7.6.3
 
-  make-error@1.3.6: {}
+  make-error@1.3.6:
+    optional: true
 
   makeerror@1.0.12:
     dependencies:
@@ -15116,6 +15142,8 @@ snapshots:
     dependencies:
       global-dirs: 0.1.1
 
+  resolve-pkg-maps@1.0.0: {}
+
   resolve-url@0.2.1: {}
 
   resolve.exports@1.1.1: {}
@@ -16084,6 +16112,7 @@ snapshots:
       typescript: 4.9.5
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    optional: true
 
   tsconfig-paths@3.15.0:
     dependencies:
@@ -16100,6 +16129,13 @@ snapshots:
     dependencies:
       tslib: 1.14.1
       typescript: 4.9.5
+
+  tsx@4.19.3:
+    dependencies:
+      esbuild: 0.25.2
+      get-tsconfig: 4.10.0
+    optionalDependencies:
+      fsevents: 2.3.3
 
   tunnel@0.0.6: {}
 
@@ -16266,7 +16302,8 @@ snapshots:
 
   uuid@8.3.2: {}
 
-  v8-compile-cache-lib@3.0.1: {}
+  v8-compile-cache-lib@3.0.1:
+    optional: true
 
   v8-compile-cache@2.4.0: {}
 
@@ -16310,7 +16347,7 @@ snapshots:
       fsevents: 2.3.3
       less: 4.2.0
 
-  vite@6.3.1(@types/node@22.9.0)(jiti@1.21.6)(less@4.2.0)(terser@5.33.0):
+  vite@6.3.1(@types/node@22.9.0)(jiti@1.21.6)(less@4.2.0)(terser@5.33.0)(tsx@4.19.3):
     dependencies:
       esbuild: 0.25.2
       fdir: 6.4.3(picomatch@4.0.2)
@@ -16324,6 +16361,7 @@ snapshots:
       jiti: 1.21.6
       less: 4.2.0
       terser: 5.33.0
+      tsx: 4.19.3
 
   vue-eslint-parser@8.3.0(eslint@7.32.0):
     dependencies:
@@ -16777,7 +16815,8 @@ snapshots:
       y18n: 5.0.8
       yargs-parser: 20.2.9
 
-  yn@3.1.1: {}
+  yn@3.1.1:
+    optional: true
 
   yocto-queue@0.1.0: {}
 
