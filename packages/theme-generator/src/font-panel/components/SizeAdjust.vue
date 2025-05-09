@@ -344,6 +344,10 @@ export default {
     }
     /deep/ .t-radio-button {
       width: 50%;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     /deep/ .t-radio-group__bg-block {
       border-radius: 5px;

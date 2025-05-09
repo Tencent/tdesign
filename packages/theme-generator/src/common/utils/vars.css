@@ -56,11 +56,11 @@
   --text-placeholder: rgba(0, 0, 0, .4);
   --text-disabled: rgba(0, 0, 0, .26);
   --text-anti: #fff;
-  --text-interactive: #0052d9;
-  --brand-main: #0052d9;
-  --brand-main-hover: #366ef4;
-  --brand-main-focus: #d9e1ff;
-  --brand-main-disabled: #b5c7ff;
+  --text-interactive: var(--td-brand-color);
+  --brand-main: var(--td-brand-color);
+  --brand-main-hover: var(--td-brand-color-hover);
+  --brand-main-focus: var(--td-brand-color-focus);
+  --brand-main-disabled: var(--td-brand-color-disabled);
   --brand-main-light: rgba(0, 82, 217, .1);
   --error-1: #fff0ed;
   --error-8: #881f1c;
@@ -132,11 +132,6 @@
   --text-placeholder: rgba(255, 255, 255, .35);
   --text-disabled: rgba(255, 255, 255, .22);
   --text-anti: #fff;
-  --text-interactive: #4582e6;
-  --brand-main: #4582e6;
-  --brand-main-hover: #2667d4;
-  --brand-main-focus: #173463;
-  --brand-main-disabled: #143975;
   --brand-main-light: rgba(69, 130, 230, .2);
   --error-1: #472324;
   --error-8: #ec888e;
