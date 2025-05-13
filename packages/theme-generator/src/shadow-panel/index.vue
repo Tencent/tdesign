@@ -14,10 +14,7 @@
         <div :style="{ display: 'flex' }">
           <div class="shadow-panel__round">
             <div class="shadow-panel__round-tag">
-              <div
-                class="shadow-panel__round-box"
-                :style="{ 'box-shadow': leftShadow }"
-              ></div>
+              <div class="shadow-panel__round-box" :style="{ 'box-shadow': leftShadow }"></div>
             </div>
             <div class="shadow-panel__round-slider">
               <div
@@ -26,10 +23,7 @@
                 :style="{
                   opacity: i == 0 || i === selectOptions.length - 1 ? 0 : 1,
                 }"
-                v-for="(v, i) in selectOptions.slice(
-                  0,
-                  selectOptions.length - 1
-                )"
+                v-for="(v, i) in selectOptions.slice(0, selectOptions.length - 1)"
               ></div>
 
               <t-slider
@@ -42,10 +36,7 @@
               ></t-slider>
             </div>
             <div class="shadow-panel__round-tag">
-              <div
-                class="shadow-panel__round-box"
-                :style="{ 'box-shadow': rightShadow }"
-              ></div>
+              <div class="shadow-panel__round-box" :style="{ 'box-shadow': rightShadow }"></div>
             </div>
           </div>
           <t-select
@@ -54,7 +45,7 @@
             v-model="step"
             :keys="isEn ? { label: 'enLabel' } : null"
             :popup-props="{ attach: handleAttach }"
-            style="width:82px"
+            style="width: 82px"
           ></t-select>
         </div>
         <shadow-card
@@ -70,20 +61,15 @@
   </div>
 </template>
 <script lang="jsx">
-import { Slider as TSlider, Select as TSelect } from "tdesign-vue";
-import { modifyToken, handleAttach, replacePercentages } from "../common/utils";
-import {
-  ShadowSelect,
-  ShadowSelectType,
-  ShadowTypeMap,
-  ShadowTypeDetail,
-  ShadowSelectDetail,
-} from "./const";
-import ShadowCard from "./components/ShadowCard.vue";
-import langMixin from "../common/i18n/mixin";
+import { Select as TSelect, Slider as TSlider } from 'tdesign-vue';
+import ShadowCard from './components/ShadowCard.vue';
 
+import langMixin from '../common/i18n/mixin';
+import { getOptionFromLocal, modifyToken, updateLocalOption } from '../common/Themes';
+import { handleAttach } from '../common/utils';
+import { ShadowSelect, ShadowSelectDetail, ShadowSelectType, ShadowTypeDetail, ShadowTypeMap } from './const';
 export default {
-  name: "ShadowPanel",
+  name: 'ShadowPanel',
   props: {
     top: Number,
   },
@@ -103,29 +89,26 @@ export default {
   },
   created() {
     this.shadowTypeDetail = ShadowTypeDetail;
-    // 判断是否是提供的值， 并设置 step
-    this.checkStep();
   },
   computed: {
     contentStyle() {
       const clientHeight = window.innerHeight;
       return {
-        overflowY: "scroll",
+        overflowY: 'scroll',
         height: `${clientHeight - (this.top || 0) - 96}px`,
       };
     },
     leftShadow() {
       const selectKeys = Object.keys(ShadowSelectDetail);
-      if (selectKeys.length < 1) return "";
+      if (selectKeys.length < 1) return '';
       const shadowArray = ShadowSelectDetail[selectKeys[0]][0];
       return shadowArray;
     },
     rightShadow() {
       const selectKeys = Object.keys(ShadowSelectDetail);
-      if (selectKeys.length < 1) return "";
-      //倒数第二个的， 最后一个为自定义
-      const shadowArray =
-        ShadowSelectDetail[selectKeys[selectKeys.length - 2]][0];
+      if (selectKeys.length < 1) return '';
+      // 倒数第二个的，最后一个为自定义
+      const shadowArray = ShadowSelectDetail[selectKeys[selectKeys.length - 2]][0];
       return shadowArray;
     },
     forbidden() {
@@ -135,6 +118,7 @@ export default {
   watch: {
     step: {
       handler(nVal) {
+        updateLocalOption('shadow', nVal, nVal !== ShadowSelectType.Default);
         // 自定义时去当前系统值
         if (nVal === ShadowSelectType.Self_Defined) {
           // this.shadowPalette = this.getCurrentPalette();
@@ -142,62 +126,42 @@ export default {
         }
         const shadows = ShadowSelectDetail[nVal];
         if (!shadows) return;
-        this.shadowPalette = shadows.map((shadow) =>
-          this.splitShadowValue(shadow)
-        );
+        this.shadowPalette = shadows.map((shadow) => this.splitShadowValue(shadow));
       },
     },
     shadowPalette(nVal) {
-      // shadowPalette 值变化时认为 有编辑
+      // shadowPalette 值变化时认为有编辑
       const currentPalette = this.getCurrentPalette();
       for (let index = 0; index < nVal.length; index++) {
         const shadow = nVal[index];
         const current = currentPalette[index];
-        const newShadow = shadow.join(",");
-        if (newShadow === current.join(",")) continue;
+        const newShadow = shadow.join(',');
+        if (newShadow === current.join(',')) continue;
         const { name } = ShadowTypeMap[index];
-        modifyToken(name, newShadow);
-      }
 
-      // 如果palette中的值不是定义好的任何一个 则变为自定义
-      const newPalette = nVal.map((v) => v.join(", "));
-      const isSelfDefined = !this.selectOptions.find((v) => {
-        const currentStr = replacePercentages(JSON.stringify(newPalette));
-        const optionStr = replacePercentages(
-          JSON.stringify(ShadowSelectDetail[v.value])
-        );
-        return currentStr === optionStr;
-      });
-      if (isSelfDefined) this.step = ShadowSelectType.Self_Defined;
+        const isCustom = this.step === ShadowSelectType.Self_Defined;
+        modifyToken(name, newShadow, isCustom);
+      }
     },
   },
   methods: {
     handleAttach,
+    initStep() {
+      const shadowStep = getOptionFromLocal('shadow');
+      /*  超轻的 step 对应 0，直接写 if(shadowStep)
+          会被判为 if(0) -> false，导致进不去这个条件 */
+      if (shadowStep >= 0) {
+        this.step = shadowStep;
+      }
+    },
     handleSliderChange(v) {
       if (this.forbidden) return;
       this.step = v;
     },
-    checkStep() {
-      const shadowPalette = this.getCurrentPalette();
-      const shadowSteps = Object.entries(ShadowSelectDetail);
-      for (let index = 0; index < shadowSteps.length; index++) {
-        const [step, shadows] = shadowSteps[index];
-        let isEqual = true;
-        for (let id = 0; id < shadows.length; id++) {
-          const shadow = shadows[id];
-          const currentShadow = shadowPalette[id];
-          if (shadow !== currentShadow.join(",")) {
-            isEqual = false;
-            break;
-          }
-        }
-        if (isEqual) return step;
-      }
-    },
-    // 拆分 box-shadow的值 0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%)
+    // 拆分 box-shadow 的值 0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%)
     splitShadowValue(data) {
       const tempData = `${data},`;
-      const shadows = tempData.split("),");
+      const shadows = tempData.split('),');
       return shadows
         .filter((shadow) => shadow)
         .map((shadow) => {
@@ -207,35 +171,35 @@ export default {
     },
     getCurrentPalette() {
       const docStyle = getComputedStyle(document.documentElement);
-      const currentPalette = [...new Array(ShadowTypeMap.length).keys()].map(
-        (v, i) => {
-          const { value, from } = ShadowTypeMap[i];
-          if (value) return value;
-          const data = docStyle.getPropertyValue(from);
-          return this.splitShadowValue(data);
-        }
-      );
+      const currentPalette = [...new Array(ShadowTypeMap.length).keys()].map((v, i) => {
+        const { value, from } = ShadowTypeMap[i];
+        if (value) return value;
+        const data = docStyle.getPropertyValue(from);
+        return this.splitShadowValue(data);
+      });
       return currentPalette;
     },
     change(value, index) {
+      this.step = ShadowSelectType.Self_Defined;
       const val = [...this.shadowPalette];
       val[index] = value;
       this.shadowPalette = val;
     },
     setCurrentPalette() {
       const currentTokenArr = this.getCurrentPalette();
-      this.shadowPalette = currentTokenArr.map((token) =>
-        this.splitShadowValue(token)
-      );
+      this.shadowPalette = currentTokenArr.map((token) => this.splitShadowValue(token));
     },
   },
   mounted() {
-    this.setCurrentPalette();
+    this.$nextTick(() => {
+      this.initStep();
+      this.setCurrentPalette();
+    });
   },
 };
 </script>
 <style scoped lang="less">
-/deep/ .t-popup[data-popper-placement="bottom-end"] .t-popup__arrow {
+/deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;
 }
 
@@ -276,8 +240,7 @@ export default {
     line-height: 22px;
     display: flex;
     align-items: center;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
 }
 .shadow-panel {

@@ -1,17 +1,17 @@
 {
   "private": true,
+  "packageManager": "pnpm@9.15.9",
   "scripts": {
-    "preinstall": "npx -y only-allow pnpm",
     "dev:components": "pnpm run --filter 'tdesign-site-components' dev",
     "dev:site": "pnpm run build:components && pnpm run --filter 'tdesign-site' dev",
     "dev:theme-generator": "pnpm run --filter 'tdesign-theme-generator' dev",
-    "build:components": "pnpm run --filter 'tdesign-site-components' build && pnpm run --filter 'tdesign-site-components' postbuild",
+    "build:components": "pnpm run --filter 'tdesign-site-components' build",
     "build:theme-generator": "pnpm run --filter 'tdesign-theme-generator' build",
     "build-watch:theme-generator": "pnpm run --filter 'tdesign-theme-generator' build:watch",
     "site": "npm run build:components && cd site && npm run build",
     "site:intranet": "npm run build:components && cd site && npm run site:intranet",
     "site:preview": "npm run build:components && cd site && npm run site:preview",
-    "auto-release": "pnpm run --filter 'tdesign-auto-release' start",
+    "auto-release-collection": "pnpm run --filter 'auto-release-collection' start",
     "prepare": "husky install"
   },
   "license": "MIT",
@@ -49,7 +49,7 @@
       "prettier --write",
       "git add"
     ],
-    "*.{less,css}": [
+    "*.{less}": [
       "stylelint --fix",
       "git add"
     ]

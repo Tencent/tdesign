@@ -5,58 +5,22 @@
       <remove-icon class="shadow-layer__remove" @click="handleMove" />
     </div>
     <div class="shadow-layer__card--item">
-      <t-input-number
-        theme="normal"
-        autoWidth
-        v-model="shadow[0]"
-        class="shadow-layer__card--x"
-        placeholder="0px"
-      >
+      <t-input-number theme="normal" autoWidth v-model="shadow[0]" class="shadow-layer__card--x" placeholder="0px">
         <template #suffix><div class="shadow-layer__suffix">X</div></template>
       </t-input-number>
-      <t-input-number
-        theme="normal"
-        autoWidth
-        v-model="shadow[1]"
-        class="shadow-layer__card--x"
-        placeholder="0px"
-      >
+      <t-input-number theme="normal" autoWidth v-model="shadow[1]" class="shadow-layer__card--x" placeholder="0px">
         <template #suffix><div class="shadow-layer__suffix">Y</div></template>
       </t-input-number>
     </div>
-    <t-input-number
-      autoWidth
-      theme="normal"
-      v-model="shadow[2]"
-      class="shadow-layer__card--item"
-      placeholder="0px"
-    >
+    <t-input-number autoWidth theme="normal" v-model="shadow[2]" class="shadow-layer__card--item" placeholder="0px">
       <template #suffix><div class="shadow-layer__suffix">Blur</div></template>
     </t-input-number>
-    <t-input-number
-      autoWidth
-      theme="normal"
-      v-model="shadow[3]"
-      class="shadow-layer__card--item"
-      placeholder="0px"
-    >
-      <template #suffix
-        ><span class="shadow-layer__suffix">Spread</span></template
-      >
+    <t-input-number autoWidth theme="normal" v-model="shadow[3]" class="shadow-layer__card--item" placeholder="0px">
+      <template #suffix><span class="shadow-layer__suffix">Spread</span></template>
     </t-input-number>
-    <t-popup
-      class="placement top center"
-      placement="left"
-      showArrow
-      destroyOnClose
-      :attach="handleAttach"
-    >
+    <t-popup class="placement top center" placement="left" showArrow destroyOnClose :attach="handleAttach">
       <t-input v-model="color">
-        <div
-          class="shadow-layer__card--sharp"
-          :style="{ background: color }"
-          slot="prefix-icon"
-        ></div>
+        <div class="shadow-layer__card--sharp" :style="{ background: color }" slot="prefix-icon"></div>
       </t-input>
       <template #content>
         <color-picker :value="color" enableAlpha @change="changeColor" />
@@ -65,17 +29,13 @@
   </div>
 </template>
 <script lang="jsx">
-import {
-  InputNumber as TInputNumber,
-  Popup as TPopup,
-  Input as TInput,
-} from "tdesign-vue";
-import { RemoveIcon } from "tdesign-icons-vue";
-import ColorPicker from "../../common/ColorPicker/ColorPicker.vue";
-import { handleAttach } from "../../common/utils";
+import { InputNumber as TInputNumber, Popup as TPopup, Input as TInput } from 'tdesign-vue';
+import { RemoveIcon } from 'tdesign-icons-vue';
+import ColorPicker from '../../common/ColorPicker/index.vue';
+import { handleAttach } from '../../common/utils';
 
 export default {
-  name: "ShadowEditor",
+  name: 'ShadowEditor',
   props: {
     name: String,
     value: String,
@@ -90,7 +50,7 @@ export default {
   data() {
     return {
       shadow: [0, 0, 0, 0],
-      color: "",
+      color: '',
       hasInit: false,
     };
   },
@@ -105,8 +65,8 @@ export default {
         // this.hasInit= true;
         return;
       }
-      const shadow = nVal.map((val) => `${val}px`).join(" ");
-      this.$emit("change", `${shadow} ${this.color}`);
+      const shadow = nVal.map((val) => `${val}px`).join(' ');
+      this.$emit('change', `${shadow} ${this.color}`);
     },
     color(nVal) {
       // 初始化值 不触发 change事件
@@ -114,8 +74,8 @@ export default {
         this.hasInit = true;
         return;
       }
-      const shadow = this.shadow.map((val) => `${val}px`).join(" ");
-      this.$emit("change", `${shadow} ${nVal}`);
+      const shadow = this.shadow.map((val) => `${val}px`).join(' ');
+      this.$emit('change', `${shadow} ${nVal}`);
     },
   },
   methods: {
@@ -144,7 +104,7 @@ export default {
       const data = value.match(/rgb(a)?(.*)/g);
       if (!data || data.length < 1) {
         console.log(`invalid shadow value ${value}`);
-        return "rgba(0, 0, 0, 0)";
+        return 'rgba(0, 0, 0, 0)';
       }
       return data[0].trim();
     },
@@ -152,7 +112,7 @@ export default {
       this.color = hex;
     },
     handleMove() {
-      this.$emit("move");
+      this.$emit('move');
     },
   },
 };
@@ -169,8 +129,7 @@ export default {
     &--name {
       font-size: 14px;
       color: var(--text-primary);
-      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-        "Liberation Mono", monospace;
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
   }
   &__remove {
@@ -220,11 +179,10 @@ export default {
     margin-bottom: 4px;
   }
   &__name {
-    font-family: "SF Mono";
+    font-family: 'SF Mono';
     font-size: 12px;
     color: var(--text-primary);
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
   &__suffix {
     font-size: 14px;

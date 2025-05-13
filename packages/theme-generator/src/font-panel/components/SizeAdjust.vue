@@ -18,9 +18,7 @@
     <!-- Token List -->
     <div class="font-panel__token-list">
       <t-radio-group variant="default-filled" v-model="tokenType">
-        <t-radio-button value="list">{{
-          lang.font.steppedMode
-        }}</t-radio-button>
+        <t-radio-button value="list">{{ lang.font.steppedMode }}</t-radio-button>
         <t-radio-button value="token">{{ lang.font.tokenMode }}</t-radio-button>
       </t-radio-group>
       <t-list v-if="tokenType === 'list'">
@@ -38,10 +36,7 @@
           <t-list-item
             :style="{
               transition: 'border-color .2s',
-              border:
-                hoverIdx === idx
-                  ? '1px solid var(--brand-main-hover)'
-                  : '1px solid transparent',
+              border: hoverIdx === idx ? '1px solid var(--brand-main-hover)' : '1px solid transparent',
             }"
             ><div :style="{ display: 'flex', justifyContent: 'space-between' }">
               <span>{{ token.label }}</span
@@ -61,9 +56,7 @@
             ><size-slider
               title="font-size"
               :sizeValue="token.value"
-              @changeFontSize="
-                (v) => handleChangeFontSize(v, 'list', token.tokens, idx)
-              "
+              @changeFontSize="(v) => handleChangeFontSize(v, 'list', token.tokens, idx)"
           /></template>
         </t-popup>
       </t-list>
@@ -82,13 +75,10 @@
           <t-list-item
             :style="{
               transition: 'border-color .2s',
-              border:
-                hoverIdx === idx
-                  ? '1px solid var(--brand-main-hover)'
-                  : '1px solid transparent',
+              border: hoverIdx === idx ? '1px solid var(--brand-main-hover)' : '1px solid transparent',
             }"
             ><div :style="{ display: 'flex', justifyContent: 'space-between' }">
-              <span>{{ token.label.replace("--td-", "") }}</span
+              <span>{{ token.label.replace('--td-', '') }}</span
               ><span>{{ token.value }}</span>
             </div>
             <div
@@ -105,9 +95,7 @@
             ><size-slider
               title="font-size"
               :sizeValue="token.value"
-              @changeFontSize="
-                (v) => handleChangeFontSize(v, 'token', token.label, idx)
-              "
+              @changeFontSize="(v) => handleChangeFontSize(v, 'token', token.label, idx)"
           /></template>
         </t-popup>
       </t-list>
@@ -118,31 +106,30 @@
 import {
   List as TList,
   ListItem as TListItem,
-  RadioGroup as TRadioGroup,
-  RadioButton as TRadioButton,
   Popup as TPopup,
-} from "tdesign-vue";
-import {
-  handleAttach,
-  modifyToken,
-  getCustomThemeSheet,
-} from "../../common/utils";
-import { fontSizeSteps, fontSizeLabels } from "../built-in/font-size";
-import SizeSlider from "../../common/SizeSlider/index.vue";
-import SegmentSelection from "../../common/SegmentSelection/index.vue";
-import langMixin from "../../common/i18n/mixin";
+  RadioButton as TRadioButton,
+  RadioGroup as TRadioGroup,
+} from 'tdesign-vue';
+
+import langMixin from '../../common/i18n/mixin';
+import SegmentSelection from '../../common/SegmentSelection/index.vue';
+import SizeSlider from '../../common/SizeSlider/index.vue';
+import { CUSTOM_THEME_ID, getOptionFromLocal, modifyToken, updateLocalOption } from '../../common/Themes';
+import { handleAttach } from '../../common/utils';
+
+import { fontSizeLabels, fontSizeSteps } from '../built-in/font-size';
 
 const STEP_MAP = [
-  { label: "超小号", enLabel: "mini", value: 1 },
-  { label: "小号", enLabel: "small", value: 2 },
-  { label: "默认", enLabel: "default", value: 3 },
-  { label: "大号", enLabel: "large", value: 4 },
-  { label: "特大号", enLabel: "max", value: 5 },
-  { label: "自定义", enLabel: "customized", value: 6, disabled: true },
+  { label: '超小号', enLabel: 'mini', value: 1 },
+  { label: '小号', enLabel: 'small', value: 2 },
+  { label: '默认', enLabel: 'default', value: 3 },
+  { label: '大号', enLabel: 'large', value: 4 },
+  { label: '特大号', enLabel: 'max', value: 5 },
+  { label: '自定义', enLabel: 'customized', value: 6, disabled: true },
 ];
 
 export default {
-  name: "FontSizeAdjust",
+  name: 'FontSizeAdjust',
   components: {
     TList,
     TListItem,
@@ -158,27 +145,27 @@ export default {
       step: 3,
       hoverIdx: null,
       selectOptions: STEP_MAP,
-      tokenType: "list", // list or token
+      tokenType: 'list', // list or token
       computedStyle: null,
       segmentSelectionDisabled: false,
       fontSizeLabels,
       tokenTypeList: [
-        { label: "--td-font-size-link-small", value: null },
-        { label: "--td-font-size-link-medium", value: null },
-        { label: "--td-font-size-link-large", value: null },
-        { label: "--td-font-size-mark-small", value: null, isBold: true },
-        { label: "--td-font-size-mark-medium", value: null, isBold: true },
-        { label: "--td-font-size-body-small", value: null },
-        { label: "--td-font-size-body-medium", value: null },
-        { label: "--td-font-size-body-large", value: null },
-        { label: "--td-font-size-title-small", value: null, isBold: true },
-        { label: "--td-font-size-title-medium", value: null, isBold: true },
-        { label: "--td-font-size-title-large", value: null, isBold: true },
-        { label: "--td-font-size-headline-small", value: null, isBold: true },
-        { label: "--td-font-size-headline-medium", value: null, isBold: true },
-        { label: "--td-font-size-headline-large", value: null, isBold: true },
-        { label: "--td-font-size-display-medium", value: null, isBold: true },
-        { label: "--td-font-size-display-large", value: null, isBold: true },
+        { label: '--td-font-size-link-small', value: null },
+        { label: '--td-font-size-link-medium', value: null },
+        { label: '--td-font-size-link-large', value: null },
+        { label: '--td-font-size-mark-small', value: null, isBold: true },
+        { label: '--td-font-size-mark-medium', value: null, isBold: true },
+        { label: '--td-font-size-body-small', value: null },
+        { label: '--td-font-size-body-medium', value: null },
+        { label: '--td-font-size-body-large', value: null },
+        { label: '--td-font-size-title-small', value: null, isBold: true },
+        { label: '--td-font-size-title-medium', value: null, isBold: true },
+        { label: '--td-font-size-title-large', value: null, isBold: true },
+        { label: '--td-font-size-headline-small', value: null, isBold: true },
+        { label: '--td-font-size-headline-medium', value: null, isBold: true },
+        { label: '--td-font-size-headline-large', value: null, isBold: true },
+        { label: '--td-font-size-display-medium', value: null, isBold: true },
+        { label: '--td-font-size-display-large', value: null, isBold: true },
       ],
       initTokenList: [],
       ladderTypeList: [],
@@ -187,15 +174,11 @@ export default {
   },
   watch: {
     tokenTypeList(list) {
-      const fontSizeStepArray = Object.keys(fontSizeSteps).map(
-        (v) => fontSizeSteps[v]
-      );
+      const fontSizeStepArray = Object.keys(fontSizeSteps).map((v) => fontSizeSteps[v]);
 
       if (
         !fontSizeStepArray.find(
-          (array) =>
-            array.filter((v, i) => v.value === list[i].value.trim()).length ===
-            array.length
+          (array) => array.filter((v, i) => v.value === list[i].value.trim()).length === array.length,
         )
       ) {
         this.segmentSelectionDisabled = true;
@@ -204,10 +187,14 @@ export default {
     step(v) {
       // 改变阶梯
       if (!fontSizeSteps[v]) return;
+
+      // 默认值（v=3)的时候不存
+      updateLocalOption('font', v, v !== 3);
+
+      const isCustom = v === 6;
       const newSteps = fontSizeSteps[v];
       newSteps.map(({ name, value }) => {
-        modifyToken(name, value);
-        // 同时将它从token模式中修改
+        modifyToken(name, value, isCustom);
         const i = this.tokenTypeList.findIndex((v) => v.label === name);
         if (i !== -1) this.tokenTypeList[i].value = value;
       });
@@ -216,9 +203,7 @@ export default {
       // 阶梯模式列表
       this.ladderTypeList = [];
       this.tokenTypeList.forEach((token) => {
-        const listIdx = this.ladderTypeList
-          .map((v) => v.value)
-          .indexOf(token.value);
+        const listIdx = this.ladderTypeList.map((v) => v.value).indexOf(token.value);
         if (listIdx !== -1) {
           this.ladderTypeList[listIdx].tokens.push(token.label);
         } else {
@@ -233,47 +218,80 @@ export default {
   },
   methods: {
     handleAttach,
+    initStep() {
+      const fontStep = getOptionFromLocal('font');
+      if (fontStep >= 0) {
+        this.step = fontStep;
+      }
+    },
     handleVisibleChange(v, ctx, idx) {
       if (v) this.hoverIdx = idx;
-      if (!v && ctx.trigger === "document" && this.hoverIdx === idx)
-        this.hoverIdx = null;
+      if (!v && ctx.trigger === 'document' && this.hoverIdx === idx) this.hoverIdx = null;
     },
-    handleChangeFontSize(v, type, tokenIdxName, idx) {
+    handleInitFontSize() {
+      // 将当前的字体相关枚举存储
+      const computedStyle = window.getComputedStyle(document.documentElement);
+      this.computedStyle = computedStyle;
+      // token 模式列表
+      this.tokenTypeList = this.tokenTypeList.map((v) => ({
+        label: v.label,
+        value: computedStyle.getPropertyValue(v.label),
+        isBold: v.isBold,
+      }));
+      this.initTokenList = JSON.parse(JSON.stringify(this.tokenTypeList));
+      // 阶梯模式列表
+      this.tokenTypeList.forEach((token) => {
+        const listIdx = this.ladderTypeList.map((v) => v.value).indexOf(token.value);
+        if (listIdx !== -1) {
+          this.ladderTypeList[listIdx].tokens.push(token.label);
+        } else {
+          this.ladderTypeList.push({
+            value: token.value,
+            tokens: [token.label],
+          });
+        }
+      });
+      this.initLadderList = JSON.parse(JSON.stringify(this.ladderTypeList));
+    },
+    handleChangeFontSize(v, type, tokenName, idx) {
       const res = `${v}px`;
-      const styleSheet = getCustomThemeSheet();
+      const styleSheet = document.getElementById(CUSTOM_THEME_ID);
       if (!styleSheet) return;
 
-      if (type === "list") {
-        // 阶梯模式 需要修改所有对应该梯度的值
+      if (Array.isArray(tokenName)) {
+        // 阶梯模式传进来的是数组
+        tokenName.forEach((token) => {
+          modifyToken(token, res);
+        });
+      } else {
+        // Token 模式传进来的是单个
+        modifyToken(tokenName, res);
+      }
+
+      if (type === 'list') {
+        // 阶梯模式需要修改所有对应该梯度的值
         const fontSizeList = this.ladderTypeList[idx].tokens;
-        // 修改state
+        // 修改 state
         this.ladderTypeList[idx].value = res;
-        if (parseInt(this.initLadderList[idx].value, 10) !== parseInt(res, 10))
-          this.segmentSelectionDisabled = true;
+        if (parseInt(this.initLadderList[idx].value, 10) !== parseInt(res, 10)) this.segmentSelectionDisabled = true;
 
         fontSizeList.map((tokenName) => {
-          // token 需要修改所有对应该token的值
-          modifyToken(tokenName, res);
-          // 同时将它从token模式中修改
           const i = this.tokenTypeList.findIndex((v) => v.label === tokenName);
           if (i !== -1) this.tokenTypeList[i].value = res;
         });
       }
-      if (type === "token") {
-        // token 需要修改所有对应该token的值
-        if (parseInt(this.initTokenList[idx].value, 10) !== parseInt(res, 10))
-          this.segmentSelectionDisabled = true;
-        // 修改state
+
+      if (type === 'token') {
+        // token 需要修改所有对应该 token 的值
+        if (parseInt(this.initTokenList[idx].value, 10) !== parseInt(res, 10)) this.segmentSelectionDisabled = true;
+        // 修改 state
         this.tokenTypeList[idx].value = res;
         // 同时将它从阶梯中移除
         const preVal = this.initTokenList[idx].value;
         if (res !== preVal) {
-          const preListIdx = this.ladderTypeList.findIndex((v) =>
-            v.tokens.includes(tokenIdxName)
-          );
+          const preListIdx = this.ladderTypeList.findIndex((v) => v.tokens.includes(tokenName));
           if (preListIdx !== -1) {
-            const resIdx =
-              this.ladderTypeList?.[preListIdx].tokens?.indexOf(tokenIdxName);
+            const resIdx = this.ladderTypeList?.[preListIdx].tokens?.indexOf(tokenName);
             this.ladderTypeList[preListIdx].tokens?.splice(resIdx, 1);
           }
         }
@@ -281,37 +299,15 @@ export default {
     },
   },
   mounted() {
-    // radio group在此场景下初始化无法正确算出left 需强行计算
     this.$nextTick(() => {
+      this.initStep();
+      this.handleInitFontSize();
+
+      // radio group 在此场景下初始化无法正确算出 left 需强行计算
       const body = handleAttach();
-      const block = body.querySelector(".t-radio-group__bg-block");
-      if (block && block.style.left === "0px") block.style.left = "2px";
+      const block = body.querySelector('.t-radio-group__bg-block');
+      if (block && block.style.left === '0px') block.style.left = '2px';
     });
-    // mounted后将当前的字体相关枚举存储
-    const computedStyle = window.getComputedStyle(document.documentElement);
-    this.computedStyle = computedStyle;
-    // token模式列表
-    this.tokenTypeList = this.tokenTypeList.map((v) => ({
-      label: v.label,
-      value: computedStyle.getPropertyValue(v.label),
-      isBold: v.isBold,
-    }));
-    this.initTokenList = JSON.parse(JSON.stringify(this.tokenTypeList));
-    // 阶梯模式列表
-    this.tokenTypeList.forEach((token) => {
-      const listIdx = this.ladderTypeList
-        .map((v) => v.value)
-        .indexOf(token.value);
-      if (listIdx !== -1) {
-        this.ladderTypeList[listIdx].tokens.push(token.label);
-      } else {
-        this.ladderTypeList.push({
-          value: token.value,
-          tokens: [token.label],
-        });
-      }
-    });
-    this.initLadderList = JSON.parse(JSON.stringify(this.ladderTypeList));
   },
 };
 </script>
@@ -321,15 +317,13 @@ export default {
     font-size: 12px;
     line-height: 32px;
     font-weight: 600;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
   &__round-tag-right {
     font-size: 18px;
     line-height: 32px;
     font-weight: 600;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
   &__token-list {
     margin-top: 8px;
@@ -340,8 +334,7 @@ export default {
     span {
       font-size: 12px;
       line-height: 12px;
-      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-        "Liberation Mono", monospace;
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
     /deep/ .t-radio-group {
       width: 100%;

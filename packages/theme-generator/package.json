@@ -1,6 +1,6 @@
 {
   "name": "tdesign-theme-generator",
-  "version": "1.0.17",
+  "version": "1.1.4",
   "description": "TDesign主题配置生成器挂件",
   "scripts": {
     "dev": "vue-cli-service serve",
@@ -22,13 +22,21 @@
     "mingrutough1",
     "yilaierwang"
   ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tencent/tdesign.git"
+  },
+  "homepage": "https://github.com/Tencent/tdesign/blob/main/packages/theme-generator/README.md",
   "license": "ISC",
   "dependencies": {
     "core-js": "^3.8.3",
     "cssbeautify": "^0.3.1",
     "lodash": "^4.17.21",
     "tdesign-icons-vue": "^0.0.8",
-    "tdesign-vue": "1.4.6-naruto",
+    "tdesign-vue": "1.9.4-naruto",
     "tvision-color": "^1.6.0",
     "vue": "2.7.14"
   },

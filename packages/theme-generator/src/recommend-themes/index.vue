@@ -5,22 +5,15 @@
         {{ lang.dock.recommendTitle }}
       </div>
       <div class="recommend-theme__flex">
-        <div
-          v-for="(theme, themeIdx) in type.options"
-          :key="themeIdx"
-          @click="generateNewTheme(theme)"
-        >
+        <div v-for="(theme, themeIdx) in type.options" :key="themeIdx" @click="handleNewThemeGeneration(theme)">
           <div
             class="recommend-theme__flex-theme"
             :style="{
               'background-color': theme.value,
             }"
           >
-            <div v-html="theme.subtitle" />
-            <div
-              v-if="currentTheme && currentTheme.value === theme.value"
-              class="recommend-theme__flex-theme--active"
-            >
+            <div v-html="theme.subtitle"></div>
+            <div v-if="currentTheme && currentTheme.value === theme.value" class="recommend-theme__flex-theme--active">
               <picked-svg />
             </div>
           </div>
@@ -41,20 +34,21 @@
 </template>
 
 <script>
-import { RECOMMEND_THEMES } from "./const";
-import { generateNewTheme } from "../utils";
-import PickedSvg from "./PickedSvg.vue";
-import langMixin from "../i18n/mixin";
+import langMixin from '../common/i18n/mixin';
+import { generateNewTheme, getBuiltInThemes } from '../common/Themes';
+import PickedSvg from './PickedSvg.vue';
 
 export default {
-  emit: ["changeTabTheme"],
+  name: 'RecommendThemes',
+  emit: ['changeTabTheme'],
   props: {
     currentTheme: Object,
   },
+  inject: ['device'],
   mixins: [langMixin],
   data() {
     return {
-      recommendThemes: RECOMMEND_THEMES,
+      recommendThemes: getBuiltInThemes(this.device),
       isThemeTabVisible: false,
       isDrawerVisible: false,
     };
@@ -63,9 +57,9 @@ export default {
     PickedSvg,
   },
   methods: {
-    generateNewTheme(theme) {
-      generateNewTheme(theme.value);
-      this.$emit("changeTabTheme", theme);
+    handleNewThemeGeneration(theme) {
+      generateNewTheme(theme.value, undefined, this.device);
+      this.$emit('changeTabTheme', theme);
     },
   },
 };
@@ -147,5 +141,4 @@ export default {
     }
   }
 }
-
 </style>

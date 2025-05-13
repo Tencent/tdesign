@@ -11,10 +11,7 @@
   >
     <sticky-theme-display :theme="theme" v-if="!!theme" />
     <div style="display: flex">
-      <switch-tabs
-        :activeTabIdx="activeTabIdx"
-        @changeActiveTab="changeActiveTab"
-      />
+      <switch-tabs :activeTabIdx="activeTabIdx" @changeActiveTab="changeActiveTab" />
       <color-content
         :top="top"
         :is-refresh="refresh"
@@ -50,16 +47,17 @@
 </template>
 
 <script>
-import { Drawer as TDrawer } from "tdesign-vue";
-import ColorContent from "../color-panel/components/ColorContent/index.vue"; //色彩配置
-import FontContent from "../font-panel/index.vue"; // 字体配置
-import RadiusContent from "../radius-panel/index.vue"; // 字体配置
-import ShadowContent from "../shadow-panel/index.vue"; // 阴影配置
-import SizeContent from "../size-panel/index.vue"; // 阴影配置
-import { initVariables } from "../common/utils";
+import { Drawer as TDrawer } from 'tdesign-vue';
 
-import StickyThemeDisplay from "../common/StickyThemeDisplay/index.vue";
-import SwitchTabs from "../common/SwitchTabs/index.vue";
+import ColorContent from '../color-panel/components/ColorContent/index.vue'; //色彩配置
+import FontContent from '../font-panel/index.vue'; // 字体配置
+import RadiusContent from '../radius-panel/index.vue'; // 字体配置
+import ShadowContent from '../shadow-panel/index.vue'; // 阴影配置
+import SizeContent from '../size-panel/index.vue'; // 阴影配置
+
+import StickyThemeDisplay from '../common/StickyThemeDisplay/index.vue';
+import SwitchTabs from '../common/SwitchTabs/index.vue';
+import { initGeneratorVars, syncThemeToGenerator } from '../common/utils';
 
 const activeTabMap = {
   color: 0,
@@ -70,6 +68,7 @@ const activeTabMap = {
 };
 
 export default {
+  name: 'PanelDrawer',
   components: {
     TDrawer,
     SwitchTabs,
@@ -83,7 +82,7 @@ export default {
   props: {
     propsTop: String,
     showSetting: {
-      type: [String,  Boolean],
+      type: [String, Boolean],
     },
     theme: {
       type: [Object, String],
@@ -113,42 +112,39 @@ export default {
   },
   watch: {
     drawerVisible(v) {
-      if ((typeof v === "string" && v === "false") || v === false) {
+      if ((typeof v === 'string' && v === 'false') || v === false) {
         this.visible = false;
         return;
       }
       this.visible = true;
     },
     visible(v) {
-      this.$emit("panel-drawer-visible", v);
+      this.$emit('panel-drawer-visible', v);
     },
   },
   mounted() {
-    initVariables(); // 插入主题生成器variables
+    initGeneratorVars();
+    syncThemeToGenerator();
 
     if (this.propsTop) {
       this.top = parseInt(this.propsTop, 10);
     } else {
-      const headerHeight = getComputedStyle(
-        document.documentElement
-      ).getPropertyValue("--header-height");
+      const headerHeight = getComputedStyle(document.documentElement).getPropertyValue('--header-height');
 
       if (headerHeight) this.top = parseInt(headerHeight) - window.scrollY;
     }
 
-    window.addEventListener("scroll", this.calcHeaderShow);
+    window.addEventListener('scroll', this.calcHeaderShow);
   },
   beforeDestroy() {
-    window.removeEventListener("scroll", this.calcHeaderShow);
+    window.removeEventListener('scroll', this.calcHeaderShow);
   },
   methods: {
     changeActiveTab(tab) {
       this.activeTabIdx = tab;
     },
     calcHeaderShow() {
-      const headerHeight = getComputedStyle(
-        document.documentElement
-      ).getPropertyValue("--header-height");
+      const headerHeight = getComputedStyle(document.documentElement).getPropertyValue('--header-height');
 
       this.top = Math.max(parseInt(headerHeight) - window.scrollY, 0);
     },
@@ -157,7 +153,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../node_modules/tdesign-vue/dist/tdesign.css";
 /deep/ .t-drawer__mask {
   background: none;
 }
@@ -169,8 +164,7 @@ export default {
 
 /deep/ .t-popup__content {
   font-size: 14px;
-  box-shadow: var(--shadow-2), var(--shadow-inset-top),
-    var(--shadow-inset-right), var(--shadow-inset-bottom),
+  box-shadow: var(--shadow-2), var(--shadow-inset-top), var(--shadow-inset-right), var(--shadow-inset-bottom),
     var(--shadow-inset-left);
 }
 
@@ -178,11 +172,11 @@ export default {
   background: var(--bg-color-container);
 }
 
-/deep/ .t-popup[data-popper-placement="bottom-end"] .t-popup__arrow {
+/deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2);
 }
 
-/deep/ .t-popup[data-popper-placement="bottom-start"] .t-popup__arrow {
+/deep/ .t-popup[data-popper-placement='bottom-start'] .t-popup__arrow {
   left: 20px;
 }
 

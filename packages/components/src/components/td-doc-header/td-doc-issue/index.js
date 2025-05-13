@@ -3,9 +3,6 @@ import style from './style.less';
 import infoIcon from '@images/info.svg?raw';
 import checkIcon from '@images/check.svg?raw';
 import addIcon from '@images/add.svg?raw';
-import { isIntranet } from '@utils/index';
-
-const getIssueHelper = (framework) => `https://github.com/Tencent/tdesign-${framework}/issues/new/choose`;
 
 // 已开源的不区分内外网 统一去外网 GitHub
 const issueUrlMap = {
@@ -16,6 +13,7 @@ const issueUrlMap = {
   'mobile-react': `https://github.com/Tencent/tdesign-mobile-react/issues`,
   miniprogram: `https://github.com/Tencent/tdesign-miniprogram/issues`,
   flutter: `https://github.com/Tencent/tdesing-flutter/issues`,
+  chat: `https://github.com/Tencent/tdesign-vue-next/issues`,
 };
 
 function parseUrl() {
@@ -33,13 +31,9 @@ function getCurrentIssueUrl() {
   const [, framework, componentName] = parseUrl();
 
   return {
-    newUrl: isIntranet() ? `${issueUrlMap[framework]}/new` : getIssueHelper(framework),
-    openUrl: isIntranet()
-      ? `${issueUrlMap[framework]}?issue_search=${componentName}`
-      : `${issueUrlMap[framework]}?q=is:issue+is:open+${componentName}`,
-    closedUrl: isIntranet()
-      ? `${issueUrlMap[framework]}?state=closed&issue_search=${componentName}`
-      : `${issueUrlMap[framework]}?q=is:issue+is:closed+${componentName}`,
+    newUrl: `${issueUrlMap[framework]}/new/choose`,
+    openUrl: `${issueUrlMap[framework]}?q=is:issue+is:open+${componentName}`,
+    closedUrl: `${issueUrlMap[framework]}?q=is:issue+is:closed+${componentName}`,
   };
 }
 

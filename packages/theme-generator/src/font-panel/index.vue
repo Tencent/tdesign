@@ -12,7 +12,7 @@
         <p class="font-content__title">{{ lang.font.fontSize }}</p>
         <size-adjust />
       </div>
-      <common-collapse>
+      <common-collapse v-if="!isMobile(device)">
         <template #round>
           <div
             class="block"
@@ -65,21 +65,19 @@
   </div>
 </template>
 <script lang="jsx">
-import CommonCollapse from "../common/Collapse/index.vue";
-import SizeAdjust from "./components/SizeAdjust.vue";
-import LineHeightAdjust from "./components/LineHeightAdjust.vue";
-import FontColorAdjust from "./components/FontColorAdjust.vue";
+import CommonCollapse from '../common/Collapse/index.vue';
+import FontColorAdjust from './components/FontColorAdjust.vue';
+import FontColorSvg from './components/FontColorSvg.vue';
+import LineHeightAdjust from './components/LineHeightAdjust.vue';
+import LineHeightSvg from './components/LineHeightSvg.vue';
+import SizeAdjust from './components/SizeAdjust.vue';
 
-import LineHeightSvg from "./components/LineHeightSvg.vue";
-import FontColorSvg from "./components/FontColorSvg.vue";
-
-import { modifyToken } from "../common/utils";
-import { FONT_COLOR_MAP } from "../color-panel/utils/const";
-
-import langMixin from "../common/i18n/mixin";
+import { FONT_COLOR_MAP } from '../color-panel/utils/const';
+import langMixin from '../common/i18n/mixin';
+import { isMobile, modifyToken } from '../common/Themes';
 
 export default {
-  name: "FontPanel",
+  name: 'FontPanel',
   props: {
     top: Number,
     isRefresh: Boolean,
@@ -92,29 +90,28 @@ export default {
     LineHeightSvg,
     FontColorSvg,
   },
+  inject: ['device'],
   mixins: [langMixin],
   data() {
     return {
-      textColorPalette: [""],
-      initTextColorPalette: [""],
+      textColorPalette: [''],
+      initTextColorPalette: [''],
     };
   },
   computed: {
     isTextPaletteChange() {
-      return (
-        JSON.stringify(this.textColorPalette) !==
-        JSON.stringify(this.initTextColorPalette)
-      );
+      return JSON.stringify(this.textColorPalette) !== JSON.stringify(this.initTextColorPalette);
     },
     contentStyle() {
       const clientHeight = window.innerHeight;
       return {
-        overflowY: "scroll",
+        overflowY: 'scroll',
         height: `${clientHeight - (this.top || 0) - 96}px`,
       };
     },
   },
   methods: {
+    isMobile,
     changeGradation(hex, idx) {
       const tokenIdxName = this.textColorPalette[idx].name;
       this.textColorPalette[idx].value = hex;
@@ -127,8 +124,7 @@ export default {
       let currentPalette = [...new Array(7).keys()].map((v, i) => {
         return {
           ...colorMap[i],
-          value:
-            colorMap[i].value ?? docStyle.getPropertyValue(colorMap[i].from),
+          value: colorMap[i].value ?? docStyle.getPropertyValue(colorMap[i].from),
         };
       });
 
@@ -141,12 +137,15 @@ export default {
     },
   },
   mounted() {
-    this.setFontPalette();
+    // 确保 custom-theme 被 append 后再同步
+    this.$nextTick(() => {
+      this.setFontPalette();
+    });
   },
 };
 </script>
 <style scoped lang="less">
-/deep/ .t-popup[data-popper-placement="bottom-end"] .t-popup__arrow {
+/deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;
 }
 
@@ -285,8 +284,7 @@ export default {
     }
     &-top {
       padding: 10px 12px;
-      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-        "Liberation Mono", monospace;
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 
       > p {
         color: var(--td-font-white-3);
@@ -312,8 +310,7 @@ export default {
           font-weight: 600;
         }
         &:last-child {
-          font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-            "Liberation Mono", monospace;
+          font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
         }
       }
     }
