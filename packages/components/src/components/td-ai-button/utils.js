@@ -1,7 +1,7 @@
 import { createPopper } from '@popperjs/core';
 
 let preSelectedText = '';
-let sdk;
+let sdkInstance;
 let isGeneratingDemo = false;
 let regExp = {
   vue: /```vue(?:\w+)?\s*([\s\S]*?)```/g,
@@ -13,41 +13,50 @@ let frameworkKeys = {
   miniprogram: 'tdesign-miniprogram',
 };
 
-const appendChildAsync = (parent, child) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      parent.appendChild(child);
-      resolve();
-    }, 100);
-  });
+const createSDKContainer = (framework, demoRequestBody) => {
+  if (window.WebChatSdk) {
+    sdkInstance = new window.WebChatSdk({
+      logo: 'https://cdc.cdn-go.cn/tdc/latest/images/tdesign.svg',
+      logoLarge: 'https://cdc.cdn-go.cn/tdc/latest/images/tdesign.svg',
+      style: {
+        background: 'linear-gradient(117deg, #E4FFEE 0%, #B3EAFF 17.08%, #EAE7FF 45.83%, #FFF2F9 83.33%)',
+      },
+      knowledgeBase: '#TDesign',
+      keywords: frameworkKeys[framework],
+    });
+    sdkInstance.sendMessage({
+      prompt: '',
+    });
+    webChatInteraction(framework, demoRequestBody);
+  }
 };
-
 // create AI search SDK
 const createAISearchSDK = (framework, demoRequestBody) => {
-  if (document.getElementById('ai-search-sdk')) return;
+  const searchSDK = document.getElementById('ai-search-sdk');
+  const sdkContainer = document.getElementsByClassName('webchat-sdk-iframe-container');
+
+  if (searchSDK && sdkContainer.length && sdkInstance) {
+    sdkInstance.sendMessage({
+      prompt: '',
+    });
+    return;
+  }
+
   const sdkScript = document.createElement('script');
   sdkScript.setAttribute('src', 'https://acc-1258344699.cos.accelerate.myqcloud.com/web/webchat/sdk.js');
   sdkScript.setAttribute('id', 'ai-search-sdk');
 
-  document.body.appendChild(sdkScript);
-
-  appendChildAsync(document.body, sdkScript).then(() => {
-    if (window.WebChatSdk) {
-      sdk = new window.WebChatSdk({
-        logo: 'https://cdc.cdn-go.cn/tdc/latest/images/tdesign.svg',
-        logoLarge: 'https://cdc.cdn-go.cn/tdc/latest/images/tdesign.svg',
-        style: {
-          background: 'linear-gradient(117deg, #E4FFEE 0%, #B3EAFF 17.08%, #EAE7FF 45.83%, #FFF2F9 83.33%)',
-        },
-        knowledgeBase: '#TDesign',
-        keywords: frameworkKeys[framework],
-      });
-      sdk.sendMessage({
-        prompt: '',
-      });
-      webChatInteraction(framework, demoRequestBody);
+  sdkScript.onload = () => {
+    createSDKContainer(framework, demoRequestBody);
+  };
+  // for IE
+  sdkScript.onreadystatechange = function () {
+    if (this.readyState === 'loaded' || this.readyState === 'complete') {
+      createSDKContainer(framework, demoRequestBody);
     }
-  });
+  };
+
+  document.body.appendChild(sdkScript);
 };
 
 const unmountTooltips = () => {
@@ -58,7 +67,7 @@ const unmountTooltips = () => {
 
 // send message to AI search SDK
 const sendMessage = (prompt) => {
-  sdk.sendMessage({
+  sdkInstance.sendMessage({
     prompt,
   });
 };
@@ -79,7 +88,7 @@ const createTooltips = (generateDemo, selectedText) => {
   tooltip.setAttribute('role', 'tooltip');
 
   const info = location.pathname.split('/');
-  const framework = info[1];
+  // const framework = info[1];
   const component = info[3];
   isGeneratingDemo = generateDemo;
   content.innerHTML = generateDemo ? '生成示例' : '划词解释';
@@ -106,7 +115,7 @@ const webChatInteraction = (framework, demoRequestBody) => {
   const codeRegex = regExp[framework];
   let body = JSON.parse(demoRequestBody);
   if (window.webChatSdk) {
-    sdk.onChatEnd((payload) => {
+    sdkInstance.onChatEnd((payload) => {
       let match;
       while ((match = codeRegex.exec(payload.content)) !== null) {
         const code = match[1];
