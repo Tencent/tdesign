@@ -1,6 +1,6 @@
 {
   "name": "tdesign-theme-generator",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "TDesign主题配置生成器挂件",
   "scripts": {
     "dev": "vue-cli-service serve",
@@ -16,11 +16,6 @@
     "tdesign",
     "theme",
     "generator"
-  ],
-  "contributors": [
-    "uyarn",
-    "mingrutough1",
-    "yilaierwang"
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
