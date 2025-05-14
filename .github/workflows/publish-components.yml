@@ -30,10 +30,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          registry-url: "https://registry.npmjs.org"
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
+
       - run: pnpm install
       - run: cd packages/components && npm run build
       - run: cd packages/components && npm publish
