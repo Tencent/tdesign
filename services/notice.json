@@ -8,12 +8,7 @@
   },
   "vue": {},
   "react": {},
-  "vue-next": {
-    "title": "📢 Chat 组件发布 0.2 版本，新增支持展示思考过程、模型切换配置等能力",
-    "type": "primary",
-    "actionUrl": "https://tdesign.tencent.com/chat/changelog#%F0%9F%8C%88-0-2-0-2025-03-08",
-    "closeable": true
-  },
+  "vue-next": {},
   "vue-mobile": {
     "title": "📢 站点接入主题生成器，支持自定义CSS 变量",
     "type": "primary",
