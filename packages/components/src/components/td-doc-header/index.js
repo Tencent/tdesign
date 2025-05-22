@@ -1,10 +1,12 @@
 import { html, define } from 'hybrids';
+import { getLocale } from '@config/locale.js';
 import splineConfig from '@config/spline';
+import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, watchHtmlMode } from '@utils';
 import style from './style.less';
-import { mobileBodyStyle, watchHtmlMode } from '@utils';
 
 let timer = null;
 let observeTimer = null;
+const locale = getLocale();
 
 function handleModeChange(themeMode, host) {
   if (!host.shadowRoot) return;
@@ -145,6 +147,18 @@ export default define({
     const mobileBodyStyle = { ...host.mobileBodyStyle };
     const splineUrl = splineConfig[spline];
 
+    const openChangelogDrawer = () => {
+      let changelog = document.querySelector('td-doc-changelog');
+      if (!changelog) {
+        changelog = document.createElement('td-doc-changelog');
+        document.body.appendChild(changelog);
+      }
+      // 为了触发动画，下一帧再切换为显示状态
+      requestAnimationFrame(() => {
+        changelog.visible = true;
+      });
+    };
+
     return html`
       ${splineUrl
         ? html` <iframe id="__iframe__" class="TDesign-doc-header__thumb" onload="${iframeOnload}"></iframe>`
@@ -158,7 +172,12 @@ export default define({
             <div class="TDesign-doc-header__info">
               ${docInfo
                 ? html`
-                    <h1 class="TDesign-doc-header__info-title">${docInfo.title}</h1>
+                    <div>
+                      <h1 class="TDesign-doc-header__info-title">${docInfo.title}</h1>
+                      ${isComponentPage() || isGlobalConfigPage()
+                        ? html` <button onclick="${openChangelogDrawer}">${locale.changelog.title}</button> `
+                        : html``}
+                    </div>
                     <div class="TDesign-doc-header__info-describe">
                       <div innerHTML="${docInfo.desc}"></div>
                     </div>

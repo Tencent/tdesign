@@ -84,6 +84,27 @@
     bottom: 0;
     left: 0;
 
+    > div:first-child {
+      display: flex;
+      align-items: center;
+
+      button {
+        all: unset;
+        height: 18px;
+        padding: 5px 10px;
+        margin-left: 24px;
+        font-size: 12px;
+        background-color: var(--bg-color-tag);
+        color: var(--text-secondary);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+      }
+
+      button:hover {
+        color: var(--text-primary);
+      }
+    }
+
     &-title {
       font-size: var(--title-font-size, 48px);
       color: var(--text-primary);

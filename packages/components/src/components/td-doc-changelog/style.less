@@ -1,0 +1,150 @@
+.TDesign-doc-changelog {
+    &__drawer {
+        &-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+        }
+
+        &-container {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100%;
+            background-color: var(--bg-color-container);
+            z-index: 100001;
+            padding: 14px 28px;
+            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-primary);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--bg-color-scroll);
+        }
+
+        &-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--brand-main);
+
+            &-close-button {
+                background: transparent;
+                border: none;
+                font-size: 26px;
+                cursor: pointer;
+                color: var(--text-secondary);
+                padding: 0 6px;
+                transition: color 0.3s ease;
+
+                &:hover {
+                    color: var(--brand-main);
+                }
+            }
+        }
+
+        &-body {
+            overflow-y: auto;
+        }
+    }
+
+    &__log {
+        &-item {
+            padding: 14px 0;
+            border-bottom: 1px solid var(--brand-main);
+
+            &:last-child {
+                margin-bottom: 18px;
+                border-bottom: none;
+            }
+        }
+
+        &-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            margin: 10px 0;
+
+            &-version {
+                font-size: 18px;
+                color: var(--text-primary);
+            }
+
+            &-date {
+                font-size: 13px;
+                color: var(--text-secondary);
+            }
+        }
+
+        &-section {
+            margin: 10px 0 14px;
+
+            &-title {
+                font-size: 16px;
+                font-weight: 700;
+                color: var(--text-primary);
+                margin-bottom: 8px;
+            }
+        }
+
+        &-list {
+            margin: 0;
+            padding-left: 20px;
+            list-style-type: disc;
+            font-size: 14px;
+
+            li {
+                padding-left: 5px;
+                margin-bottom: 6px;
+                line-height: 1.5;
+                color: var(--text-primary);
+            }
+
+            code {
+                font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+                margin: 0 2px;
+                color: var(--error-8);
+                background: var(--error-1);
+                border-radius: 3px;
+                padding: 2px 6px;
+                font-size: 12px;
+                word-break: break-word;
+            }
+
+            a {
+                color: var(--brand-main);
+                text-decoration: none;
+
+                &:hover {
+                    color: var(--brand-main-hover);
+                }
+            }
+        }
+
+        &-empty {
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 30px 0;
+            font-style: italic;
+        }
+    }
+}
+
+// 动画效果
+.TDesign-doc-changelog__drawer-container {
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+}
+
+:host([visible]) .TDesign-doc-changelog__drawer-container {
+    transform: translateX(0);
+    opacity: 1;
+}
