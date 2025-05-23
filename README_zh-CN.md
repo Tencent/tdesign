@@ -123,7 +123,7 @@ TDesign 将腾讯内部多年设计经验提炼总结为专业的设计指南，
 - [动效](https://tdesign.tencent.com/design/motion)
 - [图标](https://tdesign.tencent.com/design/icon)
 - [布局](https://tdesign.tencent.com/design/layout)
-- [暗黑模式](https://tdesign.tencent.com/design/dark)
+- [深色模式](https://tdesign.tencent.com/design/dark)
 
 更多内容参考每个组件的指南部分，例如：[Button](https://tdesign.tencent.com/vue/components/button?tab=design)。
 
