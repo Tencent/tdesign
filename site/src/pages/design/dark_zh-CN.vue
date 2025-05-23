@@ -15,14 +15,14 @@
 
     <h2>概述</h2>
     <p>
-      暗黑模式是一种夜间友好的颜色主题，主要侧重于UI界面中每个元素可读性所需的最小色彩对比度，以保证出色的阅读体验。
+      深色模式是一种夜间友好的颜色主题，主要侧重于UI界面中每个元素可读性所需的最小色彩对比度，以保证出色的阅读体验。
     </p>
 
     <img class="starter" src="./assets/mode/starter.png" />
 
     <h2>原则</h2>
     <h3>内容优先</h3>
-    <p>暗黑模式下应优先保证内容识别度。需要确保文本内容易于阅读，而不是无缘无故的花哨。</p>
+    <p>深色模式下应优先保证内容识别度。需要确保文本内容易于阅读，而不是无缘无故的花哨。</p>
 
     <h3>阅读舒适度</h3>
     <p>
@@ -34,7 +34,8 @@
 
     <h3>符合 WCAG2.0 标准</h3>
     <p>
-      依据 WCAG2.0 设计标准，文本的视觉呈现以及文本图像至少要有 1:4.5 的对比度，以确保所有的文字内容清晰易读，对比度足够。
+      依据 WCAG2.0 设计标准，文本的视觉呈现以及文本图像至少要有 1:4.5
+      的对比度，以确保所有的文字内容清晰易读，对比度足够。
     </p>
 
     <h2>文字</h2>
@@ -47,7 +48,7 @@
 
     <h2>色彩</h2>
     <p>
-      在 TDesign 色彩系统中，在亮色的色彩算法基础上，经过运算得到暗黑模式的色板。色阶的制定同样采用了 CIElab、HSL
+      在 TDesign 色彩系统中，在亮色的色彩算法基础上，经过运算得到深色模式的色板。色阶的制定同样采用了 CIElab、HSL
       色彩空间结合插值的方法，保证色彩变化均匀，多色之间亮度均等。
     </p>
     <p>色彩中提供了 8 套常用的基础色板，每个扩展色均为 10 级色阶。</p>
@@ -75,50 +76,50 @@
 </template>
 
 <script>
-import anchorMixin from '../mixins/anchor'
+import anchorMixin from '../mixins/anchor';
 
 export default {
   mixins: [anchorMixin],
 
-  data () {
+  data() {
     return {
       dataSource: [
         {
           index: 0,
           token: '@text-color-primary',
           name: '标题',
-          color: '#ffffff 90%'
+          color: '#ffffff 90%',
         },
         {
           index: 1,
           token: '@text-color-secondary',
           name: '次要文字',
-          color: '#ffffff 60%'
+          color: '#ffffff 60%',
         },
         {
           index: 2,
           token: '@text-color-placeholder',
           name: '占位符文字',
-          color: '#ffffff 40%'
+          color: '#ffffff 40%',
         },
         {
           index: 3,
           token: '@text-color-disabled',
           name: '禁用状态文字',
-          color: '#ffffff 26%'
-        }
+          color: '#ffffff 26%',
+        },
       ],
       columns: [
         { ellipsis: true, colKey: 'token', title: 'token' },
         { ellipsis: true, colKey: 'name', title: '名称' },
-        { ellipsis: true, colKey: 'color', title: '色值' }
+        { ellipsis: true, colKey: 'color', title: '色值' },
       ],
       colorList: {
         list: [
           {
             topTitle: 'Blue',
             leftTxt: 'Blue6',
-            rightTxt: '#2174FF'
+            rightTxt: '#2174FF',
           },
           { leftTxt: 'Blue1', rightTxt: '#1E2C60' },
           { leftTxt: 'Blue2', rightTxt: '#062E9A' },
@@ -129,13 +130,13 @@ export default {
           { leftTxt: 'Blue7', rightTxt: '#478DFF' },
           { leftTxt: 'Blue8', rightTxt: '#69A1FF' },
           { leftTxt: 'Blue9', rightTxt: '#8CB8FF' },
-          { leftTxt: 'Blue10', rightTxt: '#ABCAFF' }
+          { leftTxt: 'Blue10', rightTxt: '#ABCAFF' },
         ],
         list1: [
           {
             topTitle: 'Cyan',
             leftTxt: 'Cyan6',
-            rightTxt: '#3CB1FB'
+            rightTxt: '#3CB1FB',
           },
           { leftTxt: 'Cyan1', rightTxt: '#05437D' },
           { leftTxt: 'Cyan2', rightTxt: '#06579E' },
@@ -146,13 +147,13 @@ export default {
           { leftTxt: 'Cyan7', rightTxt: '#67C9FC' },
           { leftTxt: 'Cyan8', rightTxt: '#8FDDFF' },
           { leftTxt: 'Cyan9', rightTxt: '#BDEFFF' },
-          { leftTxt: 'Cyan10', rightTxt: '#E0F9FF' }
+          { leftTxt: 'Cyan10', rightTxt: '#E0F9FF' },
         ],
         list2: [
           {
             topTitle: 'Purple',
             leftTxt: 'Purple6',
-            rightTxt: '#B382F0'
+            rightTxt: '#B382F0',
           },
           { leftTxt: 'Purple1', rightTxt: '#451981' },
           { leftTxt: 'Purple2', rightTxt: '#5A2D96' },
@@ -163,13 +164,13 @@ export default {
           { leftTxt: 'Purple7', rightTxt: '#CB96FF' },
           { leftTxt: 'Purple8', rightTxt: '#DDB5FF' },
           { leftTxt: 'Purple9', rightTxt: '#EACFFF' },
-          { leftTxt: 'Purple10', rightTxt: '#F7EBFF' }
+          { leftTxt: 'Purple10', rightTxt: '#F7EBFF' },
         ],
         list3: [
           {
             topTitle: 'Pink',
             leftTxt: 'Pink6',
-            rightTxt: '#FF70CF'
+            rightTxt: '#FF70CF',
           },
           { leftTxt: 'Pink1', rightTxt: '#7B0554' },
           { leftTxt: 'Pink2', rightTxt: '#9B066D' },
@@ -180,13 +181,13 @@ export default {
           { leftTxt: 'Pink7', rightTxt: '#FF99E4' },
           { leftTxt: 'Pink8', rightTxt: '#FFBDF4' },
           { leftTxt: 'Pink9', rightTxt: '#FFDBFD' },
-          { leftTxt: 'Pink10', rightTxt: '#FFF2FF' }
+          { leftTxt: 'Pink10', rightTxt: '#FFF2FF' },
         ],
         list4: [
           {
             topTitle: 'Red',
             leftTxt: 'Red6',
-            rightTxt: '#FB6E77'
+            rightTxt: '#FB6E77',
           },
           { leftTxt: 'Red1', rightTxt: '#730524' },
           { leftTxt: 'Red2', rightTxt: '#960627' },
@@ -197,13 +198,13 @@ export default {
           { leftTxt: 'Red7', rightTxt: '#FF9195' },
           { leftTxt: 'Red8', rightTxt: '#FFB5B8' },
           { leftTxt: 'Red9', rightTxt: '#FFD6D8' },
-          { leftTxt: 'Red10', rightTxt: '#FFF2F2' }
+          { leftTxt: 'Red10', rightTxt: '#FFF2F2' },
         ],
         list5: [
           {
             topTitle: 'Orange',
             leftTxt: 'Orange6',
-            rightTxt: '#ED8139'
+            rightTxt: '#ED8139',
           },
           { leftTxt: 'Orange1', rightTxt: '#692204' },
           { leftTxt: 'Orange2', rightTxt: '#873105' },
@@ -214,13 +215,13 @@ export default {
           { leftTxt: 'Orange7', rightTxt: '#FF9852' },
           { leftTxt: 'Orange8', rightTxt: '#FFB97D' },
           { leftTxt: 'Orange9', rightTxt: '#FFD8AD' },
-          { leftTxt: 'Orange10', rightTxt: '#FFF4E5' }
+          { leftTxt: 'Orange10', rightTxt: '#FFF4E5' },
         ],
         list6: [
           {
             topTitle: 'Yellow',
             leftTxt: 'Yellow6',
-            rightTxt: '#D29E08'
+            rightTxt: '#D29E08',
           },
           { leftTxt: 'Yellow1', rightTxt: '#5E3B04' },
           { leftTxt: 'Yellow2', rightTxt: '#754E05' },
@@ -231,13 +232,13 @@ export default {
           { leftTxt: 'Yellow7', rightTxt: '#EBB30E' },
           { leftTxt: 'Yellow8', rightTxt: '#FBCC30' },
           { leftTxt: 'Yellow9', rightTxt: '#FFE682' },
-          { leftTxt: 'Yellow10', rightTxt: '#FFF9C2' }
+          { leftTxt: 'Yellow10', rightTxt: '#FFF9C2' },
         ],
         list7: [
           {
             topTitle: 'Green',
             leftTxt: 'Green6',
-            rightTxt: '#07A872'
+            rightTxt: '#07A872',
           },
           { leftTxt: 'Green1', rightTxt: '#034116' },
           { leftTxt: 'Green2', rightTxt: '#035428' },
@@ -248,39 +249,39 @@ export default {
           { leftTxt: 'Green7', rightTxt: '#37BF8E' },
           { leftTxt: 'Green8', rightTxt: '#71D5AE' },
           { leftTxt: 'Green9', rightTxt: '#B3E8D1' },
-          { leftTxt: 'Green10', rightTxt: '#E8F7F1' }
-        ]
-      }
-    }
+          { leftTxt: 'Green10', rightTxt: '#E8F7F1' },
+        ],
+      },
+    };
   },
   methods: {
-    copyColor (color) {
+    copyColor(color) {
       if ('clipboard' in navigator) {
-        navigator.clipboard.writeText(color)
-        this.$message.success('复制成功')
-        return
+        navigator.clipboard.writeText(color);
+        this.$message.success('复制成功');
+        return;
       }
 
-      const textarea = document.createElement('textarea')
-      textarea.textContent = color
-      textarea.style.width = 0
-      textarea.style.height = 0
-      document.body.appendChild(textarea)
+      const textarea = document.createElement('textarea');
+      textarea.textContent = color;
+      textarea.style.width = 0;
+      textarea.style.height = 0;
+      document.body.appendChild(textarea);
 
-      const selection = document.getSelection()
-      const range = document.createRange()
-      range.selectNode(textarea)
-      selection.removeAllRanges()
-      selection.addRange(range)
+      const selection = document.getSelection();
+      const range = document.createRange();
+      range.selectNode(textarea);
+      selection.removeAllRanges();
+      selection.addRange(range);
 
-      document.execCommand('copy')
-      selection.removeAllRanges()
-      document.body.removeChild(textarea)
+      document.execCommand('copy');
+      selection.removeAllRanges();
+      document.body.removeChild(textarea);
 
-      this.$message.success('复制成功')
-    }
-  }
-}
+      this.$message.success('复制成功');
+    },
+  },
+};
 </script>
 
 <style lang="less">
@@ -309,7 +310,8 @@ export default {
       margin-bottom: 24px;
       width: calc((100% - 48px) / 4);
 
-      &:last-of-type, &:nth-child(4) {
+      &:last-of-type,
+      &:nth-child(4) {
         margin-right: 0;
       }
       &:nth-child(n + 5) {
@@ -317,9 +319,9 @@ export default {
       }
       .color-board-list {
         height: 40px;
-        color: rgba(0,0,0,.9);
+        color: rgba(0, 0, 0, 0.9);
         padding: 4px 8px;
-        transition: all .2s var(--anim-time-fn-easing);
+        transition: all 0.2s var(--anim-time-fn-easing);
         cursor: pointer;
 
         &:hover {
@@ -343,14 +345,14 @@ export default {
         &:first-child {
           border-radius: 6px 6px 0 0;
           height: 56px;
-          color: rgba(0,0,0,.9);
+          color: rgba(0, 0, 0, 0.9);
           display: flex;
           flex-flow: column;
           justify-content: space-between;
           .color-board-bottomTxt {
             font-size: 12px;
             line-height: 20px;
-            color: rgba(0,0,0,0.9);
+            color: rgba(0, 0, 0, 0.9);
             font-weight: 500;
           }
           .color-board-topTxt {
