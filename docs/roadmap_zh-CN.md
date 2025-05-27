@@ -13,7 +13,7 @@ title: 后续计划
 
 - 持续维护目前 1.0 LTS 版本的基础通用 UI 组件，并完善目前基础组件的功能 [TDesign LTS Version Maintain](https://github.com/orgs/Tencent/projects/1/views/35?sliceBy%5Bvalue%5D=Desktop)。
 
-- 持续迭代跨端组件库 `TDesign Flutter`，并迭代至 1.0 稳定版本。同时提供H5/小程序跨端的解决方案。
+- 持续迭代跨端组件库 TDesign Flutter，并迭代至 1.0 稳定版本。同时提供H5/小程序跨端的解决方案。
 
 - 提供一套 Web Components 标准的 TDesign UI 风格的基础组件，并在此基础上进行建设 AIGC 系列高阶组件的实现，降低维护成本。
 
@@ -23,6 +23,6 @@ title: 后续计划
 
 **我们准备做的**
 
-和腾讯内外的各个业务和业务进行合作，提供更多周边建设，包括低代码平台、AI 编程辅助能力、D2C 和更丰富的页面模板等资源
+和腾讯内外的各个业务进行合作，提供更多周边建设，包括低代码平台、AI 编程辅助能力、D2C 和更丰富的页面模板等资源
 
 以上工作都在 GitHub Projects 上公开进行。[view on GitHub](https://github.com/orgs/Tencent/projects/1)
