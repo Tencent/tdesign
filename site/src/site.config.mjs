@@ -87,12 +87,12 @@ const siteConfig = {
           },
           {
             name: 'dark',
-            title: 'Dark Mode 暗黑模式',
+            title: 'Dark Mode 深色模式',
             path: '/design/dark',
             meta: {
-              documentTitle: 'Dark Mode 暗黑模式 - TDesign',
-              title: 'Dark Mode 暗黑模式',
-              desc: '暗黑模式是一种夜间友好的颜色主题，帮助用户更沉浸式的工作。',
+              documentTitle: 'Dark Mode 深色模式 - TDesign',
+              title: 'Dark Mode 深色模式',
+              desc: '深色模式是一种夜间友好的颜色主题，帮助用户更沉浸式的工作。',
               spline: 'design-mode',
             },
             component: () => import('@/pages/design/dark_zh-CN.vue'),
