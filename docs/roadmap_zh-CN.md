@@ -23,6 +23,6 @@ title: 后续计划
 
 **我们准备做的**
 
-和腾讯内外的各个业务和业务进行合作，提供更多周边建设，包括低代码平台、AI 编程辅助能力、D2C 和更丰富的页面模板等资源
+和腾讯内外各个业务进行合作，提供更多周边建设，包括低代码平台、AI 编程辅助能力、D2C 和更丰富的页面模板等资源
 
 以上工作都在 GitHub Projects 上公开进行。[view on GitHub](https://github.com/orgs/Tencent/projects/1)
