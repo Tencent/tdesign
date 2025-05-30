@@ -1,5 +1,5 @@
 const fs = require('fs');
-const path = require('path');
+const path = require('path');;
 
 const RELEASE_API = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/release';
 
