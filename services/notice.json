@@ -14,11 +14,6 @@
     "type": "primary",
     "closeable": true
   },
-  "react-mobile": {
-    "title": "📢 站点接入主题生成器，支持自定义CSS 变量",
-    "type": "primary",
-    "closeable": true
-  },
   "miniprogram": {
     "title": "📢 站点接入主题生成器，支持自定义CSS 变量",
     "type": "primary",
