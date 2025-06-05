@@ -10,6 +10,7 @@ on:
     paths:
       - 'packages/components/**'
       - 'packages/theme-generator/**'
+      - 'site/**'
 
 jobs:
   build:
