@@ -1,13 +1,13 @@
 name: PUBLISH_COMPONENTS
 
 on:
-  push:
-    branches: [main]
   pull_request:
     types: [closed]
-
+    paths:
+      - packages/components/package.json
 jobs:
   modify-components:
+    if: github.repository == 'Tencent/tdesign' && github.event.pull_request.merged
     runs-on: ubuntu-latest
     outputs:
       components-changed: ${{ steps.components-changed.outputs.changed }}

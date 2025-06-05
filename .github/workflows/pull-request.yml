@@ -1,14 +1,14 @@
 name: MAIN_PULL_REQUEST
 
 on:
-  push:
-    branches: [main]
   pull_request:
     types: [closed]
+    paths:
+      - 'services/**'
 
 jobs:
   modify-services:
-    if: github.repository == 'Tencent/tdesign'
+    if: github.repository == 'Tencent/tdesign' && github.event.pull_request.merged
     runs-on: ubuntu-latest
     outputs:
       services-changed: ${{ steps.services-changed.outputs.changed }}
