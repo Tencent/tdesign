@@ -2,8 +2,14 @@ name: Publish_Any_Commit
 on:
   push:
     branches: [main]
+    paths:
+      - 'packages/components/**'
+      - 'packages/theme-generator/**'
   pull_request:
     branches: [main]
+    paths:
+      - 'packages/components/**'
+      - 'packages/theme-generator/**'
 
 jobs:
   build:
