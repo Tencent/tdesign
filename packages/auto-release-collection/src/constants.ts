@@ -41,7 +41,7 @@ export const submodules = {
     title: '## React for Starter 发布 ',
     changelogUrl: 'https://raw.githubusercontent.com/Tencent/tdesign-react-starter/refs/heads/main/CHANGELOG.md',
   },
-  '@tdesign-vue-next-chat': {
+  '@tdesign-vue-next/chat': {
     title: '## Vue3 for Chat 发布',
     changelogUrl:
       'https://raw.githubusercontent.com/Tencent/tdesign-vue-next/refs/heads/main/packages/tdesign-vue-next-chat/CHANGELOG.md',
@@ -61,5 +61,5 @@ export const submodulesKeys: SubmoduleItem[] = [
   'tdesign-vue-starter',
   'tdesign-vue-next-starter',
   'tdesign-react-starter',
-  '@tdesign-vue-next-chat',
+  '@tdesign-vue-next/chat',
 ];
