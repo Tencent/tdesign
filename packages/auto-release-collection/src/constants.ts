@@ -83,5 +83,5 @@ export const submodulesKeys: SubmoduleItem[] = [
   'tdesign-vue-starter',
   'tdesign-vue-next-starter',
   'tdesign-react-starter',
-  '@tdesign-vue-next/chat',
+  //'@tdesign-vue-next/chat',
 ];
