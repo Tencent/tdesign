@@ -28,9 +28,16 @@ export function getVersionContent(version: string, markdown: string) {
  * @param {string} suffixDesc
  */
 export function getProjectDesc(project: SubmoduleItem, tag: string, prefixDesc: string, suffixDesc: string) {
+  let  newTag=tag;
+  
+  //  这里未来考虑配置化
+  if(project==='tdesign-vue-next'){
+    newTag=`tdesign-vue-next@${tag}`;
+  }
+
   return [
-    `${prefixDesc} [${tag}](https://github.com/Tencent/${project}/releases/tag/${tag})`,
-    `${suffixDesc} https://github.com/Tencent/${project}/releases/tag/${tag}`,
+    `${prefixDesc} [${tag}](https://github.com/Tencent/${project}/releases/tag/${newTag})`,
+    `${suffixDesc} https://github.com/Tencent/${project}/releases/tag/${newTag}`,
   ];
 }
 
