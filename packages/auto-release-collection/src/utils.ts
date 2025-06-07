@@ -27,10 +27,10 @@ export function getVersionContent(version: string, markdown: string) {
  * @param {string} prefixDesc
  * @param {string} suffixDesc
  */
-export function getProjectDesc(project: SubmoduleItem, tag: string, prefixDesc: string, suffixDesc: string) {
+export function getProjectDesc(project: string, tag: string, prefixDesc: string, suffixDesc: string) {
   return [
-    `${prefixDesc} [${tag}](https://github.com/Tencent/${project}/releases/tag/${tag})`,
-    `${suffixDesc} https://github.com/Tencent/${project}/releases/tag/${tag}`,
+    `${prefixDesc} [${tag}](https://github.com/${project}/releases/tag/${tag})`,
+    `${suffixDesc} https://github.com/${project}/releases/tag/${tag}`,
   ];
 }
 
@@ -65,8 +65,8 @@ export function getReleaseData() {
   let tagDay = today.getDate();
   console.log('today', tagDay);
 
-  const tagYear = (today.getMonth() === 0 && today.getDate() === 1) ? today.getFullYear() - 1 : today.getFullYear();
-  const tagMonth = (today.getMonth() === 0 && tagDay === 1) ? 12 : today.getMonth() + (tagDay === 1 ? 0 : 1);
+  const tagYear = today.getMonth() === 0 && today.getDate() === 1 ? today.getFullYear() - 1 : today.getFullYear();
+  const tagMonth = today.getMonth() === 0 && tagDay === 1 ? 12 : today.getMonth() + (tagDay === 1 ? 0 : 1);
 
   const monthShort = new Date(tagYear, tagMonth - 1).toLocaleString('en-US', { month: 'short' });
 
