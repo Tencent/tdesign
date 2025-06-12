@@ -1,10 +1,12 @@
 import { html, define } from 'hybrids';
 import { getLocale } from '@config/locale.js';
+import closeIcon from '@images/close.svg?raw';
 import { isComponentPage, isGlobalConfigPage } from '@utils';
 import style from './style.less';
 
 let changelogCache = null;
 const classPrefix = 'TDesign-doc-changelog';
+const logWrapperPrefix = `${classPrefix}__log`;
 const locale = getLocale();
 
 function getCompName() {
@@ -31,7 +33,7 @@ async function fetchChangelog(host) {
     }
 
     const compChangelog = changelogCache[compName];
-    const container = host.shadowRoot?.querySelector(`.${classPrefix}__drawer-body`);
+    const container = host.shadowRoot?.querySelector(`.${logWrapperPrefix}`);
     if (container) {
       container.innerHTML = renderChangelog(compChangelog);
     }
@@ -42,19 +44,20 @@ async function fetchChangelog(host) {
 
 function renderChangelog(list) {
   if (!Array.isArray(list)) {
-    return `<div class="${classPrefix}__log-empty">${locale.changelog.emptyInfo}</div>`;
+    return `<div class="${logWrapperPrefix}-empty">${locale.changelog.emptyInfo}</div>`;
   }
 
   return list
     .map(
       (item) => `
-        <div class="${classPrefix}__log-item">
-          <div class="${classPrefix}__log-header">
-            <span class="${classPrefix}__log-header-version">🌈 ${item.version}</span>
-            <span class="${classPrefix}__log-header-date">${item.date}</span>
-          </div>
+        <div class="${logWrapperPrefix}-item">
+          <h2 class="${logWrapperPrefix}-header">
+            <span class="${logWrapperPrefix}-header-version">🌈 ${item.version}</span>
+            <code class="${logWrapperPrefix}-header-date">${item.date}</code>
+          </h2>
           ${renderLogSection('🚀 Features', item.features)}
           ${renderLogSection('🐞 Bug Fixes', item.bugfixes)}
+          ${renderLogSection('❗ Breaking Changes', item.breakingChanges)}
         </div>
       `,
     )
@@ -65,7 +68,7 @@ function renderLogSection(title, items) {
   if (!items) return '';
   return `
     <div class="${classPrefix}__log-section">
-      <div class="${classPrefix}__log-section-title">${title}</div>
+      <h3 class="${classPrefix}__log-section-title">${title}</h3>
       <ul class="${classPrefix}__log-list">
         ${items.map((item) => renderChangelogList(item)).join('')}
       </ul>
@@ -144,11 +147,18 @@ export default define({
         <div class="${classPrefix}__drawer-overlay" onclick="${closeChangelogDrawer}"></div>
         <div class="${classPrefix}__drawer-container">
           <div class="${classPrefix}__drawer-header">
-            <button class="${classPrefix}__drawer-header-close-button" onclick="${closeChangelogDrawer}">×</button>
+            <p class="${classPrefix}__drawer-header-title">${locale.changelog.title}</p>
+            <button
+              class="${classPrefix}__drawer-header-close-button"
+              onclick="${closeChangelogDrawer}"
+              innerHTML="${closeIcon}"
+            ></button>
           </div>
-          <div class="${classPrefix}__drawer-body"></div>
+          <div class="${classPrefix}__drawer-body">
+            <div class="${logWrapperPrefix}"></div>
+          </div>
+          <div></div>
         </div>
-        <div></div>
       </div>
     `.css`${style}`;
   },

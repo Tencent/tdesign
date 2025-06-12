@@ -1,6 +1,7 @@
 import { html, define } from 'hybrids';
 import { getLocale } from '@config/locale.js';
 import splineConfig from '@config/spline';
+import historyIcon from '@images/history.svg?raw';
 import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, watchHtmlMode } from '@utils';
 import style from './style.less';
 
@@ -175,7 +176,12 @@ export default define({
                     <div>
                       <h1 class="TDesign-doc-header__info-title">${docInfo.title}</h1>
                       ${isComponentPage() || isGlobalConfigPage()
-                        ? html` <button onclick="${openChangelogDrawer}">${locale.changelog.title}</button> `
+                        ? html`
+                            <button onclick="${openChangelogDrawer}">
+                              <i innerHTML="${historyIcon}"></i>
+                              ${locale.changelog.title}
+                            </button>
+                          `
                         : html``}
                     </div>
                     <div class="TDesign-doc-header__info-describe">

@@ -14,11 +14,10 @@
             position: fixed;
             top: 0;
             right: 0;
-            width: 400px;
-            height: 100%;
+            width: 500px;
+            height: 100vh;
             background-color: var(--bg-color-container);
             z-index: 100001;
-            padding: 14px 28px;
             box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: var(--text-primary);
@@ -31,61 +30,114 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--brand-main);
+            height: 56px;
+            box-shadow: var(--header-box-shadow);
+
+            &-title {
+                position: relative;
+                font-size: 16px;
+                left: 16px;
+                height: 24px;
+                font-weight: 600;
+            }
 
             &-close-button {
                 background: transparent;
                 border: none;
-                font-size: 26px;
                 cursor: pointer;
-                color: var(--text-secondary);
-                padding: 0 6px;
-                transition: color 0.3s ease;
+                padding: 2px;
 
-                &:hover {
-                    color: var(--brand-main);
+                svg {
+                    width: 20px;
+                    height: 20px;
+                    color: var(--text-primary);
                 }
             }
         }
 
         &-body {
-            overflow-y: auto;
+            position: relative;
+            padding: 16px;
         }
     }
 
     &__log {
-        &-item {
-            padding: 14px 0;
-            border-bottom: 1px solid var(--brand-main);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        min-height: 100%;
 
-            &:last-child {
-                margin-bottom: 18px;
-                border-bottom: none;
+        // 竖线
+        &:not(:has(&-empty))::after {
+            content: '';
+            position: absolute;
+            top: 32px;
+            left: 15px;
+            width: 2px;
+            height: 100%;
+            background: var(--brand-main);
+        }
+
+        &-item {
+            position: relative;
+            padding-left: 32px;
+
+            &:last-of-type {
+                &::after {
+                    content: '';
+                    position: absolute;
+                    left: 15px;
+                    top: 30px;
+                    z-index: 10;
+                    width: 8px;
+                    height: 105%;
+                    background: var(--bg-color-docpage);
+                }
             }
         }
 
         &-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-weight: 600;
             margin: 10px 0;
+
+            // 圆点
+            &::before {
+                content: '';
+                position: absolute;
+                left: 12px;
+                width: 8px;
+                height: 8px;
+                border: 2px solid var(--brand-main);
+                background: var(--bg-color-docpage);
+                outline: 8px solid var(--bg-color-docpage);
+                box-sizing: border-box;
+                border-radius: 50%;
+                z-index: 10;
+            }
 
             &-version {
                 font-size: 18px;
+                font-weight: 600;
                 color: var(--text-primary);
             }
 
             &-date {
-                font-size: 13px;
-                color: var(--text-secondary);
+                position: relative;
+                left: 8px;
+                color: var(--text-primary);
+                background: var(--bg-color-tag);
+                border-radius: 3px;
+                margin: 0 2px;
+                padding: 2px 8px;
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 20px;
             }
         }
 
         &-section {
-            margin: 10px 0 14px;
-
             &-title {
                 font-size: 16px;
                 font-weight: 700;
@@ -103,7 +155,7 @@
             li {
                 padding-left: 5px;
                 margin-bottom: 6px;
-                line-height: 1.5;
+                line-height: 22px;
                 color: var(--text-primary);
             }
 

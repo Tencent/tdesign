@@ -14,7 +14,7 @@
 .TDesign-doc-header {
   height: var(--doc-header-height);
   padding-right: var(--content-padding-right);
-  
+
   &__inner {
     padding: 48px var(--content-padding-left-right);
     box-sizing: border-box;
@@ -84,24 +84,33 @@
     bottom: 0;
     left: 0;
 
-    > div:first-child {
+    >div:first-child {
       display: flex;
       align-items: center;
 
       button {
         all: unset;
-        height: 18px;
-        padding: 5px 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-items: center;
+        gap: 4px;
+        height: 24px;
+        padding: 2px 8px;
         margin-left: 24px;
         font-size: 12px;
-        background-color: var(--bg-color-tag);
-        color: var(--text-secondary);
-        border-radius: var(--border-radius);
+        color: var(--brand-main);
+        border: 1px solid var(--brand-main);
+        border-radius: 3px;
         cursor: pointer;
-      }
 
-      button:hover {
-        color: var(--text-primary);
+        &:hover {
+          color: var(--brand-main-hover);
+          border: 1px solid var(--brand-main-hover);
+        }
+
+        i {
+          display: flex;
+        }
       }
     }
 
@@ -111,7 +120,7 @@
       text-align: left;
       line-height: 56px;
       margin: 0;
-      transition: top .2s var(--anim-time-fn-easing),opacity .2s linear, visibility .2s linear;
+      transition: top .2s var(--anim-time-fn-easing), opacity .2s linear, visibility .2s linear;
     }
 
     &-describe {
