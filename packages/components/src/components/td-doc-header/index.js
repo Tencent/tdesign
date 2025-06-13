@@ -177,7 +177,7 @@ export default define({
                       <h1 class="TDesign-doc-header__info-title">${docInfo.title}</h1>
                       ${isComponentPage() || isGlobalConfigPage()
                         ? html`
-                            <button onclick="${openChangelogDrawer}">
+                            <button id="TDesign-doc-changelog__entry" onclick="${openChangelogDrawer}">
                               <i innerHTML="${historyIcon}"></i>
                               ${locale.changelog.title}
                             </button>

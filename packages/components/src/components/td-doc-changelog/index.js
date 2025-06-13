@@ -4,10 +4,12 @@ import closeIcon from '@images/close.svg?raw';
 import { isComponentPage, isGlobalConfigPage } from '@utils';
 import style from './style.less';
 
-let changelogCache = null;
 const classPrefix = 'TDesign-doc-changelog';
-const logWrapperPrefix = `${classPrefix}__log`;
+const logsPrefix = `${classPrefix}__logs`;
+
 const locale = getLocale();
+
+let changelogCache = null;
 
 function getCompName() {
   if (isComponentPage()) {
@@ -15,9 +17,9 @@ function getCompName() {
     let rawName = pathSegments[3] || '';
     // 去除结尾的 -en
     if (rawName.endsWith('-en')) rawName = rawName.slice(0, -3);
-    // 转为驼峰并首字母大写
-    const camelCaseName = rawName.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-    return camelCaseName ? camelCaseName[0].toUpperCase() + camelCaseName.slice(1) : '';
+    // 转为帕斯卡命名
+    const pascalCaseName = rawName.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+    return pascalCaseName ? pascalCaseName[0].toUpperCase() + pascalCaseName.slice(1) : '';
   } else if (isGlobalConfigPage()) {
     return 'ConfigProvider';
   }
@@ -33,79 +35,88 @@ async function fetchChangelog(host) {
     }
 
     const compChangelog = changelogCache[compName];
-    const container = host.shadowRoot?.querySelector(`.${logWrapperPrefix}`);
+    const container = host.shadowRoot?.querySelector(`.${logsPrefix}`);
     if (container) {
-      container.innerHTML = renderChangelog(compChangelog);
+      container.innerHTML = renderLog(compChangelog);
     }
   } catch (err) {
     console.error('Failed to load changelog:', err);
   }
 }
 
-function renderChangelog(list) {
+function renderLog(list) {
   if (!Array.isArray(list)) {
-    return `<div class="${logWrapperPrefix}-empty">${locale.changelog.emptyInfo}</div>`;
+    return `<div class="${logsPrefix}-empty">${locale.changelog.emptyInfo}</div>`;
   }
 
   return list
-    .map(
-      (item) => `
-        <div class="${logWrapperPrefix}-item">
-          <h2 class="${logWrapperPrefix}-header">
-            <span class="${logWrapperPrefix}-header-version">🌈 ${item.version}</span>
-            <code class="${logWrapperPrefix}-header-date">${item.date}</code>
+    .map((item) => {
+      const sections = Object.keys(item)
+        .filter((key) => Array.isArray(item[key]))
+        .map((key) => renderLogSection(key, item[key]))
+        .join('');
+
+      // 一个版本
+      return `
+        <div class="${logsPrefix}-version">
+          <h2 class="${logsPrefix}-version-header">
+            <span>🌈 ${item.version}</span>
+            <code>${item.date}</code>
           </h2>
-          ${renderLogSection('🚀 Features', item.features)}
-          ${renderLogSection('🐞 Bug Fixes', item.bugfixes)}
-          ${renderLogSection('❗ Breaking Changes', item.breakingChanges)}
+          ${sections}
         </div>
-      `,
-    )
+      `;
+    })
     .join('');
 }
 
+// 一种变更类型
 function renderLogSection(title, items) {
   if (!items) return '';
   return `
-    <div class="${classPrefix}__log-section">
-      <h3 class="${classPrefix}__log-section-title">${title}</h3>
-      <ul class="${classPrefix}__log-list">
-        ${items.map((item) => renderChangelogList(item)).join('')}
+    <div class="${logsPrefix}-version-section">
+      <h3>${title}</h3>
+      <ul>
+        ${items.map((item) => renderLogDetails(item)).join('')}
       </ul>
     </div>
   `;
 }
 
-function renderChangelogList(text) {
-  // 行内 code
-  text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
-  // 链接
-  text = text.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
-  // @用户名
-  text = text.replace(/@([a-zA-Z0-9-_]+)/g, '<a href="https://github.com/$1" target="_blank">@$1</a>');
-
+// 日志详情
+function renderLogDetails(text) {
   const lines = text
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean);
 
   // Case 1: 存在多行子列表描述
-  if (lines.length > 1 && !lines[0].startsWith('-')) {
+  if (
+    lines.length > 1 &&
+    // 第一行开头是 @用户名
+    /^@([a-zA-Z0-9-_]+)/.test(lines[0])
+  ) {
     const [firstLine, ...rest] = lines;
-    const restItems = rest
-      .map((line) => line.replace(/^- /, ''))
-      .map((item) => `<li>${item}</li>`)
-      .join('');
-    return `<li>${firstLine}</li><ul>${restItems}</ul>`;
+    const restItems = rest.map((item) => `<li>${item}</li>`).join('');
+    const html = `<li>${firstLine}</li><ul>${restItems}</ul>`;
+    return replaceSpecialTags(html);
   }
 
-  // Case 2
-  return lines
-    .map((line) => {
-      const content = line.replace(/^- /, '');
-      return `<li>${content}</li>`;
-    })
-    .join('');
+  // Case 2：单独一行
+  const html = lines.map((line) => `<li>${line}</li>`).join('');
+  return replaceSpecialTags(html);
+}
+
+function replaceSpecialTags(html) {
+  return (
+    html
+      // 行内 code
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      // 链接
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+      // @用户名
+      .replace(/@([a-zA-Z0-9-_]+)/g, '<a href="https://github.com/$1" target="_blank">@$1</a>')
+  );
 }
 
 export default define({
@@ -128,6 +139,7 @@ export default define({
 
       const container = host.shadowRoot?.querySelector(`.${classPrefix}__drawer-body`);
       if (container) {
+        // 切换页面时，重置滚动位置
         container.scrollTop = 0;
       }
     };
@@ -143,19 +155,15 @@ export default define({
     };
 
     return html`
-      <div style="visibility: ${host.visible ? 'visibility' : 'hidden'}">
-        <div class="${classPrefix}__drawer-overlay" onclick="${closeChangelogDrawer}"></div>
-        <div class="${classPrefix}__drawer-container">
+      <div class="${host.visible ? 'visible' : 'hidden'}">
+        <div class="${classPrefix}__overlay" onclick="${closeChangelogDrawer}"></div>
+        <div class="${classPrefix}__drawer">
           <div class="${classPrefix}__drawer-header">
-            <p class="${classPrefix}__drawer-header-title">${locale.changelog.title}</p>
-            <button
-              class="${classPrefix}__drawer-header-close-button"
-              onclick="${closeChangelogDrawer}"
-              innerHTML="${closeIcon}"
-            ></button>
+            <p>${locale.changelog.title}</p>
+            <button onclick="${closeChangelogDrawer}" innerHTML="${closeIcon}"></button>
           </div>
           <div class="${classPrefix}__drawer-body">
-            <div class="${logWrapperPrefix}"></div>
+            <div class="${logsPrefix}"></div>
           </div>
           <div></div>
         </div>

@@ -87,31 +87,6 @@
     >div:first-child {
       display: flex;
       align-items: center;
-
-      button {
-        all: unset;
-        display: inline-flex;
-        align-items: center;
-        justify-items: center;
-        gap: 4px;
-        height: 24px;
-        padding: 2px 8px;
-        margin-left: 24px;
-        font-size: 12px;
-        color: var(--brand-main);
-        border: 1px solid var(--brand-main);
-        border-radius: 3px;
-        cursor: pointer;
-
-        &:hover {
-          color: var(--brand-main-hover);
-          border: 1px solid var(--brand-main-hover);
-        }
-
-        i {
-          display: flex;
-        }
-      }
     }
 
     &-title {
@@ -132,5 +107,36 @@
       box-sizing: border-box;
       transition: all .2s linear;
     }
+  }
+}
+
+#TDesign-doc-changelog__entry {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 2px 8px;
+  margin-left: 24px;
+  font-size: 12px;
+  color: var(--brand-main);
+  border: 1px solid var(--brand-main);
+  border-radius: 3px;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--brand-main-hover);
+    border: 1px solid var(--brand-main-hover);
+  }
+
+  i {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  #TDesign-doc-changelog__entry {
+    display: none;
   }
 }
