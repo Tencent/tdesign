@@ -34,33 +34,40 @@ export function patchShadowDomIntoDom(host) {
   function patchNode() {
     requestAnimationFrame(() => {
       if (!host || !host.shadowRoot || host.patchDom) return;
-      const slotElement = document.createElement("div");
-      slotElement.setAttribute("slot", "__render_content__");
+      const slotElement = document.createElement('div');
+      slotElement.setAttribute('slot', '__render_content__');
       slotElement.innerHTML = host.shadowRoot.innerHTML;
       host.appendChild(slotElement);
     });
   }
 
-  window.addEventListener("load", patchNode);
+  window.addEventListener('load', patchNode);
 
-  return () => window.removeEventListener("load", patchNode);
+  return () => window.removeEventListener('load', patchNode);
+}
+
+export function isComponentPage() {
+  return /\/components\//.test(location.pathname);
+}
+
+export function isGlobalConfigPage() {
+  return /\/global-configuration/.test(location.pathname);
 }
 
 // 手机定位特殊处理
 export const mobileBodyStyle = {
   get: (host, lastValue) => lastValue || {},
   set: (host, value) => value,
-  connect: (host, key) => {
+  connect: (host) => {
     // 响应手机定位
     const handleResize = () => {
       const mobileBodyStyle = {};
-      if (host.platform === "mobile") {
-        const isComponentPage = /\/components\//.test(location.pathname);
+      if (host.platform === 'mobile') {
         const isMobileResponse = window.innerWidth < 960;
         if (isMobileResponse) {
-          mobileBodyStyle.paddingRight = "0px";
+          mobileBodyStyle.paddingRight = '0px';
         } else {
-          mobileBodyStyle.paddingRight = isComponentPage ? "400px" : "";
+          mobileBodyStyle.paddingRight = isComponentPage() ? '400px' : '';
         }
       }
       host.mobileBodyStyle = mobileBodyStyle;
@@ -68,17 +75,17 @@ export const mobileBodyStyle = {
 
     handleResize();
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   },
 };
 
 // 判断是否内网
 export function isIntranet() {
-  return location.host.includes("oa.com");
+  return location.host.includes('oa.com');
 }
 
 // 监听暗黑模式
@@ -88,8 +95,8 @@ export function watchHtmlMode(callback = () => {}) {
 
   const observerCallback = (mutationsList) => {
     for (const mutation of mutationsList) {
-      if (mutation.attributeName === "theme-mode") {
-        const themeMode = mutation.target.getAttribute("theme-mode") || 'light';
+      if (mutation.attributeName === 'theme-mode') {
+        const themeMode = mutation.target.getAttribute('theme-mode') || 'light';
         if (themeMode) callback(themeMode);
       }
     }

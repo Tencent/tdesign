@@ -1,4 +1,5 @@
 import path from 'path';
+import { exec } from 'child_process';
 
 export default {
   resolve: {
@@ -27,4 +28,22 @@ export default {
       formats: ['es', 'umd'],
     },
   },
+
+  plugins: [lessCompilePlugin()],
 };
+
+function lessCompilePlugin() {
+  return {
+    name: 'less-compile-plugin',
+    closeBundle() {
+      console.log('Running compile-less.js...');
+      exec('node ./script/compile-less.js', (err, stdout, stderr) => {
+        if (err) {
+          console.error('Compiled failed:\n', stderr);
+        } else {
+          console.log('Compiled successfully:\n', stdout);
+        }
+      });
+    },
+  };
+}

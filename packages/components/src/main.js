@@ -11,6 +11,7 @@ import './components/td-theme-tabs/index.js';
 import './components/td-doc-layout/index.js';
 import './components/td-doc-aside/index.js';
 import './components/td-doc-search/index.js';
+import './components/td-doc-changelog/index.js';
 import './components/td-doc-content/index.js';
 import './components/td-doc-header/index.js';
 import './components/td-doc-header/td-doc-issue/index.js';

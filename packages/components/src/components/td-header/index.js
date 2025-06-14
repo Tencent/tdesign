@@ -1,20 +1,20 @@
 import { html, define } from 'hybrids';
-import style from './style.less';
-import portalStyle from './portal.less';
-import githubIcon from '@images/github.svg?raw';
+import closeIcon from '@images/close.svg?raw';
 import fakeArrowIcon from '@images/fake-arrow.svg?raw';
+import githubIcon from '@images/github.svg?raw';
+import { getHeaderConfig } from '@config/header.js';
 import translateIcon from '@images/translate.svg?raw';
 import { getLang } from '@utils/index';
-import closeIcon from '@images/close.svg?raw';
-import { getHeaderConfig } from '@config/header.js';
+import portalStyle from './portal.less';
+import style from './style.less';
 
 const headerConfig = getHeaderConfig();
 const { headerList, baseComponentsLinks, baseComponentPrefix } = headerConfig;
 
-const allComponentsNpmUrl = [
-  ...baseComponentsLinks.web.links.filter((l) => l.status).map((l) => l.npm),
-  ...baseComponentsLinks.mobile.links.filter((l) => l.status).map((l) => l.npm),
-];
+// const allComponentsNpmUrl = [
+//   ...baseComponentsLinks.web.links.filter((l) => l.status).map((l) => l.npm),
+//   ...baseComponentsLinks.mobile.links.filter((l) => l.status).map((l) => l.npm),
+// ];
 
 export function handleLinkClick(host, e, item) {
   e.preventDefault();
@@ -244,16 +244,19 @@ export default define({
     get: (_host, lastValue) => lastValue || false,
     set: (_host, value) => value,
     connect: (host, key) => {
+      const mediaQuery = window.matchMedia('(max-width: 960px)');
+
       function handleResize() {
-        const isMobileResponse = window.innerWidth < 960;
+        const isMobileResponse = mediaQuery.matches;
         Object.assign(host, { [key]: isMobileResponse });
       }
 
       requestAnimationFrame(() => handleResize());
 
+      mediaQuery.addEventListener('change', handleResize);
       window.addEventListener('resize', handleResize);
-
       return () => {
+        mediaQuery.removeEventListener('change', handleResize);
         window.removeEventListener('resize', handleResize);
       };
     },

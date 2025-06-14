@@ -1,12 +1,11 @@
 import { html, define } from 'hybrids';
-import style from './style.less';
 import { mobileBodyStyle } from '@utils';
+import style from './style.less';
 
 const FIXED_HEADER_TOP = 228;
+const CONTENT_SELECTORS = ['div[name="DEMO"]', 'div[name="API"]', 'div[name="DESIGN"]', 'div[name="DOC"]'];
 
 function anchorHighlight() {
-  const selectors = ['div[name="DEMO"]', 'div[name="API"]', 'div[name="DESIGN"]', 'div[name="DOC"]'];
-
   function getLinkTopList(anchorList) {
     const linkList = anchorList.map((anchor) => {
       const [, id] = decodeURIComponent(anchor.href).split('#');
@@ -32,7 +31,7 @@ function anchorHighlight() {
     }
   }
 
-  selectors.forEach((item) => {
+  CONTENT_SELECTORS.forEach((item) => {
     const wrapper = document.querySelector(item);
     if (!wrapper) return;
 
@@ -62,12 +61,13 @@ export default define({
           });
         } else {
           containers.forEach((container) => {
-            Object.assign(container.style, { position: 'absolute', top: '316px'  });
+            Object.assign(container.style, { position: 'absolute', top: '316px' });
           });
         }
 
         anchorHighlight();
       }
+
       // 优化锚点滚动体验
       function proxyTitleAnchor(e) {
         if (e.target.tagName !== 'A') return;
@@ -76,14 +76,31 @@ export default define({
         if (!href.includes('#')) return;
 
         const [, id = ''] = href.split('#');
-        if (target.classList.contains('tdesign-header-anchor') || target.classList.contains('tdesign-toc_list_item_a')) {
+        if (
+          target.classList.contains('tdesign-header-anchor') ||
+          target.classList.contains('tdesign-toc_list_item_a')
+        ) {
           const idTarget = document.getElementById(id);
           if (!idTarget) return;
           const { top } = idTarget.getBoundingClientRect();
-          const offsetTop = top + document.documentElement.scrollTop; 
+          const offsetTop = top + document.documentElement.scrollTop;
 
           requestAnimationFrame(() => window.scrollTo({ top: offsetTop - 120, left: 0 }));
         }
+      }
+
+      function waitForDemoLoad() {
+        const observer = new MutationObserver(() => {
+          for (const selector of CONTENT_SELECTORS) {
+            const targetElement = document.querySelector(selector);
+            if (targetElement) {
+              observer.disconnect();
+              handleAnchorScroll();
+              break;
+            }
+          }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
       }
 
       // 加载后跳转到锚点定位处
@@ -94,27 +111,28 @@ export default define({
         const [, id = ''] = href.split('#');
         const idTarget = document.getElementById(id);
         if (!idTarget) return;
-
         const { top } = idTarget.getBoundingClientRect();
-        const offsetTop = top + document.documentElement.scrollTop; 
+        const offsetTop = top + window.scrollY;
 
-        requestAnimationFrame(() => window.scrollTo({ top: offsetTop - 120, left: 0 }));
+        window.scrollTo({ top: offsetTop - 120, left: 0 });
       }
 
       document.addEventListener('scroll', changeTocHeight);
       document.addEventListener('click', proxyTitleAnchor);
-      window.addEventListener('load', handleAnchorScroll)
-      
+      window.addEventListener('load', waitForDemoLoad);
+
       return () => {
         document.removeEventListener('scroll', changeTocHeight);
         document.removeEventListener('click', proxyTitleAnchor);
-        window.removeEventListener('load', handleAnchorScroll)
+        window.removeEventListener('load', waitForDemoLoad);
       };
     },
   },
   render: (host) => {
     return html`
-      <style>${style}</style>
+      <style>
+        ${style}
+      </style>
       <div class="TDesign-doc-content ${host.pageStatus}">
         <slot name="doc-header"></slot>
 

@@ -6,7 +6,6 @@
     "dev": "vite",
     "watch": "vite build --watch",
     "build": "vite build --debug",
-    "postbuild": "node ./script/compile-less.js",
     "test": "jest --coverage"
   },
   "publishConfig": {

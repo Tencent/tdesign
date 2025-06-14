@@ -1,0 +1,220 @@
+.TDesign-doc-changelog {
+    &__overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.3);
+        z-index: 10000;
+
+        .hidden & {
+            display: none;
+        }
+    }
+
+    &__drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 500px;
+        height: 100vh;
+        background-color: var(--bg-color-container);
+        z-index: 100001;
+        box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-primary);
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--bg-color-scroll);
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+
+        @media screen and (max-width: 960px) {
+            width: 85vw;
+        }
+
+        .visible & {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .hidden & {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        &-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 56px;
+            box-shadow: var(--header-box-shadow);
+
+            p {
+                position: relative;
+                font-size: 16px;
+                left: 16px;
+                height: 24px;
+                font-weight: 600;
+            }
+
+            button {
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                padding: 2px;
+
+                svg {
+                    width: 20px;
+                    height: 20px;
+                    color: var(--text-primary);
+                }
+            }
+        }
+
+        &-body {
+            position: relative;
+            padding: 16px;
+        }
+    }
+
+    &__logs {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        min-height: 100%;
+
+        // 竖线
+        &:not(:has(&-empty))::after {
+            content: '';
+            position: absolute;
+            top: 32px;
+            left: 15px;
+            width: 2px;
+            height: 100%;
+            background: var(--brand-main);
+        }
+
+        // 一个版本
+        &-version {
+            position: relative;
+            padding-left: 32px;
+
+            &:last-of-type {
+                &::after {
+                    content: '';
+                    position: absolute;
+                    left: 15px;
+                    top: 30px;
+                    z-index: 10;
+                    width: 8px;
+                    height: 105%;
+                    background: var(--bg-color-docpage);
+                }
+            }
+
+            &-header {
+                display: flex;
+                align-items: center;
+                margin: 10px 0;
+
+                // 圆点
+                &::before {
+                    content: '';
+                    position: absolute;
+                    left: 12px;
+                    width: 8px;
+                    height: 8px;
+                    border: 2px solid var(--brand-main);
+                    background: var(--bg-color-docpage);
+                    outline: 8px solid var(--bg-color-docpage);
+                    box-sizing: border-box;
+                    border-radius: 50%;
+                    z-index: 10;
+                }
+
+                // 版本号
+                span {
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: var(--text-primary);
+                }
+
+                // 日期
+                code {
+                    position: relative;
+                    left: 8px;
+                    color: var(--text-primary);
+                    background: var(--bg-color-tag);
+                    border-radius: 3px;
+                    margin: 0 2px;
+                    padding: 2px 8px;
+                    font-size: 12px;
+                    font-weight: 400;
+                    line-height: 20px;
+                }
+            }
+
+            // 一种变更类型
+            &-section {
+                h3 {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                    margin-bottom: 8px;
+                }
+
+                // 日志详情
+                ul {
+                    margin: 0;
+                    padding-left: 20px;
+                    list-style-type: disc;
+                    font-size: 14px;
+
+                    ul {
+                        padding-left: 22px;
+
+                        li {
+                            list-style-type: circle;
+                        }
+                    }
+
+                    li {
+                        padding-left: 6px;
+                        margin-bottom: 6px;
+                        line-height: 22px;
+                        color: var(--text-primary);
+                    }
+
+                    code {
+                        font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+                        margin: 0 2px;
+                        color: var(--error-8);
+                        background: var(--error-1);
+                        border-radius: 3px;
+                        padding: 2px 6px;
+                        font-size: 12px;
+                        word-break: break-word;
+                    }
+
+                    a {
+                        color: var(--brand-main);
+                        text-decoration: none;
+
+                        &:hover {
+                            color: var(--brand-main-hover);
+                        }
+                    }
+                }
+            }
+        }
+
+        &-empty {
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 30px 0;
+            font-style: italic;
+        }
+    }
+}
