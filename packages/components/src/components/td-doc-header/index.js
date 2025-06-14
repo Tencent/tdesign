@@ -75,8 +75,11 @@ export default define({
     get: (_host, lastValue) => lastValue || undefined,
     set: (_host, value) => value,
     connect: (host) => {
+      const mediaQuery = window.matchMedia('(max-width: 1200px)');
+
       function changeTitlePos() {
         if (!host.shadowRoot) return;
+
         const { shadowRoot } = host;
         const { scrollTop } = document.documentElement;
         // 吸顶效果
@@ -88,8 +91,9 @@ export default define({
         const tabs = document.querySelector('td-doc-tabs');
 
         // 适配移动端
-        const isMobileResponse = window.innerWidth < 1200;
+        const isMobileResponse = mediaQuery.matches;
         const asideWidth = isMobileResponse ? 0 : '260px';
+        const titleFontSize = isMobileResponse ? '32px' : '48px';
 
         if (scrollTop >= 228) {
           if (title.style.position !== 'fixed') {
@@ -97,7 +101,6 @@ export default define({
               position: 'fixed',
               top: tabs ? '16px' : '28px',
               fontSize: '24px',
-              lineHeight: '32px',
               opacity: 1,
               visibility: 'visible',
             });
@@ -124,8 +127,7 @@ export default define({
           if (title.style.position === 'fixed' || title.style.visibility === 'hidden') {
             Object.assign(title.style, {
               position: 'unset',
-              fontSize: '48px',
-              lineHeight: '56px',
+              fontSize: titleFontSize,
               opacity: 1,
               visibility: 'visible',
             });
@@ -138,9 +140,17 @@ export default define({
         }
       }
 
+      changeTitlePos();
+
+      mediaQuery.addEventListener('change', changeTitlePos);
+      window.addEventListener('resize', changeTitlePos);
       document.addEventListener('scroll', changeTitlePos);
 
-      return () => document.removeEventListener('scroll', changeTitlePos);
+      return () => {
+        mediaQuery.removeEventListener('change', changeTitlePos);
+        window.removeEventListener('resize', changeTitlePos);
+        document.removeEventListener('scroll', changeTitlePos);
+      };
     },
   },
   render: (host) => {
@@ -179,7 +189,7 @@ export default define({
                         ? html`
                             <button id="TDesign-doc-changelog__entry" onclick="${openChangelogDrawer}">
                               <i innerHTML="${historyIcon}"></i>
-                              ${locale.changelog.title}
+                              <span>${locale.changelog.title}</span>
                             </button>
                           `
                         : html``}

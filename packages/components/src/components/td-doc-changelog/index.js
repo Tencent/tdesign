@@ -132,20 +132,20 @@ export default define({
   },
 
   connect: (host) => {
-    const handler = () => {
+    const handleRouterChange = () => {
       if (host.visible) {
         fetchChangelog(host);
       }
 
       const container = host.shadowRoot?.querySelector(`.${classPrefix}__drawer-body`);
       if (container) {
-        // 切换页面时，重置滚动位置
+        // 重置滚动位置
         container.scrollTop = 0;
       }
     };
-    window.addEventListener('popstate', handler);
+    window.addEventListener('popstate', handleRouterChange);
     return () => {
-      window.removeEventListener('popstate', handler);
+      window.removeEventListener('popstate', handleRouterChange);
     };
   },
 
