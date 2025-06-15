@@ -11,11 +11,6 @@ import style from './style.less';
 const headerConfig = getHeaderConfig();
 const { headerList, baseComponentsLinks, baseComponentPrefix } = headerConfig;
 
-// const allComponentsNpmUrl = [
-//   ...baseComponentsLinks.web.links.filter((l) => l.status).map((l) => l.npm),
-//   ...baseComponentsLinks.mobile.links.filter((l) => l.status).map((l) => l.npm),
-// ];
-
 export function handleLinkClick(host, e, item) {
   e.preventDefault();
   if (!item.status) return;
