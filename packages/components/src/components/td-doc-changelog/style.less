@@ -24,9 +24,7 @@
         box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         color: var(--text-primary);
-        overflow-y: auto;
-        scrollbar-width: thin;
-        scrollbar-color: var(--bg-color-scroll);
+      
         transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
 
         @media screen and (max-width: 960px) {
@@ -75,6 +73,31 @@
         &-body {
             position: relative;
             padding: 16px;
+            overflow-y: auto;
+            height: calc(100vh - 56px);
+
+            &:hover {
+                &::-webkit-scrollbar-thumb {
+                    background-color: var(--bg-color-scroll);
+                }
+            }
+            
+            &::-webkit-scrollbar {
+                width: 12px;
+                height: 12px;
+                background: transparent;
+            }
+            
+            &::-webkit-scrollbar-corner {
+                width: 0;
+            }
+            
+            &::-webkit-scrollbar-thumb {
+                border-radius: 6px;
+                border: 4px solid transparent;
+                background-clip: content-box;
+                background-color: transparent;       
+            }
         }
     }
 
