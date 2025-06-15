@@ -1,8 +1,8 @@
 import { html, dispatch, define } from 'hybrids';
-import style from './style.less';
-import { patchShadowDomIntoDom } from '@utils';
 import menuFoldIcon from '@images/menu-fold.svg?raw';
 import menuUnfoldIcon from '@images/menu-unfold.svg?raw';
+import { patchShadowDomIntoDom } from '@utils';
+import style from './style.less';
 
 const replaceStateEvent = new CustomEvent('replaceState');
 
@@ -23,10 +23,31 @@ function handleLinkClick(host, e, path) {
   requestAnimationFrame(() => dispatch(host, 'change', { detail: path }));
 }
 
+function scrollToActiveLink(host) {
+  if (!host.shadowRoot) return;
+
+  const sidenav = host.shadowRoot.querySelector('.TDesign-doc-sidenav');
+  const activeLink = host.shadowRoot.querySelector('.TDesign-doc-sidenav-link.active');
+
+  if (sidenav && activeLink) {
+    const sidenavRect = sidenav.getBoundingClientRect();
+    const activeLinkRect = activeLink.getBoundingClientRect();
+
+    const offsetTop = activeLinkRect.top - sidenavRect.top + sidenav.scrollTop;
+    const sidenavHeight = sidenav.clientHeight;
+    const activeLinkHeight = activeLink.clientHeight;
+
+    // 滚动到可视范围的中间
+    const targetScrollTop = offsetTop - sidenavHeight / 2 + activeLinkHeight / 2;
+    sidenav.scrollTop = targetScrollTop;
+  }
+}
+
 function renderNav(host, nav, deep = 0) {
   if (Array.isArray(nav)) return nav.map((item) => renderNav(host, item, deep));
 
   const isActive = location.pathname === nav.path || location.hash.slice(1) === nav.path;
+  scrollToActiveLink(host);
 
   const hasUpdate = () => {
     const currentSite = location.pathname.split('/')[1];
