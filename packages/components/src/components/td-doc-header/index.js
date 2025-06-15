@@ -157,7 +157,7 @@ export default define({
     const { docInfo, spline } = host;
     const mobileBodyStyle = { ...host.mobileBodyStyle };
     const splineUrl = splineConfig[spline];
-
+    const isChangelogComponentRegistered = customElements.get('td-doc-changelog'); // 检查td-doc-changelog组件是否已注册
     const openChangelogDrawer = () => {
       let changelog = document.querySelector('td-doc-changelog');
       if (!changelog) {
@@ -185,7 +185,7 @@ export default define({
                 ? html`
                     <div>
                       <h1 class="TDesign-doc-header__info-title">${docInfo.title}</h1>
-                      ${isComponentPage() || isGlobalConfigPage()
+                      ${isChangelogComponentRegistered && (isComponentPage() || isGlobalConfigPage())
                         ? html`
                             <button id="TDesign-doc-changelog__entry" onclick="${openChangelogDrawer}">
                               <i innerHTML="${historyIcon}"></i>
