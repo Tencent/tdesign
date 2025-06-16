@@ -34,6 +34,9 @@ async function fetchChangelog(host) {
       changelogCache = await response.json();
     }
 
+    const loading = host.shadowRoot?.querySelector(`.${logsPrefix}__loading`);
+    loading?.remove();
+
     const compChangelog = changelogCache[compName];
     const container = host.shadowRoot?.querySelector(`.${logsPrefix}`);
     if (container) {
@@ -163,9 +166,18 @@ export default define({
             <button onclick="${closeChangelogDrawer}" innerHTML="${closeIcon}"></button>
           </div>
           <div class="${classPrefix}__drawer-body">
+            <div class="${logsPrefix}__loading">
+              <svg
+                class="${logsPrefix}__loading-icon"
+                viewBox="0 0 12 12"
+                version="1.1"
+                width="1em"
+                height="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              ></svg>
+            </div>
             <div class="${logsPrefix}"></div>
           </div>
-          <div></div>
         </div>
       </div>
     `.css`${style}`;
