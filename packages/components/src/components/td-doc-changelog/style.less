@@ -24,7 +24,7 @@
         box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         color: var(--text-primary);
-      
+
         transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
 
         @media screen and (max-width: 960px) {
@@ -81,22 +81,22 @@
                     background-color: var(--bg-color-scroll);
                 }
             }
-            
+
             &::-webkit-scrollbar {
                 width: 12px;
                 height: 12px;
                 background: transparent;
             }
-            
+
             &::-webkit-scrollbar-corner {
                 width: 0;
             }
-            
+
             &::-webkit-scrollbar-thumb {
                 border-radius: 6px;
                 border: 4px solid transparent;
                 background-clip: content-box;
-                background-color: transparent;       
+                background-color: transparent;
             }
         }
     }
@@ -237,6 +237,36 @@
             text-align: center;
             padding: 30px 0;
             font-style: italic;
+        }
+
+        &__loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 128px;
+            color: var(--brand-main);
+
+            &-icon {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: conic-gradient(from 90deg at 50% 50%, #fff 0deg, currentColor 360deg);
+                -webkit-mask: radial-gradient(transparent calc(50% - 0.5px), #fff 50%);
+                mask: radial-gradient(transparent calc(50% - 0.5px), #fff 50%);
+                animation: spin 1s linear infinite;
+                -webkit-animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                from {
+                    transform: rotate(0deg);
+                }
+
+                to {
+                    transform: rotate(360deg);
+                }
+            }
         }
     }
 }
