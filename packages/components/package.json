@@ -1,12 +1,11 @@
 {
   "name": "tdesign-site-components",
-  "version": "0.16.0-alpha.11",
+  "version": "0.17.0-alpha.1",
   "main": "lib/site.es.js",
   "scripts": {
     "dev": "vite",
     "watch": "vite build --watch",
     "build": "vite build --debug",
-    "postbuild": "node ./script/compile-less.js",
     "test": "jest --coverage"
   },
   "publishConfig": {

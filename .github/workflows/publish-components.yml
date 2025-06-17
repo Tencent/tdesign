@@ -1,45 +1,34 @@
 name: PUBLISH_COMPONENTS
 
 on:
-  push:
+  pull_request:
     branches: [main]
-  pull_request_target:
     types: [closed]
+    paths:
+      - packages/components/package.json
+
+  workflow_dispatch:
 
 jobs:
-  modify-components:
-    runs-on: ubuntu-latest
-    outputs:
-      components-changed: ${{ steps.components-changed.outputs.changed }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 100
-      - uses: marceloprado/has-changed-path@v1
-        id: components-changed
-        with:
-          paths: packages/components/package.json
-      - run: echo components changed=${{ steps.components-changed.outputs.changed }}
-
   publish-components:
+    if: github.repository == 'Tencent/tdesign'
     runs-on: ubuntu-latest
-    needs: modify-components
-    if: needs.modify-components.outputs.components-changed == 'true'
     steps:
       - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          registry-url: "https://registry.npmjs.org"
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
+
       - run: pnpm install
-      - run: cd packages/components && npm run build
-      - run: cd packages/components && npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}
-      - run: echo '${{ github.ref }} ...  ${{ github.ref_name }}'
-      - if: steps.publish.outputs.type != 'none'
+
+      - run: pnpm -F tdesign-site-components run build
+      
+      - name: Publish Package
         run: |
-          echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
+          npm config set "//registry.npmjs.org/:_authToken" "${NPM_TOKEN}"
+          pnpm -F tdesign-site-components publish
+        env:
+          NPM_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}

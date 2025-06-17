@@ -28,7 +28,12 @@ const fetchPromises = submodulesKeys.map(async (project) => {
       const date = new Date(dateMatch[0]);
       // 检查日期是否在指定范围内,[2024-06-01, 2024-06-07] 闭区间
       if (date >= new Date(START_DATE) && date <= new Date(END_DATE)) {
-        const desc = getProjectDesc(project, tag[0], submodules[project]['title'], '详情见：');
+        const desc = getProjectDesc(
+          submodules[project].repo,
+          `${submodules[project].tagPrefix}${tag[0]}`,
+          submodules[project]['title'],
+          '详情见：',
+        );
         projectOutput.push(`${desc[0]}\n${versionContent}\n${desc[1]}\n`);
       }
     }

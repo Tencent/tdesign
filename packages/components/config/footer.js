@@ -18,7 +18,8 @@ export const getFooterConfig = () => {
       links: [
         { name: 'CoDesign', url: 'https://codesign.qq.com/', target: '_blank' },
         { name: 'TDesign', url: `https://tdesign.${isIntranet() ? 'woa' : 'tencent'}.com`, target: '_self' },
-        isIntranet() ? { name: 'TVision', url: 'https://tvision.oa.com/', target: '_blank' } : null,
+        isIntranet() ? { name: 'TVision', url: 'https://tvision.woa.com/', target: '_blank' } : null,
+        isIntranet() ? { name: 'TEditor', url: 'https://teditor.woa.com/', target: '_blank' } : null,
       ].filter((item) => item),
     },
     {
