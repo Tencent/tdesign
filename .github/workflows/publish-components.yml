@@ -25,7 +25,10 @@ jobs:
       - run: pnpm install
 
       - run: pnpm -F tdesign-site-components run build
-
-      - run: pnpm -F tdesign-site-components publish
+      
+      - name: Publish Package
+        run: |
+          npm config set "//registry.npmjs.org/:_authToken" "${NPM_TOKEN}"
+          pnpm -F tdesign-site-components publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}
