@@ -1,4 +1,4 @@
-import { html, define } from 'hybrids';
+import { define, html } from 'hybrids';
 import { getLocale } from '@config/locale.js';
 import closeIcon from '@images/close.svg?raw';
 import { isComponentPage, isGlobalConfigPage } from '@utils';
@@ -37,10 +37,13 @@ async function fetchChangelog(host) {
     const loading = host.shadowRoot?.querySelector(`.${logsPrefix}__loading`);
     loading?.remove();
 
+    const drawerBody = host.shadowRoot?.querySelector(`.${classPrefix}__drawer-body`);
+    if (drawerBody) drawerBody.scrollTop = 0;
+
     const compChangelog = changelogCache[compName];
-    const container = host.shadowRoot?.querySelector(`.${logsPrefix}`);
-    if (container) {
-      container.innerHTML = renderLog(compChangelog);
+    const logsContainer = host.shadowRoot?.querySelector(`.${logsPrefix}`);
+    if (logsContainer) {
+      logsContainer.innerHTML = renderLog(compChangelog);
     }
   } catch (err) {
     console.error('Failed to load changelog:', err);
@@ -113,12 +116,12 @@ function renderLogDetails(text) {
 function replaceSpecialTags(html) {
   return (
     html
-      // 行内 code
-      .replace(/`([^`]+)`/g, '<code>$1</code>')
       // 链接
       .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
-      // @用户名
-      .replace(/@([a-zA-Z0-9-_]+)/g, '<a href="https://github.com/$1" target="_blank">@$1</a>')
+      // @用户名 (且不在反引号内)
+      .replace(/(?<!`)@([a-zA-Z0-9-_]+)(?!`)/g, '<a href="https://github.com/$1" target="_blank">@$1</a>')
+      // 行内 code
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
   );
 }
 
@@ -132,24 +135,6 @@ export default define({
         fetchChangelog(host);
       }
     },
-  },
-
-  connect: (host) => {
-    const handleRouterChange = () => {
-      if (host.visible) {
-        fetchChangelog(host);
-      }
-
-      const container = host.shadowRoot?.querySelector(`.${classPrefix}__drawer-body`);
-      if (container) {
-        // 重置滚动位置
-        container.scrollTop = 0;
-      }
-    };
-    window.addEventListener('popstate', handleRouterChange);
-    return () => {
-      window.removeEventListener('popstate', handleRouterChange);
-    };
   },
 
   render: (host) => {
