@@ -58,7 +58,7 @@
   --text-anti: #fff;
   --text-interactive: var(--td-brand-color);
   --brand-main: var(--td-brand-color);
-  --brand-main-hover: var(--td-brand-color-hover);
+  --brand-main-hover: var(--td-brand-color-hover, var(--td-brand-color-active)); 
   --brand-main-focus: var(--td-brand-color-focus);
   --brand-main-disabled: var(--td-brand-color-disabled);
   --brand-main-light: rgba(0, 82, 217, .1);
