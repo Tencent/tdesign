@@ -1,4 +1,4 @@
-name: PUBLISH_COMPONENTS
+name: publish-site-components
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish-components:
+  publish-site-components:
     if: github.repository == 'Tencent/tdesign'
     runs-on: ubuntu-latest
     steps:
