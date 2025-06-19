@@ -55,6 +55,18 @@ jobs:
 
       - run: pnpm run site:preview
 
+      - uses: actions/checkout@v4
+        with:
+          repository: Tencent/tdesign-vue-next
+          submodules: recursive
+          path: ./tdesign-vue-next
+      - run: |
+          cd tdesign-vue-next
+          pnpm install
+          pnpm -C packages/tdesign-vue-next/site run preview
+          mv packages/tdesign-vue-next/site/dist ../_site/vue-next
+
+
       - run: cp _site/index.html _site/404.html
 
       - uses: actions/upload-artifact@v4
