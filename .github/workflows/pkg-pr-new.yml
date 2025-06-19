@@ -63,7 +63,7 @@ jobs:
       - run: |
           cd tdesign-vue-next
           pnpm install
-          pnpm -C packages/tdesign-vue-next/site run preview
+          pnpm -C packages/tdesign-vue-next/site run intranet
           mv packages/tdesign-vue-next/site/dist ../_site/vue-next
 
 
