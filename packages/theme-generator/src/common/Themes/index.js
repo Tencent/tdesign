@@ -238,7 +238,7 @@ export function exportCustomTheme(device = 'web') {
     `;
   }
 
-  if (isMobile) {
+  if (isMobile(device)) {
     finalCssString = removeCssProperties(finalCssString, MOBILE_MISSING_TOKENS);
   }
 
