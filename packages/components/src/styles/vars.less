@@ -100,14 +100,15 @@
   --text-placeholder: rgba(0, 0, 0, .4); // 占位符文字色彩
   --text-disabled: rgba(0, 0, 0, .26); // 文字disabled态
   --text-anti: #fff; // 文字反色色彩
-  --text-interactive: #0052d9; // 主题色文字色彩
+  --text-interactive: var(--td-brand-color); // 主题色文字色彩
 
   // 主题色相关
   // 主题相关配置
-  --brand-main: #0052d9; // 品牌色
-  --brand-main-hover: #366ef4; // 品牌色hover
-  --brand-main-focus: #d9e1ff; // 品牌色 focus
-  --brand-main-disabled: #b5c7ff; // 品牌色disabled
+  --brand-main: var(--td-brand-color);
+  // 移动端缺失 hover Token 时，使用 active 兜底
+  --brand-main-hover: var(--td-brand-color-hover, var(--td-brand-color-active)); 
+  --brand-main-focus: var(--td-brand-color-focus);
+  --brand-main-disabled: var(--td-brand-color-disabled);
   --brand-main-light: rgba(0, 82, 217, .1);
   --error-1: #fff0ed;
   --error-8: #881f1c;

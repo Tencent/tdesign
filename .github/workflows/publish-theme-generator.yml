@@ -1,0 +1,34 @@
+name: publish-theme-generator
+
+on:
+  pull_request:
+    branches: [main]
+    types: [closed]
+    paths:
+      - packages/theme-generator/package.json
+
+  workflow_dispatch:
+
+jobs:
+  publish-theme-generator:
+    if: github.repository == 'Tencent/tdesign'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: pnpm install
+
+      - run: pnpm -F tdesign-theme-generator run build
+      
+      - name: Publish Package
+        run: |
+          npm config set "//registry.npmjs.org/:_authToken" "${NPM_TOKEN}"
+          pnpm -F tdesign-theme-generator publish
+        env:
+          NPM_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}

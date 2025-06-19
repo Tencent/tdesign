@@ -135,9 +135,13 @@ export default {
 .t-radio-button__label {
   font-size: 14px;
 }
-
 .t-slider__button {
   width: 16px;
   height: 16px;
+}
+.t-button--variant-base.t-button--theme-primary:hover,
+.t-button--variant-base.t-button--theme-primary:focus-visible {
+  border-color: var(--brand-main-hover);
+  background-color: var(--brand-main-hover);
 }
 </style>
