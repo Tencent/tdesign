@@ -11,6 +11,15 @@ const locale = getLocale();
 
 let changelogCache = null;
 
+const OFFICIAL_DOMAINS = ['tencent.com', 'woa.com'];
+
+function getLogUrlPrefix() {
+  const currentUrl = window.location.href;
+  const framework = currentUrl.split('/')[3];
+  const isOfficial = OFFICIAL_DOMAINS.some((domain) => location.hostname.includes(domain));
+  return `${location.origin}${isOfficial ? `/${framework}` : ''}`;
+}
+
 function getCompName() {
   if (isComponentPage()) {
     const pathSegments = window.location.pathname.split('/');
@@ -30,7 +39,7 @@ async function fetchChangelog(host) {
 
   try {
     if (!changelogCache) {
-      const response = await fetch(`${location.origin}/changelog.json`);
+      const response = await fetch(`${getLogUrlPrefix()}/changelog.json`);
       changelogCache = await response.json();
     }
 
