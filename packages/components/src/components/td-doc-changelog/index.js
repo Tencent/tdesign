@@ -97,11 +97,7 @@ function renderLogDetails(text) {
     .filter(Boolean);
 
   // Case 1: 存在多行子列表描述
-  if (
-    lines.length > 1 &&
-    // 第一行开头是 @用户名
-    /^@([a-zA-Z0-9-_]+)/.test(lines[0])
-  ) {
+  if (lines.length > 1) {
     const [firstLine, ...rest] = lines;
     const restItems = rest.map((item) => `<li>${item}</li>`).join('');
     const html = `<li>${firstLine}</li><ul>${restItems}</ul>`;
