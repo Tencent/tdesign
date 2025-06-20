@@ -18,7 +18,7 @@
     "prismjs": "^1.29.0",
     "tdesign-icons-view": "^0.3.5",
     "tdesign-icons-vue": "^0.1.4",
-    "tdesign-site-components": "^0.15.11",
+    "tdesign-site-components": "^0.16.3",
     "tdesign-vue": "1.9.8-naruto",
     "three": "0.127.0",
     "vue": "2.7.14",
@@ -30,6 +30,7 @@
     "@types/markdown-it": "^12.2.3",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
+    "@vitejs/plugin-vue2": "^2.3.3",
     "autoprefixer": "^10.4.0",
     "babel-eslint": "^10.1.0",
     "cssnano": "^5.0.12",
@@ -51,7 +52,6 @@
     "typescript": "^4.5.2",
     "vite": "^6.3.1",
     "vite-plugin-tdoc": "^2.0.0",
-    "@vitejs/plugin-vue2": "^2.3.3",
     "vue-template-compiler": "2.7.14"
   },
   "config": {
