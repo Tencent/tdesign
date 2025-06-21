@@ -2,22 +2,22 @@
   "all": {},
   "site": {},
   "vue": {
-    "title": "🗓 站点新增支持查看单组件的更新日志",
+    "title": "🗓 新增单组件的更新日志，打开任意组件页点击更新日志按钮即可查看",
     "type": "primary",
     "closeable": true
   },
   "react": {
-     "title": "🗓 站点新增支持查看单组件的更新日志",
+     "title": "🗓 新增单组件的更新日志，打开任意组件页点击更新日志按钮即可查看",
     "type": "primary",
     "closeable": true
   },
   "vue-next": {
-    "title": "🗓 站点新增支持查看单组件的更新日志",
+    "title": "🗓 新增单组件的更新日志，打开任意组件页点击更新日志按钮即可查看",
     "type": "primary",
     "closeable": true
   },
   "vue-mobile": {
-    "title": "🗓 站点新增支持查看单组件的更新日志",
+    "title": "📢 站点接入主题生成器，支持自定义CSS 变量",
     "type": "primary",
     "closeable": true
   },
@@ -27,7 +27,7 @@
     "closeable": true
   },
   "miniprogram": {
-    "title": "🗓 站点新增支持查看单组件的更新日志",
+    "title": "📢 站点接入主题生成器，支持自定义CSS 变量",
     "type": "primary",
     "closeable": true
   }
