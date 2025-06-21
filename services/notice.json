@@ -7,12 +7,12 @@
     "closeable": true
   },
   "react": {
-     "title": "🗓 新增单组件的更新日志，进入任意组件页后，点击更新日志按钮即可查看",
+    "title": "🗓 新增单组件的更新日志，进入任意组件页后，点击更新日志按钮即可查看",
     "type": "primary",
     "closeable": true
   },
   "vue-next": {
-    "title": "🗓 新增单组件的更新日志，进入任意组件页后，页点击更新日志按钮即可查看",
+    "title": "🗓 新增单组件的更新日志，进入任意组件页后，点击更新日志按钮即可查看",
     "type": "primary",
     "closeable": true
   },
