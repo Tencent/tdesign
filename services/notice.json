@@ -1,14 +1,21 @@
 {
   "all": {},
-  "site": {
-    "title": "📢 TDesign Figma 设计资源上新啦，涉及组件上新、问题修复及 Table 组件变体优化，欢迎使用体验 🎨",
+  "site": {},
+  "vue": {
+    "title": "🗓 新增单组件的更新日志，进入任意组件页后，点击更新日志按钮即可查看",
     "type": "primary",
-    "actionUrl": "https://www.figma.com/design/KInDIZzoxifaKVQ3n5KB8W/TDesign-for-web?node-id=22414-33911&p=f&t=aWr2DlazJcoPsjic-0",
     "closeable": true
   },
-  "vue": {},
-  "react": {},
-  "vue-next": {},
+  "react": {
+     "title": "🗓 新增单组件的更新日志，进入任意组件页后，点击更新日志按钮即可查看",
+    "type": "primary",
+    "closeable": true
+  },
+  "vue-next": {
+    "title": "🗓 新增单组件的更新日志，进入任意组件页后，页点击更新日志按钮即可查看",
+    "type": "primary",
+    "closeable": true
+  },
   "vue-mobile": {
     "title": "📢 站点接入主题生成器，支持自定义CSS 变量",
     "type": "primary",
