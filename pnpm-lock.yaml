@@ -208,8 +208,8 @@ importers:
         specifier: ^0.1.4
         version: 0.1.11(vue@2.7.14)
       tdesign-site-components:
-        specifier: ^0.16.3
-        version: 0.16.3
+        specifier: ^0.16.4
+        version: 0.16.4
       tdesign-vue:
         specifier: 1.9.8-naruto
         version: 1.9.8-naruto(vue@2.7.14)
@@ -7129,8 +7129,8 @@ packages:
     peerDependencies:
       vue: ^2.6.12
 
-  tdesign-site-components@0.16.3:
-    resolution: {integrity: sha512-+vRxYS+r9r/wE976NXM5gXxVYpzSa45GjAd/1e4HMtY4/W/7kgkB0cgLhZ4BGMz96FhQ7GYMhup0kYGrbIdSLA==}
+  tdesign-site-components@0.16.4:
+    resolution: {integrity: sha512-Q182Huph8bExGqQCfiSroSC3beI0lF4FQ/LR0mreqvZQEk00N+57dz9CcO1ASQEEdJLq0auh3RlL7Sd8IFkOkg==}
 
   tdesign-vue@1.10.5-naruto:
     resolution: {integrity: sha512-sNi/Ga/beo7gNdyhv11ufOKvnLB1s9zU7Dt14NjHVkSFnYDELr6ck+nTXKYQF3Y0Fd4PVVWn2YaGCCDISZMJ7Q==}
@@ -15902,7 +15902,7 @@ snapshots:
       classnames: 2.5.1
       vue: 2.7.14
 
-  tdesign-site-components@0.16.3:
+  tdesign-site-components@0.16.4:
     dependencies:
       '@popperjs/core': 2.11.8
       hybrids: 8.2.2
