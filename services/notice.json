@@ -17,7 +17,7 @@
     "closeable": true
   },
   "vue-mobile": {
-    "title": "📢 站点接入主题生成器，支持自定义CSS 变量",
+    "title": "🗓 新增单组件的更新日志，进入任意组件页后，点击更新日志按钮即可查看",
     "type": "primary",
     "closeable": true
   },
@@ -27,7 +27,7 @@
     "closeable": true
   },
   "miniprogram": {
-    "title": "📢 站点接入主题生成器，支持自定义CSS 变量",
+    "title": "🗓 新增单组件的更新日志，进入任意组件页后，点击更新日志按钮即可查看",
     "type": "primary",
     "closeable": true
   }
