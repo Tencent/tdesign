@@ -100,7 +100,7 @@
   --td-text-color-secondary: var(--td-font-white-2);
   --td-text-color-placeholder: var(--td-font-white-3);
   --td-text-color-disabled: var(--td-font-white-4);
-  --td-text-color-anti: var(--td-font-gray-1);
+  --td-text-color-anti: var(--td-font-white-1);
   --td-text-color-brand: var(--td-brand-color-8);
   --td-text-color-link: var(--td-brand-color-8);
   --td-border-level-1-color: var(--td-gray-color-11);
