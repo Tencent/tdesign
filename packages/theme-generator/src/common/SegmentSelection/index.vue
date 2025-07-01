@@ -20,6 +20,7 @@
           :value="step"
           @change="handleSliderChange"
           :label="suspendedLabels[step]"
+          :tooltipProps="{ attach: handleAttach }"
         ></t-slider>
       </div>
       <div class="segment-panel__round-tag">
