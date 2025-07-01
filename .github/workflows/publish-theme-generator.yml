@@ -32,3 +32,87 @@ jobs:
           pnpm -F tdesign-theme-generator publish
         env:
           NPM_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}
+
+  upgrade-deps-theme-generator-for-vue:
+    needs: publish-theme-generator
+    runs-on: ubuntu-latest
+    steps:
+      - name: upgrade tdesign-theme-generator
+        uses: TDesignOteam/tdesign-pr-trigger-action@develop
+        with:
+          owner: Tencent
+          repo: tdesign-vue
+          token: ${{ secrets.TDESIGN_BOT_TOKEN }}
+          trigger: /upgrade-deps
+          deps: tdesign-theme-generator
+          package-manager: pnpm
+
+  upgrade-deps-theme-generator-for-vue-next:
+    needs: publish-theme-generator
+    runs-on: ubuntu-latest
+    steps:
+      - name: upgrade tdesign-theme-generator
+        uses: TDesignOteam/tdesign-pr-trigger-action@develop
+        with:
+          owner: Tencent
+          repo: tdesign-vue-next
+          token: ${{ secrets.TDESIGN_BOT_TOKEN }}
+          trigger: /upgrade-deps
+          deps: tdesign-theme-generator
+          package-manager: pnpm
+  
+  upgrade-deps-theme-generator-for-react:
+    needs: publish-theme-generator
+    runs-on: ubuntu-latest
+    steps:
+      - name: upgrade tdesign-theme-generator
+        uses: TDesignOteam/tdesign-pr-trigger-action@develop
+        with:
+          owner: Tencent
+          repo: tdesign-react
+          token: ${{ secrets.TDESIGN_BOT_TOKEN }}
+          trigger: /upgrade-deps
+          deps: tdesign-theme-generator
+          package-manager: pnpm
+  
+  upgrade-deps-theme-generator-for-mobile-vue:
+    needs: publish-theme-generator
+    runs-on: ubuntu-latest
+    steps:
+      - name: upgrade tdesign-theme-generator
+        uses: TDesignOteam/tdesign-pr-trigger-action@develop
+        with:
+          owner: Tencent
+          repo: tdesign-mobile-vue
+          token: ${{ secrets.TDESIGN_BOT_TOKEN }}
+          trigger: /upgrade-deps
+          deps: tdesign-theme-generator
+          package-manager: npm
+
+  upgrade-deps-theme-generator-for-mobile-react:
+    needs: publish-theme-generator
+    runs-on: ubuntu-latest
+    steps:
+      - name: upgrade tdesign-theme-generator
+        uses: TDesignOteam/tdesign-pr-trigger-action@develop
+        with:
+          owner: Tencent
+          repo: tdesign-mobile-react
+          token: ${{ secrets.TDESIGN_BOT_TOKEN }}
+          trigger: /upgrade-deps
+          deps: tdesign-theme-generator
+          package-manager: npm
+
+  upgrade-deps-theme-generator-for-miniprogram:
+    needs: publish-theme-generator
+    runs-on: ubuntu-latest
+    steps:
+      - name: upgrade tdesign-theme-generator
+        uses: TDesignOteam/tdesign-pr-trigger-action@develop
+        with:
+          owner: Tencent
+          repo: tdesign-miniprogram
+          token: ${{ secrets.TDESIGN_BOT_TOKEN }}
+          trigger: /upgrade-deps
+          deps: tdesign-theme-generator
+          package-manager: npm
