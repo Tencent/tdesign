@@ -45,7 +45,7 @@ jobs:
           token: ${{ secrets.TDESIGN_BOT_TOKEN }}
           trigger: /upgrade-deps
           deps: tdesign-theme-generator
-          package-manager: pnpm
+          package-manager: npm
 
   upgrade-deps-theme-generator-for-vue-next:
     needs: publish-theme-generator
