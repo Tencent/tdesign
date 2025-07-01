@@ -260,7 +260,11 @@ export function modifyToken(tokenName, newVal, saveToLocal = true) {
     const reg = new RegExp(`${tokenName}:\\s*(.*?);`);
     const match = styleSheet.innerText.match(reg);
 
-    if (!match || match[1] === newVal) return;
+    if (!match) return;
+    if (match[1] === newVal) {
+      tokenFound = true;
+      return;
+    }
 
     const currentVal = match[1];
     styleSheet.innerText = styleSheet.innerText.replace(`${tokenName}: ${currentVal}`, `${tokenName}: ${newVal}`);
