@@ -156,10 +156,14 @@ export default {
 /deep/ .t-drawer__mask {
   background: none;
 }
-/deep/ .t-drawer__body {
-  padding: 0;
-  background: var(--bg-color-theme-transparent);
-  backdrop-filter: blur(10px);
+
+/deep/ .t-drawer__content-wrapper {
+  box-shadow: var(--shadow-2);
+  .t-drawer__body {
+    padding: 0;
+    background: var(--bg-color-theme-transparent);
+    backdrop-filter: blur(10px);
+  }
 }
 
 /deep/ .t-popup__content {
