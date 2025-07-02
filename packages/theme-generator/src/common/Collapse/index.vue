@@ -11,10 +11,7 @@
         </div>
       </div>
       <div @click="isActive = !isActive">
-        <arrow-icon
-          :isActive="isActive"
-          overlayClassName="common-collapse__arrow"
-        />
+        <arrow-icon :isActive="isActive" overlayClassName="common-collapse__arrow" />
       </div>
     </div>
     <transition
@@ -26,17 +23,19 @@
       @leave="leave"
       @afterLeave="afterLeave"
     >
-      <slot v-if="isActive" name="content" />
+      <div v-show="isActive">
+        <slot name="content" />
+      </div>
     </transition>
   </div>
 </template>
 <script>
-import { collapseAnimation } from "../utils/animation";
-import ArrowIcon from "tdesign-vue/es/common-components/fake-arrow";
-import { handleAttach } from "../utils";
+import ArrowIcon from 'tdesign-vue/es/common-components/fake-arrow';
+import { handleAttach } from '../utils';
+import { collapseAnimation } from '../utils/animation';
 
 export default {
-  name: "CommonCollapse",
+  name: 'CommonCollapse',
   props: {
     title: String,
     colorPalette: Array,
@@ -78,7 +77,7 @@ export default {
       border-radius: 6px;
 
       &::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         left: 0;
@@ -114,8 +113,7 @@ export default {
     color: var(--text-secondary);
     font-size: 12px;
     line-height: 20px;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     /deep/ .t-icon {
       margin-left: 4px;
       cursor: pointer;
