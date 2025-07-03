@@ -159,8 +159,6 @@ export default define({
   },
   render: (host) => {
     const { changelog, docInfo, spline } = host;
-
-    console.log('td-doc-header', changelog, typeof changelog);
     const mobileBodyStyle = { ...host.mobileBodyStyle };
     const splineUrl = splineConfig[spline];
     const isChangelogComponentRegistered = customElements.get('td-doc-changelog'); // 检查td-doc-changelog组件是否已注册
