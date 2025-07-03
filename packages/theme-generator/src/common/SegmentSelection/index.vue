@@ -19,7 +19,8 @@
           :max="5"
           :value="step"
           @change="handleSliderChange"
-          :label="suspendedLabels[step]"
+          :label="renderLabel"
+          :tooltipProps="{ attach: handleAttach }"
         ></t-slider>
       </div>
       <div class="segment-panel__round-tag">
@@ -99,6 +100,9 @@ export default {
     handleSliderChange(v) {
       if (this.disabled) return;
       this.step = v;
+    },
+    renderLabel() {
+      return this.suspendedLabels[this.step];
     },
   },
 };
