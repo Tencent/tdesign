@@ -122,3 +122,9 @@ export function parseBoolean(value, defaultValue = true) {
   }
   return Boolean(value);
 }
+
+export const convert2PascalCase = (name) =>
+  name
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join('');
