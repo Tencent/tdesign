@@ -1,17 +1,21 @@
 import { define, html } from 'hybrids';
 import { getLocale } from '@config/locale.js';
 import closeIcon from '@images/close.svg?raw';
-import { isComponentPage, isGlobalConfigPage } from '@utils';
+import { convert2PascalCase, isComponentPage, isGlobalConfigPage } from '@utils';
 import style from './style.less';
+
+let changelogCache = null;
 
 const classPrefix = 'TDesign-doc-changelog';
 const logsPrefix = `${classPrefix}__logs`;
 
 const locale = getLocale();
 
-let changelogCache = null;
-
 const OFFICIAL_DOMAINS = ['tencent.com', 'woa.com'];
+
+const SPECIAL_NAME_MAP = {
+  qrcode: 'QRCode',
+};
 
 function getLogUrlPrefix() {
   const currentUrl = window.location.href;
@@ -23,12 +27,11 @@ function getLogUrlPrefix() {
 function getCompName() {
   if (isComponentPage()) {
     const pathSegments = window.location.pathname.split('/');
+
     let rawName = pathSegments[3] || '';
-    // 去除结尾的 -en
     if (rawName.endsWith('-en')) rawName = rawName.slice(0, -3);
-    // 转为帕斯卡命名
-    const pascalCaseName = rawName.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-    return pascalCaseName ? pascalCaseName[0].toUpperCase() + pascalCaseName.slice(1) : '';
+
+    return SPECIAL_NAME_MAP[rawName] || convert2PascalCase(rawName);
   } else if (isGlobalConfigPage()) {
     return 'ConfigProvider';
   }
