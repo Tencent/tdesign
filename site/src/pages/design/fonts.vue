@@ -46,11 +46,7 @@
       Microsoft YaHei.
     </p>
 
-    <h4>Chinese @font-family</h4>
     <pre><code>-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol</code></pre>
-
-    <h4>Other Text @font-family</h4>
-    <pre><code>-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol</code></pre>
 
     <h4>Number Font</h4>
     <p>
@@ -76,11 +72,10 @@
       standardization.
     </p>
     <p>
-      For the secondary level font size, font size intervals are reduced to accommodate larger module titles,
-      display text, and digital data. To meet the display needs of this font size range, font sizes increase at
-      intervals of +4, +8, +12, and +16. This growth pattern ensures that font size hierarchy has larger steps that meet
-      the display requirements of texts with significant differences in levels, and reduces unnecessary font size
-      increments.
+      For the secondary level font size, font size intervals are reduced to accommodate larger module titles, display
+      text, and digital data. To meet the display needs of this font size range, font sizes increase at intervals of +4,
+      +8, +12, and +16. This growth pattern ensures that font size hierarchy has larger steps that meet the display
+      requirements of texts with significant differences in levels, and reduces unnecessary font size increments.
     </p>
     <div class="fonts-block font-steps">
       <div>
@@ -208,7 +203,8 @@
 <script>
 import anchorMixin from '../mixins/anchor';
 
-const fontDownloadUrl = 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/design-source/TCloudNumber%20v1.010.zip';
+const fontDownloadUrl =
+  'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/design-source/TCloudNumber%20v1.010.zip';
 
 function genFontSize(num) {
   const result = [];
