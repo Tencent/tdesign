@@ -36,7 +36,6 @@ export default ({ mode }) => {
       host: '0.0.0.0',
       port: 10000,
       open: '/',
-      https: false,
       fs: {
         strict: false,
       },

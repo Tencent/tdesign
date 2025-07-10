@@ -28,7 +28,7 @@ const routes = [
     meta: {
       documentTitle: 'TDesign - 开源的企业级设计体系，为设计师 & 开发者，打造工作美学',
     },
-    component: () => import('./pages/home/index_zh-CN.vue'),
+    component: () => import('./pages/icons/index.vue'),
   },
   {
     path: '/design',
@@ -57,6 +57,14 @@ const routes = [
       documentTitle: '行业组件 - TDesign',
     },
     component: () => import('./pages/design/trade.vue'),
+  },
+  {
+    path: '/icons',
+    name: 'icons',
+    meta: {
+      documentTitle: '图标资源 - TDesign',
+    },
+    component: () => import('./pages/icons/index.vue'),
   },
   {
     path: '*',
