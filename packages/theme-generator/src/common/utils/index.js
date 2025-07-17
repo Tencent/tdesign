@@ -60,16 +60,6 @@ export function handleAttach() {
 }
 
 /**
- * 将百分比字符串转换为浮点数字符串
- * - e.g. `"50%"` -> `"0.5"`
- */
-export function replacePercentages(str) {
-  return str.replace(/(\d+(\.\d+)?)%/g, (match, number) => {
-    return `${parseFloat(number) / 100}`;
-  });
-}
-
-/**
  * 将指定内容导出为文件
  * - e.g. `new Blob(['Hello, world!'], { type: 'text/plain' })`
  */

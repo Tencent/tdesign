@@ -208,8 +208,8 @@ importers:
         specifier: ^0.1.4
         version: 0.1.11(vue@2.7.14)
       tdesign-site-components:
-        specifier: ^0.15.11
-        version: 0.15.11
+        specifier: ^0.16.6
+        version: 0.16.6
       tdesign-vue:
         specifier: 1.9.8-naruto
         version: 1.9.8-naruto(vue@2.7.14)
@@ -1342,6 +1342,9 @@ packages:
   '@jridgewell/sourcemap-codec@1.5.0':
     resolution: {integrity: sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==}
 
+  '@jridgewell/sourcemap-codec@1.5.4':
+    resolution: {integrity: sha512-VT2+G1VQs/9oz078bLrYbecdZKs912zQlkelYpuf+SXF+QvZDYJlbx/LSx+meSAwdDFnF8FVXW92AVjjkVmgFw==}
+
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
@@ -2062,6 +2065,11 @@ packages:
 
   acorn@8.12.1:
     resolution: {integrity: sha512-tcpGyI9zbizT9JbV6oYE477V6mTlXvvi0T0G3SNIYE2apm/G5huBa1+K89VGeovbg+jycCrfhl3ADxErOuO6Jg==}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
+
+  acorn@8.15.0:
+    resolution: {integrity: sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
 
@@ -7124,8 +7132,8 @@ packages:
     peerDependencies:
       vue: ^2.6.12
 
-  tdesign-site-components@0.15.11:
-    resolution: {integrity: sha512-UxNEuv9aZj9OM1AtbI2lCCI7mG8mHj+4D2PPrTkVB9of+SD9LRGQVZyPQ4uY6rfn/01ZToJl+1YKXz1TJ4Kwlw==}
+  tdesign-site-components@0.16.6:
+    resolution: {integrity: sha512-UoOHcemsC4tJSPRPpKPfcXKXtoyOh7JOMCE6ZtuOTkwnPZPV7qucvcddCCDDgl1UVNcdyIYoq5DznqkXcgpsiA==}
 
   tdesign-vue@1.10.5-naruto:
     resolution: {integrity: sha512-sNi/Ga/beo7gNdyhv11ufOKvnLB1s9zU7Dt14NjHVkSFnYDELr6ck+nTXKYQF3Y0Fd4PVVWn2YaGCCDISZMJ7Q==}
@@ -9199,6 +9207,9 @@ snapshots:
 
   '@jridgewell/sourcemap-codec@1.5.0': {}
 
+  '@jridgewell/sourcemap-codec@1.5.4':
+    optional: true
+
   '@jridgewell/trace-mapping@0.3.25':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
@@ -9207,7 +9218,7 @@ snapshots:
   '@jridgewell/trace-mapping@0.3.9':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.5.0
+      '@jridgewell/sourcemap-codec': 1.5.4
     optional: true
 
   '@leichtgewicht/ip-codec@2.0.5': {}
@@ -10229,6 +10240,9 @@ snapshots:
   acorn@7.4.1: {}
 
   acorn@8.12.1: {}
+
+  acorn@8.15.0:
+    optional: true
 
   add-stream@1.0.0: {}
 
@@ -15894,7 +15908,7 @@ snapshots:
       classnames: 2.5.1
       vue: 2.7.14
 
-  tdesign-site-components@0.15.11:
+  tdesign-site-components@0.16.6:
     dependencies:
       '@popperjs/core': 2.11.8
       hybrids: 8.2.2
@@ -16103,7 +16117,7 @@ snapshots:
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
       '@types/node': 22.9.0
-      acorn: 8.12.1
+      acorn: 8.15.0
       acorn-walk: 8.3.4
       arg: 4.1.3
       create-require: 1.1.1

@@ -1,8 +1,8 @@
-import { html, define } from 'hybrids';
+import { define, html } from 'hybrids';
 import { getLocale } from '@config/locale.js';
 import splineConfig from '@config/spline';
 import historyIcon from '@images/history.svg?raw';
-import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, watchHtmlMode } from '@utils';
+import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, parseBoolean, watchHtmlMode } from '@utils';
 import style from './style.less';
 
 let timer = null;
@@ -58,6 +58,10 @@ export default define({
     },
   },
   platform: 'web',
+  changelog: {
+    get: (_host, lastValue) => parseBoolean(lastValue, true),
+    set: (_host, value) => parseBoolean(value, true),
+  },
   mobileBodyStyle,
   docInfo: {
     get: (_host, lastValue) => lastValue || undefined,
@@ -154,19 +158,19 @@ export default define({
     },
   },
   render: (host) => {
-    const { docInfo, spline } = host;
+    const { changelog, docInfo, spline } = host;
     const mobileBodyStyle = { ...host.mobileBodyStyle };
     const splineUrl = splineConfig[spline];
     const isChangelogComponentRegistered = customElements.get('td-doc-changelog'); // 检查td-doc-changelog组件是否已注册
     const openChangelogDrawer = () => {
-      let changelog = document.querySelector('td-doc-changelog');
-      if (!changelog) {
-        changelog = document.createElement('td-doc-changelog');
-        document.body.appendChild(changelog);
+      let changelogEl = document.querySelector('td-doc-changelog');
+      if (!changelogEl) {
+        changelogEl = document.createElement('td-doc-changelog');
+        document.body.appendChild(changelogEl);
       }
       // 为了触发动画，下一帧再切换为显示状态
       requestAnimationFrame(() => {
-        changelog.visible = true;
+        changelogEl.visible = true;
       });
     };
 
@@ -185,7 +189,7 @@ export default define({
                 ? html`
                     <div>
                       <h1 class="TDesign-doc-header__info-title">${docInfo.title}</h1>
-                      ${isChangelogComponentRegistered && (isComponentPage() || isGlobalConfigPage())
+                      ${changelog && isChangelogComponentRegistered && (isComponentPage() || isGlobalConfigPage())
                         ? html`
                             <button id="TDesign-doc-changelog__entry" onclick="${openChangelogDrawer}">
                               <i innerHTML="${historyIcon}"></i>

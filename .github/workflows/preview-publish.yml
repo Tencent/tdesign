@@ -151,7 +151,7 @@ jobs:
         run: pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
         working-directory: packages/tdesign-vue-next/site
 
-      - run: pnpm run site:preview
+      - run: pnpm -C packages/tdesign-vue-next/site run preview
 
       - run: |
           export DEPLOY_DOMAIN=${{ needs.preview-context.outputs.tdesign_vue_next_domain }}
@@ -183,7 +183,7 @@ jobs:
         run: pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
         working-directory: packages/tdesign-vue-next-chat/site
 
-      - run: pnpm run site:chat-preview
+      - run: pnpm -C packages/tdesign-vue-next-chat/site run preview
 
       - run: |
           export DEPLOY_DOMAIN=${{ needs.preview-context.outputs.tdesign_vue_next_chat_domain }}

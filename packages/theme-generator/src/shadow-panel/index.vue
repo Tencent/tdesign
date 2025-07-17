@@ -31,7 +31,7 @@
                 :max="selectOptions.length - 2"
                 :value="step"
                 @change="handleSliderChange"
-                :label="selectOptions[step].label"
+                :label="renderLabel"
                 :disabled="forbidden"
               ></t-slider>
             </div>
@@ -157,6 +157,9 @@ export default {
     handleSliderChange(v) {
       if (this.forbidden) return;
       this.step = v;
+    },
+    renderLabel() {
+      return this.selectOptions[this.step].label;
     },
     // 拆分 box-shadow 的值 0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%)
     splitShadowValue(data) {

@@ -112,3 +112,19 @@ export function getLang() {
   const isEn = /-en$/.test(location.pathname);
   return isEn ? 'en' : 'zh';
 }
+
+export function parseBoolean(value, defaultValue = true) {
+  if (value === undefined) {
+    return defaultValue;
+  }
+  if (typeof value === 'string') {
+    return value === 'true';
+  }
+  return Boolean(value);
+}
+
+export const convert2PascalCase = (name) =>
+  name
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join('');
