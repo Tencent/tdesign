@@ -1,8 +1,9 @@
 import { Color } from 'tvision-color';
 
-import { CUSTOM_DARK_ID, CUSTOM_THEME_ID } from '.';
-import { appendStyleSheet } from '../../common/utils';
+import { appendStyleSheet } from '../utils';
+
 import { DEFAULT_THEME } from './preset';
+import { CUSTOM_DARK_ID, CUSTOM_THEME_ID } from './stylesheet';
 
 /**
  * 默认主题的 `--td-brand-color-x` 系列 Token 对应的数值

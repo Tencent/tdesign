@@ -35,8 +35,8 @@
 
 <script>
 import langMixin from '../common/i18n/mixin';
-import { RECOMMEND_THEMES } from '../common/Themes';
-import { themeStore } from '../common/Themes/store';
+import { RECOMMEND_THEMES, themeStore } from '../common/themes';
+
 import PickedSvg from './PickedSvg.vue';
 
 export default {

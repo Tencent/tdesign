@@ -99,7 +99,7 @@ import {
 import langMixin from '../../common/i18n/mixin';
 import SegmentSelection from '../../common/SegmentSelection/index.vue';
 import SizeSlider from '../../common/SizeSlider/index.vue';
-import { getOptionFromLocal, updateLocalOption } from '../../common/Themes';
+import { getOptionFromLocal, updateLocalOption } from '../../common/themes';
 import { handleAttach } from '../../common/utils';
 import { LINE_HEIGHT_OPTIONS, LINE_HEIGHT_STEPS, updateLineHeightTokens } from '../built-in/line-height';
 export default {

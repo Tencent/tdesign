@@ -193,7 +193,7 @@ export const FUNCTION_TOKEN_MAPS = {
 
 /* ============================== */
 
-export const FONT_TOKEN_MAP = [
+export const FONT_COLOR_TOKEN_MAP = [
   { name: '--td-text-color-primary', from: '--td-font-gray-1' },
   { name: '--td-text-color-secondary', from: '--td-font-gray-2' },
   { name: '--td-text-color-placeholder', from: '--td-font-gray-3' },

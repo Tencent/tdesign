@@ -10,7 +10,7 @@
 </template>
 <script>
 import langMixin from '../i18n/mixin';
-import { themeStore } from '../Themes/store';
+import { themeStore } from '../themes/store';
 import { getTokenValue } from '../utils';
 
 export default {

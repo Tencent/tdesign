@@ -104,18 +104,17 @@
 <script>
 import { MessagePlugin, Button as TButton, Popconfirm as TPopconfirm, Popup as TPopup } from 'tdesign-vue';
 
-import RecommendThemes from '../recommend-themes/index.vue';
+import langMixin from '../common/i18n/mixin';
+import { exportCustomStyleSheet, themeStore } from '../common/themes';
+import { handleAttach } from '../common/utils';
+
+import RecommendThemes from '../recommend-themes';
 
 import AdjustSvg from './svg/AdjustSvg.vue';
 import DownloadSvg from './svg/DownloadSvg.vue';
 import PaletteSvg from './svg/PaletteSvg.vue';
 import RecoverSvg from './svg/RecoverSvg.vue';
 import SettingSvg from './svg/SettingSvg.vue';
-
-import langMixin from '../common/i18n/mixin';
-import { exportCustomStyleSheet } from '../common/Themes';
-import { themeStore } from '../common/Themes/store';
-import { handleAttach } from '../common/utils';
 
 export default {
   name: 'DockIndex',

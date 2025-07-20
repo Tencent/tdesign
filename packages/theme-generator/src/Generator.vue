@@ -1,5 +1,5 @@
 <template>
-  <div class="theme-generator">
+  <div id="theme-generator">
     <dock
       :drawerVisible="visible"
       :showSetting="showSetting"
@@ -11,13 +11,11 @@
 </template>
 
 <script>
-import { applyTokenFromLocal, initThemeStyleSheet, syncThemeToIframe } from './common/Themes';
-import { themeStore } from './common/Themes/store';
-
+import { applyTokenFromLocal, initThemeStyleSheet, syncThemeToIframe, themeStore } from './common/themes';
 import { initGeneratorVars } from './common/utils';
 
-import Dock from './dock/index.vue';
-import PanelDrawer from './panel-drawer/index.vue';
+import Dock from './dock';
+import PanelDrawer from './panel-drawer';
 
 const activeTabMap = {
   color: 0,
@@ -87,7 +85,7 @@ export default {
 @import './styles/tdesign.min.css';
 
 @media screen and (max-width: 960px) {
-  .theme-generator {
+  #theme-generator {
     display: none;
   }
 }

@@ -1,8 +1,3 @@
-export * from './color';
-export * from './iframe';
-export * from './preset';
-export * from './token';
-
 import cssbeautify from 'cssbeautify';
 
 import { appendStyleSheet, clearLocalItem, downloadFile, extractRootContent, removeCssProperties } from '../utils';

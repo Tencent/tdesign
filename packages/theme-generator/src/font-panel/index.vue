@@ -64,17 +64,19 @@
     </div>
   </div>
 </template>
+
 <script lang="jsx">
-import CommonCollapse from '../common/Collapse/index.vue';
+import CommonCollapse from '../common/Collapse';
+import langMixin from '../common/i18n/mixin';
+import { isMobile, modifyToken } from '../common/themes';
+
+import { FONT_COLOR_TOKEN_MAP } from '../color-panel/utils/const';
+
 import FontColorAdjust from './components/FontColorAdjust.vue';
 import FontColorSvg from './components/FontColorSvg.vue';
 import LineHeightAdjust from './components/LineHeightAdjust.vue';
 import LineHeightSvg from './components/LineHeightSvg.vue';
 import SizeAdjust from './components/SizeAdjust.vue';
-
-import { FONT_TOKEN_MAP } from '../color-panel/utils/const';
-import langMixin from '../common/i18n/mixin';
-import { isMobile, modifyToken } from '../common/Themes';
 
 export default {
   name: 'FontPanel',
@@ -117,7 +119,7 @@ export default {
       modifyToken(tokenIdxName, hex);
     },
     getCurrentPalette() {
-      let colorMap = FONT_TOKEN_MAP;
+      let colorMap = FONT_COLOR_TOKEN_MAP;
       let docStyle = getComputedStyle(document.documentElement);
 
       let currentPalette = [...new Array(7).keys()].map((v, i) => {
@@ -143,6 +145,7 @@ export default {
   },
 };
 </script>
+
 <style scoped lang="less">
 /deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;

@@ -86,7 +86,7 @@ import { Popup as TPopup } from 'tdesign-vue';
 
 import ColorPicker from '../../../common/ColorPicker/index.vue';
 import langMixin from '../../../common/i18n/mixin';
-import { CUSTOM_TOKEN_ID } from '../../../common/Themes';
+import { CUSTOM_TOKEN_ID } from '../../../common/themes';
 import { getTokenValue, handleAttach } from '../../../common/utils';
 
 export default {

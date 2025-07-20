@@ -46,7 +46,7 @@
 import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue';
 
 import SizeSlider from '../../common/SizeSlider/index.vue';
-import { CUSTOM_THEME_ID, modifyToken } from '../../common/Themes';
+import { CUSTOM_THEME_ID, modifyToken } from '../../common/themes';
 import { handleAttach } from '../../common/utils';
 
 import HorizontalPaddingAdjustSvg from '../svg/HorizontalPaddingAdjustSvg.vue';

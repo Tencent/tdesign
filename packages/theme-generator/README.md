@@ -1,18 +1,10 @@
-# TDesign Theme Generator Plugin
+<h1 style="text-align: center"><em><img alt="TDesign Logo" width="40" src="https://tdesign.tencent.com/favicon.ico"> TDesign Theme Generator</em></h1>
 
-- TDesign theme generator plugin, which is available in any web application.
+English | [简体中文](./README_zh-CN.md)
 
-## 🏗️ Develop
+TDesign theme generator plugin, which is tailored for the component library documentation site. It is used for real-time preview of color and style adjustments.
 
-- `npm run dev`
-
-- `npm run build:watch` execute `npm link` as well to preview in application project
-
-## ⚙️ Build
-
-- `npm run build` build web-component
-
-## 📦 Usage
+## 🔨 Usage
 
 1. `npm i tdesign-theme-generator`
 
@@ -29,3 +21,10 @@
     generator.setAttribute('device', 'mobile');
     document.body.appendChild(generator);
   ```
+
+## 🏗️ Develop
+
+```bash
+npm link
+npm run build:watch # open the component library site with hot-reload preview
+```

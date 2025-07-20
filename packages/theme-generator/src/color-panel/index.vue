@@ -327,8 +327,8 @@ import {
   Tooltip as TTooltip,
 } from 'tdesign-vue';
 
-import ColorPicker from '../../../common/ColorPicker/index.vue';
-import langMixin from '../../../common/i18n/mixin';
+import ColorPicker from '../common/ColorPicker/index.vue';
+import langMixin from '../common/i18n/mixin';
 import {
   covert2Hex,
   generateBrandPalette,
@@ -337,12 +337,12 @@ import {
   getOptionFromLocal,
   modifyToken,
   syncColorTokensToStyle,
+  themeStore,
   updateLocalOption,
   updateStyleSheetColor,
-} from '../../../common/Themes';
-import { themeStore } from '../../../common/Themes/store';
-import { getThemeMode, getTokenValue, handleAttach, setUpThemeObserver } from '../../../common/utils';
-import { colorAnimation } from '../../../common/utils/animation';
+} from '../common/themes';
+import { getThemeMode, getTokenValue, handleAttach, setUpThemeObserver } from '../common/utils';
+import { colorAnimation } from '../common/utils/animation';
 import {
   BRAND_TOKEN_MAP,
   DEFAULT_COLORS,
@@ -350,12 +350,13 @@ import {
   FUNCTION_TOKEN_MAPS,
   RECOMMEND_COLORS,
   SCENE_COLORS,
-} from '../../utils/const';
+} from './utils/const';
 
-import ColorColumn from '../ColorColumn/index.vue';
-import ColorCollapse from './ColorCollapse.vue';
+import ColorCollapse from './components/ColorCollapse';
+import ColorColumn from './components/ColorColumn';
+
 export default {
-  name: 'ColorContent',
+  name: 'ColorPanel',
   props: {
     top: Number,
   },

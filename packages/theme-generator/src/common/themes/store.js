@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
-import { clearLocalTheme, getOptionFromLocal, initThemeStyleSheet, updateLocalOption } from './index';
 import { DEFAULT_THEME, RECOMMEND_THEMES } from './preset';
+import { clearLocalTheme, getOptionFromLocal, initThemeStyleSheet, updateLocalOption } from './stylesheet';
 
 export const themeStore = Vue.observable({
   theme: getInitialTheme(),

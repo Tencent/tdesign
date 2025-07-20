@@ -11,11 +11,11 @@
     <sticky-theme-display />
     <div style="display: flex">
       <switch-tabs :activeTabIdx="activeTabIdx" @changeActiveTab="changeActiveTab" />
-      <color-content :top="top" :key="`${$refreshId}-color`" v-show="activeTabIdx === activeTabMap.color" />
-      <font-content :top="top" :key="`${$refreshId}-font`" v-show="activeTabIdx === activeTabMap.font" />
-      <radius-content :top="top" :key="`${$refreshId}-radius`" v-show="activeTabIdx === activeTabMap.radius" />
-      <shadow-content :top="top" :key="`${$refreshId}-shadow`" v-show="activeTabIdx === activeTabMap.shadow" />
-      <size-content :top="top" :key="`${$refreshId}-size`" v-show="activeTabIdx === activeTabMap.size" />
+      <color-panel :top="top" :key="`${$refreshId}-color`" v-show="activeTabIdx === ACTIVE_TAB_MAP.color" />
+      <font-panel :top="top" :key="`${$refreshId}-font`" v-show="activeTabIdx === ACTIVE_TAB_MAP.font" />
+      <radius-panel :top="top" :key="`${$refreshId}-radius`" v-show="activeTabIdx === ACTIVE_TAB_MAP.radius" />
+      <shadow-panel :top="top" :key="`${$refreshId}-shadow`" v-show="activeTabIdx === ACTIVE_TAB_MAP.shadow" />
+      <size-panel :top="top" :key="`${$refreshId}-size`" v-show="activeTabIdx === ACTIVE_TAB_MAP.size" />
     </div>
   </t-drawer>
 </template>
@@ -23,18 +23,18 @@
 <script>
 import { Drawer as TDrawer } from 'tdesign-vue';
 
-import ColorContent from '../color-panel/components/ColorContent/index.vue'; //色彩配置
-import FontContent from '../font-panel/index.vue'; // 字体配置
-import RadiusContent from '../radius-panel/index.vue'; // 字体配置
-import ShadowContent from '../shadow-panel/index.vue'; // 阴影配置
-import SizeContent from '../size-panel/index.vue'; // 阴影配置
+import ColorPanel from '../color-panel'; //色彩配置
+import FontPanel from '../font-panel'; // 字体配置
+import RadiusPanel from '../radius-panel'; // 字体配置
+import ShadowPanel from '../shadow-panel'; // 阴影配置
+import SizePanel from '../size-panel'; // 阴影配置
 
-import StickyThemeDisplay from '../common/StickyThemeDisplay/index.vue';
-import SwitchTabs from '../common/SwitchTabs/index.vue';
-import { themeStore } from '../common/Themes/store';
+import StickyThemeDisplay from '../common/StickyThemeDisplay';
+import SwitchTabs from '../common/SwitchTabs';
+import { themeStore } from '../common/themes/store';
 import { syncThemeToGenerator } from '../common/utils';
 
-const activeTabMap = {
+const ACTIVE_TAB_MAP = {
   color: 0,
   font: 1,
   radius: 2,
@@ -48,11 +48,11 @@ export default {
     TDrawer,
     SwitchTabs,
     StickyThemeDisplay,
-    ColorContent,
-    FontContent,
-    RadiusContent,
-    ShadowContent,
-    SizeContent,
+    ColorPanel,
+    FontPanel,
+    RadiusPanel,
+    ShadowPanel,
+    SizePanel,
   },
   props: {
     propsTop: String,
@@ -69,9 +69,9 @@ export default {
   data() {
     return {
       top: null,
-      activeTabMap,
+      ACTIVE_TAB_MAP,
       isHeaderShow: true,
-      activeTabIdx: activeTabMap.color,
+      activeTabIdx: ACTIVE_TAB_MAP.color,
       visible: false,
     };
   },
