@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/no-mutating-props -->
 <template>
   <t-drawer
     :visible.sync="visible"
@@ -9,39 +8,14 @@
     size="348px"
     :style="drawerStyle"
   >
-    <sticky-theme-display :theme="theme" v-if="!!theme" />
+    <sticky-theme-display />
     <div style="display: flex">
       <switch-tabs :activeTabIdx="activeTabIdx" @changeActiveTab="changeActiveTab" />
-      <color-content
-        :top="top"
-        :is-refresh="refresh"
-        :key="`${refresh}-color`"
-        v-show="activeTabIdx === activeTabMap.color"
-      />
-      <font-content
-        :top="top"
-        :is-refresh="refresh"
-        :key="`${refresh}-font`"
-        v-show="activeTabIdx === activeTabMap.font"
-      />
-      <radius-content
-        :top="top"
-        :key="`${refresh}-radius`"
-        v-show="activeTabIdx === activeTabMap.radius"
-        :is-refresh="refresh"
-      />
-      <shadow-content
-        :top="top"
-        :key="`${refresh}-shadow`"
-        v-show="activeTabIdx === activeTabMap.shadow"
-        :is-refresh="refresh"
-      />
-      <size-content
-        :top="top"
-        :key="`${refresh}-size`"
-        v-show="activeTabIdx === activeTabMap.size"
-        :is-refresh="refresh"
-      />
+      <color-content :top="top" :key="`${$refreshId}-color`" v-show="activeTabIdx === activeTabMap.color" />
+      <font-content :top="top" :key="`${$refreshId}-font`" v-show="activeTabIdx === activeTabMap.font" />
+      <radius-content :top="top" :key="`${$refreshId}-radius`" v-show="activeTabIdx === activeTabMap.radius" />
+      <shadow-content :top="top" :key="`${$refreshId}-shadow`" v-show="activeTabIdx === activeTabMap.shadow" />
+      <size-content :top="top" :key="`${$refreshId}-size`" v-show="activeTabIdx === activeTabMap.size" />
     </div>
   </t-drawer>
 </template>
@@ -57,7 +31,8 @@ import SizeContent from '../size-panel/index.vue'; // 阴影配置
 
 import StickyThemeDisplay from '../common/StickyThemeDisplay/index.vue';
 import SwitchTabs from '../common/SwitchTabs/index.vue';
-import { initGeneratorVars, syncThemeToGenerator } from '../common/utils';
+import { themeStore } from '../common/Themes/store';
+import { syncThemeToGenerator } from '../common/utils';
 
 const activeTabMap = {
   color: 0,
@@ -87,9 +62,6 @@ export default {
     theme: {
       type: [Object, String],
     },
-    refresh: {
-      type: [Boolean, String],
-    },
     drawerVisible: {
       type: [String, Number, Boolean],
     },
@@ -104,6 +76,9 @@ export default {
     };
   },
   computed: {
+    $refreshId() {
+      return themeStore.refreshId;
+    },
     drawerStyle() {
       return {
         top: `${this.top}px`,
@@ -123,7 +98,6 @@ export default {
     },
   },
   mounted() {
-    initGeneratorVars();
     syncThemeToGenerator();
 
     if (this.propsTop) {
@@ -145,7 +119,6 @@ export default {
     },
     calcHeaderShow() {
       const headerHeight = getComputedStyle(document.documentElement).getPropertyValue('--header-height');
-
       this.top = Math.max(parseInt(headerHeight) - window.scrollY, 0);
     },
   },

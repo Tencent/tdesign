@@ -9,20 +9,21 @@
   >
     <div class="color-content__content" :style="contentStyle">
       <div class="color-content__main">
-        <p class="color-content__title">{{ lang.color.themeColor }}</p>
+        <p class="color-content__title">
+          {{ lang.color.themeColor }}
+        </p>
         <t-row :gutter="[4, 4]" :style="{ marginLeft: '0' }">
-          <t-col v-for="(theme, idx) in themes.slice(0, 3)" :key="idx" :span="3" :style="{ padding: '0' }">
+          <t-col v-for="(color, idx) in DEFAULT_COLORS" :key="idx" :span="3" :style="{ padding: '0' }">
             <div
               :class="{
                 'color-content__block': true,
-                'is-active':
-                  currentThemeColor.toLocaleLowerCase() === theme.value.toLocaleLowerCase() && !isMoreVisible,
+                'is-active': $brandColor.toLocaleLowerCase() === color.value.toLocaleLowerCase() && !isMoreVisible,
               }"
               :style="{ paddingBottom: '4px', color: 'var(--text-secondary)' }"
             >
               <div
-                @click="handleNewColorGeneration(theme.value)"
-                :class="{ 'is-active': currentThemeColor.toLocaleLowerCase() === theme.value.toLocaleLowerCase() }"
+                @click="changeBrandColor(color.value)"
+                :class="{ 'is-active': $brandColor.toLocaleLowerCase() === color.value.toLocaleLowerCase() }"
               >
                 <div
                   :style="{
@@ -30,21 +31,21 @@
                     height: '48px',
                     border: '1px solid var(--theme-component-border)',
                     'border-radius': '6px',
-                    'background-color': theme.value,
+                    'background-color': color.value,
                   }"
                 >
-                  <span v-if="currentThemeColor === theme.value"></span>
+                  <span v-if="$brandColor === color.value"></span>
                 </div>
               </div>
             </div>
           </t-col>
           <t-col :span="3" :style="{ padding: '0' }">
             <t-popup
-              placement="bottom-left"
               showArrow
+              placement="bottom-left"
               trigger="hover"
               :attach="handleAttach"
-              @visible-change="handleVisibleChange"
+              @visible-change="isMoreVisible = $event"
               overlayClassName="popup-arrow"
               :overlayStyle="{
                 width: '268px',
@@ -85,12 +86,12 @@
                     class="color-content__block"
                     style="background: none"
                     :key="idx"
-                    v-for="(theme, idx) in recommendThemes"
+                    v-for="(color, idx) in RECOMMEND_COLORS"
                   >
                     <div
-                      @click="handleNewColorGeneration(theme.value)"
+                      @click="changeBrandColor(color.value)"
                       :class="{
-                        'is-active': currentThemeColor === theme.value,
+                        'is-active': $brandColor === color.value,
                       }"
                       :style="{ color: 'var(--text-secondary)' }"
                     >
@@ -98,9 +99,9 @@
                         :style="{
                           width: '48px',
                           height: '48px',
-                          'border-radius': '6px',
-                          'background-color': theme.value,
                           border: '1px solid var(--theme-component-border)',
+                          'border-radius': '6px',
+                          'background-color': color.value,
                         }"
                       ></p>
                     </div>
@@ -115,12 +116,12 @@
                     class="color-content__block"
                     style="background: none"
                     :key="idx"
-                    v-for="(theme, idx) in sceneThemes"
+                    v-for="(color, idx) in SCENE_COLORS"
                   >
                     <div
-                      @click="handleNewColorGeneration(theme.value)"
+                      @click="changeBrandColor(color.value)"
                       :class="{
-                        'is-active': currentThemeColor === theme.value,
+                        'is-active': $brandColor === color.value,
                       }"
                     >
                       <p
@@ -129,7 +130,7 @@
                           height: '48px',
                           border: '1px solid var(--theme-component-border)',
                           'border-radius': '6px',
-                          'background-color': theme.value,
+                          'background-color': color.value,
                         }"
                       ></p>
                     </div>
@@ -139,7 +140,7 @@
             </t-popup>
           </t-col>
         </t-row>
-        <!-- 自定义主题色部分 -->
+        <!-- 自定义主题颜色 -->
         <t-popup
           placement="bottom-left"
           showArrow
@@ -155,38 +156,44 @@
                 :style="{
                   width: '100%',
                   'border-radius': '6px',
-                  'background-color': currentDisplayThemeColor,
+                  'background-color': 'var(--brand-main)',
                 }"
               >
-                <p>hsv: {{ themeColorHsv }}</p>
-                <p>rgba: {{ themeColorRgb }}</p>
+                <p>hsv: {{ covert2Hex(brandDisplayedColor, 'hsv') }}</p>
+                <p>rgb: {{ covert2Hex(brandDisplayedColor, 'rgb') }}</p>
               </div>
               <div class="color-content__custom-bottom">
                 <div>
-                  <p>{{ lang.color.customizeTitle }}</p>
-                  <p :style="{ color: 'var(--text-secondary)' }">HEX: {{ currentDisplayThemeColor }}</p>
+                  <p>
+                    {{
+                      [...DEFAULT_COLORS, ...RECOMMEND_COLORS, ...SCENE_COLORS].find(
+                        (color) => color.value === $brandColor,
+                      )?.[isEn ? 'enName' : 'name'] || lang.color.customizeTitle
+                    }}
+                  </p>
+                  <p :style="{ color: 'var(--text-secondary)' }">HEX: {{ brandDisplayedColor }}</p>
                 </div>
                 <edit-1-icon size="20" :style="{ marginRight: '8px', color: 'var(--text-primary)' }" />
               </div>
             </div>
           </div>
           <template #content>
-            <color-picker :value="currentThemeColor" @change="changeColor" />
+            <color-picker :value="$brandColor" @change="changeBrandColor" />
           </template>
         </t-popup>
-        <!-- 色彩生产模式 -->
         <div class="color-content__generate-mode">
+          <!-- 保留输入 -->
           <div
             :class="{
               'color-content__generate-mode-btn': true,
-              'is-active': generateMode === 'remain',
+              'is-active': generationMode === 'remain',
             }"
-            @click="generateMode = 'remain'"
+            @click="generationMode = 'remain'"
           >
             <div
               class="color-content__generate-mode-btn-inner"
               :style="{
-                backgroundColor: currentDisplayThemeColor,
+                backgroundColor: $brandColor,
               }"
             >
               <span>{{ lang.color.remainText }}</span>
@@ -202,17 +209,18 @@
               <file-copy-icon size="14px" />
             </div>
           </div>
+          <!-- 智能推荐 -->
           <div
             :class="{
               'color-content__generate-mode-btn': true,
-              'is-active': generateMode === 'recommend',
+              'is-active': generationMode === 'recommend',
             }"
-            @click="generateMode = 'recommend'"
+            @click="generationMode = 'recommend'"
           >
             <div
               class="color-content__generate-mode-btn-inner"
               :style="{
-                backgroundColor: currentDisplayThemeColor,
+                backgroundColor: $brandColor,
               }"
             >
               <span>{{ lang.color.aiRecommendation }}</span>
@@ -229,85 +237,80 @@
             </div>
           </div>
         </div>
-        <!-- 主题色阶部分 -->
+        <!-- 主题色 -->
         <color-column
           type="brand"
-          :colorPalette="colorPalette"
-          :originColorPalette="initColorPalette"
+          :gradientStep="10"
+          :tokenMap="brandTokenMap"
           @changeGradation="changeGradation"
           @recoverGradation="recoverGradation"
-          :paletteChange="isColorPaletteChange"
         />
       </div>
+      <!-- 中性色 -->
       <color-collapse
-        :title="lang.color.neutralColor"
-        :colorPalette="grayColorPalette"
         type="gray"
-        :disableSelfDefine="isGeneratedNeutralColor"
-        @changeMainColor="changeMainColor"
+        :title="lang.color.neutralColor"
+        :mainColor="grayMainColor"
+        :disabled="isGrayRelatedToTheme"
+        @changeMainColor="changeFunctionColor"
       >
         <template #subTitle>
           <div>
-            {{ lang.color.fromThemeColor
-            }}<t-switch
-              style="margin-left: 4px"
-              v-model="isGeneratedNeutralColor"
-              @change="handleChangeGenerateNeutralColor"
-            ></t-switch>
+            {{ lang.color.fromThemeColor }}
+            <t-switch style="margin-left: 4px" v-model="isGrayRelatedToTheme" @change="changeNeutralColor"></t-switch>
           </div>
         </template>
         <color-column
           type="gray"
-          :colorPalette="grayColorPalette"
-          :originColorPalette="initGrayColorPalette"
+          :gradientStep="14"
+          :tokenMap="FUNCTION_TOKEN_MAPS['gray']"
           @changeGradation="changeGradation"
           @recoverGradation="recoverGradation"
-          :paletteChange="isGrayPaletteChange"
         />
       </color-collapse>
+      <!-- 成功色 -->
       <color-collapse
-        :title="lang.color.successColor"
-        :colorPalette="successColorPalette"
         type="success"
-        @changeMainColor="changeMainColor"
+        :title="lang.color.successColor"
+        :mainColor="successMainColor"
+        @changeMainColor="changeFunctionColor"
       >
         <color-column
           type="success"
-          :colorPalette="successColorPalette"
-          :originColorPalette="initSuccessColorPalette"
+          :gradientStep="10"
+          :tokenMap="FUNCTION_TOKEN_MAPS['success']"
           @changeGradation="changeGradation"
           @recoverGradation="recoverGradation"
-          :paletteChange="isSuccessPaletteChange"
         />
       </color-collapse>
+      <!-- 错误色 -->
       <color-collapse
-        :title="lang.color.errorColor"
-        :colorPalette="errorColorPalette"
         type="error"
-        @changeMainColor="changeMainColor"
+        :title="lang.color.errorColor"
+        :mainColor="errorMainColor"
+        @changeMainColor="changeFunctionColor"
       >
         <color-column
           type="error"
-          :colorPalette="errorColorPalette"
-          :originColorPalette="initErrorColorPalette"
+          :gradientStep="10"
+          :tokenMap="FUNCTION_TOKEN_MAPS['error']"
           @changeGradation="changeGradation"
           @recoverGradation="recoverGradation"
-          :paletteChange="isErrorPaletteChange"
         />
       </color-collapse>
+      <!-- 警告色 -->
       <color-collapse
-        :title="lang.color.warningColor"
-        :colorPalette="warningColorPalette"
         type="warning"
-        @changeMainColor="changeMainColor"
+        :title="lang.color.warningColor"
+        :mainColor="warningMainColor"
+        @changeMainColor="changeFunctionColor"
       >
         <color-column
           type="warning"
-          :colorPalette="warningColorPalette"
-          :originColorPalette="initWarningColorPalette"
+          :gradientStep="10"
+          :tokenMap="FUNCTION_TOKEN_MAPS['warning']"
           @changeGradation="changeGradation"
           @recoverGradation="recoverGradation"
-          :paletteChange="isWarningPaletteChange"
         />
       </color-collapse>
     </div>
@@ -323,43 +326,40 @@ import {
   Switch as TSwitch,
   Tooltip as TTooltip,
 } from 'tdesign-vue';
-import { Color } from 'tvision-color';
 
 import ColorPicker from '../../../common/ColorPicker/index.vue';
 import langMixin from '../../../common/i18n/mixin';
 import {
-  DEFAULT_THEME,
-  generateNewTheme,
-  generateTokenList,
+  covert2Hex,
+  generateBrandPalette,
+  generateFunctionalPalette,
+  generateNeutralPalette,
   getOptionFromLocal,
   modifyToken,
+  syncColorTokensToStyle,
   updateLocalOption,
+  updateStyleSheetColor,
 } from '../../../common/Themes';
-import { handleAttach } from '../../../common/utils';
+import { themeStore } from '../../../common/Themes/store';
+import { getThemeMode, getTokenValue, handleAttach, setUpThemeObserver } from '../../../common/utils';
 import { colorAnimation } from '../../../common/utils/animation';
-
 import {
-  BRAND_COLOR_MAP,
-  DEFAULT_COLOR,
-  ERROR_COLOR_MAP,
-  GRAY_COLOR_MAP,
-  RECOMMEND_COLOR,
-  SCENE_COLOR,
-  SUCCESS_COLOR_MAP,
-  WARNING_COLOR_MAP,
+  BRAND_TOKEN_MAP,
+  DEFAULT_COLORS,
+  DEFAULT_FUNCTION_COLORS,
+  FUNCTION_TOKEN_MAPS,
+  RECOMMEND_COLORS,
+  SCENE_COLORS,
 } from '../../utils/const';
 
 import ColorColumn from '../ColorColumn/index.vue';
 import ColorCollapse from './ColorCollapse.vue';
-
 export default {
   name: 'ColorContent',
   props: {
     top: Number,
-    isRefresh: Boolean,
   },
   mixins: [langMixin],
-  inject: ['device'],
   components: {
     TRow,
     TCol,
@@ -376,53 +376,38 @@ export default {
   },
   data() {
     return {
-      themes: DEFAULT_COLOR,
-      recommendThemes: RECOMMEND_COLOR,
-      sceneThemes: SCENE_COLOR,
-      currentThemeColor: getOptionFromLocal('color') ?? DEFAULT_THEME.value,
-      currentDisplayThemeColor: getOptionFromLocal('color') ?? DEFAULT_THEME.value,
-      currentBrandIdx: 6,
-      colorPalette: [''], //主题色色阶
-      initColorPalette: [''],
-      successColorPalette: [''], //成功色色阶
-      initSuccessColorPalette: [''],
-      warningColorPalette: [''], //告警色色阶
-      initWarningColorPalette: [''],
-      errorColorPalette: [''], // 错误色色阶
-      initErrorColorPalette: [''],
-      grayColorPalette: [''], // 中性色色阶
-      initGrayColorPalette: [''],
-      activeTab: 'color',
+      DEFAULT_COLORS,
+      RECOMMEND_COLORS,
+      SCENE_COLORS,
+      FUNCTION_TOKEN_MAPS,
+      brandInputColor: themeStore.brandColor,
+      brandIndexes: {
+        light: 7,
+        dark: 8,
+      },
+      currentBrandIdx: 7,
+      brandTokenMap: [''], // `-td-brand-x` 系列的 token 映射需要根据 brandIdx 动态计算；其它功能色都是固定的
+      grayMainColor: getOptionFromLocal('gray') || getTokenValue('--td-bg-color-secondarycontainer-active'),
+      successMainColor: getOptionFromLocal('success') || getTokenValue('--td-success-color'),
+      errorMainColor: getOptionFromLocal('error') || getTokenValue('--td-error-color'),
+      warningMainColor: getOptionFromLocal('warning') || getTokenValue('--td-warning-color'),
+      generationMode: 'remain',
+      isGrayRelatedToTheme: getOptionFromLocal('neutral') == true,
       isMoreVisible: false,
-      generateMode: getOptionFromLocal('recommend') ? 'recommend' : 'remain',
-      isGeneratedNeutralColor: false,
-      initDefaultGrayColorPalette: [''], // 默认的中性色色阶
     };
   },
   computed: {
-    isRemainGenerateMode() {
-      return this.generateMode === 'remain';
+    $theme() {
+      return themeStore.theme;
     },
-    themeColorRgb() {
-      return `(${Color.colorTransform(this.currentDisplayThemeColor, 'hex', 'rgb').join(',')})`;
+    isRemainMode() {
+      return this.generationMode === 'remain';
     },
-    themeColorHsv() {
-      return `(${Color.colorTransform(this.currentDisplayThemeColor, 'hex', 'hsv').join(',')})`;
+    $brandColor() {
+      return themeStore.brandColor;
     },
-    isColorPaletteChange() {
-      return JSON.stringify(this.colorPalette) !== JSON.stringify(this.initColorPalette);
-    },
-    isSuccessPaletteChange() {
-      return JSON.stringify(this.successColorPalette) !== JSON.stringify(this.initSuccessColorPalette);
-    },
-    isWarningPaletteChange() {
-      return JSON.stringify(this.warningColorPalette) !== JSON.stringify(this.initWarningColorPalette);
-    },
-    isErrorPaletteChange() {
-      return JSON.stringify(this.errorColorPalette) !== JSON.stringify(this.initErrorColorPalette);
-    },
-    isGrayPaletteChange() {
-      return JSON.stringify(this.grayColorPalette) !== JSON.stringify(this.initGrayColorPalette);
+    brandDisplayedColor() {
+      return this.isRemainMode ? this.brandInputColor : this.$brandColor;
     },
     contentStyle() {
       const clientHeight = window.innerHeight;
@@ -432,243 +417,99 @@ export default {
       };
     },
   },
+  watch: {
+    $theme(newTheme) {
+      this.changeBrandColor(newTheme.value);
+    },
+    generationMode() {
+      this.changeBrandColor(this.brandDisplayedColor);
+    },
+  },
   mounted() {
     this.$nextTick(() => {
-      this.setPalette();
-      this.setDefaultPalette();
-      const currentThemeColor = window
-        .getComputedStyle(document.documentElement)
-        .getPropertyValue('--td-brand-color')
-        .toLocaleLowerCase()
-        .trim();
-      this.currentThemeColor = currentThemeColor;
       colorAnimation();
-      const isNeutralColor = getOptionFromLocal('neutral');
-      if (isNeutralColor == true) {
-        this.isGeneratedNeutralColor = true;
-        this.handleChangeGenerateNeutralColor(true);
-      }
+      this.changeBrandColor(this.$brandColor);
+      ['success', 'error', 'warning'].forEach((type) => {
+        this.changeFunctionColor(this[`${type}MainColor`], type);
+      });
+      setUpThemeObserver((theme) => {
+        this.updateBrandTokenMap();
+        this.currentBrandIdx = this.brandIndexes[theme];
+        this.$forceUpdate();
+      });
     });
   },
-  watch: {
-    currentThemeColor(currentColor) {
-      this.setPalette();
-      this.handleChangeGenerateNeutralColor(this.isGeneratedNeutralColor);
-      if (this.isRemainGenerateMode) this.currentDisplayThemeColor = currentColor;
-      else
-        this.currentDisplayThemeColor = window
-          .getComputedStyle(document.documentElement)
-          .getPropertyValue('--td-brand-color')
-          .toLocaleLowerCase()
-          .trim();
-    },
-    isRefresh() {
-      this.setPalette();
-    },
-    generateMode() {
-      this.changeColor(this.currentThemeColor);
-      this.setPalette();
-    },
-    isRemainGenerateMode(remain) {
-      updateLocalOption('recommend', !remain, !remain);
-      if (remain) this.currentDisplayThemeColor = this.currentThemeColor;
-      else
-        this.currentDisplayThemeColor = window
-          .getComputedStyle(document.documentElement)
-          .getPropertyValue('--td-brand-color')
-          .toLocaleLowerCase()
-          .trim();
-    },
-  },
   methods: {
-    handleVisibleChange(v) {
-      this.isMoreVisible = v;
-    },
-    changeMainColor(v, type) {
-      // 改变某个功能色的主题色
-      const { colorPalette } = generateTokenList(v, false, type !== 'gray' ? 10 : 14, this.isRemainGenerateMode);
-      let newPalette = [];
-      let newInitPalette = [];
-      if (type === 'error') {
-        newPalette = this.errorColorPalette;
-        newInitPalette = this.initErrorColorPalette;
-      }
-      if (type === 'success') {
-        newPalette = this.successColorPalette;
-        newInitPalette = this.initSuccessColorPalette;
-      }
-      if (type === 'warning') {
-        newPalette = this.warningColorPalette;
-        newInitPalette = this.initWarningColorPalette;
-      }
-      if (type === 'gray') {
-        newPalette = this.grayColorPalette;
-        newInitPalette = this.initGrayColorPalette;
-      }
-      colorPalette.forEach((v, i) => {
-        if (newPalette[i] && !(newPalette[i] instanceof Array)) {
-          newPalette[i].value = v;
-          newInitPalette[i].value = v;
-          this.changeGradation(v, i, type);
-        } else if (newPalette[i] && newPalette[i] instanceof Array) {
-          newPalette[i].forEach((p) => {
-            p.value = v;
-          });
-
-          newInitPalette[i].forEach((p) => {
-            p.value = v;
-          });
-          this.changeGradation(v, i, type);
-        }
-      });
-    },
-    setPalette() {
-      // 设置各种色阶 为重置需要保留各类色板的初始色阶
-      const colorPalette = this.getCurrentPalette();
-      this.initColorPalette = JSON.parse(JSON.stringify(colorPalette));
-      this.colorPalette = colorPalette;
-
-      const successPalette = this.getCurrentPalette('success');
-      this.initSuccessColorPalette = JSON.parse(JSON.stringify(successPalette));
-      this.successColorPalette = successPalette;
-
-      const warningPalette = this.getCurrentPalette('warning');
-      this.initWarningColorPalette = JSON.parse(JSON.stringify(warningPalette));
-      this.warningColorPalette = warningPalette;
-
-      const errorColorPalette = this.getCurrentPalette('error');
-      this.initErrorColorPalette = JSON.parse(JSON.stringify(errorColorPalette));
-      this.errorColorPalette = errorColorPalette;
-
-      const grayColorPalette = this.getCurrentPalette('gray');
-      this.initGrayColorPalette = JSON.parse(JSON.stringify(grayColorPalette));
-
-      this.grayColorPalette = grayColorPalette;
-    },
-    setDefaultPalette() {
-      const grayColorPalette = this.getCurrentPalette('gray');
-      this.initDefaultGrayColorPalette = JSON.parse(JSON.stringify(grayColorPalette));
-    },
     handleAttach,
-    handleChangeGenerateNeutralColor(generated) {
-      if (generated) {
-        // 关联生成
-        this.generatedNeutralColors = Color.getNeutralColor(this.currentThemeColor);
-        this.generatedNeutralColors.map((color, idx) => this.changeGradation(color, idx, 'gray', false));
+    covert2Hex,
+    generateBrandTokenMap(brandIdx) {
+      const hoverIdx = brandIdx - 1;
+      const activeIdx = brandIdx > 8 ? brandIdx : brandIdx + 1;
+      return [
+        { name: '--td-brand-color-hover', idx: hoverIdx },
+        { name: '--td-brand-color', idx: brandIdx },
+        { name: '--td-brand-color-active', idx: activeIdx },
+      ];
+    },
+    updateBrandTokenMap() {
+      const brandIdx = this.currentBrandIdx;
+      const extraTokens = this.generateBrandTokenMap(brandIdx);
+      this.brandTokenMap = BRAND_TOKEN_MAP.concat(extraTokens);
+    },
+    changeBrandColor(hex) {
+      // 备份用户实际输入的颜色
+      // 在智能推荐模式下，它与实际更新的颜色不同
+      this.brandInputColor = hex.toUpperCase();
 
-        const grayColorPalette = this.getCurrentPalette('gray');
-        this.initGrayColorPalette = JSON.parse(JSON.stringify(grayColorPalette));
-      } else {
-        // 不关联生成
-        this.initGrayColorPalette = JSON.parse(JSON.stringify(this.initDefaultGrayColorPalette));
-        this.grayColorPalette = JSON.parse(JSON.stringify(this.initDefaultGrayColorPalette));
+      const { lightPalette, lightBrandIdx, darkPalette, darkBrandIdx } = generateBrandPalette(hex, this.isRemainMode);
+      this.brandIndexes = {
+        light: lightBrandIdx,
+        dark: darkBrandIdx,
+      };
 
-        this.$nextTick(() => {
-          this.recoverGradation('gray');
-        });
+      const newBrandColor = lightPalette[lightBrandIdx - 1].toUpperCase();
+      themeStore.setBrandColorState(newBrandColor);
+
+      this.currentBrandIdx = this.brandIndexes[getThemeMode()];
+      this.updateBrandTokenMap();
+      updateStyleSheetColor('brand', lightPalette, darkPalette);
+
+      const lightExtraTokens = this.generateBrandTokenMap(lightBrandIdx);
+      const darkExtraTokens = this.generateBrandTokenMap(darkBrandIdx);
+      syncColorTokensToStyle(lightExtraTokens, darkExtraTokens);
+
+      this.updateBrandTokenMap();
+      this.changeNeutralColor(this.isGrayRelatedToTheme);
+    },
+    changeNeutralColor(related) {
+      updateLocalOption('neutral', true, related);
+      updateLocalOption('gray', this.grayMainColor, !related && this.grayMainColor !== DEFAULT_FUNCTION_COLORS['gray']);
+      const inputHex = related ? this.$brandColor : this.grayMainColor;
+      const palette = generateNeutralPalette(inputHex, related);
+      updateStyleSheetColor('gray', palette, palette);
+      this.$nextTick(this.refreshAllTokens);
+    },
+    changeFunctionColor(hex, type) {
+      this[`${type}MainColor`] = hex;
+      if (type === 'gray') {
+        this.changeNeutralColor(false);
+        return;
       }
-
-      updateLocalOption('neutral', generated, generated);
-    },
-    changeColor(hex) {
-      this.currentThemeColor = hex;
-      this.handleNewColorGeneration(hex, this.isRemainGenerateMode);
-    },
-    recoverGradation(type) {
-      let palette;
-      const modifiedPalette = this.getCurrentPalette(type);
-
-      if (type === 'brand') palette = this.initColorPalette;
-      if (type === 'error') palette = this.initErrorColorPalette;
-      if (type === 'success') palette = this.initSuccessColorPalette;
-      if (type === 'warning') palette = this.initWarningColorPalette;
-      if (type === 'gray') palette = this.initGrayColorPalette;
-
-      const diffPalette = palette.filter((v, i) => JSON.stringify(v) !== JSON.stringify(modifiedPalette[i]));
-      diffPalette.forEach((v) => {
-        if (v instanceof Array) {
-          this.changeGradation(v[0].value, v[0].idx, type, false);
-          return;
-        } else {
-          this.changeGradation(v.value, v.idx, type, false);
-        }
-      });
+      const { lightPalette, darkPalette } = generateFunctionalPalette(hex);
+      updateStyleSheetColor(type, lightPalette, darkPalette);
+      updateLocalOption(type, hex, DEFAULT_FUNCTION_COLORS[type] !== hex);
+      this.$nextTick(this.refreshAllTokens);
     },
     changeGradation(hex, idx, type, saveToLocal = true) {
-      if (!this.colorPalette[idx]) return;
-      if (type === 'brand') {
-        if (this.colorPalette[idx] instanceof Array) {
-          this.colorPalette[idx].map((v) => (v.value = hex));
-        } else {
-          this.colorPalette[idx].value = hex;
-        }
-      }
-      if (type === 'error') {
-        this.errorColorPalette[idx].value = hex;
-      }
-      if (type === 'success') {
-        this.successColorPalette[idx].value = hex;
-      }
-      if (type === 'warning') {
-        this.warningColorPalette[idx].value = hex;
-      }
-      if (type === 'gray') {
-        if (this.grayColorPalette[idx] instanceof Array) {
-          this.grayColorPalette[idx].map((v) => (v.value = hex));
-        } else {
-          this.grayColorPalette[idx].value = hex;
-        }
-      }
-
       const tokenName = `--td-${type}-color-${idx + 1}`;
       modifyToken(tokenName, hex, saveToLocal);
+      this.$forceUpdate();
     },
-    getCurrentPalette(type = 'brand') {
-      let colorMap;
-      let duplicateMap = [];
-      // 获取匹配色表
-      if (type === 'brand') {
-        colorMap = BRAND_COLOR_MAP;
-        const brandIdx = this.currentBrandIdx;
-        const hoverIdx = brandIdx > 0 ? brandIdx - 1 : brandIdx;
-        const activeIdx = brandIdx > 8 ? brandIdx : brandIdx + 1;
-        duplicateMap = [
-          { name: '--td-brand-color-hover', type: 'hover', idx: hoverIdx },
-          { name: '--td-brand-color', type: 'main', idx: brandIdx },
-          { name: '--td-brand-color-active', type: 'active', idx: activeIdx },
-        ];
-        colorMap = colorMap.concat(duplicateMap);
-      }
-      if (type === 'error') colorMap = ERROR_COLOR_MAP;
-      if (type === 'success') colorMap = SUCCESS_COLOR_MAP;
-      if (type === 'warning') colorMap = WARNING_COLOR_MAP;
-      if (type === 'gray') colorMap = GRAY_COLOR_MAP;
-
-      let docStyle = getComputedStyle(document.documentElement);
-
-      let currentPalette = [...new Array(type === 'gray' ? 14 : 10).keys()].map((v, i) => {
-        const color = colorMap.filter((v) => v.idx === i);
-        if (color.length) {
-          if (color.length === 1)
-            return {
-              ...color[0],
-              value: docStyle.getPropertyValue(`--td-${type}-color-${i + 1}`),
-            };
-          return color.map((v) => ({
-            ...v,
-            value: docStyle.getPropertyValue(`--td-${type}-color-${v.idx + 1}`),
-          }));
-        }
-        return {
-          value: docStyle.getPropertyValue(`--td-${type}-color-${i + 1}`),
-        };
-      });
-
-      return currentPalette;
+    recoverGradation(type) {
+      this.changeFunctionColor(this[`${type}MainColor`], type);
     },
-    handleNewColorGeneration(hex) {
-      this.currentThemeColor = hex;
-      this.currentBrandIdx = generateNewTheme(hex, this.isRemainGenerateMode, this.device).brandColorIdx;
+    refreshColorTokens() {
+      this.$root.$emit('refresh-color-tokens');
     },
   },
 };

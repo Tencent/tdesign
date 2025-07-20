@@ -151,7 +151,7 @@ import PopupPaddingSvg from './svg/PopupPaddingSvg.vue';
 import SizeSvg from './svg/SizeSvg.vue';
 import VerticalPaddingSvg from './svg/VerticalPaddingSvg.vue';
 
-import { FONT_COLOR_MAP } from '../color-panel/utils/const';
+import { FONT_TOKEN_MAP } from '../color-panel/utils/const';
 
 import langMixin from '../common/i18n/mixin';
 import { modifyToken } from '../common/Themes';
@@ -216,7 +216,7 @@ export default {
       modifyToken(tokenIdxName, hex);
     },
     getCurrentPalette() {
-      let colorMap = FONT_COLOR_MAP;
+      let colorMap = FONT_TOKEN_MAP;
       let docStyle = getComputedStyle(document.documentElement);
 
       let currentPalette = [...new Array(7).keys()].map((v, i) => {

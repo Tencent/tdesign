@@ -8,8 +8,8 @@ export default {
   },
   color: {
     title: 'Color',
-    themeColor: 'Theme color',
-    customizeTitle: 'customized color',
+    themeColor: 'Theme Color',
+    customizeTitle: 'customized',
     aiRecommendation: 'AI',
     aiTip: 'If the selected color is unsuitable, it will be adjusted.',
     remainText: 'remain',
@@ -20,6 +20,7 @@ export default {
     errorColor: 'Error color',
     neutralColor: 'Neutral Color',
     fromThemeColor: 'From Theme',
+    gradientTip: 'Color gradient break, click to restore',
   },
   font: {
     title: 'Font',

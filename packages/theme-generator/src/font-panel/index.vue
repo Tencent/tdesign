@@ -12,7 +12,7 @@
         <p class="font-content__title">{{ lang.font.fontSize }}</p>
         <size-adjust />
       </div>
-      <common-collapse v-if="!isMobile(device)">
+      <common-collapse v-if="!isMobile($device)">
         <template #round>
           <div
             class="block"
@@ -72,7 +72,7 @@ import LineHeightAdjust from './components/LineHeightAdjust.vue';
 import LineHeightSvg from './components/LineHeightSvg.vue';
 import SizeAdjust from './components/SizeAdjust.vue';
 
-import { FONT_COLOR_MAP } from '../color-panel/utils/const';
+import { FONT_TOKEN_MAP } from '../color-panel/utils/const';
 import langMixin from '../common/i18n/mixin';
 import { isMobile, modifyToken } from '../common/Themes';
 
@@ -80,7 +80,6 @@ export default {
   name: 'FontPanel',
   props: {
     top: Number,
-    isRefresh: Boolean,
   },
   components: {
     CommonCollapse,
@@ -90,7 +89,7 @@ export default {
     LineHeightSvg,
     FontColorSvg,
   },
-  inject: ['device'],
+  inject: ['$device'],
   mixins: [langMixin],
   data() {
     return {
@@ -118,7 +117,7 @@ export default {
       modifyToken(tokenIdxName, hex);
     },
     getCurrentPalette() {
-      let colorMap = FONT_COLOR_MAP;
+      let colorMap = FONT_TOKEN_MAP;
       let docStyle = getComputedStyle(document.documentElement);
 
       let currentPalette = [...new Array(7).keys()].map((v, i) => {

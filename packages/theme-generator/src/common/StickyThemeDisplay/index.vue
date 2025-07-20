@@ -1,17 +1,20 @@
 <template>
-  <div class="sticky-theme" :style="stickyThemeStyle" v-if="!!theme">
+  <div class="sticky-theme" :style="stickyThemeStyle">
     <div class="theme-status"></div>
     <div v-if="isAnimating" class="theme-status color-transition"></div>
     <div class="theme-text">
-      <p class="theme-text-title">{{ title }}</p>
-      <p class="theme-text-subtitle">{{ subtitleText }}</p>
+      <p class="theme-text-title">{{ isEn ? $theme.enName : $theme.name }}</p>
+      <p class="theme-text-subtitle">{{ $theme.subtitleText }}</p>
     </div>
   </div>
 </template>
 <script>
 import langMixin from '../i18n/mixin';
+import { themeStore } from '../Themes/store';
+import { getTokenValue } from '../utils';
+
 export default {
-  name: 'StickyExport',
+  name: 'StickyThemeDisplay',
   props: {
     top: Number,
     theme: {
@@ -27,20 +30,17 @@ export default {
     };
   },
   computed: {
+    $theme() {
+      return themeStore.theme;
+    },
     stickyThemeStyle() {
       return {
         top: `${this.top}px`,
       };
     },
-    title() {
-      return this.isEn ? this.theme.enName : this.theme.name;
-    },
-    subtitleText() {
-      return this.theme.subtitleText;
-    },
   },
   mounted() {
-    this.brandColor = getComputedStyle(document.documentElement).getPropertyValue('--td-brand-color').trim();
+    this.brandColor = getTokenValue('--brand-main');
     this.setupStyleObserver();
   },
   methods: {
@@ -48,11 +48,11 @@ export default {
       this.styleObserver = new MutationObserver(this.checkBrandColorChange);
       this.styleObserver.observe(document.documentElement, {
         attributes: true,
-        attributeFilter: ['style', 'class'],
+        attributeFilter: ['style'],
       });
     },
     checkBrandColorChange() {
-      const newColor = getComputedStyle(document.documentElement).getPropertyValue('--td-brand-color').trim();
+      const newColor = getTokenValue('--brand-main');
       if (newColor && newColor !== this.brandColor) {
         this.brandColor = newColor;
         this.isAnimating = true;
@@ -84,7 +84,7 @@ export default {
 
 .theme-status {
   position: absolute;
-  background-color: var(--td-brand-color);
+  background-color: var(--brand-main);
   transition: background-color 1s ease;
   width: 332px;
   height: 72px;

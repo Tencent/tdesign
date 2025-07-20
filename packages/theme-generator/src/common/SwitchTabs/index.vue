@@ -35,11 +35,11 @@ export default {
   props: {
     activeTabIdx: Number,
   },
-  inject: ['device'],
+  inject: ['$device'],
   computed: {
     filteredTabs() {
       // 移动端不显示尺寸配置
-      return isMobile(this.device) ? this.tabs.filter((tab) => tab.title !== this.lang.size.title) : this.tabs;
+      return isMobile(this.$device) ? this.tabs.filter((tab) => tab.title !== this.lang.size.title) : this.tabs;
     },
   },
   components: { ColorSvg, FontSvg, RadiusSvg, BoxshadowSvg, SizeSvg },

@@ -24,12 +24,6 @@ import MobileTDesignLight from '!raw-loader!./built-in/css/mobile/TDesign/light.
 import MobileFont from '!raw-loader!./built-in/css/mobile/common/font.css';
 import MobileRadius from '!raw-loader!./built-in/css/mobile/common/radius.css';
 
-export const CUSTOM_THEME_TEXT = {
-  name: '自定义主题',
-  enName: 'Custom',
-  subtitleText: 'Custom Theme',
-};
-
 export const DEFAULT_THEME = {
   name: '默认主题',
   enName: 'TDesign',

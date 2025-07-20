@@ -1,6 +1,6 @@
-# tdesign-theme-generator
+# TDesign Theme Generator Plugin
 
-- TDesign 主题配置生成器挂件 支持任意框架使用。
+- TDesign 主题配置生成器挂件，支持任意框架使用。
 
 ## 🏗️ Develop
 
@@ -27,3 +27,6 @@
     generator.setAttribute('device', 'mobile');
     document.body.appendChild(generator);
   ```
+
+
+## 架构图

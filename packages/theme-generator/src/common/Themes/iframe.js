@@ -1,4 +1,4 @@
-import { extractRootContent } from '../utils';
+import { extractRootContent, getThemeMode, setUpThemeObserver } from '../utils';
 import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile } from './';
 
 /* ----- 同步亮暗模式 -----  */
@@ -90,23 +90,11 @@ function watchThemeModeChange(iframe) {
   };
 
   // 初始化
-  const mode = document.documentElement.getAttribute('theme-mode');
-  handleModeChange(mode);
+  handleModeChange(getThemeMode());
 
-  const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'theme-mode') {
-        const newMode = document.documentElement.getAttribute('theme-mode');
-        handleModeChange(newMode);
-      }
-    }
+  const observer = setUpThemeObserver((newMode) => {
+    handleModeChange(newMode);
   });
-
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['theme-mode'],
-  });
-
   return observer;
 }
 

@@ -15,11 +15,7 @@
     >
       <div class="dock__theme-tab" :style="{ height: !isThemeTabVisible ? '0px' : '140px' }">
         <transition name="fade">
-          <recommend-themes
-            @changeTabTheme="handleChangeTabTheme"
-            v-if="isThemeTabVisible && isThemeTabContentDisplay"
-            :currentTheme="currentTheme"
-          />
+          <recommend-themes v-if="isThemeTabVisible && isThemeTabContentDisplay" />
         </transition>
       </div>
       <div class="dock__operation">
@@ -39,7 +35,7 @@
               <palette-svg />
             </template>
             <div v-if="!isCustomizeDrawerVisible" style="margin-left: 8px">
-              {{ isEn ? currentTheme.enName : currentTheme.name }}
+              {{ isEn ? $theme.enName : $theme.name }}
             </div>
           </t-button>
         </div>
@@ -91,7 +87,7 @@
             :popup-props="{
               attach: handleAttach,
             }"
-            @confirm="recoverTheme"
+            @confirm="resetTheme"
           >
             <t-button variant="outline" shape="square" size="large">
               <template #icon>
@@ -117,15 +113,8 @@ import RecoverSvg from './svg/RecoverSvg.vue';
 import SettingSvg from './svg/SettingSvg.vue';
 
 import langMixin from '../common/i18n/mixin';
-import {
-  clearLocalTheme,
-  CUSTOM_THEME_TEXT,
-  DEFAULT_THEME,
-  exportCustomTheme,
-  generateNewTheme,
-  getBuiltInThemes,
-  getOptionFromLocal,
-} from '../common/Themes';
+import { exportCustomStyleSheet } from '../common/Themes';
+import { themeStore } from '../common/Themes/store';
 import { handleAttach } from '../common/utils';
 
 export default {
@@ -145,13 +134,12 @@ export default {
     drawerVisible: { type: [Boolean, Number] },
     showSetting: { type: [Boolean, String] },
   },
-  inject: ['device'],
+  inject: ['$device'],
   mixins: [langMixin],
   data() {
     return {
       isThemeTabVisible: false,
       isCustomizeDrawerVisible: false,
-      currentTheme: getOptionFromLocal('color') ?? DEFAULT_THEME.value,
       isThemeTabContentDisplay: false,
       dockY: null,
       dockX: 0,
@@ -161,6 +149,9 @@ export default {
     };
   },
   computed: {
+    $theme() {
+      return themeStore.theme;
+    },
     operationWidth() {
       if (!this.showSetting) {
         if (this.isThemeTabVisible || this.isCustomizeDrawerVisible) return '400px';
@@ -189,7 +180,6 @@ export default {
   mounted() {
     this.dockY = 24;
     this.dockX = innerWidth / 2;
-    this.setupStyleChangeObserver();
   },
   methods: {
     dragStart(e) {
@@ -220,7 +210,7 @@ export default {
     },
     handleAttach,
     handleDownload() {
-      exportCustomTheme(this.device);
+      exportCustomStyleSheet(this.$device);
       MessagePlugin.success(this.lang.dock.downloadTips);
     },
     triggerSettingDrawer() {
@@ -252,45 +242,8 @@ export default {
         this.isThemeTabVisible = visible;
       }
     },
-    handleChangeTabTheme(theme) {
-      this.currentTheme = theme;
-      this.$emit('refresh-content');
-      this.$emit('change-theme', theme);
-    },
-    recoverTheme() {
-      generateNewTheme(DEFAULT_THEME.value, undefined, this.device);
-      clearLocalTheme();
-      this.currentTheme = DEFAULT_THEME;
-      this.$emit('refresh-content');
-    },
-    setupStyleChangeObserver() {
-      const styleObserver = new MutationObserver((mutationsList) => {
-        mutationsList.forEach((mutation) => {
-          if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-            const currentStyle = mutation.target.getAttribute('style');
-            const brandColorMatch = currentStyle.match(/--brand-main:\s*([^;]+)/);
-            if (!brandColorMatch) return;
-
-            const mainColor = brandColorMatch[1];
-            const existedTheme = getBuiltInThemes(this.device, mainColor);
-            const theme = existedTheme[0] ? existedTheme[0].options[0] : CUSTOM_THEME_TEXT;
-
-            this.currentTheme = theme;
-            this.$emit('change-theme', theme);
-          }
-        });
-      });
-
-      styleObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['style'],
-        childList: false,
-        subtree: false,
-      });
-
-      this.$once('hook:beforeDestroy', () => {
-        styleObserver.disconnect();
-      });
+    resetTheme() {
+      themeStore.resetTheme();
     },
   },
 };

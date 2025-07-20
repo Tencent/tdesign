@@ -1,31 +1,20 @@
 <template>
   <div class="theme-generator">
     <dock
-      @trigger-visible="handleTriggerVisible"
-      @refresh-content="handleRefreshContent"
-      @change-theme="handleChangeTheme"
-      @click-setting="handleClickSetting"
       :drawerVisible="visible"
       :showSetting="showSetting"
+      @click-setting="handleClickSetting"
+      @trigger-visible="handleTriggerVisible"
     />
-    <panel-drawer
-      :drawerVisible="visible"
-      :theme="theme"
-      :refresh="refresh"
-      @panel-drawer-visible="handleDrawerVisible"
-      :propsTop="propsTop"
-    />
+    <panel-drawer :drawerVisible="visible" :propsTop="propsTop" @panel-drawer-visible="handleDrawerVisible" />
   </div>
 </template>
 
 <script>
-import {
-  applyThemeFromLocal,
-  DEFAULT_THEME,
-  generateNewTheme,
-  getOptionFromLocal,
-  syncThemeToIframe,
-} from './common/Themes';
+import { applyTokenFromLocal, initThemeStyleSheet, syncThemeToIframe } from './common/Themes';
+import { themeStore } from './common/Themes/store';
+
+import { initGeneratorVars } from './common/utils';
 
 import Dock from './dock/index.vue';
 import PanelDrawer from './panel-drawer/index.vue';
@@ -56,31 +45,28 @@ export default {
   },
   provide() {
     return {
-      device: this.device,
+      $device: this.device,
     };
   },
   data() {
     return {
       activeTabMap,
-      refresh: false,
       visible: 0,
       activeTabIdx: activeTabMap.color,
-      theme: DEFAULT_THEME,
     };
   },
+  computed: {
+    $theme() {
+      return themeStore.theme;
+    },
+  },
   mounted() {
-    const localTheme = getOptionFromLocal('color') ?? DEFAULT_THEME.value;
-    generateNewTheme(localTheme, undefined, this.device);
+    initGeneratorVars();
+    initThemeStyleSheet(this.$theme.enName);
+    applyTokenFromLocal();
     syncThemeToIframe(this.device);
-    applyThemeFromLocal(this.device);
   },
   methods: {
-    handleChangeTheme(theme) {
-      this.theme = theme;
-    },
-    handleRefreshContent() {
-      this.refresh = !this.refresh;
-    },
     handleTriggerVisible() {
       this.visible = true;
     },
@@ -107,11 +93,21 @@ export default {
 }
 </style>
 <style>
-.t-popup .t-select-option {
-  font-size: 14px;
+:host {
+  --td-bg-color-container: var(--bg-color-container);
+  --td-bg-color-secondarycomponent: var(--bg-color-theme-secondary);
+  --td-bg-color-container-hover: var(--bg-color-container-hover);
+  --td-bg-color-component-active: var(--bg-color-component-hover);
+  --td-border-level-2-color: var(--component-border);
 }
 .t-popconfirm {
   z-index: 10000;
+}
+.t-popconfirm .t-icon {
+  font-size: 20px !important;
+}
+.t-popup .t-select-option {
+  font-size: 14px;
 }
 .t-popup .t-input-number {
   font-size: 14px;
@@ -122,15 +118,8 @@ export default {
 .t-popup .t-icon {
   font-size: 14px !important;
 }
-
-.t-popconfirm .t-icon {
-  font-size: 20px !important;
-}
 .t-popup .t-select__empty {
   font-size: 14px;
-}
-.t-button.t-size-l {
-  font-size: 16px;
 }
 .t-radio-button__label {
   font-size: 14px;
@@ -138,6 +127,9 @@ export default {
 .t-slider__button {
   width: 16px;
   height: 16px;
+}
+.t-button.t-size-l {
+  font-size: 16px;
 }
 .t-button--variant-base.t-button--theme-primary:hover,
 .t-button--variant-base.t-button--theme-primary:focus-visible {

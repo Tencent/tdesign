@@ -15,9 +15,9 @@
           :style="{
             width: '48px',
             height: '48px',
-            background: mainColorVal,
+            background: mainColor,
             borderRadius: '6px',
-            cursor: 'pointer',
+            cursor: disabled ? 'not-allowed' : 'pointer',
             display: 'flex',
             border: '1px solid var(--theme-component-border)',
             'justify-content': 'center',
@@ -28,11 +28,11 @@
           @mouseleave="isHover = false"
         >
           <transition name="fade">
-            <edit-1-icon v-if="isHover" size="24px" />
+            <edit-1-icon v-if="!disabled && isHover" size="24px" />
           </transition>
         </div>
-        <template #content v-if="!disableSelfDefine">
-          <color-picker :value="mainColorVal" @change="changeColor" />
+        <template #content v-if="!disabled">
+          <color-picker :value="mainColor" @change="changeColor" />
         </template>
       </t-popup>
       <div class="color-collapse__text">
@@ -41,7 +41,7 @@
         </div>
         <slot name="subTitle"></slot>
         <div class="color-collapse__subtitle" :style="{ color: 'var(--text-secondary)' }" v-if="!$slots.subTitle">
-          HEX: {{ mainColorVal }}
+          HEX: {{ mainColor }}
           <t-popup
             placement="top"
             showArrow
@@ -50,7 +50,7 @@
             :attach="handleAttach"
             :overlayStyle="{ borderRadius: '6px' }"
           >
-            <file-copy-icon @click="() => copyHex(mainColorVal)" />
+            <file-copy-icon @click="() => copyHex(mainColor)" />
             <template #content
               ><span :style="{ color: `var(--text-secondary)` }">{{ lang.copied }}</span>
             </template>
@@ -75,7 +75,6 @@
   </div>
 </template>
 <script>
-import flatten from 'lodash/flatten';
 import { Edit1Icon, FileCopyIcon } from 'tdesign-icons-vue';
 import { Popup as TPopup } from 'tdesign-vue';
 import ArrowIcon from 'tdesign-vue/es/common-components/fake-arrow';
@@ -88,21 +87,13 @@ import { collapseAnimation } from '../../../common/utils/animation';
 export default {
   name: 'ColorCollapse',
   props: {
-    title: String,
-    colorPalette: Array,
     type: String,
-    disableSelfDefine: Boolean,
+    title: String,
+    mainColor: String,
+    disabled: Boolean,
   },
   mixins: [langMixin],
   components: { FileCopyIcon, ArrowIcon, TPopup, Edit1Icon, ColorPicker },
-  computed: {
-    mainColorVal() {
-      return this.flattenPalette.find((v) => v.type === 'main' || v.type === 'gray')?.value;
-    },
-    flattenPalette() {
-      return flatten(this.colorPalette);
-    },
-  },
   data() {
     return {
       ...collapseAnimation(),

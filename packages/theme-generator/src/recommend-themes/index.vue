@@ -1,11 +1,11 @@
 <template>
   <div class="recommend-theme">
-    <div :key="idx" v-for="(type, idx) in recommendThemes">
+    <div :key="idx" v-for="(type, idx) in RECOMMEND_THEMES">
       <div class="recommend-theme__title">
         {{ lang.dock.recommendTitle }}
       </div>
       <div class="recommend-theme__flex">
-        <div v-for="(theme, themeIdx) in type.options" :key="themeIdx" @click="handleNewThemeGeneration(theme)">
+        <div v-for="(theme, themeIdx) in type.options" :key="themeIdx" @click="handleChangeTheme(theme)">
           <div
             class="recommend-theme__flex-theme"
             :style="{
@@ -13,7 +13,7 @@
             }"
           >
             <div v-html="theme.subtitle"></div>
-            <div v-if="currentTheme && currentTheme.value === theme.value" class="recommend-theme__flex-theme--active">
+            <div v-if="theme.enName === $theme.enName" class="recommend-theme__flex-theme--active">
               <picked-svg />
             </div>
           </div>
@@ -35,20 +35,21 @@
 
 <script>
 import langMixin from '../common/i18n/mixin';
-import { generateNewTheme, getBuiltInThemes } from '../common/Themes';
+import { RECOMMEND_THEMES } from '../common/Themes';
+import { themeStore } from '../common/Themes/store';
 import PickedSvg from './PickedSvg.vue';
 
 export default {
   name: 'RecommendThemes',
-  emit: ['changeTabTheme'],
-  props: {
-    currentTheme: Object,
-  },
-  inject: ['device'],
   mixins: [langMixin],
+  computed: {
+    $theme() {
+      return themeStore.theme;
+    },
+  },
   data() {
     return {
-      recommendThemes: getBuiltInThemes(this.device),
+      RECOMMEND_THEMES,
       isThemeTabVisible: false,
       isDrawerVisible: false,
     };
@@ -57,9 +58,8 @@ export default {
     PickedSvg,
   },
   methods: {
-    handleNewThemeGeneration(theme) {
-      generateNewTheme(theme.value, undefined, this.device);
-      this.$emit('changeTabTheme', theme);
+    handleChangeTheme(theme) {
+      themeStore.setThemeState(theme);
     },
   },
 };

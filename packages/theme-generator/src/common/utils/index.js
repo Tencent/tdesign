@@ -12,16 +12,34 @@ export function initGeneratorVars() {
 }
 
 /**
- * 同步亮暗模式给 Web Component
+ * 获取指定 CSS Token 对应的数值
  */
-export function syncThemeToGenerator() {
+export function getTokenValue(name) {
+  const isDarkMode =
+    document.documentElement.getAttribute('theme-mode') === 'dark' || document.querySelector('[theme-mode="dark"]');
+
+  const rootElement = isDarkMode ? document.querySelector('[theme-mode="dark"]') : document.documentElement;
+  return window.getComputedStyle(rootElement).getPropertyValue(name).toLowerCase().trim();
+}
+
+export function getThemeMode() {
+  return document.documentElement.getAttribute('theme-mode');
+}
+
+/**
+ * 创建主题变化监听器
+ */
+export function setUpThemeObserver(handler) {
+  let theme = getThemeMode();
+
   const observer = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'theme-mode') {
-        const generator = document.querySelector('td-theme-generator');
-        if (!generator) return;
-        const themeMode = document.documentElement.getAttribute('theme-mode');
-        generator.setAttribute('theme-mode', themeMode);
+      if (mutation.type === 'attributes') {
+        const newTheme = getThemeMode();
+        if (newTheme !== theme) {
+          theme = newTheme;
+          handler(theme);
+        }
       }
     }
   });
@@ -29,6 +47,19 @@ export function syncThemeToGenerator() {
   observer.observe(document.documentElement, {
     attributes: true,
     attributeFilter: ['theme-mode'],
+  });
+
+  return observer;
+}
+
+/**
+ * 同步亮暗模式给 Web Component
+ */
+export function syncThemeToGenerator() {
+  setUpThemeObserver((theme) => {
+    const generator = document.querySelector('td-theme-generator');
+    if (!generator) return;
+    generator.setAttribute('theme-mode', theme);
   });
 }
 

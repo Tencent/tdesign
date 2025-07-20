@@ -1,4 +1,5 @@
 import { modifyToken } from '../../common/Themes';
+import { getTokenValue } from '../../common/utils';
 
 export const LINE_HEIGHT_STEPS = {
   1: 2,
@@ -40,9 +41,7 @@ export function updateLineHeightTokens(commonVal, type = 'plus') {
   LINE_HEIGHT_VAR.forEach((size) => {
     const fontSizeToken = `--td-font-size-${size}`;
     const lineHeightToken = `--td-line-height-${size}`;
-
-    // 基于字体大小计算行高
-    const fontSize = getComputedStyle(document.documentElement).getPropertyValue(fontSizeToken);
+    const fontSize = getTokenValue(fontSizeToken);
     const fontSizeNum = parseFloat(fontSize);
     const commonValNum = parseFloat(commonVal);
 
