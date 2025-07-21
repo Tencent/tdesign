@@ -140,10 +140,11 @@
     </div>
   </div>
 </template>
-<script lang="jsx">
-import langMixin from '../common/i18n/mixin';
 
-import CommonCollapse from '../common/Collapse/index.vue';
+<script lang="jsx">
+import { CommonCollapse } from '../common/components';
+import { langMixin } from '../common/i18n';
+
 import SizeAdjust from './components/SizeAdjust.vue';
 import SizeDisplay from './components/SizeDisplay.vue';
 
@@ -200,6 +201,7 @@ export default {
   },
 };
 </script>
+
 <style scoped lang="less">
 /deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;

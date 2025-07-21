@@ -64,12 +64,18 @@
 <script lang="jsx">
 import { Select as TSelect, Slider as TSlider } from 'tdesign-vue';
 
-import langMixin from '../common/i18n/mixin';
+import { langMixin } from '../common/i18n';
 import { getOptionFromLocal, modifyToken, updateLocalOption } from '../common/themes';
 import { handleAttach } from '../common/utils';
 
+import {
+  ShadowSelect,
+  ShadowSelectDetail,
+  ShadowSelectType,
+  ShadowTypeDetail,
+  ShadowTypeMap,
+} from './built-in/shadow-map';
 import ShadowCard from './components/ShadowCard';
-import { ShadowSelect, ShadowSelectDetail, ShadowSelectType, ShadowTypeDetail, ShadowTypeMap } from './const';
 
 export default {
   name: 'ShadowPanel',

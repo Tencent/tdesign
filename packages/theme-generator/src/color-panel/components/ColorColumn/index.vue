@@ -84,8 +84,8 @@
 import { Edit1Icon, ErrorCircleIcon, LinkUnlinkIcon } from 'tdesign-icons-vue';
 import { Popup as TPopup } from 'tdesign-vue';
 
-import ColorPicker from '../../../common/ColorPicker/index.vue';
-import langMixin from '../../../common/i18n/mixin';
+import { ColorPicker } from '../../../common/components';
+import { langMixin } from '../../../common/i18n';
 import { CUSTOM_TOKEN_ID } from '../../../common/themes';
 import { getTokenValue, handleAttach } from '../../../common/utils';
 

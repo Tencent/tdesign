@@ -88,6 +88,7 @@
     </div>
   </div>
 </template>
+
 <script lang="jsx">
 import {
   List as TList,
@@ -96,12 +97,14 @@ import {
   RadioButton as TRadioButton,
   RadioGroup as TRadioGroup,
 } from 'tdesign-vue';
-import langMixin from '../../common/i18n/mixin';
-import SegmentSelection from '../../common/SegmentSelection/index.vue';
-import SizeSlider from '../../common/SizeSlider/index.vue';
+
+import { SegmentSelection, SizeSlider } from '../../common/components';
+import { langMixin } from '../../common/i18n';
 import { getOptionFromLocal, updateLocalOption } from '../../common/themes';
 import { handleAttach } from '../../common/utils';
-import { LINE_HEIGHT_OPTIONS, LINE_HEIGHT_STEPS, updateLineHeightTokens } from '../built-in/line-height';
+
+import { LINE_HEIGHT_OPTIONS, LINE_HEIGHT_STEPS, updateLineHeightTokens } from '../built-in/line-height-map';
+
 export default {
   name: 'LineHeightAdjust',
   components: {
@@ -191,6 +194,7 @@ export default {
   },
 };
 </script>
+
 <style lang="less" scoped>
 .font-panel {
   &__round-tag-left {

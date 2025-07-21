@@ -316,6 +316,7 @@
     </div>
   </div>
 </template>
+
 <script lang="jsx">
 import { Edit1Icon, FileCopyIcon, HelpCircleIcon } from 'tdesign-icons-vue';
 import {
@@ -327,8 +328,8 @@ import {
   Tooltip as TTooltip,
 } from 'tdesign-vue';
 
-import ColorPicker from '../common/ColorPicker/index.vue';
-import langMixin from '../common/i18n/mixin';
+import { ColorPicker } from '../common/components';
+import { langMixin } from '../common/i18n';
 import {
   covert2Hex,
   generateBrandPalette,
@@ -341,8 +342,8 @@ import {
   updateLocalOption,
   updateStyleSheetColor,
 } from '../common/themes';
-import { getThemeMode, getTokenValue, handleAttach, setUpThemeObserver } from '../common/utils';
-import { colorAnimation } from '../common/utils/animation';
+import { colorAnimation, getThemeMode, getTokenValue, handleAttach, setUpModeObserver } from '../common/utils';
+
 import {
   BRAND_TOKEN_MAP,
   DEFAULT_COLORS,
@@ -350,7 +351,7 @@ import {
   FUNCTION_TOKEN_MAPS,
   RECOMMEND_COLORS,
   SCENE_COLORS,
-} from './utils/const';
+} from './built-in/color-map';
 
 import ColorCollapse from './components/ColorCollapse';
 import ColorColumn from './components/ColorColumn';
@@ -433,7 +434,7 @@ export default {
       ['success', 'error', 'warning'].forEach((type) => {
         this.changeFunctionColor(this[`${type}MainColor`], type);
       });
-      setUpThemeObserver((theme) => {
+      setUpModeObserver((theme) => {
         this.updateBrandTokenMap();
         this.currentBrandIdx = this.brandIndexes[theme];
         this.$forceUpdate();
@@ -515,6 +516,7 @@ export default {
   },
 };
 </script>
+
 <style scoped lang="less">
 /deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;

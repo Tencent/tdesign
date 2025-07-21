@@ -7,43 +7,35 @@
       :attach="handleAttach"
       :overlayStyle="{ borderRadius: '9px', padding: '12px 16px 8px' }"
     >
-      <div
-        class="shadow-card__item"
-        :style="{ 'box-shadow': shadow.join(',') }"
-      >
+      <div class="shadow-card__item" :style="{ 'box-shadow': shadow.join(',') }">
         <div class="shadow-card__title">{{ detail.label }}:</div>
         <div class="shadow-card__tips">
           {{ isEn ? detail.enTips : detail.tips }}
         </div>
         <t-divider class="shadow-card__divided"></t-divider>
         <div class="shadow-card__info">
-          <div
-            :class="['shadow-card__info-item', 'text-ellipsis']"
-            v-for="(value, i) in shadow"
-            :key="i"
-          >
-            {{ value }} {{ i === shadow.length - 1 ? ";" : "," }}
+          <div :class="['shadow-card__info-item', 'text-ellipsis']" v-for="(value, i) in shadow" :key="i">
+            {{ value }} {{ i === shadow.length - 1 ? ';' : ',' }}
           </div>
         </div>
       </div>
       <template #content>
-        <shadow-layer
-          :shadow="shadow"
-          :detail="detail"
-          @change="change"
-        ></shadow-layer>
+        <shadow-layer :shadow="shadow" :detail="detail" @change="change"></shadow-layer>
       </template>
     </t-popup>
   </div>
 </template>
+
 <script lang="jsx">
-import { Popup as TPopup, Divider as TDivider } from "tdesign-vue";
-import ShadowLayer from "./ShadowLayer.vue";
-import { handleAttach } from "../../common/utils";
-import langMixin from "../../common/i18n/mixin";
+import { Divider as TDivider, Popup as TPopup } from 'tdesign-vue';
+
+import { langMixin } from '../../common/i18n';
+import { handleAttach } from '../../common/utils';
+
+import ShadowLayer from './ShadowLayer.vue';
 
 export default {
-  name: "ShadowCard",
+  name: 'ShadowCard',
   props: {
     shadow: Array,
     detail: Object,
@@ -58,11 +50,12 @@ export default {
   methods: {
     handleAttach,
     change(value) {
-      this.$emit("change", value);
+      this.$emit('change', value);
     },
   },
 };
 </script>
+
 <style scoped lang="less">
 .shadow-card {
   display: flex;
@@ -86,8 +79,7 @@ export default {
     font-size: 12px;
     color: var(--text-primary);
     line-height: 20px;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
   &__tips {
     font-size: 12px;
@@ -101,8 +93,7 @@ export default {
     font-size: 12px;
     color: var(--text-placeholder);
     line-height: 20px;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
 }
 .text-ellipsis {

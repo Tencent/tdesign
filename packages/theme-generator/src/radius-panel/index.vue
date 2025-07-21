@@ -83,9 +83,8 @@
 import isNumber from 'lodash/isNumber';
 import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue';
 
-import langMixin from '../common/i18n/mixin';
-import SegmentSelection from '../common/SegmentSelection';
-import SizeSlider from '../common/SizeSlider';
+import { SegmentSelection, SizeSlider } from '../common/components';
+import { langMixin } from '../common/i18n';
 import {
   CUSTOM_COMMON_ID_PREFIX,
   CUSTOM_EXTRA_ID,
@@ -95,7 +94,7 @@ import {
 } from '../common/themes';
 import { handleAttach } from '../common/utils';
 
-import { RADIUS_OPTIONS, RADIUS_STEP_ARRAY } from './built-in/border-radius';
+import { RADIUS_OPTIONS, RADIUS_STEP_ARRAY } from './built-in/radius-map';
 
 export default {
   name: 'RadiusPanel',

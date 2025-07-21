@@ -23,16 +23,16 @@
 <script>
 import { Drawer as TDrawer } from 'tdesign-vue';
 
-import ColorPanel from '../color-panel'; //色彩配置
-import FontPanel from '../font-panel'; // 字体配置
-import RadiusPanel from '../radius-panel'; // 字体配置
-import ShadowPanel from '../shadow-panel'; // 阴影配置
-import SizePanel from '../size-panel'; // 阴影配置
+import { themeStore } from '../common/themes';
 
-import StickyThemeDisplay from '../common/StickyThemeDisplay';
-import SwitchTabs from '../common/SwitchTabs';
-import { themeStore } from '../common/themes/store';
-import { syncThemeToGenerator } from '../common/utils';
+import ColorPanel from '../color-panel';
+import FontPanel from '../font-panel';
+import RadiusPanel from '../radius-panel';
+import ShadowPanel from '../shadow-panel';
+import SizePanel from '../size-panel';
+
+import StickyThemeDisplay from './components/StickyThemeDisplay';
+import SwitchTabs from './components/SwitchTabs';
 
 const ACTIVE_TAB_MAP = {
   color: 0,
@@ -98,8 +98,6 @@ export default {
     },
   },
   mounted() {
-    syncThemeToGenerator();
-
     if (this.propsTop) {
       this.top = parseInt(this.propsTop, 10);
     } else {

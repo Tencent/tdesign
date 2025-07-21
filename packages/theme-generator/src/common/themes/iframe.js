@@ -1,5 +1,5 @@
-import { extractRootContent, getThemeMode, setUpThemeObserver } from '../utils';
-import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile } from './stylesheet';
+import { extractRootContent, getThemeMode, setUpModeObserver } from '../utils';
+import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile } from './core';
 
 /* ----- 同步亮暗模式 -----  */
 function handleMobileModeChange(iframe, mode) {
@@ -92,7 +92,7 @@ function watchThemeModeChange(iframe) {
   // 初始化
   handleModeChange(getThemeMode());
 
-  const observer = setUpThemeObserver((newMode) => {
+  const observer = setUpModeObserver((newMode) => {
     handleModeChange(newMode);
   });
   return observer;

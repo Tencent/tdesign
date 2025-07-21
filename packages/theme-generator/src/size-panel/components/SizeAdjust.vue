@@ -45,17 +45,17 @@
 <script lang="jsx">
 import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue';
 
-import SizeSlider from '../../common/SizeSlider/index.vue';
-import { CUSTOM_THEME_ID, modifyToken } from '../../common/themes';
-import { handleAttach } from '../../common/utils';
+import { SizeSlider } from './../../common/components';
+import { CUSTOM_THEME_ID, modifyToken } from './../../common/themes';
+import { handleAttach } from './../../common/utils';
+
+import { sizeLabels, sizeSteps } from '../built-in/size-map';
 
 import HorizontalPaddingAdjustSvg from '../svg/HorizontalPaddingAdjustSvg.vue';
 import MarginAdjustSvg from '../svg/MarginAdjustSvg.vue';
 import PopupPaddingAdjustSvg from '../svg/PopupPaddingAdjustSvg.vue';
 import SizeAdjustSvg from '../svg/SizeAdjustSvg.vue';
 import VerticalPaddingAdjustSvg from '../svg/VerticalPaddingAdjustSvg.vue';
-
-import { sizeLabels, sizeSteps } from '../built-in/size-map';
 
 const STEP_MAP = [
   { label: '默认', value: 3 },

@@ -66,11 +66,11 @@
 </template>
 
 <script lang="jsx">
-import CommonCollapse from '../common/Collapse';
-import langMixin from '../common/i18n/mixin';
+import { CommonCollapse } from '../common/components';
+import { langMixin } from '../common/i18n';
 import { isMobile, modifyToken } from '../common/themes';
 
-import { FONT_COLOR_TOKEN_MAP } from '../color-panel/utils/const';
+import { FONT_COLOR_TOKEN_MAP } from './built-in/font-map';
 
 import FontColorAdjust from './components/FontColorAdjust.vue';
 import FontColorSvg from './components/FontColorSvg.vue';

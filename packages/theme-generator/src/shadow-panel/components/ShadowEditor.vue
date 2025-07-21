@@ -28,10 +28,12 @@
     </t-popup>
   </div>
 </template>
+
 <script lang="jsx">
-import { InputNumber as TInputNumber, Popup as TPopup, Input as TInput } from 'tdesign-vue';
 import { RemoveIcon } from 'tdesign-icons-vue';
-import ColorPicker from '../../common/ColorPicker/index.vue';
+import { Input as TInput, InputNumber as TInputNumber, Popup as TPopup } from 'tdesign-vue';
+
+import { ColorPicker } from '../../common/components';
 import { handleAttach } from '../../common/utils';
 
 export default {
@@ -117,6 +119,7 @@ export default {
   },
 };
 </script>
+
 <style scoped lang="less">
 .shadow-layer {
   display: flex;

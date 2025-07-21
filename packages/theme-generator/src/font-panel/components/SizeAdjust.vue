@@ -102,6 +102,7 @@
     </div>
   </div>
 </template>
+
 <script lang="jsx">
 import {
   List as TList,
@@ -111,13 +112,12 @@ import {
   RadioGroup as TRadioGroup,
 } from 'tdesign-vue';
 
-import langMixin from '../../common/i18n/mixin';
-import SegmentSelection from '../../common/SegmentSelection/index.vue';
-import SizeSlider from '../../common/SizeSlider/index.vue';
+import { SegmentSelection, SizeSlider } from '../../common/components';
+import { langMixin } from '../../common/i18n';
 import { CUSTOM_THEME_ID, getOptionFromLocal, modifyToken, updateLocalOption } from '../../common/themes';
 import { handleAttach } from '../../common/utils';
 
-import { fontSizeLabels, fontSizeSteps } from '../built-in/font-size';
+import { fontSizeLabels, fontSizeSteps } from '../built-in/font-map';
 
 const STEP_MAP = [
   { label: '超小号', enLabel: 'mini', value: 1 },
@@ -311,6 +311,7 @@ export default {
   },
 };
 </script>
+
 <style lang="less" scoped>
 .font-panel {
   &__round-tag-left {

@@ -1,6 +1,6 @@
 <template>
-  <div id="theme-generator">
-    <dock
+  <div class="theme-generator">
+    <float-dock
       :drawerVisible="visible"
       :showSetting="showSetting"
       @click-setting="handleClickSetting"
@@ -11,25 +11,23 @@
 </template>
 
 <script>
-import { applyTokenFromLocal, initThemeStyleSheet, syncThemeToIframe, themeStore } from './common/themes';
-import { initGeneratorVars } from './common/utils';
+import {
+  applyTokenFromLocal,
+  initGeneratorVars,
+  initThemeStyleSheet,
+  syncModeToGenerator,
+  syncThemeToIframe,
+  themeStore,
+} from './common/themes';
 
-import Dock from './dock';
+import FloatDock from './float-dock';
 import PanelDrawer from './panel-drawer';
-
-const activeTabMap = {
-  color: 0,
-  font: 1,
-  radius: 2,
-  shadow: 3,
-  size: 4,
-};
 
 export default {
   name: 'ThemeGenerator',
   components: {
+    FloatDock,
     PanelDrawer,
-    Dock,
   },
   props: {
     propsTop: String,
@@ -48,9 +46,7 @@ export default {
   },
   data() {
     return {
-      activeTabMap,
       visible: 0,
-      activeTabIdx: activeTabMap.color,
     };
   },
   computed: {
@@ -59,6 +55,7 @@ export default {
     },
   },
   mounted() {
+    syncModeToGenerator();
     initGeneratorVars();
     initThemeStyleSheet(this.$theme.enName);
     applyTokenFromLocal();
@@ -70,10 +67,8 @@ export default {
     },
     handleDrawerVisible(v) {
       this.visible = v;
-      this.$emit('panel-drawer-visible', v);
     },
     handleClickSetting() {
-      this.$emit('click-setting');
       this.visible = false;
     },
   },
@@ -85,7 +80,7 @@ export default {
 @import './styles/tdesign.min.css';
 
 @media screen and (max-width: 960px) {
-  #theme-generator {
+  .theme-generator {
     display: none;
   }
 }
