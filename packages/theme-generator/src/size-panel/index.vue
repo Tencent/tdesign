@@ -140,8 +140,11 @@
     </div>
   </div>
 </template>
+
 <script lang="jsx">
-import CommonCollapse from '../common/Collapse/index.vue';
+import { CommonCollapse } from '../common/components';
+import { langMixin } from '../common/i18n';
+
 import SizeAdjust from './components/SizeAdjust.vue';
 import SizeDisplay from './components/SizeDisplay.vue';
 
@@ -151,10 +154,6 @@ import PopupPaddingSvg from './svg/PopupPaddingSvg.vue';
 import SizeSvg from './svg/SizeSvg.vue';
 import VerticalPaddingSvg from './svg/VerticalPaddingSvg.vue';
 
-import { FONT_COLOR_MAP } from '../color-panel/utils/const';
-
-import langMixin from '../common/i18n/mixin';
-import { modifyToken } from '../common/Themes';
 import {
   compMarginArr,
   compPaddingLRArr,
@@ -191,15 +190,7 @@ export default {
       compMarginArr,
     };
   },
-  mounted() {
-    const textColorPalette = this.getCurrentPalette();
-    this.textColorPalette = textColorPalette;
-    this.initTextColorPalette = JSON.parse(JSON.stringify(textColorPalette));
-  },
   computed: {
-    isTextPaletteChange() {
-      return JSON.stringify(this.textColorPalette) !== JSON.stringify(this.initTextColorPalette);
-    },
     contentStyle() {
       const clientHeight = window.innerHeight;
       return {
@@ -208,29 +199,9 @@ export default {
       };
     },
   },
-  methods: {
-    changeGradation(hex, idx) {
-      const tokenIdxName = this.textColorPalette[idx].name;
-
-      this.textColorPalette[idx].value = hex;
-      modifyToken(tokenIdxName, hex);
-    },
-    getCurrentPalette() {
-      let colorMap = FONT_COLOR_MAP;
-      let docStyle = getComputedStyle(document.documentElement);
-
-      let currentPalette = [...new Array(7).keys()].map((v, i) => {
-        return {
-          ...colorMap[i],
-          value: colorMap[i].value ?? docStyle.getPropertyValue(colorMap[i].from),
-        };
-      });
-
-      return currentPalette;
-    },
-  },
 };
 </script>
+
 <style scoped lang="less">
 /deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;

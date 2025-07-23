@@ -69,13 +69,16 @@
     </div>
   </div>
 </template>
+
 <script>
 import flatten from 'lodash/flatten';
 import { Edit1Icon } from 'tdesign-icons-vue';
 import { Popup as TPopup, RadioButton as TRadioButton, RadioGroup as TRadioGroup } from 'tdesign-vue';
-import ColorPicker from '../../common/ColorPicker/index.vue';
-import langMixin from '../../common/i18n/mixin';
+
+import { ColorPicker } from '../../common/components';
+import { langMixin } from '../../common/i18n';
 import { handleAttach } from '../../common/utils';
+
 export default {
   name: 'FontColorAdjust',
   props: {
@@ -130,6 +133,7 @@ export default {
   },
 };
 </script>
+
 <style scoped lang="less">
 .fade-enter-active,
 .fade-leave-active {

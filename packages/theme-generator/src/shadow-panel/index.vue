@@ -60,14 +60,23 @@
     </div>
   </div>
 </template>
+
 <script lang="jsx">
 import { Select as TSelect, Slider as TSlider } from 'tdesign-vue';
-import ShadowCard from './components/ShadowCard.vue';
 
-import langMixin from '../common/i18n/mixin';
-import { getOptionFromLocal, modifyToken, updateLocalOption } from '../common/Themes';
+import { langMixin } from '../common/i18n';
+import { getOptionFromLocal, modifyToken, updateLocalOption } from '../common/themes';
 import { handleAttach } from '../common/utils';
-import { ShadowSelect, ShadowSelectDetail, ShadowSelectType, ShadowTypeDetail, ShadowTypeMap } from './const';
+
+import {
+  ShadowSelect,
+  ShadowSelectDetail,
+  ShadowSelectType,
+  ShadowTypeDetail,
+  ShadowTypeMap,
+} from './built-in/shadow-map';
+import ShadowCard from './components/ShadowCard';
+
 export default {
   name: 'ShadowPanel',
   props: {
@@ -201,6 +210,7 @@ export default {
   },
 };
 </script>
+
 <style scoped lang="less">
 /deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;
