@@ -1,9 +1,7 @@
 <template>
   <div :style="{ width: '100%' }">
     <t-radio-group class="font-color__type-radio" variant="default-filled" v-model="colorType">
-      <!-- <t-radio-button :value="0" disabled>弱对比</t-radio-button> -->
       <t-radio-button :value="1">{{ lang.font.colorDefault }}</t-radio-button>
-      <!-- <t-radio-button :value="2" disabled>高对比</t-radio-button> -->
     </t-radio-group>
 
     <div class="font-color__vertical-list">
@@ -117,9 +115,6 @@ export default {
     },
   },
   methods: {
-    flatten(arr) {
-      return flatten(arr);
-    },
     handleAttach,
     handleClickIdx(idx) {
       this.activeIdx = idx;
@@ -159,11 +154,15 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-    }
 
-    /deep/ .t-radio-group__bg-block {
-      border-radius: 5px;
-      background-color: var(--bg-color-theme-surface);
+      /deep/ .t-radio-group__bg-block {
+        border-radius: 5px;
+        background-color: var(--bg-color-theme-surface);
+        // 手动修复高亮部分的尺寸异常情况
+        // TODO 待接入最新版的 TD 后可解决并移除
+        width: 99% !important;
+        left: 1px !important;
+      }
     }
   }
   &__horizontal-list {

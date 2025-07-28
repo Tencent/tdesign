@@ -311,3 +311,23 @@ export function syncColorTokensToStyle(lightTokenMap, darkTokenMap) {
   updateColorTokens(styleSheet, lightTokenMap);
   updateColorTokens(darkStyleSheet, darkTokenMap);
 }
+
+export function collectTokenIndexes(tokenArr) {
+  const isDarkMode = document.documentElement.getAttribute('theme-mode') === 'dark';
+  const targetCss = document.querySelector(isDarkMode ? `#${CUSTOM_DARK_ID}` : `#${CUSTOM_THEME_ID}`);
+
+  return tokenArr
+    .map((token) => {
+      const reg = new RegExp(`${token}:\\s*var\\((--td-[\\w-]+)\\)`, 'i');
+      const match = targetCss?.innerText.match(reg);
+      if (match) {
+        return {
+          name: token,
+          idx: parseInt(match[1].match(/(\d+)$/)?.[1], 10),
+        };
+      }
+      return null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.idx - b.idx);
+}

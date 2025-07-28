@@ -21,21 +21,25 @@ export const DEFAULT_THEME = {
   subtitle: TDesignOriginal,
   subtitleText: 'TDesign Original',
   value: '#0052D9',
+  // gray: '#ddd',
+  // success: '#2ba471',
+  // error: '#d54941',
+  // warning: '#e37318',
+};
+
+// UNCONFIRMED: 确定 CSS 的功能色与算法生成的一致，才能内置一个 mainColor 用于匹配
+const TCLOUD_THEME = {
+  name: '腾讯云',
+  enName: 'TCloud',
+  subtitle: TencentCloud,
+  subtitleText: 'Tencent Cloud',
+  value: '#006EFF',
 };
 
 export const RECOMMEND_THEMES = [
   {
     title: '官方推荐',
-    options: [
-      DEFAULT_THEME,
-      {
-        name: '腾讯云',
-        enName: 'TCloud',
-        subtitle: TencentCloud,
-        subtitleText: 'Tencent Cloud',
-        value: '#006EFF',
-      },
-    ],
+    options: [DEFAULT_THEME, TCLOUD_THEME],
   },
 ];
 

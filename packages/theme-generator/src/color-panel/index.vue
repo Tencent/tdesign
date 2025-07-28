@@ -166,9 +166,8 @@
                 <div>
                   <p>
                     {{
-                      [...DEFAULT_COLORS, ...RECOMMEND_COLORS, ...SCENE_COLORS].find(
-                        (color) => color.value === $brandColor,
-                      )?.[isEn ? 'enName' : 'name'] || lang.color.customizeTitle
+                      ALL_PRESET_COLORS.find((color) => color.value === $brandColor)?.[isEn ? 'enName' : 'name'] ||
+                      lang.color.customizeTitle
                     }}
                   </p>
                   <p :style="{ color: 'var(--text-secondary)' }">HEX: {{ brandDisplayedColor }}</p>
@@ -263,7 +262,7 @@
         <color-column
           type="gray"
           :gradientStep="14"
-          :tokenMap="FUNCTION_TOKEN_MAPS['gray']"
+          :tokenMap="functionTokenMap['gray']"
           @changeGradation="changeGradation"
           @recoverGradation="recoverGradation"
         />
@@ -278,7 +277,7 @@
         <color-column
           type="success"
           :gradientStep="10"
-          :tokenMap="FUNCTION_TOKEN_MAPS['success']"
+          :tokenMap="functionTokenMap['success']"
           @changeGradation="changeGradation"
           @recoverGradation="recoverGradation"
         />
@@ -293,7 +292,7 @@
         <color-column
           type="error"
           :gradientStep="10"
-          :tokenMap="FUNCTION_TOKEN_MAPS['error']"
+          :tokenMap="functionTokenMap['error']"
           @changeGradation="changeGradation"
           @recoverGradation="recoverGradation"
         />
@@ -308,7 +307,7 @@
         <color-column
           type="warning"
           :gradientStep="10"
-          :tokenMap="FUNCTION_TOKEN_MAPS['warning']"
+          :tokenMap="functionTokenMap['warning']"
           @changeGradation="changeGradation"
           @recoverGradation="recoverGradation"
         />
@@ -331,6 +330,7 @@ import {
 import { ColorPicker } from '../common/components';
 import { langMixin } from '../common/i18n';
 import {
+  collectTokenIndexes,
   covert2Hex,
   generateBrandPalette,
   generateFunctionalPalette,
@@ -339,19 +339,12 @@ import {
   modifyToken,
   syncColorTokensToStyle,
   themeStore,
-  updateLocalOption,
   updateStyleSheetColor,
 } from '../common/themes';
 import { colorAnimation, getThemeMode, getTokenValue, handleAttach, setUpModeObserver } from '../common/utils';
 
-import {
-  BRAND_TOKEN_MAP,
-  DEFAULT_COLORS,
-  DEFAULT_FUNCTION_COLORS,
-  FUNCTION_TOKEN_MAPS,
-  RECOMMEND_COLORS,
-  SCENE_COLORS,
-} from './built-in/color-map';
+import { BRAND_TOKEN_MAP, FUNCTION_TOKENS } from './built-in/color-map';
+import { ALL_PRESET_COLORS, DEFAULT_COLORS, RECOMMEND_COLORS, SCENE_COLORS } from './built-in/color-preset';
 
 import ColorCollapse from './components/ColorCollapse';
 import ColorColumn from './components/ColorColumn';
@@ -381,7 +374,13 @@ export default {
       DEFAULT_COLORS,
       RECOMMEND_COLORS,
       SCENE_COLORS,
-      FUNCTION_TOKEN_MAPS,
+      ALL_PRESET_COLORS,
+      functionTokenMap: {
+        gray: [],
+        success: [],
+        error: [],
+        warning: [],
+      },
       brandInputColor: themeStore.brandColor,
       brandIndexes: {
         light: 7,
@@ -431,11 +430,10 @@ export default {
     this.$nextTick(() => {
       colorAnimation();
       this.changeBrandColor(this.$brandColor);
-      ['success', 'error', 'warning'].forEach((type) => {
-        this.changeFunctionColor(this[`${type}MainColor`], type);
-      });
+      this.updateFunctionTokenMap();
       setUpModeObserver((theme) => {
         this.updateBrandTokenMap();
+        this.updateFunctionTokenMap();
         this.currentBrandIdx = this.brandIndexes[theme];
         this.$forceUpdate();
       });
@@ -458,6 +456,12 @@ export default {
       const extraTokens = this.generateBrandTokenMap(brandIdx);
       this.brandTokenMap = BRAND_TOKEN_MAP.concat(extraTokens);
     },
+    updateFunctionTokenMap() {
+      Object.keys(FUNCTION_TOKENS).forEach((type) => {
+        const tokens = FUNCTION_TOKENS[type];
+        this.functionTokenMap[type] = collectTokenIndexes(tokens);
+      });
+    },
     changeBrandColor(hex) {
       // 备份用户实际输入的颜色
       // 在智能推荐模式下，它与实际更新的颜色不同
@@ -473,7 +477,6 @@ export default {
       themeStore.setBrandColorState(newBrandColor);
 
       this.currentBrandIdx = this.brandIndexes[getThemeMode()];
-      this.updateBrandTokenMap();
       updateStyleSheetColor('brand', lightPalette, darkPalette);
 
       const lightExtraTokens = this.generateBrandTokenMap(lightBrandIdx);
@@ -484,8 +487,8 @@ export default {
       this.changeNeutralColor(this.isGrayRelatedToTheme);
     },
     changeNeutralColor(related) {
-      updateLocalOption('neutral', true, related);
-      updateLocalOption('gray', this.grayMainColor, !related && this.grayMainColor !== DEFAULT_FUNCTION_COLORS['gray']);
+      // updateLocalOption('neutral', true, related);
+      // updateLocalOption('gray', this.grayMainColor, !related && this.grayMainColor !== DEFAULT_FUNCTION_COLORS['gray']);
       const inputHex = related ? this.$brandColor : this.grayMainColor;
       const palette = generateNeutralPalette(inputHex, related);
       updateStyleSheetColor('gray', palette, palette);
@@ -499,7 +502,7 @@ export default {
       }
       const { lightPalette, darkPalette } = generateFunctionalPalette(hex);
       updateStyleSheetColor(type, lightPalette, darkPalette);
-      updateLocalOption(type, hex, DEFAULT_FUNCTION_COLORS[type] !== hex);
+      // updateLocalOption(type, hex, DEFAULT_FUNCTION_COLORS[type] !== hex);
       this.$nextTick(this.refreshAllTokens);
     },
     changeGradation(hex, idx, type, saveToLocal = true) {

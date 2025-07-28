@@ -4,9 +4,7 @@ export * from './animation';
  * 获取指定 CSS Token 对应的数值
  */
 export function getTokenValue(name) {
-  const isDarkMode =
-    document.documentElement.getAttribute('theme-mode') === 'dark' || document.querySelector('[theme-mode="dark"]');
-
+  const isDarkMode = document.documentElement.getAttribute('theme-mode') === 'dark';
   const rootElement = isDarkMode ? document.querySelector('[theme-mode="dark"]') : document.documentElement;
   return window.getComputedStyle(rootElement).getPropertyValue(name).toLowerCase().trim();
 }

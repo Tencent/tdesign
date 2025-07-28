@@ -28,8 +28,6 @@ export const themeStore = Vue.observable({
   },
 });
 
-export default themeStore;
-
 function findLocalTheme() {
   const localThemeName = getOptionFromLocal('theme');
   const localTheme = findThemeByName(localThemeName) || DEFAULT_THEME;
