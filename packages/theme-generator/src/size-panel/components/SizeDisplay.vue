@@ -39,6 +39,9 @@ export default {
       // 初始化 local 的 token 后更新 size 显示
       this.$forceUpdate();
     });
+    this.$root.$on('refresh-size-tokens', () => {
+      this.$forceUpdate();
+    });
   },
 };
 </script>

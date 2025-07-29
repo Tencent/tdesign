@@ -86,6 +86,11 @@ export default {
     tokenList: Array,
     type: String,
   },
+  data() {
+    return {
+      hoverIdx: null,
+    };
+  },
   methods: {
     getTokenValue,
     handleAttach,
@@ -103,6 +108,7 @@ export default {
         const num = parseFloat(val);
         return isNaN(num) ? 0 : num;
       }
+      console.log(val);
       return val;
     },
   },

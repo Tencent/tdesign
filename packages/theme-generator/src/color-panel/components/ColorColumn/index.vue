@@ -32,7 +32,7 @@
         }"
       ></div>
 
-      <div v-for="(color, idx) in tokenMap" :key="idx">
+      <div v-for="(color, index) in tokenMap" :key="index">
         <t-popup
           placement="left"
           showArrow
@@ -55,18 +55,18 @@
               'align-items': 'center',
               color: 'var(--text-anti)',
             }"
-            @mouseover="hoverIdx = color.idx"
+            @mouseover="hoverIdx = index"
             @mouseleave="hoverIdx = null"
           >
             <transition name="fade">
-              <edit-1-icon v-if="hoverIdx === color.idx" />
+              <edit-1-icon v-if="hoverIdx === index" />
             </transition>
           </div>
           <template #content>
-            <color-picker :value="color.value" @change="(hex) => changeGradation(hex, color.idx)" />
+            <color-picker :value="getTokenValue(color.name)" @change="(hex) => changeGradation(hex, color.idx)" />
           </template>
         </t-popup>
-        <div v-if="color.name" @click="() => handleClickIdx(color.idx)" class="color-content__vertical-list-content">
+        <div v-if="color.name" @click="handleClickIdx(color.idx)" class="color-content__vertical-list-content">
           <div class="color-content__vertical-list-title" :title="color.name">
             {{ color.name.replace('--td-', '') }}
           </div>

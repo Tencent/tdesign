@@ -482,7 +482,6 @@ export default {
         'color',
         newBrandColor.toLowerCase() !== this.$theme.value.toLowerCase() ? this.brandInputColor : null,
       );
-      console.log(this.isRemainMode, this.generationMode);
       updateLocalOption('recommend', !this.isRemainMode ? 'true' : null);
 
       const lightExtraTokens = this.generateBrandTokenMap(lightBrandIdx);

@@ -46,7 +46,7 @@ export default {
     TSlider,
     TInputNumber,
   },
-  emit: ['changeFontSize'],
+  emit: ['changeSize'],
   data() {
     return {
       size: null,
@@ -67,7 +67,7 @@ export default {
       )
         return;
       this.size = v;
-      this.$emit('changeFontSize', v);
+      this.$emit('changeSize', v);
     },
   },
   mounted() {

@@ -49,7 +49,6 @@
             <transition name="fade">
               <edit-1-icon v-if="hoverIdx === idx" />
             </transition>
-            <!-- <edit-1-icon /> -->
           </div>
           <template #content>
             <color-picker :value="color.value" @change="(hex) => changeColor(hex, idx)" :enable-alpha="true" />
