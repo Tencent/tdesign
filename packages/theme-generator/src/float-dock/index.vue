@@ -150,6 +150,9 @@ export default {
     $theme() {
       return themeStore.theme;
     },
+    $device() {
+      return themeStore.device;
+    },
     operationWidth() {
       if (!this.showSetting) {
         if (this.isThemeTabVisible || this.isCustomizeDrawerVisible) return '400px';
@@ -208,7 +211,7 @@ export default {
       document.removeEventListener('mousemove', this.handleMousemove, true);
     },
     handleDownload() {
-      exportCustomStyleSheet();
+      exportCustomStyleSheet(this.$device);
       MessagePlugin.success(this.lang.dock.downloadTips);
     },
     triggerSettingDrawer() {

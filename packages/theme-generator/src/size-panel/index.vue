@@ -34,7 +34,7 @@
         <template #title>{{ lang.size.componentSize }}</template>
         <template #subTitle>size</template>
         <template #content>
-          <size-adjust :tokenList="compSizeArr" type="comp-size" />
+          <size-adjust :key="refreshIdMap['comp-size']" :tokenList="COMP_SIZE_MAP" type="comp-size" />
         </template>
       </common-collapse>
       <!-- 组件上下边距 -->
@@ -59,7 +59,7 @@
         <template #title>{{ lang.size.yPadding }}</template>
         <template #subTitle>padding top & bottom</template>
         <template #content>
-          <size-adjust :tokenList="compPaddingTBArr" type="comp-padding-tb" />
+          <size-adjust :key="refreshIdMap['comp-padding-tb']" :tokenList="COMP_PADDING_TB_MAP" type="comp-padding-tb" />
         </template>
       </common-collapse>
       <!-- 组件左右边距 -->
@@ -84,7 +84,7 @@
         <template #title>{{ lang.size.xPadding }}</template>
         <template #subTitle>padding left & right</template>
         <template #content>
-          <size-adjust :tokenList="compPaddingLRArr" type="comp-padding-lr" />
+          <size-adjust :key="refreshIdMap['comp-padding-lr']" :tokenList="COMP_PADDING_LR_MAP" type="comp-padding-lr" />
         </template>
       </common-collapse>
       <!-- popup 边距 -->
@@ -109,7 +109,7 @@
         <template #title>{{ lang.size.popupPadding }}</template>
         <template #subTitle>popup padding</template>
         <template #content>
-          <size-adjust :tokenList="compPopupPaddingArr" type="popup-padding" />
+          <size-adjust :key="refreshIdMap['popup-padding']" :tokenList="COMP_POPUP_PADDING_MAP" type="popup-padding" />
         </template>
       </common-collapse>
       <!-- margin 边距 -->
@@ -134,7 +134,7 @@
         <template #title>{{ lang.size.margin }}</template>
         <template #subTitle>margin</template>
         <template #content>
-          <size-adjust :tokenList="compMarginArr" type="comp-margin" />
+          <size-adjust :key="refreshIdMap['comp-margin']" :tokenList="COMP_MARGIN_MAP" type="comp-margin" />
         </template>
       </common-collapse>
     </div>
@@ -155,11 +155,11 @@ import SizeSvg from './svg/SizeSvg.vue';
 import VerticalPaddingSvg from './svg/VerticalPaddingSvg.vue';
 
 import {
-  compMarginArr,
-  compPaddingLRArr,
-  compPaddingTBArr,
-  compPopupPaddingArr,
-  compSizeArr,
+  COMP_MARGIN_MAP,
+  COMP_PADDING_LR_MAP,
+  COMP_PADDING_TB_MAP,
+  COMP_POPUP_PADDING_MAP,
+  COMP_SIZE_MAP,
 } from './built-in/size-map';
 
 export default {
@@ -181,13 +181,18 @@ export default {
   mixins: [langMixin],
   data() {
     return {
-      textColorPalette: [''],
-      initTextColorPalette: [''],
-      compSizeArr,
-      compPaddingLRArr,
-      compPaddingTBArr,
-      compPopupPaddingArr,
-      compMarginArr,
+      COMP_SIZE_MAP,
+      COMP_PADDING_LR_MAP,
+      COMP_PADDING_TB_MAP,
+      COMP_POPUP_PADDING_MAP,
+      COMP_MARGIN_MAP,
+      refreshIdMap: {
+        'comp-size': 0,
+        'comp-padding-tb': 0,
+        'comp-padding-lr': 0,
+        'popup-padding': 0,
+        'comp-margin': 0,
+      },
     };
   },
   computed: {
@@ -198,6 +203,15 @@ export default {
         height: `${clientHeight - (this.top || 0) - 96}px`,
       };
     },
+  },
+  mounted() {
+    this.$root.$on('refresh-size-tokens', (type) => {
+      Object.keys(this.refreshIdMap).forEach((key) => {
+        if (key !== type) {
+          this.refreshIdMap[key]++;
+        }
+      });
+    });
   },
 };
 </script>

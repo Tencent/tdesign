@@ -1,26 +1,31 @@
 import Vue from 'vue';
 
-import { DEFAULT_THEME, RECOMMEND_THEMES } from './built-in';
-import { clearLocalTheme, getOptionFromLocal, initThemeStyleSheet, updateLocalOption } from './core';
+import { DEFAULT_THEME_META, TDESIGN_WEB_THEME } from './built-in';
+import { clearLocalTheme, getDefaultTheme, getOptionFromLocal, initThemeStyleSheet, updateLocalOption } from './core';
 
 export const themeStore = Vue.observable({
-  theme: getInitialTheme(),
-  brandColor: getInitialBrandColor(),
+  device: 'web',
+  theme: TDESIGN_WEB_THEME,
+  brandColor: TDESIGN_WEB_THEME.value,
   refreshId: 0, // 用于强制刷新绑定了 key 的组件 UI
-  setThemeState(theme) {
+  updateDevice(device) {
+    this.device = device;
+    this.theme = getInitialTheme(device);
+    this.brandColor = getInitialBrandColor(device);
+  },
+  updateTheme(theme) {
     this.theme = theme;
-    initThemeStyleSheet(theme.enName);
+    initThemeStyleSheet(theme.enName, this.device);
     clearLocalTheme();
-    updateLocalOption('theme', theme.enName, theme.enName !== DEFAULT_THEME.enName);
-    this.setBrandColorState(theme.value);
+    updateLocalOption('theme', theme.enName !== DEFAULT_THEME_META.enName ? theme.enName : null);
+    this.updateBrandColor(theme.value);
     this.incrementRefreshId();
   },
   resetTheme() {
-    this.setThemeState(DEFAULT_THEME);
+    this.updateTheme(getDefaultTheme(this.device));
   },
-  setBrandColorState(color) {
+  updateBrandColor(color) {
     this.brandColor = color;
-    updateLocalOption('color', color, color !== this.theme.value);
     document.documentElement.style.setProperty('--brand-main', color);
   },
   incrementRefreshId() {
@@ -28,28 +33,14 @@ export const themeStore = Vue.observable({
   },
 });
 
-function findLocalTheme() {
-  const localThemeName = getOptionFromLocal('theme');
-  const localTheme = findThemeByName(localThemeName) || DEFAULT_THEME;
-  return localTheme;
-}
-
-function getInitialTheme() {
-  const localTheme = findLocalTheme();
-  initThemeStyleSheet(localTheme.enName);
-  return localTheme;
+export function getInitialTheme(device = 'web') {
+  const localThemeName = getOptionFromLocal('theme') || DEFAULT_THEME_META.enName;
+  const theme = initThemeStyleSheet(localThemeName, device);
+  return theme;
 }
 
 function getInitialBrandColor() {
-  let localColor = getOptionFromLocal('color') || findLocalTheme().value;
+  let localColor = getOptionFromLocal('color') || DEFAULT_THEME_META.value;
   document.documentElement.style.setProperty('--brand-main', localColor);
   return localColor;
-}
-
-function findThemeByName(name) {
-  for (const category of RECOMMEND_THEMES) {
-    const theme = category.options.find((t) => t.enName === name);
-    if (theme) return theme;
-  }
-  return null;
 }

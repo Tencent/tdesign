@@ -1,4 +1,23 @@
-export const fontSizeSteps = {
+export const FONT_SIZE_TOKEN_LIST = [
+  { label: '--td-font-size-link-small' },
+  { label: '--td-font-size-link-medium' },
+  { label: '--td-font-size-link-large' },
+  { label: '--td-font-size-mark-small', isBold: true },
+  { label: '--td-font-size-mark-medium', isBold: true },
+  { label: '--td-font-size-body-small' },
+  { label: '--td-font-size-body-medium' },
+  { label: '--td-font-size-body-large' },
+  { label: '--td-font-size-title-small', isBold: true },
+  { label: '--td-font-size-title-medium', isBold: true },
+  { label: '--td-font-size-title-large', isBold: true },
+  { label: '--td-font-size-headline-small', isBold: true },
+  { label: '--td-font-size-headline-medium', isBold: true },
+  { label: '--td-font-size-headline-large', isBold: true },
+  { label: '--td-font-size-display-medium', isBold: true },
+  { label: '--td-font-size-display-large', isBold: true },
+];
+
+export const FONT_SIZE_STEPS = {
   1: [
     { name: '--td-font-size-link-small', value: '12px' },
     { name: '--td-font-size-link-medium', value: '13px' },
@@ -91,13 +110,16 @@ export const fontSizeSteps = {
   ], // 特大号
 };
 
-export const fontSizeLabels = {
-  1: '超小号',
-  2: '小号',
-  3: '默认',
-  4: '大号',
-  5: '特大号',
-};
+export const FONT_SIZE_OPTIONS = [
+  { label: '超小号', enLabel: 'mini', value: 1 },
+  { label: '小号', enLabel: 'small', value: 2 },
+  { label: '默认', enLabel: 'default', value: 3 },
+  { label: '大号', enLabel: 'large', value: 4 },
+  { label: '特大号', enLabel: 'max', value: 5 },
+  { label: '自定义', enLabel: 'customized', value: 6, disabled: true },
+];
+
+export const FONT_SIZE_LABELS = Object.fromEntries(FONT_SIZE_OPTIONS.map((item, index) => [index + 1, item.label]));
 
 export const FONT_COLOR_TOKEN_MAP = [
   { name: '--td-text-color-primary', from: '--td-font-gray-1' },

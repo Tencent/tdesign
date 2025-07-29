@@ -118,7 +118,9 @@ export default {
     },
   },
   mounted() {
-    this.$root.$on('refresh-color-tokens', this.$forceUpdate);
+    this.$root.$on('refresh-color-tokens', () => {
+      this.$forceUpdate();
+    });
   },
   methods: {
     getTokenValue,

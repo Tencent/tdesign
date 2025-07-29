@@ -18,27 +18,27 @@ export const LINE_HEIGHT_OPTIONS = [
   { label: '自定义', enLabel: 'customized', value: 6, disabled: true },
 ];
 
-export function updateLineHeightTokens(commonVal, type = 'plus') {
-  const LINE_HEIGHT_VAR = [
-    'link-small',
-    'link-medium',
-    'link-large',
-    'mark-small',
-    'mark-medium',
-    'body-small',
-    'body-medium',
-    'body-large',
-    'title-small',
-    'title-medium',
-    'title-large',
-    'headline-small',
-    'headline-medium',
-    'headline-large',
-    'display-medium',
-    'display-large',
-  ];
+const LINE_HEIGHT_TOKENS = [
+  'link-small',
+  'link-medium',
+  'link-large',
+  'mark-small',
+  'mark-medium',
+  'body-small',
+  'body-medium',
+  'body-large',
+  'title-small',
+  'title-medium',
+  'title-large',
+  'headline-small',
+  'headline-medium',
+  'headline-large',
+  'display-medium',
+  'display-large',
+];
 
-  LINE_HEIGHT_VAR.forEach((size) => {
+export function updateLineHeightTokens(commonVal, type = 'plus') {
+  LINE_HEIGHT_TOKENS.forEach((size) => {
     const fontSizeToken = `--td-font-size-${size}`;
     const lineHeightToken = `--td-line-height-${size}`;
     const fontSize = getTokenValue(fontSizeToken);

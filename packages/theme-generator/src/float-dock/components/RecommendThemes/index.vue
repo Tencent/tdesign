@@ -1,8 +1,9 @@
 <template>
+  <!-- FIXME：这个布局是不合理的...但鉴于 type 目前只有 “官方推荐” 一种，所以暂时如此 -->
   <div class="recommend-theme">
-    <div :key="idx" v-for="(type, idx) in RECOMMEND_THEMES">
+    <div :key="idx" v-for="(type, idx) in recommendedThemes">
       <div class="recommend-theme__title">
-        {{ lang.dock.recommendTitle }}
+        {{ isEn ? type.enTitle : type.title }}
       </div>
       <div class="recommend-theme__flex">
         <div v-for="(theme, themeIdx) in type.options" :key="themeIdx" @click="handleChangeTheme(theme)">
@@ -35,7 +36,7 @@
 
 <script>
 import { langMixin } from '../../../common/i18n';
-import { RECOMMEND_THEMES, themeStore } from '../../../common/themes';
+import { getRecommendThemes, themeStore } from '../../../common/themes';
 
 import PickedSvg from './PickedSvg.vue';
 
@@ -43,13 +44,15 @@ export default {
   name: 'RecommendThemes',
   mixins: [langMixin],
   computed: {
+    recommendedThemes() {
+      return getRecommendThemes(themeStore.device);
+    },
     $theme() {
       return themeStore.theme;
     },
   },
   data() {
     return {
-      RECOMMEND_THEMES,
       isThemeTabVisible: false,
       isDrawerVisible: false,
     };
@@ -59,7 +62,7 @@ export default {
   },
   methods: {
     handleChangeTheme(theme) {
-      themeStore.setThemeState(theme);
+      themeStore.updateTheme(theme);
     },
   },
 };

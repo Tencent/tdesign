@@ -6,7 +6,7 @@
       </div>
       <div class="segment-panel__round-slider">
         <div
-          v-for="(v, i) in selectOptions.slice(0, 5)"
+          v-for="(_, i) in selectOptions.slice(0, 5)"
           :key="i"
           class="slider-split"
           :style="{

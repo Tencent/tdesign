@@ -83,23 +83,6 @@ export function downloadFile(blob, fileName) {
 }
 
 /**
- * 从 CSS 文本中移除指定的 Token 字符串 / 数组
- * - e.g. `"--td-xxx-1"` or `["--td-xxx-2", "--td-xxx-3"]`
- */
-export function removeCssProperties(cssText, properties) {
-  if (!Array.isArray(properties)) {
-    properties = [properties];
-  }
-
-  properties.forEach((property) => {
-    const reg = new RegExp(`${property}:\\s*.*?;`, 'g');
-    cssText = cssText.replace(reg, '');
-  });
-
-  return cssText;
-}
-
-/**
  * 从 CSS 文本中提取 `:root` 中的内容
  */
 export function extractRootContent(cssText) {

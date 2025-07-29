@@ -14,7 +14,6 @@
 import {
   applyTokenFromLocal,
   initGeneratorVars,
-  initThemeStyleSheet,
   syncModeToGenerator,
   syncThemeToIframe,
   themeStore,
@@ -39,11 +38,6 @@ export default {
       default: 'web',
     },
   },
-  provide() {
-    return {
-      $device: this.device,
-    };
-  },
   data() {
     return {
       visible: 0,
@@ -55,9 +49,9 @@ export default {
     },
   },
   mounted() {
+    themeStore.updateDevice(this.device);
     syncModeToGenerator();
     initGeneratorVars();
-    initThemeStyleSheet(this.$theme.enName);
     applyTokenFromLocal();
     syncThemeToIframe(this.device);
   },
@@ -87,7 +81,8 @@ export default {
 </style>
 <style>
 :host {
-  --td-bg-color-container: var(--bg-color-container);
+  --td-brand-main-hover: var(--brand-main-hover);
+  --td-bg-color-container: var(--bg-color-theme-secondary);
   --td-bg-color-secondarycomponent: var(--bg-color-theme-secondary);
   --td-bg-color-container-hover: var(--bg-color-container-hover);
   --td-bg-color-component-active: var(--bg-color-component-hover);

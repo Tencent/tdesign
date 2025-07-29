@@ -24,7 +24,7 @@
 
 <script>
 import { langMixin } from '../../../common/i18n';
-import { isMobile } from '../../../common/themes';
+import { isMobile, themeStore } from '../../../common/themes';
 
 import BoxshadowSvg from './BoxshadowSvg.vue';
 import ColorSvg from './ColorSvg.vue';
@@ -37,8 +37,10 @@ export default {
   props: {
     activeTabIdx: Number,
   },
-  inject: ['$device'],
   computed: {
+    $device() {
+      return themeStore.device;
+    },
     filteredTabs() {
       // 移动端不显示尺寸配置
       return isMobile(this.$device) ? this.tabs.filter((tab) => tab.title !== this.lang.size.title) : this.tabs;

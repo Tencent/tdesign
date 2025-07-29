@@ -17,13 +17,13 @@
             <div
               :class="{
                 'color-content__block': true,
-                'is-active': $brandColor.toLocaleLowerCase() === color.value.toLocaleLowerCase() && !isMoreVisible,
+                'is-active': $brandColor.toLowerCase() === color.value.toLowerCase() && !isMoreVisible,
               }"
               :style="{ paddingBottom: '4px', color: 'var(--text-secondary)' }"
             >
               <div
                 @click="changeBrandColor(color.value)"
-                :class="{ 'is-active': $brandColor.toLocaleLowerCase() === color.value.toLocaleLowerCase() }"
+                :class="{ 'is-active': $brandColor.toLowerCase() === color.value.toLowerCase() }"
               >
                 <div
                   :style="{
@@ -159,8 +159,8 @@
                   'background-color': 'var(--brand-main)',
                 }"
               >
-                <p>hsv: {{ covert2Hex(brandDisplayedColor, 'hsv') }}</p>
-                <p>rgb: {{ covert2Hex(brandDisplayedColor, 'rgb') }}</p>
+                <p>hsv: {{ convertFromHex(brandDisplayedColor, 'hsv') }}</p>
+                <p>rgb: {{ convertFromHex(brandDisplayedColor, 'rgb') }}</p>
               </div>
               <div class="color-content__custom-bottom">
                 <div>
@@ -331,14 +331,17 @@ import { ColorPicker } from '../common/components';
 import { langMixin } from '../common/i18n';
 import {
   collectTokenIndexes,
-  covert2Hex,
+  convertFromHex,
   generateBrandPalette,
   generateFunctionalPalette,
   generateNeutralPalette,
   getOptionFromLocal,
+  isMobile,
   modifyToken,
   syncColorTokensToStyle,
   themeStore,
+  updateLocalOption,
+  updateLocalToken,
   updateStyleSheetColor,
 } from '../common/themes';
 import { colorAnimation, getThemeMode, getTokenValue, handleAttach, setUpModeObserver } from '../common/utils';
@@ -387,19 +390,22 @@ export default {
         dark: 8,
       },
       currentBrandIdx: 7,
-      brandTokenMap: [''], // `-td-brand-x` 系列的 token 映射需要根据 brandIdx 动态计算；其它功能色都是固定的
+      brandTokenMap: [], // `-td-brand-x` 系列的 token 映射需要根据 brandIdx 动态计算；其它功能色都是固定的
       grayMainColor: getOptionFromLocal('gray') || getTokenValue('--td-bg-color-secondarycontainer-active'),
       successMainColor: getOptionFromLocal('success') || getTokenValue('--td-success-color'),
       errorMainColor: getOptionFromLocal('error') || getTokenValue('--td-error-color'),
       warningMainColor: getOptionFromLocal('warning') || getTokenValue('--td-warning-color'),
-      generationMode: 'remain',
-      isGrayRelatedToTheme: getOptionFromLocal('neutral') == true,
+      generationMode: getOptionFromLocal('recommend') === 'true' ? 'recommend' : 'remain', // remain: 保留输入, recommend: 智能推荐
+      isGrayRelatedToTheme: getOptionFromLocal('neutral') == 'true',
       isMoreVisible: false,
     };
   },
   computed: {
     $theme() {
       return themeStore.theme;
+    },
+    $device() {
+      return themeStore.device;
     },
     isRemainMode() {
       return this.generationMode === 'remain';
@@ -419,9 +425,6 @@ export default {
     },
   },
   watch: {
-    $theme(newTheme) {
-      this.changeBrandColor(newTheme.value);
-    },
     generationMode() {
       this.changeBrandColor(this.brandDisplayedColor);
     },
@@ -441,20 +444,20 @@ export default {
   },
   methods: {
     handleAttach,
-    covert2Hex,
+    convertFromHex,
     generateBrandTokenMap(brandIdx) {
       const hoverIdx = brandIdx - 1;
       const activeIdx = brandIdx > 8 ? brandIdx : brandIdx + 1;
       return [
-        { name: '--td-brand-color-hover', idx: hoverIdx },
+        ...(!isMobile(this.$device) ? [{ name: '--td-brand-color-hover', idx: hoverIdx }] : []),
         { name: '--td-brand-color', idx: brandIdx },
         { name: '--td-brand-color-active', idx: activeIdx },
       ];
     },
     updateBrandTokenMap() {
       const brandIdx = this.currentBrandIdx;
-      const extraTokens = this.generateBrandTokenMap(brandIdx);
-      this.brandTokenMap = BRAND_TOKEN_MAP.concat(extraTokens);
+      const extraBrandTokens = this.generateBrandTokenMap(brandIdx);
+      this.brandTokenMap = BRAND_TOKEN_MAP.concat(extraBrandTokens);
     },
     updateFunctionTokenMap() {
       Object.keys(FUNCTION_TOKENS).forEach((type) => {
@@ -474,43 +477,64 @@ export default {
       };
 
       const newBrandColor = lightPalette[lightBrandIdx - 1].toUpperCase();
-      themeStore.setBrandColorState(newBrandColor);
-
-      this.currentBrandIdx = this.brandIndexes[getThemeMode()];
-      updateStyleSheetColor('brand', lightPalette, darkPalette);
+      themeStore.updateBrandColor(newBrandColor);
+      updateLocalOption(
+        'color',
+        newBrandColor.toLowerCase() !== this.$theme.value.toLowerCase() ? this.brandInputColor : null,
+      );
+      console.log(this.isRemainMode, this.generationMode);
+      updateLocalOption('recommend', !this.isRemainMode ? 'true' : null);
 
       const lightExtraTokens = this.generateBrandTokenMap(lightBrandIdx);
       const darkExtraTokens = this.generateBrandTokenMap(darkBrandIdx);
-      syncColorTokensToStyle(lightExtraTokens, darkExtraTokens);
+
+      this.currentBrandIdx = this.brandIndexes[getThemeMode()];
+
+      if (this.$brandColor != this.$theme.value) {
+        // 只在用户手动修改主题色时同步 stylesheet，避免覆盖内置主题自身的逻辑
+        updateStyleSheetColor('brand', lightPalette, darkPalette);
+        syncColorTokensToStyle(lightExtraTokens, darkExtraTokens);
+        this.changeNeutralColor(this.isGrayRelatedToTheme);
+      }
 
       this.updateBrandTokenMap();
-      this.changeNeutralColor(this.isGrayRelatedToTheme);
     },
     changeNeutralColor(related) {
-      // updateLocalOption('neutral', true, related);
-      // updateLocalOption('gray', this.grayMainColor, !related && this.grayMainColor !== DEFAULT_FUNCTION_COLORS['gray']);
+      updateLocalOption('neutral', related ? 'true' : null);
       const inputHex = related ? this.$brandColor : this.grayMainColor;
       const palette = generateNeutralPalette(inputHex, related);
       updateStyleSheetColor('gray', palette, palette);
-      this.$nextTick(this.refreshAllTokens);
+      this.$nextTick(this.refreshColorTokens);
     },
     changeFunctionColor(hex, type) {
-      this[`${type}MainColor`] = hex;
+      const oldColor = getOptionFromLocal(type);
+      updateLocalOption(type, oldColor !== hex ? hex : null);
+
       if (type === 'gray') {
         this.changeNeutralColor(false);
         return;
       }
+      this[`${type}MainColor`] = hex;
       const { lightPalette, darkPalette } = generateFunctionalPalette(hex);
       updateStyleSheetColor(type, lightPalette, darkPalette);
-      // updateLocalOption(type, hex, DEFAULT_FUNCTION_COLORS[type] !== hex);
-      this.$nextTick(this.refreshAllTokens);
+      this.$nextTick(this.refreshColorTokens);
     },
     changeGradation(hex, idx, type, saveToLocal = true) {
-      const tokenName = `--td-${type}-color-${idx + 1}`;
+      const tokenName = `--td-${type}-color-${idx}`;
       modifyToken(tokenName, hex, saveToLocal);
-      this.$forceUpdate();
+      this.$nextTick(this.refreshColorTokens);
     },
     recoverGradation(type) {
+      Array(14) // 最长的情况为 gray 的 14 个色阶（虽然理论上有些 token 用户无法直接在 UI 中修改）
+        .fill(0)
+        .forEach((_, idx) => {
+          const tokenName = `--td-${type}-color-${idx + 1}`;
+          updateLocalToken(tokenName, undefined, false); // 清空本地缓存值
+        });
+      if (type === 'brand') {
+        this.changeBrandColor(this.brandInputColor);
+        return;
+      }
       this.changeFunctionColor(this[`${type}MainColor`], type);
     },
     refreshColorTokens() {

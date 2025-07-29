@@ -10,7 +10,7 @@
     <div class="font-content__content" :style="contentStyle">
       <div class="font-content__main">
         <p class="font-content__title">{{ lang.font.fontSize }}</p>
-        <size-adjust />
+        <font-size-adjust />
       </div>
       <common-collapse v-if="!isMobile($device)">
         <template #round>
@@ -66,17 +66,18 @@
 </template>
 
 <script lang="jsx">
+import { getTokenValue } from '@/common/utils';
 import { CommonCollapse } from '../common/components';
 import { langMixin } from '../common/i18n';
-import { isMobile, modifyToken } from '../common/themes';
+import { isMobile, modifyToken, themeStore } from '../common/themes';
 
 import { FONT_COLOR_TOKEN_MAP } from './built-in/font-map';
 
 import FontColorAdjust from './components/FontColorAdjust.vue';
 import FontColorSvg from './components/FontColorSvg.vue';
+import FontSizeAdjust from './components/FontSizeAdjust.vue';
 import LineHeightAdjust from './components/LineHeightAdjust.vue';
 import LineHeightSvg from './components/LineHeightSvg.vue';
-import SizeAdjust from './components/SizeAdjust.vue';
 
 export default {
   name: 'FontPanel',
@@ -85,13 +86,12 @@ export default {
   },
   components: {
     CommonCollapse,
-    SizeAdjust,
-    LineHeightAdjust,
     FontColorAdjust,
-    LineHeightSvg,
+    FontSizeAdjust,
     FontColorSvg,
+    LineHeightAdjust,
+    LineHeightSvg,
   },
-  inject: ['$device'],
   mixins: [langMixin],
   data() {
     return {
@@ -100,6 +100,9 @@ export default {
     };
   },
   computed: {
+    $device() {
+      return themeStore.device;
+    },
     isTextPaletteChange() {
       return JSON.stringify(this.textColorPalette) !== JSON.stringify(this.initTextColorPalette);
     },
@@ -120,12 +123,11 @@ export default {
     },
     getCurrentPalette() {
       let colorMap = FONT_COLOR_TOKEN_MAP;
-      let docStyle = getComputedStyle(document.documentElement);
 
       let currentPalette = [...new Array(7).keys()].map((v, i) => {
         return {
           ...colorMap[i],
-          value: colorMap[i].value ?? docStyle.getPropertyValue(colorMap[i].from),
+          value: colorMap[i].value ?? getTokenValue(colorMap[i].from),
         };
       });
 

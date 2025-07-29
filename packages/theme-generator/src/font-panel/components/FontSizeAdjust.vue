@@ -2,8 +2,8 @@
   <div>
     <!-- 顶部调整 -->
     <SegmentSelection
-      :selectOptions="selectOptions"
-      :suspendedLabels="fontSizeLabels"
+      :selectOptions="FONT_SIZE_OPTIONS"
+      :suspendedLabels="FONT_SIZE_LABELS"
       v-model="step"
       :disabled="segmentSelectionDisabled"
       @enable="segmentSelectionDisabled = false"
@@ -56,7 +56,7 @@
             ><size-slider
               title="font-size"
               :sizeValue="token.value"
-              @changeFontSize="(v) => handleChangeFontSize(v, 'list', token.tokens, idx)"
+              @changeSize="(v) => handleChangeFontSize(v, 'list', token.tokens, idx)"
           /></template>
         </t-popup>
       </t-list>
@@ -83,7 +83,7 @@
             </div>
             <div
               :style="{
-                fontSize: `var(${token.label})`,
+                fontSize: `${getTokenValue(token.label)}`,
                 fontWeight: token.isBold ? '600' : 'normal',
                 lineHeight: `calc(${token.value} + 8px)`,
               }"
@@ -95,7 +95,7 @@
             ><size-slider
               title="font-size"
               :sizeValue="token.value"
-              @changeFontSize="(v) => handleChangeFontSize(v, 'token', token.label, idx)"
+              @changeSize="(v) => handleChangeFontSize(v, 'token', token.label, idx)"
           /></template>
         </t-popup>
       </t-list>
@@ -114,19 +114,10 @@ import {
 
 import { SegmentSelection, SizeSlider } from '../../common/components';
 import { langMixin } from '../../common/i18n';
-import { CUSTOM_THEME_ID, getOptionFromLocal, modifyToken, updateLocalOption } from '../../common/themes';
-import { handleAttach } from '../../common/utils';
+import { getOptionFromLocal, modifyToken, updateLocalOption } from '../../common/themes';
+import { getTokenValue, handleAttach } from '../../common/utils';
 
-import { fontSizeLabels, fontSizeSteps } from '../built-in/font-map';
-
-const STEP_MAP = [
-  { label: '超小号', enLabel: 'mini', value: 1 },
-  { label: '小号', enLabel: 'small', value: 2 },
-  { label: '默认', enLabel: 'default', value: 3 },
-  { label: '大号', enLabel: 'large', value: 4 },
-  { label: '特大号', enLabel: 'max', value: 5 },
-  { label: '自定义', enLabel: 'customized', value: 6, disabled: true },
-];
+import { FONT_SIZE_LABELS, FONT_SIZE_OPTIONS, FONT_SIZE_STEPS, FONT_SIZE_TOKEN_LIST } from '../built-in/font-map';
 
 export default {
   name: 'FontSizeAdjust',
@@ -142,31 +133,14 @@ export default {
   mixins: [langMixin],
   data() {
     return {
+      FONT_SIZE_OPTIONS,
+      FONT_SIZE_LABELS,
       step: 3,
       hoverIdx: null,
-      selectOptions: STEP_MAP,
       tokenType: 'list', // list or token
       computedStyle: null,
       segmentSelectionDisabled: false,
-      fontSizeLabels,
-      tokenTypeList: [
-        { label: '--td-font-size-link-small', value: null },
-        { label: '--td-font-size-link-medium', value: null },
-        { label: '--td-font-size-link-large', value: null },
-        { label: '--td-font-size-mark-small', value: null, isBold: true },
-        { label: '--td-font-size-mark-medium', value: null, isBold: true },
-        { label: '--td-font-size-body-small', value: null },
-        { label: '--td-font-size-body-medium', value: null },
-        { label: '--td-font-size-body-large', value: null },
-        { label: '--td-font-size-title-small', value: null, isBold: true },
-        { label: '--td-font-size-title-medium', value: null, isBold: true },
-        { label: '--td-font-size-title-large', value: null, isBold: true },
-        { label: '--td-font-size-headline-small', value: null, isBold: true },
-        { label: '--td-font-size-headline-medium', value: null, isBold: true },
-        { label: '--td-font-size-headline-large', value: null, isBold: true },
-        { label: '--td-font-size-display-medium', value: null, isBold: true },
-        { label: '--td-font-size-display-large', value: null, isBold: true },
-      ],
+      tokenTypeList: FONT_SIZE_TOKEN_LIST,
       initTokenList: [],
       ladderTypeList: [],
       initLadderList: [],
@@ -174,11 +148,11 @@ export default {
   },
   watch: {
     tokenTypeList(list) {
-      const fontSizeStepArray = Object.keys(fontSizeSteps).map((v) => fontSizeSteps[v]);
+      const fontSizeStepArray = Object.keys(FONT_SIZE_STEPS).map((v) => FONT_SIZE_STEPS[v]);
 
       if (
         !fontSizeStepArray.find(
-          (array) => array.filter((v, i) => v.value === list[i].value.trim()).length === array.length,
+          (array) => array.filter((v, i) => v?.value === list[i]?.value?.trim()).length === array.length,
         )
       ) {
         this.segmentSelectionDisabled = true;
@@ -186,13 +160,13 @@ export default {
     },
     step(v) {
       // 改变阶梯
-      if (!fontSizeSteps[v]) return;
+      if (!FONT_SIZE_STEPS[v]) return;
 
-      // 默认值（v=3)的时候不存
-      updateLocalOption('font', v, v !== 3);
+      // 默认值（v=3) 的时候不存到本地
+      updateLocalOption('font', v !== 3 ? v : null);
 
       const isCustom = v === 6;
-      const newSteps = fontSizeSteps[v];
+      const newSteps = FONT_SIZE_STEPS[v];
       newSteps.map(({ name, value }) => {
         modifyToken(name, value, isCustom);
         const i = this.tokenTypeList.findIndex((v) => v.label === name);
@@ -217,6 +191,7 @@ export default {
     },
   },
   methods: {
+    getTokenValue,
     handleAttach,
     initStep() {
       const fontStep = getOptionFromLocal('font');
@@ -229,13 +204,10 @@ export default {
       if (!v && ctx.trigger === 'document' && this.hoverIdx === idx) this.hoverIdx = null;
     },
     handleInitFontSize() {
-      // 将当前的字体相关枚举存储
-      const computedStyle = window.getComputedStyle(document.documentElement);
-      this.computedStyle = computedStyle;
       // token 模式列表
       this.tokenTypeList = this.tokenTypeList.map((v) => ({
         label: v.label,
-        value: computedStyle.getPropertyValue(v.label),
+        value: getTokenValue(v.label),
         isBold: v.isBold,
       }));
       this.initTokenList = JSON.parse(JSON.stringify(this.tokenTypeList));
@@ -254,10 +226,8 @@ export default {
       this.initLadderList = JSON.parse(JSON.stringify(this.ladderTypeList));
     },
     handleChangeFontSize(v, type, tokenName, idx) {
+      console.log('handleChangeFontSize', { v, type, tokenName, idx });
       const res = `${v}px`;
-      const styleSheet = document.getElementById(CUSTOM_THEME_ID);
-      if (!styleSheet) return;
-
       if (Array.isArray(tokenName)) {
         // 阶梯模式传进来的是数组
         tokenName.forEach((token) => {
@@ -286,7 +256,6 @@ export default {
         if (parseInt(this.initTokenList[idx].value, 10) !== parseInt(res, 10)) this.segmentSelectionDisabled = true;
         // 修改 state
         this.tokenTypeList[idx].value = res;
-        // 同时将它从阶梯中移除
         const preVal = this.initTokenList[idx].value;
         if (res !== preVal) {
           const preListIdx = this.ladderTypeList.findIndex((v) => v.tokens.includes(tokenName));
@@ -299,14 +268,9 @@ export default {
     },
   },
   mounted() {
+    this.initStep();
     this.$nextTick(() => {
-      this.initStep();
       this.handleInitFontSize();
-
-      // radio group 在此场景下初始化无法正确算出 left 需强行计算
-      const body = handleAttach();
-      const block = body.querySelector('.t-radio-group__bg-block');
-      if (block && block.style.left === '0px') block.style.left = '2px';
     });
   },
 };
@@ -333,7 +297,7 @@ export default {
     background-color: var(--bg-color-theme-secondary);
 
     span {
-      font-size: 12px;
+      font-size: 11.5px;
       line-height: 12px;
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
@@ -352,6 +316,7 @@ export default {
     }
     /deep/ .t-radio-group__bg-block {
       border-radius: 5px;
+      // FIXME：手动解决高亮失败的问题，引入 TD 最新版后可移除
       width: calc(50% - 2px) !important;
       background-color: var(--bg-color-theme-radio-active);
     }
