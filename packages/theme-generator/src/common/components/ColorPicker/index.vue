@@ -8,6 +8,7 @@
     :show-primary-color-preview="false"
     :popup-props="{ attach: handleAttach }"
     @change="handleChange"
+    v-bind="$attrs"
   />
 </template>
 
@@ -16,6 +17,7 @@ import { ColorPickerPanel as TColorPickerPanel } from 'tdesign-vue';
 import { handleAttach } from '../../utils';
 
 export default {
+  inheritAttrs: false,
   name: 'ColorPicker',
   components: {
     TColorPickerPanel,
