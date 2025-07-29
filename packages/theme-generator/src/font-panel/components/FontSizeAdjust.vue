@@ -315,10 +315,8 @@ export default {
       align-items: center;
     }
     /deep/ .t-radio-group__bg-block {
-      border-radius: 5px;
       // FIXME：手动解决高亮失败的问题，引入 TD 最新版后可移除
       width: calc(50% - 2px) !important;
-      background-color: var(--bg-color-theme-radio-active);
     }
 
     /deep/ .t-list__inner {

@@ -143,16 +143,15 @@ export default {
     /deep/ .t-radio-button {
       flex: 1;
       text-align: center;
-      width: 25%;
+      width: 100%;
       padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-
-      /deep/ .t-radio-group__bg-block {
-        border-radius: 5px;
-        background-color: var(--bg-color-theme-surface);
-      }
+    }
+    /deep/ .t-radio-group__bg-block {
+      width: calc(100% - 2px) !important;
+      background-color: var(--bg-color-theme-surface);
     }
   }
   &__horizontal-list {
