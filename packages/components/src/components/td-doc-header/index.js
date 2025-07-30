@@ -161,8 +161,13 @@ export default define({
       };
     },
   },
+  showIssue: {
+    get: (_host, lastValue) => parseBoolean(lastValue, true),
+    set: (_host, value) => parseBoolean(value, true),
+  },
+
   render: (host) => {
-    const { changelog, docInfo, spline } = host;
+    const { changelog, docInfo, spline, showIssue } = host;
     const mobileBodyStyle = { ...host.mobileBodyStyle };
     const splineUrl = splineConfig[spline];
     const isChangelogComponentRegistered = customElements.get('td-doc-changelog'); // 检查td-doc-changelog组件是否已注册
@@ -212,7 +217,7 @@ export default define({
         </div>
       </div>
       <div class="TDesign-doc-header__background"></div>
-      <td-doc-issue></td-doc-issue>
+      ${showIssue ? html`<td-doc-issue />` : html``}
     `.css`${style}`;
   },
 });
