@@ -508,12 +508,11 @@ export default {
     changeFunctionColor(hex, type) {
       const oldColor = getOptionFromLocal(type);
       updateLocalOption(type, oldColor !== hex ? hex : null);
-
+      this[`${type}MainColor`] = hex;
       if (type === 'gray') {
         this.changeNeutralColor(false);
         return;
       }
-      this[`${type}MainColor`] = hex;
       const { lightPalette, darkPalette } = generateFunctionalPalette(hex);
       updateStyleSheetColor(type, lightPalette, darkPalette);
       this.$nextTick(this.refreshColorTokens);
