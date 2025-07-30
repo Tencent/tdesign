@@ -6,7 +6,7 @@
     :recent-colors="null"
     :swatch-colors="null"
     :show-primary-color-preview="false"
-    :popup-props="{ attach: handleAttach }"
+    :select-input-props="{ popupProps: { attach: handleAttach } }"
     @change="handleChange"
     v-bind="$attrs"
   />
