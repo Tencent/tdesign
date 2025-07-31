@@ -80,13 +80,6 @@ export default {
 }
 </style>
 <style>
-:host {
-  --td-brand-main-hover: var(--brand-main-hover);
-  --td-bg-color-container: var(--bg-color-theme-secondary);
-  --td-bg-color-container-hover: var(--bg-color-container-hover);
-  --td-bg-color-component-active: var(--bg-color-component-hover);
-  --td-border-level-2-color: var(--component-border);
-}
 .t-popconfirm {
   z-index: 10000;
 }
