@@ -60,14 +60,23 @@
     </div>
   </div>
 </template>
+
 <script lang="jsx">
 import { Select as TSelect, Slider as TSlider } from 'tdesign-vue';
-import ShadowCard from './components/ShadowCard.vue';
 
-import langMixin from '../common/i18n/mixin';
-import { getOptionFromLocal, modifyToken, updateLocalOption } from '../common/Themes';
-import { handleAttach } from '../common/utils';
-import { ShadowSelect, ShadowSelectDetail, ShadowSelectType, ShadowTypeDetail, ShadowTypeMap } from './const';
+import { langMixin } from '../common/i18n';
+import { getOptionFromLocal, modifyToken, updateLocalOption } from '../common/themes';
+import { getTokenValue, handleAttach } from '../common/utils';
+
+import {
+  ShadowSelect,
+  ShadowSelectDetail,
+  ShadowSelectType,
+  ShadowTypeDetail,
+  ShadowTypeMap,
+} from './built-in/shadow-map';
+import ShadowCard from './components/ShadowCard';
+
 export default {
   name: 'ShadowPanel',
   props: {
@@ -118,7 +127,7 @@ export default {
   watch: {
     step: {
       handler(nVal) {
-        updateLocalOption('shadow', nVal, nVal !== ShadowSelectType.Default);
+        updateLocalOption('shadow', nVal !== ShadowSelectType.Default ? nVal : null);
         // 自定义时去当前系统值
         if (nVal === ShadowSelectType.Self_Defined) {
           // this.shadowPalette = this.getCurrentPalette();
@@ -140,7 +149,7 @@ export default {
         const { name } = ShadowTypeMap[index];
 
         const isCustom = this.step === ShadowSelectType.Self_Defined;
-        modifyToken(name, newShadow, isCustom);
+        modifyToken(name, isCustom ? newShadow : null);
       }
     },
   },
@@ -164,6 +173,7 @@ export default {
     // 拆分 box-shadow 的值 0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%)
     splitShadowValue(data) {
       const tempData = `${data},`;
+      // FIXME：待引入新版的 ColorPicker，否则 rgba 生成失败
       const shadows = tempData.split('),');
       return shadows
         .filter((shadow) => shadow)
@@ -173,11 +183,10 @@ export default {
         });
     },
     getCurrentPalette() {
-      const docStyle = getComputedStyle(document.documentElement);
-      const currentPalette = [...new Array(ShadowTypeMap.length).keys()].map((v, i) => {
+      const currentPalette = [...new Array(ShadowTypeMap.length).keys()].map((_, i) => {
         const { value, from } = ShadowTypeMap[i];
         if (value) return value;
-        const data = docStyle.getPropertyValue(from);
+        const data = getTokenValue(from);
         return this.splitShadowValue(data);
       });
       return currentPalette;
@@ -201,6 +210,7 @@ export default {
   },
 };
 </script>
+
 <style scoped lang="less">
 /deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;
