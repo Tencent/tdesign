@@ -254,8 +254,9 @@
                 <t-radio-button value="vue">vue</t-radio-button>
                 <t-radio-button value="vue-next">vue-next</t-radio-button>
                 <t-radio-button value="react">react</t-radio-button>
-                <t-radio-button value="miniprogram">mini-program</t-radio-button>
-                <!-- <t-radio-button value="vue-mobile">vue-mobile</t-radio-button> -->
+                <t-radio-button value="miniprogram">miniprogram</t-radio-button>
+                <t-radio-button value="mobile-vue">mobile-vue</t-radio-button>
+                <t-radio-button value="mobile-react">mobile-react</t-radio-button>
               </t-radio-group>
 
               <ul class="code-list">
@@ -717,7 +718,19 @@ export default {
           { type: 'javascript', code: '<t-tag theme="primary">重要</t-tag>' },
           { type: 'javascript', code: '' },
         ],
-        // 'vue-mobile': [],
+        'mobile-vue': [
+          { type: 'bash', code: 'npm i tdesign-mobile-vue' },
+          { type: 'javascript', code: "import { createApp } from 'vue';" },
+          { type: 'javascript', code: "import TDesign from 'tdesign-mobile-vue';" },
+          { type: 'javascript', code: "import 'tdesign-mobile-vue/es/style/index.css';" },
+          { type: 'javascript', code: 'createApp(App).use(TDesign);' },
+        ],
+        'mobile-react': [
+          { type: 'bash', code: 'npm i tdesign-mobile-react' },
+          { type: 'javascript', code: "import { Button } from 'tdesign-mobile-react';" },
+          { type: 'javascript', code: "import 'tdesign-mobile-react/es/style/index.css';" },
+          { type: 'javascript', code: '' },
+        ],
       },
       componentModel: {
         selectValue: ['1'],
