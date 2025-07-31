@@ -238,7 +238,7 @@
       </div>
     </div>
     <!-- swiper content -->
-    <div class="module-board" @click.stop="onClickSwiperContent">
+    <div class="module-board" id="moduleBoard">
       <div class="module-board__inner" :style="`transform: translateX(-${tabTransformWidth}px);`">
         <div
           :class="[
@@ -848,6 +848,7 @@ export default {
     this.getBrandList();
     this.getNews();
     window.addEventListener('resize', this.handleResize);
+    window.addEventListener('mousemove', this.handleMousemove);
     this.initTabTimer();
   },
 
@@ -857,20 +858,25 @@ export default {
     clearInterval(this.tabTimer);
     this.observer.disconnect();
     window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('mousemove', this.handleMousemove);
   },
 
   methods: {
+    handleMousemove() {
+      const element = document.querySelector('#moduleBoard');
+      if (!element) return;
+      const isOver = element.contains(event.target);
+      if (isOver) {
+        clearInterval(this.tabTimer);
+        return;
+      }
+      this.initTabTimer();
+    },
     initTabTimer() {
       clearInterval(this.tabTimer);
       this.tabTimer = setInterval(() => {
         this.currentTab = this.currentTab === 2 ? 0 : this.currentTab + 1;
       }, 4000);
-    },
-    onClickSwiperContent() {
-      clearInterval(this.tabTimer);
-      setTimeout(() => {
-        this.initTabTimer();
-      }, 8000);
     },
     handleClickNews(url) {
       if (url) window.open(url, '_blank');
