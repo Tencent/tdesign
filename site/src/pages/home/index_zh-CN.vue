@@ -252,7 +252,9 @@
                 <t-radio-button value="vue">vue</t-radio-button>
                 <t-radio-button value="vue-next">vue-next</t-radio-button>
                 <t-radio-button value="react">react</t-radio-button>
-                <t-radio-button value="miniprogram">mini-program</t-radio-button>
+                <t-radio-button value="miniprogram">miniprogram</t-radio-button>
+                <t-radio-button value="mobile-vue">mobile-vue</t-radio-button>
+                <t-radio-button value="mobile-react">mobile-react</t-radio-button>
               </t-radio-group>
 
               <ul class="code-list">
@@ -390,7 +392,7 @@
                 <div>
                   <t-radio-group defaultValue="1" variant="default-filled">
                     <t-radio-button value="1">亮色</t-radio-button>
-                    <t-radio-button value="2">暗色</t-radio-button>
+                    <t-radio-button value="2">深色</t-radio-button>
                     <t-radio-button value="3">中性色</t-radio-button>
                   </t-radio-group>
                 </div>
@@ -694,6 +696,19 @@ export default {
           { type: 'bash', code: 'npm i tdesign-miniprogram' },
           { type: 'javascript', code: '{ "usingComponents": { "t-tag": "tdesign-miniprogram/tag/tag" } }' },
           { type: 'javascript', code: '<t-tag theme="primary">重要</t-tag>' },
+          { type: 'javascript', code: '' },
+        ],
+        'mobile-vue': [
+          { type: 'bash', code: 'npm i tdesign-mobile-vue' },
+          { type: 'javascript', code: "import { createApp } from 'vue';" },
+          { type: 'javascript', code: "import TDesign from 'tdesign-mobile-vue';" },
+          { type: 'javascript', code: "import 'tdesign-mobile-vue/es/style/index.css';" },
+          { type: 'javascript', code: 'createApp(App).use(TDesign);' },
+        ],
+        'mobile-react': [
+          { type: 'bash', code: 'npm i tdesign-mobile-react' },
+          { type: 'javascript', code: "import { Button } from 'tdesign-mobile-react';" },
+          { type: 'javascript', code: "import 'tdesign-mobile-react/es/style/index.css';" },
           { type: 'javascript', code: '' },
         ],
       },
