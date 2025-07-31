@@ -576,6 +576,7 @@ const brandUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/brand/list'
 const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
 
 const isIntranet = location.host.includes('woa.com'); // 部分动态或内容只能通过内网访问
+let ticking = false;
 
 export default {
   name: 'site-home',
@@ -840,14 +841,24 @@ export default {
   },
 
   methods: {
-    handleMousemove() {
+    handleMousemove(event) {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        this.checkMousePosition(event);
+        ticking = false;
+      });
+    },
+    checkMousePosition(event) {
       const element = document.querySelector('#moduleBoard');
       if (!element) return;
       const isOver = element.contains(event.target);
       if (isOver) {
         clearInterval(this.tabTimer);
+        this.tabTimer = null;
         return;
       }
+      if (this.tabTimer) return;
       this.initTabTimer();
     },
     initTabTimer() {
