@@ -236,7 +236,7 @@
       </div>
     </div>
     <!-- swiper content -->
-    <div class="module-board">
+    <div class="module-board" @click.stop="onClickSwiperContent">
       <div class="module-board__inner" :style="`transform: translateX(-${tabTransformWidth}px);`">
         <div
           :class="[
@@ -826,9 +826,7 @@ export default {
     this.getBrandList();
     this.getNews();
     window.addEventListener('resize', this.handleResize);
-    this.tabTimer = setInterval(() => {
-      this.currentTab = this.currentTab === 2 ? 0 : this.currentTab + 1;
-    }, 4000);
+    this.initTabTimer();
   },
 
   beforeDestroy() {
@@ -840,6 +838,18 @@ export default {
   },
 
   methods: {
+    initTabTimer() {
+      clearInterval(this.tabTimer);
+      this.tabTimer = setInterval(() => {
+        this.currentTab = this.currentTab === 2 ? 0 : this.currentTab + 1;
+      }, 4000);
+    },
+    onClickSwiperContent() {
+      clearInterval(this.tabTimer);
+      setTimeout(() => {
+        this.initTabTimer();
+      }, 8000);
+    },
     handleClickNews(url) {
       if (url) window.open(url, '_blank');
     },
