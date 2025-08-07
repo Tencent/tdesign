@@ -23,7 +23,7 @@
         <div class="shadow-layer__card--sharp" :style="{ background: color }" slot="prefix-icon"></div>
       </t-input>
       <template #content>
-        <color-picker :value="color" enableAlpha format="rgb" @change="changeColor" />
+        <color-picker :value="color" enableAlpha format="RGBA" @change="changeColor" />
       </template>
     </t-popup>
   </div>

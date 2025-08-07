@@ -1,7 +1,7 @@
 <template>
   <t-color-picker-panel
     v-model="color"
-    format="HEX"
+    :format="format"
     :color-modes="['monochrome']"
     :recent-colors="null"
     :swatch-colors="null"
@@ -24,6 +24,10 @@ export default {
   },
   props: {
     value: String,
+    format: {
+      type: String,
+      default: 'HEX',
+    },
   },
   emit: ['change'],
   data() {
