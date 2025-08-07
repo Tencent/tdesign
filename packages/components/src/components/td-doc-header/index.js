@@ -88,6 +88,7 @@ export default define({
         const { scrollTop } = document.documentElement;
         // 吸顶效果
         const background = shadowRoot.querySelector('.TDesign-doc-header__background') || { style: {} };
+        const changelogEntry = shadowRoot.querySelector('#TDesign-doc-changelog__entry') || { style: {} };
         const title = shadowRoot.querySelector('.TDesign-doc-header__info-title') || { style: {} };
         const describe = shadowRoot.querySelector('.TDesign-doc-header__info-describe') || { style: {} };
         const thumb = shadowRoot.querySelector('.TDesign-doc-header__thumb') || { style: {} };
@@ -108,6 +109,7 @@ export default define({
               opacity: 1,
               visibility: 'visible',
             });
+            Object.assign(changelogEntry.style, { opacity: 1, visibility: 'visible' });
             Object.assign(background.style, { position: 'fixed', top: '0', left: asideWidth });
             tabs &&
               Object.assign(tabs.style, {
@@ -120,6 +122,7 @@ export default define({
         } else if (scrollTop > 192 && scrollTop < 228) {
           if (title.style.visibility !== 'hidden') {
             Object.assign(title.style, { opacity: 0, visibility: 'hidden' });
+            Object.assign(changelogEntry.style, { opacity: 0, visibility: 'hidden' });
             Object.assign(thumb.style, { opacity: 0, visibility: 'hidden' });
             Object.assign(describe.style, { opacity: 0, visibility: 'hidden' });
 
@@ -135,6 +138,7 @@ export default define({
               opacity: 1,
               visibility: 'visible',
             });
+            Object.assign(changelogEntry.style, { opacity: 1, visibility: 'visible' });
             Object.assign(describe.style, { opacity: 1, visibility: 'visible' });
             Object.assign(background.style, { position: 'absolute', top: 'unset', left: '0' });
             tabs && Object.assign(tabs.style, { position: 'absolute', top: '228px' });
@@ -157,8 +161,13 @@ export default define({
       };
     },
   },
+  showIssue: {
+    get: (_host, lastValue) => parseBoolean(lastValue, true),
+    set: (_host, value) => parseBoolean(value, true),
+  },
+
   render: (host) => {
-    const { changelog, docInfo, spline } = host;
+    const { changelog, docInfo, spline, showIssue } = host;
     const mobileBodyStyle = { ...host.mobileBodyStyle };
     const splineUrl = splineConfig[spline];
     const isChangelogComponentRegistered = customElements.get('td-doc-changelog'); // 检查td-doc-changelog组件是否已注册
@@ -208,7 +217,7 @@ export default define({
         </div>
       </div>
       <div class="TDesign-doc-header__background"></div>
-      <td-doc-issue></td-doc-issue>
+      ${showIssue ? html`<td-doc-issue />` : html``}
     `.css`${style}`;
   },
 });

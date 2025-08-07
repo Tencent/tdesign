@@ -238,7 +238,7 @@
       </div>
     </div>
     <!-- swiper content -->
-    <div class="module-board">
+    <div class="module-board" id="moduleBoard">
       <div class="module-board__inner" :style="`transform: translateX(-${tabTransformWidth}px);`">
         <div
           :class="[
@@ -254,8 +254,9 @@
                 <t-radio-button value="vue">vue</t-radio-button>
                 <t-radio-button value="vue-next">vue-next</t-radio-button>
                 <t-radio-button value="react">react</t-radio-button>
-                <t-radio-button value="miniprogram">mini-program</t-radio-button>
-                <!-- <t-radio-button value="vue-mobile">vue-mobile</t-radio-button> -->
+                <t-radio-button value="miniprogram">miniprogram</t-radio-button>
+                <t-radio-button value="mobile-vue">mobile-vue</t-radio-button>
+                <t-radio-button value="mobile-react">mobile-react</t-radio-button>
               </t-radio-group>
 
               <ul class="code-list">
@@ -595,6 +596,7 @@ const brandUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/brand/list'
 const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
 
 const isIntranet = location.host.includes('woa.com'); // 部分动态或内容只能通过内网访问
+let ticking = false;
 
 export default {
   name: 'site-home',
@@ -716,7 +718,19 @@ export default {
           { type: 'javascript', code: '<t-tag theme="primary">重要</t-tag>' },
           { type: 'javascript', code: '' },
         ],
-        // 'vue-mobile': [],
+        'mobile-vue': [
+          { type: 'bash', code: 'npm i tdesign-mobile-vue' },
+          { type: 'javascript', code: "import { createApp } from 'vue';" },
+          { type: 'javascript', code: "import TDesign from 'tdesign-mobile-vue';" },
+          { type: 'javascript', code: "import 'tdesign-mobile-vue/es/style/index.css';" },
+          { type: 'javascript', code: 'createApp(App).use(TDesign);' },
+        ],
+        'mobile-react': [
+          { type: 'bash', code: 'npm i tdesign-mobile-react' },
+          { type: 'javascript', code: "import { Button } from 'tdesign-mobile-react';" },
+          { type: 'javascript', code: "import 'tdesign-mobile-react/es/style/index.css';" },
+          { type: 'javascript', code: '' },
+        ],
       },
       componentModel: {
         selectValue: ['1'],
@@ -848,9 +862,8 @@ export default {
     this.getBrandList();
     this.getNews();
     window.addEventListener('resize', this.handleResize);
-    this.tabTimer = setInterval(() => {
-      this.currentTab = this.currentTab === 2 ? 0 : this.currentTab + 1;
-    }, 4000);
+    window.addEventListener('mousemove', this.handleMousemove);
+    this.initTabTimer();
   },
 
   beforeDestroy() {
@@ -859,9 +872,36 @@ export default {
     clearInterval(this.tabTimer);
     this.observer.disconnect();
     window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('mousemove', this.handleMousemove);
   },
 
   methods: {
+    handleMousemove(event) {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        this.checkMousePosition(event);
+        ticking = false;
+      });
+    },
+    checkMousePosition(event) {
+      const element = document.querySelector('#moduleBoard');
+      if (!element) return;
+      const isOver = element.contains(event.target);
+      if (isOver) {
+        clearInterval(this.tabTimer);
+        this.tabTimer = null;
+        return;
+      }
+      if (this.tabTimer) return;
+      this.initTabTimer();
+    },
+    initTabTimer() {
+      clearInterval(this.tabTimer);
+      this.tabTimer = setInterval(() => {
+        this.currentTab = this.currentTab === 2 ? 0 : this.currentTab + 1;
+      }, 4000);
+    },
     handleClickNews(url) {
       if (url) window.open(url, '_blank');
     },
