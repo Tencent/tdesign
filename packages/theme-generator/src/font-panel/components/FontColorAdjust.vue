@@ -149,10 +149,6 @@ export default {
       justify-content: center;
       align-items: center;
     }
-    /deep/ .t-radio-group__bg-block {
-      width: calc(100% - 2px) !important;
-      background-color: var(--bg-color-theme-surface);
-    }
   }
   &__horizontal-list {
     width: 100%;

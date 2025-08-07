@@ -122,7 +122,7 @@ export default {
       isHover: null,
       /* 存入 local 的 line-height 结构为 ${tokenType}_${lineHeightValue}
          例如：plus_8 和 time_1.5  */
-      tokenType: '', // 固定（plus） or 递增（time）
+      tokenType: 'plus', // 固定（plus） or 递增（time）
       step: 3, // 默认
       lineHeightValue: LINE_HEIGHT_STEPS[3],
       lineHeightOptions: LINE_HEIGHT_OPTIONS,
@@ -271,13 +271,6 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-    /deep/ .t-radio-group__bg-block {
-      border-radius: 5px;
-      width: calc(50% - 2px) !important;
-    }
-    /deep/ .t-radio-button__label {
-      z-index: 1;
     }
 
     /deep/ .t-list-item {

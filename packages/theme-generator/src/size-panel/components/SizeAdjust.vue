@@ -132,13 +132,6 @@ export default {
       text-align: center;
       margin-bottom: 4px;
     }
-    /deep/ .t-radio-button {
-      width: 50%;
-    }
-    /deep/ .t-radio-group__bg-block {
-      border-radius: 5px;
-      width: calc(50% - 2px) !important;
-    }
 
     /deep/ .t-list-item {
       margin-bottom: 4px;

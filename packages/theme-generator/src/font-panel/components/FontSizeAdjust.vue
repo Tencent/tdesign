@@ -314,11 +314,6 @@ export default {
       justify-content: center;
       align-items: center;
     }
-    /deep/ .t-radio-group__bg-block {
-      // FIXME：手动解决高亮失败的问题，引入 TD 最新版后可移除
-      width: calc(50% - 2px) !important;
-    }
-
     /deep/ .t-list__inner {
       overflow: hidden;
     }
