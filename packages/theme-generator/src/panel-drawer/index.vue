@@ -1,12 +1,14 @@
 <template>
   <t-drawer
+    size="348px"
+    :style="drawerStyle"
     :visible.sync="visible"
     :header="false"
     :closeBtn="false"
     :preventScrollThrough="false"
     :footer="false"
-    size="348px"
-    :style="drawerStyle"
+    :attach="handleAttach"
+    showInAttachedElement
   >
     <sticky-theme-display />
     <div style="display: flex">
@@ -24,6 +26,7 @@
 import { Drawer as TDrawer } from 'tdesign-vue';
 
 import { themeStore } from '../common/themes';
+import { handleAttach } from '../common/utils';
 
 import ColorPanel from '../color-panel';
 import FontPanel from '../font-panel';
@@ -112,6 +115,7 @@ export default {
     window.removeEventListener('scroll', this.calcHeaderShow);
   },
   methods: {
+    handleAttach,
     changeActiveTab(tab) {
       this.activeTabIdx = tab;
     },
@@ -130,6 +134,7 @@ export default {
 
 /deep/ .t-drawer__content-wrapper {
   box-shadow: var(--shadow-2);
+  position: fixed;
   .t-drawer__body {
     padding: 0;
     background: var(--bg-color-theme-transparent);
