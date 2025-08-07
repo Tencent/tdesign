@@ -1,47 +1,23 @@
-<!-- eslint-disable vue/no-mutating-props -->
 <template>
   <t-drawer
+    size="348px"
+    :style="drawerStyle"
     :visible.sync="visible"
     :header="false"
     :closeBtn="false"
     :preventScrollThrough="false"
     :footer="false"
-    size="348px"
-    :style="drawerStyle"
+    :attach="handleAttach"
+    showInAttachedElement
   >
-    <sticky-theme-display :theme="theme" v-if="!!theme" />
+    <sticky-theme-display />
     <div style="display: flex">
       <switch-tabs :activeTabIdx="activeTabIdx" @changeActiveTab="changeActiveTab" />
-      <color-content
-        :top="top"
-        :is-refresh="refresh"
-        :key="`${refresh}-color`"
-        v-show="activeTabIdx === activeTabMap.color"
-      />
-      <font-content
-        :top="top"
-        :is-refresh="refresh"
-        :key="`${refresh}-font`"
-        v-show="activeTabIdx === activeTabMap.font"
-      />
-      <radius-content
-        :top="top"
-        :key="`${refresh}-radius`"
-        v-show="activeTabIdx === activeTabMap.radius"
-        :is-refresh="refresh"
-      />
-      <shadow-content
-        :top="top"
-        :key="`${refresh}-shadow`"
-        v-show="activeTabIdx === activeTabMap.shadow"
-        :is-refresh="refresh"
-      />
-      <size-content
-        :top="top"
-        :key="`${refresh}-size`"
-        v-show="activeTabIdx === activeTabMap.size"
-        :is-refresh="refresh"
-      />
+      <color-panel :top="top" :key="`${$refreshId}-color`" v-show="activeTabIdx === ACTIVE_TAB_MAP.color" />
+      <font-panel :top="top" :key="`${$refreshId}-font`" v-show="activeTabIdx === ACTIVE_TAB_MAP.font" />
+      <radius-panel :top="top" :key="`${$refreshId}-radius`" v-show="activeTabIdx === ACTIVE_TAB_MAP.radius" />
+      <shadow-panel :top="top" :key="`${$refreshId}-shadow`" v-show="activeTabIdx === ACTIVE_TAB_MAP.shadow" />
+      <size-panel :top="top" :key="`${$refreshId}-size`" v-show="activeTabIdx === ACTIVE_TAB_MAP.size" />
     </div>
   </t-drawer>
 </template>
@@ -49,17 +25,19 @@
 <script>
 import { Drawer as TDrawer } from 'tdesign-vue';
 
-import ColorContent from '../color-panel/components/ColorContent/index.vue'; //色彩配置
-import FontContent from '../font-panel/index.vue'; // 字体配置
-import RadiusContent from '../radius-panel/index.vue'; // 字体配置
-import ShadowContent from '../shadow-panel/index.vue'; // 阴影配置
-import SizeContent from '../size-panel/index.vue'; // 阴影配置
+import { themeStore } from '../common/themes';
+import { handleAttach } from '../common/utils';
 
-import StickyThemeDisplay from '../common/StickyThemeDisplay/index.vue';
-import SwitchTabs from '../common/SwitchTabs/index.vue';
-import { initGeneratorVars, syncThemeToGenerator } from '../common/utils';
+import ColorPanel from '../color-panel';
+import FontPanel from '../font-panel';
+import RadiusPanel from '../radius-panel';
+import ShadowPanel from '../shadow-panel';
+import SizePanel from '../size-panel';
 
-const activeTabMap = {
+import StickyThemeDisplay from './components/StickyThemeDisplay';
+import SwitchTabs from './components/SwitchTabs';
+
+const ACTIVE_TAB_MAP = {
   color: 0,
   font: 1,
   radius: 2,
@@ -73,11 +51,11 @@ export default {
     TDrawer,
     SwitchTabs,
     StickyThemeDisplay,
-    ColorContent,
-    FontContent,
-    RadiusContent,
-    ShadowContent,
-    SizeContent,
+    ColorPanel,
+    FontPanel,
+    RadiusPanel,
+    ShadowPanel,
+    SizePanel,
   },
   props: {
     propsTop: String,
@@ -87,9 +65,6 @@ export default {
     theme: {
       type: [Object, String],
     },
-    refresh: {
-      type: [Boolean, String],
-    },
     drawerVisible: {
       type: [String, Number, Boolean],
     },
@@ -97,13 +72,16 @@ export default {
   data() {
     return {
       top: null,
-      activeTabMap,
+      ACTIVE_TAB_MAP,
       isHeaderShow: true,
-      activeTabIdx: activeTabMap.color,
+      activeTabIdx: ACTIVE_TAB_MAP.color,
       visible: false,
     };
   },
   computed: {
+    $refreshId() {
+      return themeStore.refreshId;
+    },
     drawerStyle() {
       return {
         top: `${this.top}px`,
@@ -123,9 +101,6 @@ export default {
     },
   },
   mounted() {
-    initGeneratorVars();
-    syncThemeToGenerator();
-
     if (this.propsTop) {
       this.top = parseInt(this.propsTop, 10);
     } else {
@@ -140,12 +115,12 @@ export default {
     window.removeEventListener('scroll', this.calcHeaderShow);
   },
   methods: {
+    handleAttach,
     changeActiveTab(tab) {
       this.activeTabIdx = tab;
     },
     calcHeaderShow() {
       const headerHeight = getComputedStyle(document.documentElement).getPropertyValue('--header-height');
-
       this.top = Math.max(parseInt(headerHeight) - window.scrollY, 0);
     },
   },
@@ -159,6 +134,7 @@ export default {
 
 /deep/ .t-drawer__content-wrapper {
   box-shadow: var(--shadow-2);
+  position: fixed;
   .t-drawer__body {
     padding: 0;
     background: var(--bg-color-theme-transparent);
