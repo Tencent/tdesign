@@ -93,7 +93,7 @@ export default {
       shadowPalette: [],
       selectOptions: ShadowSelect,
       selfDefined: ShadowSelectType,
-      step: ShadowSelectType.Default,
+      step: getOptionFromLocal('shadow') || ShadowSelectType.Default,
     };
   },
   created() {
@@ -155,14 +155,6 @@ export default {
   },
   methods: {
     handleAttach,
-    initStep() {
-      const shadowStep = getOptionFromLocal('shadow');
-      /*  超轻的 step 对应 0，直接写 if(shadowStep)
-          会被判为 if(0) -> false，导致进不去这个条件 */
-      if (shadowStep >= 0) {
-        this.step = shadowStep;
-      }
-    },
     handleSliderChange(v) {
       if (this.forbidden) return;
       this.step = v;
@@ -173,7 +165,6 @@ export default {
     // 拆分 box-shadow 的值 0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%)
     splitShadowValue(data) {
       const tempData = `${data},`;
-      // FIXME：待引入新版的 ColorPicker，否则 rgba 生成失败
       const shadows = tempData.split('),');
       return shadows
         .filter((shadow) => shadow)
@@ -204,7 +195,6 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.initStep();
       this.setCurrentPalette();
     });
   },

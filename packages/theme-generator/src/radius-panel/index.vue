@@ -107,7 +107,7 @@ export default {
     return {
       RADIUS_OPTIONS,
       RADIUS_LABELS,
-      step: 3,
+      step: getOptionFromLocal('radius') || 3,
       hoverIdx: null,
       segmentSelectionDisabled: false,
       radiusTypeList: RADIUS_TOKEN_LIST,
@@ -138,10 +138,11 @@ export default {
       if (!existStep) this.segmentSelectionDisabled = true;
     },
     step(val) {
-      if (!RADIUS_STEP_ARRAY[val - 1]) return;
       updateLocalOption('radius', val !== 3 ? val : null);
-
       const isCustom = val === 6;
+      this.segmentSelectionDisabled = isCustom;
+      if (!RADIUS_STEP_ARRAY[val - 1]) return;
+
       // 批量修改 radius
       this.radiusTypeList = this.radiusTypeList.map((item, index) => {
         const preVal = RADIUS_STEP_ARRAY?.[val - 1]?.[index];
@@ -157,12 +158,6 @@ export default {
   },
   methods: {
     handleAttach,
-    initStep() {
-      const radiusStep = getOptionFromLocal('radius');
-      if (radiusStep >= 0) {
-        this.step = radiusStep;
-      }
-    },
     handleVisibleChange(v, ctx, idx) {
       if (v) this.hoverIdx = idx;
       if (!v && ctx.trigger === 'document' && this.hoverIdx === idx) this.hoverIdx = null;
@@ -200,7 +195,6 @@ export default {
     },
   },
   mounted() {
-    this.initStep();
     this.$nextTick(() => {
       // 下一个 tick 再更新避免与 init 的 step 冲突
       this.initRadiusToken();

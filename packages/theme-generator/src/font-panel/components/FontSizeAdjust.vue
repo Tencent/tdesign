@@ -135,7 +135,7 @@ export default {
     return {
       FONT_SIZE_OPTIONS,
       FONT_SIZE_LABELS,
-      step: 3,
+      step: getOptionFromLocal('font') || 3,
       hoverIdx: null,
       tokenType: 'list', // list or token
       computedStyle: null,
@@ -159,13 +159,12 @@ export default {
       }
     },
     step(v) {
-      // 改变阶梯
-      if (!FONT_SIZE_STEPS[v]) return;
-
+      const isCustom = v === 6;
+      this.segmentSelectionDisabled = isCustom;
       // 默认值（v=3) 的时候不存到本地
       updateLocalOption('font', v !== 3 ? v : null);
 
-      const isCustom = v === 6;
+      if (!FONT_SIZE_STEPS[v]) return;
       const newSteps = FONT_SIZE_STEPS[v];
       newSteps.map(({ name, value }) => {
         modifyToken(name, value, isCustom);
@@ -193,12 +192,6 @@ export default {
   methods: {
     getTokenValue,
     handleAttach,
-    initStep() {
-      const fontStep = getOptionFromLocal('font');
-      if (fontStep >= 0) {
-        this.step = fontStep;
-      }
-    },
     handleVisibleChange(v, ctx, idx) {
       if (v) this.hoverIdx = idx;
       if (!v && ctx.trigger === 'document' && this.hoverIdx === idx) this.hoverIdx = null;
@@ -226,7 +219,6 @@ export default {
       this.initLadderList = JSON.parse(JSON.stringify(this.ladderTypeList));
     },
     handleChangeFontSize(v, type, tokenName, idx) {
-      console.log('handleChangeFontSize', { v, type, tokenName, idx });
       const res = `${v}px`;
       if (Array.isArray(tokenName)) {
         // 阶梯模式传进来的是数组
@@ -268,7 +260,6 @@ export default {
     },
   },
   mounted() {
-    this.initStep();
     this.$nextTick(() => {
       this.handleInitFontSize();
     });

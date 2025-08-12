@@ -198,7 +198,7 @@ export function applyTokenFromLocal() {
 
   const tokenObj = JSON.parse(token);
   Object.entries(tokenObj).forEach(([key, value]) => {
-    modifyToken(key, value, false);
+    modifyToken(key, value);
   });
 }
 
