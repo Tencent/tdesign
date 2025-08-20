@@ -1,6 +1,6 @@
 import { html, define, dispatch } from 'hybrids';
 import { createPopper } from '@popperjs/core';
-import style from './style.less';
+import style from './style.less?inline';
 
 function handleMouseEvent(host, type) {
   if (host.triggerType !== 'hover') return;

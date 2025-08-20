@@ -1,20 +1,22 @@
 import { html, define } from 'hybrids';
-import style from './style.less';
+import style from './style.less?inline';
 
 const apiUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
 
 function renderContributors(list) {
   if (!list.length) return html``;
 
-  const contributors = list.filter((item) => (typeof item === 'object' && item !== null));
+  const contributors = list.filter((item) => typeof item === 'object' && item !== null);
 
   return html`
     <section class="TDesign-contributors">
       <h3 class="title">Contributors</h3>
       <div class="TDesign-contributors__content">
-        ${contributors.map((item) => html`
-          <td-avatar username="${item?.username}" content="${item?.roleNames} ${item?.username}"></td-avatar>
-        `)}
+        ${contributors.map(
+          (item) => html`
+            <td-avatar username="${item?.username}" content="${item?.roleNames} ${item?.username}"></td-avatar>
+          `,
+        )}
       </div>
     </section>
   `;
@@ -33,7 +35,7 @@ function getContributors(platform, framework, componentName, contributorsData) {
 
   const members = {};
   tasks.forEach((c) => {
-    ['contributors', 'pmcs'].forEach(key => {
+    ['contributors', 'pmcs'].forEach((key) => {
       c[key].forEach((m) => {
         if (members[m]) {
           members[m].role.push(c.name);
@@ -42,7 +44,7 @@ function getContributors(platform, framework, componentName, contributorsData) {
           members[m] = { role: [c.name], roleName: [c.fullName] };
         }
       });
-    })
+    });
   });
 
   return Object.keys(members).map((username) => {
@@ -70,12 +72,14 @@ export default define({
         Object.assign(host, { [key]: data });
         invalidate();
       } else {
-        fetch(apiUrl).then((res) => res.json())
+        fetch(apiUrl)
+          .then((res) => res.json())
           .then((data) => {
             Object.assign(host, { [key]: data });
             sessionStorage.setItem('__tdesign_contributors__', JSON.stringify(data));
             invalidate();
-          }).catch(err => {
+          })
+          .catch((err) => {
             console.error(err);
           });
       }

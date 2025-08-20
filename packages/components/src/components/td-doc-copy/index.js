@@ -1,15 +1,14 @@
 import { html, dispatch, define } from 'hybrids';
-import style from './style.less';
+import style from './style.less?inline';
 import copyIcon from '@images/copy.svg?raw';
 
 function handleCopy(host) {
   if ('clipboard' in navigator) {
-    navigator.clipboard.writeText(host.code)
-      .then(() => {
-        Object.assign(host, { showTip: true });
-        setTimeout(() => Object.assign(host, { showTip: false }), 800);
-        dispatch(host, 'copy', { detail: host.code });
-      });
+    navigator.clipboard.writeText(host.code).then(() => {
+      Object.assign(host, { showTip: true });
+      setTimeout(() => Object.assign(host, { showTip: false }), 800);
+      dispatch(host, 'copy', { detail: host.code });
+    });
     return;
   }
 
@@ -35,10 +34,11 @@ function handleCopy(host) {
 export default define({
   tag: 'td-doc-copy',
   code: '',
-  render: () => html`
-    <td-tooltip duration="800">
-      <div class="TDesign-doc-copy__inner" innerHTML=${copyIcon} onclick=${handleCopy}></div>
-      <span slot="content">已复制</span>
-    </td-tooltip>
-  `.css`${style}`,
+  render: () =>
+    html`
+      <td-tooltip duration="800">
+        <div class="TDesign-doc-copy__inner" innerHTML=${copyIcon} onclick=${handleCopy}></div>
+        <span slot="content">已复制</span>
+      </td-tooltip>
+    `.css`${style}`,
 });

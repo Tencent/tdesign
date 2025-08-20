@@ -1,7 +1,7 @@
-import { html, define, dispatch } from "hybrids";
-import style from "./style.less";
-import portalStyle from "./portal.less";
-import fakeArrowIcon from "@images/fake-arrow.svg?raw";
+import { html, define, dispatch } from 'hybrids';
+import style from './style.less?inline';
+import portalStyle from './portal.less?inline';
+import fakeArrowIcon from '@images/fake-arrow.svg?raw';
 
 function renderOptions(host) {
   const { options = [] } = host;
@@ -11,7 +11,7 @@ function renderOptions(host) {
     requestAnimationFrame(() => {
       host.visible = false;
     });
-    dispatch(host, 'change', { detail: { value: host.value } })
+    dispatch(host, 'change', { detail: { value: host.value } });
   }
 
   return html`
@@ -21,7 +21,7 @@ function renderOptions(host) {
         return html`
           <li
             onclick="${(host) => handleItemClick(host, item)}"
-            class="TDesign-select-list__item ${isActive ? "is-active" : ""}"
+            class="TDesign-select-list__item ${isActive ? 'is-active' : ''}"
           >
             ${item.label}
           </li>
@@ -32,9 +32,9 @@ function renderOptions(host) {
 }
 
 export default define({
-  tag: "td-select",
+  tag: 'td-select',
   borderless: false,
-  value: "",
+  value: '',
   visible: false,
   options: {
     get: (host, lastValue) => lastValue || [],
@@ -44,10 +44,10 @@ export default define({
     const { options, value, visible, borderless } = host;
 
     const activeItem = options.find((item) => item.value == value) || {};
-    const inputValue = activeItem.label || "";
+    const inputValue = activeItem.label || '';
 
     const selectInputClass = {
-      'focus': visible,
+      focus: visible,
       'TDesign-select-input': true,
       'TDesign-select-input--borderless': borderless,
     };
@@ -62,15 +62,8 @@ export default define({
         onvisible-change="${(host, e) => (host.visible = e.detail.visible)}"
       >
         <div class="${selectInputClass}">
-          <input
-            class="TDesign-select-input__inner"
-            readonly
-            value="${inputValue}"
-          />
-          <i
-            class="suffix-icon ${visible ? "up" : ""}"
-            innerHTML="${fakeArrowIcon}"
-          ></i>
+          <input class="TDesign-select-input__inner" readonly value="${inputValue}" />
+          <i class="suffix-icon ${visible ? 'up' : ''}" innerHTML="${fakeArrowIcon}"></i>
         </div>
         <div slot="content" class="TDesign-select-dropdown">${renderOptions(host)}</div>
       </td-doc-popup>

@@ -18,8 +18,8 @@ import vue3QrcodeIcon from '@images/groups/vue3-group.png';
 import reactQrcodeIcon from '@images/groups/react-group.png';
 import wxQrcodeIcon from '@images/groups/wx-group.png';
 
-import style from './style.less';
-import portalStyle from './portal.less';
+import style from './style.less?inline';
+import portalStyle from './portal.less?inline';
 
 const footerLinks = getFooterConfig();
 const locale = getLocale();

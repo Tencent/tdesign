@@ -1,5 +1,5 @@
 import { define, html } from 'hybrids';
-import style from './style.less';
+import style from './style.less?inline';
 
 export default define({
   tag: 'td-code',

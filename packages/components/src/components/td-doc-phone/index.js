@@ -1,6 +1,6 @@
 import { html, define } from 'hybrids';
 import QRCode from 'qrcode';
-import style from './style.less';
+import style from './style.less?inline';
 import qrcodeIcon from '@images/qrcode.svg?raw';
 import mobileIcon from '@images/mobile.svg?raw';
 import closeIcon from '@images/close.svg?raw';
