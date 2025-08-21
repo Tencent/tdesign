@@ -1,7 +1,8 @@
 {
   "name": "tdesign-site-components",
   "version": "0.16.7",
-  "main": "lib/site.es.js",
+  "main": "lib/site.js",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "watch": "vite build --watch",
