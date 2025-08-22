@@ -432,8 +432,16 @@ export default {
   mounted() {
     this.$nextTick(() => {
       colorAnimation();
-      this.changeBrandColor(this.$brandColor);
+      this.changeBrandColor(this.$brandColor, 'init');
       this.updateFunctionTokenMap();
+      // 恢复用户上次选择的功能色
+      const functionColors = ['gray', 'success', 'error', 'warning'];
+      functionColors.forEach((type) => {
+        const color = getOptionFromLocal(type);
+        if (color) {
+          this.changeFunctionColor(color, type, 'init');
+        }
+      });
       setUpModeObserver((theme) => {
         this.updateBrandTokenMap();
         this.updateFunctionTokenMap();
@@ -465,7 +473,7 @@ export default {
         this.functionTokenMap[type] = collectTokenIndexes(tokens);
       });
     },
-    changeBrandColor(hex) {
+    changeBrandColor(hex, trigger = 'update') {
       // 备份用户实际输入的颜色
       // 在智能推荐模式下，它与实际更新的颜色不同
       this.brandInputColor = hex.toUpperCase();
@@ -491,30 +499,29 @@ export default {
 
       if (this.$brandColor != this.$theme.value) {
         // 只在用户手动修改主题色时同步 stylesheet，避免覆盖内置主题自身的逻辑
-        updateStyleSheetColor('brand', lightPalette, darkPalette);
+        updateStyleSheetColor('brand', lightPalette, darkPalette, trigger);
         syncColorTokensToStyle(lightExtraTokens, darkExtraTokens);
-        this.changeNeutralColor(this.isGrayRelatedToTheme);
+        this.changeNeutralColor(this.isGrayRelatedToTheme, trigger);
       }
 
       this.updateBrandTokenMap();
     },
-    changeNeutralColor(related) {
+    changeNeutralColor(related, trigger = 'update') {
       updateLocalOption('neutral', related ? 'true' : null);
       const inputHex = related ? this.$brandColor : this.grayMainColor;
       const palette = generateNeutralPalette(inputHex, related);
-      updateStyleSheetColor('gray', palette, palette);
+      updateStyleSheetColor('gray', palette, palette, trigger);
       this.$nextTick(this.refreshColorTokens);
     },
-    changeFunctionColor(hex, type) {
-      const oldColor = getOptionFromLocal(type);
-      updateLocalOption(type, oldColor !== hex ? hex : null);
+    changeFunctionColor(hex, type, trigger = 'update') {
+      updateLocalOption(type, hex);
       this[`${type}MainColor`] = hex;
       if (type === 'gray') {
-        this.changeNeutralColor(false);
+        this.changeNeutralColor(false, trigger);
         return;
       }
       const { lightPalette, darkPalette } = generateFunctionalPalette(hex);
-      updateStyleSheetColor(type, lightPalette, darkPalette);
+      updateStyleSheetColor(type, lightPalette, darkPalette, trigger);
       this.$nextTick(this.refreshColorTokens);
     },
     changeGradation(hex, idx, type, saveToLocal = true) {

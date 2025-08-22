@@ -6,12 +6,11 @@ import { clearLocalTheme, getDefaultTheme, getOptionFromLocal, initThemeStyleShe
 export const themeStore = Vue.observable({
   device: 'web',
   theme: TDESIGN_WEB_THEME,
-  brandColor: TDESIGN_WEB_THEME.value,
+  brandColor: getOptionFromLocal('color') || DEFAULT_THEME_META.value,
   refreshId: 0, // 用于强制刷新绑定了 key 的组件 UI
   updateDevice(device) {
     this.device = device;
     this.theme = getInitialTheme(device);
-    this.brandColor = getInitialBrandColor(device);
   },
   updateTheme(theme) {
     this.theme = theme;
@@ -33,14 +32,8 @@ export const themeStore = Vue.observable({
   },
 });
 
-export function getInitialTheme(device = 'web') {
+function getInitialTheme(device = 'web') {
   const localThemeName = getOptionFromLocal('theme') || DEFAULT_THEME_META.enName;
   const theme = initThemeStyleSheet(localThemeName, device);
   return theme;
-}
-
-function getInitialBrandColor() {
-  let localColor = getOptionFromLocal('color') || DEFAULT_THEME_META.value;
-  document.documentElement.style.setProperty('--brand-main', localColor);
-  return localColor;
 }

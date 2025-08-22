@@ -165,6 +165,17 @@ export function getOptionFromLocal(optionName) {
 }
 
 /**
+ * 如果不传入 `tokenName`，则返回所有的 `token` 对象
+ */
+export function getTokenFromLocal(tokenName) {
+  const tokens = localStorage.getItem(CUSTOM_TOKEN_ID);
+  if (!tokens) return;
+  const tokenObj = JSON.parse(tokens);
+  if (!tokenName) return tokenObj;
+  return tokenObj[tokenName];
+}
+
+/**
  * @param {*} value 传入 `null` 或 `undefined`，则表示清除掉之前的存储
  */
 export function updateLocalOption(optionName, value) {
@@ -252,14 +263,24 @@ export function generateNeutralPalette(hex, isRelatedTheme) {
   }
 }
 
-export function updateStyleSheetColor(type, lightPalette, darkPalette) {
+/**
+ * @param {'init' | 'update'} trigger - 触发类型
+ */
+export function updateStyleSheetColor(type, lightPalette, darkPalette, trigger) {
   const styleSheet = appendStyleSheet(CUSTOM_THEME_ID);
   const darkStyleSheet = appendStyleSheet(CUSTOM_DARK_ID);
   const updateColorTokens = (styleSheet, palette) => {
     palette.forEach((color, index) => {
       const tokenName = `--td-${type}-color-${index + 1}`;
       const regExp = new RegExp(`${tokenName}:.*?;`, 'g');
-      const replacement = `${tokenName}: ${color};`;
+      let replacement = `${tokenName}: ${color};`;
+      if (trigger === 'init') {
+        // 确保不覆盖用户本地自定义的值
+        replacement = `${tokenName}: ${getTokenFromLocal(tokenName) || color};`;
+      }
+      if (trigger === 'update') {
+        updateLocalToken(tokenName, null); // 清除本地存储的颜色 Token
+      }
       styleSheet.textContent = styleSheet.textContent.replace(regExp, replacement);
     });
   };
@@ -283,6 +304,10 @@ export function syncColorTokensToStyle(lightTokenMap, darkTokenMap) {
   updateColorTokens(darkStyleSheet, darkTokenMap);
 }
 
+/**
+ * 根据 token 名称获取对应的索引
+ * 例如 `--td-brand-focus` ->  2
+ */
 export function collectTokenIndexes(tokenArr) {
   const isDarkMode = document.documentElement.getAttribute('theme-mode') === 'dark';
   const targetCss = document.querySelector(isDarkMode ? `#${CUSTOM_DARK_ID}` : `#${CUSTOM_THEME_ID}`);

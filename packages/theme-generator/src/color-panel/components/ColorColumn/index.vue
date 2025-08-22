@@ -86,7 +86,7 @@ import { Popup as TPopup } from 'tdesign-vue';
 
 import { ColorPicker } from '../../../common/components';
 import { langMixin } from '../../../common/i18n';
-import { CUSTOM_TOKEN_ID } from '../../../common/themes';
+import { getTokenFromLocal } from '../../../common/themes';
 import { getTokenValue, handleAttach } from '../../../common/utils';
 
 export default {
@@ -137,18 +137,10 @@ export default {
       this.$emit('changeGradation', hex, idx, this.type);
     },
     hasModifiedColors() {
-      const localTokens = localStorage.getItem(CUSTOM_TOKEN_ID);
+      const localTokens = getTokenFromLocal();
       if (!localTokens) return false;
-      try {
-        const tokenObj = JSON.parse(localTokens);
-        const tokenKeys = Object.keys(tokenObj);
-        return this.tokenMap.some((color) => {
-          const mappedToken = color.name.replace(/-[^-]*$/, `-${color.idx}`);
-          return tokenKeys.includes(mappedToken);
-        });
-      } catch {
-        return false;
-      }
+      const tokenKeys = Object.keys(localTokens);
+      return tokenKeys.some((key) => key.includes(this.type));
     },
   },
 };
