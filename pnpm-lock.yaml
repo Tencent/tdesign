@@ -186,9 +186,6 @@ importers:
 
   site:
     dependencies:
-      '@tdesign/site-components':
-        specifier: ^0.0.1
-        version: 0.0.1
       canvas-3d:
         specifier: ^1.0.14
         version: 1.0.14
@@ -210,6 +207,9 @@ importers:
       tdesign-icons-vue:
         specifier: ^0.1.4
         version: 0.1.11(vue@2.7.14)
+      tdesign-site-components:
+        specifier: ^0.16.7
+        version: 0.16.7
       tdesign-vue:
         specifier: 1.9.8-naruto
         version: 1.9.8-naruto(vue@2.7.14)
@@ -1571,9 +1571,6 @@ packages:
 
   '@soda/get-current-script@1.0.2':
     resolution: {integrity: sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==}
-
-  '@tdesign/site-components@0.0.1':
-    resolution: {integrity: sha512-E1fC62K8XpA69CSXke8KKffOgDMhVdMf/rfekYK/u2ues0erfLZod2oWbTvYpI/FlH0pQspXEl3KHQEcY1I1SA==}
 
   '@tootallnate/once@1.1.2':
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
@@ -7135,6 +7132,9 @@ packages:
     peerDependencies:
       vue: ^2.6.12
 
+  tdesign-site-components@0.16.7:
+    resolution: {integrity: sha512-+7b9ydtxcV3NwAeE0nG+K4h+6UTdOYBwTZ0TpcKl5hGFmy7QV/+xugmQAZIO4FrkUC/dQvPjdQWR95r86KJvuQ==}
+
   tdesign-vue@1.10.5-naruto:
     resolution: {integrity: sha512-sNi/Ga/beo7gNdyhv11ufOKvnLB1s9zU7Dt14NjHVkSFnYDELr6ck+nTXKYQF3Y0Fd4PVVWn2YaGCCDISZMJ7Q==}
     peerDependencies:
@@ -9408,8 +9408,6 @@ snapshots:
       webpack: 5.94.0
 
   '@soda/get-current-script@1.0.2': {}
-
-  '@tdesign/site-components@0.0.1': {}
 
   '@tootallnate/once@1.1.2': {}
 
@@ -15909,6 +15907,15 @@ snapshots:
       '@babel/runtime': 7.25.6
       classnames: 2.5.1
       vue: 2.7.14
+
+  tdesign-site-components@0.16.7:
+    dependencies:
+      '@popperjs/core': 2.11.8
+      hybrids: 8.2.2
+      nprogress: 0.2.0
+      prismjs: 1.29.0
+      qrcode: 1.5.4
+      tdesign-icons-svg: 0.0.1
 
   tdesign-vue@1.10.5-naruto(vue@2.7.14):
     dependencies:
