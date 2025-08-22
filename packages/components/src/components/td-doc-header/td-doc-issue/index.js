@@ -1,5 +1,5 @@
 import { html, define } from 'hybrids';
-import style from './style.less';
+import style from './style.less?inline';
 import infoIcon from '@images/info.svg?raw';
 import checkIcon from '@images/check.svg?raw';
 import addIcon from '@images/add.svg?raw';

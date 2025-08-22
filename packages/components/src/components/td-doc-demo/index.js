@@ -1,6 +1,6 @@
 import { html, define, dispatch } from 'hybrids';
 import Prism from 'prismjs';
-import style from './style.less';
+import style from './style.less?inline';
 import codeIcon from '@images/code.svg?raw';
 import 'prismjs/components/prism-markup.js';
 import 'prismjs/components/prism-css.js';

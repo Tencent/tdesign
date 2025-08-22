@@ -1,10 +1,10 @@
 import { html, define } from 'hybrids';
-import style from './style.less';
+import style from './style.less?inline';
 import Prism from 'prismjs';
 
 function getLineStyle(host) {
   const { slotsName, panel } = host;
-  const index = slotsName?.findIndex(s => s === panel) || 0;
+  const index = slotsName?.findIndex((s) => s === panel) || 0;
 
   if (index === -1 || !host.shadowRoot) return '';
 
@@ -19,13 +19,13 @@ function extractSlots(host) {
   const slotsName = [];
   const slotsContentMap = {};
 
-  slotsEl.forEach(s => {
+  slotsEl.forEach((s) => {
     slotsName.push(s.slot);
     slotsContentMap[s.slot] = {
       name: s.slot,
       lang: s.lang,
       content: decodeURIComponent(s.innerHTML),
-    }
+    };
   });
 
   // 保存 slots
@@ -48,7 +48,7 @@ export default define({
 
       const lineEl = host.shadowRoot.querySelector('.active-line');
       lineEl.style = getLineStyle(host);
-    }
+    },
   },
   render: (host) => {
     const { panel } = host;
@@ -56,21 +56,19 @@ export default define({
 
     const slotObj = slotsContentMap[panel];
 
-    const highlightCode = Prism.highlight(
-      slotObj.content,
-      Prism.languages[slotObj.lang],
-      slotObj.lang
-    );
+    const highlightCode = Prism.highlight(slotObj.content, Prism.languages[slotObj.lang], slotObj.lang);
 
     return html`
       <div class="TDesign-code-block">
         <td-doc-copy code="${slotObj.content}"></td-doc-copy>
         <div class="TDesign-code-block__header">
-          ${slotsName.map(slotName => html`
-            <div class="header-panel" onclick="${html.set('panel', slotName)}">
-              <span class="panel-inner ${panel === slotName ? 'active' : ''}">${slotName}</span>
-            </div>
-          `)}
+          ${slotsName.map(
+            (slotName) => html`
+              <div class="header-panel" onclick="${html.set('panel', slotName)}">
+                <span class="panel-inner ${panel === slotName ? 'active' : ''}">${slotName}</span>
+              </div>
+            `,
+          )}
 
           <span class="active-line"></span>
         </div>
@@ -79,6 +77,6 @@ export default define({
           <pre class="language-${slotObj.lang}" innerHTML="${highlightCode}"></pre>
         </div>
       </div>
-    `.css`${style}`
+    `.css`${style}`;
   },
 });

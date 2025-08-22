@@ -1,5 +1,5 @@
 import { html, define } from 'hybrids';
-import style from './style.less';
+import style from './style.less?inline';
 
 function handleClick(host) {
   if (host.triggerType !== 'click') return;
@@ -34,7 +34,11 @@ export default define({
         <div onmouseover=${handleEnter} onmouseout=${handleLeave} onclick=${handleClick}>
           <slot></slot>
         </div>
-        <div class="TDesign-tooltip__popup ${showTip ? 'show' : ''}" onmouseover=${handleEnter} onmouseout=${handleLeave}>
+        <div
+          class="TDesign-tooltip__popup ${showTip ? 'show' : ''}"
+          onmouseover=${handleEnter}
+          onmouseout=${handleLeave}
+        >
           <slot name="content"></slot>
         </div>
       </div>

@@ -7,8 +7,8 @@ import { isIntranet } from '@utils/index';
 import { logoMenuConfigCdn, logoMenuConfigWoaCdn, logoMenuSvgPrefix } from '@config';
 import { getLang } from '@utils';
 
-import style from './style.less';
-import portalStyle from './portal.less';
+import style from './style.less?inline';
+import portalStyle from './portal.less?inline';
 
 const isEnglish = getLang() === 'en';
 

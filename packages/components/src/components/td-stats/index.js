@@ -1,12 +1,12 @@
-import { html, define } from "hybrids";
+import { html, define } from 'hybrids';
 
 function initStats(statsId, scriptAttrs, statsCallback) {
   if (document.getElementById(statsId)) return;
 
-  const script = document.createElement("script");
+  const script = document.createElement('script');
   script.async = true;
   script.id = statsId;
-  script.type = "text/javascript";
+  script.type = 'text/javascript';
   Object.keys(scriptAttrs).forEach((key) => {
     script.setAttribute(key, scriptAttrs[key]);
   });
@@ -17,8 +17,8 @@ function initStats(statsId, scriptAttrs, statsCallback) {
 }
 
 export default define({
-  tag: "td-stats",
-  dataAccount: "tdesign",
+  tag: 'td-stats',
+  dataAccount: 'tdesign',
   track: {
     get() {
       return () => {
@@ -32,20 +32,20 @@ export default define({
     connect: (host) => {
       function registerStats() {
         // horizon
-        initStats("horizon-tracker", {
-          "data-account": host.dataAccount,
-          src: "https://static.codesign.qq.com/analytics.js",
+        initStats('horizon-tracker', {
+          'data-account': host.dataAccount,
+          src: 'https://static.codesign.qq.com/analytics.js',
         });
 
         // tcss
         initStats(
-          "__td_tcss__",
+          '__td_tcss__',
           {
-            src: "https://pingjs.qq.com/tcss.ping.https.js",
+            src: 'https://pingjs.qq.com/tcss.ping.https.js',
           },
           () => {
             window.pgvMain && window.pgvMain();
-          }
+          },
         );
       }
 
@@ -55,12 +55,12 @@ export default define({
         });
       }
 
-      window.addEventListener("load", registerStats);
-      window.addEventListener("popstate", handleRouterTrack);
+      window.addEventListener('load', registerStats);
+      window.addEventListener('popstate', handleRouterTrack);
 
       return () => {
-        window.removeEventListener("load", registerStats);
-        window.removeEventListener("popstate", handleRouterTrack);
+        window.removeEventListener('load', registerStats);
+        window.removeEventListener('popstate', handleRouterTrack);
       };
     },
   },

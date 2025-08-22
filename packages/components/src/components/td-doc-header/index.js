@@ -3,7 +3,7 @@ import { getLocale } from '@config/locale.js';
 import splineConfig from '@config/spline';
 import historyIcon from '@images/history.svg?raw';
 import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, parseBoolean, watchHtmlMode } from '@utils';
-import style from './style.less';
+import style from './style.less?inline';
 
 let timer = null;
 let observeTimer = null;

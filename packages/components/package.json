@@ -2,6 +2,7 @@
   "name": "@tdesign/site-components",
   "version": "0.17.0",
   "main": "lib/site.es.js",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "watch": "vite build --watch",
@@ -31,7 +32,7 @@
     "fs-extra": "^10.0.0",
     "jest": "^27.4.3",
     "less": "^4.1.1",
-    "vite": "^2.9.1"
+    "vite": "^6.3.1"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.5",

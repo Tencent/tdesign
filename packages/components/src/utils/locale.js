@@ -27,8 +27,4 @@ function jumpLocation(url) {
   return lang === 'en' ? `${url}-en` : url;
 }
 
-export {
-  getLang,
-  registerLocaleChange,
-  jumpLocation,
-};
+export { getLang, registerLocaleChange, jumpLocation };

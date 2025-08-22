@@ -1,11 +1,12 @@
 import { html, define } from 'hybrids';
-import style from './style.less';
+import style from './style.less?inline';
 
 function getColor(message) {
   const percentage = message && parseFloat(message);
   if (percentage >= 90) {
     return 'brightgreen';
-  } if (percentage >= 70) {
+  }
+  if (percentage >= 70) {
     return 'yellow';
   }
   return 'red';
@@ -24,8 +25,6 @@ export default define({
 
     const badgeUrl = encodeURI(`https://img.shields.io/badge/${label}-${message}-${color}`);
 
-    return html`
-      <img class="TDesign-doc-badge" src="${badgeUrl}" />
-    `.css`${style}`;
+    return html` <img class="TDesign-doc-badge" src="${badgeUrl}" /> `.css`${style}`;
   },
 });

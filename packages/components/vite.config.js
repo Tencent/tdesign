@@ -24,7 +24,7 @@ export default {
     lib: {
       name: 'td-site',
       entry: './src/main.js',
-      fileName: 'site',
+      fileName: (format) => `site.${format}.js`,
       formats: ['es', 'umd'],
     },
   },

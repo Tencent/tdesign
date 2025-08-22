@@ -1,5 +1,5 @@
 import { html, define } from 'hybrids';
-import style from './style.less';
+import style from './style.less?inline';
 import backTopIcon from '@images/backtop.svg?raw';
 
 function handleBacktop() {
@@ -27,9 +27,10 @@ export default define({
     },
   },
 
-  render: ({ backtopShow }) => html`
-    <div class="TDesign-backtop ${backtopShow ? 'show' : ''}" onclick="${handleBacktop}">
-      <div class="TDesign-backtop__inner" innerHTML=${backTopIcon}></div>
-    </div>
-  `.css`${style}`,
+  render: ({ backtopShow }) =>
+    html`
+      <div class="TDesign-backtop ${backtopShow ? 'show' : ''}" onclick="${handleBacktop}">
+        <div class="TDesign-backtop__inner" innerHTML=${backTopIcon}></div>
+      </div>
+    `.css`${style}`,
 });

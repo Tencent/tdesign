@@ -1,6 +1,6 @@
 import { html, define } from 'hybrids';
 import { mobileBodyStyle } from '@utils';
-import style from './style.less';
+import style from './style.less?inline';
 
 const FIXED_HEADER_TOP = 228;
 const CONTENT_SELECTORS = ['div[name="DEMO"]', 'div[name="API"]', 'div[name="DESIGN"]', 'div[name="DOC"]'];

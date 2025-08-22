@@ -1,8 +1,8 @@
 import { html, define } from 'hybrids';
-import style from './style.less';
+import style from './style.less?inline';
 import searchIcon from '@images/search.svg?raw';
 import './docsearch.min.js';
-import docsearchStyle from './docsearch.less';
+import docsearchStyle from './docsearch.less?inline';
 import { getLang } from '@utils';
 
 const isEn = getLang() === 'en';

@@ -5,8 +5,8 @@ import githubIcon from '@images/github.svg?raw';
 import { getHeaderConfig } from '@config/header.js';
 import translateIcon from '@images/translate.svg?raw';
 import { getLang } from '@utils/index';
-import portalStyle from './portal.less';
-import style from './style.less';
+import portalStyle from './portal.less?inline';
+import style from './style.less?inline';
 
 const headerConfig = getHeaderConfig();
 const { headerList, baseComponentsLinks, baseComponentPrefix } = headerConfig;

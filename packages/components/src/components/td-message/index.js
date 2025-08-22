@@ -1,24 +1,24 @@
-import { html, define } from "hybrids";
-import InfoCircleFilled from "tdesign-icons-svg/src/info-circle-filled.svg?raw";
-import ErrorCircleFilled from "tdesign-icons-svg/src/error-circle-filled.svg?raw";
-import CheckCircleFilled from "tdesign-icons-svg/src/check-circle-filled.svg?raw";
-import HelpCircleFilled from "tdesign-icons-svg/src/help-circle-filled.svg?raw";
+import { html, define } from 'hybrids';
+import InfoCircleFilled from 'tdesign-icons-svg/src/info-circle-filled.svg?raw';
+import ErrorCircleFilled from 'tdesign-icons-svg/src/error-circle-filled.svg?raw';
+import CheckCircleFilled from 'tdesign-icons-svg/src/check-circle-filled.svg?raw';
+import HelpCircleFilled from 'tdesign-icons-svg/src/help-circle-filled.svg?raw';
 
-import style from "./style.less";
+import style from './style.less?inline';
 
 function renderIcon(theme) {
-  if (theme === "info") return InfoCircleFilled;
-  if (theme === "success") return CheckCircleFilled;
-  if (["warning", "error"].includes(theme)) return ErrorCircleFilled;
-  if (theme === "question") return HelpCircleFilled;
+  if (theme === 'info') return InfoCircleFilled;
+  if (theme === 'success') return CheckCircleFilled;
+  if (['warning', 'error'].includes(theme)) return ErrorCircleFilled;
+  if (theme === 'question') return HelpCircleFilled;
 }
 
 export default define({
-  tag: "td-message",
-  theme: "info",
+  tag: 'td-message',
+  theme: 'info',
   duration: 3000,
   zIndex: 5000,
-  content: "",
+  content: '',
   showMessage: false,
   show:
     (host) =>
@@ -42,26 +42,20 @@ export default define({
     const styles = {
       zIndex: zIndex,
     };
-    const className = ["t-message", `t-is-${theme}`].concat(
-      showMessage ? "t-message-enter" : "t-message-leave"
-    );
+    const className = ['t-message', `t-is-${theme}`].concat(showMessage ? 't-message-enter' : 't-message-leave');
     return html`
       <div class="TDesign-message">
-        <div
-          style=${styles}
-          class="${className}"
-          innerHTML=${finalContent}
-        ></div>
+        <div style=${styles} class="${className}" innerHTML=${finalContent}></div>
       </div>
     `.css`${style}`;
   },
 });
 
 window.showTdMessage = function ({ content, duration, theme }) {
-  const instanceId = "__tdesign_message__";
+  const instanceId = '__tdesign_message__';
   if (!document.getElementById(instanceId)) {
-    const messageInstance = document.createElement("td-message");
-    messageInstance.setAttribute("id", instanceId);
+    const messageInstance = document.createElement('td-message');
+    messageInstance.setAttribute('id', instanceId);
     document.body.appendChild(messageInstance);
   }
   setTimeout(() => {

@@ -1,6 +1,6 @@
 import { html, define } from 'hybrids';
 import NProgress from 'nprogress';
-import style from './style.less';
+import style from './style.less?inline';
 
 export default define({
   tag: 'td-doc-layout',
@@ -23,7 +23,8 @@ export default define({
     },
   },
   direction: 'row', // row column
-  render: ({ direction }) => html`
+  render: ({ direction }) =>
+    html`
       <div class="TDesign-page-doc">
         <slot name="header"></slot>
         <div class="TDesign-body ${direction}">
