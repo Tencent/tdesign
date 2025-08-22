@@ -283,7 +283,7 @@ export default {
   }
   &__token-list {
     margin-top: 8px;
-    padding: 4px 4px 0 4px;
+    padding: 4px;
     border-radius: 9px;
     background-color: var(--bg-color-theme-secondary);
 
