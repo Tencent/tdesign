@@ -33,7 +33,7 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}
 
-  auto-upgrade-tdesign-site-components:
+  auto-upgrade-@tdesign/site-components:
     needs: publish-site-components
     runs-on: ubuntu-latest
     steps:
