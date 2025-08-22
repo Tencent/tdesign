@@ -24,23 +24,23 @@ jobs:
 
       - run: pnpm install
 
-      - run: pnpm -F tdesign-site-components run build
+      - run: pnpm -F @tdesign/site-components run build
       
       - name: Publish Package
         run: |
           npm config set "//registry.npmjs.org/:_authToken" "${NPM_TOKEN}"
-          pnpm -F tdesign-site-components publish
+          pnpm -F @tdesign/site-components publish
         env:
           NPM_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}
 
-  auto-upgrade-tdesign-site-components:
+  auto-upgrade-@tdesign/site-components:
     needs: publish-site-components
     runs-on: ubuntu-latest
     steps:
-      - name: upgrade tdesign-site-components
+      - name: upgrade @tdesign/site-components
         uses: TDesignOteam/tdesign-pr-trigger-action@develop
         with:
           token: ${{ secrets.TDESIGN_BOT_TOKEN }}
           trigger: /upgrade-deps
-          deps: tdesign-site-components
+          deps: '@tdesign/site-components'
           package-manager: pnpm
