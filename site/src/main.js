@@ -10,14 +10,14 @@ import '@/style/index.less';
 import 'tdesign-vue/es/style/index.css';
 
 // import site webcomponents
-import 'tdesign-site-components';
-import 'tdesign-site-components/lib/styles/style.css';
-import 'tdesign-site-components/lib/styles/prism-theme.less';
-import 'tdesign-site-components/lib/styles/prism-theme-dark.less';
-import "tdesign-icons-view";
-import { registerLocaleChange } from 'tdesign-site-components';
+import '@tdesign/site-components';
+import '@tdesign/site-components/lib/styles/style.css';
+import '@tdesign/site-components/lib/styles/prism-theme.less';
+import '@tdesign/site-components/lib/styles/prism-theme-dark.less';
+import 'tdesign-icons-view';
+import { registerLocaleChange } from '@tdesign/site-components';
 
-registerLocaleChange()
+registerLocaleChange();
 
 Vue.use(TDesign);
 Vue.use(VueRouter);
@@ -46,4 +46,3 @@ new Vue({
   render: (h) => h(App),
   router,
 });
-

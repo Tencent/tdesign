@@ -186,6 +186,9 @@ importers:
 
   site:
     dependencies:
+      '@tdesign/site-components':
+        specifier: ^0.17.0
+        version: 0.17.0
       canvas-3d:
         specifier: ^1.0.14
         version: 1.0.14
@@ -207,9 +210,6 @@ importers:
       tdesign-icons-vue:
         specifier: ^0.1.4
         version: 0.1.11(vue@2.7.14)
-      tdesign-site-components:
-        specifier: ^0.16.7
-        version: 0.16.7
       tdesign-vue:
         specifier: 1.9.8-naruto
         version: 1.9.8-naruto(vue@2.7.14)
@@ -1342,8 +1342,8 @@ packages:
   '@jridgewell/sourcemap-codec@1.5.0':
     resolution: {integrity: sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==}
 
-  '@jridgewell/sourcemap-codec@1.5.4':
-    resolution: {integrity: sha512-VT2+G1VQs/9oz078bLrYbecdZKs912zQlkelYpuf+SXF+QvZDYJlbx/LSx+meSAwdDFnF8FVXW92AVjjkVmgFw==}
+  '@jridgewell/sourcemap-codec@1.5.5':
+    resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
@@ -1571,6 +1571,9 @@ packages:
 
   '@soda/get-current-script@1.0.2':
     resolution: {integrity: sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==}
+
+  '@tdesign/site-components@0.17.0':
+    resolution: {integrity: sha512-fk+4+Zlb0qVHfIume0wpkshBGioFAJWZJoXFPoVockjIZc+ifxyKBf5o2ac/lXopHP6mKVwchAe0W7KkkhJaBA==}
 
   '@tootallnate/once@1.1.2':
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
@@ -7140,9 +7143,6 @@ packages:
     peerDependencies:
       vue: ^2.6.12
 
-  tdesign-site-components@0.16.7:
-    resolution: {integrity: sha512-+7b9ydtxcV3NwAeE0nG+K4h+6UTdOYBwTZ0TpcKl5hGFmy7QV/+xugmQAZIO4FrkUC/dQvPjdQWR95r86KJvuQ==}
-
   tdesign-vue@1.10.5-naruto:
     resolution: {integrity: sha512-sNi/Ga/beo7gNdyhv11ufOKvnLB1s9zU7Dt14NjHVkSFnYDELr6ck+nTXKYQF3Y0Fd4PVVWn2YaGCCDISZMJ7Q==}
     peerDependencies:
@@ -9215,7 +9215,7 @@ snapshots:
 
   '@jridgewell/sourcemap-codec@1.5.0': {}
 
-  '@jridgewell/sourcemap-codec@1.5.4':
+  '@jridgewell/sourcemap-codec@1.5.5':
     optional: true
 
   '@jridgewell/trace-mapping@0.3.25':
@@ -9226,7 +9226,7 @@ snapshots:
   '@jridgewell/trace-mapping@0.3.9':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.5.4
+      '@jridgewell/sourcemap-codec': 1.5.5
     optional: true
 
   '@leichtgewicht/ip-codec@2.0.5': {}
@@ -9416,6 +9416,15 @@ snapshots:
       webpack: 5.94.0
 
   '@soda/get-current-script@1.0.2': {}
+
+  '@tdesign/site-components@0.17.0':
+    dependencies:
+      '@popperjs/core': 2.11.8
+      hybrids: 8.2.2
+      nprogress: 0.2.0
+      prismjs: 1.29.0
+      qrcode: 1.5.4
+      tdesign-icons-svg: 0.0.1
 
   '@tootallnate/once@1.1.2': {}
 
@@ -15923,15 +15932,6 @@ snapshots:
       '@babel/runtime': 7.25.6
       classnames: 2.5.1
       vue: 2.7.14
-
-  tdesign-site-components@0.16.7:
-    dependencies:
-      '@popperjs/core': 2.11.8
-      hybrids: 8.2.2
-      nprogress: 0.2.0
-      prismjs: 1.29.0
-      qrcode: 1.5.4
-      tdesign-icons-svg: 0.0.1
 
   tdesign-vue@1.10.5-naruto(vue@2.7.14):
     dependencies:

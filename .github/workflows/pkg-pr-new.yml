@@ -24,11 +24,11 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version-file: .node-version
 
       - run: pnpm install
 
-      - run: pnpm --filter 'tdesign-site-components' --filter 'tdesign-theme-generator' run build
+      - run: pnpm --filter '@tdesign/site-components' --filter 'tdesign-theme-generator' run build
 
       - run: pnpm dlx pkg-pr-new publish './packages/components' './packages/theme-generator'
 
@@ -49,7 +49,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version-file: .node-version
 
       - run: pnpm install
 
