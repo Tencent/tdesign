@@ -30,9 +30,10 @@
                 :min="0"
                 :max="selectOptions.length - 2"
                 :value="step"
-                @change="handleSliderChange"
                 :label="renderLabel"
                 :disabled="forbidden"
+                :tooltipProps="{ attach: handleAttach }"
+                @change="handleSliderChange"
               ></t-slider>
             </div>
             <div class="shadow-panel__round-tag">
