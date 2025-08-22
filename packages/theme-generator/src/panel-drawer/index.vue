@@ -1,23 +1,21 @@
 <template>
   <t-drawer
     size="348px"
-    :style="drawerStyle"
     :visible.sync="visible"
     :header="false"
     :closeBtn="false"
     :preventScrollThrough="false"
     :footer="false"
-    :attach="handleAttach"
     showInAttachedElement
   >
     <sticky-theme-display />
     <div style="display: flex">
       <switch-tabs :activeTabIdx="activeTabIdx" @changeActiveTab="changeActiveTab" />
-      <color-panel :top="top" :key="`${$refreshId}-color`" v-show="activeTabIdx === ACTIVE_TAB_MAP.color" />
-      <font-panel :top="top" :key="`${$refreshId}-font`" v-show="activeTabIdx === ACTIVE_TAB_MAP.font" />
-      <radius-panel :top="top" :key="`${$refreshId}-radius`" v-show="activeTabIdx === ACTIVE_TAB_MAP.radius" />
-      <shadow-panel :top="top" :key="`${$refreshId}-shadow`" v-show="activeTabIdx === ACTIVE_TAB_MAP.shadow" />
-      <size-panel :top="top" :key="`${$refreshId}-size`" v-show="activeTabIdx === ACTIVE_TAB_MAP.size" />
+      <color-panel :key="`${$refreshId}-color`" v-show="activeTabIdx === ACTIVE_TAB_MAP.color" />
+      <font-panel :key="`${$refreshId}-font`" v-show="activeTabIdx === ACTIVE_TAB_MAP.font" />
+      <radius-panel :key="`${$refreshId}-radius`" v-show="activeTabIdx === ACTIVE_TAB_MAP.radius" />
+      <shadow-panel :key="`${$refreshId}-shadow`" v-show="activeTabIdx === ACTIVE_TAB_MAP.shadow" />
+      <size-panel :key="`${$refreshId}-size`" v-show="activeTabIdx === ACTIVE_TAB_MAP.size" />
     </div>
   </t-drawer>
 </template>
@@ -58,7 +56,6 @@ export default {
     SizePanel,
   },
   props: {
-    propsTop: String,
     showSetting: {
       type: [String, Boolean],
     },
@@ -71,7 +68,6 @@ export default {
   },
   data() {
     return {
-      top: null,
       ACTIVE_TAB_MAP,
       isHeaderShow: true,
       activeTabIdx: ACTIVE_TAB_MAP.color,
@@ -81,11 +77,6 @@ export default {
   computed: {
     $refreshId() {
       return themeStore.refreshId;
-    },
-    drawerStyle() {
-      return {
-        top: `${this.top}px`,
-      };
     },
   },
   watch: {
@@ -100,28 +91,10 @@ export default {
       this.$emit('panel-drawer-visible', v);
     },
   },
-  mounted() {
-    if (this.propsTop) {
-      this.top = parseInt(this.propsTop, 10);
-    } else {
-      const headerHeight = getComputedStyle(document.documentElement).getPropertyValue('--header-height');
-
-      if (headerHeight) this.top = parseInt(headerHeight) - window.scrollY;
-    }
-
-    window.addEventListener('scroll', this.calcHeaderShow);
-  },
-  beforeDestroy() {
-    window.removeEventListener('scroll', this.calcHeaderShow);
-  },
   methods: {
     handleAttach,
     changeActiveTab(tab) {
       this.activeTabIdx = tab;
-    },
-    calcHeaderShow() {
-      const headerHeight = getComputedStyle(document.documentElement).getPropertyValue('--header-height');
-      this.top = Math.max(parseInt(headerHeight) - window.scrollY, 0);
     },
   },
 };

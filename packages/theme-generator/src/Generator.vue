@@ -6,7 +6,7 @@
       @click-setting="handleClickSetting"
       @trigger-visible="handleTriggerVisible"
     />
-    <panel-drawer :drawerVisible="visible" :propsTop="propsTop" @panel-drawer-visible="handleDrawerVisible" />
+    <panel-drawer :drawerVisible="visible" @panel-drawer-visible="handleDrawerVisible" />
   </div>
 </template>
 
@@ -29,7 +29,6 @@ export default {
     PanelDrawer,
   },
   props: {
-    propsTop: String,
     showSetting: {
       type: [Boolean, String],
     },
