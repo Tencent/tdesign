@@ -138,8 +138,8 @@ importers:
         specifier: ^0.0.8
         version: 0.0.8(vue@2.7.14)
       tdesign-vue:
-        specifier: 1.13.0-naruto
-        version: 1.13.0-naruto(vue@2.7.14)
+        specifier: 1.13.1-naruto
+        version: 1.13.1-naruto(vue@2.7.14)
       tvision-color:
         specifier: ^1.6.0
         version: 1.6.0
@@ -7148,8 +7148,8 @@ packages:
     peerDependencies:
       vue: ~2.7.14
 
-  tdesign-vue@1.13.0-naruto:
-    resolution: {integrity: sha512-K9m6+WYILEke4zy9uDkQg0ri8q4jrV/0L/HOReUSY2JFJ9etCtcUbHsxS0NP5r/fEOe5QQEn/zLKmHoKcDikvw==}
+  tdesign-vue@1.13.1-naruto:
+    resolution: {integrity: sha512-GfSkK3xyMNowc4wkJ3cTev5VulfUjCqqrYti9f3PC6X5fLRDbumWTxcbozsZHYC4VbwXFaZHi9/p558FKCHsQA==}
     peerDependencies:
       vue: ~2.7.14
 
@@ -15954,7 +15954,7 @@ snapshots:
       validator: 13.12.0
       vue: 2.7.14
 
-  tdesign-vue@1.13.0-naruto(vue@2.7.14):
+  tdesign-vue@1.13.1-naruto(vue@2.7.14):
     dependencies:
       '@babel/runtime': 7.25.6
       '@popperjs/core': 2.11.8
