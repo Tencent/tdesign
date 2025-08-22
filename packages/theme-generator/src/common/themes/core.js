@@ -232,8 +232,9 @@ export function generateBrandPalette(hex, remainInput = false) {
   });
 
   const isTencentBlue = lowCaseHex === TENCENT_BLUE.toLowerCase();
+  const validPrimary = typeof primary === 'number' && !isNaN(primary) ? primary : 6;
 
-  const lightBrandIdx = isTencentBlue ? 7 : primary + 1;
+  const lightBrandIdx = isTencentBlue ? 7 : validPrimary + 1;
   const lightPalette = [...colors];
 
   const darkPalette = isTencentBlue ? TENCENT_BLUE_DARK_PALETTE : [...colors].reverse();
