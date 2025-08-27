@@ -2,7 +2,7 @@ import { define, html } from 'hybrids';
 import { getLocale } from '@config/locale.js';
 import closeIcon from '@images/close.svg?raw';
 import { convert2PascalCase, isComponentPage, isGlobalConfigPage } from '@utils';
-import style from './style.less';
+import style from './style.less?inline';
 
 let changelogCache = null;
 

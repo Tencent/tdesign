@@ -1,5 +1,5 @@
 import { html, define } from 'hybrids';
-import style from './style.less';
+import style from './style.less?inline';
 
 export default define({
   tag: 'td-portal',
@@ -7,8 +7,12 @@ export default define({
   portalStyle: '',
   render: (host) => {
     return html`
-      ${host.portalStyle ? html`<style>${host.portalStyle}</style>` : ''}
+      ${host.portalStyle
+        ? html`<style>
+            ${host.portalStyle}
+          </style>`
+        : ''}
       <slot class="TDesign-portal" name="content"></slot>
-    `.css`${style}`
+    `.css`${style}`;
   },
 });

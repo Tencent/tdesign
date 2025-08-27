@@ -1,12 +1,12 @@
-import { html, define } from "hybrids";
-import style from "./style.less";
+import { html, define } from 'hybrids';
+import style from './style.less?inline';
 
 export default define({
-  tag: "td-avatar",
-  content: "",
-  username: "",
-  src: "",
-  href: "",
+  tag: 'td-avatar',
+  content: '',
+  username: '',
+  src: '',
+  href: '',
   render: ({ content, username, src, href }) => {
     const defaultSrc = `https://avatars.githubusercontent.com/${username}`;
     const defaultHref = `https://github.com/${username}`;

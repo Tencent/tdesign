@@ -1,5 +1,5 @@
 import { html, define } from 'hybrids';
-import style from './style.less';
+import style from './style.less?inline';
 
 function renderEmpty(type) {
   if (type === 'design') {
@@ -18,10 +18,6 @@ export default define({
   render: (host) => {
     const { type } = host;
 
-    return html`
-      <div class="TDesign-doc-empty">
-        ${renderEmpty(type)}
-      </div>
-    `.css`${style}`;
+    return html` <div class="TDesign-doc-empty">${renderEmpty(type)}</div> `.css`${style}`;
   },
 });
