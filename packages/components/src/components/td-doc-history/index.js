@@ -1,5 +1,5 @@
 import { html, define } from 'hybrids';
-import style from './style.less';
+import style from './style.less?inline';
 import historyIcon from '@images/history.svg?raw';
 
 function transformTime(time) {
@@ -19,11 +19,13 @@ export default define({
     return html`
       <div class="TDesign-doc-history">
         <i class="icon" innerHTML="${historyIcon}"></i>
-        ${content ? content : html`
-          <span class="text">Last Update: </span>
-          ${transformTime(time)}
-        `}
+        ${content
+          ? content
+          : html`
+              <span class="text">Last Update: </span>
+              ${transformTime(time)}
+            `}
       </div>
-    `.css`${style}`
+    `.css`${style}`;
   },
 });

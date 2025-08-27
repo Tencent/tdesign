@@ -1,5 +1,5 @@
 import { html, define } from 'hybrids';
-import style from './style.less';
+import style from './style.less?inline';
 import moonIcon from '@images/moon.svg?raw';
 import sunIcon from '@images/sun.svg?raw';
 import { watchHtmlMode } from '@utils';

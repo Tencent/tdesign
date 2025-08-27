@@ -25,7 +25,7 @@ jobs:
       - run: pnpm install
 
       - run: pnpm -F @tdesign/site-components run build
-      
+
       - name: Publish Package
         run: |
           npm config set "//registry.npmjs.org/:_authToken" "${NPM_TOKEN}"

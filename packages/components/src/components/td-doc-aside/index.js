@@ -2,7 +2,7 @@ import { html, dispatch, define } from 'hybrids';
 import menuFoldIcon from '@images/menu-fold.svg?raw';
 import menuUnfoldIcon from '@images/menu-unfold.svg?raw';
 import { patchShadowDomIntoDom } from '@utils';
-import style from './style.less';
+import style from './style.less?inline';
 
 const replaceStateEvent = new CustomEvent('replaceState');
 
