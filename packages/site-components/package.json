@@ -17,7 +17,7 @@
     "type": "git",
     "url": "git+https://github.com/Tencent/tdesign.git"
   },
-  "homepage": "https://github.com/Tencent/tdesign/blob/main/packages/components/README.md",
+  "homepage": "https://github.com/Tencent/tdesign/blob/main/packages/site-components/README.md",
   "keywords": [
     "TDesign",
     "webcomponents"
