@@ -72,6 +72,6 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git status
           git fetch origin
-          git merge origin/develop
+          git merge origin/develop -X theirs
           git push origin main
       
