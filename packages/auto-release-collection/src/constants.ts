@@ -21,7 +21,8 @@ export const submodules = {
   },
   'tdesign-miniprogram': {
     title: '## Miniprogram for WeChat 发布',
-    changelogUrl: 'https://raw.githubusercontent.com/Tencent/tdesign-miniprogram/refs/heads/main/CHANGELOG.md',
+    changelogUrl:
+      'https://raw.githubusercontent.com/Tencent/tdesign-miniprogram/refs/heads/main/packages/tdesign-miniprogram-site/CHANGELOG.md',
     tagPrefix: '',
     repo: 'Tencent/tdesign-miniprogram',
   },
