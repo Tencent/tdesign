@@ -4,13 +4,11 @@
   </a>
 </template>
 
-<script>
-export default {
-  props: {
-    href: String,
-    src: String,
-  },
-};
+<script setup>
+defineProps({
+  href: String,
+  src: String,
+});
 </script>
 
 <style lang="less">
