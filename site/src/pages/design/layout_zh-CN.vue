@@ -176,66 +176,108 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor'
+<script setup>
+import { ref, onMounted } from 'vue'
 
-export default {
-  mixins: [anchorMixin],
-  data () {
-    return {
-      dataSource: [
-        {
-          cut: 'sm',
-          cutValue: '768px',
-          range: '768px-991px',
-          colWidth: '16px',
-          grid: '内容区块根据不同的断点进行堆叠或缩放',
-          device: '平板'
-        },
-        {
-          cut: 'md',
-          cutValue: '992px',
-          range: '992px-1199px',
-          colWidth: '16px',
-          grid: '内容区块根据不同的断点进行堆叠或缩放',
-          device: '超小尺寸电脑'
-        },
-        {
-          cut: 'lg',
-          cutValue: '1200px',
-          range: '大于 1200px',
-          colWidth: '16px',
-          grid: '大于断点值时，始终保持水平排列',
-          device: '小尺寸电脑'
-        }
-      ],
-      columns: [
-        { width: 104, ellipsis: true, colKey: 'cut', title: '断点' },
-        { width: 104, ellipsis: true, colKey: 'cutValue', title: '断点值' },
-        { width: 144, ellipsis: true, colKey: 'range', title: '响应区间' },
-        { width: 104, colKey: 'colWidth', title: '槽宽' },
-        { colKey: 'grid', title: '栅格' },
-        { width: 160, ellipsis: true, colKey: 'device', title: '显示设备参考' }
-      ],
-      rowKey: 'default',
-      size: 'small'
-    }
+// Template refs
+const article = ref(null)
+
+// Data (from mixin)
+const catalog = ref([])
+
+// Data (from component)
+const dataSource = ref([
+  {
+    cut: 'sm',
+    cutValue: '768px',
+    range: '768px-991px',
+    colWidth: '16px',
+    grid: '内容区块根据不同的断点进行堆叠或缩放',
+    device: '平板'
   },
-  methods: {
-    rowspanAndColspan ({ col, rowIndex }) {
-      if (col.colKey === 'colWidth' && rowIndex === 0) {
-        return {
-          rowspan: 3
-        }
+  {
+    cut: 'md',
+    cutValue: '992px',
+    range: '992px-1199px',
+    colWidth: '16px',
+    grid: '内容区块根据不同的断点进行堆叠或缩放',
+    device: '超小尺寸电脑'
+  },
+  {
+    cut: 'lg',
+    cutValue: '1200px',
+    range: '大于 1200px',
+    colWidth: '16px',
+    grid: '大于断点值时，始终保持水平排列',
+    device: '小尺寸电脑'
+  }
+])
+
+const columns = ref([
+  { width: 104, ellipsis: true, colKey: 'cut', title: '断点' },
+  { width: 104, ellipsis: true, colKey: 'cutValue', title: '断点值' },
+  { width: 144, ellipsis: true, colKey: 'range', title: '响应区间' },
+  { width: 104, colKey: 'colWidth', title: '槽宽' },
+  { colKey: 'grid', title: '栅格' },
+  { width: 160, ellipsis: true, colKey: 'device', title: '显示设备参考' }
+])
+
+const rowKey = ref('default')
+const size = ref('small')
+
+// Methods (from mixin)
+const genAnchor = () => {
+  if (!article.value) return;
+  const articleContent = article.value;
+  const nodes = ['H2', 'H3'];
+  const titles = [];
+  articleContent.childNodes.forEach((e, index) => {
+    if (nodes.includes(e.nodeName)) {
+      const id = `header-${index}`;
+      e.setAttribute('id', id);
+      titles.push({
+        id,
+        title: e.innerHTML,
+        level: Number(e.nodeName.substring(1, 2)),
+        nodeName: e.nodeName,
+        children: []
+      });
+    }
+  });
+
+  const isEveryLevel3 = titles.every(t => t.level === 3);
+  catalog.value = titles.reduce((acc, curr) => {
+    if (isEveryLevel3) {
+      acc.push(curr);
+    } else {
+      if (curr.level === 2) {
+        acc.push(curr);
+      } else if (curr.level === 3) {
+        acc[acc.length - 1].children.push(curr);
       }
-      if (col.colKey === 'grid' && rowIndex === 0) {
-        return {
-          rowspan: 2
-        }
-      }
+    }
+    return acc;
+  }, []);
+};
+
+// Methods (from component)
+const rowspanAndColspan = ({ col, rowIndex }) => {
+  if (col.colKey === 'colWidth' && rowIndex === 0) {
+    return {
+      rowspan: 3
+    }
+  }
+  if (col.colKey === 'grid' && rowIndex === 0) {
+    return {
+      rowspan: 2
     }
   }
 }
+
+// Lifecycle
+onMounted(() => {
+  genAnchor();
+});
 </script>
 
 <style lang="less">

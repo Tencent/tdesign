@@ -97,26 +97,19 @@ d<template>
   </div>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue'
+
 const safeTeamUrl = import.meta.env.VITE_SAFE_TEAM_URL;
 
-export default {
-  data() {
-    return {
-      safeTeamUrl
-    };
-  },
-  computed: {
-    footerStyle () {
-      return {
-        '--content-padding-right': '0',
-        '--content-max-width': '1440px',
-        '--content-padding-left-right': '48px',
-        '--footer-logo-position': 'unset'
-      }
-    }
+const footerStyle = computed(() => {
+  return {
+    '--content-padding-right': '0',
+    '--content-max-width': '1440px',
+    '--content-padding-left-right': '48px',
+    '--footer-logo-position': 'unset'
   }
-}
+})
 </script>
 
 <style lang="less">
