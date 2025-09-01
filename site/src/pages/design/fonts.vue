@@ -200,8 +200,14 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor';
+<script setup>
+import { ref, onMounted, getCurrentInstance } from 'vue'
+
+// Template refs
+const article = ref(null)
+
+// Data (from mixin)
+const catalog = ref([])
 
 const fontDownloadUrl =
   'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/design-source/TCloudNumber%20v1.010.zip';
@@ -214,70 +220,109 @@ function genFontSize(num) {
   return result;
 }
 
-export default {
-  mixins: [anchorMixin],
-  data() {
-    return {
-      dialogVisible: false,
-      fontDownloadUrl,
-      fontList: [
-        { step: 'base', size: '10px minimum in mobile', fontSize: 10, desc: 'first font size' },
-        { step: '+2', size: '12px minimum in desktop', fontSize: 12 },
-        { step: '+2', size: '14px content', fontSize: 14 },
-        { step: '+2', size: '16px TDesign', fontSize: 16 },
-        { type: 'divider' },
-        { step: '+4', size: '20px TDesign', fontSize: 20, desc: 'second font size' },
-        { step: '+4', size: '24px TDesign', fontSize: 24 },
-        { step: '+4', size: '28px TDesign', fontSize: 28 },
-        { step: '+8', size: '36px TDesign', fontSize: 36 },
-        { step: '+12', size: '48px TDesign', fontSize: 48 },
-        { step: '+16', size: '64px TDesign', fontSize: 64 },
-      ],
-      fontSize: 48,
-      fontSelectList: genFontSize(64),
-      fontColorListLeft: [
-        { background: 'rgba(0, 0, 0, 0.9)', color: '#fff', text: 'Font Gy1', style: '#000000 90%' },
-        { background: 'rgba(0, 0, 0, 0.6)', color: '#fff', text: 'Font Gy2', style: '#000000 60%' },
-        { background: 'rgba(0, 0, 0, 0.4)', color: '#fff', text: 'Font Gy3', style: '#000000 40%' },
-        { background: 'rgba(0, 0, 0, 0.26)', color: '#fff', text: 'Font Gy4', style: '#000000 26%' },
-      ],
-      fontColorListRight: [
-        { background: 'rgba(255, 255, 255, 1)', color: 'rgba(0,0,0,.9)', text: 'Font Wh1', style: '#ffffff 100%' },
-        { background: 'rgba(255, 255, 255, 0.55)', color: '#fff', text: 'Font Wh2', style: '#ffffff 55%' },
-        { background: 'rgba(255, 255, 255, 0.35)', color: '#fff', text: 'Font Wh3', style: '#ffffff 35%' },
-        { background: 'rgba(255, 255, 255, 0.22)', color: '#fff', text: 'Font Wh4', style: '#ffffff 22%' },
-      ],
-    };
-  },
+// Data (from component)
+const dialogVisible = ref(false)
+const fontList = ref([
+  { step: 'base', size: '10px minimum in mobile', fontSize: 10, desc: 'first font size' },
+  { step: '+2', size: '12px minimum in desktop', fontSize: 12 },
+  { step: '+2', size: '14px content', fontSize: 14 },
+  { step: '+2', size: '16px TDesign', fontSize: 16 },
+  { type: 'divider' },
+  { step: '+4', size: '20px TDesign', fontSize: 20, desc: 'second font size' },
+  { step: '+4', size: '24px TDesign', fontSize: 24 },
+  { step: '+4', size: '28px TDesign', fontSize: 28 },
+  { step: '+8', size: '36px TDesign', fontSize: 36 },
+  { step: '+12', size: '48px TDesign', fontSize: 48 },
+  { step: '+16', size: '64px TDesign', fontSize: 64 },
+])
+const fontSize = ref(48)
+const fontSelectList = ref(genFontSize(64))
+const fontColorListLeft = ref([
+  { background: 'rgba(0, 0, 0, 0.9)', color: '#fff', text: 'Font Gy1', style: '#000000 90%' },
+  { background: 'rgba(0, 0, 0, 0.6)', color: '#fff', text: 'Font Gy2', style: '#000000 60%' },
+  { background: 'rgba(0, 0, 0, 0.4)', color: '#fff', text: 'Font Gy3', style: '#000000 40%' },
+  { background: 'rgba(0, 0, 0, 0.26)', color: '#fff', text: 'Font Gy4', style: '#000000 26%' },
+])
+const fontColorListRight = ref([
+  { background: 'rgba(255, 255, 255, 1)', color: 'rgba(0,0,0,.9)', text: 'Font Wh1', style: '#ffffff 100%' },
+  { background: 'rgba(255, 255, 255, 0.55)', color: '#fff', text: 'Font Wh2', style: '#ffffff 55%' },
+  { background: 'rgba(255, 255, 255, 0.35)', color: '#fff', text: 'Font Wh3', style: '#ffffff 35%' },
+  { background: 'rgba(255, 255, 255, 0.22)', color: '#fff', text: 'Font Wh4', style: '#ffffff 22%' },
+])
 
-  methods: {
-    copyColor(color) {
-      if ('clipboard' in navigator) {
-        navigator.clipboard.writeText(color);
-        this.$message.success('Copied');
-        return;
+// Methods (from mixin)
+const genAnchor = () => {
+  if (!article.value) return;
+  const articleContent = article.value;
+  const nodes = ['H2', 'H3'];
+  const titles = [];
+  articleContent.childNodes.forEach((e, index) => {
+    if (nodes.includes(e.nodeName)) {
+      const id = `header-${index}`;
+      e.setAttribute('id', id);
+      titles.push({
+        id,
+        title: e.innerHTML,
+        level: Number(e.nodeName.substring(1, 2)),
+        nodeName: e.nodeName,
+        children: []
+      });
+    }
+  });
+
+  const isEveryLevel3 = titles.every(t => t.level === 3);
+  catalog.value = titles.reduce((acc, curr) => {
+    if (isEveryLevel3) {
+      acc.push(curr);
+    } else {
+      if (curr.level === 2) {
+        acc.push(curr);
+      } else if (curr.level === 3) {
+        acc[acc.length - 1].children.push(curr);
       }
-
-      const textarea = document.createElement('textarea');
-      textarea.textContent = color;
-      textarea.style.width = 0;
-      textarea.style.height = 0;
-      document.body.appendChild(textarea);
-
-      const selection = document.getSelection();
-      const range = document.createRange();
-      range.selectNode(textarea);
-      selection.removeAllRanges();
-      selection.addRange(range);
-
-      document.execCommand('copy');
-      selection.removeAllRanges();
-      document.body.removeChild(textarea);
-
-      this.$message.success('Copied');
-    },
-  },
+    }
+    return acc;
+  }, []);
 };
+
+// Methods (from component)
+const copyColor = (color) => {
+  if ('clipboard' in navigator) {
+    navigator.clipboard.writeText(color);
+    // Using t-message if available
+    const message = getCurrentInstance()?.appContext?.config?.globalProperties?.$message;
+    if (message) {
+      message.success('Copied');
+    }
+    return;
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.textContent = color;
+  textarea.style.width = 0;
+  textarea.style.height = 0;
+  document.body.appendChild(textarea);
+
+  const selection = document.getSelection();
+  const range = document.createRange();
+  range.selectNode(textarea);
+  selection.removeAllRanges();
+  selection.addRange(range);
+
+  document.execCommand('copy');
+  selection.removeAllRanges();
+  document.body.removeChild(textarea);
+
+  const message = getCurrentInstance()?.appContext?.config?.globalProperties?.$message;
+  if (message) {
+    message.success('Copied');
+  }
+};
+
+// Lifecycle
+onMounted(() => {
+  genAnchor();
+});
 </script>
 
 <style lang="less">

@@ -19,51 +19,46 @@
   </t-dialog>
 </template>
 
-<script>
-export default {
-  props: {
-    visible: Boolean,
-    downloadItem: Object
+<script setup>
+import { ref, computed } from 'vue'
+
+const props = defineProps({
+  visible: Boolean,
+  downloadItem: Object
+})
+
+const emit = defineEmits(['update:visible'])
+
+const email = ref('')
+
+const visibleSync = computed({
+  get () {
+    return props.visible
   },
-
-  data () {
-    return {
-      email: ''
-    }
-  },
-
-  computed: {
-    visibleSync: {
-      get () {
-        return this.visible
-      },
-      set (v) {
-        this.$emit('update:visible', v)
-      }
-    },
-    legalEmail () {
-      return /^[A-Za-z0-9\-\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.email)
-    }
-  },
-
-  methods: {
-    downloadCancel () {
-      this.visibleSync = false
-    },
-    downloadConfirm () {
-      const { downloadItem, email } = this
-      if (!email || !downloadItem) return
-
-      window.open(downloadItem.actionUrl, '_blank')
-      this.visibleSync = false
-      aegis.reportEvent({
-        name: '设计资源下载', // 必填
-        ext1: email,
-        ext2: downloadItem.title,
-        ext3: downloadItem.actionUrl
-      })
-    }
+  set (v) {
+    emit('update:visible', v)
   }
+})
+
+const legalEmail = computed(() => {
+  return /^[A-Za-z0-9\-\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(email.value)
+})
+
+const downloadCancel = () => {
+  visibleSync.value = false
+}
+
+const downloadConfirm = () => {
+  if (!email.value || !props.downloadItem) return
+
+  window.open(props.downloadItem.actionUrl, '_blank')
+  visibleSync.value = false
+  aegis.reportEvent({
+    name: '设计资源下载', // 必填
+    ext1: email.value,
+    ext2: props.downloadItem.title,
+    ext3: props.downloadItem.actionUrl
+  })
 }
 </script>
 
