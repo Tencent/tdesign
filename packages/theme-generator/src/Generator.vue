@@ -18,7 +18,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, provide, onMounted } from 'vue';
 import {
   applyThemeFromLocal,
   DEFAULT_THEME,
@@ -38,62 +39,58 @@ const activeTabMap = {
   size: 4,
 };
 
-export default {
-  name: 'ThemeGenerator',
-  components: {
-    PanelDrawer,
-    Dock,
+const props = defineProps({
+  propsTop: String,
+  showSetting: {
+    type: [Boolean, String],
   },
-  props: {
-    propsTop: String,
-    showSetting: {
-      type: [Boolean, String],
-    },
-    device: {
-      type: String,
-      default: 'web',
-    },
+  device: {
+    type: String,
+    default: 'web',
   },
-  provide() {
-    return {
-      device: this.device,
-    };
-  },
-  data() {
-    return {
-      activeTabMap,
-      refresh: false,
-      visible: 0,
-      activeTabIdx: activeTabMap.color,
-      theme: DEFAULT_THEME,
-    };
-  },
-  mounted() {
-    const localTheme = getOptionFromLocal('color') ?? DEFAULT_THEME.value;
-    generateNewTheme(localTheme, undefined, this.device);
-    syncThemeToIframe(this.device);
-    applyThemeFromLocal(this.device);
-  },
-  methods: {
-    handleChangeTheme(theme) {
-      this.theme = theme;
-    },
-    handleRefreshContent() {
-      this.refresh = !this.refresh;
-    },
-    handleTriggerVisible() {
-      this.visible = true;
-    },
-    handleDrawerVisible(v) {
-      this.visible = v;
-      this.$emit('panel-drawer-visible', v);
-    },
-    handleClickSetting() {
-      this.$emit('click-setting');
-      this.visible = false;
-    },
-  },
+});
+
+const emit = defineEmits(['click-setting', 'panel-drawer-visible']);
+
+// Provide device to child components
+provide('device', props.device);
+
+// Data
+const refresh = ref(false);
+const visible = ref(0);
+const activeTabIdx = ref(activeTabMap.color);
+const theme = ref(DEFAULT_THEME);
+
+// Methods
+const handleChangeTheme = (newTheme) => {
+  theme.value = newTheme;
 };
+
+const handleRefreshContent = () => {
+  refresh.value = !refresh.value;
+};
+
+const handleTriggerVisible = () => {
+  visible.value = true;
+};
+
+const handleDrawerVisible = (v) => {
+  visible.value = v;
+  emit('panel-drawer-visible', v);
+};
+
+const handleClickSetting = () => {
+  emit('click-setting');
+  visible.value = false;
+};
+
+// Lifecycle hooks
+onMounted(() => {
+  const localTheme = getOptionFromLocal('color') ?? DEFAULT_THEME.value;
+  generateNewTheme(localTheme, undefined, props.device);
+  syncThemeToIframe(props.device);
+  applyThemeFromLocal(props.device);
+});
 </script>
 
 <style lang="less" scoped>

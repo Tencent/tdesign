@@ -24,56 +24,51 @@
     </div>
   </div>
 </template>
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import { InputNumber as TInputNumber, Slider as TSlider } from 'tdesign-vue';
 import { handleAttach } from '../../common/utils';
 
-export default {
-  name: 'SizeSlider',
-  props: {
-    sizeValue: [String, Number],
-    title: String,
-    step: Number,
-    min: Number,
-    max: Number,
-    disabled: Boolean,
-    needInteger: {
-      type: Boolean,
-      default: true,
-    },
+const props = defineProps({
+  sizeValue: [String, Number],
+  title: String,
+  step: Number,
+  min: Number,
+  max: Number,
+  disabled: Boolean,
+  needInteger: {
+    type: Boolean,
+    default: true,
   },
-  components: {
-    TSlider,
-    TInputNumber,
-  },
-  emit: ['changeFontSize'],
-  data() {
-    return {
-      size: null,
-    };
-  },
-  methods: {
-    format(val) {
-      return `${val}px`;
-    },
-    handleAttach,
-    handleInputChange(v) {
-      if (
-        v === this.size ||
-        v < this.min ||
-        v > this.max ||
-        this.disabled ||
-        (this.needInteger && !Number.isInteger(Number(v)))
-      )
-        return;
-      this.size = v;
-      this.$emit('changeFontSize', v);
-    },
-  },
-  mounted() {
-    this.size = this.needInteger ? parseInt(this.sizeValue, 10) : this.sizeValue;
-  },
+});
+
+const emit = defineEmits(['changeFontSize']);
+
+// Data
+const size = ref(null);
+
+// Methods
+const format = (val) => {
+  return `${val}px`;
 };
+
+const handleInputChange = (v) => {
+  if (
+    v === size.value ||
+    v < props.min ||
+    v > props.max ||
+    props.disabled ||
+    (props.needInteger && !Number.isInteger(Number(v)))
+  )
+    return;
+  size.value = v;
+  emit('changeFontSize', v);
+};
+
+// Lifecycle hooks
+onMounted(() => {
+  size.value = props.needInteger ? parseInt(props.sizeValue, 10) : props.sizeValue;
+});
 </script>
 <style lang="less" scoped>
 .panel {
