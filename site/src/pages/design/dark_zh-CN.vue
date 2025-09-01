@@ -75,15 +75,15 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor';
+<script setup>
+import { ref, onMounted } from 'vue';
 
-export default {
-  mixins: [anchorMixin],
+// Template refs
+const article = ref(null);
 
-  data() {
-    return {
-      dataSource: [
+// Data (from mixin and component)
+const catalog = ref([]);
+const dataSource = ref([
         {
           index: 0,
           token: '@text-color-primary',
@@ -252,10 +252,45 @@ export default {
           { leftTxt: 'Green10', rightTxt: '#E8F7F1' },
         ],
       },
-    };
-  },
-  methods: {
-    copyColor(color) {
+    }
+]);
+
+// Methods (from mixin)
+const genAnchor = () => {
+  if (!article.value) return;
+  const articleContent = article.value;
+  const nodes = ['H2', 'H3'];
+  const titles = [];
+  articleContent.childNodes.forEach((e, index) => {
+    if (nodes.includes(e.nodeName)) {
+      const id = `header-${index}`;
+      e.setAttribute('id', id);
+      titles.push({
+        id,
+        title: e.innerHTML,
+        level: Number(e.nodeName.substring(1, 2)),
+        nodeName: e.nodeName,
+        children: []
+      });
+    }
+  });
+
+  const isEveryLevel3 = titles.every(t => t.level === 3);
+  catalog.value = titles.reduce((acc, curr) => {
+    if (isEveryLevel3) {
+      acc.push(curr);
+    } else {
+      if (curr.level === 2) {
+        acc.push(curr);
+      } else if (curr.level === 3) {
+        acc[acc.length - 1].children.push(curr);
+      }
+    }
+    return acc;
+  }, []);
+};
+
+const copyColor = (color) => {
       if ('clipboard' in navigator) {
         navigator.clipboard.writeText(color);
         this.$message.success('复制成功');
@@ -279,9 +314,12 @@ export default {
       document.body.removeChild(textarea);
 
       this.$message.success('复制成功');
-    },
-  },
 };
+
+// Lifecycle hooks
+onMounted(() => {
+  genAnchor();
+});
 </script>
 
 <style lang="less">

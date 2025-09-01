@@ -101,41 +101,74 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor'
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
-export default {
-  mixins: [anchorMixin],
-  data () {
-    return {
-      gif1: encodeURI('https://tdesign.gtimg.com/site/images/包容.mp4'),
-      gif2: encodeURI('https://tdesign.gtimg.com/site/images/多元.mp4'),
-      gif3: encodeURI('https://tdesign.gtimg.com/site/images/进化.mp4'),
-      gif4: encodeURI('https://tdesign.gtimg.com/site/images/连接.mp4')
+// Template refs
+const article = ref(null);
 
-      // gif1: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E5%8C%85%E5%AE%B9.gif',
-      // gif2: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E5%A4%9A%E5%85%83.gif',
-      // gif3: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E8%BF%9B%E5%8C%96.gif',
-      // gif4: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E8%BF%9E%E6%8E%A5.gif',
+// Data (from mixin and component)
+const catalog = ref([]);
+const gif1 = ref(encodeURI('https://tdesign.gtimg.com/site/images/包容.mp4'));
+const gif2 = ref(encodeURI('https://tdesign.gtimg.com/site/images/多元.mp4'));
+const gif3 = ref(encodeURI('https://tdesign.gtimg.com/site/images/进化.mp4'));
+const gif4 = ref(encodeURI('https://tdesign.gtimg.com/site/images/连接.mp4'));
+
+// gif1: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E5%8C%85%E5%AE%B9.gif',
+// gif2: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E5%A4%9A%E5%85%83.gif',
+// gif3: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E8%BF%9B%E5%8C%96.gif',
+// gif4: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E8%BF%9E%E6%8E%A5.gif',
+
+// Methods (from mixin)
+const genAnchor = () => {
+  if (!article.value) return;
+  const articleContent = article.value;
+  const nodes = ['H2', 'H3'];
+  const titles = [];
+  articleContent.childNodes.forEach((e, index) => {
+    if (nodes.includes(e.nodeName)) {
+      const id = `header-${index}`;
+      e.setAttribute('id', id);
+      titles.push({
+        id,
+        title: e.innerHTML,
+        level: Number(e.nodeName.substring(1, 2)),
+        nodeName: e.nodeName,
+        children: []
+      });
     }
-  },
+  });
 
-  mounted () {
-    window.addEventListener('touchstart', this.playAllVideo)
-  },
-
-  beforeDestroy () {
-    window.removeEventListener('touchstart', this.playAllVideo)
-  },
-
-  methods: {
-    playAllVideo () {
-      Array.from(this.$refs.article.querySelectorAll('video')).forEach(item => {
-        if (item.paused) item.play()
-      })
+  const isEveryLevel3 = titles.every(t => t.level === 3);
+  catalog.value = titles.reduce((acc, curr) => {
+    if (isEveryLevel3) {
+      acc.push(curr);
+    } else {
+      if (curr.level === 2) {
+        acc.push(curr);
+      } else if (curr.level === 3) {
+        acc[acc.length - 1].children.push(curr);
+      }
     }
-  }
-}
+    return acc;
+  }, []);
+};
+
+const playAllVideo = () => {
+  Array.from(article.value.querySelectorAll('video')).forEach(item => {
+    if (item.paused) item.play();
+  });
+};
+
+// Lifecycle hooks
+onMounted(() => {
+  genAnchor();
+  window.addEventListener('touchstart', playAllVideo);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('touchstart', playAllVideo);
+});
 </script>
 
 <style lang="less" scoped>

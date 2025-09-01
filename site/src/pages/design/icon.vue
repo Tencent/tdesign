@@ -262,12 +262,53 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import AllIcons from '@/components/all-icons.vue';
-import anchorMixin from '../mixins/anchor';
 
-export default {
-  components: { AllIcons },
-  mixins: [anchorMixin],
+// Template refs
+const article = ref(null);
+
+// Data (from mixin)
+const catalog = ref([]);
+
+// Methods (from mixin)
+const genAnchor = () => {
+  if (!article.value) return;
+  const articleContent = article.value;
+  const nodes = ['H2', 'H3'];
+  const titles = [];
+  articleContent.childNodes.forEach((e, index) => {
+    if (nodes.includes(e.nodeName)) {
+      const id = `header-${index}`;
+      e.setAttribute('id', id);
+      titles.push({
+        id,
+        title: e.innerHTML,
+        level: Number(e.nodeName.substring(1, 2)),
+        nodeName: e.nodeName,
+        children: []
+      });
+    }
+  });
+
+  const isEveryLevel3 = titles.every(t => t.level === 3);
+  catalog.value = titles.reduce((acc, curr) => {
+    if (isEveryLevel3) {
+      acc.push(curr);
+    } else {
+      if (curr.level === 2) {
+        acc.push(curr);
+      } else if (curr.level === 3) {
+        acc[acc.length - 1].children.push(curr);
+      }
+    }
+    return acc;
+  }, []);
 };
+
+// Lifecycle hooks
+onMounted(() => {
+  genAnchor();
+});
 </script>
