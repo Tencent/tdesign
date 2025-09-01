@@ -6,14 +6,14 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onBeforeUnmount, watch } from 'vue';
-import { useRoute } from 'vue-router';
-
-const route = useRoute();
+import { computed, onMounted, onBeforeUnmount, watch, getCurrentInstance } from 'vue';
+// vue-router@3 无 useRoute 组合式 API，使用实例 proxy.$route，并用 computed 保持响应式
+const { proxy } = getCurrentInstance();
+const route = computed(() => proxy.$route);
 
 // Computed
 const headerStyle = computed(() => {
-  const { name } = route;
+  const { name } = route.value;
   const fixedHeaderList = ['home', 'home-en', 'source', 'source-en', 'trade'];
   if (fixedHeaderList.includes(name)) {
     return {
@@ -24,7 +24,7 @@ const headerStyle = computed(() => {
       zIndex: 1200,
       '--bg-color-secondarypage': 'var(--bg-color-navigation)',
       '--bg-color-secondarypage-hover': 'var(--bg-color-navigation-hover)',
-      '--bg-color-secondarypage-select': 'var(--bg-color-navigation-select)'
+      '--bg-color-secondarypage-select': 'var(--bg-color-navigation-select)',
     };
   }
   return { display: 'none' };
@@ -32,7 +32,7 @@ const headerStyle = computed(() => {
 
 // Methods
 const handleHashScroll = () => {
-  const hash = decodeURIComponent(route.hash);
+  const hash = decodeURIComponent(route.value.hash);
   requestAnimationFrame(() => {
     const id = hash.slice(1);
     const anchorEl = document.getElementById(id);
@@ -54,9 +54,13 @@ onBeforeUnmount(() => {
 });
 
 // Watch
-watch(route, (newRoute) => {
-  if (newRoute.meta) {
-    document.title = newRoute.meta.documentTitle || 'TDesign';
-  }
-}, { immediate: true });
+watch(
+  route,
+  (newRoute) => {
+    if (newRoute && newRoute.meta) {
+      document.title = newRoute.meta.documentTitle || 'TDesign';
+    }
+  },
+  { immediate: true },
+);
 </script>
