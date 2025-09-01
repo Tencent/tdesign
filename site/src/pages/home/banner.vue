@@ -48,7 +48,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import Canvas3d from 'canvas-3d';
 import modelData from './assets/banner.glb';
 import hdrData from './assets/banner.hdr';
@@ -63,42 +64,45 @@ const WIDTH = 1056;
 const HEIGHT = 640;
 const SCALE = 15.1;
 
-export default {
-  props: {
-    themeMode: {
-      type: String,
-      default: 'light',
-    },
+const props = defineProps({
+  themeMode: {
+    type: String,
+    default: 'light',
   },
+});
 
-  data() {
-    return {
-      showCanvas: true,
-      imageLoaded: false,
-    };
-  },
+// Template refs
+const canvasLight = ref(null);
+const canvasDark = ref(null);
 
-  watch: {
-    themeMode() {
-      this.initWebgl();
-    },
-  },
+// Data
+const showCanvas = ref(true);
+const imageLoaded = ref(false);
 
-  mounted() {
-    // document.body.appendChild(stats.dom);
-    this.initWebgl();
+// Instance variables (not reactive)
+let canvas3dLight = null;
+let canvas3dDark = null;
 
-    this.reploadImage();
-  },
+// Lifecycle hooks
+onMounted(() => {
+  // document.body.appendChild(stats.dom);
+  initWebgl();
+  reploadImage();
+});
 
-  beforeDestroy() {
-    // 离开当前页面时，可以调用该方法取消掉requestAnimationFrame
-    this.canvas3dLight && this.canvas3dLight.cancelAnimationFrame();
-    this.canvas3dDark && this.canvas3dDark.cancelAnimationFrame();
-  },
+onBeforeUnmount(() => {
+  // 离开当前页面时，可以调用该方法取消掉requestAnimationFrame
+  canvas3dLight && canvas3dLight.cancelAnimationFrame();
+  canvas3dDark && canvas3dDark.cancelAnimationFrame();
+});
 
-  methods: {
-    reploadImage() {
+// Watch
+watch(() => props.themeMode, () => {
+  initWebgl();
+});
+
+// Methods
+const reploadImage = () => {
       const preloadImages = [
         `${CDN_BASE}/site/images/breathe-top.png`,
         `${CDN_BASE}/site/images/breathe-bottom.png`,
@@ -117,33 +121,30 @@ export default {
       )
         .then(() => {
           console.timeEnd('preload');
-          this.imageLoaded = true;
+          imageLoaded.value = true;
         })
         .catch(() => {
-          this.imageLoaded = true;
+          imageLoaded.value = true;
         });
-    },
-    initWebgl() {
-      // 移动端不渲染 webgl
-      if (/(iPhone|iPod|iOS|Android)/i.test(navigator.userAgent)) {
-        this.showCanvas = false;
-        return;
-      }
-      const { themeMode, renderWebgl } = this;
-      if (themeMode === 'dark' || document.documentElement.getAttribute('theme-mode') === 'dark') {
-        this.canvas3dLight && this.canvas3dLight.cancelAnimationFrame();
-        this.canvas3dDark ? this.canvas3dDark.animate() : (this.canvas3dDark = renderWebgl('dark'));
-      } else {
-        this.canvas3dDark && this.canvas3dDark.cancelAnimationFrame();
-        this.canvas3dLight ? this.canvas3dLight.animate() : (this.canvas3dLight = renderWebgl('light'));
-      }
-    },
-    renderWebgl(theme = 'light') {
-      const { canvasLight, canvasDark } = this.$refs;
-
+const initWebgl = () => {
+  // 移动端不渲染 webgl
+  if (/(iPhone|iPod|iOS|Android)/i.test(navigator.userAgent)) {
+    showCanvas.value = false;
+    return;
+  }
+  const themeMode = props.themeMode;
+  if (themeMode === 'dark' || document.documentElement.getAttribute('theme-mode') === 'dark') {
+    canvas3dLight && canvas3dLight.cancelAnimationFrame();
+    canvas3dDark ? canvas3dDark.animate() : (canvas3dDark = renderWebgl('dark'));
+  } else {
+    canvas3dDark && canvas3dDark.cancelAnimationFrame();
+    canvas3dLight ? canvas3dLight.animate() : (canvas3dLight = renderWebgl('light'));
+  }
+};
+const renderWebgl = (theme = 'light') => {
       const canvas3d = new Canvas3d({
         canvasData: {
-          dom: theme === 'light' ? canvasLight : canvasDark,
+          dom: theme === 'light' ? canvasLight.value : canvasDark.value,
           width: WIDTH,
           height: HEIGHT,
           pixelRatio: Math.min(window.devicePixelRatio, 1.5),
@@ -203,7 +204,7 @@ export default {
         // 模型交互
         sceneInteractiveData: {
           isAble: false,
-          trigger: theme === 'light' ? canvasLight : canvasDark,
+          trigger: theme === 'light' ? canvasLight.value : canvasDark.value,
           param: {
             maxVertical: (0 * Math.PI) / 2,
             minVertical: (0 * -Math.PI) / 2,
@@ -221,7 +222,7 @@ export default {
 
       // 可以通过 canvas3d.shouldRender 的返回值决定是否渲染 3d 模型，移动端也会判定为不渲染
       if (canvas3d.shouldRender()) {
-        this.showCanvas = true;
+        showCanvas.value = true;
         canvas3d
           .loadAssert()
           .then(() => {
@@ -347,11 +348,9 @@ export default {
           });
       } else {
         console.log('当前环境不适宜渲染3d');
-        this.showCanvas = false;
+        showCanvas.value = false;
       }
       return canvas3d;
-    },
-  },
 };
 </script>
 
