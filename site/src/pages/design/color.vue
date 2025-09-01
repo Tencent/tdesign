@@ -256,14 +256,23 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor';
+<script setup>
+import { ref, getCurrentInstance } from 'vue';
 
-export default {
-  mixins: [anchorMixin],
-  data() {
-    return {
-      listFeatures: {
+// Get global properties access
+const instance = getCurrentInstance();
+
+// Inline anchor mixin functionality
+const catalog = ref([
+  { id: 'DOC', title: 'Summary', children: [] },
+  { id: 'en_1', title: 'TDesign Official Palette', children: [] },
+  { id: 'en_2', title: 'Extended Color Palette', children: [] },
+  { id: 'en_3', title: 'Color Extension', children: [] },
+  { id: 'en_4', title: 'Color Usage Specification', children: [] },
+]);
+
+// Data - keeping the existing structure intact
+const listFeatures = ref({
         list: [
           {
             topTitle: 'Contrast Ratio 6.54:1',
@@ -821,35 +830,31 @@ export default {
           ]
         }
       ]
-    };
-  },
+});
 
-  methods: {
-    copyColor(color) {
-      if ('clipboard' in navigator) {
-        navigator.clipboard.writeText(color);
-        this.$message.success('复制成功');
-        return;
-      }
-
-      const textarea = document.createElement('textarea');
-      textarea.textContent = color;
-      textarea.style.width = 0;
-      textarea.style.height = 0;
-      document.body.appendChild(textarea);
-
-      const selection = document.getSelection();
-      const range = document.createRange();
-      range.selectNode(textarea);
-      selection.removeAllRanges();
-      selection.addRange(range);
-
-      document.execCommand('copy');
-      selection.removeAllRanges();
-      document.body.removeChild(textarea);
-
-      this.$message.success('复制成功');
-    }
+const copyColor = (color) => {
+  if ('clipboard' in navigator) {
+    navigator.clipboard.writeText(color);
+    instance.proxy.$message.success('复制成功');
+    return;
   }
+
+  const textarea = document.createElement('textarea');
+  textarea.textContent = color;
+  textarea.style.width = 0;
+  textarea.style.height = 0;
+  document.body.appendChild(textarea);
+
+  const selection = document.getSelection();
+  const range = document.createRange();
+  range.selectNode(textarea);
+  selection.removeAllRanges();
+  selection.addRange(range);
+
+  document.execCommand('copy');
+  selection.removeAllRanges();
+  document.body.removeChild(textarea);
+
+  instance.proxy.$message.success('复制成功');
 };
 </script>

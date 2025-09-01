@@ -412,9 +412,9 @@
   </div>
 </template>
 
-<script lang="jsx">
+<script setup lang="jsx">
+import { ref, onMounted } from 'vue'
 import lottie from 'lottie-web'
-import anchorMixin from '../mixins/anchor'
 
 import xAxis from './assets/motion/X_Axis.json'
 import xAxisDark from './assets/motion/X_Axis_dark.json'
@@ -435,122 +435,144 @@ const lottieProps = {
   autoplay: true
 }
 
-export default {
-  mixins: [anchorMixin],
-  data () {
-    return {
-      axisValue: 'x',
-      slowValue: 'easing',
-      value: '',
-      options: [
-        { label: '架构云', value: '1' },
-        { label: '大数据', value: '2' },
-        { label: '区块链', value: '3' },
-        { label: '物联网', value: '4', disabled: true },
-        { label: '人工智能', value: '5' },
-        // 可以使用渲染函数自定义下拉选项内容和样式
-        {
-          label: '计算场景',
-          value: '6',
-          // eslint-disable-next-line
-          content: (h) => <span>计算场景（高性能计算）</span>,
-        }
-      ]
-    }
-  },
-
-  mounted () {
-    this.loadAxisMotion()
-    this.loadContainerMotion()
-    this.loadFadeMotion()
-    this.initDownloadTable()
-  },
-
-  methods: {
-    changeAxis (value) {
-      this.axisValue = value
-    },
-    loadAxisMotion () {
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.axisX,
-        animationData: xAxis
-      })
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.axisXDark,
-        animationData: xAxisDark
-      })
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.axisY,
-        animationData: yAxis
-      })
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.axisYDark,
-        animationData: yAxisDark
-      })
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.axisZ,
-        animationData: zAxis
-      })
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.axisZDark,
-        animationData: zAxisDark
-      })
-    },
-    loadContainerMotion () {
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.containerMotion,
-        animationData: containerTrans
-      })
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.containerMotionDark,
-        animationData: containerTransDark
-      })
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.containerMotionSample,
-        animationData: containerTransSample
-      })
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.containerMotionSampleDark,
-        animationData: containerTransSampleDark
-      })
-    },
-    loadFadeMotion () {
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.fadeMotion,
-        animationData: fadeInOut
-      })
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.fadeMotionDark,
-        animationData: fadeInOutDark
-      })
-    },
-
-    changeSlow (value) {
-      this.slowValue = value
-    },
-
-    initDownloadTable () {
-      const tableContent = this.$refs.tableCheck.outerHTML
-      const html = `<html><head><meta charset='utf-8' /></head><body>${tableContent}</body></html>`
-
-      const blob = new Blob([html], {
-        type: 'application/vnd.ms-excel'
-      })
-
-      this.$refs.downloadBtn.href = URL.createObjectURL(blob)
-    }
+// Reactive data
+const axisValue = ref('x')
+const slowValue = ref('easing')
+const value = ref('')
+const options = ref([
+  { label: '架构云', value: '1' },
+  { label: '大数据', value: '2' },
+  { label: '区块链', value: '3' },
+  { label: '物联网', value: '4', disabled: true },
+  { label: '人工智能', value: '5' },
+  // 可以使用渲染函数自定义下拉选项内容和样式
+  {
+    label: '计算场景',
+    value: '6',
+    // eslint-disable-next-line
+    content: (h) => <span>计算场景（高性能计算）</span>,
   }
+])
+
+// Template refs
+const axisX = ref()
+const axisXDark = ref()
+const axisY = ref()
+const axisYDark = ref()
+const axisZ = ref()
+const axisZDark = ref()
+const containerMotion = ref()
+const containerMotionDark = ref()
+const containerMotionSample = ref()
+const containerMotionSampleDark = ref()
+const fadeMotion = ref()
+const fadeMotionDark = ref()
+const tableCheck = ref()
+const downloadBtn = ref()
+
+// Inline anchor mixin functionality
+const catalog = ref([
+  { id: 'zh_1', title: '动效总述', children: [] },
+  { id: 'zh_2', title: '动效原则', children: [] },
+  { id: 'zh_3', title: '方向', children: [] },
+  { id: 'zh_4', title: '时间', children: [] },
+  { id: 'zh_5', title: '属性与状态', children: [] },
+  { id: 'zh_6', title: '组件动效', children: [] },
+])
+
+// Methods
+const changeAxis = (value) => {
+  axisValue.value = value
 }
+
+const loadAxisMotion = () => {
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: axisX.value,
+    animationData: xAxis
+  })
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: axisXDark.value,
+    animationData: xAxisDark
+  })
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: axisY.value,
+    animationData: yAxis
+  })
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: axisYDark.value,
+    animationData: yAxisDark
+  })
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: axisZ.value,
+    animationData: zAxis
+  })
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: axisZDark.value,
+    animationData: zAxisDark
+  })
+}
+
+const loadContainerMotion = () => {
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: containerMotion.value,
+    animationData: containerTrans
+  })
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: containerMotionDark.value,
+    animationData: containerTransDark
+  })
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: containerMotionSample.value,
+    animationData: containerTransSample
+  })
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: containerMotionSampleDark.value,
+    animationData: containerTransSampleDark
+  })
+}
+
+const loadFadeMotion = () => {
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: fadeMotion.value,
+    animationData: fadeInOut
+  })
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: fadeMotionDark.value,
+    animationData: fadeInOutDark
+  })
+}
+
+const changeSlow = (value) => {
+  slowValue.value = value
+}
+
+const initDownloadTable = () => {
+  const tableContent = tableCheck.value.outerHTML
+  const html = `<html><head><meta charset='utf-8' /></head><body>${tableContent}</body></html>`
+
+  const blob = new Blob([html], {
+    type: 'application/vnd.ms-excel'
+  })
+
+  downloadBtn.value.href = URL.createObjectURL(blob)
+}
+
+onMounted(() => {
+  loadAxisMotion()
+  loadContainerMotion()
+  loadFadeMotion()
+  initDownloadTable()
+})
 </script>
