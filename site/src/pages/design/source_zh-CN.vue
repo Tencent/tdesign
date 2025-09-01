@@ -89,7 +89,10 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
 import figmaIcon from './assets/source/figma-logo.svg';
 import sketchIcon from './assets/source/sketch-logo.svg';
 import xdIcon from './assets/source/xd-logo.svg';
@@ -101,106 +104,107 @@ import mdIcon from './assets/source/md-logo.svg';
 import mastergoIcon from './assets/source/mastergo-logo.svg';
 import ryIcon from './assets/source/ry-logo.svg';
 
-import { webSourceList, mobileSourceList, sourceDownloadUrl, webChartSourceList } from '@/consts';
+import { webSourceList as _webSourceList, mobileSourceList as _mobileSourceList, sourceDownloadUrl, webChartSourceList } from '@/consts';
 import { webDesignContributor, mobileDesignContributor, webChartDesignContributor } from '@/contributor';
 
-export default {
-  data () {
-    return {
-      webSourceList,
-      mobileSourceList,
-      webChartSourceList,
-      webDesignContributor,
-      mobileDesignContributor,
-      webChartDesignContributor,
-      iconMap: {
-        figma: figmaIcon,
-        sketch: sketchIcon,
-        xd: xdIcon,
-        axure: axureIcon,
-        codesign: codesignIcon,
-        jssj: jssjIcon,
-        pixso: pixsoIcon,
-        md: mdIcon,
-        mastergo: mastergoIcon,
-        ry: ryIcon,
-      },
-      previewUrl: {
-        web: 'https://codesign.qq.com/s/dqN2925D7qjaBXe?active-screen=xDP39qAvLNl9wlK&menu_aside=null&minimap=close',
-        mobile: 'https://codesign.qq.com/s/YDgGjYv28y9wEVQ?active-screen=GD5OjERAdXO93eA&menu_aside=null&minimap=close',
-        'web-chart':
-          'https://codesign.qq.com/s/kv8398d7m59nKeg?active-screen=6ym7ZRGAEOYjAYE&menu_aside=null&minimap=close',
-      },
-    };
-  },
-  computed: {
-    designContributor() {
-      const map = {
-        web: this.webDesignContributor,
-        mobile: this.mobileDesignContributor,
-        'web-chart': this.webChartDesignContributor,
-      };
-      return map[this.tab];
-    },
-    sourceList() {
-      const map = {
-        web: this.webSourceList,
-        mobile: this.mobileSourceList,
-        'web-chart': this.webChartSourceList,
-      };
-      return map[this.tab];
-    },
-    tab: {
-      get() {
-        return this.$route.query.tab || 'web';
-      },
-      set(v) {
-        if (this.$route.query.tab !== v) this.$router.push({ query: { tab: v } });
-      },
-    },
-    footerStyle() {
-      return {
-        '--content-padding-right': '0',
-        '--content-max-width': '1440px',
-        '--content-padding-left-right': '48px',
-        '--footer-inner-position': 'relative',
-        '--footer-logo-position': 'unset',
-      };
-    },
-  },
+const route = useRoute();
+const router = useRouter();
 
-  mounted() {
-    this.$refs.tabs.tabs = [
-      { tab: 'web', name: '桌面端组件库' },
-      { tab: 'mobile', name: '移动端组件库' },
-      { tab: 'web-chart', name: '桌面端图表库' },
-    ];
-    this.$refs.tabs.onchange = ({ detail: currentTab }) => (this.tab = currentTab);
-    fetch(sourceDownloadUrl)
-      .then((res) => res.json())
-      .then((res) => {
-        this.webSourceList = this.webSourceList.map((item) => {
-          item.watch = res[item.id];
-          return item;
-        });
-        this.mobileSourceList = this.mobileSourceList.map((item) => {
-          item.watch = res[item.id];
-          return item;
-        });
-      });
-  },
+// Template refs
+const tabs = ref();
 
-  methods: {
-    handleSourceClick(item) {
-      if (item.status === -1 || !item.actionUrl) return;
+// Reactive data
+const webSourceList = ref(_webSourceList);
+const mobileSourceList = ref(_mobileSourceList);
 
-      if (window._horizon) {
-        window._horizon.send('资源下载', 'click', item.eventLabel, item.actionUrl);
-      }
-      window.open(item.actionUrl, '_blank');
-    },
+const iconMap = ref({
+  figma: figmaIcon,
+  sketch: sketchIcon,
+  xd: xdIcon,
+  axure: axureIcon,
+  codesign: codesignIcon,
+  jssj: jssjIcon,
+  pixso: pixsoIcon,
+  md: mdIcon,
+  mastergo: mastergoIcon,
+  ry: ryIcon,
+});
+
+const previewUrl = ref({
+  web: 'https://codesign.qq.com/s/dqN2925D7qjaBXe?active-screen=xDP39qAvLNl9wlK&menu_aside=null&minimap=close',
+  mobile: 'https://codesign.qq.com/s/YDgGjYv28y9wEVQ?active-screen=GD5OjERAdXO93eA&menu_aside=null&minimap=close',
+  'web-chart':
+    'https://codesign.qq.com/s/kv8398d7m59nKeg?active-screen=6ym7ZRGAEOYjAYE&menu_aside=null&minimap=close',
+});
+
+// Computed properties
+const designContributor = computed(() => {
+  const map = {
+    web: webDesignContributor,
+    mobile: mobileDesignContributor,
+    'web-chart': webChartDesignContributor,
+  };
+  return map[tab.value];
+});
+
+const sourceList = computed(() => {
+  const map = {
+    web: webSourceList.value,
+    mobile: mobileSourceList.value,
+    'web-chart': webChartSourceList,
+  };
+  return map[tab.value];
+});
+
+const tab = computed({
+  get() {
+    return route.query.tab || 'web';
   },
+  set(v) {
+    if (route.query.tab !== v) router.push({ query: { tab: v } });
+  },
+});
+
+const footerStyle = computed(() => {
+  return {
+    '--content-padding-right': '0',
+    '--content-max-width': '1440px',
+    '--content-padding-left-right': '48px',
+    '--footer-inner-position': 'relative',
+    '--footer-logo-position': 'unset',
+  };
+});
+
+// Methods
+const handleSourceClick = (item) => {
+  if (item.status === -1 || !item.actionUrl) return;
+
+  if (window._horizon) {
+    window._horizon.send('资源下载', 'click', item.eventLabel, item.actionUrl);
+  }
+  window.open(item.actionUrl, '_blank');
 };
+
+onMounted(() => {
+  tabs.value.tabs = [
+    { tab: 'web', name: '桌面端组件库' },
+    { tab: 'mobile', name: '移动端组件库' },
+    { tab: 'web-chart', name: '桌面端图表库' },
+  ];
+  tabs.value.onchange = ({ detail: currentTab }) => (tab.value = currentTab);
+  fetch(sourceDownloadUrl)
+    .then((res) => res.json())
+    .then((res) => {
+      webSourceList.value = webSourceList.value.map((item) => {
+        item.watch = res[item.id];
+        return item;
+      });
+      mobileSourceList.value = mobileSourceList.value.map((item) => {
+        item.watch = res[item.id];
+        return item;
+      });
+    });
+});
 </script>
 
 <style lang="less" scoped>
