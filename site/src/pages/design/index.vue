@@ -10,59 +10,64 @@
   </td-doc-layout>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import siteEnConfig from '../../site-en.config'
+
+const route = useRoute()
+const router = useRouter()
+
+// Template refs
+const tdDocAside = ref(null)
+const tdDocContent = ref(null)
+const tdDocHeader = ref(null)
 
 const { docs: designDocs } = JSON.parse(JSON.stringify(siteEnConfig.design).replace(/component:.+/g, ''))
 
-export default {
-  data () {
-    return {
-      timer: null
-    }
-  },
+// Data
+const timer = ref(null)
 
-  computed: {
-    asideList () {
-      if (this.$route.path.includes('/design-en')) return designDocs
-      return designDocs
-    }
-  },
-  watch: {
-    $route (v) {
-      this.$refs.tdDocContent.pageStatus = 'hidden'
+// Computed
+const asideList = computed(() => {
+  if (route.path.includes('/design-en')) return designDocs
+  return designDocs
+})
 
-      requestAnimationFrame(() => {
-        this.initDocHeader()
-        this.$refs.tdDocContent.pageStatus = 'show'
-      })
-    }
-  },
+// Methods
+const initDocHeader = () => {
+  const { meta } = route
 
-  mounted () {
-    this.$refs.tdDocAside.routerList = this.asideList
-    this.$refs.tdDocAside.onchange = ({ detail }) => {
-      if (this.$route.path === detail) return
-      this.$router.push(detail)
-      window.scrollTo(0, 0)
-    }
-
-    this.initDocHeader()
-    this.$refs.tdDocContent.pageStatus = 'show'
-  },
-  methods: {
-    initDocHeader () {
-      const { meta } = this.$route
-
-      if (this.$route.path.includes('/design/')) {
-        clearTimeout(this.timer)
-        this.$refs.tdDocHeader.docInfo = meta
-        this.$refs.tdDocHeader.spline = ''
-        this.timer = setTimeout(() => {
-          this.$refs.tdDocHeader.spline = meta.spline || ''
-        }, 500)
-      }
-    }
+  if (route.path.includes('/design/')) {
+    clearTimeout(timer.value)
+    tdDocHeader.value.docInfo = meta
+    tdDocHeader.value.spline = ''
+    timer.value = setTimeout(() => {
+      tdDocHeader.value.spline = meta.spline || ''
+    }, 500)
   }
 }
+
+// Watch
+watch(route, (v) => {
+  tdDocContent.value.pageStatus = 'hidden'
+
+  requestAnimationFrame(() => {
+    initDocHeader()
+    tdDocContent.value.pageStatus = 'show'
+  })
+})
+
+// Lifecycle
+onMounted(() => {
+  tdDocAside.value.routerList = asideList.value
+  tdDocAside.value.onchange = ({ detail }) => {
+    if (route.path === detail) return
+    router.push(detail)
+    window.scrollTo(0, 0)
+  }
+
+  initDocHeader()
+  tdDocContent.value.pageStatus = 'show'
+})
 </script>
