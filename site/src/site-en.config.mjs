@@ -26,7 +26,7 @@ const siteConfig = {
         title: 'Global Styles',
         children: [
           {
-            name: 'color',
+            name: 'color-en',
             title: 'Color',
             meta: {
               documentTitle: 'Color - TDesign',
@@ -104,7 +104,7 @@ const siteConfig = {
         title: 'Design Guidelines',
         children: [
           {
-            name: 'offices',
+            name: 'offices-en',
             title: 'How to building the framework',
             path: '/design/offices-en',
             meta: {
@@ -116,7 +116,7 @@ const siteConfig = {
             component: () => import('@docs/design/offices.md'),
           },
           {
-            name: 'offices task',
+            name: 'offices-task-en',
             title: 'Design high-Frequency tasks',
             path: '/design/offices-task-en',
             meta: {
@@ -185,7 +185,7 @@ const siteConfig = {
             component: () => import('@docs/awesome.md'),
           },
           {
-            name: 'release',
+            name: 'release-en',
             title: 'Release Summary',
             path: '/about/release-en',
             meta: {
@@ -210,7 +210,7 @@ const siteConfig = {
             component: () => import('@docs/contributing.md'),
           },
           {
-            name: 'contributing-en',
+            name: 'new-component-en',
             title: 'New Component',
             path: '/about/new-component-en',
             meta: {
