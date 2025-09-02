@@ -3,12 +3,12 @@ on:
   push:
     branches: [main]
     paths:
-      - 'packages/components/**'
+      - 'packages/site-components/**'
       - 'packages/theme-generator/**'
   pull_request:
     branches: [main]
     paths:
-      - 'packages/components/**'
+      - 'packages/site-components/**'
       - 'packages/theme-generator/**'
       - 'site/**'
 
@@ -24,13 +24,13 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version-file: .node-version
 
       - run: pnpm install
 
-      - run: pnpm --filter 'tdesign-site-components' --filter 'tdesign-theme-generator' run build
+      - run: pnpm --filter '@tdesign/site-components' --filter 'tdesign-theme-generator' run build
 
-      - run: pnpm dlx pkg-pr-new publish './packages/components' './packages/theme-generator'
+      - run: pnpm dlx pkg-pr-new publish './packages/site-components' './packages/theme-generator'
 
   build-site:
     if: github.repository == 'Tencent/tdesign' && github.event_name == 'pull_request'
@@ -49,7 +49,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version-file: .node-version
 
       - run: pnpm install
 

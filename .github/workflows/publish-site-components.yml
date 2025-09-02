@@ -5,7 +5,7 @@ on:
     branches: [main]
     types: [closed]
     paths:
-      - packages/components/package.json
+      - packages/site-components/package.json
 
   workflow_dispatch:
 
@@ -20,16 +20,16 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version-file: .node-version
 
       - run: pnpm install
 
-      - run: pnpm -F tdesign-site-components run build
-      
+      - run: pnpm -F @tdesign/site-components run build
+
       - name: Publish Package
         run: |
           npm config set "//registry.npmjs.org/:_authToken" "${NPM_TOKEN}"
-          pnpm -F tdesign-site-components publish
+          pnpm -F @tdesign/site-components publish
         env:
           NPM_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}
 
@@ -37,10 +37,10 @@ jobs:
     needs: publish-site-components
     runs-on: ubuntu-latest
     steps:
-      - name: upgrade tdesign-site-components
+      - name: upgrade @tdesign/site-components
         uses: TDesignOteam/tdesign-pr-trigger-action@develop
         with:
           token: ${{ secrets.TDESIGN_BOT_TOKEN }}
           trigger: /upgrade-deps
-          deps: tdesign-site-components
+          deps: '@tdesign/site-components'
           package-manager: pnpm
