@@ -222,13 +222,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 
 // Template refs
-const article = ref(null)
+const article = ref(null);
 
 // Data (from mixin)
-const catalog = ref([])
+const catalog = ref([]);
 
 // Data (from component)
 const dataSource = ref([
@@ -256,7 +256,7 @@ const dataSource = ref([
     grid: '大于断点值时，始终保持水平排列',
     device: 'small size laptop',
   },
-])
+]);
 
 const columns = ref([
   { width: 104, ellipsis: true, colKey: 'cut', title: 'break point' },
@@ -265,10 +265,10 @@ const columns = ref([
   { width: 104, colKey: 'colWidth', title: 'gutter width' },
   { colKey: 'grid', title: 'grid' },
   { width: 160, ellipsis: true, colKey: 'device', title: '显示设备参考' },
-])
+]);
 
-const rowKey = ref('default')
-const size = ref('small')
+const rowKey = ref('default');
+const size = ref('small');
 
 // Methods (from mixin)
 const genAnchor = () => {
@@ -285,12 +285,12 @@ const genAnchor = () => {
         title: e.innerHTML,
         level: Number(e.nodeName.substring(1, 2)),
         nodeName: e.nodeName,
-        children: []
+        children: [],
       });
     }
   });
 
-  const isEveryLevel3 = titles.every(t => t.level === 3);
+  const isEveryLevel3 = titles.every((t) => t.level === 3);
   catalog.value = titles.reduce((acc, curr) => {
     if (isEveryLevel3) {
       acc.push(curr);

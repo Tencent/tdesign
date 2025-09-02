@@ -93,9 +93,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-
+import { ref, computed, onMounted, getCurrentInstance } from 'vue';
 import figmaIcon from './assets/source/figma-logo.svg';
 import sketchIcon from './assets/source/sketch-logo.svg';
 import xdIcon from './assets/source/xd-logo.svg';
@@ -107,11 +105,17 @@ import mdIcon from './assets/source/md-logo.svg';
 import mastergoIcon from './assets/source/mastergo-logo.svg';
 import ryIcon from './assets/source/ry-logo.svg';
 
-import { webSourceList as _webSourceList, mobileSourceList as _mobileSourceList, sourceDownloadUrl, webChartSourceList } from '@/consts';
+import {
+  webSourceList as _webSourceList,
+  mobileSourceList as _mobileSourceList,
+  sourceDownloadUrl,
+  webChartSourceList,
+} from '@/consts';
 import { webDesignContributor, mobileDesignContributor, webChartDesignContributor } from '@/contributor';
 
-const route = useRoute();
-const router = useRouter();
+const { proxy } = getCurrentInstance();
+const route = computed(() => proxy.$route);
+const router = proxy.$router;
 
 // Template refs
 const tabs = ref();
@@ -130,14 +134,13 @@ const iconMap = ref({
   pixso: pixsoIcon,
   md: mdIcon,
   mastergo: mastergoIcon,
-  ry: ryIcon
+  ry: ryIcon,
 });
 
 const previewUrl = ref({
   web: 'https://codesign.qq.com/s/dqN2925D7qjaBXe?active-screen=xDP39qAvLNl9wlK&menu_aside=null&minimap=close',
   mobile: 'https://codesign.qq.com/s/YDgGjYv28y9wEVQ?active-screen=GD5OjERAdXO93eA&menu_aside=null&minimap=close',
-  'web-chart':
-    'https://codesign.qq.com/s/kv8398d7m59nKeg?active-screen=6ym7ZRGAEOYjAYE&menu_aside=null&minimap=close',
+  'web-chart': 'https://codesign.qq.com/s/kv8398d7m59nKeg?active-screen=6ym7ZRGAEOYjAYE&menu_aside=null&minimap=close',
 });
 
 // Computed properties
@@ -161,10 +164,10 @@ const sourceList = computed(() => {
 
 const tab = computed({
   get() {
-    return route.query.tab || 'web';
+    return route.value.query.tab || 'web';
   },
   set(v) {
-    if (route.query.tab !== v) router.push({ query: { tab: v } });
+    if (route.value.query.tab !== v) router.push({ query: { tab: v } });
   },
 });
 

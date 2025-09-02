@@ -214,7 +214,9 @@
 
     <h3>Breaks</h3>
     <p>
-      Breaks mostly appear on composite icons, and their width should be analyzed according to the specific style of the icon and aim to balance the visual weight.</p>
+      Breaks mostly appear on composite icons, and their width should be analyzed according to the specific style of the
+      icon and aim to balance the visual weight.
+    </p>
     <img src="./assets/icon/fracture.png" alt="" />
 
     <h3>Simplicity</h3>
@@ -287,12 +289,12 @@ const genAnchor = () => {
         title: e.innerHTML,
         level: Number(e.nodeName.substring(1, 2)),
         nodeName: e.nodeName,
-        children: []
+        children: [],
       });
     }
   });
 
-  const isEveryLevel3 = titles.every(t => t.level === 3);
+  const isEveryLevel3 = titles.every((t) => t.level === 3);
   catalog.value = titles.reduce((acc, curr) => {
     if (isEveryLevel3) {
       acc.push(curr);

@@ -1,25 +1,20 @@
 <template>
   <span :class="_class" :style="_style">
-    <img
-      :src="imgSrc"
-      alt="user avatar"
-      @error="onError"
-      v-if="!error && imgSrc"
-    >
-    <div class="tdesign-avatar-name">{{username}}</div>
+    <img :src="imgSrc" alt="user avatar" @error="onError" v-if="!error && imgSrc" />
+    <div class="tdesign-avatar-name">{{ username }}</div>
   </span>
 </template>
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, defineProps } from 'vue';
 
-function getSrc (username, src) {
+function getSrc(username, src) {
   if (username) {
     // return `http://dcloud.oa.com/Public/Avatar/${username}.png`;
     // return `http://r.hrc.oa.com/photo/500/${username}.png`;
-    return `https://dayu.oa.com/avatars/${username}/profile.jpg`
+    return `https://dayu.oa.com/avatars/${username}/profile.jpg`;
   }
 
-  return src || ''
+  return src || '';
 }
 
 const props = defineProps({
@@ -29,7 +24,7 @@ const props = defineProps({
    */
   type: {
     type: String,
-    default: 'round'
+    default: 'round',
   },
   /**
    * 头像大小
@@ -37,42 +32,45 @@ const props = defineProps({
    */
   size: {
     type: String,
-    default: 'default'
+    default: 'default',
   },
   username: String,
   src: String,
   width: [String, Number],
-  height: [String, Number]
-})
+  height: [String, Number],
+});
 
-const prefixCls = 'tdesign-avatar'
-const error = ref(false)
+const prefixCls = 'tdesign-avatar';
+const error = ref(false);
 
 const _class = computed(() => {
-  return [prefixCls, {
-    [`${prefixCls}__lg`]: props.size === 'large',
-    [`${prefixCls}__square`]: props.type === 'square',
-    [`${prefixCls}__default`]: error.value || !imgSrc.value
-  }]
-})
+  return [
+    prefixCls,
+    {
+      [`${prefixCls}__lg`]: props.size === 'large',
+      [`${prefixCls}__square`]: props.type === 'square',
+      [`${prefixCls}__default`]: error.value || !imgSrc.value,
+    },
+  ];
+});
 
 const _style = computed(() => {
   if (props.width) {
     return {
       width: `${props.width}px`,
-      height: `${props.width}px`
-    }
+      height: `${props.width}px`,
+    };
   }
-  return {}
-})
+  return {};
+});
 
 const imgSrc = computed(() => {
-  return getSrc(props.username, props.src)
-})
+  return getSrc(props.username, props.src);
+});
 
 const onError = () => {
-  error.value = true
-}
+  error.value = true;
+};
 </script>
 
 <style lang="less">

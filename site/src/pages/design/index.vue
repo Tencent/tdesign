@@ -11,63 +11,63 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import siteEnConfig from '../../site-en.config'
+import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue';
+import siteEnConfig from '../../site-en.config';
 
-const route = useRoute()
-const router = useRouter()
+const { proxy } = getCurrentInstance();
+const route = computed(() => proxy.$route);
+const router = proxy.$router;
 
 // Template refs
-const tdDocAside = ref(null)
-const tdDocContent = ref(null)
-const tdDocHeader = ref(null)
+const tdDocAside = ref(null);
+const tdDocContent = ref(null);
+const tdDocHeader = ref(null);
 
-const { docs: designDocs } = JSON.parse(JSON.stringify(siteEnConfig.design).replace(/component:.+/g, ''))
+const { docs: designDocs } = JSON.parse(JSON.stringify(siteEnConfig.design).replace(/component:.+/g, ''));
 
 // Data
-const timer = ref(null)
+const timer = ref(null);
 
 // Computed
 const asideList = computed(() => {
-  if (route.path.includes('/design-en')) return designDocs
-  return designDocs
-})
+  if (route.path.includes('/design-en')) return designDocs;
+  return designDocs;
+});
 
 // Methods
 const initDocHeader = () => {
-  const { meta } = route
+  const { meta } = route;
 
   if (route.path.includes('/design/')) {
-    clearTimeout(timer.value)
-    tdDocHeader.value.docInfo = meta
-    tdDocHeader.value.spline = ''
+    clearTimeout(timer.value);
+    tdDocHeader.value.docInfo = meta;
+    tdDocHeader.value.spline = '';
     timer.value = setTimeout(() => {
-      tdDocHeader.value.spline = meta.spline || ''
-    }, 500)
+      tdDocHeader.value.spline = meta.spline || '';
+    }, 500);
   }
-}
+};
 
 // Watch
 watch(route, (v) => {
-  tdDocContent.value.pageStatus = 'hidden'
+  tdDocContent.value.pageStatus = 'hidden';
 
   requestAnimationFrame(() => {
-    initDocHeader()
-    tdDocContent.value.pageStatus = 'show'
-  })
-})
+    initDocHeader();
+    tdDocContent.value.pageStatus = 'show';
+  });
+});
 
 // Lifecycle
 onMounted(() => {
-  tdDocAside.value.routerList = asideList.value
+  tdDocAside.value.routerList = asideList.value;
   tdDocAside.value.onchange = ({ detail }) => {
-    if (route.path === detail) return
-    router.push(detail)
-    window.scrollTo(0, 0)
-  }
+    if (route.path === detail) return;
+    router.push(detail);
+    window.scrollTo(0, 0);
+  };
 
-  initDocHeader()
-  tdDocContent.value.pageStatus = 'show'
-})
+  initDocHeader();
+  tdDocContent.value.pageStatus = 'show';
+});
 </script>

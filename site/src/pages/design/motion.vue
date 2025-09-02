@@ -395,7 +395,7 @@
       </tbody>
       <thead>
         <th></th>
-        <th> Can my animation be clearly perceived?</th>
+        <th>Can my animation be clearly perceived?</th>
         <th></th>
       </thead>
       <tbody>
@@ -471,7 +471,7 @@
               <t-icon name="check-circle-filled" />
             </label>
           </td>
-          <td> Can necessary information still be conveyed statically if the animation is deleted?</td>
+          <td>Can necessary information still be conveyed statically if the animation is deleted?</td>
           <td></td>
         </tr>
       </tbody>

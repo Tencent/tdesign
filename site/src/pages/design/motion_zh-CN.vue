@@ -413,32 +413,32 @@
 </template>
 
 <script setup lang="jsx">
-import { ref, onMounted } from 'vue'
-import lottie from 'lottie-web'
+import { ref, onMounted } from 'vue';
+import lottie from 'lottie-web';
 
-import xAxis from './assets/motion/X_Axis.json'
-import xAxisDark from './assets/motion/X_Axis_dark.json'
-import yAxis from './assets/motion/Y_Axis.json'
-import yAxisDark from './assets/motion/Y_Axis_dark.json'
-import zAxis from './assets/motion/Z_Axis.json'
-import zAxisDark from './assets/motion/Z_Axis_dark.json'
-import containerTrans from './assets/motion/container_trans.json'
-import containerTransDark from './assets/motion/container_trans_dark.json'
-import containerTransSample from './assets/motion/container_trans_sample.json'
-import containerTransSampleDark from './assets/motion/container_trans_sample_dark.json'
-import fadeInOut from './assets/motion/fade_in_out.json'
-import fadeInOutDark from './assets/motion/fade_in_out_dark.json'
+import xAxis from './assets/motion/X_Axis.json';
+import xAxisDark from './assets/motion/X_Axis_dark.json';
+import yAxis from './assets/motion/Y_Axis.json';
+import yAxisDark from './assets/motion/Y_Axis_dark.json';
+import zAxis from './assets/motion/Z_Axis.json';
+import zAxisDark from './assets/motion/Z_Axis_dark.json';
+import containerTrans from './assets/motion/container_trans.json';
+import containerTransDark from './assets/motion/container_trans_dark.json';
+import containerTransSample from './assets/motion/container_trans_sample.json';
+import containerTransSampleDark from './assets/motion/container_trans_sample_dark.json';
+import fadeInOut from './assets/motion/fade_in_out.json';
+import fadeInOutDark from './assets/motion/fade_in_out_dark.json';
 
 const lottieProps = {
   renderer: 'svg',
   loop: true,
-  autoplay: true
-}
+  autoplay: true,
+};
 
 // Reactive data
-const axisValue = ref('x')
-const slowValue = ref('easing')
-const value = ref('')
+const axisValue = ref('x');
+const slowValue = ref('easing');
+const value = ref('');
 const options = ref([
   { label: '架构云', value: '1' },
   { label: '大数据', value: '2' },
@@ -451,24 +451,24 @@ const options = ref([
     value: '6',
     // eslint-disable-next-line
     content: (h) => <span>计算场景（高性能计算）</span>,
-  }
-])
+  },
+]);
 
 // Template refs
-const axisX = ref()
-const axisXDark = ref()
-const axisY = ref()
-const axisYDark = ref()
-const axisZ = ref()
-const axisZDark = ref()
-const containerMotion = ref()
-const containerMotionDark = ref()
-const containerMotionSample = ref()
-const containerMotionSampleDark = ref()
-const fadeMotion = ref()
-const fadeMotionDark = ref()
-const tableCheck = ref()
-const downloadBtn = ref()
+const axisX = ref();
+const axisXDark = ref();
+const axisY = ref();
+const axisYDark = ref();
+const axisZ = ref();
+const axisZDark = ref();
+const containerMotion = ref();
+const containerMotionDark = ref();
+const containerMotionSample = ref();
+const containerMotionSampleDark = ref();
+const fadeMotion = ref();
+const fadeMotionDark = ref();
+const tableCheck = ref();
+const downloadBtn = ref();
 
 // Inline anchor mixin functionality
 const catalog = ref([
@@ -478,101 +478,101 @@ const catalog = ref([
   { id: 'zh_4', title: '时间', children: [] },
   { id: 'zh_5', title: '属性与状态', children: [] },
   { id: 'zh_6', title: '组件动效', children: [] },
-])
+]);
 
 // Methods
 const changeAxis = (value) => {
-  axisValue.value = value
-}
+  axisValue.value = value;
+};
 
 const loadAxisMotion = () => {
   lottie.loadAnimation({
     ...lottieProps,
     container: axisX.value,
-    animationData: xAxis
-  })
+    animationData: xAxis,
+  });
   lottie.loadAnimation({
     ...lottieProps,
     container: axisXDark.value,
-    animationData: xAxisDark
-  })
+    animationData: xAxisDark,
+  });
   lottie.loadAnimation({
     ...lottieProps,
     container: axisY.value,
-    animationData: yAxis
-  })
+    animationData: yAxis,
+  });
   lottie.loadAnimation({
     ...lottieProps,
     container: axisYDark.value,
-    animationData: yAxisDark
-  })
+    animationData: yAxisDark,
+  });
   lottie.loadAnimation({
     ...lottieProps,
     container: axisZ.value,
-    animationData: zAxis
-  })
+    animationData: zAxis,
+  });
   lottie.loadAnimation({
     ...lottieProps,
     container: axisZDark.value,
-    animationData: zAxisDark
-  })
-}
+    animationData: zAxisDark,
+  });
+};
 
 const loadContainerMotion = () => {
   lottie.loadAnimation({
     ...lottieProps,
     container: containerMotion.value,
-    animationData: containerTrans
-  })
+    animationData: containerTrans,
+  });
   lottie.loadAnimation({
     ...lottieProps,
     container: containerMotionDark.value,
-    animationData: containerTransDark
-  })
+    animationData: containerTransDark,
+  });
   lottie.loadAnimation({
     ...lottieProps,
     container: containerMotionSample.value,
-    animationData: containerTransSample
-  })
+    animationData: containerTransSample,
+  });
   lottie.loadAnimation({
     ...lottieProps,
     container: containerMotionSampleDark.value,
-    animationData: containerTransSampleDark
-  })
-}
+    animationData: containerTransSampleDark,
+  });
+};
 
 const loadFadeMotion = () => {
   lottie.loadAnimation({
     ...lottieProps,
     container: fadeMotion.value,
-    animationData: fadeInOut
-  })
+    animationData: fadeInOut,
+  });
   lottie.loadAnimation({
     ...lottieProps,
     container: fadeMotionDark.value,
-    animationData: fadeInOutDark
-  })
-}
+    animationData: fadeInOutDark,
+  });
+};
 
 const changeSlow = (value) => {
-  slowValue.value = value
-}
+  slowValue.value = value;
+};
 
 const initDownloadTable = () => {
-  const tableContent = tableCheck.value.outerHTML
-  const html = `<html><head><meta charset='utf-8' /></head><body>${tableContent}</body></html>`
+  const tableContent = tableCheck.value.outerHTML;
+  const html = `<html><head><meta charset='utf-8' /></head><body>${tableContent}</body></html>`;
 
   const blob = new Blob([html], {
-    type: 'application/vnd.ms-excel'
-  })
+    type: 'application/vnd.ms-excel',
+  });
 
-  downloadBtn.value.href = URL.createObjectURL(blob)
-}
+  downloadBtn.value.href = URL.createObjectURL(blob);
+};
 
 onMounted(() => {
-  loadAxisMotion()
-  loadContainerMotion()
-  loadFadeMotion()
-  initDownloadTable()
-})
+  loadAxisMotion();
+  loadContainerMotion();
+  loadFadeMotion();
+  initDownloadTable();
+});
 </script>

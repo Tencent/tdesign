@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch, defineProps } from 'vue';
 
 const props = defineProps({
   themeMode: {
@@ -111,9 +111,12 @@ onBeforeUnmount(() => {
 });
 
 // Watch
-watch(() => props.themeMode, (v) => {
-  togglePlay(v);
-});
+watch(
+  () => props.themeMode,
+  (v) => {
+    togglePlay(v);
+  },
+);
 </script>
 
 <style lang="less">

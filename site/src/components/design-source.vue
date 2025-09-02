@@ -14,10 +14,7 @@
           </div>
           <div class="tdesign-source-block-title">
             {{ item.title }}
-            <span
-              v-if="item.status"
-              :class="getStatusClass(item.status)"
-            >
+            <span v-if="item.status" :class="getStatusClass(item.status)">
               {{ getStatusText(item.status) }}
             </span>
           </div>
@@ -54,37 +51,37 @@
 </template>
 
 <script setup>
-import { reactive, computed } from 'vue'
-import AdobeXDWeb from './assets/Adobe-XD-Web.png'
-import AdobeXDWebDark from './assets/Adobe-XD-Web-dark.png'
-import AdobeXDMobile from './assets/Adobe-XD-Mobile.png'
-import AdobeXDMobileDark from './assets/Adobe-XD-Mobile-dark.png'
-import AxureWeb from './assets/Axure-Web.png'
-import AxureWebDark from './assets/Axure-Web-dark.png'
-import AxureMobile from './assets/Axure-Mobile.png'
-import AxureMobileDark from './assets/Axure-Mobile-dark.png'
-import FigmaWeb from './assets/Figma-Web.png'
-import FigmaWebDark from './assets/Figma-Web-dark.png'
-import FigmaMobile from './assets/Figma-Mobile.png'
-import FigmaMobileDark from './assets/Figma-Mobile-dark.png'
-import SketchWeb from './assets/Sketch-Web.png'
-import SketchWebDark from './assets/Sketch-Web-dark.png'
-import SketchMobile from './assets/Sketch-Mobile.png'
-import SketchMobileDark from './assets/Sketch-Mobile-dark.png'
-import SketchTDesignMaker from './assets/Sketch-TDesignMaker.png'
-import SketchTDesignMakerDark from './assets/Sketch-TDesignMaker-dark.png'
-import TDesignPixso from './assets/TDesign-Pixso.png'
-import TDesignPixsoDark from './assets/TDesign-Pixso-dark.png'
-import Modao from './assets/modao.png'
-import ModaoDark from './assets/modao-dark.png'
-import TDesignJs from './assets/TDesign-Js.png'
-import TDesignJsDark from './assets/TDesign-Js-dark.png'
-import CoDesign from './assets/CoDesign.png'
-import CoDesignDark from './assets/CoDesign-dark.png'
-import StarterUIkitPC from './assets/Starter-UIkit-pc.png'
-import StarterUIkitPCDark from './assets/Starter-UIkit-pc-dark.png'
-import StarterUIkitMobile from './assets/Starter-UIkit-mobile.png'
-import StarterUIkitMobileDark from './assets/Starter-UIkit-mobile-dark.png'
+import { reactive } from 'vue';
+import AdobeXDWeb from './assets/Adobe-XD-Web.png';
+import AdobeXDWebDark from './assets/Adobe-XD-Web-dark.png';
+import AdobeXDMobile from './assets/Adobe-XD-Mobile.png';
+import AdobeXDMobileDark from './assets/Adobe-XD-Mobile-dark.png';
+import AxureWeb from './assets/Axure-Web.png';
+import AxureWebDark from './assets/Axure-Web-dark.png';
+import AxureMobile from './assets/Axure-Mobile.png';
+import AxureMobileDark from './assets/Axure-Mobile-dark.png';
+import FigmaWeb from './assets/Figma-Web.png';
+import FigmaWebDark from './assets/Figma-Web-dark.png';
+import FigmaMobile from './assets/Figma-Mobile.png';
+import FigmaMobileDark from './assets/Figma-Mobile-dark.png';
+import SketchWeb from './assets/Sketch-Web.png';
+import SketchWebDark from './assets/Sketch-Web-dark.png';
+import SketchMobile from './assets/Sketch-Mobile.png';
+import SketchMobileDark from './assets/Sketch-Mobile-dark.png';
+import SketchTDesignMaker from './assets/Sketch-TDesignMaker.png';
+import SketchTDesignMakerDark from './assets/Sketch-TDesignMaker-dark.png';
+import TDesignPixso from './assets/TDesign-Pixso.png';
+import TDesignPixsoDark from './assets/TDesign-Pixso-dark.png';
+import Modao from './assets/modao.png';
+import ModaoDark from './assets/modao-dark.png';
+import TDesignJs from './assets/TDesign-Js.png';
+import TDesignJsDark from './assets/TDesign-Js-dark.png';
+import CoDesign from './assets/CoDesign.png';
+import CoDesignDark from './assets/CoDesign-dark.png';
+import StarterUIkitPC from './assets/Starter-UIkit-pc.png';
+import StarterUIkitPCDark from './assets/Starter-UIkit-pc-dark.png';
+import StarterUIkitMobile from './assets/Starter-UIkit-mobile.png';
+import StarterUIkitMobileDark from './assets/Starter-UIkit-mobile-dark.png';
 
 import {
   figmaWebUrl,
@@ -93,8 +90,8 @@ import {
   sketchWebUrl,
   sketchMobileUrl,
   axWebUrl,
-  xdWebUrl
-} from '@consts'
+  xdWebUrl,
+} from '@consts';
 
 const baseList = reactive([
   {
@@ -103,7 +100,7 @@ const baseList = reactive([
     status: 0,
     imgUrl: FigmaWeb,
     imgUrlDark: FigmaWebDark,
-    actionUrl: figmaWebUrl
+    actionUrl: figmaWebUrl,
   },
   {
     title: 'Figma 移动端组件库',
@@ -111,7 +108,7 @@ const baseList = reactive([
     status: 0,
     imgUrl: FigmaMobile,
     imgUrlDark: FigmaMobileDark,
-    actionUrl: figmaMobileUrl
+    actionUrl: figmaMobileUrl,
   },
   {
     title: 'Sketch 桌面端组件库',
@@ -119,7 +116,7 @@ const baseList = reactive([
     status: 3,
     imgUrl: SketchWeb,
     imgUrlDark: SketchWebDark,
-    actionUrl: sketchWebUrl
+    actionUrl: sketchWebUrl,
   },
   {
     title: 'Sketch 移动端组件库',
@@ -127,22 +124,23 @@ const baseList = reactive([
     status: 0,
     imgUrl: SketchMobile,
     imgUrlDark: SketchMobileDark,
-    actionUrl: sketchMobileUrl
+    actionUrl: sketchMobileUrl,
   },
   {
     title: 'Axure 桌面端组件库',
-    detail: '使用 Axure 组件库请参考<a href="https://github.com/Tencent/tdesign/blob/main/docs/design/TDesign_Axure_Library%20Guide.md" target="blank">《使用帮助》</a>',
+    detail:
+      '使用 Axure 组件库请参考<a href="https://github.com/Tencent/tdesign/blob/main/docs/design/TDesign_Axure_Library%20Guide.md" target="blank">《使用帮助》</a>',
     status: 3,
     imgUrl: AxureWeb,
     imgUrlDark: AxureWebDark,
-    actionUrl: axWebUrl
+    actionUrl: axWebUrl,
   },
   {
     title: 'Axure 移动端组件库',
     detail: '适用于移动端/小程序场景的 Axure 文件',
     status: 1,
     imgUrl: AxureMobile,
-    imgUrlDark: AxureMobileDark
+    imgUrlDark: AxureMobileDark,
   },
   {
     title: 'Adobe XD 桌面端组件库',
@@ -150,14 +148,14 @@ const baseList = reactive([
     status: 0,
     imgUrl: AdobeXDWeb,
     imgUrlDark: AdobeXDWebDark,
-    actionUrl: xdWebUrl
+    actionUrl: xdWebUrl,
   },
   {
     title: 'Adobe XD 移动端组件库',
     detail: '适用于移动端/小程序场景的 XD 文件',
     status: 1,
     imgUrl: AdobeXDMobile,
-    imgUrlDark: AdobeXDMobileDark
+    imgUrlDark: AdobeXDMobileDark,
   },
   {
     title: 'Figma 桌面端页面模板',
@@ -165,16 +163,16 @@ const baseList = reactive([
     status: 0,
     imgUrl: StarterUIkitPC,
     imgUrlDark: StarterUIkitPCDark,
-    actionUrl: figmaWebStarterUrl
+    actionUrl: figmaWebStarterUrl,
   },
   {
     title: 'Figma 移动端页面模板',
     detail: '适用于移动端/小程序场景的页面模板',
     status: 1,
     imgUrl: StarterUIkitMobile,
-    imgUrlDark: StarterUIkitMobileDark
-  }
-])
+    imgUrlDark: StarterUIkitMobileDark,
+  },
+]);
 
 const utilList = reactive([
   {
@@ -184,7 +182,7 @@ const utilList = reactive([
     status: 0,
     imgUrl: SketchTDesignMaker,
     imgUrlDark: SketchTDesignMakerDark,
-    actionUrl: 'https://teamaker-1251887421.cos.ap-guangzhou.myqcloud.com/tdesignmaker.sketchplugin0.1.3.zip'
+    actionUrl: 'https://teamaker-1251887421.cos.ap-guangzhou.myqcloud.com/tdesignmaker.sketchplugin0.1.3.zip',
   },
   {
     title: 'CoDesign & TDesign',
@@ -193,7 +191,7 @@ const utilList = reactive([
     status: 0,
     imgUrl: CoDesign,
     imgUrlDark: CoDesignDark,
-    actionUrl: 'https://codesign.qq.com/?utm_source=tdesign&utm_medium=tdesign'
+    actionUrl: 'https://codesign.qq.com/?utm_source=tdesign&utm_medium=tdesign',
   },
   {
     title: '即时设计 & TDesign',
@@ -201,7 +199,7 @@ const utilList = reactive([
     status: 0,
     imgUrl: TDesignJs,
     imgUrlDark: TDesignJsDark,
-    actionUrl: 'https://js.design/resourceDetails/?id=61c19580b7b05104e240fa76'
+    actionUrl: 'https://js.design/resourceDetails/?id=61c19580b7b05104e240fa76',
   },
   {
     title: 'Pixso & TDesign',
@@ -209,7 +207,7 @@ const utilList = reactive([
     status: 0,
     imgUrl: TDesignPixso,
     imgUrlDark: TDesignPixsoDark,
-    actionUrl: 'https://pixso.cn/community/file/rHGnmqg_TSuh_Z3y2d6IfA'
+    actionUrl: 'https://pixso.cn/community/file/rHGnmqg_TSuh_Z3y2d6IfA',
   },
   {
     title: '墨刀 & TDesign',
@@ -218,28 +216,33 @@ const utilList = reactive([
     imgUrl: Modao,
     imgUrlDark: ModaoDark,
     actionUrl:
-      'https://modao.cc/community?page=1&type=find&params=work&keyword=TDesign%E6%A1%8C%E9%9D%A2%E7%AB%AF%E7%BB%84%E4%BB%B6%E5%BA%93'
-  }
-])
+      'https://modao.cc/community?page=1&type=find&params=work&keyword=TDesign%E6%A1%8C%E9%9D%A2%E7%AB%AF%E7%BB%84%E4%BB%B6%E5%BA%93',
+  },
+]);
 
-const headerStyle = computed(() => {
-  return {
-    '--bg-color-secondarypage': 'var(--bg-color-navigation)',
-    '--bg-color-secondarypage-hover': 'var(--bg-color-navigation-hover)',
-    '--bg-color-secondarypage-select': 'var(--bg-color-navigation-select)'
-  }
-})
+// const headerStyle = computed(() => {
+//   return {
+//     '--bg-color-secondarypage': 'var(--bg-color-navigation)',
+//     '--bg-color-secondarypage-hover': 'var(--bg-color-navigation-hover)',
+//     '--bg-color-secondarypage-select': 'var(--bg-color-navigation-select)',
+//   };
+// });
 
 const getStatusClass = (status) => {
-  const map = { 0: '', 1: 'tdesign-source-block-tag-todo', 2: 'tdesign-source-block-tag-waiting', 3: 'tdesign-source-block-tag-new' }
-  return map[status]
-}
+  const map = {
+    0: '',
+    1: 'tdesign-source-block-tag-todo',
+    2: 'tdesign-source-block-tag-waiting',
+    3: 'tdesign-source-block-tag-new',
+  };
+  return map[status];
+};
 
 const getStatusText = (status) => {
-  console.log('status', status)
-  const map = { 0: '', 1: '待上线', 2: '进行中', 3: '最新' }
-  return map[status]
-}
+  console.log('status', status);
+  const map = { 0: '', 1: '待上线', 2: '进行中', 3: '最新' };
+  return map[status];
+};
 
 const download = (item) => {
   if (item.actionUrl) {
@@ -247,12 +250,12 @@ const download = (item) => {
       window.aegis.reportEvent({
         name: '设计资源下载', // 必填
         ext1: item.title,
-        ext2: item.actionUrl
-      })
+        ext2: item.actionUrl,
+      });
     if (window._horizon) {
-      window._horizon.send('资源下载', 'click', item.title, item.actionUrl)
+      window._horizon.send('资源下载', 'click', item.title, item.actionUrl);
     }
-    window.open(item.actionUrl, '_blank')
+    window.open(item.actionUrl, '_blank');
   }
-}
+};
 </script>

@@ -27,79 +27,79 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import MarkdownIt from 'markdown-it'
-import mila from 'markdown-it-link-attributes'
+import { ref, computed, onMounted, getCurrentInstance } from 'vue';
+import MarkdownIt from 'markdown-it';
+import mila from 'markdown-it-link-attributes';
 
-const route = useRoute()
+const { proxy } = getCurrentInstance();
+const route = computed(() => proxy.$route);
 
 // Template refs
-const tdDocHeader = ref(null)
+const tdDocHeader = ref(null);
 
-const RELEASE_API = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/release'
+const RELEASE_API = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/release';
 
-const titleReg = /<h[23]>\s*(Vue|React|Miniprogram|Figma|Sketch|Axure|AdobeXD|TDesign)/g
+const titleReg = /<h[23]>\s*(Vue|React|Miniprogram|Figma|Sketch|Axure|AdobeXD|TDesign)/g;
 
 const mdRender = new MarkdownIt({
-  linkify: true
+  linkify: true,
 }).use(mila, {
   attrs: {
     target: '_blank',
-    rel: 'noopener'
-  }
-})
+    rel: 'noopener',
+  },
+});
 
 // Data
-const release = ref([])
+const release = ref([]);
 
 // Computed
 const releaseTimeList = computed(() => {
   return release.value.map((item) => ({
     title: formatTime(item.published_at),
-    id: formatTime(item.published_at).replace(/\s/g, '-')
-  }))
-})
+    id: formatTime(item.published_at).replace(/\s/g, '-'),
+  }));
+});
 
 // Methods
 const formatTime = (time) => {
-  return `${new Date(time).toDateString()}（${new Date(time).toLocaleDateString()}）`
-}
+  return `${new Date(time).toDateString()}（${new Date(time).toLocaleDateString()}）`;
+};
 
 const pageInit = () => {
-  const { meta } = route
-  tdDocHeader.value.docInfo = meta
-}
+  const { meta } = route.value;
+  tdDocHeader.value.docInfo = meta;
+};
 
 const fetchReleases = () => {
-  const cache = sessionStorage.getItem('__tdesign_release__')
+  const cache = sessionStorage.getItem('__tdesign_release__');
 
   if (cache) {
-    const data = JSON.parse(cache)
+    const data = JSON.parse(cache);
     release.value = data.map((item) => {
-      item.body = mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1')
-      return item
-    })
+      item.body = mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1');
+      return item;
+    });
   } else {
     fetch(RELEASE_API)
       .then((res) => res.json())
       .then((data) => {
-        sessionStorage.setItem('__tdesign_release__', JSON.stringify(data))
+        sessionStorage.setItem('__tdesign_release__', JSON.stringify(data));
 
         release.value = data.map((item) => {
-          item.body = mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1')
-          return item
-        })
+          item.body = mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1');
+          return item;
+        });
       })
-      .catch((err) => console.error(err))
+      .catch((err) => console.error(err));
   }
-}
+};
 
 // Lifecycle
 onMounted(() => {
-  pageInit()
-  fetchReleases()
-})
+  pageInit();
+  fetchReleases();
+});
 </script>
 
 <style lang="less">

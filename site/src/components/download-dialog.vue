@@ -20,69 +20,69 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
   visible: Boolean,
-  downloadItem: Object
-})
+  downloadItem: Object,
+});
 
-const emit = defineEmits(['update:visible'])
+const emit = defineEmits(['update:visible']);
 
-const email = ref('')
+const email = ref('');
 
 const visibleSync = computed({
-  get () {
-    return props.visible
+  get() {
+    return props.visible;
   },
-  set (v) {
-    emit('update:visible', v)
-  }
-})
+  set(v) {
+    emit('update:visible', v);
+  },
+});
 
 const legalEmail = computed(() => {
-  return /^[A-Za-z0-9\-\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(email.value)
-})
+  return /^[A-Za-z0-9\-\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(email.value);
+});
 
 const downloadCancel = () => {
-  visibleSync.value = false
-}
+  visibleSync.value = false;
+};
 
 const downloadConfirm = () => {
-  if (!email.value || !props.downloadItem) return
+  if (!email.value || !props.downloadItem) return;
 
-  window.open(props.downloadItem.actionUrl, '_blank')
-  visibleSync.value = false
+  window.open(props.downloadItem.actionUrl, '_blank');
+  visibleSync.value = false;
   aegis.reportEvent({
     name: '设计资源下载', // 必填
     ext1: email.value,
     ext2: props.downloadItem.title,
-    ext3: props.downloadItem.actionUrl
-  })
-}
+    ext3: props.downloadItem.actionUrl,
+  });
+};
 </script>
 
 <style lang="less">
 .dialog-download {
   .dialog-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .dialog-describe {
-      font-weight: 600;
-      font-size: 36px;
-      line-height: 44px;
-      color: var(--text-primary);
-      text-align: center;
-      margin: 30px 0 24px;
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 44px;
+    color: var(--text-primary);
+    text-align: center;
+    margin: 30px 0 24px;
   }
   .dialog-email {
-      width: 100%;
-      padding: 0 2px;
+    width: 100%;
+    padding: 0 2px;
   }
   .dialog-footer {
-      text-align: center;
+    text-align: center;
   }
 }
 </style>

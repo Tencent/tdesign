@@ -201,13 +201,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, getCurrentInstance } from 'vue'
+import { ref, onMounted, getCurrentInstance } from 'vue';
 
 // Template refs
-const article = ref(null)
+const article = ref(null);
 
 // Data (from mixin)
-const catalog = ref([])
+const catalog = ref([]);
 
 const fontDownloadUrl =
   'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/design-source/TCloudNumber%20v1.010.zip';
@@ -221,7 +221,7 @@ function genFontSize(num) {
 }
 
 // Data (from component)
-const dialogVisible = ref(false)
+// const dialogVisible = ref(false);
 const fontList = ref([
   { step: 'base', size: '10px minimum in mobile', fontSize: 10, desc: 'first font size' },
   { step: '+2', size: '12px minimum in desktop', fontSize: 12 },
@@ -234,21 +234,21 @@ const fontList = ref([
   { step: '+8', size: '36px TDesign', fontSize: 36 },
   { step: '+12', size: '48px TDesign', fontSize: 48 },
   { step: '+16', size: '64px TDesign', fontSize: 64 },
-])
-const fontSize = ref(48)
-const fontSelectList = ref(genFontSize(64))
+]);
+const fontSize = ref(48);
+const fontSelectList = ref(genFontSize(64));
 const fontColorListLeft = ref([
   { background: 'rgba(0, 0, 0, 0.9)', color: '#fff', text: 'Font Gy1', style: '#000000 90%' },
   { background: 'rgba(0, 0, 0, 0.6)', color: '#fff', text: 'Font Gy2', style: '#000000 60%' },
   { background: 'rgba(0, 0, 0, 0.4)', color: '#fff', text: 'Font Gy3', style: '#000000 40%' },
   { background: 'rgba(0, 0, 0, 0.26)', color: '#fff', text: 'Font Gy4', style: '#000000 26%' },
-])
+]);
 const fontColorListRight = ref([
   { background: 'rgba(255, 255, 255, 1)', color: 'rgba(0,0,0,.9)', text: 'Font Wh1', style: '#ffffff 100%' },
   { background: 'rgba(255, 255, 255, 0.55)', color: '#fff', text: 'Font Wh2', style: '#ffffff 55%' },
   { background: 'rgba(255, 255, 255, 0.35)', color: '#fff', text: 'Font Wh3', style: '#ffffff 35%' },
   { background: 'rgba(255, 255, 255, 0.22)', color: '#fff', text: 'Font Wh4', style: '#ffffff 22%' },
-])
+]);
 
 // Methods (from mixin)
 const genAnchor = () => {
@@ -265,12 +265,12 @@ const genAnchor = () => {
         title: e.innerHTML,
         level: Number(e.nodeName.substring(1, 2)),
         nodeName: e.nodeName,
-        children: []
+        children: [],
       });
     }
   });
 
-  const isEveryLevel3 = titles.every(t => t.level === 3);
+  const isEveryLevel3 = titles.every((t) => t.level === 3);
   catalog.value = titles.reduce((acc, curr) => {
     if (isEveryLevel3) {
       acc.push(curr);

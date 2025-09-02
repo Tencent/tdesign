@@ -23,7 +23,7 @@
       x5-playsinline
       webkit-playsinline
       x5-video-player
-      x5-video-player-type='h5'
+      x5-video-player-type="h5"
       preload="auto"
     >
       <source :src="gif1" type="video/mp4" />
@@ -44,13 +44,14 @@
       x5-playsinline
       webkit-playsinline
       x5-video-player
-      x5-video-player-type='h5'
+      x5-video-player-type="h5"
       preload="auto"
     >
       <source :src="gif2" type="video/mp4" />
     </video>
     <p>
-      在一个专业环境里，我们希望 TDesign 可以保持多元。我们意识到在世界中不可能单一化，所以作为设计体系需要不断纳入新鲜血液，适应未来的技术和体验变革，不断地进行多元化生长。
+      在一个专业环境里，我们希望 TDesign
+      可以保持多元。我们意识到在世界中不可能单一化，所以作为设计体系需要不断纳入新鲜血液，适应未来的技术和体验变革，不断地进行多元化生长。
       TDesign
       基于腾讯业务，同时也服务于业务，并伴随着业务的使用后获得业务的反哺，从而不断地得到多元内容补充。在保证价值观一致的基础上，洞察多个业务场景需求，赋能腾讯及生态中的不同业务类型
       ，为 TDesign 探索更多的多元化机会点。
@@ -66,7 +67,7 @@
       x5-playsinline
       webkit-playsinline
       x5-video-player
-      x5-video-player-type='h5'
+      x5-video-player-type="h5"
       preload="auto"
     >
       <source :src="gif3" type="video/mp4" />
@@ -88,7 +89,7 @@
       x5-playsinline
       webkit-playsinline
       x5-video-player
-      x5-video-player-type='h5'
+      x5-video-player-type="h5"
       preload="auto"
     >
       <source :src="gif4" type="video/mp4" />
@@ -134,12 +135,12 @@ const genAnchor = () => {
         title: e.innerHTML,
         level: Number(e.nodeName.substring(1, 2)),
         nodeName: e.nodeName,
-        children: []
+        children: [],
       });
     }
   });
 
-  const isEveryLevel3 = titles.every(t => t.level === 3);
+  const isEveryLevel3 = titles.every((t) => t.level === 3);
   catalog.value = titles.reduce((acc, curr) => {
     if (isEveryLevel3) {
       acc.push(curr);
@@ -155,7 +156,7 @@ const genAnchor = () => {
 };
 
 const playAllVideo = () => {
-  Array.from(article.value.querySelectorAll('video')).forEach(item => {
+  Array.from(article.value.querySelectorAll('video')).forEach((item) => {
     if (item.paused) item.play();
   });
 };

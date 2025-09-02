@@ -146,12 +146,12 @@ const genAnchor = () => {
         title: e.innerHTML,
         level: Number(e.nodeName.substring(1, 2)),
         nodeName: e.nodeName,
-        children: []
+        children: [],
       });
     }
   });
 
-  const isEveryLevel3 = titles.every(t => t.level === 3);
+  const isEveryLevel3 = titles.every((t) => t.level === 3);
   catalog.value = titles.reduce((acc, curr) => {
     if (isEveryLevel3) {
       acc.push(curr);
