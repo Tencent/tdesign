@@ -30,7 +30,7 @@ const timer = ref(null);
 
 // Computed
 const asideList = computed(() => {
-  if (route.path.includes('/design-en')) return designDocs;
+  if (route.value.path.includes('/design-en')) return designDocs;
   return designDocs;
 });
 
@@ -38,7 +38,7 @@ const asideList = computed(() => {
 const initDocHeader = () => {
   const { meta } = route.value;
 
-  if (route.path.includes('/design/')) {
+  if (route.value.path.includes('/design/')) {
     clearTimeout(timer.value);
     tdDocHeaderRef.value.docInfo = meta;
     tdDocHeaderRef.value.spline = '';
@@ -62,7 +62,7 @@ watch(route, (v) => {
 onMounted(() => {
   tdDocAsideRef.value.routerList = asideList.value;
   tdDocAsideRef.value.onchange = ({ detail }) => {
-    if (route.path === detail) return;
+    if (route.value.path === detail) return;
     router.push(detail);
     window.scrollTo(0, 0);
   };
