@@ -1,4 +1,3 @@
-d
 <template>
   <div class="tdesign-document">
     <div class="tdesign-source-header">
@@ -117,7 +116,7 @@ const footerStyle = computed(() => {
 });
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .tdesign-trade-card + .tdesign-trade-card {
   margin-top: 24px;
 }

@@ -14,7 +14,7 @@
           </p>
         </div>
 
-        <td-doc-tabs ref="tabs" :tab="tab"></td-doc-tabs>
+        <td-doc-tabs ref="tabsRef" :tab="tab"></td-doc-tabs>
       </div>
     </div>
 
@@ -118,7 +118,7 @@ const route = computed(() => proxy.$route);
 const router = proxy.$router;
 
 // Template refs
-const tabs = ref();
+const tabsRef = ref();
 
 // Reactive data
 const webSourceList = ref(_webSourceList);
@@ -192,12 +192,12 @@ const handleSourceClick = (item) => {
 };
 
 onMounted(() => {
-  tabs.value.tabs = [
+  tabsRef.value.tabs = [
     { tab: 'web', name: 'Desktop' },
     { tab: 'mobile', name: 'Mobile' },
     { tab: 'web-chart', name: 'Desktop Chart' },
   ];
-  tabs.value.onchange = ({ detail: currentTab }) => (tab.value = currentTab);
+  tabsRef.value.onchange = ({ detail: currentTab }) => (tab.value = currentTab);
   fetch(sourceDownloadUrl)
     .then((res) => res.json())
     .then((res) => {

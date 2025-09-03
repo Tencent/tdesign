@@ -1,5 +1,5 @@
 <template>
-  <div ref="article" name="DOC" class="doc-mode">
+  <div ref="articleRef" name="DOC" class="doc-mode">
     <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
       <ol class="tdesign-toc_list">
         <li class="tdesign-toc_list_item" v-for="anchor in catalog" :key="anchor.id">
@@ -90,9 +90,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { genAnchor } from './utils';
 
 // Template refs
-const article = ref(null);
+const articleRef = ref(null);
 
 // Data (from mixin and component)
 const catalog = ref([]);
@@ -266,41 +267,6 @@ const colorList = {
   ],
 };
 
-// Methods (from mixin)
-const genAnchor = () => {
-  if (!article.value) return;
-  const articleContent = article.value;
-  const nodes = ['H2', 'H3'];
-  const titles = [];
-  articleContent.childNodes.forEach((e, index) => {
-    if (nodes.includes(e.nodeName)) {
-      const id = `header-${index}`;
-      e.setAttribute('id', id);
-      titles.push({
-        id,
-        title: e.innerHTML,
-        level: Number(e.nodeName.substring(1, 2)),
-        nodeName: e.nodeName,
-        children: [],
-      });
-    }
-  });
-
-  const isEveryLevel3 = titles.every((t) => t.level === 3);
-  catalog.value = titles.reduce((acc, curr) => {
-    if (isEveryLevel3) {
-      acc.push(curr);
-    } else {
-      if (curr.level === 2) {
-        acc.push(curr);
-      } else if (curr.level === 3) {
-        acc[acc.length - 1].children.push(curr);
-      }
-    }
-    return acc;
-  }, []);
-};
-
 const copyColor = (color) => {
   if ('clipboard' in navigator) {
     navigator.clipboard.writeText(color);
@@ -331,7 +297,7 @@ const copyColor = (color) => {
 
 // Lifecycle hooks
 onMounted(() => {
-  genAnchor();
+  genAnchor(articleRef, catalog);
 });
 </script>
 

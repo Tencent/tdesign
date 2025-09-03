@@ -1,5 +1,5 @@
 <template>
-  <div ref="article" name="DOC" class="doc-values">
+  <div ref="articleRef" name="DOC" class="doc-values">
     <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
       <ol class="tdesign-toc_list">
         <li class="tdesign-toc_list_item" v-for="anchor in catalog" :key="anchor.id">
@@ -106,7 +106,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 // Template refs
-const article = ref(null);
+const articleRef = ref(null);
 
 // Data (from mixin and component)
 const catalog = ref([]);
@@ -122,8 +122,8 @@ const gif4 = ref(encodeURI('https://tdesign.gtimg.com/site/images/连接.mp4'));
 
 // Methods (from mixin)
 const genAnchor = () => {
-  if (!article.value) return;
-  const articleContent = article.value;
+  if (!articleRef.value) return;
+  const articleContent = articleRef.value;
   const nodes = ['H2', 'H3'];
   const titles = [];
   articleContent.childNodes.forEach((e, index) => {
@@ -156,14 +156,14 @@ const genAnchor = () => {
 };
 
 const playAllVideo = () => {
-  Array.from(article.value.querySelectorAll('video')).forEach((item) => {
+  Array.from(articleRef.value.querySelectorAll('video')).forEach((item) => {
     if (item.paused) item.play();
   });
 };
 
 // Lifecycle hooks
 onMounted(() => {
-  genAnchor();
+  genAnchor(articleRef, catalog);
   window.addEventListener('touchstart', playAllVideo);
 });
 
