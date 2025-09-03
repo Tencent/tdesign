@@ -1,9 +1,9 @@
 <template>
   <td-doc-layout>
     <td-header slot="header" framework="site" />
-    <td-doc-aside ref="tdDocAside" />
-    <td-doc-content ref="tdDocContent" page-status="hidden">
-      <td-doc-header ref="tdDocHeader" slot="doc-header" key="header" />
+    <td-doc-aside ref="tdDocAsideRef" />
+    <td-doc-content ref="tdDocContentRef" page-status="hidden">
+      <td-doc-header ref="tdDocHeaderRef" slot="doc-header" key="header" />
       <router-view />
       <td-doc-footer slot="doc-footer" />
     </td-doc-content>
@@ -19,9 +19,9 @@ const route = computed(() => proxy.$route);
 const router = proxy.$router;
 
 // Template refs
-const tdDocAside = ref(null);
-const tdDocContent = ref(null);
-const tdDocHeader = ref(null);
+const tdDocAsideRef = ref(null);
+const tdDocContentRef = ref(null);
+const tdDocHeaderRef = ref(null);
 
 const { docs: designDocs } = JSON.parse(JSON.stringify(siteConfig.design).replace(/component:.+/g, ''));
 
@@ -40,11 +40,11 @@ const initDocHeader = () => {
 
   if (route.value && route.value.path && route.value.path.includes('/design/')) {
     clearTimeout(timer.value);
-    if (tdDocHeader.value) {
-      tdDocHeader.value.docInfo = meta;
-      tdDocHeader.value.spline = '';
+    if (tdDocHeaderRef.value) {
+      tdDocHeaderRef.value.docInfo = meta;
+      tdDocHeaderRef.value.spline = '';
       timer.value = setTimeout(() => {
-        tdDocHeader.value.spline = meta.spline || '';
+        tdDocHeaderRef.value.spline = meta.spline || '';
       }, 500);
     }
   }
@@ -52,20 +52,20 @@ const initDocHeader = () => {
 
 // Watch
 watch(route, (v) => {
-  if (tdDocContent.value) tdDocContent.value.pageStatus = 'hidden';
+  if (tdDocContentRef.value) tdDocContentRef.value.pageStatus = 'hidden';
 
   requestAnimationFrame(() => {
     initDocHeader();
-    if (tdDocContent.value) tdDocContent.value.pageStatus = 'show';
+    if (tdDocContentRef.value) tdDocContentRef.value.pageStatus = 'show';
   });
 });
 
 // Lifecycle
 onMounted(async () => {
   await nextTick();
-  if (tdDocAside.value) {
-    tdDocAside.value.routerList = asideList.value;
-    tdDocAside.value.onchange = ({ detail }) => {
+  if (tdDocAsideRef.value) {
+    tdDocAsideRef.value.routerList = asideList.value;
+    tdDocAsideRef.value.onchange = ({ detail }) => {
       if (route.value && route.value.path === detail) return;
       if (router && router.push) router.push(detail);
       window.scrollTo(0, 0);
@@ -73,6 +73,6 @@ onMounted(async () => {
   }
 
   initDocHeader();
-  if (tdDocContent.value) tdDocContent.value.pageStatus = 'show';
+  if (tdDocContentRef.value) tdDocContentRef.value.pageStatus = 'show';
 });
 </script>

@@ -1,7 +1,7 @@
 <template>
   <td-doc-layout>
     <td-header slot="header" framework="site" />
-    <td-doc-aside ref="tdDocAside" />
+    <td-doc-aside ref="tdDocAsideRef" />
     <router-view :style="contentStyle" @loaded="contentLoaded" />
   </td-doc-layout>
 </template>
@@ -16,7 +16,7 @@ const route = computed(() => proxy.$route);
 const router = proxy.$router;
 
 // Template refs
-const tdDocAside = ref(null);
+const tdDocAsideRef = ref(null);
 
 // Data (from page-load mixin)
 const loaded = ref(false);
@@ -45,8 +45,8 @@ const asideList = computed(() => {
 
 // Lifecycle
 onMounted(() => {
-  tdDocAside.value.routerList = asideList.value;
-  tdDocAside.value.onchange = ({ detail }) => {
+  tdDocAsideRef.value.routerList = asideList.value;
+  tdDocAsideRef.value.onchange = ({ detail }) => {
     if (route.value.path === detail) return;
     loaded.value = false;
     router.push(detail);
