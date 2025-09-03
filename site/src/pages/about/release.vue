@@ -1,6 +1,6 @@
 <template>
   <td-doc-content>
-    <td-doc-header slot="doc-header" ref="tdDocHeader"></td-doc-header>
+    <td-doc-header slot="doc-header" ref="tdDocHeaderRef"></td-doc-header>
 
     <div name="DESIGN">
       <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
@@ -35,7 +35,7 @@ const { proxy } = getCurrentInstance();
 const route = computed(() => proxy.$route);
 
 // Template refs
-const tdDocHeader = ref(null);
+const tdDocHeaderRef = ref(null);
 
 const RELEASE_API = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/release';
 
@@ -68,7 +68,7 @@ const formatTime = (time) => {
 
 const pageInit = () => {
   const { meta } = route.value;
-  tdDocHeader.value.docInfo = meta;
+  tdDocHeaderRef.value.docInfo = meta;
 };
 
 const fetchReleases = () => {
