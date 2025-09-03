@@ -36,7 +36,7 @@ const asideList = computed(() => {
 
 // Methods
 const initDocHeader = () => {
-  const { meta } = route;
+  const { meta } = route.value;
 
   if (route.path.includes('/design/')) {
     clearTimeout(timer.value);
