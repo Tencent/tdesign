@@ -28,7 +28,7 @@ const routes = [
     meta: {
       documentTitle: 'TDesign - 开源的企业级设计体系，为设计师 & 开发者，打造工作美学',
     },
-    component: () => import('./pages/icons/index.vue'),
+    component: () => import('./pages/home/index_zh-CN.vue'),
   },
   {
     path: '/design',
