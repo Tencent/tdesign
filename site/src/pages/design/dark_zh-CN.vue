@@ -76,8 +76,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, getCurrentInstance } from 'vue';
 import { genAnchor } from './utils';
+
+const instance = getCurrentInstance();
 
 // Template refs
 const articleRef = ref(null);
@@ -257,7 +259,7 @@ const colorList = {
 const copyColor = (color) => {
   if ('clipboard' in navigator) {
     navigator.clipboard.writeText(color);
-    this.$message.success('复制成功');
+    instance.proxy.$message.success('复制成功');
     return;
   }
 
@@ -277,7 +279,7 @@ const copyColor = (color) => {
   selection.removeAllRanges();
   document.body.removeChild(textarea);
 
-  this.$message.success('复制成功');
+  instance.proxy.$message.success('复制成功');
 };
 
 // Lifecycle hooks
