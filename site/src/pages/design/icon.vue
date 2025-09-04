@@ -1,5 +1,5 @@
 <template>
-  <div ref="article" name="DESIGN" class="doc-icon">
+  <div ref="articleRef" name="DESIGN" class="doc-icon">
     <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
       <ol class="tdesign-toc_list">
         <li class="tdesign-toc_list_item" v-for="anchor in catalog" :key="anchor.id">
@@ -214,7 +214,9 @@
 
     <h3>Breaks</h3>
     <p>
-      Breaks mostly appear on composite icons, and their width should be analyzed according to the specific style of the icon and aim to balance the visual weight.</p>
+      Breaks mostly appear on composite icons, and their width should be analyzed according to the specific style of the
+      icon and aim to balance the visual weight.
+    </p>
     <img src="./assets/icon/fracture.png" alt="" />
 
     <h3>Simplicity</h3>
@@ -262,12 +264,19 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import AllIcons from '@/components/all-icons.vue';
-import anchorMixin from '../mixins/anchor';
+import { genAnchor } from './utils';
 
-export default {
-  components: { AllIcons },
-  mixins: [anchorMixin],
-};
+// Template refs
+const articleRef = ref(null);
+
+// Data (from mixin)
+const catalog = ref([]);
+
+// Lifecycle hooks
+onMounted(() => {
+  genAnchor(articleRef, catalog);
+});
 </script>

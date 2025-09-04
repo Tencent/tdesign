@@ -116,7 +116,7 @@ const siteConfig = {
             component: () => import('@docs/design/offices_zh-CN.md'),
           },
           {
-            name: 'offices task',
+            name: 'offices-task',
             title: '如何设计高频任务',
             path: '/design/offices-task',
             meta: {
@@ -210,7 +210,7 @@ const siteConfig = {
             component: () => import('@docs/contributing_zh-CN.md'),
           },
           {
-            name: 'contributing',
+            name: 'new-component',
             title: '组件开发流程',
             path: '/about/new-component',
             meta: {

@@ -5,61 +5,62 @@
   </td-doc-layout>
 </template>
 
-<script>
-export default {
-  computed: {
-    headerStyle () {
-      const { name } = this.$route
-      const fixedHeaderList = ['home', 'home-en', 'source', 'source-en', 'trade']
-      if (fixedHeaderList.includes(name)) {
-        return {
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          zIndex: 1200,
-          '--bg-color-secondarypage': 'var(--bg-color-navigation)',
-          '--bg-color-secondarypage-hover': 'var(--bg-color-navigation-hover)',
-          '--bg-color-secondarypage-select': 'var(--bg-color-navigation-select)'
-        }
-      }
-      return { display: 'none' }
-    }
-  },
+<script setup>
+import { computed, onMounted, onBeforeUnmount, watch, getCurrentInstance } from 'vue';
+// vue-router@3 无 useRoute 组合式 API，使用实例 proxy.$route，并用 computed 保持响应式
+const { proxy } = getCurrentInstance();
+const route = computed(() => proxy.$route);
 
-  mounted () {
-    window.addEventListener('load', this.handleHashScroll)
-  },
-
-  beforeDestroy () {
-    window.removeEventListener('load', this.handleHashScroll)
-  },
-
-  watch: {
-    $route: {
-      immediate: true,
-      handler (route) {
-        if (route.meta) {
-          document.title = route.meta.documentTitle || 'TDesign'
-        }
-      }
-    }
-  },
-
-  methods: {
-    handleHashScroll () {
-      const { $route } = this
-      const hash = decodeURIComponent($route.hash)
-      requestAnimationFrame(() => {
-        const id = hash.slice(1)
-        const anchorEl = document.getElementById(id)
-        if (!anchorEl) return
-
-        requestAnimationFrame(() => {
-          window.scrollTo({ top: anchorEl.offsetTop - 88 })
-        })
-      })
-    }
+// Computed
+const headerStyle = computed(() => {
+  const { name } = route.value;
+  const fixedHeaderList = ['home', 'home-en', 'source', 'source-en', 'trade'];
+  if (fixedHeaderList.includes(name)) {
+    return {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100%',
+      zIndex: 1200,
+      '--bg-color-secondarypage': 'var(--bg-color-navigation)',
+      '--bg-color-secondarypage-hover': 'var(--bg-color-navigation-hover)',
+      '--bg-color-secondarypage-select': 'var(--bg-color-navigation-select)',
+    };
   }
-}
+  return { display: 'none' };
+});
+
+// Methods
+const handleHashScroll = () => {
+  const hash = decodeURIComponent(route.value.hash);
+  requestAnimationFrame(() => {
+    const id = hash.slice(1);
+    const anchorEl = document.getElementById(id);
+    if (!anchorEl) return;
+
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: anchorEl.offsetTop - 88 });
+    });
+  });
+};
+
+// Lifecycle hooks
+onMounted(() => {
+  window.addEventListener('load', handleHashScroll);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('load', handleHashScroll);
+});
+
+// Watch
+watch(
+  route,
+  (newRoute) => {
+    if (newRoute && newRoute.meta) {
+      document.title = newRoute.meta.documentTitle || 'TDesign';
+    }
+  },
+  { immediate: true },
+);
 </script>
