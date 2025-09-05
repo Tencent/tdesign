@@ -105,7 +105,7 @@ import { webSourceList, mobileSourceList, sourceDownloadUrl, webChartSourceList 
 import { webDesignContributor, mobileDesignContributor, webChartDesignContributor } from '@/contributor';
 
 export default {
-  data () {
+  data() {
     return {
       webSourceList,
       mobileSourceList,
@@ -174,8 +174,13 @@ export default {
       { tab: 'web', name: '桌面端组件库' },
       { tab: 'mobile', name: '移动端组件库' },
       { tab: 'web-chart', name: '桌面端图表库' },
+      { tab: 'icons', name: '图标资源' },
     ];
-    this.$refs.tabs.onchange = ({ detail: currentTab }) => (this.tab = currentTab);
+    this.$refs.tabs.onchange = ({ detail: currentTab }) => {
+      if (currentTab !== 'icons') this.tab = currentTab;
+      else window.open('/icons', '_blank');
+    };
+
     fetch(sourceDownloadUrl)
       .then((res) => res.json())
       .then((res) => {
