@@ -110,5 +110,13 @@ const enRoutes = [
     },
     component: () => import('./pages/design/trade.vue'),
   },
+  {
+    path: '/icons-en',
+    name: 'icons',
+    meta: {
+      documentTitle: '图标资源 - TDesign',
+    },
+    component: () => import('./pages/icons/index.vue'),
+  },
 ];
 export default [...routes, ...enRoutes];

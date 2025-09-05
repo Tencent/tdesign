@@ -179,7 +179,10 @@ export default {
       { tab: 'web-chart', name: 'Desktop Chart' },
       { tab: 'icons', name: 'Icons' },
     ];
-    this.$refs.tabs.onchange = ({ detail: currentTab }) => (this.tab = currentTab);
+    this.$refs.tabs.onchange = ({ detail: currentTab }) => {
+      if (currentTab !== 'icons') this.tab = currentTab;
+      else window.open('/icons-en', '_blank');
+    };
     fetch(sourceDownloadUrl)
       .then((res) => res.json())
       .then((res) => {
