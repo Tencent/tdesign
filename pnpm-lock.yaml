@@ -205,8 +205,8 @@ importers:
         specifier: ^1.29.0
         version: 1.29.0
       tdesign-icons-view:
-        specifier: 0.4.0-alpha.9
-        version: 0.4.0-alpha.9
+        specifier: 0.4.0-alpha.11
+        version: 0.4.0-alpha.11
       tdesign-icons-vue:
         specifier: ^0.1.4
         version: 0.1.11(vue@2.7.14)
@@ -6979,8 +6979,8 @@ packages:
   tdesign-icons-svg@0.0.1:
     resolution: {integrity: sha512-4l05CgPXwI33Y6hU8ytKYIIXVznR22x6blhhtB6MntSHj2xrA+Unx4U/qy+Do/lCMtYao9q1wVkaZvxNjuX7jw==}
 
-  tdesign-icons-view@0.4.0-alpha.9:
-    resolution: {integrity: sha512-uBEW3KunjBfZShYldQ/IhubfnJvW2bZmwzdoQOn2i5cNnmYw/CaVVarNOaNrZt7oB0VtShR0GRxoegrIzeiKVA==}
+  tdesign-icons-view@0.4.0-alpha.11:
+    resolution: {integrity: sha512-x4F6hxX2ZcbekaZv9h6KR3nNDxPg/m5c1HuLeHAMKaY+NT8YtcE6J3EesLecv50KGtaNnPTj0Bf364Oi0uwVxw==}
 
   tdesign-icons-vue@0.0.8:
     resolution: {integrity: sha512-lxKeMlrRrMuD0AIVIvciK/0GryTJPsOH00LNSPjUkPFznlxua/7N4F39bWJhjHa67/zcPyeHSFvyLjwXi53OCg==}
@@ -15644,7 +15644,7 @@ snapshots:
 
   tdesign-icons-svg@0.0.1: {}
 
-  tdesign-icons-view@0.4.0-alpha.9:
+  tdesign-icons-view@0.4.0-alpha.11:
     dependencies:
       '@popperjs/core': 2.11.8
       core-js: 3.38.1
