@@ -17,7 +17,7 @@
     "markdown-it": "^12.3.2",
     "markdown-it-link-attributes": "^4.0.0",
     "prismjs": "^1.29.0",
-    "tdesign-icons-view": "0.4.0-alpha.6",
+    "tdesign-icons-view": "0.4.0-alpha.7",
     "tdesign-icons-vue": "^0.1.4",
     "tdesign-vue": "1.9.8-naruto",
     "three": "0.127.0",
