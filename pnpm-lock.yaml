@@ -205,8 +205,8 @@ importers:
         specifier: ^1.29.0
         version: 1.29.0
       tdesign-icons-view:
-        specifier: 0.4.0-alpha.13
-        version: 0.4.0-alpha.13
+        specifier: ~0.4.0
+        version: 0.4.0
       tdesign-icons-vue:
         specifier: ^0.1.4
         version: 0.1.11(vue@2.7.14)
@@ -6979,8 +6979,8 @@ packages:
   tdesign-icons-svg@0.0.1:
     resolution: {integrity: sha512-4l05CgPXwI33Y6hU8ytKYIIXVznR22x6blhhtB6MntSHj2xrA+Unx4U/qy+Do/lCMtYao9q1wVkaZvxNjuX7jw==}
 
-  tdesign-icons-view@0.4.0-alpha.13:
-    resolution: {integrity: sha512-2KHzJChbDZHayTkLVnw0zJmya4ctSNZl6BkwIeCSHKk2yLu8JpM1H0wz0vpORIqikaArqxG44UzXWPj5cdRrPQ==}
+  tdesign-icons-view@0.4.0:
+    resolution: {integrity: sha512-drgQasSA+0WiFTZ4MvoFGLN+xrbJW5Oe2gOJnfsiUaFKd6h1VwebP6WfVOd4r+1EoKxMf/IGKcSusjKgaJRQ6A==}
 
   tdesign-icons-vue@0.0.8:
     resolution: {integrity: sha512-lxKeMlrRrMuD0AIVIvciK/0GryTJPsOH00LNSPjUkPFznlxua/7N4F39bWJhjHa67/zcPyeHSFvyLjwXi53OCg==}
@@ -6999,6 +6999,11 @@ packages:
 
   tdesign-icons-vue@0.3.6:
     resolution: {integrity: sha512-FXE5Ryihyamk0cYKY1wuppuAOtyV2W0k2HxgR4EaocbbdmnFUWIcSBL0buNeFAQqSi16HQOtr2KpP9v87IwLXw==}
+    peerDependencies:
+      vue: ^2.6.12
+
+  tdesign-icons-vue@0.4.0:
+    resolution: {integrity: sha512-3hIxRatBvAPknXE8KSYvYudreBzIIBA5XYM+jedvdzS1P9HE2pap4wP22qf3RIhTw50PHsQMjBOaW6XeeiSaEg==}
     peerDependencies:
       vue: ^2.6.12
 
@@ -15644,12 +15649,12 @@ snapshots:
 
   tdesign-icons-svg@0.0.1: {}
 
-  tdesign-icons-view@0.4.0-alpha.13:
+  tdesign-icons-view@0.4.0:
     dependencies:
       '@popperjs/core': 2.11.8
       core-js: 3.38.1
       lodash: 4.17.21
-      tdesign-icons-vue: 0.3.6(vue@2.7.14)
+      tdesign-icons-vue: 0.4.0(vue@2.7.14)
       tdesign-vue: 1.13.1-naruto(vue@2.7.14)
       vue: 2.7.14
 
@@ -15672,6 +15677,12 @@ snapshots:
       vue: 2.7.14
 
   tdesign-icons-vue@0.3.6(vue@2.7.14):
+    dependencies:
+      '@babel/runtime': 7.25.6
+      classnames: 2.5.1
+      vue: 2.7.14
+
+  tdesign-icons-vue@0.4.0(vue@2.7.14):
     dependencies:
       '@babel/runtime': 7.25.6
       classnames: 2.5.1
