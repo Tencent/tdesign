@@ -205,8 +205,8 @@ importers:
         specifier: ^1.29.0
         version: 1.29.0
       tdesign-icons-view:
-        specifier: ^0.3.5
-        version: 0.3.5
+        specifier: ~0.4.0
+        version: 0.4.0
       tdesign-icons-vue:
         specifier: ^0.1.4
         version: 0.1.11(vue@2.7.14)
@@ -5132,6 +5132,9 @@ packages:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
     engines: {node: '>=10'}
 
+  lodash-es@4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+
   lodash._reinterpolate@3.0.0:
     resolution: {integrity: sha512-xYHt68QRoYGjeeM/XOE1uJtvXQAgvszfBhjV4yvsQH0u2i9I6cI6c6/eG4Hh3UAOVn0y/xAXwmTzEay49Q//HA==}
 
@@ -6976,8 +6979,8 @@ packages:
   tdesign-icons-svg@0.0.1:
     resolution: {integrity: sha512-4l05CgPXwI33Y6hU8ytKYIIXVznR22x6blhhtB6MntSHj2xrA+Unx4U/qy+Do/lCMtYao9q1wVkaZvxNjuX7jw==}
 
-  tdesign-icons-view@0.3.5:
-    resolution: {integrity: sha512-LhahUyxAC1u6B5hoj1aqq16TQiOU8NvIPKAOceC269ZawarVt8eEpTPRWmpbJS8+U0OnUaxB4jDtMQi8J6NcGA==}
+  tdesign-icons-view@0.4.0:
+    resolution: {integrity: sha512-drgQasSA+0WiFTZ4MvoFGLN+xrbJW5Oe2gOJnfsiUaFKd6h1VwebP6WfVOd4r+1EoKxMf/IGKcSusjKgaJRQ6A==}
 
   tdesign-icons-vue@0.0.8:
     resolution: {integrity: sha512-lxKeMlrRrMuD0AIVIvciK/0GryTJPsOH00LNSPjUkPFznlxua/7N4F39bWJhjHa67/zcPyeHSFvyLjwXi53OCg==}
@@ -6994,13 +6997,18 @@ packages:
     peerDependencies:
       vue: ^2.6.12
 
-  tdesign-icons-vue@0.3.4:
-    resolution: {integrity: sha512-ZENwP8xRwRTvSEI1G5EfxXT0SlsiSSvFqoTpa9bGZ3E1pV8Snr0563d+vWMnt4YpFL7bUIY9RXccj4rUEgm3eg==}
+  tdesign-icons-vue@0.3.6:
+    resolution: {integrity: sha512-FXE5Ryihyamk0cYKY1wuppuAOtyV2W0k2HxgR4EaocbbdmnFUWIcSBL0buNeFAQqSi16HQOtr2KpP9v87IwLXw==}
     peerDependencies:
       vue: ^2.6.12
 
-  tdesign-vue@1.10.5-naruto:
-    resolution: {integrity: sha512-sNi/Ga/beo7gNdyhv11ufOKvnLB1s9zU7Dt14NjHVkSFnYDELr6ck+nTXKYQF3Y0Fd4PVVWn2YaGCCDISZMJ7Q==}
+  tdesign-icons-vue@0.4.0:
+    resolution: {integrity: sha512-3hIxRatBvAPknXE8KSYvYudreBzIIBA5XYM+jedvdzS1P9HE2pap4wP22qf3RIhTw50PHsQMjBOaW6XeeiSaEg==}
+    peerDependencies:
+      vue: ^2.6.12
+
+  tdesign-vue@1.13.1-naruto:
+    resolution: {integrity: sha512-GfSkK3xyMNowc4wkJ3cTev5VulfUjCqqrYti9f3PC6X5fLRDbumWTxcbozsZHYC4VbwXFaZHi9/p558FKCHsQA==}
     peerDependencies:
       vue: ~2.7.14
 
@@ -13680,6 +13688,8 @@ snapshots:
     dependencies:
       p-locate: 5.0.0
 
+  lodash-es@4.17.21: {}
+
   lodash._reinterpolate@3.0.0: {}
 
   lodash.debounce@4.0.8: {}
@@ -15639,13 +15649,13 @@ snapshots:
 
   tdesign-icons-svg@0.0.1: {}
 
-  tdesign-icons-view@0.3.5:
+  tdesign-icons-view@0.4.0:
     dependencies:
+      '@popperjs/core': 2.11.8
       core-js: 3.38.1
       lodash: 4.17.21
-      tdesign-icons-vue: 0.3.4(vue@2.7.14)
-      tdesign-vue: 1.10.5-naruto(vue@2.7.14)
-      tvision-color: 1.6.0
+      tdesign-icons-vue: 0.4.0(vue@2.7.14)
+      tdesign-vue: 1.13.1-naruto(vue@2.7.14)
       vue: 2.7.14
 
   tdesign-icons-vue@0.0.8(vue@2.7.14):
@@ -15666,29 +15676,34 @@ snapshots:
       classnames: 2.5.1
       vue: 2.7.14
 
-  tdesign-icons-vue@0.3.4(vue@2.7.14):
+  tdesign-icons-vue@0.3.6(vue@2.7.14):
     dependencies:
       '@babel/runtime': 7.25.6
       classnames: 2.5.1
       vue: 2.7.14
 
-  tdesign-vue@1.10.5-naruto(vue@2.7.14):
+  tdesign-icons-vue@0.4.0(vue@2.7.14):
+    dependencies:
+      '@babel/runtime': 7.25.6
+      classnames: 2.5.1
+      vue: 2.7.14
+
+  tdesign-vue@1.13.1-naruto(vue@2.7.14):
     dependencies:
       '@babel/runtime': 7.25.6
       '@popperjs/core': 2.11.8
       '@types/clipboard': 2.0.7
-      '@types/lodash': 4.14.182
       '@types/raf': 3.4.3
       '@types/sortablejs': 1.15.8
       '@types/tinycolor2': 1.4.6
       '@types/validator': 13.12.2
       clipboard: 2.0.11
       dayjs: 1.11.10
-      lodash: 4.17.21
+      lodash-es: 4.17.21
       mitt: 3.0.1
       raf: 3.4.1
       sortablejs: 1.15.3
-      tdesign-icons-vue: 0.2.5(vue@2.7.14)
+      tdesign-icons-vue: 0.3.6(vue@2.7.14)
       tinycolor2: 1.6.0
       validator: 13.12.0
       vue: 2.7.14

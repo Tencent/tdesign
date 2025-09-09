@@ -59,6 +59,14 @@ const routes = [
     component: () => import('./pages/design/trade.vue'),
   },
   {
+    path: '/icons',
+    name: 'icons',
+    meta: {
+      documentTitle: '图标资源 - TDesign',
+    },
+    component: () => import('./pages/icons/index.vue'),
+  },
+  {
     path: '*',
     redirect: '/',
   },
@@ -98,9 +106,17 @@ const enRoutes = [
     path: '/trade-en',
     name: 'trade-en',
     meta: {
-      documentTitle: '行业组件 - TDesign',
+      documentTitle: 'Trade Components - TDesign',
     },
     component: () => import('./pages/design/trade.vue'),
+  },
+  {
+    path: '/icons-en',
+    name: 'icons-en',
+    meta: {
+      documentTitle: 'Icons - TDesign',
+    },
+    component: () => import('./pages/icons/index.vue'),
   },
 ];
 export default [...routes, ...enRoutes];
