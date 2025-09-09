@@ -106,7 +106,7 @@ const enRoutes = [
     path: '/trade-en',
     name: 'trade-en',
     meta: {
-      documentTitle: '行业组件 - TDesign',
+      documentTitle: 'Trade Components - TDesign',
     },
     component: () => import('./pages/design/trade.vue'),
   },
@@ -114,7 +114,7 @@ const enRoutes = [
     path: '/icons-en',
     name: 'icons-en',
     meta: {
-      documentTitle: '图标资源 - TDesign',
+      documentTitle: 'Icons - TDesign',
     },
     component: () => import('./pages/icons/index.vue'),
   },
