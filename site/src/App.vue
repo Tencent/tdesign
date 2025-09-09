@@ -14,7 +14,7 @@ const route = computed(() => proxy.$route);
 // Computed
 const headerStyle = computed(() => {
   const { name } = route.value;
-  const fixedHeaderList = ['home', 'home-en', 'source', 'source-en', 'trade'];
+  const fixedHeaderList = ['home', 'home-en', 'source', 'source-en', 'trade', 'icons', 'icons-en'];
   if (fixedHeaderList.includes(name)) {
     return {
       position: 'fixed',

@@ -194,8 +194,13 @@ onMounted(() => {
     { tab: 'web', name: '桌面端组件库' },
     { tab: 'mobile', name: '移动端组件库' },
     { tab: 'web-chart', name: '桌面端图表库' },
+    { tab: 'icons', name: '图标资源' },
   ];
-  tabsRef.value.onchange = ({ detail: currentTab }) => (tab.value = currentTab);
+  tabsRef.value.onchange = ({ detail: currentTab }) => {
+    if (currentTab !== 'icons') tab.value = currentTab;
+    else window.open('/icons', '_blank');
+  };
+
   fetch(sourceDownloadUrl)
     .then((res) => res.json())
     .then((res) => {

@@ -196,8 +196,12 @@ onMounted(() => {
     { tab: 'web', name: 'Desktop' },
     { tab: 'mobile', name: 'Mobile' },
     { tab: 'web-chart', name: 'Desktop Chart' },
+    { tab: 'icons', name: 'Icons' },
   ];
-  tabsRef.value.onchange = ({ detail: currentTab }) => (tab.value = currentTab);
+  tabsRef.value.onchange = ({ detail: currentTab }) => {
+    if (currentTab !== 'icons') tab.value = currentTab;
+    else window.open('/icons-en', '_blank');
+  };
   fetch(sourceDownloadUrl)
     .then((res) => res.json())
     .then((res) => {

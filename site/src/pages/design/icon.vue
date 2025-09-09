@@ -259,14 +259,26 @@
       </div>
     </div>
 
-    <h3>Download Icon</h3>
-    <all-icons />
+    <h3>All Icons</h3>
+    <div
+      style="
+        background: #ecf2fe;
+        display: flex;
+        align-items: center;
+        line-height: 20px;
+        padding: 14px 24px;
+        border-radius: 3px;
+        color: #555a65;
+        margin: 16px 0;
+      "
+    >
+      Visit <a href="/icons-en"> TDesign Icons </a> to view and experience all supported icons.
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import AllIcons from '@/components/all-icons.vue';
 import { genAnchor } from './utils';
 
 // Template refs

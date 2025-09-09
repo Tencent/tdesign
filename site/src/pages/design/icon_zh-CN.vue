@@ -218,14 +218,26 @@
       </div>
     </div>
 
-    <h3>下载 Icon</h3>
-    <all-icons />
+    <h3>全部图标</h3>
+    <div
+      style="
+        background: #ecf2fe;
+        display: flex;
+        align-items: center;
+        line-height: 20px;
+        padding: 14px 24px;
+        border-radius: 3px;
+        color: #555a65;
+        margin: 16px 0;
+      "
+    >
+      打开 <a href="/icons"> TDesign 图标独立站点 </a> 查看全部支持的图标。
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import AllIcons from '@/components/all-icons.vue';
 import { genAnchor } from './utils';
 
 // Template refs
