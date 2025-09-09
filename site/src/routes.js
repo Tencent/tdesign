@@ -112,7 +112,7 @@ const enRoutes = [
   },
   {
     path: '/icons-en',
-    name: 'icons',
+    name: 'icons-en',
     meta: {
       documentTitle: '图标资源 - TDesign',
     },
