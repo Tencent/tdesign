@@ -49,5 +49,5 @@ export const contributors = [
   'burtonx',
   '123456-sisi',
   'Lido8',
-  'isqinghui'
-]
+  'isqinghui',
+];
