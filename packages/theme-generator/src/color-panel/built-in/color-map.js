@@ -1,11 +1,3 @@
-/* `idx` 对应实际的颜色索引，例如 `--td-brand-color-light: var(--td-brand-1)` */
-
-export const BRAND_TOKEN_MAP = [
-  { name: '--td-brand-color-light', idx: 1 },
-  { name: '--td-brand-color-focus', idx: 2 },
-  { name: '--td-brand-color-disabled', idx: 3 },
-];
-
 export const GRAY_TOKENS = [
   '--td-bg-color-container-hover',
   '--td-bg-color-secondarycontainer',

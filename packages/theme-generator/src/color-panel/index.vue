@@ -346,7 +346,7 @@ import {
 } from '../common/themes';
 import { colorAnimation, getThemeMode, getTokenValue, handleAttach, setUpModeObserver } from '../common/utils';
 
-import { BRAND_TOKEN_MAP, FUNCTION_TOKENS } from './built-in/color-map';
+import { FUNCTION_TOKENS } from './built-in/color-map';
 import { ALL_PRESET_COLORS, DEFAULT_COLORS, RECOMMEND_COLORS, SCENE_COLORS } from './built-in/color-preset';
 
 import ColorCollapse from './components/ColorCollapse';
@@ -461,6 +461,9 @@ export default {
       const hoverIdx = brandIdx - 1;
       const activeIdx = brandIdx > 8 ? brandIdx : brandIdx + 1;
       return [
+        { name: '--td-brand-color-light', idx: 1 },
+        { name: '--td-brand-color-focus', idx: isMobile(this.$device) ? 1 : 2 },
+        { name: '--td-brand-color-disabled', idx: 3 },
         ...(!isMobile(this.$device) ? [{ name: '--td-brand-color-hover', idx: hoverIdx }] : []),
         { name: '--td-brand-color', idx: brandIdx },
         { name: '--td-brand-color-active', idx: activeIdx },
@@ -469,7 +472,7 @@ export default {
     updateBrandTokenMap() {
       const brandIdx = this.currentBrandIdx;
       const extraBrandTokens = this.generateBrandTokenMap(brandIdx);
-      this.brandTokenMap = BRAND_TOKEN_MAP.concat(extraBrandTokens);
+      this.brandTokenMap = extraBrandTokens;
     },
     updateFunctionTokenMap() {
       Object.keys(FUNCTION_TOKENS).forEach((type) => {
@@ -500,8 +503,8 @@ export default {
       const darkExtraTokens = this.generateBrandTokenMap(darkBrandIdx);
 
       this.currentBrandIdx = this.brandIndexes[getThemeMode()];
-
-      if (this.$brandColor != this.$theme.value) {
+      const shouldUpdateStyleSheet = this.$brandColor != this.$theme.value || trigger === 'update';
+      if (shouldUpdateStyleSheet) {
         // 只在用户手动修改主题色时同步 stylesheet，避免覆盖内置主题自身的逻辑
         updateStyleSheetColor('brand', lightPalette, darkPalette, trigger);
         syncColorTokensToStyle(lightExtraTokens, darkExtraTokens);
