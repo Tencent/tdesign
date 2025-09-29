@@ -13,7 +13,7 @@ export function getTokenValue(name) {
  * 获取当前亮暗模式 (light / dark)
  */
 export function getThemeMode() {
-  return document.documentElement.getAttribute('theme-mode');
+  return document.documentElement.getAttribute('theme-mode') || 'light';
 }
 
 /**
