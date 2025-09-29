@@ -5,8 +5,9 @@
         <slot name="left"></slot>
       </div>
       <div class="segment-panel__round-slider">
+        <!-- 自定义选项不放入 Slider -->
         <div
-          v-for="(_, i) in selectOptions.slice(0, 5)"
+          v-for="(_, i) in selectOptions.slice(0, selectOptions.length - 1)"
           :key="i"
           class="slider-split"
           :style="{
