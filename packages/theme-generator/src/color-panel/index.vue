@@ -391,7 +391,7 @@ export default {
       },
       currentBrandIdx: 7,
       brandTokenMap: [], // `-td-brand-x` 系列的 token 映射需要根据 brandIdx 动态计算；其它功能色都是固定的
-      grayMainColor: getOptionFromLocal('gray') || getTokenValue('--td-bg-color-secondarycontainer-active'),
+      grayMainColor: getOptionFromLocal('gray') || getTokenValue('--td-gray-color-4'),
       successMainColor: getOptionFromLocal('success') || getTokenValue('--td-success-color'),
       errorMainColor: getOptionFromLocal('error') || getTokenValue('--td-error-color'),
       warningMainColor: getOptionFromLocal('warning') || getTokenValue('--td-warning-color'),
@@ -437,7 +437,11 @@ export default {
       // 恢复用户上次选择的功能色
       const functionColors = ['gray', 'success', 'error', 'warning'];
       functionColors.forEach((type) => {
-        const color = getOptionFromLocal(type);
+        const color =
+          this[`${type}MainColor`] ||
+          getOptionFromLocal(type) ||
+          getTokenValue(`--td-${type}-color`) ||
+          getTokenValue(`--td-${type}-color-4`);
         if (color) {
           this.changeFunctionColor(color, type, 'init');
         }

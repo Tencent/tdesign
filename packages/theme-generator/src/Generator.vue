@@ -103,6 +103,9 @@ export default {
 .t-radio-button__label {
   font-size: 14px;
 }
+.t-radio-group__bg-block {
+  background: var(--bg-color-theme-radio-active) !important;
+}
 .t-slider__button {
   width: 16px;
   height: 16px;
