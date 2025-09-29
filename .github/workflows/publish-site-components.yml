@@ -5,7 +5,7 @@ on:
     branches: [main]
     types: [closed]
     paths:
-      - packages/components/package.json
+      - packages/site-components/package.json
 
   workflow_dispatch:
 
@@ -25,7 +25,7 @@ jobs:
       - run: pnpm install
 
       - run: pnpm -F @tdesign/site-components run build
-      
+
       - name: Publish Package
         run: |
           npm config set "//registry.npmjs.org/:_authToken" "${NPM_TOKEN}"
@@ -33,7 +33,7 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}
 
-  auto-upgrade-@tdesign/site-components:
+  auto-upgrade-tdesign-site-components:
     needs: publish-site-components
     runs-on: ubuntu-latest
     steps:

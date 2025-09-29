@@ -250,21 +250,25 @@ jobs:
           repository: Tencent/tdesign-miniprogram
           submodules: recursive
 
+      - uses: pnpm/action-setup@v4
+ 
       - uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - run: npm install
+      - run: pnpm install
 
-      - run: npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
+      - run: pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
+        working-directory: packages/tdesign-miniprogram/site
 
-      - run: npm install --save-dev ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
+      - run: pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
+        working-directory: packages/tdesign-miniprogram/site
 
-      - run: npm run site:intranet
+      - run: pnpm -C packages/tdesign-miniprogram/site site:preview
 
       - run: |
           export DEPLOY_DOMAIN=${{ needs.preview-context.outputs.tdesign_miniprogram_domain }}
-          npx surge --project _site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
+          npx surge --project packages/tdesign-miniprogram/site/dist --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
 
   preview-comment:
     if: always()
