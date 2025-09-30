@@ -9,7 +9,6 @@
     "build:theme-generator": "pnpm run --filter 'tdesign-theme-generator' build",
     "build-watch:theme-generator": "pnpm run --filter 'tdesign-theme-generator' build:watch",
     "site": "npm run build:components && cd site && npm run build",
-    "site:intranet": "npm run build:components && cd site && npm run site:intranet",
     "site:preview": "npm run build:components && cd site && npm run site:preview",
     "auto-release-collection": "pnpm run --filter 'auto-release-collection' start",
     "prepare": "husky install"
