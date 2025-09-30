@@ -21,7 +21,6 @@ export const COMP_SIZE_MAP = [
   {
     name: 'comp-size-m',
     from: 'size-10',
-    value: null,
   },
   {
     name: 'comp-size-l',

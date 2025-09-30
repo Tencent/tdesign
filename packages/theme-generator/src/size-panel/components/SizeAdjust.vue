@@ -108,7 +108,6 @@ export default {
         const num = parseFloat(val);
         return isNaN(num) ? 0 : num;
       }
-      console.log(val);
       return val;
     },
   },
