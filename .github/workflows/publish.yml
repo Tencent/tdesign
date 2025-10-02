@@ -32,19 +32,6 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - run: npm install
-
-      - name: Build site
-        run: npm run site:preview
-      - name: upload surge service
-        id: deploy
-        run: |
-          repository=${{github.repository}}
-          project_name=${repository#*/}
-          ref_name=${{ github.ref_name }}
-          tag_name=${ref_name//./_}
-          export DEPLOY_DOMAIN=https://$tag_name-$project_name.surge.sh
-          npx surge --project _site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
-          echo $DEPLOY_DOMAIN
       - run: echo "🍏 This job's status is ${{ job.status }}."
       - run: npm run build
       - name: publish
@@ -56,6 +43,44 @@ jobs:
       - if: steps.publish.outputs.type != 'none'
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
+
+  DEPLOY_HISTORY_VERSION_SITE:
+    runs-on: ubuntu-latest
+    if: github.event.ref_type == 'tag'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - uses: actions/cache@v4
+        env:
+          cache-name: cache-nodemodules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - run: npm install
+
+      - name: Build site
+        run: npm run site:preview
+
+      - name: upload surge service
+        id: deploy
+        run: |
+          repository=${{github.repository}}
+          project_name=${repository#*/}
+          ref_name=${{ github.ref_name }}
+          tag_name=${ref_name//./_}
+          export DEPLOY_DOMAIN=https://$tag_name-$project_name.surge.sh
+          npx surge --project _site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
+          echo $DEPLOY_DOMAIN
+
   UPDATE_OFFICIAL_WEBSITE:
     runs-on: ubuntu-latest
     if: github.event.ref_type == 'tag'
@@ -74,4 +99,3 @@ jobs:
           git fetch origin
           git merge origin/develop -X theirs
           git push origin main
-      
