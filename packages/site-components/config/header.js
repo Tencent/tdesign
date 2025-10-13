@@ -5,6 +5,9 @@ import flutterIcon from '../src/images/flutter-logo.svg?url';
 import { isIntranet, getLang } from '@utils/index';
 import { jumpLocation } from '@utils/locale';
 
+const uniappIcon =
+  'https://mike-1255355338.cos.ap-guangzhou.myqcloud.com/article/2025/10/own_mike_heEYDnJFxx2Jx4R6.png';
+
 const headerList = [
   {
     name: '设计',
@@ -212,6 +215,13 @@ export const getHeaderConfig = () => {
           icon: wxIcon,
           path: jumpLocation('/qq-miniprogram/overview'),
           npm: 'tdesign-qq-miniprogram',
+          status: 2,
+        },
+        {
+          name: isEnglish ? 'UniApp' : 'UniApp',
+          icon: uniappIcon,
+          path: jumpLocation('/uniapp/overview'),
+          npm: 'tdesign-uniapp',
           status: 2,
         },
         // {

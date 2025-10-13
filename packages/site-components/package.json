@@ -1,5 +1,5 @@
 {
-  "name": "@tdesign/site-components",
+  "name": "tdesign-site-components-uniapp",
   "version": "0.17.1",
   "license": "MIT",
   "main": "lib/site.es.js",
