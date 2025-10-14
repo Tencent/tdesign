@@ -5,7 +5,7 @@ import tdocPlugin from './plugin-tdoc/index.js';
 
 const publicPathMap = {
   preview: '/',
-  production: '/', // 虽然一样但是还是留着 各个站点保持一致
+  production: 'https://static.tdesign.tencent.com/',
 };
 
 // https://vitejs.dev/config/
