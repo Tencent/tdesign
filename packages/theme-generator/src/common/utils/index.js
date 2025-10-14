@@ -1,27 +1,35 @@
-export * from 'tdesign-vue/es/_common/js/color-picker';
-
-import GENERATOR_VARIABLES from '!raw-loader!./vars.css';
-const GENERATOR_ID = 'TDESIGN_GENERATOR_SYMBOL';
+export * from './animation';
 
 /**
- * 初始化给生成器本身使用的样式变量，避免和 TDesign 冲突
+ * 获取指定 CSS Token 对应的数值
  */
-export function initGeneratorVars() {
-  const siteStylesheet = appendStyleSheet(GENERATOR_ID);
-  siteStylesheet.textContent = GENERATOR_VARIABLES;
+export function getTokenValue(name) {
+  const isDarkMode = document.documentElement.getAttribute('theme-mode') === 'dark';
+  const rootElement = isDarkMode ? document.querySelector('[theme-mode="dark"]') : document.documentElement;
+  return window.getComputedStyle(rootElement).getPropertyValue(name).toLowerCase().trim();
 }
 
 /**
- * 同步亮暗模式给 Web Component
+ * 获取当前亮暗模式 (light / dark)
  */
-export function syncThemeToGenerator() {
+export function getThemeMode() {
+  return document.documentElement.getAttribute('theme-mode') || 'light';
+}
+
+/**
+ * 创建亮暗变化监听器
+ */
+export function setUpModeObserver(handler) {
+  let mode = getThemeMode();
+
   const observer = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'theme-mode') {
-        const generator = document.querySelector('td-theme-generator');
-        if (!generator) return;
-        const themeMode = document.documentElement.getAttribute('theme-mode');
-        generator.setAttribute('theme-mode', themeMode);
+      if (mutation.type === 'attributes') {
+        const newMode = getThemeMode();
+        if (newMode !== mode) {
+          mode = newMode;
+          handler(mode);
+        }
       }
     }
   });
@@ -30,6 +38,8 @@ export function syncThemeToGenerator() {
     attributes: true,
     attributeFilter: ['theme-mode'],
   });
+
+  return observer;
 }
 
 /**
@@ -70,23 +80,6 @@ export function downloadFile(blob, fileName) {
   a.target = '_blank';
   a.href = url;
   a.click();
-}
-
-/**
- * 从 CSS 文本中移除指定的 Token 字符串 / 数组
- * - e.g. `"--td-xxx-1"` or `["--td-xxx-2", "--td-xxx-3"]`
- */
-export function removeCssProperties(cssText, properties) {
-  if (!Array.isArray(properties)) {
-    properties = [properties];
-  }
-
-  properties.forEach((property) => {
-    const reg = new RegExp(`${property}:\\s*.*?;`, 'g');
-    cssText = cssText.replace(reg, '');
-  });
-
-  return cssText;
 }
 
 /**
