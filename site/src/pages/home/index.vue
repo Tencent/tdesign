@@ -320,7 +320,7 @@
                 <t-menu
                   :theme="themeMode"
                   defaultValue="dashboard/base"
-                  :defaultExpanded="componentModel.menuExanded"
+                  :defaultExpanded="componentModel.menuExpanded"
                   width="256px"
                 >
                   <template #logo>
@@ -739,7 +739,7 @@ export default {
           { label: 'Finance Department', value: '2' },
           { label: 'Development Department', value: '3' },
         ],
-        menuExanded: ['dashboard'],
+        menuExpanded: ['dashboard'],
         treeData: [
           {
             value: '1',
