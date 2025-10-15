@@ -1,5 +1,9 @@
 name: publish-site-components
 
+permissions:
+  contents: read
+  id-token: write
+
 on:
   pull_request:
     branches: [main]
@@ -25,7 +29,7 @@ jobs:
       - run: pnpm install
 
       - run: pnpm -F @tdesign/site-components run build
-      
+
       - run: npm i -g npm@latest
 
       - name: Publish Package
