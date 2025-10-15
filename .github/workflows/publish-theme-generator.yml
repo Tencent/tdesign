@@ -25,10 +25,8 @@ jobs:
       - run: pnpm install
 
       - run: pnpm -F tdesign-theme-generator run build
-      
+
+      - run: npm i -g npm@latest
+
       - name: Publish Package
-        run: |
-          npm config set "//registry.npmjs.org/:_authToken" "${NPM_TOKEN}"
-          pnpm -F tdesign-theme-generator publish
-        env:
-          NPM_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}
+        run: pnpm -F tdesign-theme-generator publish

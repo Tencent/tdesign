@@ -25,13 +25,11 @@ jobs:
       - run: pnpm install
 
       - run: pnpm -F @tdesign/site-components run build
+      
+      - run: npm i -g npm@latest
 
       - name: Publish Package
-        run: |
-          npm config set "//registry.npmjs.org/:_authToken" "${NPM_TOKEN}"
-          pnpm -F @tdesign/site-components publish
-        env:
-          NPM_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}
+        run: pnpm -F @tdesign/site-components publish
 
   auto-upgrade-tdesign-site-components:
     needs: publish-site-components
