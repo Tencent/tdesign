@@ -30,7 +30,7 @@ jobs:
 
       - run: pnpm -F tdesign-theme-generator run build
 
-      - run: npm i -g npm@latesttrusted publish
+      - run: npm i -g npm@latest publish
 
       - name: Publish Package
         run: pnpm -F tdesign-theme-generator publish
