@@ -134,6 +134,10 @@ function renderLinksPopup(host, trigger) {
 }
 
 export function gitPath(platform, framework) {
+  if (framework === 'uniapp') {
+    return `https://github.com/novlan1/tdesign-uniapp`;
+  }
+
   const isStarter = /starter/.test(location.pathname);
   // 页面模板跳转
   if (isStarter) {

@@ -23,6 +23,9 @@ function registerLocaleChange(cb = defaultChangeCallBack) {
 }
 
 function jumpLocation(url) {
+  if (!url.startsWith('https')) {
+    url = 'https://tdesign.tencent.com/' + url.replace(/^\//, '');
+  }
   const lang = getLang();
   return lang === 'en' ? `${url}-en` : url;
 }
