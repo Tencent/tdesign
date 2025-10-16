@@ -1,5 +1,9 @@
 name: publish-theme-generator
 
+permissions:
+  contents: read
+  id-token: write
+
 on:
   pull_request:
     branches: [main]
