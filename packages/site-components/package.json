@@ -1,6 +1,6 @@
 {
   "name": "tdesign-site-components-uniapp",
-  "version": "0.17.2",
+  "version": "0.17.3",
   "license": "MIT",
   "main": "lib/site.es.js",
   "type": "module",

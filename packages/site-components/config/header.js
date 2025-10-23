@@ -220,7 +220,7 @@ export const getHeaderConfig = () => {
         {
           name: isEnglish ? 'UniApp' : 'UniApp',
           icon: uniappIcon,
-          path: jumpLocation('/uniapp/overview'),
+          path: jumpLocation('https://uwayfly.com/tdesign-uniapp/#/overview'),
           npm: 'tdesign-uniapp',
           status: 2,
         },
