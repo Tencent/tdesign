@@ -208,7 +208,14 @@ export default define({
                         : html``}
                     </div>
                     <div class="TDesign-doc-header__info-describe">
-                      <div innerHTML="${docInfo.desc}"></div>
+                      <td-doc-popup placement="start">
+                        <div innerHTML=${docInfo.desc}></div>
+                        <div
+                          slot="content"
+                          class="TDesign-doc-header__info-describe-line"
+                          innerHTML="${docInfo.desc}"
+                        ></div>
+                      </td-doc-popup>
                     </div>
                   `
                 : html``}
