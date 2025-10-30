@@ -6,7 +6,6 @@
     "build": "vite build",
     "preview": "vite preview",
     "site": "run-s build",
-    "site:intranet": "vite build --mode intranet",
     "site:preview": "vite build --mode preview",
     "lint:fix": "eslint --ext .vue,.js,.ts,.tsx ./src --fix"
   },

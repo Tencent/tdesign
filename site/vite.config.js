@@ -4,7 +4,6 @@ import vue from '@vitejs/plugin-vue2';
 import tdocPlugin from './plugin-tdoc/index.js';
 
 const publicPathMap = {
-  intranet: '/',
   preview: '/',
   production: 'https://static.tdesign.tencent.com/',
 };
