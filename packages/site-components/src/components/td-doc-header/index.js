@@ -4,6 +4,7 @@ import splineConfig from '@config/spline';
 import historyIcon from '@images/history.svg?raw';
 import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, parseBoolean, watchHtmlMode } from '@utils';
 import style from './style.less?inline';
+import { isDark, SYSTEM_MODE } from '../td-theme-tabs';
 
 let timer = null;
 let observeTimer = null;
@@ -53,7 +54,7 @@ export default define({
       clearTimeout(observeTimer);
       const themeMode = localStorage.getItem('--tdesign-theme') || 'light';
       observeTimer = setTimeout(() => {
-        handleModeChange(themeMode, host);
+        handleModeChange(themeMode === SYSTEM_MODE ? isDark() : themeMode, host);
       }, 600);
     },
   },
