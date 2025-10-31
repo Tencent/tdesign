@@ -68,7 +68,6 @@ export default define({
             placement,
             modifiers: [{ name: 'offset', options: { offset: isVertical ? [0, 8] : [0, 16] } }],
           });
-          console.log(host.equalWidth, reference);
 
           if (isVertical) {
             if (host.equalWidth) {
