@@ -1,5 +1,5 @@
 <template>
-  <div ref="article" name="DOC" class="doc-values">
+  <div ref="articleRef" name="DOC" class="doc-values">
     <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
       <ol class="tdesign-toc_list">
         <li class="tdesign-toc_list_item" v-for="anchor in catalog" :key="anchor.id">
@@ -23,7 +23,7 @@
       x5-playsinline
       webkit-playsinline
       x5-video-player
-      x5-video-player-type='h5'
+      x5-video-player-type="h5"
       preload="auto"
     >
       <source :src="gif1" type="video/mp4" />
@@ -44,13 +44,14 @@
       x5-playsinline
       webkit-playsinline
       x5-video-player
-      x5-video-player-type='h5'
+      x5-video-player-type="h5"
       preload="auto"
     >
       <source :src="gif2" type="video/mp4" />
     </video>
     <p>
-      在一个专业环境里，我们希望 TDesign 可以保持多元。我们意识到在世界中不可能单一化，所以作为设计体系需要不断纳入新鲜血液，适应未来的技术和体验变革，不断地进行多元化生长。
+      在一个专业环境里，我们希望 TDesign
+      可以保持多元。我们意识到在世界中不可能单一化，所以作为设计体系需要不断纳入新鲜血液，适应未来的技术和体验变革，不断地进行多元化生长。
       TDesign
       基于腾讯业务，同时也服务于业务，并伴随着业务的使用后获得业务的反哺，从而不断地得到多元内容补充。在保证价值观一致的基础上，洞察多个业务场景需求，赋能腾讯及生态中的不同业务类型
       ，为 TDesign 探索更多的多元化机会点。
@@ -66,7 +67,7 @@
       x5-playsinline
       webkit-playsinline
       x5-video-player
-      x5-video-player-type='h5'
+      x5-video-player-type="h5"
       preload="auto"
     >
       <source :src="gif3" type="video/mp4" />
@@ -88,7 +89,7 @@
       x5-playsinline
       webkit-playsinline
       x5-video-player
-      x5-video-player-type='h5'
+      x5-video-player-type="h5"
       preload="auto"
     >
       <source :src="gif4" type="video/mp4" />
@@ -101,41 +102,74 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor'
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
-export default {
-  mixins: [anchorMixin],
-  data () {
-    return {
-      gif1: encodeURI('https://tdesign.gtimg.com/site/images/包容.mp4'),
-      gif2: encodeURI('https://tdesign.gtimg.com/site/images/多元.mp4'),
-      gif3: encodeURI('https://tdesign.gtimg.com/site/images/进化.mp4'),
-      gif4: encodeURI('https://tdesign.gtimg.com/site/images/连接.mp4')
+// Template refs
+const articleRef = ref(null);
 
-      // gif1: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E5%8C%85%E5%AE%B9.gif',
-      // gif2: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E5%A4%9A%E5%85%83.gif',
-      // gif3: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E8%BF%9B%E5%8C%96.gif',
-      // gif4: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E8%BF%9E%E6%8E%A5.gif',
+// Data (from mixin and component)
+const catalog = ref([]);
+const gif1 = ref(encodeURI('https://tdesign.gtimg.com/site/images/包容.mp4'));
+const gif2 = ref(encodeURI('https://tdesign.gtimg.com/site/images/多元.mp4'));
+const gif3 = ref(encodeURI('https://tdesign.gtimg.com/site/images/进化.mp4'));
+const gif4 = ref(encodeURI('https://tdesign.gtimg.com/site/images/连接.mp4'));
+
+// gif1: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E5%8C%85%E5%AE%B9.gif',
+// gif2: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E5%A4%9A%E5%85%83.gif',
+// gif3: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E8%BF%9B%E5%8C%96.gif',
+// gif4: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E8%BF%9E%E6%8E%A5.gif',
+
+// Methods (from mixin)
+const genAnchor = () => {
+  if (!articleRef.value) return;
+  const articleContent = articleRef.value;
+  const nodes = ['H2', 'H3'];
+  const titles = [];
+  articleContent.childNodes.forEach((e, index) => {
+    if (nodes.includes(e.nodeName)) {
+      const id = `header-${index}`;
+      e.setAttribute('id', id);
+      titles.push({
+        id,
+        title: e.innerHTML,
+        level: Number(e.nodeName.substring(1, 2)),
+        nodeName: e.nodeName,
+        children: [],
+      });
     }
-  },
+  });
 
-  mounted () {
-    window.addEventListener('touchstart', this.playAllVideo)
-  },
-
-  beforeDestroy () {
-    window.removeEventListener('touchstart', this.playAllVideo)
-  },
-
-  methods: {
-    playAllVideo () {
-      Array.from(this.$refs.article.querySelectorAll('video')).forEach(item => {
-        if (item.paused) item.play()
-      })
+  const isEveryLevel3 = titles.every((t) => t.level === 3);
+  catalog.value = titles.reduce((acc, curr) => {
+    if (isEveryLevel3) {
+      acc.push(curr);
+    } else {
+      if (curr.level === 2) {
+        acc.push(curr);
+      } else if (curr.level === 3) {
+        acc[acc.length - 1].children.push(curr);
+      }
     }
-  }
-}
+    return acc;
+  }, []);
+};
+
+const playAllVideo = () => {
+  Array.from(articleRef.value.querySelectorAll('video')).forEach((item) => {
+    if (item.paused) item.play();
+  });
+};
+
+// Lifecycle hooks
+onMounted(() => {
+  genAnchor(articleRef, catalog);
+  window.addEventListener('touchstart', playAllVideo);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('touchstart', playAllVideo);
+});
 </script>
 
 <style lang="less" scoped>
