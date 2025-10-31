@@ -27,6 +27,7 @@ export default define({
   portalStyle: '',
   placement: 'bottom-end',
   triggerType: 'hover',
+  equalWidth: false,
   visible: {
     get: (host, lastValue) => lastValue || false,
     set: (host, value) => value,
@@ -62,7 +63,13 @@ export default define({
             placement,
             modifiers: [{ name: 'offset', options: { offset: isVertical ? [0, 8] : [0, 16] } }],
           });
-          if (isVertical) host.popper.state.styles.popper.minWidth = `${reference.offsetWidth}px`;
+          if (isVertical) {
+            if (host.equalWidth) {
+              host.popper.state.styles.popper.width = `${reference.offsetWidth}px`;
+            } else {
+              host.popper.state.styles.popper.minWidth = `${reference.offsetWidth}px`;
+            }
+          }
         });
       });
 
