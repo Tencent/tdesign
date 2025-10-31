@@ -1,269 +1,177 @@
-const sizeSteps = {
-  3: [
-    { name: "size-1", value: "2px" },
-    { name: "size-2", value: "4px" },
-    { name: "size-3", value: "6px" },
-    { name: "size-4", value: "8px" },
-    { name: "size-5", value: "12px" },
-    { name: "size-6", value: "16px" },
-    { name: "size-7", value: "20px" },
-    { name: "size-8", value: "24px" },
-    { name: "size-9", value: "28px" },
-    { name: "size-10", value: "32px" },
-    { name: "size-11", value: "36px" },
-    { name: "size-12", value: "40px" },
-    { name: "size-13", value: "48px" },
-    { name: "size-14", value: "56px" },
-    { name: "size-15", value: "64px" },
-    { name: "size-16", value: "72px" },
-  ],
-};
-
-const sizeLabels = {
-  3: "默认",
-};
-
-const sizeArr = [
-  { token:'--td-size-1',name: "size-1", value: "2px" },
-  { token:'--td-size-2',name: "size-2", value: "4px" },
-  { token:'--td-size-3',name: "size-3", value: "6px" },
-  { token:'--td-size-4',name: "size-4", value: "8px" },
-  { token:'--td-size-5',name: "size-5", value: "12px" },
-  { token:'--td-size-6',name: "size-6", value: "16px" },
-  { token:'--td-size-7',name: "size-7", value: "20px" },
-  { token:'--td-size-8',name: "size-8", value: "24px" },
-  { token:'--td-size-9',name: "size-9", value: "28px" },
-  { token:'--td-size-10',name: "size-10", value: "32px" },
-  { token:'--td-size-11',name: "size-11", value: "36px" },
-  { token:'--td-size-12',name: "size-12", value: "40px" },
-  { token:'--td-size-13',name: "size-13", value: "48px" },
-  { token:'--td-size-14',name: "size-14", value: "56px" },
-  { token:'--td-size-15',name: "size-15", value: "64px" },
-  { token:'--td-size-16',name: "size-16", value: "72px" },
-];
+export const SIZE_TOKENS = Array.from({ length: 16 }, (_, i) => `--td-size-${i + 1}`);
 
 // 组件大小列表
-const compSizeArr = [
+export const COMP_SIZE_MAP = [
   {
-    label: "comp-size-xxxs",
-    value: null,
-    remark: "size-6",
+    name: 'comp-size-xxxs',
+    from: 'size-6',
   },
   {
-    label: "comp-size-xxs",
-    remark: "size-7",
-    value: null,
+    name: 'comp-size-xxs',
+    from: 'size-7',
   },
   {
-    label: "comp-size-xs",
-    remark: "size-8",
-    value: null,
+    name: 'comp-size-xs',
+    from: 'size-8',
   },
   {
-    remark: "size-9",
-    value: null,
-    label: "comp-size-s",
+    name: 'comp-size-s',
+    from: 'size-9',
   },
   {
-    remark: "size-10",
-    value: null,
-    label: "comp-size-m",
+    name: 'comp-size-m',
+    from: 'size-10',
   },
   {
-    remark: "size-11",
-    value: null,
-    label: "comp-size-l",
+    name: 'comp-size-l',
+    from: 'size-11',
   },
   {
-    remark: "size-12",
-    value: null,
-    label: "comp-size-xl",
+    name: 'comp-size-xl',
+    from: 'size-12',
   },
   {
-    remark: "size-13",
-    value: null,
-    label: "comp-size-xxl",
+    name: 'comp-size-xxl',
+    from: 'size-13',
   },
   {
-    remark: "size-14",
-    value: null,
-    label: "comp-size-xxxl",
+    name: 'comp-size-xxxl',
+    from: 'size-14',
   },
   {
-    remark: "size-15",
-    value: null,
-    label: "comp-size-xxxxl",
+    name: 'comp-size-xxxxl',
+    from: 'size-15',
   },
   {
-    remark: "size-16",
-    value: null,
-    label: "comp-size-xxxxxl",
+    name: 'comp-size-xxxxxl',
+    from: 'size-16',
   },
 ];
 
 // 组件左右边距列表
-const compPaddingLRArr = [
+export const COMP_PADDING_LR_MAP = [
   {
-    label: "comp-paddingLR-xxs",
-    remark: "size-1",
-    value: null,
+    name: 'comp-paddingLR-xxs',
+    from: 'size-1',
   },
   {
-    label: "comp-paddingLR-xs",
-    remark: "size-2",
-    value: null,
+    name: 'comp-paddingLR-xs',
+    from: 'size-2',
   },
   {
-    label: "comp-paddingLR-s",
-    remark: "size-4",
-    value: null,
+    name: 'comp-paddingLR-s',
+    from: 'size-4',
   },
   {
-    label: "comp-paddingLR-m",
-    remark: "size-5",
-    value: null,
+    name: 'comp-paddingLR-m',
+    from: 'size-5',
   },
   {
-    label: "comp-paddingLR-l",
-    remark: "size-6",
-    value: null,
+    name: 'comp-paddingLR-l',
+    from: 'size-6',
   },
   {
-    label: "comp-paddingLR-xl",
-    remark: "size-8",
-    value: null,
+    name: 'comp-paddingLR-xl',
+    from: 'size-8',
   },
   {
-    label: "comp-paddingLR-xxl",
-    remark: "size-10",
-    value: null,
+    name: 'comp-paddingLR-xxl',
+    from: 'size-10',
   },
 ];
 
 // 组件上下边距列表
-const compPaddingTBArr = [
+export const COMP_PADDING_TB_MAP = [
   {
-    label: "comp-paddingTB-xxs",
-    remark: "size-1",
-    value: null,
+    name: 'comp-paddingTB-xxs',
+    from: 'size-1',
   },
   {
-    label: "comp-paddingTB-xs",
-    remark: "size-2",
-    value: null,
+    name: 'comp-paddingTB-xs',
+    from: 'size-2',
   },
   {
-    label: "comp-paddingTB-s",
-    remark: "size-4",
-    value: null,
+    name: 'comp-paddingTB-s',
+    from: 'size-4',
   },
   {
-    label: "comp-paddingTB-m",
-    remark: "size-5",
-    value: null,
+    name: 'comp-paddingTB-m',
+    from: 'size-5',
   },
   {
-    label: "comp-paddingTB-l",
-    remark: "size-6",
-    value: null,
+    name: 'comp-paddingTB-l',
+    from: 'size-6',
   },
   {
-    label: "comp-paddingTB-xl",
-    remark: "size-8",
-    value: null,
+    name: 'comp-paddingTB-xl',
+    from: 'size-8',
   },
   {
-    label: "comp-paddingTB-xxl",
-    remark: "size-10",
-    value: null,
+    name: 'comp-paddingTB-xxl',
+    from: 'size-10',
   },
 ];
 
 // 组件弹出层边距列表
-const compPopupPaddingArr = [
+export const COMP_POPUP_PADDING_MAP = [
   {
-    label: "pop-padding-s",
-    remark: "size-2",
-    value: null,
+    name: 'pop-padding-s',
+    from: 'size-2',
   },
   {
-    label: "pop-padding-m",
-    remark: "size-3",
-    value: null,
+    name: 'pop-padding-m',
+    from: 'size-3',
   },
   {
-    label: "pop-padding-l",
-    remark: "size-4",
-    value: null,
+    name: 'pop-padding-l',
+    from: 'size-4',
   },
   {
-    label: "pop-padding-xl",
-    remark: "size-5",
-    value: null,
+    name: 'pop-padding-xl',
+    from: 'size-5',
   },
   {
-    label: "pop-padding-xxl",
-    remark: "size-6",
-    value: null,
+    name: 'pop-padding-xxl',
+    from: 'size-6',
   },
 ];
 
 // 组件间距列表
-const compMarginArr = [
+export const COMP_MARGIN_MAP = [
   {
-    label: "comp-margin-xxs",
-    remark: "size-1",
-    value: null,
+    name: 'comp-margin-xxs',
+    from: 'size-1',
   },
   {
-    label: "comp-margin-xs",
-    remark: "size-2",
-    value: null,
+    name: 'comp-margin-xs',
+    from: 'size-2',
   },
   {
-    label: "comp-margin-s",
-    remark: "size-4",
-    value: null,
+    name: 'comp-margin-s',
+    from: 'size-4',
   },
   {
-    label: "comp-margin-m",
-    remark: "size-5",
-    value: null,
+    name: 'comp-margin-m',
+    from: 'size-5',
   },
   {
-    label: "comp-margin-l",
-    remark: "size-6",
-    value: null,
+    name: 'comp-margin-l',
+    from: 'size-6',
   },
   {
-    label: "comp-margin-xl",
-    remark: "size-7",
-    value: null,
+    name: 'comp-margin-xl',
+    from: 'size-7',
   },
   {
-    label: "comp-margin-xxl",
-    remark: "size-8",
-    value: null,
+    name: 'comp-margin-xxl',
+    from: 'size-8',
   },
   {
-    label: "comp-margin-xxxl",
-    remark: "size-10",
-    value: null,
+    name: 'comp-margin-xxxl',
+    from: 'size-10',
   },
   {
-    label: "comp-margin-xxxxl",
-    remark: "size-12",
-    value: null,
+    name: 'comp-margin-xxxxl',
+    from: 'size-12',
   },
 ];
-
-export {
-  sizeLabels,
-  sizeSteps,
-  sizeArr,
-  compSizeArr,
-  compPaddingLRArr,
-  compPaddingTBArr,
-  compPopupPaddingArr,
-  compMarginArr,
-};

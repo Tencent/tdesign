@@ -1,0 +1,39 @@
+:root {
+    --td-font-family: pingfang sc, microsoft yahei, arial regular;
+    --td-font-family-medium: pingfang sc, microsoft yahei, arial medium;
+    --td-font-size-link-small: 12px;
+    --td-font-size-link-medium: 14px;
+    --td-font-size-link-large: 16px;
+    --td-font-size-mark-extraSmall: 10px;
+    --td-font-size-mark-small: 12px;
+    --td-font-size-mark-medium: 14px;
+    --td-font-size-mark-large: 16px;
+    --td-font-size-body-extraSmall: 10px;
+    --td-font-size-body-small: 12px;
+    --td-font-size-body-medium: 14px;
+    --td-font-size-body-large: 16px;
+    --td-font-size-title-small: 14px;
+    --td-font-size-title-medium: 16px;
+    --td-font-size-title-large: 18px;
+    --td-font-size-title-extraLarge: 20px;
+    --td-font-size-headline-small: 24px;
+    --td-font-size-headline-medium: 28px;
+    --td-font-size-headline-large: 36px;
+    --td-font-size-display-medium: 48px;
+    --td-font-size-display-large: 64px;
+    --td-font-size: 10px;
+    --td-font-size-xs: var(--td-font-size-body-extraSmall);
+    --td-font-size-s: var(--td-font-size-body-small);
+    --td-font-size-base: var(--td-font-size-title-small);
+    --td-font-size-m: var(--td-font-size-title-medium);
+    --td-font-size-l: var(--td-font-size-title-large);
+    --td-font-size-xl: var(--td-font-size-title-extraLarge);
+    --td-font-size-xxl: var(--td-font-size-headline-large);
+    
+    --td-radius-small: 3px;
+    --td-radius-default: 6px;
+    --td-radius-large: 9px;
+    --td-radius-extraLarge: 12px;
+    --td-radius-round: 999px;
+    --td-radius-circle: 50%;
+}
