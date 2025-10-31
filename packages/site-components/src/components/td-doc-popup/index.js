@@ -27,7 +27,10 @@ export default define({
   portalStyle: '',
   placement: 'bottom-end',
   triggerType: 'hover',
-  equalWidth: false,
+  equalWidth: {
+    get: (_host, lastValue) => lastValue || false,
+    set: (_host, value) => value === '' || value === 'true' || value === true,
+  },
   visible: {
     get: (host, lastValue) => lastValue || false,
     set: (host, value) => value,
