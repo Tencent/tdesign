@@ -66,13 +66,26 @@ export default define({
             placement,
             modifiers: [{ name: 'offset', options: { offset: isVertical ? [0, 8] : [0, 16] } }],
           });
-          if (isVertical) {
+
+          // 更新 popper 宽度的函数
+          const updatePopperWidth = () => {
+            if (!isVertical || !host.popper) return;
             if (host.equalWidth) {
               host.popper.state.styles.popper.width = `${reference.offsetWidth}px`;
             } else {
               host.popper.state.styles.popper.minWidth = `${reference.offsetWidth}px`;
             }
-          }
+            host.popper.update();
+          };
+
+          updatePopperWidth();
+
+          // 监听 reference 元素的尺寸变化
+          const resizeObserver = new ResizeObserver(() => {
+            updatePopperWidth();
+          });
+          resizeObserver.observe(reference);
+          host.resizeObserver = resizeObserver;
         });
       });
 
@@ -86,6 +99,7 @@ export default define({
       document.addEventListener('click', clickOutside);
 
       return () => {
+        host.resizeObserver?.disconnect?.();
         host.portals?.removeChild?.(host.portal);
         document.removeEventListener('click', clickOutside);
       };
