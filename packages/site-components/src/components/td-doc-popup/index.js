@@ -1,5 +1,6 @@
 import { html, define, dispatch } from 'hybrids';
 import { createPopper } from '@popperjs/core';
+import { parseBoolean } from '@utils';
 import style from './style.less?inline';
 
 function handleMouseEvent(host, type) {
@@ -27,11 +28,16 @@ export default define({
   portalStyle: '',
   placement: 'bottom-end',
   triggerType: 'hover',
+  equalWidth: {
+    get: (_host, lastValue) => parseBoolean(lastValue, false),
+    set: (_host, value) => parseBoolean(value, false),
+  },
   visible: {
     get: (host, lastValue) => lastValue || false,
     set: (host, value) => value,
     connect: (host) => {
       const { reference, placement } = host;
+      let resizeObserver;
 
       requestAnimationFrame(() => {
         host.portals = document.getElementById('__td_portals__');
@@ -62,7 +68,28 @@ export default define({
             placement,
             modifiers: [{ name: 'offset', options: { offset: isVertical ? [0, 8] : [0, 16] } }],
           });
-          if (isVertical) host.popper.state.styles.popper.minWidth = `${reference.offsetWidth}px`;
+
+          if (isVertical) {
+            if (host.equalWidth) {
+              host.popper.state.styles.popper.width = `${reference.offsetWidth}px`;
+            } else {
+              host.popper.state.styles.popper.minWidth = `${reference.offsetWidth}px`;
+            }
+          }
+
+          // 监听 reference 宽度变化
+          resizeObserver = new window.ResizeObserver(() => {
+            if (!host.popper) return;
+            if (isVertical) {
+              if (host.equalWidth) {
+                host.popper.state.styles.popper.width = `${reference.offsetWidth}px`;
+              } else {
+                host.popper.state.styles.popper.minWidth = `${reference.offsetWidth}px`;
+              }
+              host.popper.update();
+            }
+          });
+          resizeObserver.observe(reference);
         });
       });
 
@@ -78,6 +105,7 @@ export default define({
       return () => {
         host.portals?.removeChild?.(host.portal);
         document.removeEventListener('click', clickOutside);
+        resizeObserver?.disconnect?.();
       };
     },
     observe: (host, value) => {

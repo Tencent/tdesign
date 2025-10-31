@@ -52,7 +52,6 @@
   &__badge {
     max-width: 100%;
     display: flex;
-    overflow-x: auto;
 
     img {
       margin-right: 8px;
@@ -82,7 +81,7 @@
     position: relative;
     top: var(--info-top, 48px);
 
-    >div:first-child {
+    > div:first-child {
       display: flex;
       align-items: center;
       gap: 16px;
@@ -94,7 +93,7 @@
       text-align: left;
       line-height: 42px;
       margin: 0;
-      transition: top .2s var(--anim-time-fn-easing), opacity .2s linear, visibility .2s linear;
+      transition: top 0.2s var(--anim-time-fn-easing), opacity 0.2s linear, visibility 0.2s linear;
     }
 
     &-describe {
@@ -105,7 +104,17 @@
       line-height: 22px;
       width: 100%;
       box-sizing: border-box;
-      transition: all .2s linear;
+      transition: all 0.2s linear;
+      &-line {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        margin-top: 8px;
+      }
     }
   }
 }
