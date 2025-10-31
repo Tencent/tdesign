@@ -85,7 +85,7 @@ export default define({
           const { top } = idTarget.getBoundingClientRect();
           const offsetTop = top + document.documentElement.scrollTop;
 
-          requestAnimationFrame(() => window.scrollTo({ top: offsetTop - 120, left: 0 }));
+          requestAnimationFrame(() => window.scrollTo({ top: offsetTop, left: 0 }));
         }
       }
 
