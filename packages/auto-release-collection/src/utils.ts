@@ -1,5 +1,4 @@
 import * as github from '@actions/github';
-import { SubmoduleItem } from './constants';
 
 /**
  * @description 获取内容
