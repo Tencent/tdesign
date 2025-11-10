@@ -11,13 +11,29 @@ let frameworkKeys = {
   react: 'tdesign-react',
   vue: 'tdesign-vue-next,vue3',
   miniprogram: 'tdesign-miniprogram',
+  'mobile-vue': 'tdesign-mobile-vue,vue3',
+  'mobile-react': 'tdesign-mobile-react',
 };
 
 let promptForGenerateDemo = {
-  react: '请为我生成 ${component} 组件的 ${selectedText} 的代码示例',
-  vue: '请为我生成 ${component} 组件的 ${selectedText} 的 script setup 代码示例',
-  miniprogram: '请按照微信原生小程序代码规范，为我生成 ${component} 组件的 ${selectedText} 属性的代码示例',
+  react: '请为我生成 ${component} 组件 ${selectedText} 属性的使用示例',
+  vue: '请为我生成 ${component} 组件的 ${selectedText} 属性的使用示例，采用 script setup 语法糖',
+  miniprogram: '请按照微信原生小程序代码规范，为我生成 ${component} 组件的 ${selectedText} 属性的使用示例，输出完整可用的代码片段，包括 wxml、wxss（可选）、js（可选）、json（可选）等文件',
+  'mobile-vue': '请为我生成 ${component} 组件的 ${selectedText} 属性的使用示例，采用 script setup 语法糖',
+  'mobile-react': "请为我生成 ${component} 组件的 ${selectedText} 属性的使用示例"
 }
+
+const generatePrompt = (framework, component, selectedText) => {
+  const template = promptForGenerateDemo[framework];
+  if (!template) return '';
+
+  const REGEXP = /\$\{(\w+)\}/g;
+
+  return template.replace(REGEXP, (match, key) => {
+    const replacements = { component, selectedText };
+    return replacements[key] || match;
+  });
+};
 
 const createSDKContainer = (framework, demoRequestBody) => {
   if (window.WebChatSdk) {
@@ -108,7 +124,7 @@ const createTooltips = (framework, generateDemo, selectedText) => {
     unmountTooltips();
     let prompt = '';
     if (generateDemo) {
-      prompt = promptForGenerateDemo[framework];
+      prompt = generatePrompt(framework, component, selectedText);
     } else {
       prompt = component ? `请为我解释${component}的${selectedText}的定义` : `请为我解释${selectedText}的定义`;
     }
