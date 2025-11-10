@@ -1,13 +1,29 @@
-import { define, html } from 'hybrids';
 import { getLocale } from '@config/locale.js';
 import splineConfig from '@config/spline';
 import historyIcon from '@images/history.svg?raw';
 import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, parseBoolean, watchHtmlMode } from '@utils';
+import { define, html } from 'hybrids';
 import style from './style.less?inline';
 
 let timer = null;
 let observeTimer = null;
+let popupCheckTimer = null;
 const locale = getLocale();
+
+function checkPopup(host) {
+  if (popupCheckTimer) clearTimeout(popupCheckTimer);
+  popupCheckTimer = setTimeout(() => {
+    requestAnimationFrame(() => {
+      const describeLine = host.shadowRoot?.querySelector('.TDesign-doc-header__info-describe-line');
+      if (describeLine) {
+        const computedStyle = getComputedStyle(describeLine);
+        const lineHeight = parseFloat(computedStyle.lineHeight);
+        const maxHeight = lineHeight * 2;
+        host.shouldShowPopup = describeLine.scrollHeight > maxHeight;
+      }
+    });
+  }, 100);
+}
 
 function handleModeChange(themeMode, host) {
   if (!host.shadowRoot) return;
@@ -63,6 +79,10 @@ export default define({
     set: (_host, value) => parseBoolean(value, true),
   },
   mobileBodyStyle,
+  shouldShowPopup: {
+    get: (_host, lastValue) => lastValue || false,
+    set: (_host, value) => value,
+  },
   docInfo: {
     get: (_host, lastValue) => lastValue || undefined,
     set: (_host, value) => value,
@@ -73,6 +93,9 @@ export default define({
       titleElement.id = '__td_doc_title__';
       titleElement.innerText = value.title;
       host.appendChild(titleElement);
+
+      // 检查描述是否被省略
+      checkPopup(host);
     },
   },
   fixedTitle: {
@@ -80,6 +103,7 @@ export default define({
     set: (_host, value) => value,
     connect: (host) => {
       const mediaQuery = window.matchMedia('(max-width: 1200px)');
+      let lastWidth = window.innerWidth;
 
       function changeTitlePos() {
         if (!host.shadowRoot) return;
@@ -150,13 +174,33 @@ export default define({
 
       changeTitlePos();
 
-      mediaQuery.addEventListener('change', changeTitlePos);
-      window.addEventListener('resize', changeTitlePos);
+      mediaQuery.addEventListener('change', () => {
+        changeTitlePos();
+        checkPopup(host);
+      });
+      window.addEventListener('resize', () => {
+        changeTitlePos();
+        const currentWidth = window.innerWidth;
+        if (currentWidth !== lastWidth) {
+          lastWidth = currentWidth;
+          checkPopup(host);
+        }
+      });
       document.addEventListener('scroll', changeTitlePos);
 
       return () => {
-        mediaQuery.removeEventListener('change', changeTitlePos);
-        window.removeEventListener('resize', changeTitlePos);
+        mediaQuery.removeEventListener('change', () => {
+          changeTitlePos();
+          checkPopup(host);
+        });
+        window.removeEventListener('resize', () => {
+          changeTitlePos();
+          const currentWidth = window.innerWidth;
+          if (currentWidth !== lastWidth) {
+            lastWidth = currentWidth;
+            checkPopup(host);
+          }
+        });
         document.removeEventListener('scroll', changeTitlePos);
       };
     },
@@ -208,10 +252,16 @@ export default define({
                         : html``}
                     </div>
                     <div class="TDesign-doc-header__info-describe">
-                      <td-doc-popup placement="top-end" equal-width="true">
-                        <div class="TDesign-doc-header__info-describe-line" innerHTML="${docInfo.desc}"></div>
-                        <div slot="content" innerHTML="${docInfo.desc}"></div>
-                      </td-doc-popup>
+                      ${host.shouldShowPopup
+                        ? html`
+                            <td-doc-popup placement="top-end" equal-width="true">
+                              <div class="TDesign-doc-header__info-describe-line" innerHTML="${docInfo.desc}"></div>
+                              <div slot="content" innerHTML="${docInfo.desc}"></div>
+                            </td-doc-popup>
+                          `
+                        : html`
+                            <div class="TDesign-doc-header__info-describe-line" innerHTML="${docInfo.desc}"></div>
+                          `}
                     </div>
                   `
                 : html``}
