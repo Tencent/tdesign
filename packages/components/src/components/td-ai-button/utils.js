@@ -13,6 +13,12 @@ let frameworkKeys = {
   miniprogram: 'tdesign-miniprogram',
 };
 
+let promptForGenerateDemo = {
+  react: '请为我生成 ${component} 组件的 ${selectedText} 的代码示例',
+  vue: '请为我生成 ${component} 组件的 ${selectedText} 的 script setup 代码示例',
+  miniprogram: '请按照微信原生小程序代码规范，为我生成 ${component} 组件的 ${selectedText} 属性的代码示例',
+}
+
 const createSDKContainer = (framework, demoRequestBody) => {
   if (window.WebChatSdk) {
     sdkInstance = new window.WebChatSdk({
@@ -73,7 +79,7 @@ const sendMessage = (prompt) => {
 };
 
 // create tooltips when double click
-const createTooltips = (generateDemo, selectedText) => {
+const createTooltips = (framework, generateDemo, selectedText) => {
   const tooltip = document.createElement('div');
   const svg = document.createElement('img');
   const content = document.createElement('div');
@@ -102,7 +108,7 @@ const createTooltips = (generateDemo, selectedText) => {
     unmountTooltips();
     let prompt = '';
     if (generateDemo) {
-      prompt = `请为我生成 ${component} 组件的 ${selectedText} 的 script setup 代码示例`;
+      prompt = promptForGenerateDemo[framework];
     } else {
       prompt = component ? `请为我解释${component}的${selectedText}的定义` : `请为我解释${selectedText}的定义`;
     }
@@ -165,7 +171,7 @@ const webChatInteraction = (framework, demoRequestBody) => {
       ['api'].includes(urlParams.get('tab')) &&
       target.tagName === 'TD' &&
       Array.from(target.parentNode.childNodes).filter((node) => node.nodeType === 1)[0] === target;
-    const popper = createTooltips(isGenerateDemo, selectedText);
+    const popper = createTooltips(framework, isGenerateDemo, selectedText);
     createPopper(event.target, popper, {
       placement: 'top',
       modifiers: [
