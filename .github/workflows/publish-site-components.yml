@@ -1,11 +1,15 @@
 name: publish-site-components
 
+permissions:
+  contents: read
+  id-token: write
+
 on:
   pull_request:
     branches: [main]
     types: [closed]
     paths:
-      - packages/components/package.json
+      - packages/site-components/package.json
 
   workflow_dispatch:
 
@@ -26,12 +30,10 @@ jobs:
 
       - run: pnpm -F @tdesign/site-components run build
 
+      - run: npm i -g npm@latest
+
       - name: Publish Package
-        run: |
-          npm config set "//registry.npmjs.org/:_authToken" "${NPM_TOKEN}"
-          pnpm -F @tdesign/site-components publish
-        env:
-          NPM_TOKEN: ${{ secrets.TDESIGN_NPM_TOKEN }}
+        run: pnpm -F @tdesign/site-components publish
 
   auto-upgrade-tdesign-site-components:
     needs: publish-site-components

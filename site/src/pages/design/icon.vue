@@ -214,7 +214,9 @@
 
     <h3>Breaks</h3>
     <p>
-      Breaks mostly appear on composite icons, and their width should be analyzed according to the specific style of the icon and aim to balance the visual weight.</p>
+      Breaks mostly appear on composite icons, and their width should be analyzed according to the specific style of the
+      icon and aim to balance the visual weight.
+    </p>
     <img src="./assets/icon/fracture.png" alt="" />
 
     <h3>Simplicity</h3>
@@ -257,17 +259,28 @@
       </div>
     </div>
 
-    <h3>Download Icon</h3>
-    <all-icons />
+    <h3>All Icons</h3>
+    <div
+      style="
+        background: #ecf2fe;
+        display: flex;
+        align-items: center;
+        line-height: 20px;
+        padding: 14px 24px;
+        border-radius: 3px;
+        color: #555a65;
+        margin: 16px 0;
+      "
+    >
+      Visit <a href="/icons-en"> TDesign Icons </a> to view and experience all supported icons.
+    </div>
   </div>
 </template>
 
 <script>
-import AllIcons from '@/components/all-icons.vue';
 import anchorMixin from '../mixins/anchor';
 
 export default {
-  components: { AllIcons },
   mixins: [anchorMixin],
 };
 </script>

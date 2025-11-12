@@ -4,7 +4,6 @@ import vue from '@vitejs/plugin-vue2';
 import tdocPlugin from './plugin-tdoc/index.js';
 
 const publicPathMap = {
-  intranet: '/',
   preview: '/',
   production: 'https://static.tdesign.tencent.com/',
 };
@@ -36,7 +35,6 @@ export default ({ mode }) => {
       host: '0.0.0.0',
       port: 10000,
       open: '/',
-      https: false,
       fs: {
         strict: false,
       },

@@ -1,6 +1,7 @@
 {
   "name": "@tdesign/site-components",
-  "version": "0.18.0-alpha.1",
+  "version": "0.18.0-alpha.2",
+  "license": "MIT",
   "main": "lib/site.es.js",
   "type": "module",
   "scripts": {
@@ -17,7 +18,7 @@
     "type": "git",
     "url": "git+https://github.com/Tencent/tdesign.git"
   },
-  "homepage": "https://github.com/Tencent/tdesign/blob/main/packages/components/README.md",
+  "homepage": "https://github.com/Tencent/tdesign/blob/main/packages/site-components/README.md",
   "keywords": [
     "TDesign",
     "webcomponents"

@@ -1,29 +1,39 @@
 {
   "all": {},
-  "site": {},
-  "vue": {
-    "title": "🗓 新增单组件的更新日志，进入任意组件页后，点击更新日志按钮即可查看",
+  "site": {
+    "title": "🎨 新图标资源发布，支持可变粗细和多色填充，欢迎使用体验",
     "type": "primary",
+    "actionUrl": "https://tdesign.tencent.com/icons",
+    "closeable": true
+  },
+  "vue": {
+    "title": "🎨 图标新版本 0.4.0 发布，支持可变粗细和多色填充的图标资源，欢迎使用体验",
+    "type": "primary",
+    "actionUrl": "https://tdesign.tencent.com/icons",
     "closeable": true
   },
   "react": {
-    "title": "🗓 新增单组件的更新日志，进入任意组件页后，点击更新日志按钮即可查看",
+    "title": "🎨 图标新版本 0.6.0 发布，支持可变粗细和多色填充的图标资源，欢迎使用体验",
     "type": "primary",
+    "actionUrl": "https://tdesign.tencent.com/icons",
     "closeable": true
   },
   "vue-next": {
-    "title": "🗓 新增单组件的更新日志，进入任意组件页后，点击更新日志按钮即可查看",
+    "title": "🎨 图标新版本 0.4.0 发布，支持可变粗细和多色填充的图标资源，欢迎使用体验",
     "type": "primary",
+    "actionUrl": "https://tdesign.tencent.com/icons",
     "closeable": true
   },
   "vue-mobile": {
-    "title": "🗓 新增单组件的更新日志，进入任意组件页后，点击更新日志按钮即可查看",
+    "title": "🎨 图标新版本 0.4.0 发布，支持可变粗细和多色填充的图标资源，欢迎使用体验",
     "type": "primary",
+    "actionUrl": "https://tdesign.tencent.com/icons",
     "closeable": true
   },
   "react-mobile": {
-    "title": "📢 站点接入主题生成器，支持自定义CSS 变量",
+    "title": "🎨 图标新版本 0.6.0 发布，支持可变粗细和多色填充的图标资源，欢迎使用体验",
     "type": "primary",
+    "actionUrl": "https://tdesign.tencent.com/icons",
     "closeable": true
   },
   "miniprogram": {

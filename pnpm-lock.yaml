@@ -80,7 +80,7 @@ importers:
         specifier: ^4.9.5
         version: 4.9.5
 
-  packages/components:
+  packages/site-components:
     dependencies:
       '@popperjs/core':
         specifier: ^2.11.5
@@ -187,8 +187,8 @@ importers:
   site:
     dependencies:
       '@tdesign/site-components':
-        specifier: ^0.17.0
-        version: 0.17.0
+        specifier: ^0.17.1
+        version: 0.17.1
       canvas-3d:
         specifier: ^1.0.14
         version: 1.0.14
@@ -205,8 +205,8 @@ importers:
         specifier: ^1.29.0
         version: 1.29.0
       tdesign-icons-view:
-        specifier: ^0.3.5
-        version: 0.3.5
+        specifier: ~0.4.0
+        version: 0.4.0
       tdesign-icons-vue:
         specifier: ^0.1.4
         version: 0.1.11(vue@2.7.14)
@@ -1566,8 +1566,8 @@ packages:
   '@soda/get-current-script@1.0.2':
     resolution: {integrity: sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==}
 
-  '@tdesign/site-components@0.17.0':
-    resolution: {integrity: sha512-fk+4+Zlb0qVHfIume0wpkshBGioFAJWZJoXFPoVockjIZc+ifxyKBf5o2ac/lXopHP6mKVwchAe0W7KkkhJaBA==}
+  '@tdesign/site-components@0.17.1':
+    resolution: {integrity: sha512-HnRBVm6u1wDIaq+N/DTzXqcQScIr7ho297RyqZFfVL20M1MRM7qmxhPe1JL2XF7ffDyICK/UyUCqnTUXSVUZSg==}
 
   '@tootallnate/once@1.1.2':
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
@@ -5132,6 +5132,9 @@ packages:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
     engines: {node: '>=10'}
 
+  lodash-es@4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+
   lodash._reinterpolate@3.0.0:
     resolution: {integrity: sha512-xYHt68QRoYGjeeM/XOE1uJtvXQAgvszfBhjV4yvsQH0u2i9I6cI6c6/eG4Hh3UAOVn0y/xAXwmTzEay49Q//HA==}
 
@@ -6976,8 +6979,8 @@ packages:
   tdesign-icons-svg@0.0.1:
     resolution: {integrity: sha512-4l05CgPXwI33Y6hU8ytKYIIXVznR22x6blhhtB6MntSHj2xrA+Unx4U/qy+Do/lCMtYao9q1wVkaZvxNjuX7jw==}
 
-  tdesign-icons-view@0.3.5:
-    resolution: {integrity: sha512-LhahUyxAC1u6B5hoj1aqq16TQiOU8NvIPKAOceC269ZawarVt8eEpTPRWmpbJS8+U0OnUaxB4jDtMQi8J6NcGA==}
+  tdesign-icons-view@0.4.0:
+    resolution: {integrity: sha512-drgQasSA+0WiFTZ4MvoFGLN+xrbJW5Oe2gOJnfsiUaFKd6h1VwebP6WfVOd4r+1EoKxMf/IGKcSusjKgaJRQ6A==}
 
   tdesign-icons-vue@0.0.8:
     resolution: {integrity: sha512-lxKeMlrRrMuD0AIVIvciK/0GryTJPsOH00LNSPjUkPFznlxua/7N4F39bWJhjHa67/zcPyeHSFvyLjwXi53OCg==}
@@ -6994,13 +6997,18 @@ packages:
     peerDependencies:
       vue: ^2.6.12
 
-  tdesign-icons-vue@0.3.4:
-    resolution: {integrity: sha512-ZENwP8xRwRTvSEI1G5EfxXT0SlsiSSvFqoTpa9bGZ3E1pV8Snr0563d+vWMnt4YpFL7bUIY9RXccj4rUEgm3eg==}
+  tdesign-icons-vue@0.3.6:
+    resolution: {integrity: sha512-FXE5Ryihyamk0cYKY1wuppuAOtyV2W0k2HxgR4EaocbbdmnFUWIcSBL0buNeFAQqSi16HQOtr2KpP9v87IwLXw==}
     peerDependencies:
       vue: ^2.6.12
 
-  tdesign-vue@1.10.5-naruto:
-    resolution: {integrity: sha512-sNi/Ga/beo7gNdyhv11ufOKvnLB1s9zU7Dt14NjHVkSFnYDELr6ck+nTXKYQF3Y0Fd4PVVWn2YaGCCDISZMJ7Q==}
+  tdesign-icons-vue@0.4.0:
+    resolution: {integrity: sha512-3hIxRatBvAPknXE8KSYvYudreBzIIBA5XYM+jedvdzS1P9HE2pap4wP22qf3RIhTw50PHsQMjBOaW6XeeiSaEg==}
+    peerDependencies:
+      vue: ^2.6.12
+
+  tdesign-vue@1.13.1-naruto:
+    resolution: {integrity: sha512-GfSkK3xyMNowc4wkJ3cTev5VulfUjCqqrYti9f3PC6X5fLRDbumWTxcbozsZHYC4VbwXFaZHi9/p558FKCHsQA==}
     peerDependencies:
       vue: ~2.7.14
 
@@ -8890,7 +8898,7 @@ snapshots:
   '@jest/console@27.5.1':
     dependencies:
       '@jest/types': 27.5.1
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       chalk: 4.1.2
       jest-message-util: 27.5.1
       jest-util: 27.5.1
@@ -8903,7 +8911,7 @@ snapshots:
       '@jest/test-result': 27.5.1
       '@jest/transform': 27.5.1
       '@jest/types': 27.5.1
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       emittery: 0.8.1
@@ -8937,14 +8945,14 @@ snapshots:
     dependencies:
       '@jest/fake-timers': 27.5.1
       '@jest/types': 27.5.1
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       jest-mock: 27.5.1
 
   '@jest/fake-timers@27.5.1':
     dependencies:
       '@jest/types': 27.5.1
       '@sinonjs/fake-timers': 8.1.0
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       jest-message-util: 27.5.1
       jest-mock: 27.5.1
       jest-util: 27.5.1
@@ -8962,7 +8970,7 @@ snapshots:
       '@jest/test-result': 27.5.1
       '@jest/transform': 27.5.1
       '@jest/types': 27.5.1
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       chalk: 4.1.2
       collect-v8-coverage: 1.0.2
       exit: 0.1.2
@@ -9031,7 +9039,7 @@ snapshots:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       '@types/yargs': 16.0.9
       chalk: 4.1.2
 
@@ -9254,7 +9262,7 @@ snapshots:
 
   '@soda/get-current-script@1.0.2': {}
 
-  '@tdesign/site-components@0.17.0':
+  '@tdesign/site-components@0.17.1':
     dependencies:
       '@popperjs/core': 2.11.8
       hybrids: 8.2.2
@@ -9352,7 +9360,7 @@ snapshots:
 
   '@types/graceful-fs@4.1.9':
     dependencies:
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
 
   '@types/html-minifier-terser@6.1.0': {}
 
@@ -9402,7 +9410,6 @@ snapshots:
   '@types/node@22.9.0':
     dependencies:
       undici-types: 6.19.8
-    optional: true
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -10095,8 +10102,7 @@ snapshots:
 
   acorn@8.12.1: {}
 
-  acorn@8.15.0:
-    optional: true
+  acorn@8.15.0: {}
 
   add-stream@1.0.0: {}
 
@@ -13060,7 +13066,7 @@ snapshots:
       '@jest/environment': 27.5.1
       '@jest/test-result': 27.5.1
       '@jest/types': 27.5.1
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       chalk: 4.1.2
       co: 4.6.0
       dedent: 0.7.0
@@ -13158,7 +13164,7 @@ snapshots:
       '@jest/environment': 27.5.1
       '@jest/fake-timers': 27.5.1
       '@jest/types': 27.5.1
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       jest-mock: 27.5.1
       jest-util: 27.5.1
       jsdom: 16.7.0
@@ -13173,7 +13179,7 @@ snapshots:
       '@jest/environment': 27.5.1
       '@jest/fake-timers': 27.5.1
       '@jest/types': 27.5.1
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       jest-mock: 27.5.1
       jest-util: 27.5.1
 
@@ -13183,7 +13189,7 @@ snapshots:
     dependencies:
       '@jest/types': 27.5.1
       '@types/graceful-fs': 4.1.9
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       anymatch: 3.1.3
       fb-watchman: 2.0.2
       graceful-fs: 4.2.11
@@ -13202,7 +13208,7 @@ snapshots:
       '@jest/source-map': 27.5.1
       '@jest/test-result': 27.5.1
       '@jest/types': 27.5.1
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       chalk: 4.1.2
       co: 4.6.0
       expect: 27.5.1
@@ -13245,7 +13251,7 @@ snapshots:
   jest-mock@27.5.1:
     dependencies:
       '@jest/types': 27.5.1
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
 
   jest-pnp-resolver@1.2.3(jest-resolve@27.5.1):
     optionalDependencies:
@@ -13281,7 +13287,7 @@ snapshots:
       '@jest/test-result': 27.5.1
       '@jest/transform': 27.5.1
       '@jest/types': 27.5.1
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       chalk: 4.1.2
       emittery: 0.8.1
       graceful-fs: 4.2.11
@@ -13332,7 +13338,7 @@ snapshots:
 
   jest-serializer@27.5.1:
     dependencies:
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       graceful-fs: 4.2.11
 
   jest-snapshot@27.5.1:
@@ -13365,7 +13371,7 @@ snapshots:
   jest-util@27.5.1:
     dependencies:
       '@jest/types': 27.5.1
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       chalk: 4.1.2
       ci-info: 3.9.0
       graceful-fs: 4.2.11
@@ -13384,7 +13390,7 @@ snapshots:
     dependencies:
       '@jest/test-result': 27.5.1
       '@jest/types': 27.5.1
-      '@types/node': 22.5.5
+      '@types/node': 22.9.0
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       jest-util: 27.5.1
@@ -13441,7 +13447,7 @@ snapshots:
   jsdom@16.7.0:
     dependencies:
       abab: 2.0.6
-      acorn: 8.12.1
+      acorn: 8.15.0
       acorn-globals: 6.0.0
       cssom: 0.4.4
       cssstyle: 2.3.0
@@ -13681,6 +13687,8 @@ snapshots:
   locate-path@6.0.0:
     dependencies:
       p-locate: 5.0.0
+
+  lodash-es@4.17.21: {}
 
   lodash._reinterpolate@3.0.0: {}
 
@@ -15641,13 +15649,13 @@ snapshots:
 
   tdesign-icons-svg@0.0.1: {}
 
-  tdesign-icons-view@0.3.5:
+  tdesign-icons-view@0.4.0:
     dependencies:
+      '@popperjs/core': 2.11.8
       core-js: 3.38.1
       lodash: 4.17.21
-      tdesign-icons-vue: 0.3.4(vue@2.7.14)
-      tdesign-vue: 1.10.5-naruto(vue@2.7.14)
-      tvision-color: 1.6.0
+      tdesign-icons-vue: 0.4.0(vue@2.7.14)
+      tdesign-vue: 1.13.1-naruto(vue@2.7.14)
       vue: 2.7.14
 
   tdesign-icons-vue@0.0.8(vue@2.7.14):
@@ -15668,29 +15676,34 @@ snapshots:
       classnames: 2.5.1
       vue: 2.7.14
 
-  tdesign-icons-vue@0.3.4(vue@2.7.14):
+  tdesign-icons-vue@0.3.6(vue@2.7.14):
     dependencies:
       '@babel/runtime': 7.25.6
       classnames: 2.5.1
       vue: 2.7.14
 
-  tdesign-vue@1.10.5-naruto(vue@2.7.14):
+  tdesign-icons-vue@0.4.0(vue@2.7.14):
+    dependencies:
+      '@babel/runtime': 7.25.6
+      classnames: 2.5.1
+      vue: 2.7.14
+
+  tdesign-vue@1.13.1-naruto(vue@2.7.14):
     dependencies:
       '@babel/runtime': 7.25.6
       '@popperjs/core': 2.11.8
       '@types/clipboard': 2.0.7
-      '@types/lodash': 4.14.182
       '@types/raf': 3.4.3
       '@types/sortablejs': 1.15.8
       '@types/tinycolor2': 1.4.6
       '@types/validator': 13.12.2
       clipboard: 2.0.11
       dayjs: 1.11.10
-      lodash: 4.17.21
+      lodash-es: 4.17.21
       mitt: 3.0.1
       raf: 3.4.1
       sortablejs: 1.15.3
-      tdesign-icons-vue: 0.2.5(vue@2.7.14)
+      tdesign-icons-vue: 0.3.6(vue@2.7.14)
       tinycolor2: 1.6.0
       validator: 13.12.0
       vue: 2.7.14

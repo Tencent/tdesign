@@ -126,7 +126,7 @@ export default {
         pixso: pixsoIcon,
         md: mdIcon,
         mastergo: mastergoIcon,
-        ry: ryIcon
+        ry: ryIcon,
       },
       previewUrl: {
         web: 'https://codesign.qq.com/s/dqN2925D7qjaBXe?active-screen=xDP39qAvLNl9wlK&menu_aside=null&minimap=close',
@@ -177,8 +177,12 @@ export default {
       { tab: 'web', name: 'Desktop' },
       { tab: 'mobile', name: 'Mobile' },
       { tab: 'web-chart', name: 'Desktop Chart' },
+      { tab: 'icons', name: 'Icons' },
     ];
-    this.$refs.tabs.onchange = ({ detail: currentTab }) => (this.tab = currentTab);
+    this.$refs.tabs.onchange = ({ detail: currentTab }) => {
+      if (currentTab !== 'icons') this.tab = currentTab;
+      else window.open('/icons-en', '_blank');
+    };
     fetch(sourceDownloadUrl)
       .then((res) => res.json())
       .then((res) => {
