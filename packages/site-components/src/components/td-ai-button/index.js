@@ -1,6 +1,6 @@
 import { html, define } from 'hybrids';
 import { createAISearchSDK } from './utils';
-import style from './style.less';
+import style from './style.less?inline';
 
 export default define({
   tag: 'td-ai-button',
