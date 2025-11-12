@@ -75,7 +75,12 @@ function renderNav(host, nav, deep = 0) {
         class="TDesign-doc-sidenav-link ${isActive ? 'active' : ''}"
         onclick=${(host, e) => handleLinkClick(host, e, nav.path)}
       >
-        ${nav.title} ${hasUpdate() ? html`<span class="TDesign-doc-sidenav-link__tag">Update</span>` : null}
+        ${nav.title}
+        ${hasUpdate()
+          ? html`<span class="TDesign-doc-sidenav-link__tag">Update</span>`
+          : nav.customTag
+          ? html`<span class="TDesign-doc-sidenav-link__tag">${nav.customTag}</span>`
+          : null}
       </a>
     </div>
   `;
