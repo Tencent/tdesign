@@ -11,6 +11,28 @@ let frameworkKeys = {
   react: 'tdesign-react',
   vue: 'tdesign-vue-next,vue3',
   miniprogram: 'tdesign-miniprogram',
+  'mobile-vue': 'tdesign-mobile-vue,vue3',
+  'mobile-react': 'tdesign-mobile-react',
+};
+
+let promptForGenerateDemo = {
+  react: '请为我生成 ${component} 组件 ${selectedText} 属性的使用示例',
+  vue: '请为我生成 ${component} 组件的 ${selectedText} 属性的使用示例，采用 script setup 语法糖',
+  miniprogram: '请按照微信原生小程序代码规范，为我生成 ${component} 组件的 ${selectedText} 属性的使用示例，输出完整可用的代码片段，包括 wxml、wxss（可选）、js（可选）、json（可选）等文件',
+  'mobile-vue': '请为我生成 ${component} 组件的 ${selectedText} 属性的使用示例，采用 script setup 语法糖',
+  'mobile-react': "请为我生成 ${component} 组件的 ${selectedText} 属性的使用示例"
+}
+
+const generatePrompt = (framework, component, selectedText) => {
+  const template = promptForGenerateDemo[framework];
+  if (!template) return '';
+
+  const REGEXP = /\$\{(\w+)\}/g;
+
+  return template.replace(REGEXP, (match, key) => {
+    const replacements = { component, selectedText };
+    return replacements[key] || match;
+  });
 };
 
 const createSDKContainer = (framework, demoRequestBody) => {
@@ -73,7 +95,7 @@ const sendMessage = (prompt) => {
 };
 
 // create tooltips when double click
-const createTooltips = (generateDemo, selectedText) => {
+const createTooltips = (framework, generateDemo, selectedText) => {
   const tooltip = document.createElement('div');
   const svg = document.createElement('img');
   const content = document.createElement('div');
@@ -102,7 +124,7 @@ const createTooltips = (generateDemo, selectedText) => {
     unmountTooltips();
     let prompt = '';
     if (generateDemo) {
-      prompt = `请为我生成 ${component} 组件的 ${selectedText} 的 script setup 代码示例`;
+      prompt = generatePrompt(framework, component, selectedText);
     } else {
       prompt = component ? `请为我解释${component}的${selectedText}的定义` : `请为我解释${selectedText}的定义`;
     }
@@ -165,7 +187,7 @@ const webChatInteraction = (framework, demoRequestBody) => {
       ['api'].includes(urlParams.get('tab')) &&
       target.tagName === 'TD' &&
       Array.from(target.parentNode.childNodes).filter((node) => node.nodeType === 1)[0] === target;
-    const popper = createTooltips(isGenerateDemo, selectedText);
+    const popper = createTooltips(framework, isGenerateDemo, selectedText);
     createPopper(event.target, popper, {
       placement: 'top',
       modifiers: [

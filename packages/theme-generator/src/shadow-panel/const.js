@@ -37,7 +37,7 @@ export const ShadowSelectDetail = {
 };
 
 export const ShadowSelect = [
-  { label: "超轻",  enLabel: "thiner",value: ShadowSelectType.Super_Light },
+  { label: "超轻",  enLabel: "thinner",value: ShadowSelectType.Super_Light },
   { label: "轻",  enLabel: "thin",value: ShadowSelectType.Light },
   { label: "默认",  enLabel: "default",value: ShadowSelectType.Default },
   { label: "深",  enLabel: "deep",value: ShadowSelectType.Deep },
