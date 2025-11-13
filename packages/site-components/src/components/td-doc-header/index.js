@@ -10,7 +10,7 @@ let observeTimer = null;
 let popupCheckTimer = null;
 const locale = getLocale();
 
-function checkPopup(host) {
+function checkDescribeLineOverflow(host) {
   if (popupCheckTimer) clearTimeout(popupCheckTimer);
   popupCheckTimer = setTimeout(() => {
     requestAnimationFrame(() => {
@@ -95,7 +95,7 @@ export default define({
       host.appendChild(titleElement);
 
       // 检查描述是否被省略
-      checkPopup(host);
+      checkDescribeLineOverflow(host);
     },
   },
   fixedTitle: {
@@ -176,14 +176,14 @@ export default define({
 
       mediaQuery.addEventListener('change', () => {
         changeTitlePos();
-        checkPopup(host);
+        checkDescribeLineOverflow(host);
       });
       window.addEventListener('resize', () => {
         changeTitlePos();
         const currentWidth = window.innerWidth;
         if (currentWidth !== lastWidth) {
           lastWidth = currentWidth;
-          checkPopup(host);
+          checkDescribeLineOverflow(host);
         }
       });
       document.addEventListener('scroll', changeTitlePos);
@@ -191,14 +191,14 @@ export default define({
       return () => {
         mediaQuery.removeEventListener('change', () => {
           changeTitlePos();
-          checkPopup(host);
+          checkDescribeLineOverflow(host);
         });
         window.removeEventListener('resize', () => {
           changeTitlePos();
           const currentWidth = window.innerWidth;
           if (currentWidth !== lastWidth) {
             lastWidth = currentWidth;
-            checkPopup(host);
+            checkDescribeLineOverflow(host);
           }
         });
         document.removeEventListener('scroll', changeTitlePos);
