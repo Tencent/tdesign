@@ -5,6 +5,9 @@ let sdkInstance;
 let isGeneratingDemo = false;
 let regExp = {
   vue: /```vue(?:\w+)?\s*([\s\S]*?)```/g,
+  react: /```jsx(?:\w+)?\s*([\s\S]*?)```/g,
+  'mobile-vue': /```vue(?:\w+)?\s*([\s\S]*?)```/g,
+  'mobile-react': /```jsx(?:\w+)?\s*([\s\S]*?)```/g,
 };
 
 let frameworkKeys = {
@@ -18,10 +21,11 @@ let frameworkKeys = {
 let promptForGenerateDemo = {
   react: '请为我生成 ${component} 组件 ${selectedText} 属性的使用示例',
   vue: '请为我生成 ${component} 组件的 ${selectedText} 属性的使用示例，采用 script setup 语法糖',
-  miniprogram: '请按照微信原生小程序代码规范，为我生成 ${component} 组件的 ${selectedText} 属性的使用示例，输出完整可用的代码片段，包括 wxml、wxss（可选）、js（可选）、json（可选）等文件',
+  miniprogram:
+    '请按照微信原生小程序代码规范，为我生成 ${component} 组件的 ${selectedText} 属性的使用示例，输出完整可用的代码片段，包括 wxml、wxss（可选）、js（可选）、json（可选）等文件',
   'mobile-vue': '请为我生成 ${component} 组件的 ${selectedText} 属性的使用示例，采用 script setup 语法糖',
-  'mobile-react': "请为我生成 ${component} 组件的 ${selectedText} 属性的使用示例"
-}
+  'mobile-react': '请为我生成 ${component} 组件的 ${selectedText} 属性的使用示例',
+};
 
 const generatePrompt = (framework, component, selectedText) => {
   const template = promptForGenerateDemo[framework];
@@ -141,11 +145,13 @@ const webChatInteraction = (framework, demoRequestBody) => {
       let match;
       while ((match = codeRegex.exec(payload.content)) !== null) {
         const code = match[1];
+        const fileExtension = framework.includes('react') ? 'tsx' : 'vue';
+        const fileName = `src/demo.${fileExtension}`;
         body = {
           ...body,
           files: {
             ...body.files,
-            'src/demo.vue': {
+            [fileName]: {
               content: code,
             },
           },
@@ -161,7 +167,7 @@ const webChatInteraction = (framework, demoRequestBody) => {
         })
           .then((x) => x.json())
           .then(({ sandbox_id: sandboxId }) => {
-            window.open(`https://codesandbox.io/s/${sandboxId}?file=/src/demo.vue`);
+            window.open(`https://codesandbox.io/s/${sandboxId}?file=/${fileName}`);
           });
       }
     });
