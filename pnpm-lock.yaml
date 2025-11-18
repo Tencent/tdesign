@@ -187,8 +187,8 @@ importers:
   site:
     dependencies:
       '@tdesign/site-components':
-        specifier: ^0.17.1
-        version: 0.17.1
+        specifier: ^0.17.3
+        version: 0.17.3
       canvas-3d:
         specifier: ^1.0.14
         version: 1.0.14
@@ -1566,8 +1566,8 @@ packages:
   '@soda/get-current-script@1.0.2':
     resolution: {integrity: sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==}
 
-  '@tdesign/site-components@0.17.1':
-    resolution: {integrity: sha512-HnRBVm6u1wDIaq+N/DTzXqcQScIr7ho297RyqZFfVL20M1MRM7qmxhPe1JL2XF7ffDyICK/UyUCqnTUXSVUZSg==}
+  '@tdesign/site-components@0.17.3':
+    resolution: {integrity: sha512-Qn/Tc82jfm6kkbRJQHtCi+f/0G78QxdBkthMrnKSaw2YPR7lMahAXIdUScTlkiLYs6XshHnaJ3/lGpP4b2wRWA==}
 
   '@tootallnate/once@1.1.2':
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
@@ -1576,6 +1576,18 @@ packages:
   '@trysound/sax@0.2.0':
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
     engines: {node: '>=10.13.0'}
+
+  '@tsconfig/node10@1.0.12':
+    resolution: {integrity: sha512-UCYBaeFvM11aU2y3YPZ//O5Rhj+xKyzy7mvcIoAjASbigy8mHMryP5cK7dgjlz2hWxh1g5pLw084E0a/wlUSFQ==}
+
+  '@tsconfig/node12@1.0.11':
+    resolution: {integrity: sha512-cqefuRsh12pWyGsIoBKJA9luFu3mRxCA+ORZvA4ktLSzIuCUtWVxGIuXigEwO5/ywWFMZ2QEGKWvkZG1zDMTag==}
+
+  '@tsconfig/node14@1.0.3':
+    resolution: {integrity: sha512-ysT8mhdixWK6Hw3i1V2AeRqZ5WfXg1G43mqoYlM2nc6388Fq5jcXyr5mRsqViLx/GJYdoL0bfXD8nmF+Zn/Iow==}
+
+  '@tsconfig/node16@1.0.4':
+    resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
 
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -9223,7 +9235,7 @@ snapshots:
 
   '@soda/get-current-script@1.0.2': {}
 
-  '@tdesign/site-components@0.17.1':
+  '@tdesign/site-components@0.17.3':
     dependencies:
       '@popperjs/core': 2.11.8
       hybrids: 8.2.2
@@ -9235,6 +9247,18 @@ snapshots:
   '@tootallnate/once@1.1.2': {}
 
   '@trysound/sax@0.2.0': {}
+
+  '@tsconfig/node10@1.0.12':
+    optional: true
+
+  '@tsconfig/node12@1.0.11':
+    optional: true
+
+  '@tsconfig/node14@1.0.3':
+    optional: true
+
+  '@tsconfig/node16@1.0.4':
+    optional: true
 
   '@types/babel__core@7.20.5':
     dependencies:
@@ -15908,6 +15932,25 @@ snapshots:
   trim-newlines@3.0.1: {}
 
   trim-newlines@4.1.1: {}
+
+  ts-node@10.9.2(@types/node@22.9.0)(typescript@4.9.5):
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      '@tsconfig/node10': 1.0.12
+      '@tsconfig/node12': 1.0.11
+      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.4
+      '@types/node': 22.9.0
+      acorn: 8.15.0
+      acorn-walk: 8.3.4
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 4.9.5
+      v8-compile-cache-lib: 3.0.1
+      yn: 3.1.1
+    optional: true
 
   tsconfig-paths@3.15.0:
     dependencies:
