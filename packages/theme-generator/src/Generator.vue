@@ -42,11 +42,6 @@ export default {
       visible: 0,
     };
   },
-  computed: {
-    $theme() {
-      return themeStore.theme;
-    },
-  },
   mounted() {
     themeStore.updateDevice(this.device);
     syncModeToGenerator();
