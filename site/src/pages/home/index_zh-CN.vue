@@ -9,7 +9,9 @@
             <div style="display: flex">
               <p class="sub-title">为设计师 & 开发者，打造工作美学</p>
               <t-popconfirm trigger="click" placement="top-left">
-                <t-tag class="tds-intro-button" theme="primary" style="height: 24px">腾讯“端服务”联盟产品</t-tag>
+                <t-tag class="tds-intro-button" theme="primary" style="height: 24px; cursor: pointer"
+                  >腾讯“端服务”联盟产品</t-tag
+                >
                 <div class="tds-intro" slot="content">
                   <h4>腾讯 “端服务” 联盟产品</h4>
                   <p>
