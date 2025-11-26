@@ -144,6 +144,9 @@ export default {
     this.$nextTick(() => {
       this.setFontPalette();
     });
+    this.$root.$on('refresh-color-tokens', () => {
+      this.setFontPalette();
+    });
   },
 };
 </script>
