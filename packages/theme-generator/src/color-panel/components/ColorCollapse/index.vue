@@ -39,22 +39,24 @@
         <div class="color-collapse__title" @click="isActive = !isActive">
           {{ title }}
         </div>
-        <slot name="subTitle"></slot>
-        <div class="color-collapse__subtitle" :style="{ color: 'var(--text-secondary)' }" v-if="!$slots.subTitle">
-          HEX: {{ mainColor }}
-          <t-popup
-            placement="top"
-            showArrow
-            trigger="click"
-            :destroyOnClose="true"
-            :attach="handleAttach"
-            :overlayStyle="{ borderRadius: '6px' }"
-          >
-            <file-copy-icon @click="() => copyHex(mainColor)" />
-            <template #content
-              ><span :style="{ color: `var(--text-secondary)` }">{{ lang.copied }}</span>
-            </template>
-          </t-popup>
+        <div class="color-collapse__subtitle" :style="{ color: 'var(--text-secondary)' }">
+          <slot name="subTitle">
+            <!-- 没有 slot 时使用默认内容 -->
+            HEX: {{ mainColor }}
+            <t-popup
+              placement="top"
+              showArrow
+              trigger="click"
+              :destroyOnClose="true"
+              :attach="handleAttach"
+              :overlayStyle="{ borderRadius: '6px' }"
+            >
+              <file-copy-icon @click="() => copyHex(mainColor)" />
+              <template #content>
+                <span :style="{ color: `var(--text-secondary)` }">{{ lang.copied }}</span>
+              </template>
+            </t-popup>
+          </slot>
         </div>
       </div>
       <div @click="isActive = !isActive">

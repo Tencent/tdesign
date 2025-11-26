@@ -254,10 +254,8 @@
         @changeMainColor="changeFunctionColor"
       >
         <template #subTitle>
-          <div>
-            {{ lang.color.fromThemeColor }}
-            <t-switch style="margin-left: 4px" v-model="isGrayRelatedToTheme" @change="changeNeutralColor"></t-switch>
-          </div>
+          {{ lang.color.fromThemeColor }}
+          <t-switch style="margin-left: 8px" v-model="isGrayRelatedToTheme" @change="changeNeutralColor"></t-switch>
         </template>
         <color-column
           type="gray"
