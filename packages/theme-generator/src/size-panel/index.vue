@@ -142,8 +142,8 @@
 </template>
 
 <script lang="jsx">
-import { CommonCollapse } from '../common/components';
-import { langMixin } from '../common/i18n';
+import { CommonCollapse } from '@/common/components';
+import { langMixin } from '@/common/i18n';
 
 import SizeAdjust from './components/SizeAdjust.vue';
 import SizeDisplay from './components/SizeDisplay.vue';

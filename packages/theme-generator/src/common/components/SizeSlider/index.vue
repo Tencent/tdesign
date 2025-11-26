@@ -25,8 +25,8 @@
   </div>
 </template>
 <script>
+import { handleAttach } from '@/common/utils';
 import { InputNumber as TInputNumber, Slider as TSlider } from 'tdesign-vue';
-import { handleAttach } from '../../../common/utils';
 
 export default {
   name: 'SizeSlider',

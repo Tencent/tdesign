@@ -72,9 +72,9 @@ import flatten from 'lodash/flatten';
 import { Edit1Icon } from 'tdesign-icons-vue';
 import { Popup as TPopup, RadioButton as TRadioButton, RadioGroup as TRadioGroup } from 'tdesign-vue';
 
-import { ColorPicker } from '../../common/components';
-import { langMixin } from '../../common/i18n';
-import { handleAttach } from '../../common/utils';
+import { ColorPicker } from '@/common/components';
+import { langMixin } from '@/common/i18n';
+import { handleAttach } from '@/common/utils';
 
 export default {
   name: 'FontColorAdjust',

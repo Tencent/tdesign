@@ -84,10 +84,10 @@
 import { Edit1Icon, ErrorCircleIcon, LinkUnlinkIcon } from 'tdesign-icons-vue';
 import { Popup as TPopup } from 'tdesign-vue';
 
-import { ColorPicker } from '../../../common/components';
-import { langMixin } from '../../../common/i18n';
-import { getTokenFromLocal } from '../../../common/themes';
-import { getTokenValue, handleAttach } from '../../../common/utils';
+import { ColorPicker } from '@/common/components';
+import { langMixin } from '@/common/i18n';
+import { getTokenFromLocal } from '@/common/themes';
+import { getTokenValue, handleAttach } from '@/common/utils';
 
 export default {
   name: 'ColorColumn',

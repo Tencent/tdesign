@@ -66,10 +66,10 @@
 </template>
 
 <script lang="jsx">
+import { CommonCollapse } from '@/common/components';
+import { langMixin } from '@/common/i18n';
+import { isMobile, modifyToken, themeStore } from '@/common/themes';
 import { getTokenValue } from '@/common/utils';
-import { CommonCollapse } from '../common/components';
-import { langMixin } from '../common/i18n';
-import { isMobile, modifyToken, themeStore } from '../common/themes';
 
 import { FONT_COLOR_TOKEN_MAP } from './built-in/font-map';
 

@@ -17,7 +17,7 @@ import {
   syncModeToGenerator,
   syncThemeToIframe,
   themeStore,
-} from './common/themes';
+} from '@/common/themes';
 
 import FloatDock from './float-dock';
 import PanelDrawer from './panel-drawer';

@@ -112,10 +112,10 @@ import {
   RadioGroup as TRadioGroup,
 } from 'tdesign-vue';
 
-import { SegmentSelection, SizeSlider } from '../../common/components';
-import { langMixin } from '../../common/i18n';
-import { getOptionFromLocal, modifyToken, updateLocalOption } from '../../common/themes';
-import { getTokenValue, handleAttach } from '../../common/utils';
+import { SegmentSelection, SizeSlider } from '@/common/components';
+import { langMixin } from '@/common/i18n';
+import { getOptionFromLocal, modifyToken, updateLocalOption } from '@/common/themes';
+import { getTokenValue, handleAttach } from '@/common/utils';
 
 import { FONT_SIZE_LABELS, FONT_SIZE_OPTIONS, FONT_SIZE_STEPS, FONT_SIZE_TOKEN_LIST } from '../built-in/font-map';
 

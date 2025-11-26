@@ -83,10 +83,10 @@
 import isNumber from 'lodash/isNumber';
 import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue';
 
-import { SegmentSelection, SizeSlider } from '../common/components';
-import { langMixin } from '../common/i18n';
-import { CUSTOM_EXTRA_ID, getOptionFromLocal, modifyToken, updateLocalOption } from '../common/themes';
-import { handleAttach } from '../common/utils';
+import { SegmentSelection, SizeSlider } from '@/common/components';
+import { langMixin } from '@/common/i18n';
+import { CUSTOM_EXTRA_ID, getOptionFromLocal, modifyToken, updateLocalOption } from '@/common/themes';
+import { handleAttach } from '@/common/utils';
 
 import { RADIUS_LABELS, RADIUS_OPTIONS, RADIUS_STEP_ARRAY, RADIUS_TOKEN_LIST } from './built-in/radius-map';
 

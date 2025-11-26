@@ -29,8 +29,8 @@
 <script lang="jsx">
 import { Divider as TDivider, Popup as TPopup } from 'tdesign-vue';
 
-import { langMixin } from '../../common/i18n';
-import { handleAttach } from '../../common/utils';
+import { langMixin } from '@/common/i18n';
+import { handleAttach } from '@/common/utils';
 
 import ShadowLayer from './ShadowLayer.vue';
 

@@ -23,8 +23,8 @@
 <script>
 import { Drawer as TDrawer } from 'tdesign-vue';
 
-import { themeStore } from '../common/themes';
-import { handleAttach } from '../common/utils';
+import { themeStore } from '@/common/themes';
+import { handleAttach } from '@/common/utils';
 
 import ColorPanel from '../color-panel';
 import FontPanel from '../font-panel';

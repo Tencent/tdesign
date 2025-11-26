@@ -33,8 +33,8 @@
 import { RemoveIcon } from 'tdesign-icons-vue';
 import { Input as TInput, InputNumber as TInputNumber, Popup as TPopup } from 'tdesign-vue';
 
-import { ColorPicker } from '../../common/components';
-import { handleAttach } from '../../common/utils';
+import { ColorPicker } from '@/common/components';
+import { handleAttach } from '@/common/utils';
 
 export default {
   name: 'ShadowEditor',

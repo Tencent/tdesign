@@ -104,9 +104,9 @@
 <script>
 import { MessagePlugin, Button as TButton, Popconfirm as TPopconfirm, Popup as TPopup } from 'tdesign-vue';
 
-import { langMixin } from '../common/i18n';
-import { exportCustomStyleSheet, themeStore } from '../common/themes';
-import { handleAttach } from '../common/utils';
+import { langMixin } from '@/common/i18n';
+import { exportCustomStyleSheet, themeStore } from '@/common/themes';
+import { handleAttach } from '@/common/utils';
 
 import RecommendThemes from './components/RecommendThemes';
 

@@ -17,7 +17,7 @@
   </div>
 </template>
 <script lang="jsx">
-import { getTokenValue } from '../../common/utils';
+import { getTokenValue } from '@/common/utils';
 import { SIZE_TOKENS } from '../built-in/size-map';
 import SectionDynamicSvg from '../svg/SectionDynamicSvg.vue';
 

@@ -43,8 +43,8 @@
 <script>
 import { Select as TSelect, Slider as TSlider } from 'tdesign-vue';
 
-import { langMixin } from '../../../common/i18n';
-import { handleAttach } from '../../../common/utils';
+import { langMixin } from '@/common/i18n';
+import { handleAttach } from '@/common/utils';
 
 export default {
   name: 'SegmentSelection',

@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import { langMixin } from '../../../common/i18n';
-import { themeStore } from '../../../common/themes';
-import { getTokenValue } from '../../../common/utils';
+import { langMixin } from '@/common/i18n';
+import { themeStore } from '@/common/themes';
+import { getTokenValue } from '@/common/utils';
 
 export default {
   name: 'StickyThemeDisplay',

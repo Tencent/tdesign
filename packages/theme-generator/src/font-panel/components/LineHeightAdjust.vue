@@ -98,10 +98,10 @@ import {
   RadioGroup as TRadioGroup,
 } from 'tdesign-vue';
 
-import { SegmentSelection, SizeSlider } from '../../common/components';
-import { langMixin } from '../../common/i18n';
-import { getOptionFromLocal, updateLocalOption } from '../../common/themes';
-import { getTokenValue, handleAttach } from '../../common/utils';
+import { SegmentSelection, SizeSlider } from '@/common/components';
+import { langMixin } from '@/common/i18n';
+import { getOptionFromLocal, updateLocalOption } from '@/common/themes';
+import { getTokenValue, handleAttach } from '@/common/utils';
 
 import { LINE_HEIGHT_OPTIONS, LINE_HEIGHT_STEPS, updateLineHeightTokens } from '../built-in/line-height-map';
 

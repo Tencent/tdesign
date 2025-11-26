@@ -81,9 +81,9 @@ import { Edit1Icon, FileCopyIcon } from 'tdesign-icons-vue';
 import { Popup as TPopup } from 'tdesign-vue';
 import ArrowIcon from 'tdesign-vue/es/common-components/fake-arrow';
 
-import { ColorPicker } from '../../../common/components';
-import { langMixin } from '../../../common/i18n';
-import { collapseAnimation, handleAttach } from '../../../common/utils';
+import { ColorPicker } from '@/common/components';
+import { langMixin } from '@/common/i18n';
+import { collapseAnimation, handleAttach } from '@/common/utils';
 
 export default {
   name: 'ColorCollapse',

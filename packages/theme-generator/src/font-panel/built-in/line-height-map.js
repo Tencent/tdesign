@@ -1,5 +1,5 @@
-import { modifyToken } from '../../common/themes';
-import { getTokenValue } from '../../common/utils';
+import { modifyToken } from '@/common/themes';
+import { getTokenValue } from '@/common/utils';
 
 export const LINE_HEIGHT_STEPS = {
   1: 2,

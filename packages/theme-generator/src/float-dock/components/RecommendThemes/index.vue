@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import { langMixin } from '../../../common/i18n';
-import { getRecommendThemes, themeStore } from '../../../common/themes';
+import { langMixin } from '@/common/i18n';
+import { getRecommendThemes, themeStore } from '@/common/themes';
 
 import PickedSvg from './PickedSvg.vue';
 

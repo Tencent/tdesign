@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import { langMixin } from '../../../common/i18n';
-import { isMobile, themeStore } from '../../../common/themes';
+import { langMixin } from '@/common/i18n';
+import { isMobile, themeStore } from '@/common/themes';
 
 import BoxshadowSvg from './BoxshadowSvg.vue';
 import ColorSvg from './ColorSvg.vue';

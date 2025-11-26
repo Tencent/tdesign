@@ -325,8 +325,8 @@ import {
   Tooltip as TTooltip,
 } from 'tdesign-vue';
 
-import { ColorPicker } from '../common/components';
-import { langMixin } from '../common/i18n';
+import { ColorPicker } from '@/common/components';
+import { langMixin } from '@/common/i18n';
 import {
   collectTokenIndexes,
   convertFromHex,
@@ -341,8 +341,8 @@ import {
   updateLocalOption,
   updateLocalToken,
   updateStyleSheetColor,
-} from '../common/themes';
-import { colorAnimation, getThemeMode, getTokenValue, handleAttach, setUpModeObserver } from '../common/utils';
+} from '@/common/themes';
+import { colorAnimation, getThemeMode, getTokenValue, handleAttach, setUpModeObserver } from '@/common/utils';
 
 import { FUNCTION_TOKENS } from './built-in/color-map';
 import { ALL_PRESET_COLORS, DEFAULT_COLORS, RECOMMEND_COLORS, SCENE_COLORS } from './built-in/color-preset';
