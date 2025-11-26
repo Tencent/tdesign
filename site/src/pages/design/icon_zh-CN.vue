@@ -24,19 +24,19 @@
     <p>
       制作时保证参数的简化，尽量消除小数点以及非整数的角度。处理线条以及轮廓时删除多余的锚点，输出时应避免出现不必要的装饰，保持图标的简洁。
     </p>
-    <img src="./assets/icon/simplify.png" alt="" />
+    <img src="./assets/icon/simplify-1.png" alt="" />
 
     <h3>精确</h3>
     <p>
       在设计时避免使用那些含义模糊的图形，当同个事物存在多个图形表述时，应选取最为流通的样式，必要时进行针对性的强化。在图标输出时也应遵守命名规范，精确的文字描述便于他人查找。
     </p>
-    <img src="./assets/icon/accurate.png" alt="" />
+    <img src="./assets/icon/accurate-1.png" alt="" />
 
     <h3>适度</h3>
     <p>
       单个图标作为一个独立的视觉个体，在线条的疏密以及图形的搭配上要呈现适度感。在处理一些必要的高密度图标时也要考虑线条的节奏感，让其舒适不压迫。系列图标要遵守适度原则，将变化控制在一定范围内。
     </p>
-    <img src="./assets/icon/moderate.png" alt="" />
+    <img src="./assets/icon/moderate-1.png" alt="" />
 
     <h2>规范</h2>
     <h3>栅格规范</h3>

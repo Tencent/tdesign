@@ -27,7 +27,7 @@
       Remove excess anchor points when processing lines and outlines, and avoid unnecessary embellishments when
       outputting icons to maintain simplicity.
     </p>
-    <img src="./assets/icon/simplify.png" alt="" />
+    <img src="./assets/icon/simplify-1.png" alt="" />
 
     <h3>Accuracy</h3>
     <p>
@@ -35,7 +35,7 @@
       choose the most common style and adapt as needed. Follow naming conventions when outputting, and use precise
       descriptions to make it easier for others to find them.
     </p>
-    <img src="./assets/icon/accurate.png" alt="" />
+    <img src="./assets/icon/accurate-1.png" alt="" />
 
     <h3>Moderation</h3>
     <p>
@@ -44,7 +44,7 @@
       comfortable and non-oppressive. Icon series should follow the principles of moderation, keeping changes within a
       certain range.
     </p>
-    <img src="./assets/icon/moderate.png" alt="" />
+    <img src="./assets/icon/moderate-1.png" alt="" />
 
     <h2>Specification</h2>
     <h3>Grid Specification</h3>
