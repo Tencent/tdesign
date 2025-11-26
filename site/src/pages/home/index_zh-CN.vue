@@ -20,6 +20,7 @@
                   </p>
                 </div>
                 <div slot="icon" />
+                <div slot="cancelBtn" />
                 <t-button
                   slot="confirmBtn"
                   size="small"
