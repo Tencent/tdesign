@@ -1,12 +1,35 @@
 <template>
   <section class="tdesign-homepage">
-    <banner :themeMode="themeMode" />
+    <banner :theme-mode="themeMode" />
     <section class="main-page">
       <div class="banner-info">
         <div class="banner-info__left">
           <h2 class="name">
             <p class="primary">TDesign</p>
-            <p class="sub-title">为设计师 & 开发者，打造工作美学</p>
+            <div style="display: flex">
+              <p class="sub-title">为设计师 & 开发者，打造工作美学</p>
+              <t-popconfirm :popup-props="{ trigger: 'hover' }" placement="top-left">
+                <t-tag class="tds-intro-button" theme="primary" style="height: 24px; cursor: pointer"
+                  >腾讯“端服务”联盟产品</t-tag
+                >
+                <div class="tds-intro" slot="content">
+                  <h4>腾讯 “端服务” 联盟产品</h4>
+                  <p>
+                    腾讯端服务（Tencent Device-oriented
+                    Service，简称TDS），是由腾讯大前端技术委员会发起并创立的腾讯集团内的大前端技术产品联盟。
+                  </p>
+                </div>
+                <div slot="icon" />
+                <div slot="cancelBtn" />
+                <t-button
+                  slot="confirmBtn"
+                  size="small"
+                  style="margin-left: 8px"
+                  @click="() => handleIntroClick('https://tds.qq.com/')"
+                  >查看详情</t-button
+                >
+              </t-popconfirm>
+            </div>
           </h2>
         </div>
         <t-popup trigger="click" placement="left" overlay-inner-class-name="wechat-qrcode" :z-index="100">
@@ -36,10 +59,10 @@
               <div class="content-name">开发资源</div>
               <div class="content-list">
                 <div
-                  class="content-item"
-                  :class="{ disabled: !item.status }"
                   v-for="item in sourceList"
                   :key="item.name"
+                  class="content-item"
+                  :class="{ disabled: !item.status }"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
@@ -64,10 +87,10 @@
               <div class="content-name">设计资源</div>
               <div class="content-list">
                 <div
-                  class="content-item"
-                  :class="{ disabled: !item.status }"
                   v-for="item in designList"
                   :key="item.name"
+                  class="content-item"
+                  :class="{ disabled: !item.status }"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
@@ -101,10 +124,10 @@
               <div class="content-name">开发资源</div>
               <div class="content-list">
                 <div
-                  class="content-item"
-                  :class="{ disabled: !item.status }"
                   v-for="item in mobileSourceList"
                   :key="item.name"
+                  class="content-item"
+                  :class="{ disabled: !item.status }"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
@@ -129,10 +152,10 @@
               <div class="content-name">设计资源</div>
               <div class="content-list">
                 <div
-                  class="content-item"
-                  :class="{ disabled: !item.status }"
                   v-for="item in mobileDesignList"
                   :key="item.name"
+                  class="content-item"
+                  :class="{ disabled: !item.status }"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
@@ -165,10 +188,10 @@
               <div class="content-name">开发资源</div>
               <div class="content-list">
                 <div
-                  class="content-item"
-                  :class="{ disabled: !item.status }"
                   v-for="item in miniSourceList"
                   :key="item.name"
+                  class="content-item"
+                  :class="{ disabled: !item.status }"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
@@ -193,10 +216,10 @@
               <div class="content-name">设计资源</div>
               <div class="content-list">
                 <div
-                  class="content-item"
-                  :class="{ disabled: !item.status }"
                   v-for="item in mobileDesignList"
                   :key="item.name"
+                  class="content-item"
+                  :class="{ disabled: !item.status }"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
@@ -224,19 +247,19 @@
     <div class="module-board module-board__tabs">
       <div class="module-board__content" @click="currentTab = 0">
         <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 0 }]">开放</h3>
-        <div class="line" v-if="currentTab === 0"></div>
+        <div v-if="currentTab === 0" class="line"></div>
       </div>
       <div class="module-board__content" @click="currentTab = 1">
         <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 1 }]">创造</h3>
-        <div class="line" v-if="currentTab === 1"></div>
+        <div v-if="currentTab === 1" class="line"></div>
       </div>
       <div class="module-board__content" @click="currentTab = 2">
         <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 2 }]">共建</h3>
-        <div class="line" v-if="currentTab === 2"></div>
+        <div v-if="currentTab === 2" class="line"></div>
       </div>
     </div>
     <!-- swiper content -->
-    <div class="module-board" id="moduleBoard">
+    <div id="moduleBoard" class="module-board">
       <div class="module-board__inner" :style="`transform: translateX(-${tabTransformWidth}px);`">
         <div
           :class="[
@@ -248,7 +271,7 @@
         >
           <div class="module-board__detail">
             <div class="code-board">
-              <t-radio-group class="code-tab" variant="default-filled" size="large" v-model="codeFramework">
+              <t-radio-group v-model="codeFramework" class="code-tab" variant="default-filled" size="large">
                 <t-radio-button value="vue">vue</t-radio-button>
                 <t-radio-button value="vue-next">vue-next</t-radio-button>
                 <t-radio-button value="react">react</t-radio-button>
@@ -258,7 +281,7 @@
               </t-radio-group>
 
               <ul class="code-list">
-                <li class="code-item" v-for="item in codeList[codeFramework]" :key="item.code">
+                <li v-for="item in codeList[codeFramework]" :key="item.code" class="code-item">
                   <pre><code :class="[`language-${item.type}`]">{{ item.code }}</code></pre>
                 </li>
               </ul>
@@ -284,7 +307,7 @@
               </li>
             </ul>
           </div>
-          <div class="module-board__card-desc" v-if="currentTab === 0">
+          <div v-if="currentTab === 0" class="module-board__card-desc">
             <h3 class="title">开源开放，持续迭代</h3>
             <p class="desc">采用 MIT 许可协议，始终保持开放的心态，期待各方一起共建开源生态。</p>
           </div>
@@ -307,9 +330,9 @@
                 <t-select v-model="componentModel.selectValue" multiple placeholder="请选择">
                   <t-option
                     v-for="item in componentModel.selectOptions"
+                    :key="item.value"
                     :value="item.value"
                     :label="item.label"
-                    :key="item.value"
                   ></t-option>
                 </t-select>
                 <t-tree :data="componentModel.treeData" hover checkable expand-all />
@@ -317,8 +340,8 @@
               <div class="component-board-item">
                 <t-menu
                   :theme="themeMode"
-                  defaultValue="dashboard/base"
-                  :defaultExpanded="componentModel.menuExpanded"
+                  default-value="dashboard/base"
+                  :default-expanded="componentModel.menuExpanded"
                   width="256px"
                 >
                   <template #logo>
@@ -374,23 +397,23 @@
               <div class="component-board-item">
                 <div class="component-board-item-row">
                   <t-button>
-                    <icon name="file" slot="icon" />
+                    <icon slot="icon" name="file" />
                     主要按钮
                   </t-button>
                   <t-button theme="default">按钮</t-button>
                   <t-button theme="default">按钮</t-button>
                 </div>
                 <div class="component-board-item-row">
-                  <t-slider v-model="componentModel.sliderValue" :inputNumberProps="false" />
+                  <t-slider v-model="componentModel.sliderValue" :input-number-props="false" />
                 </div>
                 <div class="component-board-item-row">
-                  <t-switch size="large" :defaultValue="true" />
+                  <t-switch size="large" :default-value="true" />
                   <t-switch size="large" />
                   <t-check-tag>可选标签</t-check-tag>
                   <t-tag>默认标签</t-tag>
                 </div>
                 <div>
-                  <t-radio-group defaultValue="1" variant="default-filled">
+                  <t-radio-group default-value="1" variant="default-filled">
                     <t-radio-button value="1">亮色</t-radio-button>
                     <t-radio-button value="2">深色</t-radio-button>
                     <t-radio-button value="3">中性色</t-radio-button>
@@ -398,17 +421,17 @@
                 </div>
                 <div class="color-block-wrapper">
                   <span
-                    class="color-block"
                     v-for="color in componentModel.colorList1"
                     :key="color"
+                    class="color-block"
                     :style="{ background: [color] }"
                   ></span>
                 </div>
                 <div class="color-block-wrapper">
                   <span
-                    class="color-block"
                     v-for="color in componentModel.colorList2"
                     :key="color"
+                    class="color-block"
                     :style="{ background: [color] }"
                   ></span>
                 </div>
@@ -435,7 +458,7 @@
               </li>
             </ul>
           </div>
-          <div class="module-board__card-desc" v-if="currentTab === 1">
+          <div v-if="currentTab === 1" class="module-board__card-desc">
             <h3 class="title">包容多元，灵活易用</h3>
             <p class="desc">保持设计敏锐感，在繁杂的业务中寻找共性，提供通用的设计解决方案。</p>
           </div>
@@ -453,8 +476,8 @@
           <div class="module-contributor__top">
             <div class="module-contributor__avatars">
               <avatar
-                ref="topAvatars"
                 v-for="(item, index) in topContributors"
+                ref="topAvatars"
                 :key="index + 'top'"
                 :href="item | githubUrl"
                 :src="item | githubAvatar"
@@ -463,14 +486,14 @@
           </div>
 
           <div class="module-contributor__center">
-            <component-list :themeMode="themeMode" />
+            <component-list :theme-mode="themeMode" />
           </div>
 
           <div class="module-contributor__bottom">
             <div class="module-contributor__avatars">
               <avatar
-                ref="bottomAvatars"
                 v-for="(item, index) in bottomContributors"
+                ref="bottomAvatars"
                 :key="index + 'bottom'"
                 :href="item | githubUrl"
                 :src="item | githubAvatar"
@@ -525,9 +548,9 @@
 
             <t-space break-line :size="14">
               <div
-                class="brand-content"
                 v-for="({ title, logo, width }, index) in brandList"
                 :key="index"
+                class="brand-content"
                 :style="`width:${width}`"
               >
                 <t-popup show-arrow :content="title">
@@ -581,7 +604,7 @@ const isIntranet = location.host.includes('woa.com'); // 部分动态或内容�
 let ticking = false;
 
 export default {
-  name: 'site-home',
+  name: 'SiteHome',
   components: {
     DesktopIcon,
     Icon,
@@ -846,7 +869,7 @@ export default {
     this.initTabTimer();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.randomTimer);
     clearInterval(this.avatarTimer);
     clearInterval(this.tabTimer);
@@ -900,6 +923,10 @@ export default {
       });
     },
     handleIntroClick(item) {
+      if (typeof item === 'string') {
+        window.open(item, '_blank');
+        return;
+      }
       if (!item.status) return;
       window.open(item.href, '_blank');
     },
