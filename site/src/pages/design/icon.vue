@@ -27,7 +27,7 @@
       Remove excess anchor points when processing lines and outlines, and avoid unnecessary embellishments when
       outputting icons to maintain simplicity.
     </p>
-    <img src="./assets/icon/Simplify.png" alt="" />
+    <img src="./assets/icon/simplify.png" alt="" />
 
     <h3>Accuracy</h3>
     <p>
@@ -44,7 +44,7 @@
       comfortable and non-oppressive. Icon series should follow the principles of moderation, keeping changes within a
       certain range.
     </p>
-    <img src="./assets/icon/Moderate.png" alt="" />
+    <img src="./assets/icon/moderate.png" alt="" />
 
     <h2>Specification</h2>
     <h3>Grid Specification</h3>
@@ -264,8 +264,8 @@
     </div>
 
     <t-divider>
-      <div class="icons-page-btn">
-        <t-link href="/icons" target="blank">Visit TDesign Icons</t-link>
+      <div class="icons-page-btn" @click="handleClickBtn">
+        <link-1-icon style="margin-right: 8px" :size="20" />Visit TDesign Icons
       </div>
     </t-divider>
   </div>
@@ -273,8 +273,16 @@
 
 <script>
 import anchorMixin from '../mixins/anchor';
-
+import { Link1Icon } from 'tdesign-icons-vue';
 export default {
   mixins: [anchorMixin],
+  components: {
+    Link1Icon,
+  },
+  methods: {
+    handleClickBtn() {
+      window.open('/icons', ',_blank');
+    },
+  },
 };
 </script>
