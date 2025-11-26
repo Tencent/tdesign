@@ -164,10 +164,7 @@
       the visual message, rather than defaulting to sharp angles.
     </p>
     <img src="./assets/icon/round-1.png" alt="" />
-    <p>
-      When working with directional markers like arrows, a 0.5px corner radius should be applied to the tips to enhance
-      the sense of direction.
-    </p>
+
     <div class="legend">
       <div class="item">
         <img src="./assets/icon/round-2-left.png" />
@@ -266,20 +263,11 @@
       </div>
     </div>
 
-    <t-divider
-      ><div
-        style="
-          height: 60px;
-          border-radius: 999px;
-          background-color: var(--bg-color-theme-secondary);
-          display: flex;
-          align-items: center;
-          padding: 0 82px;
-        "
-      >
-        <t-link href="/icons" target="blank">Visit TDesign Icons to view and experience all supported icons</t-link>
-      </div></t-divider
-    >
+    <t-divider>
+      <div class="icons-page-btn">
+        <t-link href="/icons" target="blank">Visit TDesign Icons</t-link>
+      </div>
+    </t-divider>
   </div>
 </template>
 

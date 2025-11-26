@@ -54,7 +54,7 @@
     <img src="./assets/icon/grid-2.png" alt="" />
 
     <hr />
-    <p>在处理一些对称图形时居中处理，不应为了对齐栅格而打破画面平衡</p>
+    <p>在处理一些对称图形时居中处理，不应为了对齐栅格而打破画面平衡。</p>
     <div class="legend">
       <div class="item">
         <img src="./assets/icon/grid-3-left.png" />
@@ -134,7 +134,6 @@
     <h3>圆角</h3>
     <p>在处理拐角时，需结合图形表意，恰当的圆角能强化视觉语言，而不是生硬地全部处理为尖角。</p>
     <img src="./assets/icon/round-1.png" alt="" />
-    <p>在处理“箭头”等具有方向性的标记时，在其顶端应采用 0.5px 的圆角，以便于突出其指向性</p>
     <div class="legend">
       <div class="item">
         <img src="./assets/icon/round-2-left.png" />
@@ -148,11 +147,11 @@
     </div>
 
     <h3>角度</h3>
-    <p>线条如需倾斜最好与栅格内 45° 辅助线相平行，或使用 15° 的倍数。以便在低分辨率的情况下仍有较高的线条清晰度</p>
+    <p>线条如需倾斜最好与栅格内 45° 辅助线相平行，或使用 15° 的倍数。以便在低分辨率的情况下仍有较高的线条清晰度。</p>
     <img src="./assets/icon/angle-1.png" alt="" />
     <hr />
 
-    <p>不仅要注意图形部分的夹角，也要特别关注一些负形的夹角度数</p>
+    <p>不仅要注意图形部分的夹角，也要特别关注一些负形的夹角度数。</p>
     <div class="legend">
       <div class="item">
         <img src="./assets/icon/angle-2-left.png" />
@@ -166,7 +165,7 @@
     <h3>断口</h3>
     <p>
       断口多存在于复合图标上，其宽度根据具体图标的样式进行具体分析，需起到平衡视觉重量的作用 （最大宽度 ≤ 2px 且为 0.5px
-      的倍数）
+      的倍数）。
     </p>
     <div class="legend">
       <div class="item">
@@ -225,27 +224,21 @@
       </div>
     </div>
 
-    <t-divider
-      ><div
-        style="
-          height: 60px;
-          border-radius: 999px;
-          background-color: var(--bg-color-theme-secondary);
-          display: flex;
-          align-items: center;
-          padding: 0 82px;
-        "
-      >
-        <t-link href="/icons" target="blank">打开 TDesign 图标独立站点查看全部支持的图标</t-link>
-      </div></t-divider
-    >
+    <t-divider>
+      <div class="icons-page-btn">
+        <t-link href="/icons" target="blank"><link-1-icon style="margin-right: 8px" />打开 TDesign 图标独立站点</t-link>
+      </div>
+    </t-divider>
   </div>
 </template>
 
 <script>
 import anchorMixin from '../mixins/anchor';
-
+import { Link1Icon } from 'tdesign-icons-vue';
 export default {
   mixins: [anchorMixin],
+  components: {
+    Link1Icon,
+  },
 };
 </script>

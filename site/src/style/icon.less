@@ -1,9 +1,30 @@
 .doc-icon {
     img {
-        border-radius: 6px;
-        border: 1px solid var(--component-border);
+        border-radius: 0 !important;;
+        border: none!important;
         &.tag {
             border: 0;
+        }
+    }
+
+    
+    .t-divider {
+        margin: 64px 0 140px 0;
+        .t-divider__inner-text:not(:empty) {
+                padding: 0;
+        }
+        .icons-page-btn {
+            height: 60px;
+            border-radius: 999px;
+            background-color: var(--bg-color-component);
+            display: flex;
+            align-items: center;
+            padding: 0 82px;
+            cursor: pointer;
+            transition: background-color .2s;
+        }
+        .icons-page-btn:hover {
+            background-color: var(--bg-color-component-hover);
         }
     }
 }
