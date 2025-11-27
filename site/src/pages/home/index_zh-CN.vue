@@ -25,7 +25,7 @@
                   slot="confirmBtn"
                   size="small"
                   style="margin-left: 8px"
-                  @click="() => handleIntroClick('https://tds.qq.com/')"
+                  @click="() => handleIntroClick('https://tds.qq.com/?from=tdesign')"
                   >查看详情</t-button
                 >
               </t-popconfirm>
