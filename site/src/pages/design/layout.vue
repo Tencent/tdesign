@@ -231,14 +231,14 @@ const articleRef = ref(null);
 // Data (from mixin)
 const catalog = ref([]);
 
-// Data (from component)
+// Data (from component) - English version
 const dataSource = ref([
   {
     cut: 'sm',
     cutValue: '768px',
     range: '768px-991px',
     colWidth: '16px',
-    grid: '内容区块根据不同的断点进行堆叠或缩放',
+    grid: 'Content blocks stack or scale based on different breakpoints',
     device: 'Pad',
   },
   {
@@ -246,29 +246,29 @@ const dataSource = ref([
     cutValue: '992px',
     range: '992px-1199px',
     colWidth: '16px',
-    grid: '内容区块根据不同的断点进行堆叠或缩放',
-    device: 'super small size laptop',
+    grid: 'Content blocks stack or scale based on different breakpoints',
+    device: 'Super small size laptop',
   },
   {
     cut: 'lg',
     cutValue: '1200px',
-    range: '大于 1200px',
+    range: 'Greater than 1200px',
     colWidth: '16px',
-    grid: '大于断点值时，始终保持水平排列',
-    device: 'small size laptop',
+    grid: 'When the viewport width is greater than the breakpoint value, it always stays arranged horizontally',
+    device: 'Small size laptop',
   },
 ]);
 
 const columns = ref([
-  { width: 104, ellipsis: true, colKey: 'cut', title: 'break point' },
-  { width: 104, ellipsis: true, colKey: 'cutValue', title: 'break point value' },
-  { width: 144, ellipsis: true, colKey: 'range', title: '响应区间' },
-  { width: 104, colKey: 'colWidth', title: 'gutter width' },
+  { width: 104, ellipsis: true, colKey: 'cut', title: 'Breakpoint' },
+  { width: 140, ellipsis: true, colKey: 'cutValue', title: 'Breakpoint Value' },
+  { width: 144, ellipsis: true, colKey: 'range', title: 'Responsive Range' },
+  { width: 104, colKey: 'colWidth', title: 'Gutter Width' },
   { colKey: 'grid', title: 'grid' },
-  { width: 160, ellipsis: true, colKey: 'device', title: '显示设备参考' },
+  { width: 200, ellipsis: true, colKey: 'device', title: 'Reference Display Device' },
 ]);
 
-const rowKey = ref('default');
+const rowKey = ref('cut');
 const size = ref('small');
 
 // Methods (from component)

@@ -259,16 +259,16 @@ jobs:
       - run: pnpm install
 
       - run: pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
-        working-directory: packages/tdesign-miniprogram-site
+        working-directory: packages/tdesign-miniprogram/site
 
       - run: pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
-        working-directory: packages/tdesign-miniprogram-site
+        working-directory: packages/tdesign-miniprogram/site
 
-      - run: pnpm run site:intranet
+      - run: pnpm -C packages/tdesign-miniprogram/site site:preview
 
       - run: |
           export DEPLOY_DOMAIN=${{ needs.preview-context.outputs.tdesign_miniprogram_domain }}
-          npx surge --project _site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
+          npx surge --project packages/tdesign-miniprogram/site/dist --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
 
   preview-comment:
     if: always()

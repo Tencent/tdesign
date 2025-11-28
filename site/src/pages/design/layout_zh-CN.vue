@@ -224,7 +224,7 @@ const columns = ref([
   { width: 160, ellipsis: true, colKey: 'device', title: '显示设备参考' },
 ]);
 
-const rowKey = ref('default');
+const rowKey = ref('cut');
 const size = ref('small');
 
 // Methods (from component)

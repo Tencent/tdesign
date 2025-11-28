@@ -76,10 +76,8 @@ export default define({
         if (!href.includes('#')) return;
 
         const [, id = ''] = href.split('#');
-        if (
-          target.classList.contains('tdesign-header-anchor') ||
-          target.classList.contains('tdesign-toc_list_item_a')
-        ) {
+        // header-anchor 是插件自动添加的类名，所以没带 tdesign 前缀
+        if (target.classList.contains('header-anchor') || target.classList.contains('tdesign-toc_list_item_a')) {
           const idTarget = document.getElementById(id);
           if (!idTarget) return;
           const { top } = idTarget.getBoundingClientRect();
