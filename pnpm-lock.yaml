@@ -187,8 +187,8 @@ importers:
   site:
     dependencies:
       '@tdesign/site-components':
-        specifier: ^0.17.1
-        version: 0.17.1
+        specifier: ^0.17.3
+        version: 0.17.3
       canvas-3d:
         specifier: ^1.0.14
         version: 1.0.14
@@ -208,8 +208,8 @@ importers:
         specifier: ~0.4.0
         version: 0.4.0
       tdesign-icons-vue:
-        specifier: ^0.1.4
-        version: 0.1.11(vue@2.7.14)
+        specifier: ^0.4.1
+        version: 0.4.1(vue@2.7.14)
       tdesign-vue:
         specifier: 1.9.8-naruto
         version: 1.9.8-naruto(vue@2.7.14)
@@ -1566,8 +1566,8 @@ packages:
   '@soda/get-current-script@1.0.2':
     resolution: {integrity: sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==}
 
-  '@tdesign/site-components@0.17.1':
-    resolution: {integrity: sha512-HnRBVm6u1wDIaq+N/DTzXqcQScIr7ho297RyqZFfVL20M1MRM7qmxhPe1JL2XF7ffDyICK/UyUCqnTUXSVUZSg==}
+  '@tdesign/site-components@0.17.3':
+    resolution: {integrity: sha512-Qn/Tc82jfm6kkbRJQHtCi+f/0G78QxdBkthMrnKSaw2YPR7lMahAXIdUScTlkiLYs6XshHnaJ3/lGpP4b2wRWA==}
 
   '@tootallnate/once@1.1.2':
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
@@ -1577,8 +1577,8 @@ packages:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
     engines: {node: '>=10.13.0'}
 
-  '@tsconfig/node10@1.0.11':
-    resolution: {integrity: sha512-DcRjDCujK/kCk/cUe8Xz8ZSpm8mS3mNNpta+jGCA6USEDfktlNvm1+IuZ9eTcDbNk41BHwpHHeW+N1lKCz4zOw==}
+  '@tsconfig/node10@1.0.12':
+    resolution: {integrity: sha512-UCYBaeFvM11aU2y3YPZ//O5Rhj+xKyzy7mvcIoAjASbigy8mHMryP5cK7dgjlz2hWxh1g5pLw084E0a/wlUSFQ==}
 
   '@tsconfig/node12@1.0.11':
     resolution: {integrity: sha512-cqefuRsh12pWyGsIoBKJA9luFu3mRxCA+ORZvA4ktLSzIuCUtWVxGIuXigEwO5/ywWFMZ2QEGKWvkZG1zDMTag==}
@@ -6987,11 +6987,6 @@ packages:
     peerDependencies:
       vue: ^2.6.12
 
-  tdesign-icons-vue@0.1.11:
-    resolution: {integrity: sha512-m31CGTdSJZZwwIwC0burElpnYMkBZUPsobYJNuNZOA6Q0afGbTfvIu0SIVoxIl5TCl/pzm44xesiNesaouxoWQ==}
-    peerDependencies:
-      vue: ^2.6.12
-
   tdesign-icons-vue@0.2.5:
     resolution: {integrity: sha512-wKah1jB2JqLf4dj9fyTUrjl+JfdVqP91HiXyE368Nm2VFxbA1HiQcwhnvRixwqTh7S3++/whq3pzV8BLcRtOeA==}
     peerDependencies:
@@ -7002,8 +6997,8 @@ packages:
     peerDependencies:
       vue: ^2.6.12
 
-  tdesign-icons-vue@0.4.0:
-    resolution: {integrity: sha512-3hIxRatBvAPknXE8KSYvYudreBzIIBA5XYM+jedvdzS1P9HE2pap4wP22qf3RIhTw50PHsQMjBOaW6XeeiSaEg==}
+  tdesign-icons-vue@0.4.1:
+    resolution: {integrity: sha512-P6ncZEqRzkLpp+QQUBX3+NipQ8xjzluvqQ98VHvQR6mvYuTHAY+T4ltlEAGxWOmk99NxiGMSmmYzTVmJU12XTQ==}
     peerDependencies:
       vue: ^2.6.12
 
@@ -9262,7 +9257,7 @@ snapshots:
 
   '@soda/get-current-script@1.0.2': {}
 
-  '@tdesign/site-components@0.17.1':
+  '@tdesign/site-components@0.17.3':
     dependencies:
       '@popperjs/core': 2.11.8
       hybrids: 8.2.2
@@ -9275,7 +9270,7 @@ snapshots:
 
   '@trysound/sax@0.2.0': {}
 
-  '@tsconfig/node10@1.0.11':
+  '@tsconfig/node10@1.0.12':
     optional: true
 
   '@tsconfig/node12@1.0.11':
@@ -15654,17 +15649,11 @@ snapshots:
       '@popperjs/core': 2.11.8
       core-js: 3.38.1
       lodash: 4.17.21
-      tdesign-icons-vue: 0.4.0(vue@2.7.14)
+      tdesign-icons-vue: 0.4.1(vue@2.7.14)
       tdesign-vue: 1.13.1-naruto(vue@2.7.14)
       vue: 2.7.14
 
   tdesign-icons-vue@0.0.8(vue@2.7.14):
-    dependencies:
-      '@babel/runtime': 7.25.6
-      classnames: 2.5.1
-      vue: 2.7.14
-
-  tdesign-icons-vue@0.1.11(vue@2.7.14):
     dependencies:
       '@babel/runtime': 7.25.6
       classnames: 2.5.1
@@ -15682,7 +15671,7 @@ snapshots:
       classnames: 2.5.1
       vue: 2.7.14
 
-  tdesign-icons-vue@0.4.0(vue@2.7.14):
+  tdesign-icons-vue@0.4.1(vue@2.7.14):
     dependencies:
       '@babel/runtime': 7.25.6
       classnames: 2.5.1
@@ -15882,7 +15871,7 @@ snapshots:
   ts-node@10.9.2(@types/node@22.9.0)(typescript@4.9.5):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.11
+      '@tsconfig/node10': 1.0.12
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4

@@ -12,7 +12,8 @@ const logsPrefix = `${classPrefix}__logs`;
 const locale = getLocale();
 
 const OFFICIAL_DOMAINS = ['tencent.com', 'woa.com'];
-
+// 静态资源统一的地址，支持tencent.com 和 woa.com的跨域请求
+const OFFICIAL_STATIC_DOMAINS = 'https://static.tdesign.tencent.com';
 const SPECIAL_NAME_MAP = {
   qrcode: 'QRCode',
 };
@@ -21,7 +22,9 @@ function getLogUrlPrefix() {
   const currentUrl = window.location.href;
   const framework = currentUrl.split('/')[3];
   const isOfficial = OFFICIAL_DOMAINS.some((domain) => location.hostname.includes(domain));
-  return `${location.origin}${isOfficial ? `/${framework}` : ''}`;
+  if (isOfficial) return `${OFFICIAL_STATIC_DOMAINS}/${framework}`;
+
+  return location.origin;
 }
 
 function getCompName() {

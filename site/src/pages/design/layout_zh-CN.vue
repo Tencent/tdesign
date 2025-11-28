@@ -58,7 +58,8 @@
 
     <h3>网格基数</h3>
     <p>
-      网格基数是栅格系统中的基本网格单位。栅格化之前先定义网格基数尤其重要，一方面规范设计，指导版式设计与内容布局，辅助规范页面元素对齐和间距设定；另一方面节省设计开发沟通的时间。目前栅格系统中以 8 点为网格基数，粒度大小合适，且能够匹配多数主流屏幕。在 TDesign 中，网格基数为 8px。
+      网格基数是栅格系统中的基本网格单位。栅格化之前先定义网格基数尤其重要，一方面规范设计，指导版式设计与内容布局，辅助规范页面元素对齐和间距设定；另一方面节省设计开发沟通的时间。目前栅格系统中以
+      8 点为网格基数，粒度大小合适，且能够匹配多数主流屏幕。在 TDesign 中，网格基数为 8px。
     </p>
     <img src="./assets/layout/l-6.jpg" />
 
@@ -75,8 +76,8 @@
 
     <h4>安全边距</h4>
     <p>
-      安全边距是内容和屏幕边缘之间的间隔。通常为固定宽度，用来定义在所有尺寸屏幕下最小的呼吸空间。TDesign 中侧边距的默认值为 24px，也可根据实际情况确定取值，建议使用
-      8 的倍数。
+      安全边距是内容和屏幕边缘之间的间隔。通常为固定宽度，用来定义在所有尺寸屏幕下最小的呼吸空间。TDesign
+      中侧边距的默认值为 24px，也可根据实际情况确定取值，建议使用 8 的倍数。
     </p>
     <img src="./assets/layout/l-7.jpg" />
 
@@ -162,8 +163,8 @@
     <hr />
 
     <p>
-      2）侧边栏布局：固定栅格最小宽度为 704px（TDesign 中页面最小宽度为
-      768px，侧边栏宽度为 64px）；内容区域小于 704px 时页面不再缩小，浏览器出现横向滚动条。
+      2）侧边栏布局：固定栅格最小宽度为 704px（TDesign 中页面最小宽度为 768px，侧边栏宽度为 64px）；内容区域小于 704px
+      时页面不再缩小，浏览器出现横向滚动条。
     </p>
     <img src="./assets/layout/l-16.jpg" />
 
@@ -177,11 +178,11 @@
 </template>
 
 <script>
-import anchorMixin from '../mixins/anchor'
+import anchorMixin from '../mixins/anchor';
 
 export default {
   mixins: [anchorMixin],
-  data () {
+  data() {
     return {
       dataSource: [
         {
@@ -190,7 +191,7 @@ export default {
           range: '768px-991px',
           colWidth: '16px',
           grid: '内容区块根据不同的断点进行堆叠或缩放',
-          device: '平板'
+          device: '平板',
         },
         {
           cut: 'md',
@@ -198,7 +199,7 @@ export default {
           range: '992px-1199px',
           colWidth: '16px',
           grid: '内容区块根据不同的断点进行堆叠或缩放',
-          device: '超小尺寸电脑'
+          device: '超小尺寸电脑',
         },
         {
           cut: 'lg',
@@ -206,8 +207,8 @@ export default {
           range: '大于 1200px',
           colWidth: '16px',
           grid: '大于断点值时，始终保持水平排列',
-          device: '小尺寸电脑'
-        }
+          device: '小尺寸电脑',
+        },
       ],
       columns: [
         { width: 104, ellipsis: true, colKey: 'cut', title: '断点' },
@@ -215,27 +216,27 @@ export default {
         { width: 144, ellipsis: true, colKey: 'range', title: '响应区间' },
         { width: 104, colKey: 'colWidth', title: '槽宽' },
         { colKey: 'grid', title: '栅格' },
-        { width: 160, ellipsis: true, colKey: 'device', title: '显示设备参考' }
+        { width: 160, ellipsis: true, colKey: 'device', title: '显示设备参考' },
       ],
-      rowKey: 'default',
-      size: 'small'
-    }
+      rowKey: 'cut',
+      size: 'small',
+    };
   },
   methods: {
-    rowspanAndColspan ({ col, rowIndex }) {
+    rowspanAndColspan({ col, rowIndex }) {
       if (col.colKey === 'colWidth' && rowIndex === 0) {
         return {
-          rowspan: 3
-        }
+          rowspan: 3,
+        };
       }
       if (col.colKey === 'grid' && rowIndex === 0) {
         return {
-          rowspan: 2
-        }
+          rowspan: 2,
+        };
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="less">
