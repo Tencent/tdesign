@@ -869,7 +869,7 @@ export default {
     this.initTabTimer();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.randomTimer);
     clearInterval(this.avatarTimer);
     clearInterval(this.tabTimer);
