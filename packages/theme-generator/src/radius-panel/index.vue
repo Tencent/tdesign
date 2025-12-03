@@ -11,8 +11,8 @@
       <div class="radius-content__main">
         <p class="radius-content__title">{{ lang.borerRadius.radiusSize }}</p>
         <SegmentSelection
-          :selectOptions="radiusOptions"
-          :suspendedLabels="radiusLabels"
+          :selectOptions="RADIUS_OPTIONS"
+          :suspendedLabels="RADIUS_LABELS"
           v-model="step"
           :disabled="segmentSelectionDisabled"
           @enable="segmentSelectionDisabled = false"
@@ -69,7 +69,7 @@
                   title="border-radius"
                   :sizeValue="token.value"
                   :disabled="token.token === '--td-radius-circle'"
-                  @changeFontSize="(v) => handleChangeRadius(v, idx)"
+                  @changeSize="(v) => handleChangeRadius(v, idx)"
               /></template>
             </t-popup>
           </t-list>
@@ -83,19 +83,12 @@
 import isNumber from 'lodash/isNumber';
 import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue';
 
-import langMixin from '../common/i18n/mixin';
-import SegmentSelection from '../common/SegmentSelection/index.vue';
-import SizeSlider from '../common/SizeSlider/index.vue';
-import {
-  CUSTOM_COMMON_ID_PREFIX,
-  CUSTOM_EXTRA_ID,
-  getOptionFromLocal,
-  modifyToken,
-  updateLocalOption,
-} from '../common/Themes';
-import { handleAttach } from '../common/utils';
+import { SegmentSelection, SizeSlider } from '@/common/components';
+import { langMixin } from '@/common/i18n';
+import { CUSTOM_EXTRA_ID, getOptionFromLocal, modifyToken, updateLocalOption } from '@/common/themes';
+import { handleAttach } from '@/common/utils';
 
-import { RADIUS_OPTIONS, RADIUS_STEP_ARRAY } from './built-in/border-radius';
+import { RADIUS_LABELS, RADIUS_OPTIONS, RADIUS_STEP_ARRAY, RADIUS_TOKEN_LIST } from './built-in/radius-map';
 
 export default {
   name: 'RadiusPanel',
@@ -112,49 +105,12 @@ export default {
   mixins: [langMixin],
   data() {
     return {
-      step: 3,
+      RADIUS_OPTIONS,
+      RADIUS_LABELS,
+      step: getOptionFromLocal('radius') || 3,
       hoverIdx: null,
-      radiusOptions: RADIUS_OPTIONS,
-      radiusLabels: Object.fromEntries(RADIUS_OPTIONS.map((item, index) => [index + 1, item.label])),
       segmentSelectionDisabled: false,
-      radiusTypeList: [
-        {
-          token: '--td-radius-small',
-          value: null,
-          enDesc: 'internal scenes of basic components.',
-          desc: '适用于基础组件内部场景',
-        },
-        {
-          token: '--td-radius-default',
-          value: null,
-          enDesc: 'basic components',
-          desc: '适用于所有基础组件',
-        },
-        {
-          token: '--td-radius-medium',
-          value: null,
-          enDesc: 'popup and card-type components',
-          desc: '适用于弹出类型和卡片类型组件',
-        },
-        {
-          token: '--td-radius-large',
-          value: null,
-          enDesc: 'dialog-type components',
-          desc: '适用于对话框类型组件',
-        },
-        {
-          token: '--td-radius-extraLarge',
-          value: null,
-          enDesc: 'extra-large display-type components',
-          desc: '适用于超大型展示型组件',
-        },
-        {
-          token: '--td-radius-circle',
-          value: null,
-          enDesc: 'Circular Components',
-          desc: '适用于圆形组件',
-        },
-      ],
+      radiusTypeList: RADIUS_TOKEN_LIST,
     };
   },
   computed: {
@@ -182,10 +138,12 @@ export default {
       if (!existStep) this.segmentSelectionDisabled = true;
     },
     step(val) {
-      if (!RADIUS_STEP_ARRAY[val - 1]) return;
-      updateLocalOption('radius', val, val !== 3);
-
+      updateLocalOption('radius', val !== 3 ? val : null);
       const isCustom = val === 6;
+      this.segmentSelectionDisabled = isCustom;
+      if (!RADIUS_STEP_ARRAY[val - 1]) return;
+
+      // 批量修改 radius
       this.radiusTypeList = this.radiusTypeList.map((item, index) => {
         const preVal = RADIUS_STEP_ARRAY?.[val - 1]?.[index];
         const formattedVal = typeof preVal === 'number' ? `${preVal}px` : preVal;
@@ -200,17 +158,12 @@ export default {
   },
   methods: {
     handleAttach,
-    initStep() {
-      const radiusStep = getOptionFromLocal('radius');
-      if (radiusStep >= 0) {
-        this.step = radiusStep;
-      }
-    },
     handleVisibleChange(v, ctx, idx) {
       if (v) this.hoverIdx = idx;
       if (!v && ctx.trigger === 'document' && this.hoverIdx === idx) this.hoverIdx = null;
     },
     handleChangeRadius(val, idx) {
+      // 修改单独的 radius
       this.radiusTypeList.splice(idx, 1, {
         ...this.radiusTypeList[idx],
         value: val,
@@ -227,16 +180,14 @@ export default {
       return radius;
     },
     initRadiusToken() {
-      let radiusStyle = document.getElementById(`${CUSTOM_COMMON_ID_PREFIX}-radius`);
-      if (!radiusStyle) {
-        radiusStyle = document.getElementById(CUSTOM_EXTRA_ID);
-      }
+      const radiusStyle = document.getElementById(CUSTOM_EXTRA_ID);
 
       // 过滤不存在的 Token
       this.radiusTypeList = this.radiusTypeList
         .map((v) => {
           const regex = new RegExp(`${v.token}\\s*:\\s*([^;]+);`);
           const match = regex.exec(radiusStyle.innerText);
+          // 获取 token 对应的实际值
           if (match) v.value = match[1].trim();
           return v;
         })
@@ -245,7 +196,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.initStep();
+      // 下一个 tick 再更新避免与 init 的 step 冲突
       this.initRadiusToken();
     });
   },
@@ -363,11 +314,6 @@ export default {
     /deep/ .t-radio-button {
       width: 50%;
     }
-    /deep/ .t-radio-group__bg-block {
-      border-radius: 5px;
-      width: calc(50% - 2px) !important;
-    }
-
     /deep/ .t-list-item {
       display: flex;
       flex-direction: row;

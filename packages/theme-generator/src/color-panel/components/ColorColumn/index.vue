@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="color-content__horizontal-list">
-      <div v-if="!paletteChange">
+      <!-- 渐变色条 -->
+      <div v-if="!paletteChanged">
         <div
-          v-for="(color, idx) in flattenPalette.filter(
-            (v, i) =>
-              v &&
-              ((flattenPalette[i + 1] && v.value !== flattenPalette[i + 1].value) || i === flattenPalette.length - 1),
-          )"
+          v-for="(_, idx) in new Array(Number(gradientStep))"
           :key="idx"
-          :style="{ background: color.value }"
-          @click="() => handleClickIdx(idx)"
+          :style="{ background: `var(--td-${type}-color-${idx + 1})` }"
+          @click="handleClickIdx(idx + 1)"
         />
       </div>
-      <div v-else class="unlink" @click="handleRecover"><link-unlink-icon size="20px" />色阶断开，点击恢复上次结果</div>
+      <!-- 色阶断开 -->
+      <div v-else class="unlink" @click="handleRecover">
+        <link-unlink-icon size="15px" />{{ lang.color.gradientTip }}
+      </div>
     </div>
 
     <div class="color-content__vertical-list">
@@ -24,15 +24,15 @@
         }"
       ></span>
       <div
-        v-if="flattenPalette.find((v) => v.idx === activeIdx)"
+        v-if="tokenMap.find((v) => v.idx === activeIdx)"
         class="active-tab"
         :style="{
-          top: `${flattenPalette.filter((v) => !!v.name).findIndex((v) => v.idx === activeIdx) * 44 + 4}px`,
-          height: `${flattenPalette.filter((v) => !!v.name).filter((v) => v.idx === activeIdx).length * 44}px`,
+          top: `${tokenMap.findIndex((v) => v.idx === activeIdx) * 44 + 4}px`,
+          height: `${tokenMap.filter((v) => v.idx === activeIdx).length * 44}px`,
         }"
       ></div>
 
-      <div v-for="(color, idx) in flattenPalette.filter((v) => !!v.name)" :key="idx">
+      <div v-for="(color, index) in tokenMap" :key="index">
         <t-popup
           placement="left"
           showArrow
@@ -45,7 +45,7 @@
             class="block"
             :style="{
               border: '1px solid var(--theme-component-border)',
-              'background-color': color.value,
+              'background-color': `var(--td-${type}-color-${color.idx})`,
               minWidth: '32px',
               height: '32px',
               'border-radius': '6px',
@@ -55,51 +55,46 @@
               'align-items': 'center',
               color: 'var(--text-anti)',
             }"
-            @mouseover="hoverIdx = color.idx"
+            @mouseover="hoverIdx = index"
             @mouseleave="hoverIdx = null"
           >
             <transition name="fade">
-              <edit-1-icon v-if="hoverIdx === color.idx" />
+              <edit-1-icon v-if="hoverIdx === index" />
             </transition>
           </div>
           <template #content>
-            <color-picker :value="color.value" @change="(hex) => changeColor(hex, color.idx)" />
+            <color-picker :value="getTokenValue(color.name)" @change="(hex) => changeGradation(hex, color.idx)" />
           </template>
         </t-popup>
-        <div v-if="color.name" @click="() => handleClickIdx(color.idx)" class="color-content__vertical-list-content">
+        <div v-if="color.name" @click="handleClickIdx(color.idx)" class="color-content__vertical-list-content">
           <div class="color-content__vertical-list-title" :title="color.name">
-            <!-- 不展示--td-前缀 -->
             {{ color.name.replace('--td-', '') }}
           </div>
           <div class="color-content__vertical-list-subtitle">
-            <span>{{ type }}{{ color.idx + 1 }}</span
-            ><span>{{ color.value }}</span>
+            <span>{{ type }}{{ color.idx }} </span>
+            <span>{{ getTokenValue(color.name) }}</span>
           </div>
-          <error-circle-icon
-            class="error-icon"
-            v-if="
-              flattenPalette[activeIdx].value === color.value && color.value !== originFlattenPalette[activeIdx].value
-            "
-          />
+          <error-circle-icon class="error-icon" v-if="color.isModified" />
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import flatten from 'lodash/flatten';
+import { Edit1Icon, ErrorCircleIcon, LinkUnlinkIcon } from 'tdesign-icons-vue';
 import { Popup as TPopup } from 'tdesign-vue';
-import { LinkUnlinkIcon, Edit1Icon, ErrorCircleIcon } from 'tdesign-icons-vue';
-import ColorPicker from '../../../common/ColorPicker/index.vue';
-import { handleAttach } from '../../../common/utils';
+
+import { ColorPicker } from '@/common/components';
+import { langMixin } from '@/common/i18n';
+import { getTokenFromLocal } from '@/common/themes';
+import { getTokenValue, handleAttach } from '@/common/utils';
 
 export default {
   name: 'ColorColumn',
   props: {
     type: String,
-    colorPalette: Array,
-    paletteChange: Boolean,
-    originColorPalette: Array,
+    gradientStep: Number,
+    tokenMap: Array,
   },
   emit: ['recoverGradation', 'changeGradation'],
   components: {
@@ -109,33 +104,43 @@ export default {
     Edit1Icon,
     ErrorCircleIcon,
   },
+  mixins: [langMixin],
   data() {
     return {
       activeIdx: 0,
       hoverIdx: null,
+      paletteChanged: this.hasModifiedColors(),
     };
   },
-  computed: {
-    flattenPalette() {
-      return flatten(this.colorPalette);
-    },
-    originFlattenPalette() {
-      return flatten(this.originColorPalette);
+  watch: {
+    tokenMap() {
+      this.paletteChanged = this.hasModifiedColors();
     },
   },
+  mounted() {
+    this.$root.$on('refresh-color-tokens', () => {
+      this.$forceUpdate();
+    });
+  },
   methods: {
-    flatten(arr) {
-      return flatten(arr);
-    },
+    getTokenValue,
     handleAttach,
     handleClickIdx(idx) {
       this.activeIdx = idx;
     },
     handleRecover() {
+      this.paletteChanged = false;
       this.$emit('recoverGradation', this.type);
     },
-    changeColor(hex, idx) {
+    changeGradation(hex, idx) {
+      this.paletteChanged = true;
       this.$emit('changeGradation', hex, idx, this.type);
+    },
+    hasModifiedColors() {
+      const localTokens = getTokenFromLocal();
+      if (!localTokens) return false;
+      const tokenKeys = Object.keys(localTokens);
+      return tokenKeys.some((key) => key.includes(this.type));
     },
   },
 };

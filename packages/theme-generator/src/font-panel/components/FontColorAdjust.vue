@@ -1,9 +1,7 @@
 <template>
   <div :style="{ width: '100%' }">
     <t-radio-group class="font-color__type-radio" variant="default-filled" v-model="colorType">
-      <!-- <t-radio-button :value="0" disabled>弱对比</t-radio-button> -->
       <t-radio-button :value="1">{{ lang.font.colorDefault }}</t-radio-button>
-      <!-- <t-radio-button :value="2" disabled>高对比</t-radio-button> -->
     </t-radio-group>
 
     <div class="font-color__vertical-list">
@@ -51,7 +49,6 @@
             <transition name="fade">
               <edit-1-icon v-if="hoverIdx === idx" />
             </transition>
-            <!-- <edit-1-icon /> -->
           </div>
           <template #content>
             <color-picker :value="color.value" @change="(hex) => changeColor(hex, idx)" :enable-alpha="true" />
@@ -69,13 +66,16 @@
     </div>
   </div>
 </template>
+
 <script>
 import flatten from 'lodash/flatten';
 import { Edit1Icon } from 'tdesign-icons-vue';
 import { Popup as TPopup, RadioButton as TRadioButton, RadioGroup as TRadioGroup } from 'tdesign-vue';
-import ColorPicker from '../../common/ColorPicker/index.vue';
-import langMixin from '../../common/i18n/mixin';
-import { handleAttach } from '../../common/utils';
+
+import { ColorPicker } from '@/common/components';
+import { langMixin } from '@/common/i18n';
+import { handleAttach } from '@/common/utils';
+
 export default {
   name: 'FontColorAdjust',
   props: {
@@ -100,11 +100,6 @@ export default {
       colorType: 1,
     };
   },
-  watch: {
-    colorType(v) {
-      if (v === 'custom') return;
-    },
-  },
   computed: {
     flattenPalette() {
       return flatten(this.colorPalette);
@@ -114,9 +109,6 @@ export default {
     },
   },
   methods: {
-    flatten(arr) {
-      return flatten(arr);
-    },
     handleAttach,
     handleClickIdx(idx) {
       this.activeIdx = idx;
@@ -130,6 +122,7 @@ export default {
   },
 };
 </script>
+
 <style scoped lang="less">
 .fade-enter-active,
 .fade-leave-active {
@@ -150,16 +143,11 @@ export default {
     /deep/ .t-radio-button {
       flex: 1;
       text-align: center;
-      width: 25%;
+      width: 100%;
       padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-
-    /deep/ .t-radio-group__bg-block {
-      border-radius: 5px;
-      background-color: var(--bg-color-theme-surface);
     }
   }
   &__horizontal-list {

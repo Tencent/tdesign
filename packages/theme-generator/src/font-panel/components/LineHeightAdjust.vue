@@ -39,7 +39,7 @@
               border: isHover ? '1px solid var(--brand-main-hover)' : '1px solid transparent',
             }"
             ><div class="code">line-height = font size + {{ lineHeightValue }}</div>
-            <div>
+            <div :style="{ lineHeight: `${getTokenValue('--td-line-height-body-small')}` }">
               {{ lang.font.lineHeightFixedDesc }}
             </div></t-list-item
           >
@@ -50,7 +50,7 @@
               :max="99"
               :step="1"
               :sizeValue="lineHeightValue"
-              @changeFontSize="handleChangeFontSize"
+              @changeSize="handleChangeFontSize"
           /></template>
         </t-popup>
       </t-list>
@@ -69,7 +69,7 @@
               border: isHover ? '1px solid var(--brand-main-hover)' : '1px solid transparent',
             }"
             ><div class="code">line-height = font size * {{ lineHeightValue }}</div>
-            <div>
+            <div :style="{ lineHeight: `${getTokenValue('--td-line-height-body-small')}` }">
               {{ lang.font.lineHeightSteppedDesc }}
             </div></t-list-item
           >
@@ -81,13 +81,14 @@
               :max="5"
               :step="0.5"
               :needInteger="false"
-              @changeFontSize="handleChangeFontSize"
+              @changeSize="handleChangeFontSize"
           /></template>
         </t-popup>
       </t-list>
     </div>
   </div>
 </template>
+
 <script lang="jsx">
 import {
   List as TList,
@@ -96,12 +97,14 @@ import {
   RadioButton as TRadioButton,
   RadioGroup as TRadioGroup,
 } from 'tdesign-vue';
-import langMixin from '../../common/i18n/mixin';
-import SegmentSelection from '../../common/SegmentSelection/index.vue';
-import SizeSlider from '../../common/SizeSlider/index.vue';
-import { getOptionFromLocal, updateLocalOption } from '../../common/Themes';
-import { handleAttach } from '../../common/utils';
-import { LINE_HEIGHT_OPTIONS, LINE_HEIGHT_STEPS, updateLineHeightTokens } from '../built-in/line-height';
+
+import { SegmentSelection, SizeSlider } from '@/common/components';
+import { langMixin } from '@/common/i18n';
+import { getOptionFromLocal, updateLocalOption } from '@/common/themes';
+import { getTokenValue, handleAttach } from '@/common/utils';
+
+import { LINE_HEIGHT_OPTIONS, LINE_HEIGHT_STEPS, updateLineHeightTokens } from '../built-in/line-height-map';
+
 export default {
   name: 'LineHeightAdjust',
   components: {
@@ -132,7 +135,7 @@ export default {
       if (!LINE_HEIGHT_STEPS[v]) return;
       this.lineHeightValue = LINE_HEIGHT_STEPS[v];
 
-      updateLocalOption('line-height', `plus_${this.lineHeightValue}`, v !== 3);
+      updateLocalOption('line-height', v !== 3 ? `plus_${this.lineHeightValue}` : null);
       updateLineHeightTokens(this.lineHeightValue, this.tokenType);
     },
     tokenType(type) {
@@ -147,11 +150,12 @@ export default {
       } else {
         this.lineHeightValue = defaultVal;
       }
-      updateLocalOption('line-height', `${type}_${this.lineHeightValue}`, this.step == 3);
+      updateLocalOption('line-height', this.step == 3 ? `${type}_${this.lineHeightValue}` : null);
       updateLineHeightTokens(this.lineHeightValue, type);
     },
   },
   methods: {
+    getTokenValue,
     handleAttach,
     initStep() {
       const localLineHeight = getOptionFromLocal('line-height');
@@ -160,6 +164,8 @@ export default {
       if (lineHeightParts[0].startsWith('time')) {
         this.tokenType = 'time';
         return;
+      } else {
+        this.tokenType = 'plus';
       }
 
       const suffixVal = lineHeightParts[1];
@@ -191,6 +197,7 @@ export default {
   },
 };
 </script>
+
 <style lang="less" scoped>
 .font-panel {
   &__round-tag-left {
@@ -244,7 +251,7 @@ export default {
   }
   &__token-list {
     margin-top: 8px;
-    padding: 4px 4px 0 4px;
+    padding: 4px;
     border-radius: 9px;
     background-color: var(--bg-color-theme-secondary);
     .code {
@@ -265,10 +272,7 @@ export default {
       justify-content: center;
       align-items: center;
     }
-    /deep/ .t-radio-group__bg-block {
-      border-radius: 5px;
-      width: calc(50% - 2px) !important;
-    }
+
     /deep/ .t-list-item {
       margin-bottom: 4px;
       border-radius: 6px;

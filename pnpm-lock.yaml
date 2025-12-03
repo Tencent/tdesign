@@ -138,8 +138,8 @@ importers:
         specifier: ^0.0.8
         version: 0.0.8(vue@2.7.14)
       tdesign-vue:
-        specifier: 1.9.4-naruto
-        version: 1.9.4-naruto(vue@2.7.14)
+        specifier: 1.13.1-naruto
+        version: 1.13.1-naruto(vue@2.7.14)
       tvision-color:
         specifier: ^1.6.0
         version: 1.6.0
@@ -7004,11 +7004,6 @@ packages:
 
   tdesign-vue@1.13.1-naruto:
     resolution: {integrity: sha512-GfSkK3xyMNowc4wkJ3cTev5VulfUjCqqrYti9f3PC6X5fLRDbumWTxcbozsZHYC4VbwXFaZHi9/p558FKCHsQA==}
-    peerDependencies:
-      vue: ~2.7.14
-
-  tdesign-vue@1.9.4-naruto:
-    resolution: {integrity: sha512-o+K27STem9UWwimENVVVjVzW5HwTKuNLyH3jG06uMn5hJRwuXrFT3XEzaD/h8A/pjJ2cA5MIqJG4cFsK59ss8Q==}
     peerDependencies:
       vue: ~2.7.14
 
@@ -15693,27 +15688,6 @@ snapshots:
       raf: 3.4.1
       sortablejs: 1.15.3
       tdesign-icons-vue: 0.3.6(vue@2.7.14)
-      tinycolor2: 1.6.0
-      validator: 13.12.0
-      vue: 2.7.14
-
-  tdesign-vue@1.9.4-naruto(vue@2.7.14):
-    dependencies:
-      '@babel/runtime': 7.25.6
-      '@popperjs/core': 2.11.8
-      '@types/clipboard': 2.0.7
-      '@types/lodash': 4.14.182
-      '@types/raf': 3.4.3
-      '@types/sortablejs': 1.15.8
-      '@types/tinycolor2': 1.4.6
-      '@types/validator': 13.12.2
-      clipboard: 2.0.11
-      dayjs: 1.11.10
-      lodash: 4.17.21
-      mitt: 3.0.1
-      raf: 3.4.1
-      sortablejs: 1.15.3
-      tdesign-icons-vue: 0.2.5(vue@2.7.14)
       tinycolor2: 1.6.0
       validator: 13.12.0
       vue: 2.7.14

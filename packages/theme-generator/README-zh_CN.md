@@ -1,16 +1,10 @@
-# tdesign-theme-generator
+<h1 style="text-align: center"><em><img alt="TDesign Logo" width="40" src="https://tdesign.tencent.com/favicon.ico"> TDesign Theme Generator</em></h1>
 
-- TDesign 主题配置生成器挂件 支持任意框架使用。
+[English](./README.md) | 简体中文
 
-## 🏗️ Develop
+TDesign 主题生成器挂件，专为组件库的文档站点量身打造，用于实时预览配色和样式的调整。
 
-- `npm run dev`
-
-- `npm run build:watch` 配合 npm link 进入站点热更新预览
-
-- `npm run build` 构建 web component
-
-## 📦 Usage
+## 🔨 基础使用
 
 1. `npm i tdesign-theme-generator`
 
@@ -27,3 +21,10 @@
     generator.setAttribute('device', 'mobile');
     document.body.appendChild(generator);
   ```
+
+## 🏗️ 快速开发
+
+```bash
+npm link
+npm run build:watch # 进入组件库站点热更新预览
+```
