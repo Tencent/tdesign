@@ -6,9 +6,9 @@ TDesign 主题生成器挂件，专为组件库的文档站点量身打造，用
 
 ## 🔨 基础使用
 
-1. `npm i tdesign-theme-generator`
+1. `npm i @tdesign/theme-generator`
 
-2. `import 'tdesign-theme-generator';`
+2. `import '@tdesign/theme-generator';`
 
 3. 在应用的代码中加入 `<td-theme-generator />`
 
@@ -17,9 +17,9 @@ TDesign 主题生成器挂件，专为组件库的文档站点量身打造，用
 - 如果遇到参数无法正常传递的情况，可以尝试以下类似方式引入组件：
 
   ```js
-    const generator = document.createElement('td-theme-generator');
-    generator.setAttribute('device', 'mobile');
-    document.body.appendChild(generator);
+  const generator = document.createElement('td-theme-generator');
+  generator.setAttribute('device', 'mobile');
+  document.body.appendChild(generator);
   ```
 
 ## 🏗️ 快速开发

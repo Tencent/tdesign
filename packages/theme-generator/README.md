@@ -6,9 +6,9 @@ TDesign theme generator plugin, which is tailored for the component library docu
 
 ## 🔨 Usage
 
-1. `npm i tdesign-theme-generator`
+1. `npm i @tdesign/theme-generator`
 
-2. `import 'tdesign-theme-generator'`;
+2. `import '@tdesign/theme-generator'`;
 
 3. add `<td-theme-generator />` in the application code
 
@@ -17,9 +17,9 @@ TDesign theme generator plugin, which is tailored for the component library docu
 - If you encounter issues where parameters cannot be passed correctly, you can try the following method to introduce the component:
 
   ```js
-    const generator = document.createElement('td-theme-generator');
-    generator.setAttribute('device', 'mobile');
-    document.body.appendChild(generator);
+  const generator = document.createElement('td-theme-generator');
+  generator.setAttribute('device', 'mobile');
+  document.body.appendChild(generator);
   ```
 
 ## 🏗️ Develop

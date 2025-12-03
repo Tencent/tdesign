@@ -51,7 +51,7 @@ jobs:
         id: pkg
         run: |
           echo "pkg_tdesign_site_components=https://pkg.pr.new/Tencent/tdesign/@tdesign/site-components@${{ steps.pr.outputs.id }}" >> $GITHUB_OUTPUT
-          echo "pkg_tdesign_theme_generator=https://pkg.pr.new/Tencent/tdesign/tdesign-theme-generator@${{ steps.pr.outputs.id }}" >> $GITHUB_OUTPUT
+          echo "pkg_tdesign_theme_generator=https://pkg.pr.new/Tencent/tdesign/@tdesign/theme-generator@${{ steps.pr.outputs.id }}" >> $GITHUB_OUTPUT
 
   tdesign-site:
     if: github.event.workflow_run.conclusion == 'success'
@@ -115,7 +115,7 @@ jobs:
         run: pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
         working-directory: packages/tdesign-react/site
 
-      - name: install tdesign-theme-generator from pkg-pr-new
+      - name: install @tdesign/theme-generator from pkg-pr-new
         run: pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
         working-directory: packages/tdesign-react/site
 
@@ -147,7 +147,7 @@ jobs:
         run: pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
         working-directory: packages/tdesign-vue-next/site
 
-      - name: install tdesign-theme-generator from pkg-pr-new
+      - name: install @tdesign/theme-generator from pkg-pr-new
         run: pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
         working-directory: packages/tdesign-vue-next/site
 
@@ -179,7 +179,7 @@ jobs:
         run: pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_site_components }}
         working-directory: packages/tdesign-vue-next-chat/site
 
-      - name: install tdesign-theme-generator from pkg-pr-new
+      - name: install @tdesign/theme-generator from pkg-pr-new
         run: pnpm add ${{ needs.preview-context.outputs.pkg_tdesign_theme_generator }}
         working-directory: packages/tdesign-vue-next-chat/site
 
@@ -251,7 +251,7 @@ jobs:
           submodules: recursive
 
       - uses: pnpm/action-setup@v4
- 
+
       - uses: actions/setup-node@v4
         with:
           node-version: 18
