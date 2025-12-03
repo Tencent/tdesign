@@ -17,7 +17,7 @@
         <t-slider
           :min="1"
           :disabled="disabled"
-          :max="5"
+          :max="selectOptions.length - 1"
           :value="step"
           @change="handleSliderChange"
           :label="renderLabel"

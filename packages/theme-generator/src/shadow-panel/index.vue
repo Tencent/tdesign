@@ -21,7 +21,7 @@
                 class="slider-split"
                 :key="i"
                 :style="{
-                  opacity: i == 0 || i === selectOptions.length - 1 ? 0 : 1,
+                  opacity: i == 0 || i === selectOptions.length - 2 ? 0 : 1,
                 }"
                 v-for="(v, i) in selectOptions.slice(0, selectOptions.length - 1)"
               ></div>
