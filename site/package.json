@@ -10,14 +10,14 @@
     "lint:fix": "eslint --ext .vue,.js,.ts,.tsx ./src --fix"
   },
   "dependencies": {
-    "@tdesign/site-components": "^0.17.3",
+    "@tdesign/site-components": "^0.17.4",
     "canvas-3d": "^1.0.14",
     "lottie-web": "^5.7.0",
     "markdown-it": "^12.3.2",
     "markdown-it-link-attributes": "^4.0.0",
     "prismjs": "^1.29.0",
     "tdesign-icons-view": "~0.4.0",
-    "tdesign-icons-vue": "^0.1.4",
+    "tdesign-icons-vue": "^0.4.1",
     "tdesign-vue": "1.9.8-naruto",
     "three": "0.127.0",
     "vue": "2.7.14",
