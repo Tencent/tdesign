@@ -28,9 +28,9 @@ jobs:
 
       - run: pnpm install
 
-      - run: pnpm -F tdesign-theme-generator run build
+      - run: pnpm -F @tdesign/theme-generator run build
 
       - run: npm i -g npm@latest
 
       - name: Publish Package
-        run: pnpm -F tdesign-theme-generator publish
+        run: pnpm -F @tdesign/theme-generator publish
