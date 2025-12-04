@@ -1,6 +1,6 @@
 {
   "private": true,
-  "packageManager": "pnpm@9.15.9",
+  "packageManager": "pnpm@10.24.0",
   "scripts": {
     "dev:components": "pnpm run --filter '@tdesign/site-components' dev",
     "dev:site": "pnpm run build:components && pnpm run --filter 'tdesign-site' dev",
