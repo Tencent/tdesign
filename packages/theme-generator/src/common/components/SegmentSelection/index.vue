@@ -18,7 +18,7 @@
           :min="1"
           :disabled="disabled"
           :max="selectOptions.length - 1"
-          :value="step"
+          :value="sliderValue"
           @change="handleSliderChange"
           :label="renderLabel"
           :tooltipProps="{ attach: handleAttach }"
@@ -75,6 +75,13 @@ export default {
       step: this.value,
       innerSelectOptions: this.selectOptions,
     };
+  },
+  computed: {
+    sliderValue() {
+      const maxValue = this.selectOptions.length - 1;
+      // 如果 step 超过 max（自定义选项），依旧显示 max 值
+      return this.step > maxValue ? maxValue : this.step;
+    },
   },
   watch: {
     value(val) {

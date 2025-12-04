@@ -2,11 +2,10 @@
   <div>
     <!-- 顶部调整 -->
     <SegmentSelection
+      v-model="step"
       :selectOptions="FONT_SIZE_OPTIONS"
       :suspendedLabels="FONT_SIZE_LABELS"
-      v-model="step"
       :disabled="segmentSelectionDisabled"
-      @enable="segmentSelectionDisabled = false"
     >
       <template v-slot:left>
         <div class="font-panel__round-tag-left">Aa</div>
