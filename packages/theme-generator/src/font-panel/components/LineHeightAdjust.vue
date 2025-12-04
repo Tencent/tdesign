@@ -2,13 +2,12 @@
   <div>
     <!-- 顶部调整 -->
     <SegmentSelection
-      :style="{ margin: '8px 0' }"
       v-if="tokenType === 'plus'"
       v-model="step"
+      :style="{ margin: '8px 0' }"
       :selectOptions="lineHeightOptions"
       :suspendedLabels="lineHeightLabels"
       :disabled="segmentSelectionDisabled"
-      @enable="segmentSelectionDisabled = false"
     >
       <template v-slot:left>
         <div class="font-panel__round-tag-left"><p>Aa</p></div>

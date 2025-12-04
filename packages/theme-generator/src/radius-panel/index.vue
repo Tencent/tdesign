@@ -11,11 +11,10 @@
       <div class="radius-content__main">
         <p class="radius-content__title">{{ lang.borerRadius.radiusSize }}</p>
         <SegmentSelection
+          v-model="step"
           :selectOptions="RADIUS_OPTIONS"
           :suspendedLabels="RADIUS_LABELS"
-          v-model="step"
           :disabled="segmentSelectionDisabled"
-          @enable="segmentSelectionDisabled = false"
         >
           <template v-slot:left>
             <div class="radius-content__round-tag-left" :class="{ disabled: segmentSelectionDisabled }"></div>
