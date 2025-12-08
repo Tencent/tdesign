@@ -1020,7 +1020,6 @@ ul.t-select-option-group__header,
 }
 
 .t-timeline-item__wrapper .t-timeline-item__tail {
-    border-left: 1px solid transparent;
     height: calc(100% - (10px * 2 + 6px));
 }
 
