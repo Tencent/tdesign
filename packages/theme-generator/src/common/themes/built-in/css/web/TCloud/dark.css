@@ -1,3 +1,4 @@
+:root.dark,
 :root[theme-mode="dark"] {
     --td-brand-color-1: #001b92;
     --td-brand-color-2: #0935ad;
