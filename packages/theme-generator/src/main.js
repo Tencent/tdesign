@@ -22,6 +22,37 @@ const getInitProps = () => {
   };
 };
 
-new Vue({
-  render: (h) => h(Generator, { props: getInitProps() }),
-}).$mount('#app');
+// 导出一个可复用的工厂方法，供外部程序创建/挂载/销毁该组件
+export function createGenerator({ el = '#app', props = {} } = {}) {
+  const initProps = { ...getInitProps(), ...props };
+
+  const vm = new Vue({
+    render: (h) => h(Generator, { props: initProps }),
+  }).$mount();
+
+  const target = typeof el === 'string' ? document.querySelector(el) : el;
+
+  if (target) {
+    // 用生成的根节点替换目标节点
+    target.replaceWith(vm.$el);
+  } else {
+    // 若未提供目标节点则追加到 body
+    document.body.appendChild(vm.$el);
+  }
+
+  return {
+    vm,
+    destroy() {
+      vm.$destroy();
+      if (vm.$el && vm.$el.parentNode) vm.$el.parentNode.removeChild(vm.$el);
+    },
+  };
+}
+
+// 另导出一个 Vue 组件构造器，方便在其他 Vue 应用中直接注册/使用
+export const GeneratorComponent = Vue.extend({
+  name: 'GeneratorWrapper',
+  render(h) {
+    return h(Generator, { props: getInitProps() });
+  },
+});
