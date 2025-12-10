@@ -8,32 +8,17 @@ Vue.config.productionTip = false;
 const getInitProps = () => {
   const appEl = document.getElementById('app');
 
-  // 1. 获取 device 参数
-  const device =
-    [
-      appEl?.getAttribute('device'),
-      new URLSearchParams(window.location.search).get('device'),
-      'web', // 默认值
-    ].find(Boolean) || 'web';
+  // 1. 获取 device：仅从 DOM 属性读取，默认值 'web'
+  const device = appEl?.getAttribute('device') || 'web';
 
-  // 2. 获取 showSetting 参数（兼容短横线/驼峰属性）
-  const searchParams = new URLSearchParams(window.location.search);
-  const showSettingAttr = [
-    appEl?.getAttribute('show-setting'),
-    appEl?.getAttribute('showSetting'),
-    searchParams.get('showSetting'),
-  ].find((val) => val !== null && val !== undefined);
-
-  // 处理布尔值转换（可选，根据实际需求）
-  const parseBoolean = (val) => {
-    if (val === 'true') return true;
-    if (val === 'false') return false;
-    return val;
-  };
+  // 2. 获取 showSetting：仅从 DOM 属性读取（兼容短横线/驼峰命名）
+  const showSettingAttr = appEl?.getAttribute('show-setting') || appEl?.getAttribute('showSetting');
+  // 若未获取到值则设为 undefined，避免传递空值
+  const showSetting = showSettingAttr === null || showSettingAttr === undefined ? undefined : showSettingAttr;
 
   return {
     device,
-    showSetting: showSettingAttr === null ? undefined : parseBoolean(showSettingAttr),
+    showSetting,
   };
 };
 
