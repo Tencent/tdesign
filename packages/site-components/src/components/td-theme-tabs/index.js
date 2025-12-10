@@ -2,21 +2,29 @@ import { html, define } from 'hybrids';
 import style from './style.less?inline';
 import moonIcon from '@images/moon.svg?raw';
 import sunIcon from '@images/sun.svg?raw';
+import desktopIcon from '@images/desktop.svg?raw';
 import { watchHtmlMode } from '@utils';
 
-// const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+export const SYSTEM_MODE = 'system';
+
+export const isDark = () =>
+  window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 const storageChangeEvent = new CustomEvent('storageChange');
 
-function toggleTheme(host, currentTheme) {
+function toggleTheme(_host, currentTheme) {
   document.documentElement.removeAttribute('theme-mode');
-  Object.assign(host, { theme: currentTheme });
+  if (currentTheme === SYSTEM_MODE) {
+    currentTheme = isDark();
+  }
   document.documentElement.setAttribute('theme-mode', currentTheme);
 }
 
-function handleTabClick(host, event, currentTheme) {
+function handleTabClick(host, _event, currentTheme) {
   const root = document.documentElement;
   const prevTheme = root.getAttribute('theme-mode');
-  if (prevTheme === currentTheme) return;
+
+  Object.assign(host, { theme: currentTheme });
+  if ((currentTheme === SYSTEM_MODE && isDark() === prevTheme) || prevTheme === currentTheme) return;
 
   if (!document.startViewTransition) return toggleTheme(host, currentTheme);
   document.startViewTransition(() => toggleTheme(host, currentTheme));
@@ -56,18 +64,32 @@ export default define({
     },
     connect: (host, key, invalidate) => {
       const lastTheme = localStorage.getItem('--tdesign-theme');
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+      const handler = () => {
+        if (host.theme !== SYSTEM_MODE) return;
+        toggleTheme(host, SYSTEM_MODE);
+      };
 
       if (lastTheme) {
         document.documentElement.removeAttribute('theme-mode');
 
         Object.assign(host, { [key]: lastTheme });
-        document.documentElement.setAttribute('theme-mode', lastTheme);
+        document.documentElement.setAttribute('theme-mode', lastTheme === SYSTEM_MODE ? isDark() : lastTheme);
         invalidate();
       }
 
-      const observer = watchHtmlMode((themeMode) => Object.assign(host, { [key]: themeMode }));
+      const observer = watchHtmlMode((themeMode) => {
+        if (host.theme === SYSTEM_MODE) return;
+        Object.assign(host, { [key]: themeMode });
+      });
 
-      return () => observer.disconnect();
+      mediaQuery.addEventListener('change', handler, { passive: true });
+      handler();
+      return () => {
+        observer.disconnect();
+        mediaQuery.removeEventListener('change', handler);
+      };
     },
   },
   blockStyleMap: {
@@ -83,6 +105,12 @@ export default define({
     return html`
       <div class="TDesign-theme-tabs">
         <div class="TDesign-theme-tabs__block" style=${blockStyle || {}}></div>
+        <div
+          onclick=${(host, e) => handleTabClick(host, e, SYSTEM_MODE)}
+          data-theme="system"
+          class="item system ${theme === SYSTEM_MODE ? 'active' : ''}"
+          innerHTML=${desktopIcon}
+        ></div>
         <div
           onclick=${(host, e) => handleTabClick(host, e, 'light')}
           data-theme="light"
