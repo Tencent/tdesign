@@ -117,7 +117,7 @@ export function exportCustomStyleSheet(device) {
       :root, :root[theme-mode="light"] {
         ${cssString}
       }
-      :root[theme-mode="dark"] {
+      :root.dark, :root[theme-mode="dark"] {
         ${darkCssString}
       }
       ${extraCssString}
