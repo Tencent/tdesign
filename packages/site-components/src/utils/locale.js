@@ -1,10 +1,9 @@
-import { getLang } from '../utils';
+import { getLang, isEn } from '../utils';
 
 const callbacks = [];
 
 function defaultChangeCallBack() {
-  const lang = getLang();
-  if (lang === 'en') {
+  if (isEn()) {
     const zhPathname = location.pathname.slice(0, -3);
     location.pathname = zhPathname;
   } else {
@@ -23,8 +22,7 @@ function registerLocaleChange(cb = defaultChangeCallBack) {
 }
 
 function jumpLocation(url) {
-  const lang = getLang();
-  return lang === 'en' ? `${url}-en` : url;
+  return isEn() ? `${url}-en` : url;
 }
 
-export { getLang, registerLocaleChange, jumpLocation };
+export { getLang, jumpLocation, registerLocaleChange };

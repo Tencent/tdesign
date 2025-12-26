@@ -113,6 +113,10 @@ export function getLang() {
   return isEn ? 'en' : 'zh';
 }
 
+export function isEn() {
+  return getLang() === 'en';
+}
+
 export function parseBoolean(value, defaultValue = true) {
   if (value === undefined) {
     return defaultValue;
