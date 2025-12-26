@@ -20,7 +20,7 @@ TDesign upcoming iterate plans are as below:
   - Continue iterating the cross-platform component library TDesign Flutter and advance it to a stable 1.0 version.
   - Provide an officially maintained TDesign Uniapp version of component resources to enrich cross-platform solutions for H5 and mini-program scenarios.
 
-- **AI Programming and Design Applications:**
+- **AI Programming and Design Applications**
   - Refactor the current design resource implementation to fully adopt design variables and reduce design variants, ensuring greater consistency with development resources.
   - Provide a series of programming tools, including knowledge bases and MCP tools.
   - Offer a solution for D2C (Design-to-Code) scenarios, suitable for use in AI IDEs like Codebuddy, to enable the conversion of design drafts into engineering code using TDesign components.
