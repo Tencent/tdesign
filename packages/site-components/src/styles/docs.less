@@ -8,6 +8,7 @@
     background-size: 100% auto;
     margin-left: 8px;
     font-size: 0;
+    display: inline-block;
   }
 
   &:hover a {
@@ -121,6 +122,8 @@ div[name="DESIGN"] {
   }
 
   *:not(pre) > code {
+    position: relative;
+    top: -2.5px; // 实现视觉上的垂直居中
     margin: 0 2px;
     color: var(--error-8);
     background: var(--error-1);
@@ -216,10 +219,8 @@ div[name="DESIGN"] {
     font-size: 28px;
     line-height: 36px;
     margin: 64px 0 24px;
-    display: flex;
-    align-items: center;
 
-    .title-link(32px, 32px);
+    .title-link(32px, 28px);
   }
 
   & > h3 {
@@ -227,10 +228,9 @@ div[name="DESIGN"] {
     font-size: 20px;
     line-height: 28px;
     margin: 48px 0 8px;
-    align-items: center;
     white-space: pre-wrap;
 
-    .title-link(24px, 24px);
+    .title-link(24px, 20px);
   }
 
   & > h4 {
@@ -238,10 +238,8 @@ div[name="DESIGN"] {
     line-height: 24px;
     margin: 32px 0 8px;
     font-weight: bold;
-    display: flex;
-    align-items: center;
 
-    .title-link(20px, 20px);
+    .title-link(20px, 16px);
   }
 
   & > h5 {
