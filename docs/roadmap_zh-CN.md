@@ -11,15 +11,20 @@ title: 后续计划
 
 **我们正在做的**
 
-- 持续维护目前 1.0 LTS 版本的基础通用 UI 组件，并完善目前基础组件的功能 [TDesign LTS Version Maintain](https://github.com/orgs/Tencent/projects/1/views/35?sliceBy%5Bvalue%5D=Desktop)。
+- **组件的迭代和调整**
 
-- 持续迭代跨端组件库 TDesign Flutter，并迭代至 1.0 稳定版本。同时提供H5/小程序跨端的解决方案。
+  - 持续维护迭代目前 1.0 LTS 版本的基础通用 UI 组件和 AIGC 场景的高阶组件，并完善目前维护的组件的功能 [TDesign LTS Version Maintain](https://github.com/orgs/Tencent/projects/1/views/35?sliceBy%5Bvalue%5D=Desktop)。
+  - 同时着手整理 1.0 LTS 版本中不合理的 API，并同时推进实现一套原子类 TDesign 风格的 CSS 实现方案，结合 Headless 使用。
 
-- 提供一套 Web Components 标准的 TDesign UI 风格的基础组件，并在此基础上进行建设 AIGC 系列高阶组件的实现，降低维护成本。
+- **跨端使用的支持**
 
-- 持续增加 TIcon 图标数量，并在目前基础上提供可变粗细、多色图标、多风格等更丰富的图标功能。
+  - 持续迭代跨端组件库 TDesign Flutter，并迭代至 1.0 稳定版本。
+  - 提供一套官方维护的 TDesign Uniapp 版本的组件资源， 用于丰富 H5/小程序跨端场景的解决方案。
 
-- 调整目前的仓库结构，将各个技术栈分别进行大仓维护的调整，进行更多代码复用和同步优化，使得社区、贡献者发挥更大的价值，问题更加聚焦。
+- **AI 编程、设计的应用**
+  - 改造目前的设计资源实现，全部使用设计变量并减少设计变体，与开发资源更一致。
+  - 提供包括知识库、MCP 工具在内的一系列辅助编程相关工具。
+  - 提供一套 D2C 场景使用的解决方案，用于在 Codebuddy 等 AI IDE 中使用，实现设计稿转 TDesign 组件的工程代码的实现。
 
 **我们准备做的**
 

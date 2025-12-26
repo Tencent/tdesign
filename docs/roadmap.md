@@ -10,16 +10,20 @@ TDesign upcoming iterate plans are as below:
 
 **What TDesign is doing**
 
-- ​Maintain 1.0 LTS version of basic universal UI components​​, improving the functionality of existing foundational components. [TDesign LTS Version Maintain](https://github.com/orgs/Tencent/projects/1/views/35?sliceBy%5Bvalue%5D=Desktop)
+- **Component Iteration**
 
-- ​Continuous iteration of the cross-platform component library `TDesign Flutter​​`, working toward the stable 1.0 release. 
+  - ​Maintain 1.0 LTS version of basic universal UI components and AIGC components​​, improving the functionality of existing foundational components. [TDesign LTS Version Maintain](https://github.com/orgs/Tencent/projects/1/views/35?sliceBy%5Bvalue%5D=Desktop)
+  - Simultaneously, begin organizing and addressing unreasonable APIs in the 1.0 LTS version, while advancing the implementation of an atomic TDesign-style CSS solution for use in combination with Headless.
 
-- Provide a set of TDesign style components based on Web Components standards​​, and build AIGC (AI-Generated Content) pro components on this foundation components to reduce maintenance costs.
+- **Cross-Platform Support**
 
-- ​Expand the Icon components, adding more features such as variable weight, multi-color icons, and diverse styles to enrich the icon functionality.
+  - Continue iterating the cross-platform component library TDesign Flutter and advance it to a stable 1.0 version.
+  - Provide an officially maintained TDesign Uniapp version of component resources to enrich cross-platform solutions for H5 and mini-program scenarios.
 
-- ​​Restructure the current repository organization​​, consolidating repositories for different tech stacks into a monorepo to improve code reuse, synchronization, and community focus.
-
+- **AI Programming and Design Applications:**
+  - Refactor the current design resource implementation to fully adopt design variables and reduce design variants, ensuring greater consistency with development resources.
+  - Provide a series of programming tools, including knowledge bases and MCP tools.
+  - Offer a solution for D2C (Design-to-Code) scenarios, suitable for use in AI IDEs like Codebuddy, to enable the conversion of design drafts into engineering code using TDesign components.
 
 **What TDesign are planning to do**
 
