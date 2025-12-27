@@ -78,6 +78,10 @@ export default define({
     get: (_host, lastValue) => parseBoolean(lastValue, true),
     set: (_host, value) => parseBoolean(value, true),
   },
+  changelogEn: {
+    get: (_host, lastValue) => parseBoolean(lastValue, true),
+    set: (_host, value) => parseBoolean(value, true),
+  },
   mobileBodyStyle,
   shouldShowPopup: {
     get: (_host, lastValue) => lastValue || false,
@@ -211,7 +215,7 @@ export default define({
   },
 
   render: (host) => {
-    const { changelog, docInfo, spline, showIssue } = host;
+    const { changelog, changelogEn, docInfo, spline, showIssue } = host;
     const mobileBodyStyle = { ...host.mobileBodyStyle };
     const splineUrl = splineConfig[spline];
     const isChangelogComponentRegistered = customElements.get('td-doc-changelog'); // 检查td-doc-changelog组件是否已注册
@@ -219,6 +223,7 @@ export default define({
       let changelogEl = document.querySelector('td-doc-changelog');
       if (!changelogEl) {
         changelogEl = document.createElement('td-doc-changelog');
+        changelogEl.changelogEn = changelogEn;
         document.body.appendChild(changelogEl);
       }
       // 为了触发动画，下一帧再切换为显示状态

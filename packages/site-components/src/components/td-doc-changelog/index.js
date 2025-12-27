@@ -1,7 +1,7 @@
 import { define, html } from 'hybrids';
 import { getLocale } from '@config/locale.js';
 import closeIcon from '@images/close.svg?raw';
-import { convert2PascalCase, isComponentPage, isEn, isGlobalConfigPage } from '@utils';
+import { convert2PascalCase, isComponentPage, isEn, isGlobalConfigPage, parseBoolean } from '@utils';
 import style from './style.less?inline';
 
 const changelogCache = new Map();
@@ -60,7 +60,7 @@ function getCompName() {
 
 async function fetchChangelog(host) {
   const compName = getCompName();
-  const jsonName = isEn() ? 'changelog.en-US.json' : 'changelog.json';
+  const jsonName = isEn() && host.changelogEn ? 'changelog.en-US.json' : 'changelog.json';
   const url = `${getLogUrlPrefix()}/${jsonName}`;
 
   try {
@@ -163,7 +163,10 @@ function replaceSpecialTags(html) {
 
 export default define({
   tag: 'td-doc-changelog',
-
+  changelogEn: {
+    get: (_host, lastValue) => parseBoolean(lastValue, false),
+    set: (_host, value) => value,
+  },
   visible: {
     value: false,
     observe: (host, value) => {
