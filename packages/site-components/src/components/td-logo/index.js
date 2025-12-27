@@ -5,12 +5,10 @@ import menuApplicationIcon from '@images/menu-application.svg?raw';
 import chevronRightIcon from '@images/chevron-right.svg?raw';
 import { isIntranet } from '@utils/index';
 import { logoMenuConfigCdn, logoMenuConfigWoaCdn, logoMenuSvgPrefix } from '@config';
-import { getLang } from '@utils';
+import { isEn } from '@utils';
 
 import style from './style.less?inline';
 import portalStyle from './portal.less?inline';
-
-const isEnglish = getLang() === 'en';
 
 function renderList(list = []) {
   return html` <div class="list">
@@ -83,7 +81,7 @@ export default define({
         <div slot="content" class="TDesign-header-logo__content">${renderMenu(menuList)}</div>
       </td-doc-popup>
       <span class="divider"></span>
-      <a class="home" href="${isEnglish ? '/index-en' : '/'}" title="TDesign" innerHTML=${logoIcon}></a>
+      <a class="home" href="${isEn() ? '/index-en' : '/'}" title="TDesign" innerHTML=${logoIcon}></a>
     </div>
   `,
 });

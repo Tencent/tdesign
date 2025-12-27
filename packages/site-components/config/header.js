@@ -1,9 +1,9 @@
-import vueIcon from '../src/images/vue-logo.svg?url';
-import reactIcon from '../src/images/react-logo.svg?url';
-import wxIcon from '../src/images/wx-logo.svg?url';
-import flutterIcon from '../src/images/flutter-logo.svg?url';
-import { isIntranet, getLang } from '@utils/index';
+import { isEn, isIntranet } from '@utils';
 import { jumpLocation } from '@utils/locale';
+import flutterIcon from '../src/images/flutter-logo.svg?url';
+import reactIcon from '../src/images/react-logo.svg?url';
+import vueIcon from '../src/images/vue-logo.svg?url';
+import wxIcon from '../src/images/wx-logo.svg?url';
 
 const headerList = [
   {
@@ -130,28 +130,25 @@ export default {
 
 export const getHeaderConfig = () => {
   const intranet = isIntranet();
-  const lang = getLang();
-  const isEnglish = lang === 'en';
+  const en = isEn();
 
   const headerList = [
-    { name: isEnglish ? 'Design' : '设计', path: jumpLocation('/design'), type: 'main', target: '_self' },
-    { name: isEnglish ? 'Components' : '基础组件', path: jumpLocation('/vue/overview'), type: 'base', target: '_self' },
-    intranet
-      ? { name: isEnglish ? 'Industry component' : '行业组件', path: '/trade', type: 'main', target: '_self' }
-      : null,
+    { name: en ? 'Design' : '设计', path: jumpLocation('/design'), type: 'main', target: '_self' },
+    { name: en ? 'Components' : '基础组件', path: jumpLocation('/vue/overview'), type: 'base', target: '_self' },
+    intranet ? { name: en ? 'Industry component' : '行业组件', path: '/trade', type: 'main', target: '_self' } : null,
     {
-      name: isEnglish ? 'Templates' : '页面模板',
+      name: en ? 'Templates' : '页面模板',
       path: 'https://tdesign.tencent.com/starter/',
       type: 'main',
       target: '_self',
     },
-    { name: isEnglish ? 'Resources' : '资源', path: jumpLocation('/source'), type: 'main', target: '_self' },
-    { name: isEnglish ? 'About' : '关于', path: jumpLocation('/about/introduce'), type: 'main', target: '_self' },
+    { name: en ? 'Resources' : '资源', path: jumpLocation('/source'), type: 'main', target: '_self' },
+    { name: en ? 'About' : '关于', path: jumpLocation('/about/introduce'), type: 'main', target: '_self' },
   ].filter((item) => item);
 
   const baseComponentsLinks = {
     web: {
-      name: isEnglish ? 'Web PC' : 'Web 桌面端',
+      name: en ? 'Web PC' : 'Web 桌面端',
       links: [
         {
           name: 'Vue',
@@ -177,7 +174,7 @@ export const getHeaderConfig = () => {
       ],
     },
     mobile: {
-      name: isEnglish ? 'Mobile' : 'Mobile 移动端',
+      name: en ? 'Mobile' : 'Mobile 移动端',
       links: [
         {
           name: 'Vue Next',
@@ -201,14 +198,14 @@ export const getHeaderConfig = () => {
           status: 2,
         },
         {
-          name: isEnglish ? 'WeChat-Miniprogram' : '微信小程序',
+          name: en ? 'WeChat-Miniprogram' : '微信小程序',
           icon: wxIcon,
           path: jumpLocation('/miniprogram/overview'),
           npm: 'tdesign-miniprogram',
           status: 1,
         },
         {
-          name: isEnglish ? 'QQ-Miniprogram' : 'QQ 小程序',
+          name: en ? 'QQ-Miniprogram' : 'QQ 小程序',
           icon: wxIcon,
           path: jumpLocation('/qq-miniprogram/overview'),
           npm: 'tdesign-qq-miniprogram',

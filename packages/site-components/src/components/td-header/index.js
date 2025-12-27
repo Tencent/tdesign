@@ -1,10 +1,10 @@
-import { html, define } from 'hybrids';
+import { define, html } from 'hybrids';
+import { getHeaderConfig } from '@config/header.js';
 import closeIcon from '@images/close.svg?raw';
 import fakeArrowIcon from '@images/fake-arrow.svg?raw';
 import githubIcon from '@images/github.svg?raw';
-import { getHeaderConfig } from '@config/header.js';
 import translateIcon from '@images/translate.svg?raw';
-import { getLang } from '@utils/index';
+import { isEn } from '@utils';
 import portalStyle from './portal.less?inline';
 import style from './style.less?inline';
 
@@ -162,8 +162,7 @@ function renderLinks(host, headerList, platform, framework) {
   `;
 
   function handleTranslate() {
-    const lang = getLang();
-    const nextLang = lang === 'zh' ? 'en' : 'zh';
+    const nextLang = isEn() ? 'zh' : 'en';
     document.dispatchEvent(new CustomEvent('tdesign_site_lang', { detail: nextLang }));
   }
 
