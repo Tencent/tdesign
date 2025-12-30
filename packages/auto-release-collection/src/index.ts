@@ -25,8 +25,8 @@ const fetchPromises = submodulesKeys.map(async (project) => {
         throw new Error('version is null');
       }
       let tag = `${submodules[project].tagPrefix}${version[0]}`;
-      // 特殊 2026-01-01 后可以移除
-      if (project === 'tdesign-react' && version[0] === '1.6.1') {
+      // 特殊处理 2026-01-01 后可以移除
+      if (project === 'tdesign-react' && version[0] === '1.16.1') {
         tag = version[0];
       }
 
