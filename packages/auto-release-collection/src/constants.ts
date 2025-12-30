@@ -16,7 +16,7 @@ export const submodules = {
     title: '## React for Web 发布 ',
     changelogUrl:
       'https://raw.githubusercontent.com/Tencent/tdesign-react/refs/heads/main/packages/tdesign-react/CHANGELOG.md',
-    tagPrefix: '',
+    tagPrefix: 'tdesign-react@',
     repo: 'Tencent/tdesign-react',
   },
   'tdesign-miniprogram': {
