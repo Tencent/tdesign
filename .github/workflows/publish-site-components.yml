@@ -15,7 +15,7 @@ on:
 
 jobs:
   publish-site-components:
-    if: github.repository == 'Tencent/tdesign'
+    if: github.repository == 'Tencent/tdesign' && startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
