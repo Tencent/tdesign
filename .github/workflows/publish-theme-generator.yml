@@ -15,7 +15,7 @@ on:
 
 jobs:
   publish-theme-generator:
-    if: github.repository == 'Tencent/tdesign'
+    if: github.event_name == 'workflow_dispatch' || (github.repository == 'Tencent/tdesign' && startsWith(github.head_ref, 'release/'))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,4 +33,4 @@ jobs:
       - run: npm i -g npm@latest
 
       - name: Publish Package
-        run: pnpm -F @tdesign/theme-generator publish
+        run: pnpm -F @tdesign/theme-generator publish --no-git-checks
