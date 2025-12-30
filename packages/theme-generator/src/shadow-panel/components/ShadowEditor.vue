@@ -23,16 +23,18 @@
         <div class="shadow-layer__card--sharp" :style="{ background: color }" slot="prefix-icon"></div>
       </t-input>
       <template #content>
-        <color-picker :value="color" enableAlpha @change="changeColor" />
+        <color-picker :value="color" enableAlpha format="RGBA" @change="changeColor" />
       </template>
     </t-popup>
   </div>
 </template>
+
 <script lang="jsx">
-import { InputNumber as TInputNumber, Popup as TPopup, Input as TInput } from 'tdesign-vue';
 import { RemoveIcon } from 'tdesign-icons-vue';
-import ColorPicker from '../../common/ColorPicker/index.vue';
-import { handleAttach } from '../../common/utils';
+import { Input as TInput, InputNumber as TInputNumber, Popup as TPopup } from 'tdesign-vue';
+
+import { ColorPicker } from '@/common/components';
+import { handleAttach } from '@/common/utils';
 
 export default {
   name: 'ShadowEditor',
@@ -117,6 +119,7 @@ export default {
   },
 };
 </script>
+
 <style scoped lang="less">
 .shadow-layer {
   display: flex;

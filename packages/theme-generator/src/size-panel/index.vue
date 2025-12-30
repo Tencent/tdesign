@@ -34,7 +34,7 @@
         <template #title>{{ lang.size.componentSize }}</template>
         <template #subTitle>size</template>
         <template #content>
-          <size-adjust :tokenList="compSizeArr" type="comp-size" />
+          <size-adjust :key="refreshIdMap['comp-size']" :tokenList="COMP_SIZE_MAP" type="comp-size" />
         </template>
       </common-collapse>
       <!-- 组件上下边距 -->
@@ -59,7 +59,7 @@
         <template #title>{{ lang.size.yPadding }}</template>
         <template #subTitle>padding top & bottom</template>
         <template #content>
-          <size-adjust :tokenList="compPaddingTBArr" type="comp-padding-tb" />
+          <size-adjust :key="refreshIdMap['comp-padding-tb']" :tokenList="COMP_PADDING_TB_MAP" type="comp-padding-tb" />
         </template>
       </common-collapse>
       <!-- 组件左右边距 -->
@@ -84,7 +84,7 @@
         <template #title>{{ lang.size.xPadding }}</template>
         <template #subTitle>padding left & right</template>
         <template #content>
-          <size-adjust :tokenList="compPaddingLRArr" type="comp-padding-lr" />
+          <size-adjust :key="refreshIdMap['comp-padding-lr']" :tokenList="COMP_PADDING_LR_MAP" type="comp-padding-lr" />
         </template>
       </common-collapse>
       <!-- popup 边距 -->
@@ -109,7 +109,7 @@
         <template #title>{{ lang.size.popupPadding }}</template>
         <template #subTitle>popup padding</template>
         <template #content>
-          <size-adjust :tokenList="compPopupPaddingArr" type="popup-padding" />
+          <size-adjust :key="refreshIdMap['popup-padding']" :tokenList="COMP_POPUP_PADDING_MAP" type="popup-padding" />
         </template>
       </common-collapse>
       <!-- margin 边距 -->
@@ -134,14 +134,17 @@
         <template #title>{{ lang.size.margin }}</template>
         <template #subTitle>margin</template>
         <template #content>
-          <size-adjust :tokenList="compMarginArr" type="comp-margin" />
+          <size-adjust :key="refreshIdMap['comp-margin']" :tokenList="COMP_MARGIN_MAP" type="comp-margin" />
         </template>
       </common-collapse>
     </div>
   </div>
 </template>
+
 <script lang="jsx">
-import CommonCollapse from '../common/Collapse/index.vue';
+import { CommonCollapse } from '@/common/components';
+import { langMixin } from '@/common/i18n';
+
 import SizeAdjust from './components/SizeAdjust.vue';
 import SizeDisplay from './components/SizeDisplay.vue';
 
@@ -151,16 +154,12 @@ import PopupPaddingSvg from './svg/PopupPaddingSvg.vue';
 import SizeSvg from './svg/SizeSvg.vue';
 import VerticalPaddingSvg from './svg/VerticalPaddingSvg.vue';
 
-import { FONT_COLOR_MAP } from '../color-panel/utils/const';
-
-import langMixin from '../common/i18n/mixin';
-import { modifyToken } from '../common/Themes';
 import {
-  compMarginArr,
-  compPaddingLRArr,
-  compPaddingTBArr,
-  compPopupPaddingArr,
-  compSizeArr,
+  COMP_MARGIN_MAP,
+  COMP_PADDING_LR_MAP,
+  COMP_PADDING_TB_MAP,
+  COMP_POPUP_PADDING_MAP,
+  COMP_SIZE_MAP,
 } from './built-in/size-map';
 
 export default {
@@ -182,24 +181,21 @@ export default {
   mixins: [langMixin],
   data() {
     return {
-      textColorPalette: [''],
-      initTextColorPalette: [''],
-      compSizeArr,
-      compPaddingLRArr,
-      compPaddingTBArr,
-      compPopupPaddingArr,
-      compMarginArr,
+      COMP_SIZE_MAP,
+      COMP_PADDING_LR_MAP,
+      COMP_PADDING_TB_MAP,
+      COMP_POPUP_PADDING_MAP,
+      COMP_MARGIN_MAP,
+      refreshIdMap: {
+        'comp-size': 0,
+        'comp-padding-tb': 0,
+        'comp-padding-lr': 0,
+        'popup-padding': 0,
+        'comp-margin': 0,
+      },
     };
   },
-  mounted() {
-    const textColorPalette = this.getCurrentPalette();
-    this.textColorPalette = textColorPalette;
-    this.initTextColorPalette = JSON.parse(JSON.stringify(textColorPalette));
-  },
   computed: {
-    isTextPaletteChange() {
-      return JSON.stringify(this.textColorPalette) !== JSON.stringify(this.initTextColorPalette);
-    },
     contentStyle() {
       const clientHeight = window.innerHeight;
       return {
@@ -208,29 +204,18 @@ export default {
       };
     },
   },
-  methods: {
-    changeGradation(hex, idx) {
-      const tokenIdxName = this.textColorPalette[idx].name;
-
-      this.textColorPalette[idx].value = hex;
-      modifyToken(tokenIdxName, hex);
-    },
-    getCurrentPalette() {
-      let colorMap = FONT_COLOR_MAP;
-      let docStyle = getComputedStyle(document.documentElement);
-
-      let currentPalette = [...new Array(7).keys()].map((v, i) => {
-        return {
-          ...colorMap[i],
-          value: colorMap[i].value ?? docStyle.getPropertyValue(colorMap[i].from),
-        };
+  mounted() {
+    this.$root.$on('refresh-size-tokens', (type) => {
+      Object.keys(this.refreshIdMap).forEach((key) => {
+        if (key !== type) {
+          this.refreshIdMap[key]++;
+        }
       });
-
-      return currentPalette;
-    },
+    });
   },
 };
 </script>
+
 <style scoped lang="less">
 /deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;

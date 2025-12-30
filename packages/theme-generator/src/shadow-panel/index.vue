@@ -10,44 +10,19 @@
     <div class="shadow-content__content" :style="contentStyle">
       <div class="shadow-content__main">
         <p class="shadow-content__title">{{ lang.shadow.title }}</p>
-        <!-- 顶部调整 -->
-        <div :style="{ display: 'flex' }">
-          <div class="shadow-panel__round">
-            <div class="shadow-panel__round-tag">
-              <div class="shadow-panel__round-box" :style="{ 'box-shadow': leftShadow }"></div>
-            </div>
-            <div class="shadow-panel__round-slider">
-              <div
-                class="slider-split"
-                :key="i"
-                :style="{
-                  opacity: i == 0 || i === selectOptions.length - 1 ? 0 : 1,
-                }"
-                v-for="(v, i) in selectOptions.slice(0, selectOptions.length - 1)"
-              ></div>
-
-              <t-slider
-                :min="0"
-                :max="selectOptions.length - 2"
-                :value="step"
-                @change="handleSliderChange"
-                :label="renderLabel"
-                :disabled="forbidden"
-              ></t-slider>
-            </div>
-            <div class="shadow-panel__round-tag">
-              <div class="shadow-panel__round-box" :style="{ 'box-shadow': rightShadow }"></div>
-            </div>
-          </div>
-          <t-select
-            class="shadow-panel__select"
-            :options="selectOptions"
-            v-model="step"
-            :keys="isEn ? { label: 'enLabel' } : null"
-            :popup-props="{ attach: handleAttach }"
-            style="width: 82px"
-          ></t-select>
-        </div>
+        <SegmentSelection
+          v-model="step"
+          :selectOptions="selectOptions"
+          :suspendedLabels="suspendedLabels"
+          :disabled="forbidden"
+        >
+          <template #left>
+            <div class="shadow-panel__round-box" :style="{ 'box-shadow': leftShadow }"></div>
+          </template>
+          <template #right>
+            <div class="shadow-panel__round-box" :style="{ 'box-shadow': rightShadow }"></div>
+          </template>
+        </SegmentSelection>
         <shadow-card
           v-for="(shadow, i) in shadowPalette"
           :key="i"
@@ -60,22 +35,29 @@
     </div>
   </div>
 </template>
-<script lang="jsx">
-import { Select as TSelect, Slider as TSlider } from 'tdesign-vue';
-import ShadowCard from './components/ShadowCard.vue';
 
-import langMixin from '../common/i18n/mixin';
-import { getOptionFromLocal, modifyToken, updateLocalOption } from '../common/Themes';
-import { handleAttach } from '../common/utils';
-import { ShadowSelect, ShadowSelectDetail, ShadowSelectType, ShadowTypeDetail, ShadowTypeMap } from './const';
+<script lang="jsx">
+import { SegmentSelection } from '@/common/components';
+import { langMixin } from '@/common/i18n';
+import { getOptionFromLocal, modifyToken, updateLocalOption } from '@/common/themes';
+import { getTokenValue } from '@/common/utils';
+
+import {
+  ShadowSelect,
+  ShadowSelectDetail,
+  ShadowSelectType,
+  ShadowTypeDetail,
+  ShadowTypeMap,
+} from './built-in/shadow-map';
+import ShadowCard from './components/ShadowCard';
+
 export default {
   name: 'ShadowPanel',
   props: {
     top: Number,
   },
   components: {
-    TSlider,
-    TSelect,
+    SegmentSelection,
     ShadowCard,
   },
   mixins: [langMixin],
@@ -84,11 +66,16 @@ export default {
       shadowPalette: [],
       selectOptions: ShadowSelect,
       selfDefined: ShadowSelectType,
-      step: ShadowSelectType.Default,
+      step: getOptionFromLocal('shadow') || ShadowSelectType.Default,
+      suspendedLabels: {},
     };
   },
   created() {
     this.shadowTypeDetail = ShadowTypeDetail;
+    this.suspendedLabels = this.selectOptions.reduce((acc, option) => {
+      acc[option.value] = this.isEn ? option.enLabel : option.label;
+      return acc;
+    }, {});
   },
   computed: {
     contentStyle() {
@@ -118,7 +105,7 @@ export default {
   watch: {
     step: {
       handler(nVal) {
-        updateLocalOption('shadow', nVal, nVal !== ShadowSelectType.Default);
+        updateLocalOption('shadow', nVal !== ShadowSelectType.Default ? nVal : null);
         // 自定义时去当前系统值
         if (nVal === ShadowSelectType.Self_Defined) {
           // this.shadowPalette = this.getCurrentPalette();
@@ -140,27 +127,11 @@ export default {
         const { name } = ShadowTypeMap[index];
 
         const isCustom = this.step === ShadowSelectType.Self_Defined;
-        modifyToken(name, newShadow, isCustom);
+        modifyToken(name, isCustom ? newShadow : null);
       }
     },
   },
   methods: {
-    handleAttach,
-    initStep() {
-      const shadowStep = getOptionFromLocal('shadow');
-      /*  超轻的 step 对应 0，直接写 if(shadowStep)
-          会被判为 if(0) -> false，导致进不去这个条件 */
-      if (shadowStep >= 0) {
-        this.step = shadowStep;
-      }
-    },
-    handleSliderChange(v) {
-      if (this.forbidden) return;
-      this.step = v;
-    },
-    renderLabel() {
-      return this.selectOptions[this.step].label;
-    },
     // 拆分 box-shadow 的值 0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%)
     splitShadowValue(data) {
       const tempData = `${data},`;
@@ -173,11 +144,10 @@ export default {
         });
     },
     getCurrentPalette() {
-      const docStyle = getComputedStyle(document.documentElement);
-      const currentPalette = [...new Array(ShadowTypeMap.length).keys()].map((v, i) => {
+      const currentPalette = [...new Array(ShadowTypeMap.length).keys()].map((_, i) => {
         const { value, from } = ShadowTypeMap[i];
         if (value) return value;
-        const data = docStyle.getPropertyValue(from);
+        const data = getTokenValue(from);
         return this.splitShadowValue(data);
       });
       return currentPalette;
@@ -195,12 +165,12 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.initStep();
       this.setCurrentPalette();
     });
   },
 };
 </script>
+
 <style scoped lang="less">
 /deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;
@@ -247,93 +217,11 @@ export default {
   }
 }
 .shadow-panel {
-  &__round {
-    display: flex;
-    height: 32px;
-    > div {
-      display: flex;
-      background-color: var(--bg-color-theme-secondary);
-      margin-right: 2px;
-      align-items: center;
-      justify-content: center;
-    }
-    &-tag {
-      height: 100%;
-      width: 32px;
-      color: var(--text-primary);
-      &:first-child {
-        border-radius: 9px 0px 0px 9px;
-      }
-      &:last-child {
-        border-radius: 0px 9px 9px 0px;
-        margin-right: 0;
-      }
-    }
-    &-box {
-      width: 20px;
-      height: 20px;
-      background: var(--bg-color-theme-surface);
-      border-radius: 3px;
-    }
-    &-slider {
-      width: 76px;
-      padding: 6px;
-      position: relative;
-      display: flex;
-      justify-content: space-between !important;
-      .slider-split {
-        background-color: var(--bg-color-theme-secondary);
-        width: 2px;
-        height: 8px;
-        z-index: 2;
-      }
-      /deep/ .t-slider__container {
-        position: absolute;
-        top: 6px;
-        width: 60px;
-        left: 8px;
-      }
-      /deep/ .t-slider {
-        padding: 6px 0;
-      }
-      /deep/ .t-slider__rail {
-        height: 8px;
-        background-color: var(--bg-color-theme-tertiary);
-      }
-      /deep/ .t-slider__track {
-        height: 8px;
-      }
-      /deep/ .t-slider__button {
-        box-shadow: var(--shadow-1);
-        border-color: var(--bg-color-tag);
-      }
-    }
-  }
-  &__select {
-    text-align: center;
-    padding: 0;
-    margin-left: 8px;
-    /deep/ .t-input {
-      background: var(--bg-color-theme-secondary);
-      border: 1px solid transparent;
-      height: 32px;
-      border-radius: 9px;
-      padding: 0 8px;
-      transition: border-color 0.2s;
-    }
-    /deep/ .t-select:hover {
-      border-color: var(--component-border);
-    }
-    /deep/ .t-is-active {
-      border-color: var(--brand-main) !important;
-    }
-    /deep/ .t-select__right-icon {
-      color: var(--text-placeholder) !important;
-    }
-
-    /deep/ .t-select__single {
-      margin-left: 0;
-    }
+  &__round-box {
+    width: 20px;
+    height: 20px;
+    background: var(--bg-color-theme-surface);
+    border-radius: 3px;
   }
 }
 </style>

@@ -10,9 +10,9 @@
     <div class="font-content__content" :style="contentStyle">
       <div class="font-content__main">
         <p class="font-content__title">{{ lang.font.fontSize }}</p>
-        <size-adjust />
+        <font-size-adjust />
       </div>
-      <common-collapse v-if="!isMobile(device)">
+      <common-collapse v-if="!isMobile($device)">
         <template #round>
           <div
             class="block"
@@ -64,33 +64,34 @@
     </div>
   </div>
 </template>
+
 <script lang="jsx">
-import CommonCollapse from '../common/Collapse/index.vue';
+import { CommonCollapse } from '@/common/components';
+import { langMixin } from '@/common/i18n';
+import { isMobile, modifyToken, themeStore } from '@/common/themes';
+import { getTokenValue } from '@/common/utils';
+
+import { FONT_COLOR_TOKEN_MAP } from './built-in/font-map';
+
 import FontColorAdjust from './components/FontColorAdjust.vue';
 import FontColorSvg from './components/FontColorSvg.vue';
+import FontSizeAdjust from './components/FontSizeAdjust.vue';
 import LineHeightAdjust from './components/LineHeightAdjust.vue';
 import LineHeightSvg from './components/LineHeightSvg.vue';
-import SizeAdjust from './components/SizeAdjust.vue';
-
-import { FONT_COLOR_MAP } from '../color-panel/utils/const';
-import langMixin from '../common/i18n/mixin';
-import { isMobile, modifyToken } from '../common/Themes';
 
 export default {
   name: 'FontPanel',
   props: {
     top: Number,
-    isRefresh: Boolean,
   },
   components: {
     CommonCollapse,
-    SizeAdjust,
-    LineHeightAdjust,
     FontColorAdjust,
-    LineHeightSvg,
+    FontSizeAdjust,
     FontColorSvg,
+    LineHeightAdjust,
+    LineHeightSvg,
   },
-  inject: ['device'],
   mixins: [langMixin],
   data() {
     return {
@@ -99,6 +100,9 @@ export default {
     };
   },
   computed: {
+    $device() {
+      return themeStore.device;
+    },
     isTextPaletteChange() {
       return JSON.stringify(this.textColorPalette) !== JSON.stringify(this.initTextColorPalette);
     },
@@ -118,13 +122,12 @@ export default {
       modifyToken(tokenIdxName, hex);
     },
     getCurrentPalette() {
-      let colorMap = FONT_COLOR_MAP;
-      let docStyle = getComputedStyle(document.documentElement);
+      let colorMap = FONT_COLOR_TOKEN_MAP;
 
       let currentPalette = [...new Array(7).keys()].map((v, i) => {
         return {
           ...colorMap[i],
-          value: colorMap[i].value ?? docStyle.getPropertyValue(colorMap[i].from),
+          value: colorMap[i].value ?? getTokenValue(colorMap[i].from),
         };
       });
 
@@ -141,9 +144,13 @@ export default {
     this.$nextTick(() => {
       this.setFontPalette();
     });
+    this.$root.$on('refresh-color-tokens', () => {
+      this.setFontPalette();
+    });
   },
 };
 </script>
+
 <style scoped lang="less">
 /deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;

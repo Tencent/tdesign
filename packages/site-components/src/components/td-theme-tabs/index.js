@@ -56,14 +56,12 @@ export default define({
     },
     connect: (host, key, invalidate) => {
       const lastTheme = localStorage.getItem('--tdesign-theme');
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const themeToApply = lastTheme || systemTheme;
 
-      if (lastTheme) {
-        document.documentElement.removeAttribute('theme-mode');
-
-        Object.assign(host, { [key]: lastTheme });
-        document.documentElement.setAttribute('theme-mode', lastTheme);
-        invalidate();
-      }
+      document.documentElement.setAttribute('theme-mode', themeToApply);
+      Object.assign(host, { [key]: themeToApply });
+      invalidate();
 
       const observer = watchHtmlMode((themeMode) => Object.assign(host, { [key]: themeMode }));
 

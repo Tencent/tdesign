@@ -3,9 +3,7 @@ import style from './style.less?inline';
 import searchIcon from '@images/search.svg?raw';
 import './docsearch.min.js';
 import docsearchStyle from './docsearch.less?inline';
-import { getLang } from '@utils';
-
-const isEn = getLang() === 'en';
+import { isEn } from '@utils';
 
 function initDocSearch(docsearchInfo) {
   if (!docsearchInfo.indexName) return;
@@ -35,7 +33,7 @@ export default define({
         <style>${docsearchStyle}</style>
         <div class="TDesign-doc-search">
           <input id="TDSearch" class="TDesign-doc-search__inner" placeholder="${
-            isEn ? 'Search' : '搜索'
+            isEn() ? 'Search' : '搜索'
           }" type="text" />
           <span class="TDesign-doc-search__icon">${searchIcon}</span>
         </div>

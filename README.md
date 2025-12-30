@@ -18,9 +18,9 @@ The following are the repositories for TDesign：
 
 | Repository                                                      | Description                           | Status        |
 | --------------------------------------------------------------- | ------------------------------------- | ------------- |
-| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue.js UI components lib for TDesign  | `1.0 LTS`     |
-| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue3.x UI components lib for TDesign  | `1.0 LTS`     |
+| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue UI components lib for TDesign  | `1.0 LTS`     |
 | [tdesign-react](https://github.com/Tencent/tdesign-react)       | React UI components lib for TDesign   | `1.0 LTS`     |
+| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue2.x UI components lib for TDesign  | `1.0 LTS`     |
 
 ### Repositories for Mobile Components
 
