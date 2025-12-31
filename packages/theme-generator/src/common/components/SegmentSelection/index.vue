@@ -17,7 +17,7 @@
         <t-slider
           :min="1"
           :disabled="disabled"
-          :max="selectOptions.length - 1"
+          :max="maxSliderValue"
           :value="sliderValue"
           @change="handleSliderChange"
           :label="renderLabel"
@@ -77,10 +77,14 @@ export default {
     };
   },
   computed: {
+    // 获取倒数第二个选项的 value 作为 Slider 的最大值（忽略自定义）
+    maxSliderValue() {
+      if (this.selectOptions.length < 2) return 1;
+      return this.selectOptions[this.selectOptions.length - 2].value;
+    },
     sliderValue() {
-      const maxValue = this.selectOptions.length - 1;
       // 如果 step 超过 max（自定义选项），依旧显示 max 值
-      return this.step > maxValue ? maxValue : this.step;
+      return this.step > this.maxSliderValue ? this.maxSliderValue : this.step;
     },
   },
   watch: {

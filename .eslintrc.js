@@ -9,5 +9,6 @@ module.exports = {
   plugins: ['html', 'prettier'],
   rules: {
     'prettier/prettier': ['error', {}, { usePrettierrc: true }],
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
   },
 };

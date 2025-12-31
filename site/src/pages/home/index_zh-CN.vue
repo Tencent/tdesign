@@ -539,7 +539,8 @@
           </h3>
           <p class="module-sub-title">不同行业产品已使用</p>
           <p class="module-description">
-            从消费产品到金融服务，从B端到C端产品，从大品牌到个人开发者，TDesign都能充分满足低成本，高效有品质感的前端设计和开发工作，助力提升产品体验，有效提升设计研发效能
+            从消费产品到金融服务，从 B 端到 C 端产品，从大品牌到个人开发者，TDesign
+            都能充分满足低成本，高效有品质感的前端设计和开发工作，助力提升产品体验，有效提升设计研发效能
           </p>
           <div class="module-brand-wall">
             <div class="mask left" />
@@ -565,9 +566,10 @@
     <div class="module-setup">
       <img class="__light__ tdesign-flow" src="./assets/tdesign-flow-light.gif" alt="logo" />
       <img class="__dark__ tdesign-flow" src="./assets/tdesign-flow-dark.gif" alt="logo" />
-      <p class="module-title">与TDesign, 共生长</p>
+      <p class="module-title">与 TDesign，共生长</p>
       <p class="module-description">
-        不止腾讯生态，更有质感，更稳定，更持续的TDesign助力更多行业和开发者，提升产品体验，提高设计研发效能，用TDesign，更低成本，探索更多可能
+        不止腾讯生态，更有质感，更稳定，更持续的 TDesign 助力更多行业和开发者，提升产品体验，提高设计研发效能，用
+        TDesign，更低成本，探索更多可能
       </p>
       <t-button href="https://github.com/Tencent/tdesign">开始使用</t-button>
     </div>

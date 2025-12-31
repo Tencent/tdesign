@@ -107,6 +107,7 @@ export default {
 
 /deep/ .t-drawer__content-wrapper {
   box-shadow: var(--shadow-2);
+  border-radius: 12px 0 0 0;
   position: fixed;
   .t-drawer__body {
     padding: 0;
