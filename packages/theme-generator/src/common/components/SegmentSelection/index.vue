@@ -108,7 +108,6 @@ export default {
     handleVisibleChange(val) {
       if (val && this.disabled) {
         this.innerSelectOptions = this.selectOptions;
-        console.log(this.selectOptions);
         return;
       }
     },
