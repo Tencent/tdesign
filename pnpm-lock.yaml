@@ -56,7 +56,7 @@ importers:
         version: 34.0.0(stylelint@15.11.0(typescript@4.9.5))
       stylelint-config-standard-less:
         specifier: ^2.0.0
-        version: 2.0.0(postcss@8.4.47)(stylelint@15.11.0(typescript@4.9.5))
+        version: 2.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@4.9.5))
 
   packages/auto-release-collection:
     dependencies:
@@ -187,8 +187,8 @@ importers:
   site:
     dependencies:
       '@tdesign/site-components':
-        specifier: ^0.17.4
-        version: 0.17.4
+        specifier: ^0.17.5
+        version: 0.17.5
       canvas-3d:
         specifier: ^1.0.14
         version: 1.0.14
@@ -1583,8 +1583,8 @@ packages:
   '@soda/get-current-script@1.0.2':
     resolution: {integrity: sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==}
 
-  '@tdesign/site-components@0.17.4':
-    resolution: {integrity: sha512-zHuv3QlFc0WxZPc0p6WgdATeiHt5kC1M4pc//SOpmYWvnlaHL4oq9BAOZ+r8w87QV1pXlrviMr4NEMvJlHZWEA==}
+  '@tdesign/site-components@0.17.5':
+    resolution: {integrity: sha512-WIqqQHVEuoM6bW4vhwrxn8ZGxLiLTFiSDJ3kTwqr4L5zXeXOUZO03GZg4PyFYwVQI7i48OzgSCURtwjrk0vpdA==}
 
   '@tootallnate/once@1.1.2':
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
@@ -9339,7 +9339,7 @@ snapshots:
 
   '@soda/get-current-script@1.0.2': {}
 
-  '@tdesign/site-components@0.17.4':
+  '@tdesign/site-components@0.17.5':
     dependencies:
       '@popperjs/core': 2.11.8
       hybrids: 8.2.2
@@ -14613,9 +14613,9 @@ snapshots:
     dependencies:
       postcss: 8.4.47
 
-  postcss-less@6.0.0(postcss@8.4.47):
+  postcss-less@6.0.0(postcss@8.5.6):
     dependencies:
-      postcss: 8.4.47
+      postcss: 8.5.6
 
   postcss-loader@6.2.1(postcss@8.4.47)(webpack@5.94.0):
     dependencies:
@@ -15643,35 +15643,35 @@ snapshots:
       postcss: 8.4.47
       postcss-selector-parser: 6.1.2
 
-  stylelint-config-recommended-less@2.0.0(postcss@8.4.47)(stylelint@15.11.0(typescript@4.9.5)):
+  stylelint-config-recommended-less@2.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
-      postcss-less: 6.0.0(postcss@8.4.47)
+      postcss-less: 6.0.0(postcss@8.5.6)
       stylelint: 15.11.0(typescript@4.9.5)
       stylelint-config-recommended: 13.0.0(stylelint@15.11.0(typescript@4.9.5))
-      stylelint-less: 2.0.0(postcss@8.4.47)(stylelint@15.11.0(typescript@4.9.5))
+      stylelint-less: 2.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@4.9.5))
     optionalDependencies:
-      postcss: 8.4.47
+      postcss: 8.5.6
 
   stylelint-config-recommended@13.0.0(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
       stylelint: 15.11.0(typescript@4.9.5)
 
-  stylelint-config-standard-less@2.0.0(postcss@8.4.47)(stylelint@15.11.0(typescript@4.9.5)):
+  stylelint-config-standard-less@2.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
       stylelint: 15.11.0(typescript@4.9.5)
-      stylelint-config-recommended-less: 2.0.0(postcss@8.4.47)(stylelint@15.11.0(typescript@4.9.5))
+      stylelint-config-recommended-less: 2.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@4.9.5))
       stylelint-config-standard: 34.0.0(stylelint@15.11.0(typescript@4.9.5))
     optionalDependencies:
-      postcss: 8.4.47
+      postcss: 8.5.6
 
   stylelint-config-standard@34.0.0(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
       stylelint: 15.11.0(typescript@4.9.5)
       stylelint-config-recommended: 13.0.0(stylelint@15.11.0(typescript@4.9.5))
 
-  stylelint-less@2.0.0(postcss@8.4.47)(stylelint@15.11.0(typescript@4.9.5)):
+  stylelint-less@2.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
-      postcss: 8.4.47
+      postcss: 8.5.6
       postcss-resolve-nested-selector: 0.1.6
       postcss-value-parser: 4.2.0
       stylelint: 15.11.0(typescript@4.9.5)

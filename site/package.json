@@ -10,7 +10,7 @@
     "lint:fix": "eslint --ext .vue,.js,.ts,.tsx ./src --fix"
   },
   "dependencies": {
-    "@tdesign/site-components": "^0.17.4",
+    "@tdesign/site-components": "^0.17.5",
     "canvas-3d": "^1.0.14",
     "lottie-web": "^5.7.0",
     "markdown-it": "^12.3.2",
