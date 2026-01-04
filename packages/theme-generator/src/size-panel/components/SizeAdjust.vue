@@ -37,7 +37,10 @@
                   v-else-if="type === 'comp-padding-tb'"
                   :size="parseSize(getTokenValue(`--td-${token.from}`))"
                 />
-                <margin-adjust-svg v-else-if="type === 'comp-margin'" :size="parseSize(getTokenValue(token.from))" />
+                <margin-adjust-svg
+                  v-else-if="type === 'comp-margin'"
+                  :size="parseSize(getTokenValue(`--td-${token.from}`))"
+                />
                 <popup-padding-adjust-svg
                   v-else-if="type === 'popup-padding'"
                   :size="parseSize(getTokenValue(`--td-${token.from}`))"

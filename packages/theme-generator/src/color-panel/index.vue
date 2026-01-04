@@ -394,7 +394,7 @@ export default {
       errorMainColor: getOptionFromLocal('error') || getTokenValue('--td-error-color'),
       warningMainColor: getOptionFromLocal('warning') || getTokenValue('--td-warning-color'),
       generationMode: getOptionFromLocal('recommend') === 'true' ? 'recommend' : 'remain', // remain: 保留输入, recommend: 智能推荐
-      isGrayRelatedToTheme: getOptionFromLocal('neutral') == 'true',
+      isGrayRelatedToTheme: getOptionFromLocal('neutral') === 'true',
       isMoreVisible: false,
     };
   },
