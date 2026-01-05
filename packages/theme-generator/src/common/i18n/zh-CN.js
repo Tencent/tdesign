@@ -11,7 +11,7 @@ export default {
     themeColor: '主题色',
     aiRecommendation: '智能推荐',
     aiTip: '选中的颜色若无法做主题色，会做调整',
-    customizeTitle: '自定义主题颜色',
+    customizeTitle: '自定义颜色',
     officialRecommendation: '官方推荐',
     remainText: '保留输入',
     remainTip: '保留选中的主题色，不做改动',
@@ -20,6 +20,7 @@ export default {
     errorColor: '错误色',
     neutralColor: '中性色',
     fromThemeColor: '关联主题色',
+    gradientTip: '色阶断开，点击恢复上次结果',
   },
   font: {
     title: '字体',

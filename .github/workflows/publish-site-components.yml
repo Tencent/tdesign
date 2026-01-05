@@ -15,7 +15,7 @@ on:
 
 jobs:
   publish-site-components:
-    if: github.repository == 'Tencent/tdesign'
+    if: github.event_name == 'workflow_dispatch' || (github.repository == 'Tencent/tdesign' && startsWith(github.head_ref, 'release/'))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,7 +33,7 @@ jobs:
       - run: npm i -g npm@latest
 
       - name: Publish Package
-        run: pnpm -F @tdesign/site-components publish
+        run: pnpm -F @tdesign/site-components publish --no-git-checks
 
   auto-upgrade-tdesign-site-components:
     needs: publish-site-components

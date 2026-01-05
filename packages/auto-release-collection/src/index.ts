@@ -20,20 +20,20 @@ const fetchPromises = submodulesKeys.map(async (project) => {
     const dateMatch = versionLine.match(/\d{4}-\d{2}-\d{2}/);
     if (dateMatch) {
       const versionContent = getVersionContent(versionLine, changelogContent);
-      const tag = versionLine.match(/\d+\.\d+\.\d+/);
-      if (!tag) {
-        throw new Error('tag is null');
+      const version = versionLine.match(/\d+\.\d+\.\d+/);
+      if (!version) {
+        throw new Error('version is null');
+      }
+      let tag = `${submodules[project].tagPrefix}${version[0]}`;
+      // 特殊处理 2026-01-01 后可以移除
+      if (project === 'tdesign-react' && version[0] === '1.16.1') {
+        tag = version[0];
       }
 
       const date = new Date(dateMatch[0]);
       // 检查日期是否在指定范围内,[2024-06-01, 2024-06-07] 闭区间
       if (date >= new Date(START_DATE) && date <= new Date(END_DATE)) {
-        const desc = getProjectDesc(
-          submodules[project].repo,
-          `${submodules[project].tagPrefix}${tag[0]}`,
-          submodules[project]['title'],
-          '详情见：',
-        );
+        const desc = getProjectDesc(submodules[project].repo, tag, submodules[project]['title'], '详情见：');
         projectOutput.push(`${desc[0]}\n${versionContent}\n${desc[1]}\n`);
       }
     }

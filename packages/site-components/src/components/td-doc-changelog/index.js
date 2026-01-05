@@ -1,10 +1,10 @@
 import { define, html } from 'hybrids';
 import { getLocale } from '@config/locale.js';
 import closeIcon from '@images/close.svg?raw';
-import { convert2PascalCase, isComponentPage, isGlobalConfigPage } from '@utils';
+import { convert2PascalCase, isComponentPage, isEn, isGlobalConfigPage, parseBoolean } from '@utils';
 import style from './style.less?inline';
 
-let changelogCache = null;
+const changelogCache = new Map();
 
 const classPrefix = 'TDesign-doc-changelog';
 const logsPrefix = `${classPrefix}__logs`;
@@ -12,48 +12,76 @@ const logsPrefix = `${classPrefix}__logs`;
 const locale = getLocale();
 
 const OFFICIAL_DOMAINS = ['tencent.com', 'woa.com'];
+// 静态资源统一的地址，支持tencent.com 和 woa.com的跨域请求
+const OFFICIAL_STATIC_DOMAINS = 'https://static.tdesign.tencent.com';
 
 const SPECIAL_NAME_MAP = {
   qrcode: 'QRCode',
 };
 
+function parseUrl() {
+  const { pathname, hostname, origin } = window.location;
+
+  const segments = pathname.split('/').filter(Boolean);
+  const framework = segments[0];
+  const isOfficial = OFFICIAL_DOMAINS.some((domain) => hostname.includes(domain));
+
+  return {
+    origin,
+    segments,
+    framework,
+    isOfficial,
+  };
+}
+
 function getLogUrlPrefix() {
-  const currentUrl = window.location.href;
-  const framework = currentUrl.split('/')[3];
-  const isOfficial = OFFICIAL_DOMAINS.some((domain) => location.hostname.includes(domain));
-  return `${location.origin}${isOfficial ? `/${framework}` : ''}`;
+  const { isOfficial, framework, origin } = parseUrl();
+  if (isOfficial) {
+    return `${OFFICIAL_STATIC_DOMAINS}/${framework}`;
+  }
+  return origin;
 }
 
 function getCompName() {
+  const { segments } = parseUrl();
+
   if (isComponentPage()) {
-    const pathSegments = window.location.pathname.split('/');
-
-    let rawName = pathSegments[3] || '';
-    if (rawName.endsWith('-en')) rawName = rawName.slice(0, -3);
-
+    let rawName = segments[2] || '';
+    if (rawName.endsWith('-en')) {
+      rawName = rawName.slice(0, -3);
+    }
     return SPECIAL_NAME_MAP[rawName] || convert2PascalCase(rawName);
-  } else if (isGlobalConfigPage()) {
+  }
+
+  if (isGlobalConfigPage()) {
     return 'ConfigProvider';
   }
 }
 
 async function fetchChangelog(host) {
   const compName = getCompName();
+  const jsonName = isEn() && host.changelogEn ? 'changelog.en-US.json' : 'changelog.json';
+  const url = `${getLogUrlPrefix()}/${jsonName}`;
 
   try {
-    if (!changelogCache) {
-      const response = await fetch(`${getLogUrlPrefix()}/changelog.json`);
-      changelogCache = await response.json();
+    if (!changelogCache.has(jsonName)) {
+      const response = await fetch(url);
+      const json = await response.json();
+      changelogCache.set(jsonName, json);
     }
 
-    const loading = host.shadowRoot?.querySelector(`.${logsPrefix}__loading`);
-    loading?.remove();
+    const data = changelogCache.get(jsonName);
 
+    // 移除 loading
+    host.shadowRoot?.querySelector(`.${logsPrefix}__loading`)?.remove();
+
+    // 滚动重置
     const drawerBody = host.shadowRoot?.querySelector(`.${classPrefix}__drawer-body`);
     if (drawerBody) drawerBody.scrollTop = 0;
 
-    const compChangelog = changelogCache[compName];
+    const compChangelog = data?.[compName];
     const logsContainer = host.shadowRoot?.querySelector(`.${logsPrefix}`);
+
     if (logsContainer) {
       logsContainer.innerHTML = renderLog(compChangelog);
     }
@@ -135,7 +163,10 @@ function replaceSpecialTags(html) {
 
 export default define({
   tag: 'td-doc-changelog',
-
+  changelogEn: {
+    get: (_host, lastValue) => parseBoolean(lastValue, false),
+    set: (_host, value) => value,
+  },
   visible: {
     value: false,
     observe: (host, value) => {
@@ -163,7 +194,6 @@ export default define({
               <svg
                 class="${logsPrefix}__loading-icon"
                 viewBox="0 0 12 12"
-                version="1.1"
                 width="1em"
                 height="1em"
                 xmlns="http://www.w3.org/2000/svg"
