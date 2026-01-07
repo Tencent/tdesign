@@ -239,11 +239,9 @@
 </template>
 
 <script setup>
-import { ref, getCurrentInstance, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
+import { MessagePlugin } from 'tdesign-vue-next';
 import { genAnchor } from './utils';
-
-// Get global properties access
-const instance = getCurrentInstance();
 
 const articleRef = ref(null);
 
@@ -819,7 +817,7 @@ const listGuideUi = [
 const copyColor = (color) => {
   if ('clipboard' in navigator) {
     navigator.clipboard.writeText(color);
-    instance.proxy.$message.success('复制成功');
+    MessagePlugin.success('复制成功');
     return;
   }
 
@@ -839,7 +837,7 @@ const copyColor = (color) => {
   selection.removeAllRanges();
   document.body.removeChild(textarea);
 
-  instance.proxy.$message.success('复制成功');
+  MessagePlugin.success('复制成功');
 };
 
 onMounted(() => {

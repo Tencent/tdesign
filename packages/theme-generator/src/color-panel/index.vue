@@ -315,7 +315,7 @@
 </template>
 
 <script lang="jsx">
-import { Edit1Icon, FileCopyIcon, HelpCircleIcon } from 'tdesign-icons-vue';
+import { Edit1Icon, FileCopyIcon, HelpCircleIcon } from 'tdesign-icons-vue-next';
 import {
   Col as TCol,
   Divider as TDivider,

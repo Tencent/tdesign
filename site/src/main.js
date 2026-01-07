@@ -1,13 +1,14 @@
 /* eslint-disable */
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import TDesign from 'tdesign-vue';
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import TDesign from 'tdesign-vue-next';
+import { MessagePlugin } from 'tdesign-vue-next';
 import routes from './routes';
 import App from './App.vue';
 import '@/style/index.less';
 
 // import tdesign style;
-import 'tdesign-vue/es/style/index.css';
+import 'tdesign-vue-next/es/style/index.css';
 
 // import site webcomponents
 import '@tdesign/site-components';
@@ -19,13 +20,8 @@ import { registerLocaleChange } from '@tdesign/site-components';
 
 registerLocaleChange();
 
-Vue.use(TDesign);
-Vue.use(VueRouter);
-
-Vue.config.ignoredElements = [/^td-/];
-
-const router = new VueRouter({
-  mode: 'history',
+const router = createRouter({
+  history: createWebHistory(),
   routes,
 });
 
@@ -41,8 +37,9 @@ router.afterEach(() => {
   document.querySelector('td-stats')?.track?.();
 });
 
-new Vue({
-  el: '#app',
-  render: (h) => h(App),
-  router,
-});
+const app = createApp(App);
+app.use(TDesign);
+app.use(MessagePlugin);
+app.use(router);
+app.config.compilerOptions.isCustomElement = (tag) => /^td-/.test(tag);
+app.mount('#app');

@@ -93,7 +93,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, getCurrentInstance } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import figmaIcon from './assets/source/figma-logo.svg';
 import sketchIcon from './assets/source/sketch-logo.svg';
 import xdIcon from './assets/source/xd-logo.svg';
@@ -113,9 +114,8 @@ import {
 } from '@/consts';
 import { webDesignContributor, mobileDesignContributor, webChartDesignContributor } from '@/contributor';
 
-const { proxy } = getCurrentInstance();
-const route = computed(() => proxy.$route);
-const router = proxy.$router;
+const route = useRoute();
+const router = useRouter();
 
 // Template refs
 const tabsRef = ref();

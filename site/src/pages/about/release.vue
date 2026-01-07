@@ -27,12 +27,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, getCurrentInstance } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import MarkdownIt from 'markdown-it';
 import mila from 'markdown-it-link-attributes';
 
-const { proxy } = getCurrentInstance();
-const route = computed(() => proxy.$route);
+const route = useRoute();
 
 // Template refs
 const tdDocHeaderRef = ref(null);

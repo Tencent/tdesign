@@ -77,7 +77,7 @@
   </div>
 </template>
 <script>
-import { Edit1Icon, FileCopyIcon } from 'tdesign-icons-vue';
+import { Edit1Icon, FileCopyIcon } from 'tdesign-icons-vue-next';
 import { Popup as TPopup } from 'tdesign-vue';
 import ArrowIcon from 'tdesign-vue/es/common-components/fake-arrow';
 

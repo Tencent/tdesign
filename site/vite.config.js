@@ -1,6 +1,7 @@
 import path from 'path';
 import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue2';
+import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
 import tdocPlugin from './plugin-tdoc/index.js';
 
 const publicPathMap = {
@@ -43,6 +44,7 @@ export default ({ mode }) => {
       vue({
         include: /(\.md|\.vue)$/,
       }),
+      vueJsx(),
       tdocPlugin(),
     ],
   });

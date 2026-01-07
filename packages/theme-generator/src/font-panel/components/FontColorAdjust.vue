@@ -69,7 +69,7 @@
 
 <script>
 import flatten from 'lodash/flatten';
-import { Edit1Icon } from 'tdesign-icons-vue';
+import { Edit1Icon } from 'tdesign-icons-vue-next';
 import { Popup as TPopup, RadioButton as TRadioButton, RadioGroup as TRadioGroup } from 'tdesign-vue';
 
 import { ColorPicker } from '@/common/components';

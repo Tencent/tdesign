@@ -1,5 +1,5 @@
 <template>
-  <t-dialog :visible.sync="visibleSync" class="dialog-download">
+  <t-dialog v-model="visibleSync" class="dialog-download">
     <div class="dialog-content" slot="body">
       <img src="../pages/design/assets/source/emoji-light.png" width="160" />
 
@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref, computed, defineProps, defineEmits } from 'vue';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
   visible: Boolean,

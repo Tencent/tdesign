@@ -168,7 +168,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, getCurrentInstance } from 'vue';
+import { ref, onMounted } from 'vue';
+import { MessagePlugin } from 'tdesign-vue-next';
 import { genAnchor } from './utils';
 
 // Template refs
@@ -222,10 +223,7 @@ const fontColorListRight = ref([
 const copyColor = (color) => {
   if ('clipboard' in navigator) {
     navigator.clipboard.writeText(color);
-    const message = getCurrentInstance()?.appContext?.config?.globalProperties?.$message;
-    if (message) {
-      message.success('复制成功');
-    }
+    MessagePlugin.success('复制成功');
     return;
   }
 
@@ -245,10 +243,7 @@ const copyColor = (color) => {
   selection.removeAllRanges();
   document.body.removeChild(textarea);
 
-  const message = getCurrentInstance()?.appContext?.config?.globalProperties?.$message;
-  if (message) {
-    message.success('复制成功');
-  }
+  MessagePlugin.success('复制成功');
 };
 
 // Lifecycle

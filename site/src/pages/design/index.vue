@@ -11,12 +11,12 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import siteEnConfig from '../../site-en.config';
 
-const { proxy } = getCurrentInstance();
-const route = computed(() => proxy.$route);
-const router = proxy.$router;
+const route = useRoute();
+const router = useRouter();
 
 // Template refs
 const tdDocAsideRef = ref(null);

@@ -273,7 +273,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { Link1Icon } from 'tdesign-icons-vue';
+import { Link1Icon } from 'tdesign-icons-vue-next';
 import { genAnchor } from './utils';
 
 // Template refs

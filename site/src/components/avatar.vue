@@ -5,7 +5,7 @@
   </span>
 </template>
 <script setup>
-import { ref, computed, defineProps } from 'vue';
+import { ref, computed } from 'vue';
 
 function getSrc(username, src) {
   if (username) {

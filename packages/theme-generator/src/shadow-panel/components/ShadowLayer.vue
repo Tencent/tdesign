@@ -17,10 +17,10 @@
   </div>
 </template>
 <script lang="jsx">
-import { AddIcon } from "tdesign-icons-vue";
-import ShadowEditor from "./ShadowEditor.vue";
+import { AddIcon } from 'tdesign-icons-vue-next';
+import ShadowEditor from './ShadowEditor.vue';
 export default {
-  name: "ShadowLayer",
+  name: 'ShadowLayer',
   props: {
     shadow: Array,
     detail: Object,
@@ -33,17 +33,17 @@ export default {
     change(value, index) {
       const val = [...this.shadow];
       val[index] = value;
-      this.$emit("change", val);
+      this.$emit('change', val);
     },
     handleAdd() {
       const val = [...this.shadow];
-      val.push("0, 0, 0, 0, rgba(0, 0, 0, 0)");
-      this.$emit("change", val);
+      val.push('0, 0, 0, 0, rgba(0, 0, 0, 0)');
+      this.$emit('change', val);
     },
     handleMove(index) {
       const val = [...this.shadow];
       val.splice(index, 1);
-      this.$emit("change", val);
+      this.$emit('change', val);
     },
   },
 };
@@ -75,8 +75,7 @@ export default {
     &--name {
       font-size: 14px;
       color: var(--text-primary);
-      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-        "Liberation Mono", monospace;
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
   }
   &__add {
@@ -125,8 +124,7 @@ export default {
   &__name {
     font-size: 12px;
     color: var(--text-primary);
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
   &__suffix {
     font-size: 14px;

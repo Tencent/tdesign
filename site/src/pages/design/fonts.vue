@@ -201,7 +201,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, getCurrentInstance } from 'vue';
+import { ref, onMounted } from 'vue';
+import { MessagePlugin } from 'tdesign-vue-next';
 import { genAnchor } from './utils';
 
 // Template refs
@@ -256,10 +257,7 @@ const copyColor = (color) => {
   if ('clipboard' in navigator) {
     navigator.clipboard.writeText(color);
     // Using t-message if available
-    const message = getCurrentInstance()?.appContext?.config?.globalProperties?.$message;
-    if (message) {
-      message.success('Copied');
-    }
+    MessagePlugin.success('Copied');
     return;
   }
 
@@ -279,10 +277,7 @@ const copyColor = (color) => {
   selection.removeAllRanges();
   document.body.removeChild(textarea);
 
-  const message = getCurrentInstance()?.appContext?.config?.globalProperties?.$message;
-  if (message) {
-    message.success('Copied');
-  }
+  MessagePlugin.success('Copied');
 };
 
 // Lifecycle

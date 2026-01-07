@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount, defineProps } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import Canvas3d from 'canvas-3d';
 import modelData from './assets/banner.glb';
 import hdrData from './assets/banner.hdr';

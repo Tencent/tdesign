@@ -5,7 +5,6 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
 defineProps({
   href: String,
   src: String,
