@@ -10,56 +10,59 @@ export default function mdToVue(options) {
       </template>
     `;
   }
+  let docHeader = '';
+  if (mdSegment.tdDocHeader) {
+    docHeader = `
 
-  const headerTemplate = mdSegment.tdDocHeader
-    ? `
-      <td-doc-header
-        slot="doc-header"
-        ref="tdDocHeader"
-        spline="${mdSegment.spline}"
-      >
-      </td-doc-header>`
-    : '';
-
+          <td-doc-header
+            slot="doc-header"
+            ref="tdDocHeader"
+            spline="${mdSegment.spline}"
+          >
+          </td-doc-header>`;
+  }
   const sfc = `
     <template>
       <td-doc-content ref="tdDocContent" page-status="hidden">
-        ${headerTemplate}
+        ${docHeader}
         <div name="DOC">${mdSegment.docMd}</div>
         <td-doc-footer slot="doc-footer"></td-doc-footer>
       </td-doc-content>
     </template>
 
-    <script setup>
-      import { ref, onMounted } from 'vue';
-      import { useRoute, useRouter } from 'vue-router';
+    <script>
       import Prismjs from 'prismjs';
 
-      const route = useRoute();
-      const router = useRouter();
-      const tdDocContent = ref(null);
-      const tdDocHeader = ref(null);
-
-      const tab = {
-        get() {
-          return route.query.tab || 'demo';
+      export default {
+        computed: {
+          tab: {
+            get() {
+              return this.$route.query.tab || 'demo';
+            },
+            set(v) {
+              if (this.$route.query.tab !== v)
+                this.$router.push({ query: { tab: v } });
+            }
+          },
         },
-        set(v) {
-          if (route.query.tab !== v)
-            router.push({ query: { tab: v } });
-        }
+
+        mounted() {
+          const { tdDocContent, tdDocHeader } = this.$refs;
+
+          if (tdDocHeader) {
+            tdDocHeader.docInfo = {
+              title: \`${mdSegment.title}\`,
+              desc: \`${mdSegment.description}\`,
+            };
+          }
+
+          Prismjs.highlightAll();
+    
+          this.$emit('loaded', () => {
+            tdDocContent.pageStatus = 'show';
+          });
+        },
       };
-
-      onMounted(() => {
-        if (tdDocHeader.value) {
-          tdDocHeader.value.docInfo = {
-            title: \`${mdSegment.title}\`,
-            desc: \`${mdSegment.description}\`,
-          };
-        }
-
-        Prismjs.highlightAll();
-      });
     </script>
   `;
 
@@ -83,7 +86,8 @@ function customRender({ source, md }) {
 
   const mdSegment = {
     ...pageData,
-    docMd: md.render(`${pageData.toc ? '[toc]\n' : ''}${content}`).html,
+    // eslint-disable-next-line no-useless-call
+    docMd: md.render.call(md, `${pageData.toc ? '[toc]\n' : ''}${content}`).html,
   };
 
   return mdSegment;

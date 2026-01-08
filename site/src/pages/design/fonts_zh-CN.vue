@@ -67,8 +67,8 @@
         <span class="title">字号</span>
       </div>
       <template v-for="(item, i) in fontList">
-        <div :key="i" v-if="item.type === 'divider'" class="divider"></div>
-        <div v-else :key="i" :class="['font-' + item.fontSize]">
+        <div v-if="item.type === 'divider'" :key="'divider-' + i" class="divider"></div>
+        <div v-else :key="'font-' + i" :class="['font-' + item.fontSize]">
           <span class="step">{{ item.step }}</span>
           <span>{{ item.size }}</span>
           <span v-if="item.desc" class="desc">{{ item.desc }}</span>
