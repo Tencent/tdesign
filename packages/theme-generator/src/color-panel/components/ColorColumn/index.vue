@@ -81,7 +81,7 @@
   </div>
 </template>
 <script>
-import { Edit1Icon, ErrorCircleIcon, LinkUnlinkIcon } from 'tdesign-icons-vue-next';
+import { Edit1Icon, ErrorCircleIcon, LinkUnlinkIcon } from 'tdesign-icons-vue';
 import { Popup as TPopup } from 'tdesign-vue';
 
 import { ColorPicker } from '@/common/components';

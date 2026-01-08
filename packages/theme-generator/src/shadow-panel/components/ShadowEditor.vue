@@ -30,7 +30,7 @@
 </template>
 
 <script lang="jsx">
-import { RemoveIcon } from 'tdesign-icons-vue-next';
+import { RemoveIcon } from 'tdesign-icons-vue';
 import { Input as TInput, InputNumber as TInputNumber, Popup as TPopup } from 'tdesign-vue';
 
 import { ColorPicker } from '@/common/components';

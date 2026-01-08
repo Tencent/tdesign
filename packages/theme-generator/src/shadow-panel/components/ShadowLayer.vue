@@ -17,7 +17,7 @@
   </div>
 </template>
 <script lang="jsx">
-import { AddIcon } from 'tdesign-icons-vue-next';
+import { AddIcon } from 'tdesign-icons-vue';
 import ShadowEditor from './ShadowEditor.vue';
 export default {
   name: 'ShadowLayer',
