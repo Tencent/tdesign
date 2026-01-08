@@ -30,26 +30,24 @@ const timer = ref(null);
 
 // Computed
 const asideList = computed(() => {
-  if (route.value.path.includes('/design-en')) return designDocs;
+  if (route.path.includes('/design-en')) return designDocs;
   return designDocs;
 });
 
 // Methods
 const initDocHeader = () => {
-  const { meta } = route.value;
-
-  if (route.value.path.includes('/design/')) {
+  if (route.path.includes('/design/')) {
     clearTimeout(timer.value);
-    tdDocHeaderRef.value.docInfo = meta;
+    tdDocHeaderRef.value.docInfo = route.meta;
     tdDocHeaderRef.value.spline = '';
     timer.value = setTimeout(() => {
-      tdDocHeaderRef.value.spline = meta.spline || '';
+      tdDocHeaderRef.value.spline = route.meta.spline || '';
     }, 500);
   }
 };
 
 // Watch
-watch(route, (v) => {
+watch(route, () => {
   tdDocContentRef.value.pageStatus = 'hidden';
 
   requestAnimationFrame(() => {
@@ -62,7 +60,7 @@ watch(route, (v) => {
 onMounted(() => {
   tdDocAsideRef.value.routerList = asideList.value;
   tdDocAsideRef.value.onchange = ({ detail }) => {
-    if (route.value.path === detail) return;
+    if (route.path === detail) return;
     router.push(detail);
     window.scrollTo(0, 0);
   };

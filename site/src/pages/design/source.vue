@@ -164,10 +164,10 @@ const sourceList = computed(() => {
 
 const tab = computed({
   get() {
-    return route.value.query.tab || 'web';
+    return route.query.tab || 'web';
   },
   set(v) {
-    if (route.value.query.tab !== v) router.push({ query: { tab: v } });
+    if (route.query.tab !== v) router.push({ query: { tab: v } });
   },
 });
 

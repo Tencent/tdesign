@@ -39,7 +39,7 @@ const { docs: aboutEnDocs } = JSON.parse(JSON.stringify(siteEnConfig.about).repl
 
 // Computed (from component)
 const asideList = computed(() => {
-  if (route.value.path.includes('en')) return aboutEnDocs;
+  if (route.path.includes('en')) return aboutEnDocs;
   return aboutDocs;
 });
 
@@ -47,7 +47,7 @@ const asideList = computed(() => {
 onMounted(() => {
   tdDocAsideRef.value.routerList = asideList.value;
   tdDocAsideRef.value.onchange = ({ detail }) => {
-    if (route.value.path === detail) return;
+    if (route.path === detail) return;
     loaded.value = false;
     router.push(detail);
     window.scrollTo(0, 0);

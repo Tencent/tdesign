@@ -30,15 +30,15 @@ const timer = ref(null);
 
 // Computed
 const asideList = computed(() => {
-  if (route.value && route.value.path && route.value.path.includes('/design')) return designDocs;
+  if (route && route.path && route.path.includes('/design')) return designDocs;
   return designDocs;
 });
 
 // Methods
 const initDocHeader = () => {
-  const meta = route.value && route.value.meta ? route.value.meta : {};
+  const meta = route && route.meta ? route.meta : {};
 
-  if (route.value && route.value.path && route.value.path.includes('/design/')) {
+  if (route && route.path && route.path.includes('/design/')) {
     clearTimeout(timer.value);
     if (tdDocHeaderRef.value) {
       tdDocHeaderRef.value.docInfo = meta;
@@ -66,7 +66,7 @@ onMounted(async () => {
   if (tdDocAsideRef.value) {
     tdDocAsideRef.value.routerList = asideList.value;
     tdDocAsideRef.value.onchange = ({ detail }) => {
-      if (route.value && route.value.path === detail) return;
+      if (route && route.path === detail) return;
       if (router && router.push) router.push(detail);
       window.scrollTo(0, 0);
     };

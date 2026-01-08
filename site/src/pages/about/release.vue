@@ -67,7 +67,7 @@ const formatTime = (time) => {
 };
 
 const pageInit = () => {
-  const { meta } = route.value;
+  const { meta } = route;
   tdDocHeaderRef.value.docInfo = meta;
 };
 
