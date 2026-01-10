@@ -22,8 +22,8 @@
               :style="{ paddingBottom: '4px', color: 'var(--text-secondary)' }"
             >
               <div
-                @click="changeBrandColor(color.value)"
                 :class="{ 'is-active': $brandColor.toLowerCase() === color.value.toLowerCase() }"
+                @click="changeBrandColor(color.value)"
               >
                 <div
                   :style="{
@@ -41,18 +41,18 @@
           </t-col>
           <t-col :span="3" :style="{ padding: '0' }">
             <t-popup
-              showArrow
+              show-arrow
               placement="bottom-left"
               trigger="hover"
               :attach="handleAttach"
-              @visible-change="isMoreVisible = $event"
-              overlayClassName="popup-arrow"
-              :overlayStyle="{
+              overlay-class-name="popup-arrow"
+              :overlay-style="{
                 width: '268px',
                 padding: '16px',
                 borderRadius: '9px',
                 marginTop: '8px',
               }"
+              @visible-change="isMoreVisible = $event"
             >
               <div
                 :class="{
@@ -83,17 +83,17 @@
                 </p>
                 <div class="color-content__flex">
                   <div
+                    v-for="(color, idx) in RECOMMEND_COLORS"
+                    :key="idx"
                     class="color-content__block"
                     style="background: none"
-                    :key="idx"
-                    v-for="(color, idx) in RECOMMEND_COLORS"
                   >
                     <div
-                      @click="changeBrandColor(color.value)"
                       :class="{
                         'is-active': $brandColor === color.value,
                       }"
                       :style="{ color: 'var(--text-secondary)' }"
+                      @click="changeBrandColor(color.value)"
                     >
                       <p
                         :style="{
@@ -113,16 +113,16 @@
                 </p>
                 <div class="color-content__flex">
                   <div
+                    v-for="(color, idx) in SCENE_COLORS"
+                    :key="idx"
                     class="color-content__block"
                     style="background: none"
-                    :key="idx"
-                    v-for="(color, idx) in SCENE_COLORS"
                   >
                     <div
-                      @click="changeBrandColor(color.value)"
                       :class="{
                         'is-active': $brandColor === color.value,
                       }"
+                      @click="changeBrandColor(color.value)"
                     >
                       <p
                         :style="{
@@ -143,11 +143,11 @@
         <!-- 自定义主题颜色 -->
         <t-popup
           placement="bottom-left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
-          :overlayStyle="{ borderRadius: '9px' }"
+          :overlay-style="{ borderRadius: '9px' }"
         >
           <div class="color-content__custom">
             <div class="color-content__custom-inner">
@@ -239,8 +239,8 @@
         <!-- 主题色 -->
         <color-column
           type="brand"
-          :gradientStep="10"
-          :tokenMap="brandTokenMap"
+          :gradient-step="10"
+          :token-map="brandTokenMap"
           @changeGradation="changeGradation"
           @recoverGradation="recoverGradation"
         />
@@ -249,18 +249,18 @@
       <color-collapse
         type="gray"
         :title="lang.color.neutralColor"
-        :mainColor="grayMainColor"
+        :main-color="grayMainColor"
         :disabled="isGrayRelatedToTheme"
         @changeMainColor="changeFunctionColor"
       >
         <template #subTitle>
           {{ lang.color.fromThemeColor }}
-          <t-switch style="margin-left: 8px" v-model="isGrayRelatedToTheme" @change="changeNeutralColor"></t-switch>
+          <t-switch v-model="isGrayRelatedToTheme" style="margin-left: 8px" @change="changeNeutralColor"></t-switch>
         </template>
         <color-column
           type="gray"
-          :gradientStep="14"
-          :tokenMap="functionTokenMap['gray']"
+          :gradient-step="14"
+          :token-map="functionTokenMap['gray']"
           @changeGradation="changeGradation"
           @recoverGradation="recoverGradation"
         />
@@ -269,13 +269,13 @@
       <color-collapse
         type="success"
         :title="lang.color.successColor"
-        :mainColor="successMainColor"
+        :main-color="successMainColor"
         @changeMainColor="changeFunctionColor"
       >
         <color-column
           type="success"
-          :gradientStep="10"
-          :tokenMap="functionTokenMap['success']"
+          :gradient-step="10"
+          :token-map="functionTokenMap['success']"
           @changeGradation="changeGradation"
           @recoverGradation="recoverGradation"
         />
@@ -284,13 +284,13 @@
       <color-collapse
         type="error"
         :title="lang.color.errorColor"
-        :mainColor="errorMainColor"
+        :main-color="errorMainColor"
         @changeMainColor="changeFunctionColor"
       >
         <color-column
           type="error"
-          :gradientStep="10"
-          :tokenMap="functionTokenMap['error']"
+          :gradient-step="10"
+          :token-map="functionTokenMap['error']"
           @changeGradation="changeGradation"
           @recoverGradation="recoverGradation"
         />
@@ -299,13 +299,13 @@
       <color-collapse
         type="warning"
         :title="lang.color.warningColor"
-        :mainColor="warningMainColor"
+        :main-color="warningMainColor"
         @changeMainColor="changeFunctionColor"
       >
         <color-column
           type="warning"
-          :gradientStep="10"
-          :tokenMap="functionTokenMap['warning']"
+          :gradient-step="10"
+          :token-map="functionTokenMap['warning']"
           @changeGradation="changeGradation"
           @recoverGradation="recoverGradation"
         />
@@ -352,10 +352,6 @@ import ColorColumn from './components/ColorColumn';
 
 export default {
   name: 'ColorPanel',
-  props: {
-    top: Number,
-  },
-  mixins: [langMixin],
   components: {
     TRow,
     TCol,
@@ -369,6 +365,13 @@ export default {
     ColorColumn,
     ColorPicker,
     ColorCollapse,
+  },
+  mixins: [langMixin],
+  props: {
+    top: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -493,7 +496,7 @@ export default {
       themeStore.updateBrandColor(newBrandColor);
       updateLocalOption(
         'color',
-        newBrandColor.toLowerCase() !== this.$theme.value.toLowerCase() ? this.brandInputColor : null,
+        newBrandColor.toLowerCase() !== this.$theme.value.toLowerCase() ? this.brandInputColor : null
       );
       updateLocalOption('recommend', !this.isRemainMode ? 'true' : null);
 

@@ -5,31 +5,31 @@
       v-if="tokenType === 'plus'"
       v-model="step"
       :style="{ margin: '8px 0' }"
-      :selectOptions="lineHeightOptions"
-      :suspendedLabels="lineHeightLabels"
+      :select-options="lineHeightOptions"
+      :suspended-labels="lineHeightLabels"
       :disabled="segmentSelectionDisabled"
     >
-      <template v-slot:left>
+      <template #left>
         <div class="font-panel__round-tag-left"><p>Aa</p></div>
       </template>
-      <template v-slot:right>
+      <template #right>
         <div class="font-panel__round-tag-right"><p>Aa</p></div>
       </template>
     </SegmentSelection>
     <!-- Token List -->
     <div class="font-panel__token-list">
-      <t-radio-group variant="default-filled" v-model="tokenType">
+      <t-radio-group v-model="tokenType" variant="default-filled">
         <t-radio-button value="plus">{{ lang.font.lineHeightFixedMode }}</t-radio-button>
         <t-radio-button value="time">{{ lang.font.lineHeightSteppedMode }}</t-radio-button>
       </t-radio-group>
       <t-list v-if="tokenType === 'plus'">
         <t-popup
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
-          :overlayStyle="{ borderRadius: '9px' }"
+          :overlay-style="{ borderRadius: '9px' }"
           @visible-change="handleVisibleChange"
         >
           <t-list-item
@@ -48,7 +48,7 @@
               :min="1"
               :max="99"
               :step="1"
-              :sizeValue="lineHeightValue"
+              :size-value="lineHeightValue"
               @changeSize="handleChangeFontSize"
           /></template>
         </t-popup>
@@ -56,11 +56,11 @@
       <t-list v-else>
         <t-popup
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
-          :overlayStyle="{ borderRadius: '9px' }"
+          :overlay-style="{ borderRadius: '9px' }"
           @visible-change="handleVisibleChange"
         >
           <t-list-item
@@ -75,11 +75,11 @@
           <template #content
             ><size-slider
               title="line-height"
-              :sizeValue="lineHeightValue"
+              :size-value="lineHeightValue"
               :min="1"
               :max="5"
               :step="0.5"
-              :needInteger="false"
+              :need-integer="false"
               @changeSize="handleChangeFontSize"
           /></template>
         </t-popup>
@@ -153,6 +153,11 @@ export default {
       updateLineHeightTokens(this.lineHeightValue, type);
     },
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.initStep();
+    });
+  },
   methods: {
     getTokenValue,
     handleAttach,
@@ -188,11 +193,6 @@ export default {
         this.segmentSelectionDisabled = true;
       }
     },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.initStep();
-    });
   },
 };
 </script>

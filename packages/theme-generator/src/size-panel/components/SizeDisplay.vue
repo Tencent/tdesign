@@ -31,6 +31,15 @@ export default {
       SIZE_TOKENS,
     };
   },
+  mounted() {
+    this.$nextTick(() => {
+      // 初始化 local 的 token 后更新 size 显示
+      this.$forceUpdate();
+    });
+    this.$root.$on('refresh-size-tokens', () => {
+      this.$forceUpdate();
+    });
+  },
   methods: {
     getTokenValue,
     parseSize(val) {
@@ -40,15 +49,6 @@ export default {
       }
       return val;
     },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      // 初始化 local 的 token 后更新 size 显示
-      this.$forceUpdate();
-    });
-    this.$root.$on('refresh-size-tokens', () => {
-      this.$forceUpdate();
-    });
   },
 };
 </script>

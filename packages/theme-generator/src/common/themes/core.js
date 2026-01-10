@@ -28,6 +28,11 @@ export const CUSTOM_TOKEN_ID = `${CUSTOM_THEME_ID}-tokens`;
 export const isMiniProgram = (device) => device === 'mini-program';
 export const isMobile = (device) => device === 'mobile' || isMiniProgram(device);
 
+/**
+ * 标准化设备类型
+ * @param {string} device - 设备类型
+ * @returns {string} 标准化后的设备类型
+ */
 export function normalizeDevice(device) {
   return isMobile(device) ? 'mobile' : 'web';
 }
@@ -44,12 +49,17 @@ export function getDefaultTheme(device) {
   return isMobile(device) ? TDESIGN_MOBILE_THEME : TDESIGN_WEB_THEME;
 }
 
+/**
+ * 获取推荐的主题列表
+ * @param {string} device - 设备类型
+ * @returns {array} 推荐主题列表
+ */
 export function getRecommendThemes(device) {
   return isMobile(device) ? MOBILE_RECOMMEND_THEMES : WEB_RECOMMEND_THEMES;
 }
 
 /**
- * 同步 site 的 亮暗模式给主题生成器 Web Component
+ * 同步 site 的亮暗模式给主题生成器 Web Component
  */
 export function syncModeToGenerator() {
   setUpModeObserver((theme) => {
@@ -59,6 +69,12 @@ export function syncModeToGenerator() {
   });
 }
 
+/**
+ * 通过英文名称查找主题
+ * @param {string} device - 设备类型
+ * @param {string} enName - 主题的英文名称
+ * @returns {object} 找到的主题对象，未找到则返回默认主题
+ */
 export function findThemeByEnName(device, enName) {
   const themes = getRecommendThemes(device);
   for (const category of themes) {
@@ -88,6 +104,10 @@ export function initThemeStyleSheet(themeName, device) {
   return theme;
 }
 
+/**
+ * 导出自定义样式表
+ * @param {string} device - 设备类型
+ */
 export function exportCustomStyleSheet(device) {
   const styleSheet = document.getElementById(CUSTOM_THEME_ID);
   const darkStyleSheet = document.getElementById(CUSTOM_DARK_ID);
@@ -130,6 +150,12 @@ export function exportCustomStyleSheet(device) {
   downloadFile(blob, `theme.${fileSuffix}`);
 }
 
+/**
+ * 修改 CSS 变量值
+ * @param {string} tokenName - CSS 变量名
+ * @param {string} newVal - 新值
+ * @param {boolean} saveToLocal - 是否保存到本地存储
+ */
 export function modifyToken(tokenName, newVal, saveToLocal = true) {
   if (tokenName.startsWith('--td-size-') || tokenName.startsWith('--td-comp-size-')) {
     logSizeIntercept(tokenName);
@@ -164,7 +190,7 @@ export function modifyToken(tokenName, newVal, saveToLocal = true) {
 function logSizeIntercept(tokenName) {
   console.warn(
     `🔒 [Web Components 隔离] 拦截修改尺寸变量 "${tokenName}"，保持原值不变\n` +
-      '   原因：尺寸变量已被隔离以保护 Web Components 的样式',
+      '   原因：尺寸变量已被隔离以保护 Web Components 的样式'
   );
 }
 export function getOptionFromLocal(optionName) {

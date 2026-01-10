@@ -7,12 +7,12 @@
           v-for="(token, idx) in tokenList"
           :key="idx"
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
+          :overlay-style="{ borderRadius: '9px' }"
           @visible-change="(v, ctx) => handleVisibleChange(v, ctx, idx)"
-          :overlayStyle="{ borderRadius: '9px' }"
         >
           <t-list-item
             :style="{
@@ -51,7 +51,7 @@
           <template #content
             ><size-slider
               title="size"
-              :sizeValue="getTokenValue(`--td-${token.from}`)"
+              :size-value="getTokenValue(`--td-${token.from}`)"
               @changeSize="(v) => handleChangeSize(`--td-${token.from}`, v)"
           /></template>
         </t-popup>
@@ -86,8 +86,14 @@ export default {
     PopupPaddingAdjustSvg,
   },
   props: {
-    tokenList: Array,
-    type: String,
+    tokenList: {
+      type: Array,
+      default: () => [],
+    },
+    type: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {

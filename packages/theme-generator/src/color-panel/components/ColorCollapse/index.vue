@@ -3,12 +3,12 @@
     <div class="color-collapse__header">
       <t-popup
         placement="left"
-        showArrow
+        show-arrow
         trigger="click"
-        :destroyOnClose="true"
+        :destroy-on-close="true"
         :attach="handleAttach"
-        :overlayStyle="{ borderRadius: '9px' }"
-        :hideEmptyPopup="true"
+        :overlay-style="{ borderRadius: '9px' }"
+        :hide-empty-popup="true"
       >
         <div
           class="block"
@@ -31,7 +31,7 @@
             <edit-1-icon v-if="!disabled && isHover" size="24px" />
           </transition>
         </div>
-        <template #content v-if="!disabled">
+        <template v-if="!disabled" #content>
           <color-picker :value="mainColor" @change="changeColor" />
         </template>
       </t-popup>
@@ -45,11 +45,11 @@
             HEX: {{ mainColor }}
             <t-popup
               placement="top"
-              showArrow
+              show-arrow
               trigger="click"
-              :destroyOnClose="true"
+              :destroy-on-close="true"
               :attach="handleAttach"
-              :overlayStyle="{ borderRadius: '6px' }"
+              :overlay-style="{ borderRadius: '6px' }"
             >
               <file-copy-icon @click="() => copyHex(mainColor)" />
               <template #content>
@@ -60,7 +60,7 @@
         </div>
       </div>
       <div @click="isActive = !isActive">
-        <arrow-icon :isActive="isActive" overlayClassName="color-collapse__arrow" />
+        <arrow-icon :is-active="isActive" overlay-class-name="color-collapse__arrow" />
       </div>
     </div>
     <transition
@@ -87,14 +87,26 @@ import { collapseAnimation, handleAttach } from '@/common/utils';
 
 export default {
   name: 'ColorCollapse',
-  props: {
-    type: String,
-    title: String,
-    mainColor: String,
-    disabled: Boolean,
-  },
-  mixins: [langMixin],
   components: { FileCopyIcon, ArrowIcon, TPopup, Edit1Icon, ColorPicker },
+  mixins: [langMixin],
+  props: {
+    type: {
+      type: String,
+      default: '',
+    },
+    title: {
+      type: String,
+      default: '',
+    },
+    mainColor: {
+      type: String,
+      default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       ...collapseAnimation(),

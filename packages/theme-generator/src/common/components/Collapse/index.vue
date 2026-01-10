@@ -11,7 +11,7 @@
         </div>
       </div>
       <div @click="isActive = !isActive">
-        <arrow-icon :isActive="isActive" overlayClassName="common-collapse__arrow" />
+        <arrow-icon :is-active="isActive" overlay-class-name="common-collapse__arrow" />
       </div>
     </div>
     <transition
@@ -36,12 +36,21 @@ import { collapseAnimation, handleAttach } from '../../utils';
 
 export default {
   name: 'CommonCollapse',
-  props: {
-    title: String,
-    colorPalette: Array,
-    type: String,
-  },
   components: { ArrowIcon },
+  props: {
+    title: {
+      type: String,
+      default: '',
+    },
+    colorPalette: {
+      type: Array,
+      default: () => [],
+    },
+    type: {
+      type: String,
+      default: '',
+    },
+  },
 
   data() {
     return {

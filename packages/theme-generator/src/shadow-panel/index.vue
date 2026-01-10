@@ -12,8 +12,8 @@
         <p class="shadow-content__title">{{ lang.shadow.title }}</p>
         <SegmentSelection
           v-model="step"
-          :selectOptions="selectOptions"
-          :suspendedLabels="suspendedLabels"
+          :select-options="selectOptions"
+          :suspended-labels="suspendedLabels"
           :disabled="segmentSelectionDisabled"
         >
           <template #left>
@@ -54,14 +54,17 @@ import ShadowCard from './components/ShadowCard';
 
 export default {
   name: 'ShadowPanel',
-  props: {
-    top: Number,
-  },
   components: {
     SegmentSelection,
     ShadowCard,
   },
   mixins: [langMixin],
+  props: {
+    top: {
+      type: Number,
+      default: 0,
+    },
+  },
   data() {
     return {
       shadowPalette: [],
@@ -70,9 +73,6 @@ export default {
       suspendedLabels: ShadowLabels,
       segmentSelectionDisabled: false,
     };
-  },
-  created() {
-    this.shadowTypeDetail = ShadowTypeDetail;
   },
   computed: {
     contentStyle() {
@@ -124,6 +124,14 @@ export default {
       });
     },
   },
+  created() {
+    this.shadowTypeDetail = ShadowTypeDetail;
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.initShadowToken();
+    });
+  },
   methods: {
     // 拆分 box-shadow 的值 0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%)
     splitShadowValue(data) {
@@ -159,11 +167,6 @@ export default {
         return this.splitShadowValue(data);
       });
     },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.initShadowToken();
-    });
   },
 };
 </script>

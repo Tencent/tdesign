@@ -7,7 +7,8 @@
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build --target wc --inline-vue --name td-theme-generator src/Generator.vue",
     "build:watch": "vue-cli-service build --target wc --inline-vue --name td-theme-generator src/Generator.vue --watch",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "lint:fix": "vue-cli-service lint --fix"
   },
   "main": "dist/td-theme-generator.js",
   "files": [

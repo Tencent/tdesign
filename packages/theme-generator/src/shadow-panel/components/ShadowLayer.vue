@@ -5,9 +5,9 @@
       <add-icon class="shadow-layer__add" @click="handleAdd" />
     </div>
     <shadow-editor
-      class="shadow-layer__edit"
       v-for="(data, i) in shadow"
       :key="i"
+      class="shadow-layer__edit"
       :name="`layer${i + 1}`"
       :value="data"
       @change="(value) => change(value, i)"
@@ -17,33 +17,39 @@
   </div>
 </template>
 <script lang="jsx">
-import { AddIcon } from "tdesign-icons-vue";
-import ShadowEditor from "./ShadowEditor.vue";
+import { AddIcon } from 'tdesign-icons-vue';
+import ShadowEditor from './ShadowEditor.vue';
 export default {
-  name: "ShadowLayer",
-  props: {
-    shadow: Array,
-    detail: Object,
-  },
+  name: 'ShadowLayer',
   components: {
     AddIcon,
     ShadowEditor,
+  },
+  props: {
+    shadow: {
+      type: Array,
+      default: () => [],
+    },
+    detail: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   methods: {
     change(value, index) {
       const val = [...this.shadow];
       val[index] = value;
-      this.$emit("change", val);
+      this.$emit('change', val);
     },
     handleAdd() {
       const val = [...this.shadow];
-      val.push("0, 0, 0, 0, rgba(0, 0, 0, 0)");
-      this.$emit("change", val);
+      val.push('0, 0, 0, 0, rgba(0, 0, 0, 0)');
+      this.$emit('change', val);
     },
     handleMove(index) {
       const val = [...this.shadow];
       val.splice(index, 1);
-      this.$emit("change", val);
+      this.$emit('change', val);
     },
   },
 };
@@ -75,8 +81,7 @@ export default {
     &--name {
       font-size: 14px;
       color: var(--text-primary);
-      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-        "Liberation Mono", monospace;
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
   }
   &__add {
@@ -125,8 +130,7 @@ export default {
   &__name {
     font-size: 12px;
     color: var(--text-primary);
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
   &__suffix {
     font-size: 14px;
