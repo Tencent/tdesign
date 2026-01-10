@@ -48,8 +48,60 @@ export default {
     initGeneratorVars();
     applyTokenFromLocal();
     syncThemeToIframe(this.device);
+
+    // 初始化 Web Components 尺寸变量隔离
+    this.initWebComponentsSizeProtection();
   },
   methods: {
+    initWebComponentsSizeProtection() {
+      // 创建隔离样式表，保护 Web Components 不受尺寸变量修改的影响
+      let styleEl = document.getElementById('__web-components-size-lock__');
+
+      if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = '__web-components-size-lock__';
+        document.head.appendChild(styleEl);
+      }
+
+      // 定义所有 Web Components 使用的尺寸变量的初始值
+      const webComponentsSizeVars = {
+        '--td-size-1': '2px',
+        '--td-size-2': '4px',
+        '--td-size-3': '6px',
+        '--td-size-4': '8px',
+        '--td-size-5': '12px',
+        '--td-size-6': '16px',
+        '--td-size-7': '20px',
+        '--td-size-8': '24px',
+        '--td-size-9': '28px',
+        '--td-size-10': '32px',
+        '--td-size-11': '36px',
+        '--td-size-12': '40px',
+        '--td-size-13': '48px',
+        '--td-size-14': '56px',
+        '--td-size-15': '64px',
+        '--td-size-16': '72px',
+        '--td-comp-size-xxxs': '16px',
+        '--td-comp-size-xxs': '20px',
+        '--td-comp-size-xs': '24px',
+        '--td-comp-size-s': '28px',
+        '--td-comp-size-m': '32px',
+        '--td-comp-size-l': '36px',
+        '--td-comp-size-xl': '40px',
+        '--td-comp-size-xxl': '48px',
+        '--td-comp-size-xxxl': '56px',
+        '--td-comp-size-xxxxl': '64px',
+        '--td-comp-size-xxxxxl': '72px',
+      };
+
+      let cssRules = '.theme-generator {\n';
+      Object.entries(webComponentsSizeVars).forEach(([key, val]) => {
+        cssRules += `  ${key}: ${val} !important;\n`;
+      });
+      cssRules += '}';
+
+      styleEl.textContent = cssRules;
+    },
     handleTriggerVisible() {
       this.visible = true;
     },
