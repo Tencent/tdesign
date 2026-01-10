@@ -1,6 +1,6 @@
 <template>
   <td-doc-content>
-    <td-doc-header slot="doc-header" ref="tdDocHeader"></td-doc-header>
+    <td-doc-header slot="doc-header" ref="tdDocHeaderRef"></td-doc-header>
 
     <div name="DESIGN">
       <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
@@ -26,76 +26,80 @@
   </td-doc-content>
 </template>
 
-<script>
-import MarkdownIt from 'markdown-it'
-import mila from 'markdown-it-link-attributes'
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import MarkdownIt from 'markdown-it';
+import mila from 'markdown-it-link-attributes';
 
-const RELEASE_API = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/release'
+const route = useRoute();
 
-const titleReg = /<h[23]>\s*(Vue|React|Miniprogram|Figma|Sketch|Axure|AdobeXD|TDesign)/g
+// Template refs
+const tdDocHeaderRef = ref(null);
+
+const RELEASE_API = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/release';
+
+const titleReg = /<h[23]>\s*(Vue|React|Miniprogram|Figma|Sketch|Axure|AdobeXD|TDesign)/g;
 
 const mdRender = new MarkdownIt({
-  linkify: true
+  linkify: true,
 }).use(mila, {
   attrs: {
     target: '_blank',
-    rel: 'noopener'
+    rel: 'noopener',
+  },
+});
+
+// Data
+const release = ref([]);
+
+// Computed
+const releaseTimeList = computed(() => {
+  return release.value.map((item) => ({
+    title: formatTime(item.published_at),
+    id: formatTime(item.published_at).replace(/\s/g, '-'),
+  }));
+});
+
+// Methods
+const formatTime = (time) => {
+  return `${new Date(time).toDateString()}（${new Date(time).toLocaleDateString()}）`;
+};
+
+const pageInit = () => {
+  const { meta } = route;
+  tdDocHeaderRef.value.docInfo = meta;
+};
+
+const fetchReleases = () => {
+  const cache = sessionStorage.getItem('__tdesign_release__');
+
+  if (cache) {
+    const data = JSON.parse(cache);
+    release.value = data.map((item) => {
+      item.body = mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1');
+      return item;
+    });
+  } else {
+    fetch(RELEASE_API)
+      .then((res) => res.json())
+      .then((data) => {
+        sessionStorage.setItem('__tdesign_release__', JSON.stringify(data));
+
+        release.value = data.map((item) => {
+          item.body = mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1');
+          return item;
+        });
+      })
+      .catch((err) => console.error(err));
   }
-})
+};
 
-export default {
-  data () {
-    return {
-      mdRender,
-      release: []
-    }
-  },
-  mounted () {
-    this.pageInit()
-    this.fetchReleases()
-  },
-
-  computed: {
-    releaseTimeList () {
-      return this.release.map((item) => ({
-        title: this.formatTime(item.published_at),
-        id: this.formatTime(item.published_at).replace(/\s/g, '-')
-      }))
-    }
-  },
-  methods: {
-    formatTime (time) {
-      return `${new Date(time).toDateString()}（${new Date(time).toLocaleDateString()}）`
-    },
-    pageInit () {
-      const { meta } = this.$route
-      this.$refs.tdDocHeader.docInfo = meta
-    },
-    fetchReleases () {
-      const cache = sessionStorage.getItem('__tdesign_release__')
-
-      if (cache) {
-        const data = JSON.parse(cache)
-        this.release = data.map((item) => {
-          item.body = this.mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1')
-          return item
-        })
-      } else {
-        fetch(RELEASE_API)
-          .then((res) => res.json())
-          .then((data) => {
-            sessionStorage.setItem('__tdesign_release__', JSON.stringify(data))
-
-            this.release = data.map((item) => {
-              item.body = this.mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1')
-              return item
-            })
-          })
-          .catch((err) => console.error(err))
-      }
-    }
-  }
-}
+// Lifecycle
+onMounted(() => {
+  pageInit();
+  fetchReleases();
+});
 </script>
 
 <style lang="less">

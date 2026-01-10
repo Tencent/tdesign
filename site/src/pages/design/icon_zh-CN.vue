@@ -1,5 +1,5 @@
 <template>
-  <div ref="article" name="DESIGN" class="doc-icon">
+  <div ref="articleRef" name="DESIGN" class="doc-icon">
     <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
       <ol class="tdesign-toc_list">
         <li class="tdesign-toc_list_item" v-for="anchor in catalog" :key="anchor.id">
@@ -232,18 +232,24 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor';
-import { Link1Icon } from 'tdesign-icons-vue';
-export default {
-  mixins: [anchorMixin],
-  components: {
-    Link1Icon,
-  },
-  methods: {
-    handleClickBtn() {
-      window.open('/icons', ',_blank');
-    },
-  },
+<script setup>
+import { ref, onMounted } from 'vue';
+import { Link1Icon } from 'tdesign-icons-vue-next';
+import { genAnchor } from './utils';
+
+// Template refs
+const articleRef = ref(null);
+
+// Data (from mixin)
+const catalog = ref([]);
+
+// Methods
+const handleClickBtn = () => {
+  window.open('/icons', '_blank');
 };
+
+// Lifecycle hooks
+onMounted(() => {
+  genAnchor(articleRef, catalog);
+});
 </script>

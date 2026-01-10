@@ -1,5 +1,5 @@
 <template>
-  <div ref="article" name="DESIGN" class="doc-icon">
+  <div ref="articleRef" name="DESIGN" class="doc-icon">
     <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
       <ol class="tdesign-toc_list">
         <li class="tdesign-toc_list_item" v-for="anchor in catalog" :key="anchor.id">
@@ -13,36 +13,36 @@
       </ol>
     </nav>
 
-    <h2>Summary</h2>
+    <h2>Overview</h2>
     <p>
-      Icons are an important element of UI design, and to some extent, they affect the style of the entire UI interface.
-      In the early stage of TDesign, a set of linear icons is provided for use in middle and back-end scenarios. These
-      icons are designed with a universal standard, which fits the default TDesign style - linear and rounded.
+      Icon, as an important element in UI design, significantly influences the overall style of a UI interface. TDesign
+      offers a set of linear Icons designed for mid-backend scenarios, created with universally applicable standards
+      that align with the overall style of the TDesign design system.
     </p>
 
-    <h2>Principle</h2>
+    <h2>Principles</h2>
     <h3>Simplicity</h3>
     <p>
-      Ensure parameters are simplified during production, avoid decimals and non-integer angles wherever possible.
-      Remove excess anchor points when processing lines and outlines, and avoid unnecessary embellishments when
-      outputting icons to maintain simplicity.
+      When creating, ensure that parameters are simplified and try to eliminate decimal points as well as non-integer
+      angles. When handling lines and outlines, remove redundant anchor points. During output, unnecessary decorations
+      should be avoided to keep the icons clean.
     </p>
     <img src="./assets/icon/simplify-1.png" alt="" />
 
     <h3>Accuracy</h3>
     <p>
-      Avoid using graphics with vague meanings in designs. When representing the same thing with multiple graphics,
-      choose the most common style and adapt as needed. Follow naming conventions when outputting, and use precise
-      descriptions to make it easier for others to find them.
+      Avoid using graphics with ambiguous meanings during design. When the same object has multiple graphical
+      representations, choose the most widely recognized style and emphasize it when necessary. When outputting icons,
+      also follow naming conventions—accurate text descriptions make it easier for others to find.
     </p>
     <img src="./assets/icon/accurate-1.png" alt="" />
 
     <h3>Moderation</h3>
     <p>
-      As a standalone visual entity, individual icons should have a reasonable sense of line density and graphical
-      compatibility. When dealing with necessary high-density icons, rhythm should be considered, and they should be
-      comfortable and non-oppressive. Icon series should follow the principles of moderation, keeping changes within a
-      certain range.
+      Each icon, as an independent visual entity, should present a sense of moderation in terms of line density and
+      graphic combination. When dealing with necessary high-density icons, the rhythm of the lines should still be
+      considered to ensure comfort without feeling oppressive. A series of icons should follow the principle of
+      moderation, keeping variations within a certain range.
     </p>
     <img src="./assets/icon/moderate-1.png" alt="" />
 
@@ -271,18 +271,24 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor';
-import { Link1Icon } from 'tdesign-icons-vue';
-export default {
-  mixins: [anchorMixin],
-  components: {
-    Link1Icon,
-  },
-  methods: {
-    handleClickBtn() {
-      window.open('/icons', ',_blank');
-    },
-  },
+<script setup>
+import { ref, onMounted } from 'vue';
+import { Link1Icon } from 'tdesign-icons-vue-next';
+import { genAnchor } from './utils';
+
+// Template refs
+const articleRef = ref(null);
+
+// Data (from mixin)
+const catalog = ref([]);
+
+// Methods
+const handleClickBtn = () => {
+  window.open('/icons', '_blank');
 };
+
+// Lifecycle hooks
+onMounted(() => {
+  genAnchor(articleRef, catalog);
+});
 </script>

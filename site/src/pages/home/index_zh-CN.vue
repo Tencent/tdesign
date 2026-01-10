@@ -580,7 +580,7 @@
 </template>
 
 <script>
-import { DesktopIcon, Icon } from 'tdesign-icons-vue';
+import { DesktopIcon, Icon } from 'tdesign-icons-vue-next';
 import Banner from './banner.vue';
 import Avatar from './avatar.vue';
 import ComponentList from './component-list.vue';

@@ -48,8 +48,8 @@ export const webDesignContributor = [
   'Lido8',
   'isqinghui',
   'MayDesign',
-  'Alimjan2013'
-]
+  'Alimjan2013',
+];
 
 export const mobileDesignContributor = [
   'vistintin',
@@ -61,10 +61,7 @@ export const mobileDesignContributor = [
   'caixuan29',
   'RADWIMPS426',
   'imarchitect',
-  'eugenewoody'
-]
+  'eugenewoody',
+];
 
-export const webChartDesignContributor = [
-  'Mengruli123',
-  'pearlfu'
-]
+export const webChartDesignContributor = ['Mengruli123', 'pearlfu'];

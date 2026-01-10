@@ -1,4 +1,4 @@
-d<template>
+<template>
   <div class="tdesign-document">
     <div class="tdesign-source-header">
       <div class="content">
@@ -21,7 +21,9 @@ d<template>
         <div class="info">
           <h2 class="title">创作者商业组件</h2>
           <p class="description">
-            创作者商业组件是QQ小世界团队面向创作者领域商业化特点沉淀的一套领域组件库，在QQ小店、小店运营平台、MCN机构平台、小世界运营平台等多个业务中使用。组件库以 TDesign 为原子组件，在此基础上根据业务特点，扩展了复合组件、块级组件、模板引擎三层架构，助力业务需求快速落地。其中模板引擎抽象了表单、表格、详情页等通用场景，形成运营领域特定语言，进一步解放需求生产力。
+            创作者商业组件是QQ小世界团队面向创作者领域商业化特点沉淀的一套领域组件库，在QQ小店、小店运营平台、MCN机构平台、小世界运营平台等多个业务中使用。组件库以
+            TDesign
+            为原子组件，在此基础上根据业务特点，扩展了复合组件、块级组件、模板引擎三层架构，助力业务需求快速落地。其中模板引擎抽象了表单、表格、详情页等通用场景，形成运营领域特定语言，进一步解放需求生产力。
           </p>
         </div>
         <a href="https://pd.pages.woa.com" target="_blank">
@@ -45,7 +47,8 @@ d<template>
           <h2 class="title">教育组件</h2>
           <p class="description">
             EDesign
-            教育行业组件是在教育领域沉淀的具有教育行业属性的复合功能组件。期望通过简单的配置和功能集成的高阶组件，完成教育行业通用页面的搭建和开发，比如常见表单页面、列表页面、组织架构树的创建等，让教育行业 to b 项目开发更快速更便捷。
+            教育行业组件是在教育领域沉淀的具有教育行业属性的复合功能组件。期望通过简单的配置和功能集成的高阶组件，完成教育行业通用页面的搭建和开发，比如常见表单页面、列表页面、组织架构树的创建等，让教育行业
+            to b 项目开发更快速更便捷。
           </p>
         </div>
         <a href="https://v.campus.qq.com/edu-design/guide/quickstart.html" target="_blank">
@@ -56,7 +59,8 @@ d<template>
         <div class="info">
           <h2 class="title">医疗健康组件</h2>
           <p class="description">
-            CareDesign 医疗健康组件是腾讯在医疗健康领域服务行业场景，具有医疗属性、符合健康服务多角色诉求的设计组件。医疗健康组件跨终端、可适配、可扩展，并且已在医疗服务线上触达、医保电子凭证、电子健康卡、医疗保障惠民服务、医疗大数据可视化辅助决策平台、医院管理、临床辅助诊疗等产品中有效的验证和落地。
+            CareDesign
+            医疗健康组件是腾讯在医疗健康领域服务行业场景，具有医疗属性、符合健康服务多角色诉求的设计组件。医疗健康组件跨终端、可适配、可扩展，并且已在医疗服务线上触达、医保电子凭证、电子健康卡、医疗保障惠民服务、医疗大数据可视化辅助决策平台、医院管理、临床辅助诊疗等产品中有效的验证和落地。
           </p>
         </div>
         <a href="https://caredesign.tencent.com/design-code/vue-pc/default" target="_blank">
@@ -97,29 +101,22 @@ d<template>
   </div>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue';
+
 const safeTeamUrl = import.meta.env.VITE_SAFE_TEAM_URL;
 
-export default {
-  data() {
-    return {
-      safeTeamUrl
-    };
-  },
-  computed: {
-    footerStyle () {
-      return {
-        '--content-padding-right': '0',
-        '--content-max-width': '1440px',
-        '--content-padding-left-right': '48px',
-        '--footer-logo-position': 'unset'
-      }
-    }
-  }
-}
+const footerStyle = computed(() => {
+  return {
+    '--content-padding-right': '0',
+    '--content-max-width': '1440px',
+    '--content-padding-left-right': '48px',
+    '--footer-logo-position': 'unset',
+  };
+});
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .tdesign-trade-card + .tdesign-trade-card {
   margin-top: 24px;
 }
@@ -207,7 +204,7 @@ export default {
   }
 
   &.education {
-    background-color: #E0ECE8;
+    background-color: #e0ece8;
     background-image: url(./assets/trade/education.png);
     background-size: auto 100%;
     background-position: right top;
@@ -222,7 +219,7 @@ export default {
   }
 
   &.health {
-    background-color: #EBF4FF;
+    background-color: #ebf4ff;
     background-image: url(./assets/trade/health.png);
     background-size: auto 100%;
     background-position: right top;
@@ -230,7 +227,7 @@ export default {
   }
 
   &.safe {
-    background-color: #EBF4FF;
+    background-color: #ebf4ff;
     background-image: url(./assets/trade/safe.png);
     background-size: auto 100%;
     background-position: right top;
