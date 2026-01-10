@@ -131,7 +131,11 @@ export function exportCustomStyleSheet(device) {
 }
 
 export function modifyToken(tokenName, newVal, saveToLocal = true) {
-  // 获取所有可能包含 token 的样式表
+  if (tokenName.startsWith('--td-size-') || tokenName.startsWith('--td-comp-size-')) {
+    logSizeIntercept(tokenName);
+    return;
+  }
+
   const styleSheets = document.querySelectorAll(`#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, #${CUSTOM_EXTRA_ID}`);
 
   let tokenFound = false;
@@ -150,11 +154,6 @@ export function modifyToken(tokenName, newVal, saveToLocal = true) {
     tokenFound = true;
 
     updateLocalToken(tokenName, saveToLocal ? newVal : null);
-
-    // 如果修改的是尺寸相关的 token（Web Components 使用的），为 Web Components 容器创建隔离样式
-    if (isWebComponentsSizeToken(tokenName)) {
-      createWebComponentsStyleOverride(tokenName, currentVal);
-    }
   });
 
   if (!tokenFound) {
@@ -162,44 +161,12 @@ export function modifyToken(tokenName, newVal, saveToLocal = true) {
   }
 }
 
-// 检查是否是 Web Components 使用的尺寸变量
-function isWebComponentsSizeToken(tokenName) {
-  return tokenName.startsWith('--td-size-') || tokenName.startsWith('--td-comp-size-');
+function logSizeIntercept(tokenName) {
+  console.warn(
+    `🔒 [Web Components 隔离] 拦截修改尺寸变量 "${tokenName}"，保持原值不变\n` +
+      '   原因：尺寸变量已被隔离以保护 Web Components 的样式',
+  );
 }
-
-// 为 Web Components 容器创建或更新隔离样式表
-function createWebComponentsStyleOverride(tokenName, originalVal) {
-  let styleEl = document.getElementById('__web-components-size-lock__');
-
-  if (!styleEl) {
-    styleEl = document.createElement('style');
-    styleEl.id = '__web-components-size-lock__';
-    document.head.appendChild(styleEl);
-  }
-
-  // 获取当前的 CSS 规则
-  let cssText = styleEl.textContent;
-
-  // 检查是否已经有这个变量的规则
-  const varRegex = new RegExp(`${tokenName}:\\s*[^;]*;`, 'g');
-
-  if (varRegex.test(cssText)) {
-    // 更新现有的变量定义，保持原值
-    cssText = cssText.replace(varRegex, `${tokenName}: ${originalVal} !important;`);
-  } else {
-    // 添加新的变量定义
-    // 如果没有 .theme-generator 选择器，需要创建
-    if (!cssText.includes('.theme-generator {')) {
-      cssText += `\n.theme-generator { ${tokenName}: ${originalVal} !important; }`;
-    } else {
-      // 在现有的 .theme-generator 规则中添加
-      cssText = cssText.replace(/\.theme-generator\s*{/, `.theme-generator { ${tokenName}: ${originalVal} !important;`);
-    }
-  }
-
-  styleEl.textContent = cssText;
-}
-
 export function getOptionFromLocal(optionName) {
   const options = localStorage.getItem(CUSTOM_OPTIONS_ID);
   if (!options) return;

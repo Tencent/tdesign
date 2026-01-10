@@ -20,6 +20,21 @@ export const SIZE_DEFAULT_VALUES = {
   '--td-size-16': '72px',
 };
 
+// 组件尺寸默认值
+export const COMP_SIZE_DEFAULT_VALUES = {
+  '--td-comp-size-xxxs': '16px',
+  '--td-comp-size-xxs': '20px',
+  '--td-comp-size-xs': '24px',
+  '--td-comp-size-s': '28px',
+  '--td-comp-size-m': '32px',
+  '--td-comp-size-l': '36px',
+  '--td-comp-size-xl': '40px',
+  '--td-comp-size-xxl': '48px',
+  '--td-comp-size-xxxl': '56px',
+  '--td-comp-size-xxxxl': '64px',
+  '--td-comp-size-xxxxxl': '72px',
+};
+
 // 组件大小列表
 export const COMP_SIZE_MAP = [
   {
