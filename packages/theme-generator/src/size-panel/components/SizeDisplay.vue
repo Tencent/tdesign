@@ -10,7 +10,7 @@
           marginBottom: '8px',
         }"
       >
-        <span><SectionDynamicSvg :size="parseInt(getTokenValue(token), 10)" /></span>
+        <span><SectionDynamicSvg :size="parseSize(getTokenValue(token))" /></span>
         <span>{{ token.replace('--td-', '') }} : {{ getTokenValue(token) }}</span>
       </div>
     </div>
@@ -33,6 +33,13 @@ export default {
   },
   methods: {
     getTokenValue,
+    parseSize(val) {
+      if (typeof val === 'string') {
+        const num = parseFloat(val);
+        return isNaN(num) ? 0 : num;
+      }
+      return val;
+    },
   },
   mounted() {
     this.$nextTick(() => {

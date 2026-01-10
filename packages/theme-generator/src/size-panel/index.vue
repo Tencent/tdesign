@@ -9,7 +9,19 @@
   >
     <div class="size-content__content" :style="contentStyle">
       <div class="size-content__main">
-        <p class="size-content__title">{{ lang.size.basicSize }}</p>
+        <div class="size-content__header">
+          <p class="size-content__title">{{ lang.size.basicSize }}</p>
+          <t-popconfirm
+            :content="lang.size.resetConfirm"
+            :theme="null"
+            :popup-props="{ attach: handleAttach }"
+            @confirm="resetSizeToDefault"
+          >
+            <t-button variant="text" size="small" class="size-content__reset-btn">
+              {{ lang.size.resetDefault }}
+            </t-button>
+          </t-popconfirm>
+        </div>
         <size-display />
       </div>
       <!-- 组件大小 -->
@@ -142,8 +154,12 @@
 </template>
 
 <script lang="jsx">
+import { Button as TButton, Popconfirm as TPopconfirm } from 'tdesign-vue';
+
 import { CommonCollapse } from '@/common/components';
 import { langMixin } from '@/common/i18n';
+import { modifyToken } from '@/common/themes';
+import { handleAttach } from '@/common/utils';
 
 import SizeAdjust from './components/SizeAdjust.vue';
 import SizeDisplay from './components/SizeDisplay.vue';
@@ -160,6 +176,7 @@ import {
   COMP_PADDING_TB_MAP,
   COMP_POPUP_PADDING_MAP,
   COMP_SIZE_MAP,
+  SIZE_DEFAULT_VALUES,
 } from './built-in/size-map';
 
 export default {
@@ -171,6 +188,8 @@ export default {
     CommonCollapse,
     SizeDisplay,
     SizeAdjust,
+    TButton,
+    TPopconfirm,
     // svg
     SizeSvg,
     HorizontalPaddingSvg,
@@ -202,6 +221,20 @@ export default {
         overflowY: 'scroll',
         height: `${clientHeight - (this.top || 0) - 96}px`,
       };
+    },
+  },
+  methods: {
+    handleAttach,
+    resetSizeToDefault() {
+      // 恢复所有基础尺寸到默认值
+      Object.entries(SIZE_DEFAULT_VALUES).forEach(([token, value]) => {
+        modifyToken(token, value, false);
+      });
+      // 刷新所有 size 相关组件
+      Object.keys(this.refreshIdMap).forEach((key) => {
+        this.refreshIdMap[key]++;
+      });
+      this.$root.$emit('refresh-size-tokens', 'all');
     },
   },
   mounted() {
@@ -247,6 +280,19 @@ export default {
 
   &__main {
     padding: 12px 4px 16px 16px;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__reset-btn {
+    color: var(--text-secondary);
+    &:hover {
+      color: var(--text-primary);
+    }
   }
 
   &__title {

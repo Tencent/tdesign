@@ -165,7 +165,7 @@ export default {
 
       if (!FONT_SIZE_STEPS[v]) return;
       const newSteps = FONT_SIZE_STEPS[v];
-      newSteps.map(({ name, value }) => {
+      newSteps.forEach(({ name, value }) => {
         modifyToken(name, value, isCustom);
         const i = this.tokenTypeList.findIndex((v) => v.label === name);
         if (i !== -1) this.tokenTypeList[i].value = value;
@@ -236,7 +236,7 @@ export default {
         this.ladderTypeList[idx].value = res;
         if (parseInt(this.initLadderList[idx].value, 10) !== parseInt(res, 10)) this.segmentSelectionDisabled = true;
 
-        fontSizeList.map((tokenName) => {
+        fontSizeList.forEach((tokenName) => {
           const i = this.tokenTypeList.findIndex((v) => v.label === tokenName);
           if (i !== -1) this.tokenTypeList[i].value = res;
         });

@@ -149,7 +149,7 @@ export default {
       } else {
         this.lineHeightValue = defaultVal;
       }
-      updateLocalOption('line-height', this.step == 3 ? `${type}_${this.lineHeightValue}` : null);
+      updateLocalOption('line-height', this.step !== 3 ? `${type}_${this.lineHeightValue}` : null);
       updateLineHeightTokens(this.lineHeightValue, type);
     },
   },
