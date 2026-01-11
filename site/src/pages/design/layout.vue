@@ -58,7 +58,7 @@
 
     <h3>Mixed-layout Navigation</h3>
     <p>
-      Mixed-layout Navigatio includes top area, side area, and content area. The combination of top navigation and side
+      Mixed-layout Navigation includes top area, side area, and content area. The combination of top navigation and side
       navigation improves navigation efficiency. It is commonly used in application-type websites with complex
       information architecture and certain navigation efficiency requirements.
     </p>
