@@ -116,7 +116,6 @@ export const FONT_SIZE_OPTIONS = [
   { label: '默认', enLabel: 'default', value: 3 },
   { label: '大号', enLabel: 'large', value: 4 },
   { label: '特大号', enLabel: 'max', value: 5 },
-  { label: '自定义', enLabel: 'customized', value: 6, disabled: true },
 ];
 
 export const FONT_SIZE_LABELS = Object.fromEntries(FONT_SIZE_OPTIONS.map((item, index) => [index + 1, item.label]));
