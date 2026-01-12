@@ -1,6 +1,6 @@
 {
   "name": "@tdesign/site-components",
-  "version": "0.17.5",
+  "version": "0.18.0",
   "license": "MIT",
   "main": "lib/site.es.js",
   "type": "module",
