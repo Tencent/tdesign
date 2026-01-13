@@ -16,20 +16,21 @@ The following are the repositories for TDesign：
 
 ### Repositories for Desktop Components
 
-| Repository                                                      | Description                           | Status        |
-| --------------------------------------------------------------- | ------------------------------------- | ------------- |
-| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue UI components lib for TDesign  | `1.0 LTS`     |
-| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React UI components lib for TDesign   | `1.0 LTS`     |
-| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue2.x UI components lib for TDesign  | `1.0 LTS`     |
+| Repository                                                      | Description                          | Status    |
+| --------------------------------------------------------------- | ------------------------------------ | --------- |
+| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue UI components lib for TDesign    | `1.0 LTS` |
+| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React UI components lib for TDesign  | `1.0 LTS` |
+| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue2.x UI components lib for TDesign | `1.0 LTS` |
 
 ### Repositories for Mobile Components
 
-| Repository                                                              | Description                                      | Status        |
-| ----------------------------------------------------------------------- | ------------------------------------------------ | ------------- |
-| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | Wechat MiniProgram UI components lib for TDesign | `1.0 LTS`     |
-| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue3.x Mobile UI components lib for TDesign      | `1.0 LTS`        |
-| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React Mobile UI components lib for TDesign       | `Alpha`       |
-| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)                                                        | Flutter UI components lib for TDesign            | `Alpha` |
+| Repository                                                              | Description                                      | Status    |
+| ----------------------------------------------------------------------- | ------------------------------------------------ | --------- |
+| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | Wechat MiniProgram UI components lib for TDesign | `1.0 LTS` |
+| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue3.x Mobile UI components lib for TDesign      | `1.0 LTS` |
+| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React Mobile UI components lib for TDesign       | `Alpha`   |
+| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | Flutter UI components lib for TDesign            | `Alpha`   |
+| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | UniApp UI components lib for TDesign             | `Alpha`   |
 
 ### Repositories for Shared
 
@@ -65,7 +66,7 @@ TDesign was founded with the principles of open-source collaboration from the be
 
 Many participants started by trying out the component library in their personal projects, advancing to submit their first Issue, then their first Feature MR, and gradually becoming involved in Code Review and solution-formulating tasks, eventually turning into core contributors. In the past year, TDesign has closed 1k+ issues and conducted 5k+ Code Reviews to maintained a [weekly iterative release](<(https://tdesign.tencent.com/vue/components/changelog)>) of new versions.
 
-TDesign currently supports [multiple platforms and mainstream front-end UI framework](#仓库). Desktop versions for Vue2, Vue3, and React, as well as mobile versions for WeChat Mini Programs, have been launched as stable versions. Mobile React and QQ Mini Program versions have been released the `Alpha` versions for internal testing.
+TDesign currently supports [multiple platforms and mainstream front-end UI framework](#Repositories). Desktop versions for Vue2, Vue3, and React, as well as mobile versions for Vue3 and WeChat Mini Programs, have all released their 1.x versions. Mobile versions for React, Flutter, and UniApp have released Alpha test versions.
 
 ## Why Open-source
 
