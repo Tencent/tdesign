@@ -1,6 +1,7 @@
 import { isEn, isIntranet } from '@utils';
 import { jumpLocation } from '@utils/locale';
 import flutterIcon from '../src/images/flutter-logo.svg?url';
+import uniappIcon from '../src/images/uniapp-logo.png?url';
 import reactIcon from '../src/images/react-logo.svg?url';
 import vueIcon from '../src/images/vue-logo.svg?url';
 import wxIcon from '../src/images/wx-logo.svg?url';
@@ -96,31 +97,33 @@ const baseComponentsLinks = {
         status: 2,
       },
       {
+        name: 'UniApp',
+        icon: uniappIcon,
+        path: jumpLocation('/uniapp/overview'),
+        npm: 'tdesign-uniapp',
+        status: 2,
+      },
+      {
         name: '微信小程序',
         icon: wxIcon,
         path: jumpLocation('/miniprogram/overview'),
         npm: 'tdesign-miniprogram',
         status: 1,
       },
-      {
-        name: 'QQ 小程序',
-        icon: wxIcon,
-        path: jumpLocation('/qq-miniprogram/overview'),
-        npm: 'tdesign-qq-miniprogram',
-        status: 2,
-      },
-      // {
-      //   name: 'Taro',
-      //   icon: wxIcon,
-      //   path: jumpLocation('/taro/overview'),
-      //   npm: 'tdesign-taro',
-      //   status: 0,
-      // },
     ],
   },
 };
 
-const baseComponentPrefix = ['vue', 'react', 'mobile-vue', 'mobile-react', 'vue-next', 'flutter', 'miniprogram'];
+const baseComponentPrefix = [
+  'vue',
+  'react',
+  'mobile-vue',
+  'mobile-react',
+  'vue-next',
+  'flutter',
+  'uniapp',
+  'miniprogram',
+];
 
 export default {
   headerList,
@@ -198,31 +201,33 @@ export const getHeaderConfig = () => {
           status: 2,
         },
         {
+          name: 'UniApp',
+          icon: uniappIcon,
+          path: jumpLocation('/uniapp/overview'),
+          npm: 'tdesign-uniapp',
+          status: 2,
+        },
+        {
           name: en ? 'WeChat-Miniprogram' : '微信小程序',
           icon: wxIcon,
           path: jumpLocation('/miniprogram/overview'),
           npm: 'tdesign-miniprogram',
           status: 1,
         },
-        {
-          name: en ? 'QQ-Miniprogram' : 'QQ 小程序',
-          icon: wxIcon,
-          path: jumpLocation('/qq-miniprogram/overview'),
-          npm: 'tdesign-qq-miniprogram',
-          status: 2,
-        },
-        // {
-        //   name: 'Taro',
-        //   icon: wxIcon,
-        //   path: jumpLocation('/taro/overview'),
-        //   npm: 'tdesign-taro',
-        //   status: 0,
-        // },
       ],
     },
   };
 
-  const baseComponentPrefix = ['vue', 'react', 'mobile-vue', 'mobile-react', 'vue-next', 'flutter', 'miniprogram'];
+  const baseComponentPrefix = [
+    'vue',
+    'react',
+    'mobile-vue',
+    'mobile-react',
+    'vue-next',
+    'flutter',
+    'uniapp',
+    'miniprogram',
+  ];
 
   return {
     headerList,
