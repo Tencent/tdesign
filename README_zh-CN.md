@@ -17,20 +17,21 @@ TDesign 是一个 `multi-repo`， TDesign 有如下代码仓库：
 
 ### 桌面端组件库
 
-| 仓库                                                            | 描述                 | 状态      |
-| --------------------------------------------------------------- | -------------------- | --------- |
-| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue 2.x 技术栈       | `1.0 LTS` |
-| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈       | `1.0 LTS` |
-| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈    | `1.0 LTS` |
+| 仓库                                                            | 描述              | 状态      |
+| --------------------------------------------------------------- | ----------------- | --------- |
+| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue 2.x 技术栈    | `1.0 LTS` |
+| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈    | `1.0 LTS` |
+| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈 | `1.0 LTS` |
 
 ### 移动端组件库
 
 | 仓库                                                                    | 描述              | 状态      |
 | ----------------------------------------------------------------------- | ----------------- | --------- |
 | [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | 微信小程序        | `1.0 LTS` |
-| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue 3.x 技术栈    | `1.0 LTS`    |
+| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue 3.x 技术栈    | `1.0 LTS` |
 | [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React 16.x 技术栈 | `Alpha`   |
-| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)                                                        | 1.17.0            | `Alpha`  |
+| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | 1.17.0            | `Alpha`   |
+| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | -                 | `Alpha`   |
 
 ### 基础通用仓库
 
@@ -66,7 +67,7 @@ TDesign 在创建之初就秉承开源协作的原则，包括源代码在内的
 
 很多同学从个人项目中试用组件库开始，到提交第一个 `Bug Issue`，再到提交第一个 `Feature MR`，最后逐步参与到 `Code Review` 和方案制定工作中，成为核心贡献者。在过去的一年中，TDesign 关闭了 1k+ `Issue`，进行了 5k+ 次 `CR`，保持 [每周迭代](https://tdesign.tencent.com/vue/components/changelog) 发布新版本。
 
-组件库目前支持[多个端和主流技术栈](#仓库)，桌面端 Vue2、Vue3 已发布 1.x 版本，桌面端 React 和移动端 Vue3、微信小程序已发布 `Beta` 版本，移动端 React、Flutter 和 UniApp 已发布 `Alpha` 内测版本。
+组件库目前支持[多个端和主流技术栈](#仓库)，桌面端 Vue2、Vue3、React 和移动端 Vue3、微信小程序均已发布 1.x 版本，移动端 React、Flutter 和 UniApp 已发布 `Alpha` 内测版本。
 
 ## 为什么开源
 
