@@ -26,7 +26,7 @@ export const CUSTOM_OPTIONS_ID = `${CUSTOM_THEME_ID}-options`;
 export const CUSTOM_TOKEN_ID = `${CUSTOM_THEME_ID}-tokens`;
 
 export const isMiniProgram = (device) => device === 'mini-program';
-export const isUniApp = (device) => device === 'uniapp';
+export const isUniApp = (device) => device === 'uni-app';
 export const isMobile = (device) => device === 'mobile' || isMiniProgram(device) || isUniApp(device);
 
 export function normalizeDevice(device) {
