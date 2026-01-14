@@ -1,12 +1,12 @@
 import { extractRootContent, getThemeMode, setUpModeObserver } from '../utils';
-import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile } from './core';
+import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile, isUniApp } from './core';
 
 /* ----- 同步亮暗模式 -----  */
 function handleMobileModeChange(iframe, mode) {
   iframe.contentDocument.documentElement.setAttribute('theme-mode', mode);
 }
 
-function handleMiniProgramModeChange(iframe, mode) {
+function handleMiniProgramModeChange(iframe, mode, selector = 'body') {
   const isDark = mode === 'dark';
 
   const prevModeId = isDark ? CUSTOM_THEME_ID : CUSTOM_DARK_ID;
@@ -24,7 +24,7 @@ function handleMiniProgramModeChange(iframe, mode) {
     style.id = currentModeId;
 
     const cssString = extractRootContent(themeStyle.innerText);
-    style.textContent = `body {\n${cssString}\n}`;
+    style.textContent = `${selector} {\n${cssString}\n}`;
 
     iframeDom.head.appendChild(style);
   }
@@ -35,6 +35,7 @@ function handleMiniProgramModeChange(iframe, mode) {
     preStyle.remove();
   }
 }
+
 /* ------------------- */
 
 /* ----- 同步 Token -----  */
@@ -53,8 +54,8 @@ function handleMobileTokenChange(iframe, styleElement) {
   }
 }
 
-function handleMiniProgramTokenChange(iframe, styleElement) {
-  const updatedCss = `body {\n${extractRootContent(styleElement.innerText)}\n}`;
+function handleMiniProgramTokenChange(iframe, styleElement, selector = 'body') {
+  const updatedCss = `${selector} {\n${extractRootContent(styleElement.innerText)}\n}`;
 
   const updatedId = styleElement.id;
   const iframeStyleElement = iframe.contentDocument.getElementById(updatedId);
@@ -71,6 +72,7 @@ function handleMiniProgramTokenChange(iframe, styleElement) {
     iframe.contentDocument.head.appendChild(newStyleElement);
   }
 }
+
 /* ------------------- */
 
 /**
@@ -84,6 +86,8 @@ function watchThemeModeChange(iframe) {
   const handleModeChange = (mode) => {
     if (isMiniProgram(device)) {
       handleMiniProgramModeChange(iframe, mode);
+    } else if (isUniApp(device)) {
+      handleMiniProgramModeChange(iframe, mode, 'uni-page-body');
     } else {
       handleMobileModeChange(iframe, mode);
     }
@@ -112,6 +116,8 @@ function watchThemeTokenChange(iframe) {
   const handleTokenChange = (styleElement) => {
     if (isMiniProgram(device)) {
       handleMiniProgramTokenChange(iframe, styleElement);
+    } else if (isUniApp(device)) {
+      handleMiniProgramTokenChange(iframe, styleElement, 'uni-page-body');
     } else {
       handleMobileTokenChange(iframe, styleElement);
     }

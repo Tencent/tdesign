@@ -26,7 +26,8 @@ export const CUSTOM_OPTIONS_ID = `${CUSTOM_THEME_ID}-options`;
 export const CUSTOM_TOKEN_ID = `${CUSTOM_THEME_ID}-tokens`;
 
 export const isMiniProgram = (device) => device === 'mini-program';
-export const isMobile = (device) => device === 'mobile' || isMiniProgram(device);
+export const isUniApp = (device) => device === 'uniapp';
+export const isMobile = (device) => device === 'mobile' || isMiniProgram(device) || isUniApp(device);
 
 export function normalizeDevice(device) {
   return isMobile(device) ? 'mobile' : 'web';
@@ -107,6 +108,28 @@ export function exportCustomStyleSheet(device) {
       }
       @media (prefers-color-scheme: dark) {
         page, .page {
+          ${darkCssString}
+        }
+      }
+      ${extraCssString}
+    `;
+  } else if (isUniApp(device)) {
+    finalCssString = `
+      @media (prefers-color-scheme: light) {
+      /* #ifdef H5 */
+      :root,
+      /* #endif */
+      page,
+      .page {
+          ${cssString}
+        }
+      }
+      @media (prefers-color-scheme: dark) {
+        /* #ifdef H5 */
+        :root,
+        /* #endif */
+        page,
+        .page {
           ${darkCssString}
         }
       }
