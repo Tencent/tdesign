@@ -1,12 +1,12 @@
 import { extractRootContent, getThemeMode, setUpModeObserver } from '../utils';
-import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile } from './core';
+import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile, isUniApp } from './core';
 
 /* ----- 同步亮暗模式 -----  */
 function handleMobileModeChange(iframe, mode) {
   iframe.contentDocument.documentElement.setAttribute('theme-mode', mode);
 }
 
-function handleMiniProgramModeChange(iframe, mode) {
+function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
   const isDark = mode === 'dark';
 
   const prevModeId = isDark ? CUSTOM_THEME_ID : CUSTOM_DARK_ID;
@@ -24,7 +24,8 @@ function handleMiniProgramModeChange(iframe, mode) {
     style.id = currentModeId;
 
     const cssString = extractRootContent(themeStyle.innerText);
-    style.textContent = `body {\n${cssString}\n}`;
+    const selector = uniapp ? 'uni-page-body' : 'body';
+    style.textContent = `${selector} {\n${cssString}\n}`;
 
     iframeDom.head.appendChild(style);
   }
@@ -53,8 +54,9 @@ function handleMobileTokenChange(iframe, styleElement) {
   }
 }
 
-function handleMiniProgramTokenChange(iframe, styleElement) {
-  const updatedCss = `body {\n${extractRootContent(styleElement.innerText)}\n}`;
+function handleMiniProgramTokenChange(iframe, styleElement, uniapp = false) {
+  const selector = uniapp ? 'uni-page-body' : 'body';
+  const updatedCss = `${selector} {\n${extractRootContent(styleElement.innerText)}\n}`;
 
   const updatedId = styleElement.id;
   const iframeStyleElement = iframe.contentDocument.getElementById(updatedId);
@@ -82,8 +84,8 @@ function watchThemeModeChange(iframe) {
 
   const device = iframe.getAttribute('device');
   const handleModeChange = (mode) => {
-    if (isMiniProgram(device)) {
-      handleMiniProgramModeChange(iframe, mode);
+    if (isMiniProgram(device) || isUniApp(device)) {
+      handleMiniProgramModeChange(iframe, mode, isUniApp(device));
     } else {
       handleMobileModeChange(iframe, mode);
     }
@@ -110,8 +112,8 @@ function watchThemeTokenChange(iframe) {
 
   const device = iframe.getAttribute('device');
   const handleTokenChange = (styleElement) => {
-    if (isMiniProgram(device)) {
-      handleMiniProgramTokenChange(iframe, styleElement);
+    if (isMiniProgram(device) || isUniApp(device)) {
+      handleMiniProgramTokenChange(iframe, styleElement, isUniApp(device));
     } else {
       handleMobileTokenChange(iframe, styleElement);
     }
