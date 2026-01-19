@@ -5,25 +5,25 @@
       <remove-icon class="shadow-layer__remove" @click="handleMove" />
     </div>
     <div class="shadow-layer__card--item">
-      <t-input-number theme="normal" autoWidth v-model="shadow[0]" class="shadow-layer__card--x" placeholder="0px">
+      <t-input-number v-model="shadow[0]" theme="normal" auto-width class="shadow-layer__card--x" placeholder="0px">
         <template #suffix><div class="shadow-layer__suffix">X</div></template>
       </t-input-number>
-      <t-input-number theme="normal" autoWidth v-model="shadow[1]" class="shadow-layer__card--x" placeholder="0px">
+      <t-input-number v-model="shadow[1]" theme="normal" auto-width class="shadow-layer__card--x" placeholder="0px">
         <template #suffix><div class="shadow-layer__suffix">Y</div></template>
       </t-input-number>
     </div>
-    <t-input-number autoWidth theme="normal" v-model="shadow[2]" class="shadow-layer__card--item" placeholder="0px">
+    <t-input-number v-model="shadow[2]" auto-width theme="normal" class="shadow-layer__card--item" placeholder="0px">
       <template #suffix><div class="shadow-layer__suffix">Blur</div></template>
     </t-input-number>
-    <t-input-number autoWidth theme="normal" v-model="shadow[3]" class="shadow-layer__card--item" placeholder="0px">
+    <t-input-number v-model="shadow[3]" auto-width theme="normal" class="shadow-layer__card--item" placeholder="0px">
       <template #suffix><span class="shadow-layer__suffix">Spread</span></template>
     </t-input-number>
-    <t-popup class="placement top center" placement="left" showArrow destroyOnClose :attach="handleAttach">
+    <t-popup class="placement top center" placement="left" show-arrow destroy-on-close :attach="handleAttach">
       <t-input v-model="color">
-        <div class="shadow-layer__card--sharp" :style="{ background: color }" slot="prefix-icon"></div>
+        <div slot="prefix-icon" class="shadow-layer__card--sharp" :style="{ background: color }"></div>
       </t-input>
       <template #content>
-        <color-picker :value="color" enableAlpha format="RGBA" @change="changeColor" />
+        <color-picker :value="color" enable-alpha format="RGBA" @change="changeColor" />
       </template>
     </t-popup>
   </div>
@@ -38,10 +38,6 @@ import { handleAttach } from '@/common/utils';
 
 export default {
   name: 'ShadowEditor',
-  props: {
-    name: String,
-    value: String,
-  },
   components: {
     TInputNumber,
     TInput,
@@ -49,16 +45,22 @@ export default {
     RemoveIcon,
     ColorPicker,
   },
+  props: {
+    name: {
+      type: String,
+      default: '',
+    },
+    value: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       shadow: [0, 0, 0, 0],
       color: '',
       hasInit: false,
     };
-  },
-  created() {
-    this.shadow = this.splitShadowValue(this.value);
-    this.color = this.getShadowColor(this.value);
   },
   watch: {
     shadow(nVal) {
@@ -79,6 +81,10 @@ export default {
       const shadow = this.shadow.map((val) => `${val}px`).join(' ');
       this.$emit('change', `${shadow} ${nVal}`);
     },
+  },
+  created() {
+    this.shadow = this.splitShadowValue(this.value);
+    this.color = this.getShadowColor(this.value);
   },
   methods: {
     handleAttach,

@@ -1,14 +1,15 @@
 <template>
-  <div class="color-collapse">
-    <div class="color-collapse__header">
+  <collapse-base variant="color">
+    <!-- 左侧颜色选择器 -->
+    <template #icon>
       <t-popup
         placement="left"
-        showArrow
+        show-arrow
         trigger="click"
-        :destroyOnClose="true"
+        :destroy-on-close="true"
         :attach="handleAttach"
-        :overlayStyle="{ borderRadius: '9px' }"
-        :hideEmptyPopup="true"
+        :overlay-style="{ borderRadius: '9px' }"
+        :hide-empty-popup="true"
       >
         <div
           class="block"
@@ -31,85 +32,95 @@
             <edit-1-icon v-if="!disabled && isHover" size="24px" />
           </transition>
         </div>
-        <template #content v-if="!disabled">
+        <template v-if="!disabled" #content>
           <color-picker :value="mainColor" @change="changeColor" />
         </template>
       </t-popup>
-      <div class="color-collapse__text">
-        <div class="color-collapse__title" @click="isActive = !isActive">
-          {{ title }}
-        </div>
-        <div class="color-collapse__subtitle" :style="{ color: 'var(--text-secondary)' }">
-          <slot name="subTitle">
-            <!-- 没有 slot 时使用默认内容 -->
-            HEX: {{ mainColor }}
-            <t-popup
-              placement="top"
-              showArrow
-              trigger="click"
-              :destroyOnClose="true"
-              :attach="handleAttach"
-              :overlayStyle="{ borderRadius: '6px' }"
-            >
-              <file-copy-icon @click="() => copyHex(mainColor)" />
-              <template #content>
-                <span :style="{ color: `var(--text-secondary)` }">{{ lang.copied }}</span>
-              </template>
-            </t-popup>
-          </slot>
-        </div>
-      </div>
-      <div @click="isActive = !isActive">
-        <arrow-icon :isActive="isActive" overlayClassName="color-collapse__arrow" />
-      </div>
-    </div>
-    <transition
-      name="t-slide-down"
-      @before-enter="beforeEnter"
-      @enter="enter"
-      @after-enter="afterEnter"
-      @before-leave="beforeLeave"
-      @leave="leave"
-      @afterLeave="afterLeave"
-    >
-      <slot v-if="isActive"></slot>
-    </transition>
-  </div>
+    </template>
+
+    <!-- 标题 -->
+    <template #title>{{ title }}</template>
+
+    <!-- 副标题 -->
+    <template #subTitle>
+      HEX: {{ mainColor }}
+      <t-popup
+        placement="top"
+        show-arrow
+        trigger="click"
+        :destroy-on-close="true"
+        :attach="handleAttach"
+        :overlay-style="{ borderRadius: '6px' }"
+        @click.native.stop
+      >
+        <file-copy-icon @click="() => copyHex(mainColor)" />
+        <template #content>
+          <span :style="{ color: `var(--text-secondary)` }">{{ lang.copied }}</span>
+        </template>
+      </t-popup>
+    </template>
+
+    <!-- 内容 -->
+    <template #content>
+      <slot></slot>
+    </template>
+  </collapse-base>
 </template>
+
 <script>
 import { Edit1Icon, FileCopyIcon } from 'tdesign-icons-vue';
 import { Popup as TPopup } from 'tdesign-vue';
-import ArrowIcon from 'tdesign-vue/es/common-components/fake-arrow';
 
 import { ColorPicker } from '@/common/components';
+import CollapseBase from '@/common/components/CollapseBase/index.vue';
 import { langMixin } from '@/common/i18n';
-import { collapseAnimation, handleAttach } from '@/common/utils';
+import { handleAttach } from '@/common/utils';
 
+/**
+ * 颜色展开/收起组件
+ * 基于 CollapseBase，增加颜色选择、复制功能
+ */
 export default {
   name: 'ColorCollapse',
-  props: {
-    type: String,
-    title: String,
-    mainColor: String,
-    disabled: Boolean,
-  },
+  components: { FileCopyIcon, TPopup, Edit1Icon, ColorPicker, CollapseBase },
   mixins: [langMixin],
-  components: { FileCopyIcon, ArrowIcon, TPopup, Edit1Icon, ColorPicker },
+  props: {
+    type: {
+      type: String,
+      default: '',
+    },
+    title: {
+      type: String,
+      default: '',
+    },
+    mainColor: {
+      type: String,
+      default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  emits: ['changeMainColor'],
   data() {
     return {
-      ...collapseAnimation(),
-      isActive: false,
       isHover: false,
     };
   },
-  emit: ['changeMainColor'],
   methods: {
     handleAttach,
+    /**
+     * 更改颜色
+     */
     changeColor(hex) {
       this.$emit('changeMainColor', hex, this.type);
     },
+    /**
+     * 复制十六进制颜色值
+     */
     copyHex(hex) {
-      let input = document.createElement('input');
+      const input = document.createElement('input');
       input.value = hex;
       document.body.appendChild(input);
       input.select();
@@ -119,83 +130,38 @@ export default {
   },
 };
 </script>
+
 <style lang="less" scoped>
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.1s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 
-.color-collapse {
-  padding: 16px 4px 16px 16px;
-  border-top: 1px solid var(--theme-component-border);
+.block {
+  position: relative;
 
-  &__header {
-    display: flex;
-    align-items: center;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: transparent;
+    transition: background-color 0.2s;
+    border-radius: 6px;
+  }
 
-    .block {
-      position: relative;
-
-      &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        background-color: transparent;
-        transition: background-color 0.2s;
-        border-radius: 6px;
-      }
-      &:hover {
-        &::after {
-          background-color: rgba(0, 0, 0, 0.1);
-        }
-      }
+  &:hover {
+    &::after {
+      background-color: rgba(0, 0, 0, 0.1);
     }
-  }
-
-  &__text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-left: 12px;
-    font-size: 14px;
-    line-height: 22px;
-    flex: 1;
-    cursor: pointer;
-  }
-
-  &__title {
-    margin-bottom: 4px;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-
-  &__subtitle {
-    display: flex;
-    align-items: center;
-    color: var(--text-secondary);
-    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
-    /deep/ .t-icon {
-      margin-left: 4px;
-      cursor: pointer;
-      transition: color 0.2s;
-
-      &:hover {
-        color: var(--text-primary);
-      }
-    }
-  }
-
-  &__arrow {
-    color: var(--text-primary);
-    transform: scale(1.5);
-    cursor: pointer;
   }
 }
 </style>

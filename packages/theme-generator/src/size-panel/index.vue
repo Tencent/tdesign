@@ -9,7 +9,19 @@
   >
     <div class="size-content__content" :style="contentStyle">
       <div class="size-content__main">
-        <p class="size-content__title">{{ lang.size.basicSize }}</p>
+        <div class="size-content__header">
+          <p class="size-content__title">{{ lang.size.basicSize }}</p>
+          <t-popconfirm
+            :content="lang.size.resetConfirm"
+            :theme="null"
+            :popup-props="{ attach: handleAttach }"
+            @confirm="resetSizeToDefault"
+          >
+            <t-button variant="text" size="small" class="size-content__reset-btn">
+              {{ lang.size.resetDefault }}
+            </t-button>
+          </t-popconfirm>
+        </div>
         <size-display />
       </div>
       <!-- 组件大小 -->
@@ -34,7 +46,7 @@
         <template #title>{{ lang.size.componentSize }}</template>
         <template #subTitle>size</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['comp-size']" :tokenList="COMP_SIZE_MAP" type="comp-size" />
+          <size-adjust :key="refreshIdMap['comp-size']" :token-list="COMP_SIZE_MAP" type="comp-size" />
         </template>
       </common-collapse>
       <!-- 组件上下边距 -->
@@ -59,7 +71,11 @@
         <template #title>{{ lang.size.yPadding }}</template>
         <template #subTitle>padding top & bottom</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['comp-padding-tb']" :tokenList="COMP_PADDING_TB_MAP" type="comp-padding-tb" />
+          <size-adjust
+            :key="refreshIdMap['comp-padding-tb']"
+            :token-list="COMP_PADDING_TB_MAP"
+            type="comp-padding-tb"
+          />
         </template>
       </common-collapse>
       <!-- 组件左右边距 -->
@@ -84,7 +100,11 @@
         <template #title>{{ lang.size.xPadding }}</template>
         <template #subTitle>padding left & right</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['comp-padding-lr']" :tokenList="COMP_PADDING_LR_MAP" type="comp-padding-lr" />
+          <size-adjust
+            :key="refreshIdMap['comp-padding-lr']"
+            :token-list="COMP_PADDING_LR_MAP"
+            type="comp-padding-lr"
+          />
         </template>
       </common-collapse>
       <!-- popup 边距 -->
@@ -109,7 +129,7 @@
         <template #title>{{ lang.size.popupPadding }}</template>
         <template #subTitle>popup padding</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['popup-padding']" :tokenList="COMP_POPUP_PADDING_MAP" type="popup-padding" />
+          <size-adjust :key="refreshIdMap['popup-padding']" :token-list="COMP_POPUP_PADDING_MAP" type="popup-padding" />
         </template>
       </common-collapse>
       <!-- margin 边距 -->
@@ -134,7 +154,7 @@
         <template #title>{{ lang.size.margin }}</template>
         <template #subTitle>margin</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['comp-margin']" :tokenList="COMP_MARGIN_MAP" type="comp-margin" />
+          <size-adjust :key="refreshIdMap['comp-margin']" :token-list="COMP_MARGIN_MAP" type="comp-margin" />
         </template>
       </common-collapse>
     </div>
@@ -142,8 +162,12 @@
 </template>
 
 <script lang="jsx">
+import { Button as TButton, Popconfirm as TPopconfirm } from 'tdesign-vue';
+
 import { CommonCollapse } from '@/common/components';
 import { langMixin } from '@/common/i18n';
+import { modifyToken } from '@/common/themes';
+import { handleAttach } from '@/common/utils';
 
 import SizeAdjust from './components/SizeAdjust.vue';
 import SizeDisplay from './components/SizeDisplay.vue';
@@ -160,17 +184,17 @@ import {
   COMP_PADDING_TB_MAP,
   COMP_POPUP_PADDING_MAP,
   COMP_SIZE_MAP,
+  SIZE_DEFAULT_VALUES,
 } from './built-in/size-map';
 
 export default {
   name: 'SizePanel',
-  props: {
-    top: Number,
-  },
   components: {
     CommonCollapse,
     SizeDisplay,
     SizeAdjust,
+    TButton,
+    TPopconfirm,
     // svg
     SizeSvg,
     HorizontalPaddingSvg,
@@ -179,6 +203,12 @@ export default {
     MarginSvg,
   },
   mixins: [langMixin],
+  props: {
+    top: {
+      type: Number,
+      default: 0,
+    },
+  },
   data() {
     return {
       COMP_SIZE_MAP,
@@ -212,6 +242,20 @@ export default {
         }
       });
     });
+  },
+  methods: {
+    handleAttach,
+    resetSizeToDefault() {
+      // 恢复所有基础尺寸到默认值
+      Object.entries(SIZE_DEFAULT_VALUES).forEach(([token, value]) => {
+        modifyToken(token, value, false);
+      });
+      // 刷新所有 size 相关组件
+      Object.keys(this.refreshIdMap).forEach((key) => {
+        this.refreshIdMap[key]++;
+      });
+      this.$root.$emit('refresh-size-tokens', 'all');
+    },
   },
 };
 </script>
@@ -247,6 +291,19 @@ export default {
 
   &__main {
     padding: 12px 4px 16px 16px;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__reset-btn {
+    color: var(--text-secondary);
+    &:hover {
+      color: var(--text-primary);
+    }
   }
 
   &__title {
