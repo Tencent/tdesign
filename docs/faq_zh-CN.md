@@ -8,7 +8,7 @@ title: 常见问题
 
 ### 如何定制主题
 
-参考 [自定义主题](https://github.com/Tencent/tdesign-common/blob/develop/theme.md)，你可以自由修改全局和各组件抽离的样式变量，只有已有变量无法满足你的定制需求时才考虑通过同名类覆盖的方式重写默认样式，这可以降低你跟随组件库升级的难度。
+参考 [自定义主题](https://github.com/Tencent/tdesign-common/blob/develop/docs/web/theme.md)，你可以自由修改全局和各组件抽离的样式变量，只有已有变量无法满足你的定制需求时才考虑通过同名类覆盖的方式重写默认样式，这可以降低你跟随组件库升级的难度。
 
 ### 受控与非受控用法
 
