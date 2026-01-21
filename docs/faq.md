@@ -9,7 +9,7 @@ If you have an urgent online issue to resolve, please leave a message in the iss
 
 ### Customizing Theme
 
-Refer to [Customizing Theme](<(https://github.com/Tencent/tdesign-common/blob/develop/theme.md)>), it is recommend to custom theme by modifying global and component-specific style variables. Only consider rewriting default styles using same-named classes if existing variables cannot meet your customization needs. This reduces the difficulty of upgrading with the component library.
+Refer to [Customizing Theme](https://github.com/Tencent/tdesign-common/blob/develop/docs/web/theme.en-US.md), it is recommend to custom theme by modifying global and component-specific style variables. Only consider rewriting default styles using same-named classes if existing variables cannot meet your customization needs. This reduces the difficulty of upgrading with the component library.
 
 ### Controlled and Uncontrolled Usage
 
