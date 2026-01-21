@@ -76,6 +76,13 @@ export const submodules = {
     tagPrefix: '@tdesign-vue-next/chat@',
     repo: 'Tencent/tdesign-vue-next',
   },
+  'tdesign-uniap-chat': {
+    title: '## UniApp for Chat 发布',
+    changelogUrl:
+      'https://raw.githubusercontent.com/Tencent/tdesign-miniprogram/refs/heads/main/packages/tdesign-uniapp-chat/CHANGELOG.md',
+    tagPrefix: 'tdesign-uniapp-chat@',
+    repo: 'Tencent/tdesign-miniprogram',
+  },
 };
 
 export type SubmoduleItem = keyof typeof submodules;
@@ -93,4 +100,5 @@ export const submodulesKeys: SubmoduleItem[] = [
   'tdesign-vue-next-starter',
   'tdesign-react-starter',
   //'@tdesign-vue-next/chat',
+  'tdesign-uniap-chat',
 ];
