@@ -10,21 +10,21 @@ export default function mdToVue(options) {
       </template>
     `;
   }
+  let docHeader = '';
+  if (mdSegment.tdDocHeader) {
+    docHeader = `
 
-  const sfc = `
-    <template>
-      <td-doc-content ref="tdDocContent" page-status="hidden">
-        ${
-          mdSegment.tdDocHeader
-            ? `
           <td-doc-header
             slot="doc-header"
             ref="tdDocHeader"
             spline="${mdSegment.spline}"
           >
-          </td-doc-header>`
-            : ''
-        }
+          </td-doc-header>`;
+  }
+  const sfc = `
+    <template>
+      <td-doc-content ref="tdDocContent" page-status="hidden">
+        ${docHeader}
         <div name="DOC">${mdSegment.docMd}</div>
         <td-doc-footer slot="doc-footer"></td-doc-footer>
       </td-doc-content>
@@ -86,6 +86,7 @@ function customRender({ source, md }) {
 
   const mdSegment = {
     ...pageData,
+    // eslint-disable-next-line no-useless-call
     docMd: md.render.call(md, `${pageData.toc ? '[toc]\n' : ''}${content}`).html,
   };
 

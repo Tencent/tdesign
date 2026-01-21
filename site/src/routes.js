@@ -66,10 +66,6 @@ const routes = [
     },
     component: () => import('./pages/icons/index.vue'),
   },
-  {
-    path: '*',
-    redirect: '/',
-  },
 ];
 
 // 英文站点路由
@@ -119,4 +115,13 @@ const enRoutes = [
     component: () => import('./pages/icons/index.vue'),
   },
 ];
-export default [...routes, ...enRoutes];
+
+const allRoutes = [...routes, ...enRoutes];
+
+// 添加 404 路由
+allRoutes.push({
+  path: '/:pathMatch(.*)*',
+  redirect: '/',
+});
+
+export default allRoutes;

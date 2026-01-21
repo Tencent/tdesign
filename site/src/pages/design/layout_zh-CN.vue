@@ -1,5 +1,5 @@
 <template>
-  <div ref="article" name="DOC" class="doc-layout">
+  <div ref="articleRef" name="DOC" class="doc-layout">
     <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
       <ol class="tdesign-toc_list">
         <li class="tdesign-toc_list_item" v-for="anchor in catalog" :key="anchor.id">
@@ -177,66 +177,74 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor';
+<script setup>
+import { ref, onMounted } from 'vue';
+import { genAnchor } from './utils';
 
-export default {
-  mixins: [anchorMixin],
-  data() {
+// Template refs
+const articleRef = ref(null);
+
+// Data (from mixin)
+const catalog = ref([]);
+
+// Data (from component)
+const dataSource = ref([
+  {
+    cut: 'sm',
+    cutValue: '768px',
+    range: '768px-991px',
+    colWidth: '16px',
+    grid: '内容区块根据不同的断点进行堆叠或缩放',
+    device: '平板',
+  },
+  {
+    cut: 'md',
+    cutValue: '992px',
+    range: '992px-1199px',
+    colWidth: '16px',
+    grid: '内容区块根据不同的断点进行堆叠或缩放',
+    device: '超小尺寸电脑',
+  },
+  {
+    cut: 'lg',
+    cutValue: '1200px',
+    range: '大于 1200px',
+    colWidth: '16px',
+    grid: '大于断点值时，始终保持水平排列',
+    device: '小尺寸电脑',
+  },
+]);
+
+const columns = ref([
+  { width: 104, ellipsis: true, colKey: 'cut', title: '断点' },
+  { width: 104, ellipsis: true, colKey: 'cutValue', title: '断点值' },
+  { width: 144, ellipsis: true, colKey: 'range', title: '响应区间' },
+  { width: 104, colKey: 'colWidth', title: '槽宽' },
+  { colKey: 'grid', title: '栅格' },
+  { width: 160, ellipsis: true, colKey: 'device', title: '显示设备参考' },
+]);
+
+const rowKey = ref('cut');
+const size = ref('small');
+
+// Methods (from component)
+const rowspanAndColspan = ({ col, rowIndex }) => {
+  if (col.colKey === 'colWidth' && rowIndex === 0) {
     return {
-      dataSource: [
-        {
-          cut: 'sm',
-          cutValue: '768px',
-          range: '768px-991px',
-          colWidth: '16px',
-          grid: '内容区块根据不同的断点进行堆叠或缩放',
-          device: '平板',
-        },
-        {
-          cut: 'md',
-          cutValue: '992px',
-          range: '992px-1199px',
-          colWidth: '16px',
-          grid: '内容区块根据不同的断点进行堆叠或缩放',
-          device: '超小尺寸电脑',
-        },
-        {
-          cut: 'lg',
-          cutValue: '1200px',
-          range: '大于 1200px',
-          colWidth: '16px',
-          grid: '大于断点值时，始终保持水平排列',
-          device: '小尺寸电脑',
-        },
-      ],
-      columns: [
-        { width: 104, ellipsis: true, colKey: 'cut', title: '断点' },
-        { width: 104, ellipsis: true, colKey: 'cutValue', title: '断点值' },
-        { width: 144, ellipsis: true, colKey: 'range', title: '响应区间' },
-        { width: 104, colKey: 'colWidth', title: '槽宽' },
-        { colKey: 'grid', title: '栅格' },
-        { width: 160, ellipsis: true, colKey: 'device', title: '显示设备参考' },
-      ],
-      rowKey: 'cut',
-      size: 'small',
+      rowspan: 3,
     };
-  },
-  methods: {
-    rowspanAndColspan({ col, rowIndex }) {
-      if (col.colKey === 'colWidth' && rowIndex === 0) {
-        return {
-          rowspan: 3,
-        };
-      }
-      if (col.colKey === 'grid' && rowIndex === 0) {
-        return {
-          rowspan: 2,
-        };
-      }
-    },
-  },
+  }
+  if (col.colKey === 'grid' && rowIndex === 0) {
+    return {
+      rowspan: 2,
+    };
+  }
 };
+
+// Lifecycle
+onMounted(() => {
+  genAnchor(articleRef, catalog);
+});
 </script>
 
 <style lang="less">

@@ -1,81 +1,76 @@
 <template>
   <span :class="_class" :style="_style">
-    <img
-      :src="imgSrc"
-      alt="user avatar"
-      @error="onError"
-      v-if="!error && imgSrc"
-    >
-    <div class="tdesign-avatar-name">{{username}}</div>
+    <img :src="imgSrc" alt="user avatar" @error="onError" v-if="!error && imgSrc" />
+    <div class="tdesign-avatar-name">{{ username }}</div>
   </span>
 </template>
-<script>
-function getSrc (username, src) {
+<script setup>
+import { ref, computed } from 'vue';
+
+function getSrc(username, src) {
   if (username) {
     // return `http://dcloud.oa.com/Public/Avatar/${username}.png`;
     // return `http://r.hrc.oa.com/photo/500/${username}.png`;
-    return `https://dayu.oa.com/avatars/${username}/profile.jpg`
+    return `https://dayu.oa.com/avatars/${username}/profile.jpg`;
   }
 
-  return src || ''
+  return src || '';
 }
 
-export default {
-  props: {
-    /**
-     * 头像类型
-     * @member square | round
-     */
-    type: {
-      type: String,
-      default: 'round'
-    },
-    /**
-     * 头像大小
-     * @member large | default | small
-     */
-    size: {
-      type: String,
-      default: 'default'
-    },
-    username: String,
-    src: String,
-    width: [String, Number],
-    height: [String, Number]
+const props = defineProps({
+  /**
+   * 头像类型
+   * @member square | round
+   */
+  type: {
+    type: String,
+    default: 'round',
   },
-  data () {
+  /**
+   * 头像大小
+   * @member large | default | small
+   */
+  size: {
+    type: String,
+    default: 'default',
+  },
+  username: String,
+  src: String,
+  width: [String, Number],
+  height: [String, Number],
+});
+
+const prefixCls = 'tdesign-avatar';
+const error = ref(false);
+
+const _class = computed(() => {
+  return [
+    prefixCls,
+    {
+      [`${prefixCls}__lg`]: props.size === 'large',
+      [`${prefixCls}__square`]: props.type === 'square',
+      [`${prefixCls}__default`]: error.value || !imgSrc.value,
+    },
+  ];
+});
+
+const _style = computed(() => {
+  if (props.width) {
     return {
-      prefixCls: 'tdesign-avatar',
-      error: false
-    }
-  },
-  computed: {
-    _class () {
-      return [this.prefixCls, {
-        [`${this.prefixCls}__lg`]: this.size === 'large',
-        [`${this.prefixCls}__square`]: this.type === 'square',
-        [`${this.prefixCls}__default`]: this.error || !this.imgSrc
-      }]
-    },
-    _style () {
-      if (this.width) {
-        return {
-          width: `${this.width}px`,
-          height: `${this.width}px`
-        }
-      }
-      return {}
-    },
-    imgSrc () {
-      return getSrc(this.username, this.src)
-    }
-  },
-  methods: {
-    onError () {
-      this.error = true
-    }
+      width: `${props.width}px`,
+      height: `${props.width}px`,
+    };
   }
-}
+  return {};
+});
+
+const imgSrc = computed(() => {
+  return getSrc(props.username, props.src);
+});
+
+const onError = () => {
+  error.value = true;
+};
 </script>
 
 <style lang="less">

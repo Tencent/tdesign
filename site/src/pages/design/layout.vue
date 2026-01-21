@@ -1,5 +1,5 @@
 <template>
-  <div ref="article" name="DOC" class="doc-layout">
+  <div ref="articleRef" name="DOC" class="doc-layout">
     <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
       <ol class="tdesign-toc_list">
         <li class="tdesign-toc_list_item" v-for="anchor in catalog" :key="anchor.id">
@@ -221,66 +221,74 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor';
+<script setup>
+import { ref, onMounted } from 'vue';
+import { genAnchor } from './utils';
 
-export default {
-  mixins: [anchorMixin],
-  data() {
+// Template refs
+const articleRef = ref(null);
+
+// Data (from mixin)
+const catalog = ref([]);
+
+// Data (from component) - English version
+const dataSource = ref([
+  {
+    cut: 'sm',
+    cutValue: '768px',
+    range: '768px-991px',
+    colWidth: '16px',
+    grid: 'Content blocks stack or scale based on different breakpoints',
+    device: 'Pad',
+  },
+  {
+    cut: 'md',
+    cutValue: '992px',
+    range: '992px-1199px',
+    colWidth: '16px',
+    grid: 'Content blocks stack or scale based on different breakpoints',
+    device: 'Super small size laptop',
+  },
+  {
+    cut: 'lg',
+    cutValue: '1200px',
+    range: 'Greater than 1200px',
+    colWidth: '16px',
+    grid: 'When the viewport width is greater than the breakpoint value, it always stays arranged horizontally',
+    device: 'Small size laptop',
+  },
+]);
+
+const columns = ref([
+  { width: 104, ellipsis: true, colKey: 'cut', title: 'Breakpoint' },
+  { width: 140, ellipsis: true, colKey: 'cutValue', title: 'Breakpoint Value' },
+  { width: 144, ellipsis: true, colKey: 'range', title: 'Responsive Range' },
+  { width: 104, colKey: 'colWidth', title: 'Gutter Width' },
+  { colKey: 'grid', title: 'grid' },
+  { width: 200, ellipsis: true, colKey: 'device', title: 'Reference Display Device' },
+]);
+
+const rowKey = ref('cut');
+const size = ref('small');
+
+// Methods (from component)
+const rowspanAndColspan = ({ col, rowIndex }) => {
+  if (col.colKey === 'colWidth' && rowIndex === 0) {
     return {
-      dataSource: [
-        {
-          cut: 'sm',
-          cutValue: '768px',
-          range: '768px-991px',
-          colWidth: '16px',
-          grid: 'Content blocks stack or scale based on different breakpoints',
-          device: 'Pad',
-        },
-        {
-          cut: 'md',
-          cutValue: '992px',
-          range: '992px-1199px',
-          colWidth: '16px',
-          grid: 'Content blocks stack or scale based on different breakpoints',
-          device: 'Super small size laptop',
-        },
-        {
-          cut: 'lg',
-          cutValue: '1200px',
-          range: 'Greater than 1200px',
-          colWidth: '16px',
-          grid: 'When the viewport width is greater than the breakpoint value, it always stays arranged horizontally',
-          device: 'Small size laptop',
-        },
-      ],
-      columns: [
-        { width: 104, ellipsis: true, colKey: 'cut', title: 'Breakpoint' },
-        { width: 140, ellipsis: true, colKey: 'cutValue', title: 'Breakpoint Value' },
-        { width: 144, ellipsis: true, colKey: 'range', title: 'Responsive Range' },
-        { width: 104, colKey: 'colWidth', title: 'Gutter Width' },
-        { colKey: 'grid', title: 'grid' },
-        { width: 200, ellipsis: true, colKey: 'device', title: 'Reference Display Device' },
-      ],
-      rowKey: 'cut',
-      size: 'small',
+      rowspan: 3,
     };
-  },
-  methods: {
-    rowspanAndColspan({ col, rowIndex }) {
-      if (col.colKey === 'colWidth' && rowIndex === 0) {
-        return {
-          rowspan: 3,
-        };
-      }
-      if (col.colKey === 'grid' && rowIndex === 0) {
-        return {
-          rowspan: 2,
-        };
-      }
-    },
-  },
+  }
+  if (col.colKey === 'grid' && rowIndex === 0) {
+    return {
+      rowspan: 2,
+    };
+  }
 };
+
+// Lifecycle
+onMounted(() => {
+  genAnchor(articleRef, catalog);
+});
 </script>
 
 <style lang="less">

@@ -573,7 +573,7 @@
 </template>
 
 <script>
-import { DesktopIcon, Icon } from 'tdesign-icons-vue';
+import { DesktopIcon, Icon } from 'tdesign-icons-vue-next';
 import Banner from './banner.vue';
 import Avatar from './avatar.vue';
 import ComponentList from './component-list.vue';
@@ -866,7 +866,7 @@ export default {
     this.initTabTimer();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.randomTimer);
     clearInterval(this.avatarTimer);
     clearInterval(this.tabTimer);

@@ -1,37 +1,56 @@
 <template>
   <td-doc-layout>
     <td-header slot="header" framework="site" />
-    <td-doc-aside ref="tdDocAside" />
+    <td-doc-aside ref="tdDocAsideRef" />
     <router-view :style="contentStyle" @loaded="contentLoaded" />
   </td-doc-layout>
 </template>
 
-<script>
-import siteConfig from '../../site.config'
-import siteEnConfig from '../../site-en.config'
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import siteConfig from '../../site.config';
+import siteEnConfig from '../../site-en.config';
 
-import pageLoadMixin from '../mixins/page-load.js'
+const route = useRoute();
+const router = useRouter();
 
-const { docs: aboutDocs } = JSON.parse(JSON.stringify(siteConfig.about).replace(/component:.+/g, ''))
-const { docs: aboutEnDocs } = JSON.parse(JSON.stringify(siteEnConfig.about).replace(/component:.+/g, ''))
+// Template refs
+const tdDocAsideRef = ref(null);
 
-export default {
-  mixins: [pageLoadMixin],
+// Data (from page-load mixin)
+const loaded = ref(false);
 
-  computed: {
-    asideList () {
-      if (this.$route.path.includes('en')) return aboutEnDocs
-      return aboutDocs
-    }
-  },
-  mounted () {
-    this.$refs.tdDocAside.routerList = this.asideList
-    this.$refs.tdDocAside.onchange = ({ detail }) => {
-      if (this.$route.path === detail) return
-      this.loaded = false
-      this.$router.push(detail)
-      window.scrollTo(0, 0)
-    }
-  }
-}
+// Computed (from page-load mixin)
+const contentStyle = computed(() => {
+  return { visibility: loaded.value ? 'visible' : 'hidden' };
+});
+
+// Methods (from page-load mixin)
+const contentLoaded = (callback) => {
+  requestAnimationFrame(() => {
+    loaded.value = true;
+    callback();
+  });
+};
+
+const { docs: aboutDocs } = JSON.parse(JSON.stringify(siteConfig.about).replace(/component:.+/g, ''));
+const { docs: aboutEnDocs } = JSON.parse(JSON.stringify(siteEnConfig.about).replace(/component:.+/g, ''));
+
+// Computed (from component)
+const asideList = computed(() => {
+  if (route.path.includes('en')) return aboutEnDocs;
+  return aboutDocs;
+});
+
+// Lifecycle
+onMounted(() => {
+  tdDocAsideRef.value.routerList = asideList.value;
+  tdDocAsideRef.value.onchange = ({ detail }) => {
+    if (route.path === detail) return;
+    loaded.value = false;
+    router.push(detail);
+    window.scrollTo(0, 0);
+  };
+});
 </script>

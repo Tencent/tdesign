@@ -1,5 +1,5 @@
 <template>
-  <div ref="article" name="DOC" class="doc-motion">
+  <div ref="articleRef" name="DOC" class="doc-motion">
     <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
       <ol class="tdesign-toc_list">
         <li class="tdesign-toc_list_item" v-for="anchor in catalog" :key="anchor.id">
@@ -109,14 +109,14 @@
         <t-radio-button value="z">Z-axis</t-radio-button>
       </t-radio-group>
 
-      <div v-show="axisValue === 'x'" ref="axisX" class="axis-motion-stage"></div>
-      <div v-show="axisValue === 'x'" ref="axisXDark" class="axis-motion-stage dark"></div>
+      <div v-show="axisValue === 'x'" ref="axisXRef" class="axis-motion-stage"></div>
+      <div v-show="axisValue === 'x'" ref="axisXDarkRef" class="axis-motion-stage dark"></div>
 
-      <div v-show="axisValue === 'y'" ref="axisY" class="axis-motion-stage"></div>
-      <div v-show="axisValue === 'y'" ref="axisYDark" class="axis-motion-stage dark"></div>
+      <div v-show="axisValue === 'y'" ref="axisYRef" class="axis-motion-stage"></div>
+      <div v-show="axisValue === 'y'" ref="axisYDarkRef" class="axis-motion-stage dark"></div>
 
-      <div v-show="axisValue === 'z'" ref="axisZ" class="axis-motion-stage"></div>
-      <div v-show="axisValue === 'z'" ref="axisZDark" class="axis-motion-stage dark"></div>
+      <div v-show="axisValue === 'z'" ref="axisZRef" class="axis-motion-stage"></div>
+      <div v-show="axisValue === 'z'" ref="axisZDarkRef" class="axis-motion-stage dark"></div>
     </div>
 
     <h3>Container Conversion</h3>
@@ -125,8 +125,8 @@
       shape, it enhances the continuity between elements before and after the transition.
     </p>
 
-    <div ref="containerMotion" class="container-motion"></div>
-    <div ref="containerMotionDark" class="container-motion dark"></div>
+    <div ref="containerMotionRef" class="container-motion"></div>
+    <div ref="containerMotionDarkRef" class="container-motion dark"></div>
 
     <p>
       The shared containers in container conversion may not be completely similar before and after the transition, and
@@ -135,8 +135,8 @@
       conversion mode, while if it remains unchanged, please refer to the Axis Motion mode.
     </p>
 
-    <div ref="containerMotionSample" class="container-motion"></div>
-    <div ref="containerMotionSampleDark" class="container-motion dark"></div>
+    <div ref="containerMotionSampleRef" class="container-motion"></div>
+    <div ref="containerMotionSampleDarkRef" class="container-motion dark"></div>
 
     <h3>Fade-in and Fade-out</h3>
     <p>
@@ -145,8 +145,8 @@
       unrelated static elements.
     </p>
 
-    <div ref="fadeMotion" class="fade-motion"></div>
-    <div ref="fadeMotionDark" class="fade-motion dark"></div>
+    <div ref="fadeMotionRef" class="fade-motion"></div>
+    <div ref="fadeMotionDarkRef" class="fade-motion dark"></div>
 
     <h2>Motion Time</h2>
     <p>
@@ -355,7 +355,7 @@
       values.
     </p>
 
-    <table ref="tableCheck" class="table-check">
+    <table ref="tableCheckRef" class="table-check">
       <thead>
         <th></th>
         <th>What is the meaning of my animation for the interface?</th>
@@ -395,7 +395,7 @@
       </tbody>
       <thead>
         <th></th>
-        <th> Can my animation be clearly perceived?</th>
+        <th>Can my animation be clearly perceived?</th>
         <th></th>
       </thead>
       <tbody>
@@ -471,13 +471,13 @@
               <t-icon name="check-circle-filled" />
             </label>
           </td>
-          <td> Can necessary information still be conveyed statically if the animation is deleted?</td>
+          <td>Can necessary information still be conveyed statically if the animation is deleted?</td>
           <td></td>
         </tr>
       </tbody>
     </table>
 
-    <a ref="downloadBtn" href="" download="动效自查表.xls">
+    <a ref="downloadBtnRef" href="" download="动效自查表.xls">
       <t-button class="download-btn" shape="circle" theme="default">
         <img width="16" src="./assets/motion/download.svg" slot="icon" />
       </t-button>
@@ -485,9 +485,9 @@
   </div>
 </template>
 
-<script lang="jsx">
+<script setup lang="jsx">
+import { ref, onMounted } from 'vue';
 import lottie from 'lottie-web';
-import anchorMixin from '../mixins/anchor';
 
 import xAxis from './assets/motion/X_Axis.json';
 import xAxisDark from './assets/motion/X_Axis_dark.json';
@@ -501,6 +501,7 @@ import containerTransSample from './assets/motion/container_trans_sample.json';
 import containerTransSampleDark from './assets/motion/container_trans_sample_dark.json';
 import fadeInOut from './assets/motion/fade_in_out.json';
 import fadeInOutDark from './assets/motion/fade_in_out_dark.json';
+import { genAnchor } from './utils';
 
 const lottieProps = {
   renderer: 'svg',
@@ -508,122 +509,146 @@ const lottieProps = {
   autoplay: true,
 };
 
-export default {
-  mixins: [anchorMixin],
-  data() {
-    return {
-      axisValue: 'x',
-      slowValue: 'easing',
-      value: '',
-      options: [
-        { label: '架构云', value: '1' },
-        { label: '大数据', value: '2' },
-        { label: '区块链', value: '3' },
-        { label: '物联网', value: '4', disabled: true },
-        { label: '人工智能', value: '5' },
-        // 可以使用渲染函数自定义下拉选项内容和样式
-        {
-          label: '计算场景',
-          value: '6',
-          // eslint-disable-next-line
-          content: (h) => <span>计算场景（高性能计算）</span>,
-        },
-      ],
-    };
+// Reactive data
+const axisValue = ref('x');
+const slowValue = ref('easing');
+const value = ref('');
+const options = ref([
+  { label: '架构云', value: '1' },
+  { label: '大数据', value: '2' },
+  { label: '区块链', value: '3' },
+  { label: '物联网', value: '4', disabled: true },
+  { label: '人工智能', value: '5' },
+  // 可以使用渲染函数自定义下拉选项内容和样式
+  {
+    label: '计算场景',
+    value: '6',
+    // eslint-disable-next-line
+    content: (h) => <span>计算场景（高性能计算）</span>,
   },
+]);
 
-  mounted() {
-    this.loadAxisMotion();
-    this.loadContainerMotion();
-    this.loadFadeMotion();
-    this.initDownloadTable();
-  },
+// Template refs
+const axisXRef = ref();
+const axisXDarkRef = ref();
+const axisYRef = ref();
+const axisYDarkRef = ref();
+const axisZRef = ref();
+const axisZDarkRef = ref();
+const containerMotionRef = ref();
+const containerMotionDarkRef = ref();
+const containerMotionSampleRef = ref();
+const containerMotionSampleDarkRef = ref();
+const fadeMotionRef = ref();
+const fadeMotionDarkRef = ref();
+const tableCheckRef = ref();
+const downloadBtnRef = ref();
 
-  methods: {
-    changeAxis(value) {
-      this.axisValue = value;
-    },
-    loadAxisMotion() {
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.axisX,
-        animationData: xAxis,
-      });
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.axisXDark,
-        animationData: xAxisDark,
-      });
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.axisY,
-        animationData: yAxis,
-      });
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.axisYDark,
-        animationData: yAxisDark,
-      });
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.axisZ,
-        animationData: zAxis,
-      });
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.axisZDark,
-        animationData: zAxisDark,
-      });
-    },
-    loadContainerMotion() {
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.containerMotion,
-        animationData: containerTrans,
-      });
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.containerMotionDark,
-        animationData: containerTransDark,
-      });
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.containerMotionSample,
-        animationData: containerTransSample,
-      });
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.containerMotionSampleDark,
-        animationData: containerTransSampleDark,
-      });
-    },
-    loadFadeMotion() {
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.fadeMotion,
-        animationData: fadeInOut,
-      });
-      lottie.loadAnimation({
-        ...lottieProps,
-        container: this.$refs.fadeMotionDark,
-        animationData: fadeInOutDark,
-      });
-    },
+const articleRef = ref(null);
+// Inline anchor mixin functionality
+const catalog = ref([
+  { id: 'zh_1', title: 'Summary', children: [] },
+  { id: 'zh_2', title: 'Principle', children: [] },
+  { id: 'zh_3', title: 'Direction', children: [] },
+  { id: 'zh_4', title: 'Timing', children: [] },
+  { id: 'zh_5', title: 'Property and State', children: [] },
+  { id: 'zh_6', title: 'Component Animation', children: [] },
+]);
 
-    changeSlow(value) {
-      this.slowValue = value;
-    },
-
-    initDownloadTable() {
-      const tableContent = this.$refs.tableCheck.outerHTML;
-      const html = `<html><head><meta charset='utf-8' /></head><body>${tableContent}</body></html>`;
-
-      const blob = new Blob([html], {
-        type: 'application/vnd.ms-excel',
-      });
-
-      this.$refs.downloadBtn.href = URL.createObjectURL(blob);
-    },
-  },
+// Methods
+const changeAxis = (value) => {
+  axisValue.value = value;
 };
+
+const loadAxisMotion = () => {
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: axisXRef.value,
+    animationData: xAxis,
+  });
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: axisXDarkRef.value,
+    animationData: xAxisDark,
+  });
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: axisYRef.value,
+    animationData: yAxis,
+  });
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: axisYDarkRef.value,
+    animationData: yAxisDark,
+  });
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: axisZRef.value,
+    animationData: zAxis,
+  });
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: axisZDarkRef.value,
+    animationData: zAxisDark,
+  });
+};
+
+const loadContainerMotion = () => {
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: containerMotionRef.value,
+    animationData: containerTrans,
+  });
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: containerMotionDarkRef.value,
+    animationData: containerTransDark,
+  });
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: containerMotionSampleRef.value,
+    animationData: containerTransSample,
+  });
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: containerMotionSampleDarkRef.value,
+    animationData: containerTransSampleDark,
+  });
+};
+
+const loadFadeMotion = () => {
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: fadeMotionRef.value,
+    animationData: fadeInOut,
+  });
+  lottie.loadAnimation({
+    ...lottieProps,
+    container: fadeMotionDarkRef.value,
+    animationData: fadeInOutDark,
+  });
+};
+
+const changeSlow = (value) => {
+  slowValue.value = value;
+};
+
+const initDownloadTable = () => {
+  const tableContent = tableCheckRef.value.outerHTML;
+  const html = `<html><head><meta charset='utf-8' /></head><body>${tableContent}</body></html>`;
+
+  const blob = new Blob([html], {
+    type: 'application/vnd.ms-excel',
+  });
+
+  downloadBtnRef.value.href = URL.createObjectURL(blob);
+};
+
+onMounted(() => {
+  loadAxisMotion();
+  loadContainerMotion();
+  loadFadeMotion();
+  initDownloadTable();
+  genAnchor(articleRef, catalog);
+});
 </script>
