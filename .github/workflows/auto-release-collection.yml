@@ -20,5 +20,5 @@ jobs:
         run: pnpm install
       - name: run auto-release-collection
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TDESIGN_BOT_TOKEN }}
         run: pnpm run auto-release-collection
