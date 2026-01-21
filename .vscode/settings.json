@@ -25,6 +25,6 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["tdesign","miniprogram"],
+  "cSpell.words": ["miniprogram", "tdesign", "uniapp"],
   "cSpell.ignorePaths": ["pnpm-lock.yaml", "node_modules", ".git", ".vscode"]
 }

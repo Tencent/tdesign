@@ -23,7 +23,7 @@ export const submodules = {
     title: '## Miniprogram for WeChat 发布',
     changelogUrl:
       'https://raw.githubusercontent.com/Tencent/tdesign-miniprogram/refs/heads/main/packages/tdesign-miniprogram/CHANGELOG.md',
-    tagPrefix: '',
+    tagPrefix: 'tdesign-miniprogram@',
     repo: 'Tencent/tdesign-miniprogram',
   },
   'tdesign-mobile-vue': {
@@ -37,6 +37,13 @@ export const submodules = {
     changelogUrl: 'https://raw.githubusercontent.com/Tencent/tdesign-flutter/refs/heads/main/tdesign-site/CHANGELOG.md',
     tagPrefix: '',
     repo: 'Tencent/tdesign-flutter',
+  },
+  'tdesign-uniapp': {
+    title: '## UniApp for Mobile 发布',
+    changelogUrl:
+      'https://raw.githubusercontent.com/Tencent/tdesign-miniprogram/refs/heads/main/packages/tdesign-uniapp/CHANGELOG.md',
+    tagPrefix: 'tdesign-uniapp@',
+    repo: 'Tencent/tdesign-miniprogram',
   },
   'tdesign-mobile-react': {
     title: '## React for Mobile 发布',
@@ -69,6 +76,13 @@ export const submodules = {
     tagPrefix: '@tdesign-vue-next/chat@',
     repo: 'Tencent/tdesign-vue-next',
   },
+  'tdesign-uniap-chat': {
+    title: '## UniApp for Chat 发布',
+    changelogUrl:
+      'https://raw.githubusercontent.com/Tencent/tdesign-miniprogram/refs/heads/main/packages/tdesign-uniapp-chat/CHANGELOG.md',
+    tagPrefix: 'tdesign-uniapp-chat@',
+    repo: 'Tencent/tdesign-miniprogram',
+  },
 };
 
 export type SubmoduleItem = keyof typeof submodules;
@@ -81,8 +95,10 @@ export const submodulesKeys: SubmoduleItem[] = [
   'tdesign-mobile-vue',
   'tdesign-mobile-react',
   'tdesign-flutter',
+  'tdesign-uniapp',
   'tdesign-vue-starter',
   'tdesign-vue-next-starter',
   'tdesign-react-starter',
   //'@tdesign-vue-next/chat',
+  'tdesign-uniap-chat',
 ];
