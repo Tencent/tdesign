@@ -278,6 +278,7 @@
                 <t-radio-button value="miniprogram">miniprogram</t-radio-button>
                 <t-radio-button value="mobile-vue">mobile-vue</t-radio-button>
                 <t-radio-button value="mobile-react">mobile-react</t-radio-button>
+                <t-radio-button value="flutter">flutter</t-radio-button>
               </t-radio-group>
 
               <ul class="code-list">
@@ -703,12 +704,14 @@ export default {
           { type: 'bash', code: 'npm i tdesign-vue' },
           { type: 'javascript', code: "import Vue from 'vue';" },
           { type: 'javascript', code: "import TDesign from 'tdesign-vue';" },
+          { type: 'javascript', code: "import 'tdesign-vue/es/style/index.css';" },
           { type: 'javascript', code: 'Vue.use(TDesign);' },
         ],
         'vue-next': [
           { type: 'bash', code: 'npm i tdesign-vue-next' },
           { type: 'javascript', code: "import { createApp } from 'vue';" },
           { type: 'javascript', code: "import TDesign from 'tdesign-vue-next';" },
+          { type: 'javascript', code: "import 'tdesign-vue-next/es/style/index.css';" },
           { type: 'javascript', code: 'createApp(App).use(TDesign);' },
         ],
         react: [
@@ -734,6 +737,15 @@ export default {
           { type: 'bash', code: 'npm i tdesign-mobile-react' },
           { type: 'javascript', code: "import { Button } from 'tdesign-mobile-react';" },
           { type: 'javascript', code: "import 'tdesign-mobile-react/es/style/index.css';" },
+          { type: 'javascript', code: '' },
+        ],
+        flutter: [
+          { type: 'bash', code: 'flutter pub add tdesign_flutter' },
+          { type: 'javascript', code: "import 'package:tdesign_flutter/tdesign_flutter.dart';" },
+          {
+            type: 'javascript',
+            code: "TDTag _buildTag(BuildContext context) { return const TDTag('TDesign'); }",
+          },
           { type: 'javascript', code: '' },
         ],
       },

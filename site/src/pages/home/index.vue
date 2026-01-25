@@ -257,6 +257,7 @@
                 <t-radio-button value="miniprogram">miniprogram</t-radio-button>
                 <t-radio-button value="mobile-vue">mobile-vue</t-radio-button>
                 <t-radio-button value="mobile-react">mobile-react</t-radio-button>
+                <t-radio-button value="flutter">flutter</t-radio-button>
               </t-radio-group>
 
               <ul class="code-list">
@@ -729,6 +730,15 @@ export default {
           { type: 'bash', code: 'npm i tdesign-mobile-react' },
           { type: 'javascript', code: "import { Button } from 'tdesign-mobile-react';" },
           { type: 'javascript', code: "import 'tdesign-mobile-react/es/style/index.css';" },
+          { type: 'javascript', code: '' },
+        ],
+        flutter: [
+          { type: 'bash', code: 'flutter pub add tdesign_flutter' },
+          { type: 'javascript', code: "import 'package:tdesign_flutter/tdesign_flutter.dart';" },
+          {
+            type: 'javascript',
+            code: "TDTag _buildTag(BuildContext context) { return const TDTag('TDesign'); }",
+          },
           { type: 'javascript', code: '' },
         ],
       },
