@@ -6,7 +6,7 @@
         <div class="common-collapse__title" @click="isActive = !isActive">
           <slot name="title"></slot>
         </div>
-        <div class="common-collapse__subtitle">
+        <div class="common-collapse__subtitle" @click="handleSubtitleClick">
           <slot name="subTitle"></slot>
         </div>
       </div>
@@ -52,6 +52,14 @@ export default {
   },
   methods: {
     handleAttach,
+    handleSubtitleClick(event) {
+      // 检查点击的元素是否是交互元素或其子元素
+      const target = event.target;
+      const interactiveElements = target.closest('.t-switch, .t-icon, .t-popup, .t-button');
+      if (!interactiveElements) {
+        this.isActive = !this.isActive;
+      }
+    },
   },
 };
 </script>
