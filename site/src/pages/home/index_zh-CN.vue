@@ -594,9 +594,9 @@ import figmaLogo from './assets/figma-logo.svg';
 import axLogo from './assets/ax-logo.svg';
 import xdLogo from './assets/xd-logo.svg';
 import flutterLogo from './assets/flutter-logo.svg';
+import uniappLogo from './assets/uniapp-logo.png';
 import sketchLogo from './assets/sketch-logo.svg';
 import miniprogramLogo from './assets/miniprogram-logo.svg';
-import qqLogo from './assets/qq-logo.svg';
 
 import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, xdWebUrl } from '@consts';
 
@@ -684,6 +684,7 @@ export default {
         { logo: vueLogo, name: 'Vue Next', href: '/mobile-vue/', status: 1 },
         { logo: reactLogo, name: 'React', href: '/mobile-react/', status: 2 },
         { logo: flutterLogo, name: 'Flutter', href: '/flutter/', status: 2 },
+        { logo: uniappLogo, name: 'UniApp', href: '/uniapp/', status: 2 },
       ],
       mobileDesignList: [
         { logo: figmaLogo, name: 'Figma', href: figmaMobileUrl, status: 1 },
@@ -694,10 +695,7 @@ export default {
           status: 1,
         },
       ],
-      miniSourceList: [
-        { logo: miniprogramLogo, name: '微信小程序', href: '/miniprogram/', status: 1 },
-        { logo: qqLogo, name: 'QQ 小程序', href: '/qq-miniprogram/', status: 2 },
-      ],
+      miniSourceList: [{ logo: miniprogramLogo, name: '微信小程序', href: '/miniprogram/', status: 1 }],
       codeFramework: 'vue',
       codeList: {
         vue: [
