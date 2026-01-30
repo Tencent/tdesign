@@ -12,6 +12,9 @@ const issueUrlMap = {
   'mobile-vue': `https://github.com/Tencent/tdesign-mobile-vue/issues`,
   'mobile-react': `https://github.com/Tencent/tdesign-mobile-react/issues`,
   miniprogram: `https://github.com/Tencent/tdesign-miniprogram/issues`,
+  'miniprogram-chat': `https://github.com/Tencent/tdesign-miniprogram/issues`,
+  uniapp: `https://github.com/Tencent/tdesign-miniprogram/issues`,
+  'uniapp-chat': `https://github.com/Tencent/tdesign-miniprogram/issues`,
   flutter: `https://github.com/Tencent/tdesing-flutter/issues`,
   chat: `https://github.com/Tencent/tdesign-vue-next/issues`,
 };

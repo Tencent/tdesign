@@ -100,7 +100,7 @@ const baseComponentsLinks = {
         name: 'UniApp',
         icon: uniappIcon,
         path: jumpLocation('/uniapp/overview'),
-        npm: 'tdesign-uniapp',
+        npm: '@tdesign/uniapp',
         status: 2,
       },
       {
@@ -204,7 +204,7 @@ export const getHeaderConfig = () => {
           name: 'UniApp',
           icon: uniappIcon,
           path: jumpLocation('/uniapp/overview'),
-          npm: 'tdesign-uniapp',
+          npm: '@tdesign/uniapp',
           status: 2,
         },
         {
