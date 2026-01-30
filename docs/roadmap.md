@@ -18,7 +18,7 @@ TDesign upcoming iterate plans are as below:
 - **Cross-Platform Support**
 
   - Continue iterating the cross-platform component library TDesign Flutter and advance it to a stable 1.0 version.
-  - Provide an officially maintained TDesign Uniapp version of component resources to enrich cross-platform solutions for H5 and mini-program scenarios.
+  - Provide an officially maintained TDesign UniApp version of component resources to enrich cross-platform solutions for H5 and mini-program scenarios.
 
 - **AI Programming and Design Applications**
   - Refactor the current design resource implementation to fully adopt design variables and reduce design variants, ensuring greater consistency with development resources.

@@ -1,44 +1,15 @@
 {
   "all": {},
-  "site": {
-    "title": "🎨 新图标资源发布，支持可变粗细和多色填充，欢迎使用体验",
-    "type": "primary",
-    "actionUrl": "https://tdesign.tencent.com/icons",
-    "closeable": true
-  },
-  "vue": {
-    "title": "🎨 图标新版本 0.4.0 发布，支持可变粗细和多色填充的图标资源，欢迎使用体验",
-    "type": "primary",
-    "actionUrl": "https://tdesign.tencent.com/icons",
-    "closeable": true
-  },
-  "react": {
-    "title": "🎨 图标新版本 0.6.0 发布，支持可变粗细和多色填充的图标资源，欢迎使用体验",
-    "type": "primary",
-    "actionUrl": "https://tdesign.tencent.com/icons",
-    "closeable": true
-  },
-  "vue-next": {
-    "title": "🎨 图标新版本 0.4.0 发布，支持可变粗细和多色填充的图标资源，欢迎使用体验",
-    "type": "primary",
-    "actionUrl": "https://tdesign.tencent.com/icons",
-    "closeable": true
-  },
-  "vue-mobile": {
-    "title": "🎨 图标新版本 0.4.0 发布，支持可变粗细和多色填充的图标资源，欢迎使用体验",
-    "type": "primary",
-    "actionUrl": "https://tdesign.tencent.com/icons",
-    "closeable": true
-  },
-  "react-mobile": {
-    "title": "🎨 图标新版本 0.6.0 发布，支持可变粗细和多色填充的图标资源，欢迎使用体验",
-    "type": "primary",
-    "actionUrl": "https://tdesign.tencent.com/icons",
-    "closeable": true
-  },
+  "site": {},
+  "vue": {},
+  "react": {},
+  "vue-next": {},
+  "vue-mobile": {},
+  "react-mobile": {},
   "miniprogram": {
-    "title": "🗓 新增单组件的更新日志，进入任意组件页后，点击更新日志按钮即可查看",
+    "title": "🗓 tdesign-uniapp 版本官方站点上线，欢迎体验试用",
     "type": "primary",
+    "actionUrl": "https://tdesign.tencent.com/uniapp",
     "closeable": true
   }
 }
