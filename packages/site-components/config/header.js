@@ -50,13 +50,6 @@ const baseComponentsLinks = {
     name: 'Web 桌面端',
     links: [
       {
-        name: 'Vue',
-        icon: vueIcon,
-        path: jumpLocation('/vue/overview'),
-        npm: 'tdesign-vue',
-        status: 1,
-      },
-      {
         name: 'Vue Next',
         icon: vueIcon,
         path: jumpLocation('/vue-next/overview'),
@@ -70,11 +63,25 @@ const baseComponentsLinks = {
         npm: 'tdesign-react',
         status: 1,
       },
+      {
+        name: 'Vue',
+        icon: vueIcon,
+        path: jumpLocation('/vue/overview'),
+        npm: 'tdesign-vue',
+        status: 1,
+      },
     ],
   },
   mobile: {
     name: 'Mobile 移动端',
     links: [
+      {
+        name: '微信小程序',
+        icon: wxIcon,
+        path: jumpLocation('/miniprogram/overview'),
+        npm: 'tdesign-miniprogram',
+        status: 1,
+      },
       {
         name: 'Vue Next',
         icon: vueIcon,
@@ -90,13 +97,6 @@ const baseComponentsLinks = {
         status: 2,
       },
       {
-        name: 'Flutter',
-        icon: flutterIcon,
-        path: jumpLocation('/flutter/overview'),
-        npm: 'tdesign-flutter',
-        status: 2,
-      },
-      {
         name: 'UniApp',
         icon: uniappIcon,
         path: jumpLocation('/uniapp/overview'),
@@ -104,11 +104,11 @@ const baseComponentsLinks = {
         status: 2,
       },
       {
-        name: '微信小程序',
-        icon: wxIcon,
-        path: jumpLocation('/miniprogram/overview'),
-        npm: 'tdesign-miniprogram',
-        status: 1,
+        name: 'Flutter',
+        icon: flutterIcon,
+        path: jumpLocation('/flutter/overview'),
+        npm: 'tdesign-flutter',
+        status: 2,
       },
     ],
   },
@@ -154,13 +154,6 @@ export const getHeaderConfig = () => {
       name: en ? 'Web PC' : 'Web 桌面端',
       links: [
         {
-          name: 'Vue',
-          icon: vueIcon,
-          path: jumpLocation('/vue/overview'),
-          npm: 'tdesign-vue',
-          status: 1,
-        },
-        {
           name: 'Vue Next',
           icon: vueIcon,
           path: jumpLocation('/vue-next/overview'),
@@ -174,11 +167,25 @@ export const getHeaderConfig = () => {
           npm: 'tdesign-react',
           status: 1,
         },
+        {
+          name: 'Vue',
+          icon: vueIcon,
+          path: jumpLocation('/vue/overview'),
+          npm: 'tdesign-vue',
+          status: 1,
+        },
       ],
     },
     mobile: {
       name: en ? 'Mobile' : 'Mobile 移动端',
       links: [
+        {
+          name: en ? 'WeChat-Miniprogram' : '微信小程序',
+          icon: wxIcon,
+          path: jumpLocation('/miniprogram/overview'),
+          npm: 'tdesign-miniprogram',
+          status: 1,
+        },
         {
           name: 'Vue Next',
           icon: vueIcon,
@@ -194,13 +201,6 @@ export const getHeaderConfig = () => {
           status: 2,
         },
         {
-          name: 'Flutter',
-          icon: flutterIcon,
-          path: jumpLocation('/flutter/overview'),
-          npm: 'tdesign-flutter',
-          status: 2,
-        },
-        {
           name: 'UniApp',
           icon: uniappIcon,
           path: jumpLocation('/uniapp/overview'),
@@ -208,11 +208,11 @@ export const getHeaderConfig = () => {
           status: 2,
         },
         {
-          name: en ? 'WeChat-Miniprogram' : '微信小程序',
-          icon: wxIcon,
-          path: jumpLocation('/miniprogram/overview'),
-          npm: 'tdesign-miniprogram',
-          status: 1,
+          name: 'Flutter',
+          icon: flutterIcon,
+          path: jumpLocation('/flutter/overview'),
+          npm: 'tdesign-flutter',
+          status: 2,
         },
       ],
     },
