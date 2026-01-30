@@ -56,7 +56,7 @@ importers:
         version: 34.0.0(stylelint@15.11.0(typescript@4.9.5))
       stylelint-config-standard-less:
         specifier: ^2.0.0
-        version: 2.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@4.9.5))
+        version: 2.0.0(postcss@8.4.47)(stylelint@15.11.0(typescript@4.9.5))
 
   packages/auto-release-collection:
     dependencies:
@@ -205,8 +205,8 @@ importers:
         specifier: ^1.29.0
         version: 1.29.0
       tdesign-icons-view:
-        specifier: ^0.5.1
-        version: 0.5.1(typescript@4.9.5)
+        specifier: ^0.5.3
+        version: 0.5.3(typescript@4.9.5)
       tdesign-icons-vue:
         specifier: ^0.4.1
         version: 0.4.1(vue@2.7.14)
@@ -7035,8 +7035,8 @@ packages:
   tdesign-icons-svg@0.0.1:
     resolution: {integrity: sha512-4l05CgPXwI33Y6hU8ytKYIIXVznR22x6blhhtB6MntSHj2xrA+Unx4U/qy+Do/lCMtYao9q1wVkaZvxNjuX7jw==}
 
-  tdesign-icons-view@0.5.1:
-    resolution: {integrity: sha512-PGKRjS9glgpnWUKxSg7sgzw7lbwcwZhJgotD0NLHcNlr2Uy8ewX8cMGb8/xEHjDX01YYYwgHQi0ygPp1evLvtQ==}
+  tdesign-icons-view@0.5.3:
+    resolution: {integrity: sha512-0VkQTihse8tS04xQGPJR8ULI972Kk40ajaRnuOObCqDGFgjOVlEofY6D5XWZzTEOwEwhsqNipm7vqznNR7p+wA==}
 
   tdesign-icons-vue-next@0.4.1:
     resolution: {integrity: sha512-uDPuTLRORnGcTyVGNoentNaK4V+ZcBmhYwcY3KqDaQQ5rrPeLMxu0ZVmgOEf0JtF2QZiqAxY7vodNEiLUdoRKA==}
@@ -14613,9 +14613,9 @@ snapshots:
     dependencies:
       postcss: 8.4.47
 
-  postcss-less@6.0.0(postcss@8.5.6):
+  postcss-less@6.0.0(postcss@8.4.47):
     dependencies:
-      postcss: 8.5.6
+      postcss: 8.4.47
 
   postcss-loader@6.2.1(postcss@8.4.47)(webpack@5.94.0):
     dependencies:
@@ -15643,35 +15643,35 @@ snapshots:
       postcss: 8.4.47
       postcss-selector-parser: 6.1.2
 
-  stylelint-config-recommended-less@2.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@4.9.5)):
+  stylelint-config-recommended-less@2.0.0(postcss@8.4.47)(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
-      postcss-less: 6.0.0(postcss@8.5.6)
+      postcss-less: 6.0.0(postcss@8.4.47)
       stylelint: 15.11.0(typescript@4.9.5)
       stylelint-config-recommended: 13.0.0(stylelint@15.11.0(typescript@4.9.5))
-      stylelint-less: 2.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@4.9.5))
+      stylelint-less: 2.0.0(postcss@8.4.47)(stylelint@15.11.0(typescript@4.9.5))
     optionalDependencies:
-      postcss: 8.5.6
+      postcss: 8.4.47
 
   stylelint-config-recommended@13.0.0(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
       stylelint: 15.11.0(typescript@4.9.5)
 
-  stylelint-config-standard-less@2.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@4.9.5)):
+  stylelint-config-standard-less@2.0.0(postcss@8.4.47)(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
       stylelint: 15.11.0(typescript@4.9.5)
-      stylelint-config-recommended-less: 2.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@4.9.5))
+      stylelint-config-recommended-less: 2.0.0(postcss@8.4.47)(stylelint@15.11.0(typescript@4.9.5))
       stylelint-config-standard: 34.0.0(stylelint@15.11.0(typescript@4.9.5))
     optionalDependencies:
-      postcss: 8.5.6
+      postcss: 8.4.47
 
   stylelint-config-standard@34.0.0(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
       stylelint: 15.11.0(typescript@4.9.5)
       stylelint-config-recommended: 13.0.0(stylelint@15.11.0(typescript@4.9.5))
 
-  stylelint-less@2.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@4.9.5)):
+  stylelint-less@2.0.0(postcss@8.4.47)(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
-      postcss: 8.5.6
+      postcss: 8.4.47
       postcss-resolve-nested-selector: 0.1.6
       postcss-value-parser: 4.2.0
       stylelint: 15.11.0(typescript@4.9.5)
@@ -15794,7 +15794,7 @@ snapshots:
 
   tdesign-icons-svg@0.0.1: {}
 
-  tdesign-icons-view@0.5.1(typescript@4.9.5):
+  tdesign-icons-view@0.5.3(typescript@4.9.5):
     dependencies:
       '@popperjs/core': 2.11.8
       lodash: 4.17.21
