@@ -96,17 +96,16 @@ export function exportCustomStyleSheet(device) {
 
   const cssString = extractRootContent(styleSheet?.textContent);
   const darkCssString = extractRootContent(darkStyleSheet?.textContent);
-  const extraCssString = extraStyleSheet?.textContent || '';
+  const extraCssString = extractRootContent(extraStyleSheet?.textContent);
 
   let finalCssString;
   if (isUniApp(device)) {
     finalCssString = `
       @media (prefers-color-scheme: light) {
-      /* #ifdef H5 */
-      :root,
-      /* #endif */
-      page,
-      .page {
+        /* #ifdef H5 */
+        :root,
+        /* #endif */
+        page, .page {
           ${cssString}
         }
       }
@@ -114,12 +113,16 @@ export function exportCustomStyleSheet(device) {
         /* #ifdef H5 */
         :root,
         /* #endif */
-        page,
-        .page {
+        page, .page {
           ${darkCssString}
         }
       }
-      ${extraCssString}
+      /* #ifdef H5 */
+      :root,
+      /* #endif */
+      page, .page {
+        ${extraCssString}
+      }
     `;
   } else if (isMiniProgram(device)) {
     finalCssString = `
@@ -133,7 +136,9 @@ export function exportCustomStyleSheet(device) {
           ${darkCssString}
         }
       }
-      ${extraCssString}
+      page, .page {
+        ${extraCssString}
+      }
     `;
   } else {
     finalCssString = `
@@ -143,7 +148,9 @@ export function exportCustomStyleSheet(device) {
       :root.dark, :root[theme-mode="dark"] {
         ${darkCssString}
       }
-      ${extraCssString}
+      :root {
+        ${extraCssString}
+      }
     `;
   }
 
