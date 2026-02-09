@@ -9,7 +9,14 @@
   >
     <div class="size-content__content" :style="contentStyle">
       <div class="size-content__main">
-        <p class="size-content__title">{{ lang.size.basicSize }}</p>
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <p class="size-content__title">{{ lang.size.basicSize }}</p>
+          <t-popconfirm :content="lang.size.resetConfirm" @confirm="resetSizeTokens">
+            <t-button theme="default" size="small" variant="text">
+              {{ lang.size.reset }}
+            </t-button>
+          </t-popconfirm>
+        </div>
         <size-display />
       </div>
       <!-- 组件大小 -->
@@ -144,6 +151,8 @@
 <script lang="jsx">
 import { CommonCollapse } from '@/common/components';
 import { langMixin } from '@/common/i18n';
+import { updateLocalToken, modifyToken } from '@/common/themes';
+import { Button as TButton, Popconfirm as TPopconfirm } from 'tdesign-vue';
 
 import SizeAdjust from './components/SizeAdjust.vue';
 import SizeDisplay from './components/SizeDisplay.vue';
@@ -160,6 +169,8 @@ import {
   COMP_PADDING_TB_MAP,
   COMP_POPUP_PADDING_MAP,
   COMP_SIZE_MAP,
+  SIZE_DEFAULT_VALUES,
+  SIZE_TOKENS,
 } from './built-in/size-map';
 
 export default {
@@ -171,6 +182,8 @@ export default {
     CommonCollapse,
     SizeDisplay,
     SizeAdjust,
+    TButton,
+    TPopconfirm,
     // svg
     SizeSvg,
     HorizontalPaddingSvg,
@@ -186,6 +199,7 @@ export default {
       COMP_PADDING_TB_MAP,
       COMP_POPUP_PADDING_MAP,
       COMP_MARGIN_MAP,
+      SIZE_DEFAULT_VALUES,
       refreshIdMap: {
         'comp-size': 0,
         'comp-padding-tb': 0,
@@ -202,6 +216,15 @@ export default {
         overflowY: 'scroll',
         height: `${clientHeight - (this.top || 0) - 96}px`,
       };
+    },
+  },
+  methods: {
+    resetSizeTokens() {
+      SIZE_TOKENS.forEach((token) => {
+        modifyToken(token, SIZE_DEFAULT_VALUES[token]);
+        updateLocalToken(token, null);
+      });
+      this.$root.$emit('refresh-size-tokens');
     },
   },
   mounted() {

@@ -45,6 +45,8 @@ export default {
     yPadding: '组件上下边距',
     popupPadding: '弹出层边距',
     margin: '组件间距',
+    reset: '恢复默认',
+    resetConfirm: '确定要恢复基础尺寸到默认值吗？',
   },
   borerRadius: {
     title: '圆角',
