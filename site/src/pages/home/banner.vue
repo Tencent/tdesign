@@ -57,7 +57,7 @@ import hdrDataDark from './assets/banner-dark.hdr';
 import * as THREE from 'three';
 // import Stats from './stats.module';
 // const stats = new Stats();
-import { CDN_BASE } from '@consts';
+import { CDN_BASE } from '@constants';
 
 const WIDTH = 1056;
 const HEIGHT = 640;

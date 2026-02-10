@@ -586,7 +586,7 @@ import Banner from './banner.vue';
 import Avatar from './avatar.vue';
 import ComponentList from './component-list.vue';
 import Prismjs from 'prismjs';
-import { contributors } from './consts';
+import { contributors } from './constants';
 
 import vueLogo from './assets/vue-logo.svg';
 import reactLogo from './assets/react-logo.svg';
@@ -598,7 +598,7 @@ import uniappLogo from './assets/uniapp-logo.png';
 import sketchLogo from './assets/sketch-logo.svg';
 import miniprogramLogo from './assets/miniprogram-logo.svg';
 
-import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, xdWebUrl } from '@consts';
+import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, xdWebUrl } from '@constants';
 
 const brandUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/brand/list';
 const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';

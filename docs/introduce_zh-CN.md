@@ -36,7 +36,7 @@ TDesign 在创建之初就严格按照开源协作的原则运作，包括源代
 | ----------------------------------------------------------------------- | ----------------- | --------- |
 | [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue 3.x 技术栈    | `1.0 LTS` |
 | [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | 微信小程序        | `1.0 LTS` |
-| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React 16.x 技术栈 | `Alpha`   |
+| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React 18.x 技术栈 | `Alpha`   |
 | [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | 1.17.0            | `Alpha`   |
 | [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | -                 | `Alpha`   |
 

@@ -101,7 +101,7 @@ import mdIcon from './assets/source/md-logo.svg';
 import mastergoIcon from './assets/source/mastergo-logo.svg';
 import ryIcon from './assets/source/ry-logo.svg';
 
-import { webSourceList, mobileSourceList, sourceDownloadUrl, webChartSourceList } from '@/consts';
+import { webSourceList, mobileSourceList, sourceDownloadUrl, webChartSourceList } from '@/constants';
 import { webDesignContributor, mobileDesignContributor, webChartDesignContributor } from '@/contributor';
 
 export default {
