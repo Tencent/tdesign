@@ -7,8 +7,6 @@ on:
         required: false
       TDESIGN_SURGE_TOKEN:
         required: true
-      TDESIGN_NPM_TOKEN:
-        required: true
 
 jobs:
   TAG_PUSH:
@@ -32,7 +30,6 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - run: npm install
-
       - name: Build site
         run: npm run site:preview
       - name: upload surge service
@@ -47,11 +44,13 @@ jobs:
           echo $DEPLOY_DOMAIN
       - run: echo "🍏 This job's status is ${{ job.status }}."
       - run: npm run build
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
       - name: publish
         id: publish
-        uses: JS-DevTools/npm-publish@v3
+        uses: JS-DevTools/npm-publish@v4
         with:
-          token: ${{ secrets.TDESIGN_NPM_TOKEN }}
           tag: ${{ contains(github.ref_name, 'beta') && 'beta' || 'latest' }}
       - if: steps.publish.outputs.type != 'none'
         run: |
@@ -74,4 +73,3 @@ jobs:
           git fetch origin
           git merge origin/develop -X theirs
           git push origin main
-      
