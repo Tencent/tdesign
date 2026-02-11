@@ -3,20 +3,20 @@
     <!-- 顶部调整 -->
     <SegmentSelection
       v-model="step"
-      :selectOptions="FONT_SIZE_OPTIONS"
-      :suspendedLabels="FONT_SIZE_LABELS"
+      :select-options="FONT_SIZE_OPTIONS"
+      :suspended-labels="FONT_SIZE_LABELS"
       :disabled="segmentSelectionDisabled"
     >
-      <template v-slot:left>
+      <template #left>
         <div class="font-panel__round-tag-left">Aa</div>
       </template>
-      <template v-slot:right>
+      <template #right>
         <div class="font-panel__round-tag-right">Aa</div>
       </template>
     </SegmentSelection>
     <!-- Token List -->
     <div class="font-panel__token-list">
-      <t-radio-group variant="default-filled" v-model="tokenType">
+      <t-radio-group v-model="tokenType" variant="default-filled">
         <t-radio-button value="list">{{ lang.font.steppedMode }}</t-radio-button>
         <t-radio-button value="token">{{ lang.font.tokenMode }}</t-radio-button>
       </t-radio-group>
@@ -25,12 +25,12 @@
           v-for="(token, idx) in ladderTypeList"
           :key="idx"
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
+          :overlay-style="{ borderRadius: '9px' }"
           @visible-change="(v, ctx) => handleVisibleChange(v, ctx, idx)"
-          :overlayStyle="{ borderRadius: '9px' }"
         >
           <t-list-item
             :style="{
@@ -54,7 +54,7 @@
           <template #content
             ><size-slider
               title="font-size"
-              :sizeValue="token.value"
+              :size-value="token.value"
               @changeSize="(v) => handleChangeFontSize(v, 'list', token.tokens, idx)"
           /></template>
         </t-popup>
@@ -64,11 +64,11 @@
           v-for="(token, idx) in tokenTypeList"
           :key="idx"
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
-          :overlayStyle="{ borderRadius: '9px' }"
+          :overlay-style="{ borderRadius: '9px' }"
           @visible-change="(v, ctx) => handleVisibleChange(v, ctx, idx)"
         >
           <t-list-item
@@ -93,7 +93,7 @@
           <template #content
             ><size-slider
               title="font-size"
-              :sizeValue="token.value"
+              :size-value="token.value"
               @changeSize="(v) => handleChangeFontSize(v, 'token', token.label, idx)"
           /></template>
         </t-popup>
@@ -151,7 +151,7 @@ export default {
 
       if (
         !fontSizeStepArray.find(
-          (array) => array.filter((v, i) => v?.value === list[i]?.value?.trim()).length === array.length,
+          (array) => array.filter((v, i) => v?.value === list[i]?.value?.trim()).length === array.length
         )
       ) {
         this.segmentSelectionDisabled = true;
@@ -165,7 +165,7 @@ export default {
 
       if (!FONT_SIZE_STEPS[v]) return;
       const newSteps = FONT_SIZE_STEPS[v];
-      newSteps.map(({ name, value }) => {
+      newSteps.forEach(({ name, value }) => {
         modifyToken(name, value, isCustom);
         const i = this.tokenTypeList.findIndex((v) => v.label === name);
         if (i !== -1) this.tokenTypeList[i].value = value;
@@ -187,6 +187,11 @@ export default {
       });
       this.initLadderList = JSON.parse(JSON.stringify(this.ladderTypeList));
     },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.handleInitFontSize();
+    });
   },
   methods: {
     getTokenValue,
@@ -236,7 +241,7 @@ export default {
         this.ladderTypeList[idx].value = res;
         if (parseInt(this.initLadderList[idx].value, 10) !== parseInt(res, 10)) this.segmentSelectionDisabled = true;
 
-        fontSizeList.map((tokenName) => {
+        fontSizeList.forEach((tokenName) => {
           const i = this.tokenTypeList.findIndex((v) => v.label === tokenName);
           if (i !== -1) this.tokenTypeList[i].value = res;
         });
@@ -257,11 +262,6 @@ export default {
         }
       }
     },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.handleInitFontSize();
-    });
   },
 };
 </script>

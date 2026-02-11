@@ -3,19 +3,19 @@
     size="348px"
     :visible.sync="visible"
     :header="false"
-    :closeBtn="false"
-    :preventScrollThrough="false"
+    :close-btn="false"
+    :prevent-scroll-through="false"
     :footer="false"
-    showInAttachedElement
+    show-in-attached-element
   >
     <sticky-theme-display />
     <div style="display: flex">
-      <switch-tabs :activeTabIdx="activeTabIdx" @changeActiveTab="changeActiveTab" />
-      <color-panel :key="`${$refreshId}-color`" v-show="activeTabIdx === ACTIVE_TAB_MAP.color" />
-      <font-panel :key="`${$refreshId}-font`" v-show="activeTabIdx === ACTIVE_TAB_MAP.font" />
-      <radius-panel :key="`${$refreshId}-radius`" v-show="activeTabIdx === ACTIVE_TAB_MAP.radius" />
-      <shadow-panel :key="`${$refreshId}-shadow`" v-show="activeTabIdx === ACTIVE_TAB_MAP.shadow" />
-      <size-panel :key="`${$refreshId}-size`" v-show="activeTabIdx === ACTIVE_TAB_MAP.size" />
+      <switch-tabs :active-tab-idx="activeTabIdx" @changeActiveTab="changeActiveTab" />
+      <color-panel v-show="activeTabIdx === ACTIVE_TAB_MAP.color" :key="`${$refreshId}-color`" />
+      <font-panel v-show="activeTabIdx === ACTIVE_TAB_MAP.font" :key="`${$refreshId}-font`" />
+      <radius-panel v-show="activeTabIdx === ACTIVE_TAB_MAP.radius" :key="`${$refreshId}-radius`" />
+      <shadow-panel v-show="activeTabIdx === ACTIVE_TAB_MAP.shadow" :key="`${$refreshId}-shadow`" />
+      <size-panel v-show="activeTabIdx === ACTIVE_TAB_MAP.size" :key="`${$refreshId}-size`" />
     </div>
   </t-drawer>
 </template>
@@ -58,12 +58,15 @@ export default {
   props: {
     showSetting: {
       type: [String, Boolean],
+      default: false,
     },
     theme: {
       type: [Object, String],
+      default: () => ({}),
     },
     drawerVisible: {
       type: [String, Number, Boolean],
+      default: false,
     },
   },
   data() {

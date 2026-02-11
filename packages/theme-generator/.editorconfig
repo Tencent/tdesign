@@ -1,0 +1,22 @@
+# EditorConfig 有助于在不同编辑器和 IDE 中维护一致的编码风格
+# 更多详情请见 https://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{js,jsx,ts,tsx,vue}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+[*.{json,jsonc}]
+indent_style = space
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false

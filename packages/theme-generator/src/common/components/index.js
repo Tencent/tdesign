@@ -1,3 +1,4 @@
+export { default as CollapseBase } from './CollapseBase';
 export { default as CommonCollapse } from './Collapse';
 export { default as ColorPicker } from './ColorPicker';
 export { default as SegmentSelection } from './SegmentSelection';

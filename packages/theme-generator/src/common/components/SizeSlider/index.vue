@@ -7,8 +7,8 @@
         :value="size"
         :format="format"
         theme="column"
-        @change="handleInputChange"
         :style="{ marginBottom: '8px' }"
+        @change="handleInputChange"
       />
       <t-slider
         :disabled="disabled"
@@ -16,10 +16,10 @@
         :min="min"
         :max="max"
         :step="step"
-        @change="handleInputChange"
-        :tooltipProps="{
+        :tooltip-props="{
           attach: handleAttach,
         }"
+        @change="handleInputChange"
       ></t-slider>
     </div>
   </div>
@@ -30,27 +30,48 @@ import { InputNumber as TInputNumber, Slider as TSlider } from 'tdesign-vue';
 
 export default {
   name: 'SizeSlider',
+  components: {
+    TSlider,
+    TInputNumber,
+  },
   props: {
-    sizeValue: [String, Number],
-    title: String,
-    step: Number,
-    min: Number,
-    max: Number,
-    disabled: Boolean,
+    sizeValue: {
+      type: [String, Number],
+      default: 0,
+    },
+    title: {
+      type: String,
+      default: '',
+    },
+    step: {
+      type: Number,
+      default: 1,
+    },
+    min: {
+      type: Number,
+      default: 0,
+    },
+    max: {
+      type: Number,
+      default: 100,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     needInteger: {
       type: Boolean,
       default: true,
     },
-  },
-  components: {
-    TSlider,
-    TInputNumber,
   },
   emit: ['changeSize'],
   data() {
     return {
       size: null,
     };
+  },
+  mounted() {
+    this.size = this.needInteger ? parseInt(this.sizeValue, 10) : this.sizeValue;
   },
   methods: {
     format(val) {
@@ -69,9 +90,6 @@ export default {
       this.size = v;
       this.$emit('changeSize', v);
     },
-  },
-  mounted() {
-    this.size = this.needInteger ? parseInt(this.sizeValue, 10) : this.sizeValue;
   },
 };
 </script>

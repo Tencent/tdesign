@@ -22,13 +22,13 @@
         <div
           ref="btn"
           class="generator-btn"
-          @click="handleClickTheme"
-          @mouseleave="handleLeaveTheme"
           :style="{
             width: generateBtnWidth,
             marginRight: '4px',
             transition: 'width .3s',
           }"
+          @click="handleClickTheme"
+          @mouseleave="handleLeaveTheme"
         >
           <t-button variant="outline" shape="square" size="large">
             <template #icon>
@@ -41,12 +41,12 @@
         </div>
         <div
           class="generator-btn"
-          @click="handleClickCustomize"
           :style="{
             width: !isCustomizeDrawerVisible ? '48px' : '216px',
             margin: '0 4px',
             transition: 'width .3s',
           }"
+          @click="handleClickCustomize"
         >
           <t-button variant="outline" shape="square" size="large">
             <template #icon>
@@ -67,8 +67,8 @@
         <div
           v-if="isCustomizeDrawerVisible || isThemeTabVisible"
           class="export-btn"
-          @click="handleDownload"
           :style="{ width: '48px', margin: '0 4px' }"
+          @click="handleDownload"
         >
           <t-button variant="outline" shape="square" size="large">
             <template #icon>
@@ -129,11 +129,17 @@ export default {
     AdjustSvg,
     SettingSvg,
   },
-  props: {
-    drawerVisible: { type: [Boolean, Number] },
-    showSetting: { type: [Boolean, String] },
-  },
   mixins: [langMixin],
+  props: {
+    drawerVisible: {
+      type: [Boolean, Number],
+      default: false,
+    },
+    showSetting: {
+      type: [Boolean, String],
+      default: false,
+    },
+  },
   data() {
     return {
       isThemeTabVisible: false,

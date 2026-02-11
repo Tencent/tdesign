@@ -34,8 +34,18 @@ import SizeSvg from './SizeSvg.vue';
 
 export default {
   name: 'SwitchTabs',
+  components: { ColorSvg, FontSvg, RadiusSvg, BoxshadowSvg, SizeSvg },
+  mixins: [langMixin],
   props: {
-    activeTabIdx: Number,
+    activeTabIdx: {
+      type: Number,
+      default: 0,
+    },
+  },
+  data() {
+    return {
+      tabs: [],
+    };
   },
   computed: {
     $device() {
@@ -46,19 +56,7 @@ export default {
       return isMobile(this.$device) ? this.tabs.filter((tab) => tab.title !== this.lang.size.title) : this.tabs;
     },
   },
-  components: { ColorSvg, FontSvg, RadiusSvg, BoxshadowSvg, SizeSvg },
   emit: ['changeActiveTab'],
-  mixins: [langMixin],
-  data() {
-    return {
-      tabs: [],
-    };
-  },
-  methods: {
-    handleClickPanel(idx) {
-      this.$emit('changeActiveTab', idx);
-    },
-  },
   mounted() {
     const text = this.lang;
     this.tabs = [
@@ -83,6 +81,11 @@ export default {
         image: SizeSvg,
       },
     ];
+  },
+  methods: {
+    handleClickPanel(idx) {
+      this.$emit('changeActiveTab', idx);
+    },
   },
 };
 </script>
