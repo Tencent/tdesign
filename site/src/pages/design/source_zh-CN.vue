@@ -89,16 +89,16 @@
 </template>
 
 <script>
-import figmaIcon from './assets/source/figma-logo.svg';
-import sketchIcon from './assets/source/sketch-logo.svg';
-import xdIcon from './assets/source/xd-logo.svg';
-import axureIcon from './assets/source/axure-logo.svg';
-import codesignIcon from './assets/source/codesign-logo.svg';
-import jssjIcon from './assets/source/jssj-logo.svg';
-import pixsoIcon from './assets/source/pixso-logo.svg';
-import mdIcon from './assets/source/md-logo.svg';
-import mastergoIcon from './assets/source/mastergo-logo.svg';
-import ryIcon from './assets/source/ry-logo.svg';
+import figmaIcon from '@/assets/figma-logo.svg';
+import sketchIcon from '@/assets/sketch-logo.svg';
+import xdIcon from '@/assets/xd-logo.svg';
+import axureIcon from '@/assets/axure-logo.svg';
+import codesignIcon from '@/assets/codesign-logo.svg';
+import jssjIcon from '@/assets/jssj-logo.svg';
+import pixsoIcon from '@/assets/pixso-logo.svg';
+import mdIcon from '@/assets/md-logo.svg';
+import mastergoIcon from '@/assets/mastergo-logo.svg';
+import ryIcon from '@/assets/ry-logo.svg';
 
 import { webSourceList, mobileSourceList, sourceDownloadUrl, webChartSourceList } from '@/constants';
 import { webDesignContributor, mobileDesignContributor, webChartDesignContributor } from '@/contributor';
