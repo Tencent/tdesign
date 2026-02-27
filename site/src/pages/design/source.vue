@@ -54,8 +54,7 @@
                   {{ item.watch }}
                 </span>
                 <span class="source-detail-time">
-                  <t-icon name="history" size="16px" />
-                  {{ item.lastUpdated }}
+                  {{ item.descriptionEn }}
                 </span>
                 <t-icon
                   class="source-detail-action"
