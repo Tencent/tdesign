@@ -70,14 +70,14 @@ export const submodules = {
     repo: 'Tencent/tdesign-react-starter',
   },
   '@tdesign-vue-next/chat': {
-    title: '## Vue3 for Chat 发布',
+    title: '## Vue3 for AI Chat 发布',
     changelogUrl:
       'https://raw.githubusercontent.com/Tencent/tdesign-vue-next/refs/heads/main/packages/tdesign-vue-next-chat/CHANGELOG.md',
     tagPrefix: '@tdesign-vue-next/chat@',
     repo: 'Tencent/tdesign-vue-next',
   },
   '@tdesign/uniapp-chat': {
-    title: '## UniApp for Chat 发布',
+    title: '## UniApp for AI Chat 发布',
     changelogUrl:
       'https://raw.githubusercontent.com/Tencent/tdesign-miniprogram/refs/heads/main/packages/tdesign-uniapp-chat/CHANGELOG.md',
     tagPrefix: '@tdesign/uniapp-chat@',
