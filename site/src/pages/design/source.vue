@@ -456,7 +456,7 @@ export default {
         &-action {
           position: absolute;
           right: 20px;
-          bottom: 24px;
+          bottom: 19px;
           visibility: hidden;
           opacity: 0;
           transition: all 0.2s linear;
