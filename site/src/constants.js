@@ -54,7 +54,7 @@ export const webSourceList = [
     eventLabel: '如意设计助手 x TDesign 组件库',
     actionUrl: 'https://www.figma.com/community/plugin/1192146318523533547',
     description: '高效使用组件库和 Design Token',
-    descriptionEn: 'Efficiently Component library plugin',
+    descriptionEn: 'Efficiently component library plugin',
     status: 0,
     icon: 'ry',
     actionType: 'jump',
