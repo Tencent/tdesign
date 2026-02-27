@@ -30,7 +30,7 @@
 import MarkdownIt from 'markdown-it';
 import mila from 'markdown-it-link-attributes';
 
-const RELEASE_API = '/api/apigw/release/github-contributors/release';
+const RELEASE_API = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/release';
 
 const titleReg = /<h[23]>\s*(Vue|React|Miniprogram|Flutter|UniApp|Figma|Sketch|Axure|AdobeXD|TDesign)/g;
 

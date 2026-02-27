@@ -593,8 +593,8 @@ import qqLogo from '@/assets/qq-logo.svg';
 
 import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, xdWebUrl } from '@constants';
 
-const brandUrl = '/api/scf/brand/list';
-const newsUrl = '/api/scf/news';
+const brandUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/brand/list';
+const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
 
 const isIntranet = location.host.includes('woa.com'); // 部分动态或内容只能通过内网访问
 let ticking = false;
