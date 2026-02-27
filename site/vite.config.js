@@ -38,6 +38,18 @@ export default ({ mode }) => {
       fs: {
         strict: false,
       },
+      proxy: {
+        '/api/apigw': {
+          target: 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/apigw/, ''),
+        },
+        '/api/scf': {
+          target: 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/scf/, ''),
+        },
+      },
     },
     plugins: [
       vue({

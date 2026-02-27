@@ -27,75 +27,75 @@
 </template>
 
 <script>
-import MarkdownIt from 'markdown-it'
-import mila from 'markdown-it-link-attributes'
+import MarkdownIt from 'markdown-it';
+import mila from 'markdown-it-link-attributes';
 
-const RELEASE_API = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/release'
+const RELEASE_API = '/api/apigw/release/github-contributors/release';
 
-const titleReg = /<h[23]>\s*(Vue|React|Miniprogram|Figma|Sketch|Axure|AdobeXD|TDesign)/g
+const titleReg = /<h[23]>\s*(Vue|React|Miniprogram|Flutter|UniApp|Figma|Sketch|Axure|AdobeXD|TDesign)/g;
 
 const mdRender = new MarkdownIt({
-  linkify: true
+  linkify: true,
 }).use(mila, {
   attrs: {
     target: '_blank',
-    rel: 'noopener'
-  }
-})
+    rel: 'noopener',
+  },
+});
 
 export default {
-  data () {
+  data() {
     return {
       mdRender,
-      release: []
-    }
+      release: [],
+    };
   },
-  mounted () {
-    this.pageInit()
-    this.fetchReleases()
+  mounted() {
+    this.pageInit();
+    this.fetchReleases();
   },
 
   computed: {
-    releaseTimeList () {
+    releaseTimeList() {
       return this.release.map((item) => ({
         title: this.formatTime(item.published_at),
-        id: this.formatTime(item.published_at).replace(/\s/g, '-')
-      }))
-    }
+        id: this.formatTime(item.published_at).replace(/\s/g, '-'),
+      }));
+    },
   },
   methods: {
-    formatTime (time) {
-      return `${new Date(time).toDateString()}（${new Date(time).toLocaleDateString()}）`
+    formatTime(time) {
+      return `${new Date(time).toDateString()}（${new Date(time).toLocaleDateString()}）`;
     },
-    pageInit () {
-      const { meta } = this.$route
-      this.$refs.tdDocHeader.docInfo = meta
+    pageInit() {
+      const { meta } = this.$route;
+      this.$refs.tdDocHeader.docInfo = meta;
     },
-    fetchReleases () {
-      const cache = sessionStorage.getItem('__tdesign_release__')
+    fetchReleases() {
+      const cache = sessionStorage.getItem('__tdesign_release__');
 
       if (cache) {
-        const data = JSON.parse(cache)
+        const data = JSON.parse(cache);
         this.release = data.map((item) => {
-          item.body = this.mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1')
-          return item
-        })
+          item.body = this.mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1');
+          return item;
+        });
       } else {
         fetch(RELEASE_API)
           .then((res) => res.json())
           .then((data) => {
-            sessionStorage.setItem('__tdesign_release__', JSON.stringify(data))
+            sessionStorage.setItem('__tdesign_release__', JSON.stringify(data));
 
             this.release = data.map((item) => {
-              item.body = this.mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1')
-              return item
-            })
+              item.body = this.mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1');
+              return item;
+            });
           })
-          .catch((err) => console.error(err))
+          .catch((err) => console.error(err));
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="less">
@@ -180,31 +180,39 @@ export default {
           background-size: 20px 20px;
 
           &[name^='Vue'] {
-            background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNjEuNzYgMjI2LjY5Ij48cGF0aCBkPSJNMTYxLjA5Ni4wMDFsLTMwLjIyNSA1Mi4zNTFMMTAwLjY0Ny4wMDFILS4wMDVsMTMwLjg3NyAyMjYuNjg4TDI2MS43NDkuMDAxeiIgZmlsbD0iIzQxYjg4MyIvPjxwYXRoIGQ9Ik0xNjEuMDk2LjAwMWwtMzAuMjI1IDUyLjM1MUwxMDAuNjQ3LjAwMUg1Mi4zNDZsNzguNTI2IDEzNi4wMUwyMDkuMzk4LjAwMXoiIGZpbGw9IiMzNDQ5NWUiLz48L3N2Zz4K);
+            background-image: url(@/assets/vue-logo.svg);
           }
 
           &[name^='React'] {
-            background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K);
+            background-image: url(@/assets/react-logo.svg);
           }
 
           &[name^='Miniprogram'] {
-            background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPG1hc2sgaWQ9Im1hc2swIiBtYXNrLXR5cGU9ImFscGhhIiBtYXNrVW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4PSIwIiB5PSIwIiB3aWR0aD0iMTYiIGhlaWdodD0iMTYiPgo8cmVjdCB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIGZpbGw9IndoaXRlIi8+CjwvbWFzaz4KPGcgbWFzaz0idXJsKCNtYXNrMCkiPgo8cGF0aCBkPSJNMTEuNTkzNSA4LjI2MjYxQzEyLjQyMSA4LjAxMzgxIDE0LjI3NDQgNi44Mzg2OCAxMy45NjU1IDUuMDQ3MjdDMTMuNTc5NCAyLjgwODAyIDExLjkyNDUgMi4yMzM4NSA5Ljk5Mzg3IDIuODY1NDNDOC40NDkzNiAzLjM3MDcgOC4xMDAwNyA0LjUzMDUyIDguMDYzMyA1LjA0NzI3VjExLjI0ODNDNy44OTc4MSAxMi4yNDM1IDYuNTQwNjkgMTQuMTY1MSA0LjIwMTg2IDEzLjQzMDFDMS44NjMwMyAxMi42OTUyIDEuOTY0ODkgMTAuMzcyMiAyLjM4MTY0IDkuNDY4MzZDMi42MDIyNyA4Ljk4OTg5IDMuNTYxOTQgNy44NDkyMSA0Ljc1MzQ3IDcuODAzMjgiIHN0cm9rZT0iIzA3QzE2MCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9nPgo8L3N2Zz4K);
+            background-image: url(@/assets/miniprogram-logo.svg);
+          }
+
+          &[name^='Flutter'] {
+            background-image: url(@/assets/flutter-logo.svg);
+          }
+
+          &[name^='UniApp'] {
+            background-image: url(@/assets/uniapp-logo.png);
           }
 
           &[name^='Figma'] {
-            background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTguNTA5OTggMjIuNTAwMUMxMC40NDIgMjIuNTAwMSAxMi4wMSAyMC45MzIxIDEyLjAxIDE5LjAwMDFWMTUuNTAwMUg4LjUwOTk4QzYuNTc4IDE1LjUwMDEgNS4wMTAwMSAxNy4wNjgxIDUuMDEwMDEgMTkuMDAwMUM1LjAxMDAxIDIwLjkzMjEgNi41NzggMjIuNTAwMSA4LjUwOTk4IDIyLjUwMDFaIiBmaWxsPSIjMEFDRjgzIi8+CjxwYXRoIGQ9Ik01LjAxMDAxIDEyQzUuMDEwMDEgMTAuMDY4IDYuNTc4IDguNSA4LjUwOTk4IDguNUgxMi4wMVYxNS40OTk5SDguNTA5OThDNi41NzggMTUuNDk5OSA1LjAxMDAxIDEzLjkzMiA1LjAxMDAxIDEyWiIgZmlsbD0iI0EyNTlGRiIvPgo8cGF0aCBkPSJNNS4wMTAwMSA1QzUuMDEwMDEgMy4wNjggNi41NzggMS41IDguNTA5OTggMS41SDEyLjAxVjguNUg4LjUwOTk4QzYuNTc4IDguNSA1LjAxMDAxIDYuOTMyIDUuMDEwMDEgNVoiIGZpbGw9IiNGMjRFMUUiLz4KPHBhdGggZD0iTTEyLjAxIDEuNUgxNS41MTAxQzE3LjQ0MjEgMS41IDE5LjAxMDEgMy4wNjggMTkuMDEwMSA1QzE5LjAxMDEgNi45MzIgMTcuNDQyMSA4LjUgMTUuNTEwMSA4LjVIMTIuMDFWMS41WiIgZmlsbD0iI0ZGNzI2MiIvPgo8cGF0aCBkPSJNMTkuMDEwMSAxMkMxOS4wMTAxIDEzLjkzMiAxNy40NDIxIDE1LjQ5OTkgMTUuNTEwMSAxNS40OTk5QzEzLjU3OCAxNS40OTk5IDEyLjAxIDEzLjkzMiAxMi4wMSAxMkMxMi4wMSAxMC4wNjggMTMuNTc4IDguNSAxNS41MTAxIDguNUMxNy40NDIxIDguNSAxOS4wMTAxIDEwLjA2OCAxOS4wMTAxIDEyWiIgZmlsbD0iIzFBQkNGRSIvPgo8L3N2Zz4K);
+            background-image: url(@/assets/figma-logo.svg);
           }
 
           &[name^='Sketch'] {
-            background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTYuMDgxODEgMy42MjU2N0wxMiAzTDE3LjkxODIgMy42MjU2N0wyMi41IDkuNzc2MzVMMTIgMjIuMDAzNUwxLjUgOS43NzYzNUw2LjA4MTgxIDMuNjI1NjdaIiBmaWxsPSIjRkRCMzAwIi8+CjxwYXRoIGQ9Ik01Ljc1MzAyIDkuNzc2MzdMMTIgMjIuMDAzNUwxLjUgOS43NzYzN0g1Ljc1MzAyWiIgZmlsbD0iI0VBNkMwMCIvPgo8cGF0aCBkPSJNMTguMjQ3IDkuNzc2MzdMMTIgMjIuMDAzNUwyMi41IDkuNzc2MzdIMTguMjQ3WiIgZmlsbD0iI0VBNkMwMCIvPgo8cGF0aCBkPSJNNS43NTI5MyA5Ljc3NjM3SDE4LjI0NjlMMTEuOTk5OSAyMi4wMDM1TDUuNzUyOTMgOS43NzYzN1oiIGZpbGw9IiNGREFEMDAiLz4KPHBhdGggZD0iTTExLjk5OTkgM0w2LjA4MTcgMy42MjU2Nkw1Ljc1MjkzIDkuNzc2MzVMMTEuOTk5OSAzWiIgZmlsbD0iI0ZERDIzMSIvPgo8cGF0aCBkPSJNMTEuOTk5OCAzTDE3LjkxODEgMy42MjU2NkwxOC4yNDY4IDkuNzc2MzVMMTEuOTk5OCAzWiIgZmlsbD0iI0ZERDIzMSIvPgo8cGF0aCBkPSJNMjIuNSA5Ljc3NjNMMTcuOTE4MiAzLjYyNTYxTDE4LjI0NyA5Ljc3NjNIMjIuNVoiIGZpbGw9IiNGREFEMDAiLz4KPHBhdGggZD0iTTEuNSA5Ljc3NjNMNi4wODE4IDMuNjI1NjFMNS43NTMwMiA5Ljc3NjNIMS41WiIgZmlsbD0iI0ZEQUQwMCIvPgo8cGF0aCBkPSJNMTEuOTk5OSAzTDUuNzUyOTMgOS43NzYzNUgxOC4yNDY5TDExLjk5OTkgM1oiIGZpbGw9IiNGRUVFQjciLz4KPC9zdmc+Cg==);
+            background-image: url(@/assets/sketch-logo.svg);
           }
 
           &[name^='Axure'] {
-            background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xOC43MjI1IDMuODQwMzJDMTguNTg2OCAzLjU1NDA4IDE4LjMwMDYgMy4zODI5MyAxNy45NTIzIDMuMzgyOTNIMTYuNjA2OEMxNi4yMTcyIDMuMzgyOTMgMTUuOTI1MSAzLjUzOTMzIDE1Ljc2ODcgMy44MjI2MUwxMy43NzM5IDYuNzM1MTFMMTUuNTIwOCA5LjEyMjM2TDE4LjU2OTEgNC43NDkxOEMxOC45MDU1IDQuMzQ3ODcgMTguNzg3NCAzLjk3OTAxIDE4LjcyMjUgMy44NDAzMloiIGZpbGw9IiM3NEJCMTEiLz4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik04LjIwODU1IDMuNzkzMUM3LjkwNDYxIDMuMzgyOTQgNy41MDAzNCAzLjM4MjkzIDcuMzY0NiAzLjM4MjkzSDYuMDQ4NTJDNS43MTIxMiAzLjM4MjkzIDUuNDM0NzQgMy41MzkzMyA1LjI5MDE1IDMuODA3ODZDNS4xNDI2IDQuMDg1MjQgNS4xNzIxMSA0LjQxNTc0IDUuMzc4NjcgNC43MjI2M0wxMC4yNTM1IDExLjQ4MDFMNC42NDY4NiAxOS4yOTk5QzQuNDUyMSAxOS41OTUgNC40MjI1OSAxOS45MTk2IDQuNTcwMTQgMjAuMTk2OUM0LjcxNDczIDIwLjQ2NTUgNC45OTIxMSAyMC42MjE5IDUuMzI4NTEgMjAuNjIxOUg2LjY3NDFDNy4wMTkzNSAyMC42MjE5IDcuMzIzMjkgMjAuNDQxOSA3LjQ3NjczIDIwLjE1ODZMMTMuNzUzMiAxMS41MTI2TDguMjA4NTUgMy43OTMxWiIgZmlsbD0iIzAwOUNEOSIvPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTE5LjM5MjIgMTkuMzcwOEwxNS40Nzk0IDE0LjAwMzJMMTMuNzU5IDE2LjM3NTdMMTYuODUxNSAyMC41MDM5TDE2LjkzMTIgMjAuNTM5M0MxNy4wNTUxIDIwLjU5NTQgMTcuMTg3OSAyMC42MjQ5IDE3LjMyMDcgMjAuNjI0OUgxOC42MzY4QzE4Ljk1NTUgMjAuNjI0OSAxOS4yMjQgMjAuNDgzMyAxOS4zNzc1IDIwLjIzODNDMTkuNTM2OCAxOS45ODQ2IDE5LjUzOTggMTkuNjY4OCAxOS4zOTIyIDE5LjM3MDhaIiBmaWxsPSIjRUIyMDg0Ii8+Cjwvc3ZnPgo=);
+            background-image: url(@/assets/axure-logo.svg);
           }
 
           &[name^='AdobeXD'] {
-            background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyLjc2MTUgNS45MDg1Mkw5LjA1ODY2IDEyLjE3NDlMMTMuMDA4NCAxOC44MjFDMTMuMDMzIDE4Ljg3MTcgMTMuMDQ1NCAxOC45MjIzIDEzLjAzMyAxOC45NzI5QzEzLjAyMDcgMTkuMDIzNiAxMi45NzEzIDE4Ljk4NTYgMTIuODk3MyAxOC45OTgzSDEwLjA3MDhDOS44NzMyOCAxOC45OTgzIDkuNzM3NTEgMTguOTg1NiA5LjY1MTExIDE4Ljg1OUM5LjM5MTkxIDE4LjMyNzMgOS4xMjAzNyAxNy44MDgzIDguODYxMTcgMTcuMjc2NkM4LjYwMTk3IDE2Ljc1NzYgOC4zMTgwOSAxNi4yMjU5IDguMDIxODYgMTUuNjgxNUM3LjcyNTYzIDE1LjEzNzIgNy40Mjk0IDE0LjU5MjggNy4xMzMxNyAxNC4wMzU4SDcuMTA4NDlDNi44NDkyOSAxNC41ODAyIDYuNTY1NCAxNS4xMjQ1IDYuMjgxNTIgMTUuNjY4OUM1Ljk5NzYzIDE2LjIxMzIgNS43MTM3NSAxNi43NTc2IDUuNDQyMjEgMTcuMjg5MkM1LjE1ODMyIDE3LjgyMDkgNC44NzQ0NCAxOC4zNjUzIDQuNTkwNTUgMTguODg0M0M0LjU0MTE4IDE5LjAxMDkgNC40NDI0NCAxOS4wMjM2IDQuMzA2NjcgMTkuMDIzNkgxLjU5MTI0QzEuNTQxODcgMTkuMDIzNiAxLjUwNDg0IDE5LjA0ODkgMS41MDQ4NCAxOC45ODU2QzEuNDkyNSAxOC45MzUgMS41MDQ4NCAxOC44ODQzIDEuNTI5NTMgMTguODQ2M0w1LjM2ODE1IDEyLjM5MDFMMS42MjgyNyA1Ljg5NTg2QzEuNTkxMjQgNS44NDUyMiAxLjU3ODkgNS43OTQ1OCAxLjYwMzU4IDUuNzY5MjdDMS42MjgyNyA1LjczMTI5IDEuNjc3NjQgNS43MTg2MyAxLjcyNzAxIDUuNzE4NjNINC41Mjg4NEM0LjU5MDU1IDUuNzE4NjMgNC42NTIyNiA1LjczMTI5IDQuNzAxNjQgNS43NDM5NUM0Ljc1MTAxIDUuNzY5MjcgNC43ODgwNCA1LjgwNzI0IDQuODI1MDYgNS44NTc4OEM1LjA1OTU4IDYuNDAyMjMgNS4zMzExMiA2Ljk0NjU4IDUuNjE1MDEgNy40OTA5M0M1LjkxMTIzIDguMDM1MjggNi4xOTUxMiA4LjU2Njk3IDYuNTAzNjkgOS4wOTg2N0M2Ljc5OTkyIDkuNjMwMzYgNy4wNzE0NiAxMC4xNjIgNy4zMzA2NiAxMC43MDY0SDcuMzU1MzRDNy42MTQ1NCAxMC4xNDk0IDcuODg2MDkgOS42MDUwNCA4LjE1NzYzIDkuMDczMzVDOC40MjkxNyA4LjU0MTY2IDguNzEzMDYgOC4wMDk5NiA4Ljk5Njk0IDcuNDc4MjdDOS4yODA4MyA2Ljk0NjU4IDkuNTUyMzcgNi40MDIyMyA5LjgyMzkxIDUuODgzMkM5LjgzNjI1IDUuODMyNTYgOS44NjA5NCA1Ljc4MTkyIDkuODk3OTcgNS43NTY2MUM5Ljk0NzM0IDUuNzMxMjkgOS45OTY3MSA1LjcxODYzIDEwLjA1ODQgNS43MzEyOUgxMi42NjI4QzEyLjcyNDUgNS43MTg2MyAxMi43ODYyIDUuNzU2NjEgMTIuNzk4NSA1LjgxOTlDMTIuODEwOSA1LjgzMjU2IDEyLjc4NjIgNS44ODMyIDEyLjc2MTUgNS45MDg1MloiIGZpbGw9IiNGRjYxRjYiLz4KPHBhdGggZD0iTTE4LjQ2MzkgMTkuMjY0MkMxNy41NTA1IDE5LjI3NjggMTYuNjM3MSAxOS4wODY5IDE1LjgxMDIgMTguNjk0NUMxNS4wMzI2IDE4LjMyNzQgMTQuMzkwOCAxNy43MTk3IDEzLjk0NjQgMTYuOTcyOEMxMy40ODk3IDE2LjIwMDYgMTMuMjY3NiAxNS4yMzg1IDEzLjI2NzYgMTQuMDg2NUMxMy4yNTUyIDEzLjE0OTcgMTMuNDg5NyAxMi4yMjU2IDEzLjk0NjQgMTEuNDE1NEMxNC40MTU0IDEwLjU5MjUgMTUuMDk0MyA5LjkwODkyIDE1LjkwODkgOS40NTMxOEMxNi43NzI5IDguOTU5NDcgMTcuODA5NyA4LjcxODk0IDE5LjAzMTcgOC43MTg5NEMxOS4wOTM0IDguNzE4OTQgMTkuMTc5OCA4LjcxODk0IDE5LjI5MDkgOC43MzE2QzE5LjQwMTkgOC43NDQyNiAxOS41MjU0IDguNzQ0MjYgMTkuNjczNSA4Ljc1NjkyVjQuNzU2NThDMTkuNjczNSA0LjY2Nzk2IDE5LjcxMDUgNC42MTczMiAxOS43OTY5IDQuNjE3MzJIMjIuMzAyNUMyMi4zNjQyIDQuNjA0NjYgMjIuNDEzNiA0LjY1NTMgMjIuNDI1OSA0LjcwNTk0QzIyLjQyNTkgNC43MTg2IDIyLjQyNTkgNC43MzEyNiAyMi40MjU5IDQuNzMxMjZWMTYuNzgyOUMyMi40MjU5IDE3LjAxMDggMjIuNDM4MyAxNy4yNjQgMjIuNDUwNiAxNy41NDI1QzIyLjQ3NTMgMTcuODA4MyAyMi40ODc2IDE4LjA2MTUgMjIuNSAxOC4yNzY3QzIyLjUgMTguMzY1MyAyMi40NjMgMTguNDQxMyAyMi4zNzY2IDE4LjQ3OTNDMjEuNzM0NyAxOC43NTc4IDIxLjA1NTkgMTguOTYwMyAyMC4zNjQ3IDE5LjA4NjlDMTkuNzM1MiAxOS4yMDA5IDE5LjEwNTcgMTkuMjY0MiAxOC40NjM5IDE5LjI2NDJaTTE5LjY3MzUgMTYuNzMyM1YxMS4xNjIyQzE5LjU2MjQgMTEuMTM2OSAxOS40NTEzIDExLjExMTYgMTkuMzQwMiAxMS4wOTg5QzE5LjIwNDUgMTEuMDg2MiAxOS4wNjg3IDExLjA3MzYgMTguOTMyOSAxMS4wNzM2QzE4LjQ1MTUgMTEuMDczNiAxNy45NzAyIDExLjE3NDggMTcuNTM4MiAxMS40MDI3QzE3LjExODUgMTEuNjE3OSAxNi43NjA2IDExLjkzNDQgMTYuNDg5IDEyLjMzOTVDMTYuMjE3NSAxMi43NDQ2IDE2LjA4MTcgMTMuMjg5IDE2LjA4MTcgMTMuOTQ3MkMxNi4wNjk0IDE0LjM5MDMgMTYuMTQzNCAxNC44MzM0IDE2LjI5MTUgMTUuMjUxMUMxNi40MTUgMTUuNTkyOSAxNi42MDAxIDE1Ljg5NjggMTYuODQ3IDE2LjE1QzE3LjA4MTUgMTYuMzc3OCAxNy4zNjU0IDE2LjU1NTEgMTcuNjg2MyAxNi42NTYzQzE4LjAxOTUgMTYuNzcwMyAxOC4zNjUxIDE2LjgyMDkgMTguNzEwNyAxNi44MjA5QzE4Ljg5NTkgMTYuODIwOSAxOS4wNjg3IDE2LjgwODIgMTkuMjI5MSAxNi43OTU2QzE5LjM4OTYgMTYuODA4MiAxOS41MjU0IDE2Ljc4MjkgMTkuNjczNSAxNi43MzIzWiIgZmlsbD0iI0ZGNjFGNiIvPgo8L3N2Zz4K);
+            background-image: url(@/assets/xd-logo.svg);
           }
 
           &[name^='TDesign'] {

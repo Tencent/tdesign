@@ -588,20 +588,20 @@ import ComponentList from './component-list.vue';
 import Prismjs from 'prismjs';
 import { contributors } from './constants';
 
-import vueLogo from './assets/vue-logo.svg';
-import reactLogo from './assets/react-logo.svg';
-import figmaLogo from './assets/figma-logo.svg';
-import axLogo from './assets/ax-logo.svg';
-import xdLogo from './assets/xd-logo.svg';
-import flutterLogo from './assets/flutter-logo.svg';
-import uniappLogo from './assets/uniapp-logo.png';
-import sketchLogo from './assets/sketch-logo.svg';
-import miniprogramLogo from './assets/miniprogram-logo.svg';
+import vueLogo from '@/assets/vue-logo.svg';
+import reactLogo from '@//assets/react-logo.svg';
+import figmaLogo from '@//assets/figma-logo.svg';
+import axLogo from '@//assets/ax-logo.svg';
+import xdLogo from '@//assets/xd-logo.svg';
+import flutterLogo from '@//assets/flutter-logo.svg';
+import uniappLogo from '@//assets/uniapp-logo.png';
+import sketchLogo from '@//assets/sketch-logo.svg';
+import miniprogramLogo from '@//assets/miniprogram-logo.svg';
 
 import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, xdWebUrl } from '@constants';
 
-const brandUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/brand/list';
-const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
+const brandUrl = '/api/scf/brand/list';
+const newsUrl = '/api/scf/news';
 
 const isIntranet = location.host.includes('woa.com'); // 部分动态或内容只能通过内网访问
 let ticking = false;
