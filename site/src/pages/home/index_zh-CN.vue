@@ -589,14 +589,14 @@ import Prismjs from 'prismjs';
 import { contributors } from './constants';
 
 import vueLogo from '@/assets/vue-logo.svg';
-import reactLogo from '@//assets/react-logo.svg';
-import figmaLogo from '@//assets/figma-logo.svg';
-import axLogo from '@//assets/ax-logo.svg';
-import xdLogo from '@//assets/xd-logo.svg';
-import flutterLogo from '@//assets/flutter-logo.svg';
-import uniappLogo from '@//assets/uniapp-logo.png';
-import sketchLogo from '@//assets/sketch-logo.svg';
-import miniprogramLogo from '@//assets/miniprogram-logo.svg';
+import reactLogo from '@/assets/react-logo.svg';
+import figmaLogo from '@/assets/figma-logo.svg';
+import axLogo from '@/assets/ax-logo.svg';
+import xdLogo from '@/assets/xd-logo.svg';
+import flutterLogo from '@/assets/flutter-logo.svg';
+import uniappLogo from '@/assets/uniapp-logo.png';
+import sketchLogo from '@/assets/sketch-logo.svg';
+import miniprogramLogo from '@/assets/miniprogram-logo.svg';
 
 import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, xdWebUrl } from '@constants';
 
