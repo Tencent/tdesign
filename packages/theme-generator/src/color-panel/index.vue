@@ -509,6 +509,8 @@ export default {
     },
     changeNeutralColor(related, trigger = 'update') {
       updateLocalOption('neutral', related ? 'true' : null);
+      // grayMainColor 始终保持用户自定义的中性色，不随关联状态改变
+      // 关联时只是借用品牌色作为生成算法的输入
       const inputHex = related ? this.$brandColor : this.grayMainColor;
       const palette = generateNeutralPalette(inputHex, related);
       updateStyleSheetColor('gray', palette, palette, trigger);
@@ -520,7 +522,7 @@ export default {
       }
       this[`${type}MainColor`] = hex;
       if (type === 'gray') {
-        this.changeNeutralColor(false, trigger);
+        this.changeNeutralColor(this.isGrayRelatedToTheme, trigger);
         return;
       }
       const { lightPalette, darkPalette } = generateFunctionalPalette(hex);
