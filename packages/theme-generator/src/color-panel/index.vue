@@ -435,11 +435,7 @@ export default {
       // 恢复用户上次选择的功能色
       const functionColors = ['gray', 'success', 'error', 'warning'];
       functionColors.forEach((type) => {
-        const color =
-          this[`${type}MainColor`] ||
-          getOptionFromLocal(type) ||
-          getTokenValue(`--td-${type}-color`) ||
-          getTokenValue(`--td-${type}-color-4`);
+        const color = getOptionFromLocal(type);
         if (color) {
           this.changeFunctionColor(color, type, 'init');
         }
@@ -519,7 +515,9 @@ export default {
       this.$nextTick(this.refreshColorTokens);
     },
     changeFunctionColor(hex, type, trigger = 'update') {
-      updateLocalOption(type, hex);
+      if (trigger !== 'init') {
+        updateLocalOption(type, hex);
+      }
       this[`${type}MainColor`] = hex;
       if (type === 'gray') {
         this.changeNeutralColor(false, trigger);
