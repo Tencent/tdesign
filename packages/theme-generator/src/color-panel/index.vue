@@ -255,7 +255,12 @@
       >
         <template #subTitle>
           {{ lang.color.fromThemeColor }}
-          <t-switch style="margin-left: 8px" v-model="isGrayRelatedToTheme" @change="changeNeutralColor"></t-switch>
+          <t-switch
+            style="margin-left: 8px"
+            v-model="isGrayRelatedToTheme"
+            @change="changeNeutralColor"
+            @click.stop
+          ></t-switch>
         </template>
         <color-column
           type="gray"

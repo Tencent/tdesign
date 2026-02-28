@@ -39,7 +39,7 @@
         <div class="color-collapse__title" @click="isActive = !isActive">
           {{ title }}
         </div>
-        <div class="color-collapse__subtitle" :style="{ color: 'var(--text-secondary)' }">
+        <div class="color-collapse__subtitle" @click="handleSubtitleClick" :style="{ color: 'var(--text-secondary)' }">
           <slot name="subTitle">
             <!-- 没有 slot 时使用默认内容 -->
             HEX: {{ mainColor }}
@@ -105,6 +105,14 @@ export default {
   emit: ['changeMainColor'],
   methods: {
     handleAttach,
+    handleSubtitleClick(event) {
+      // 检查点击的元素是否是交互元素或其子元素
+      const target = event.target;
+      const interactiveElements = target.closest('.t-switch, .t-icon, .t-popup');
+      if (!interactiveElements) {
+        this.isActive = !this.isActive;
+      }
+    },
     changeColor(hex) {
       this.$emit('changeMainColor', hex, this.type);
     },

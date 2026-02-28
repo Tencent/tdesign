@@ -1,5 +1,24 @@
 export const SIZE_TOKENS = Array.from({ length: 16 }, (_, i) => `--td-size-${i + 1}`);
 
+export const SIZE_DEFAULT_VALUES = {
+  '--td-size-1': '2px',
+  '--td-size-2': '4px',
+  '--td-size-3': '6px',
+  '--td-size-4': '8px',
+  '--td-size-5': '12px',
+  '--td-size-6': '16px',
+  '--td-size-7': '20px',
+  '--td-size-8': '24px',
+  '--td-size-9': '28px',
+  '--td-size-10': '32px',
+  '--td-size-11': '36px',
+  '--td-size-12': '40px',
+  '--td-size-13': '48px',
+  '--td-size-14': '56px',
+  '--td-size-15': '64px',
+  '--td-size-16': '72px',
+};
+
 // 组件大小列表
 export const COMP_SIZE_MAP = [
   {
