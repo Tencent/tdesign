@@ -435,11 +435,7 @@ export default {
       // 恢复用户上次选择的功能色
       const functionColors = ['gray', 'success', 'error', 'warning'];
       functionColors.forEach((type) => {
-        const color =
-          this[`${type}MainColor`] ||
-          getOptionFromLocal(type) ||
-          getTokenValue(`--td-${type}-color`) ||
-          getTokenValue(`--td-${type}-color-4`);
+        const color = getOptionFromLocal(type);
         if (color) {
           this.changeFunctionColor(color, type, 'init');
         }
@@ -513,16 +509,20 @@ export default {
     },
     changeNeutralColor(related, trigger = 'update') {
       updateLocalOption('neutral', related ? 'true' : null);
+      // grayMainColor 始终保持用户自定义的中性色，不随关联状态改变
+      // 关联时只是借用品牌色作为生成算法的输入
       const inputHex = related ? this.$brandColor : this.grayMainColor;
       const palette = generateNeutralPalette(inputHex, related);
       updateStyleSheetColor('gray', palette, palette, trigger);
       this.$nextTick(this.refreshColorTokens);
     },
     changeFunctionColor(hex, type, trigger = 'update') {
-      updateLocalOption(type, hex);
+      if (trigger !== 'init') {
+        updateLocalOption(type, hex);
+      }
       this[`${type}MainColor`] = hex;
       if (type === 'gray') {
-        this.changeNeutralColor(false, trigger);
+        this.changeNeutralColor(this.isGrayRelatedToTheme, trigger);
         return;
       }
       const { lightPalette, darkPalette } = generateFunctionalPalette(hex);
