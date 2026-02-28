@@ -24,7 +24,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Tencent/tdesign.git"
+    "url": "git+https://github.com/Tencent/tdesign.git",
+    "directory": "packages/theme-generator"
   },
   "homepage": "https://github.com/Tencent/tdesign/blob/main/packages/theme-generator/README.md",
   "dependencies": {
