@@ -45,6 +45,8 @@ export default {
     yPadding: 'vertical Padding',
     popupPadding: 'popup Padding',
     margin: 'margin',
+    resetDefault: 'Reset',
+    resetConfirm: 'Are you sure to reset size to default?',
   },
   borerRadius: {
     title: 'Border',

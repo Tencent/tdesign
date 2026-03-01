@@ -55,8 +55,8 @@
         <template #title>{{ lang.font.fontColor }}</template>
         <template #content>
           <font-color-adjust
-            :colorPalette="textColorPalette"
-            :originColorPalette="initTextColorPalette"
+            :color-palette="textColorPalette"
+            :origin-color-palette="initTextColorPalette"
             @changeGradation="changeGradation"
           />
         </template>
@@ -81,9 +81,6 @@ import LineHeightSvg from './components/LineHeightSvg.vue';
 
 export default {
   name: 'FontPanel',
-  props: {
-    top: Number,
-  },
   components: {
     CommonCollapse,
     FontColorAdjust,
@@ -93,6 +90,12 @@ export default {
     LineHeightSvg,
   },
   mixins: [langMixin],
+  props: {
+    top: {
+      type: Number,
+      default: 0,
+    },
+  },
   data() {
     return {
       textColorPalette: [''],
@@ -113,6 +116,15 @@ export default {
         height: `${clientHeight - (this.top || 0) - 96}px`,
       };
     },
+  },
+  mounted() {
+    // 确保 custom-theme 被 append 后再同步
+    this.$nextTick(() => {
+      this.setFontPalette();
+    });
+    this.$root.$on('refresh-color-tokens', () => {
+      this.setFontPalette();
+    });
   },
   methods: {
     isMobile,
@@ -138,15 +150,6 @@ export default {
       this.textColorPalette = textColorPalette;
       this.initTextColorPalette = JSON.parse(JSON.stringify(textColorPalette));
     },
-  },
-  mounted() {
-    // 确保 custom-theme 被 append 后再同步
-    this.$nextTick(() => {
-      this.setFontPalette();
-    });
-    this.$root.$on('refresh-color-tokens', () => {
-      this.setFontPalette();
-    });
   },
 };
 </script>

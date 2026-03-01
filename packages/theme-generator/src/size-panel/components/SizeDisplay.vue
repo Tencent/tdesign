@@ -10,7 +10,7 @@
           marginBottom: '8px',
         }"
       >
-        <span><SectionDynamicSvg :size="parseInt(getTokenValue(token), 10)" /></span>
+        <span><SectionDynamicSvg :size="parseSize(getTokenValue(token))" /></span>
         <span>{{ token.replace('--td-', '') }} : {{ getTokenValue(token) }}</span>
       </div>
     </div>
@@ -31,9 +31,6 @@ export default {
       SIZE_TOKENS,
     };
   },
-  methods: {
-    getTokenValue,
-  },
   mounted() {
     this.$nextTick(() => {
       // 初始化 local 的 token 后更新 size 显示
@@ -42,6 +39,16 @@ export default {
     this.$root.$on('refresh-size-tokens', () => {
       this.$forceUpdate();
     });
+  },
+  methods: {
+    getTokenValue,
+    parseSize(val) {
+      if (typeof val === 'string') {
+        const num = parseFloat(val);
+        return isNaN(num) ? 0 : num;
+      }
+      return val;
+    },
   },
 };
 </script>

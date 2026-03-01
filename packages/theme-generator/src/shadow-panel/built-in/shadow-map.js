@@ -1,39 +1,10 @@
 export const ShadowSelectType = {
-  Super_Light: 0,
-  Light: 1,
-  Default: 2,
-  Deep: 3,
-  Super_Deep: 4,
-  Self_Defined: 5,
-};
-
-export const ShadowSelectDetail = {
-  [ShadowSelectType.Super_Light]: [
-    '0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 2px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05)',
-    '0 2px 6px rgba(0, 0, 0, 0.02), 0 4px 6px rgba(0, 0, 0, 0.05), 0 3px 3px rgba(0, 0, 0, 0.06)',
-    '0 4px 10px 3px rgba(0, 0, 0, 0.05), 0 4px 6px 2px rgba(0, 0, 0, 0.04), 0 2px 3px -3px rgba(0, 0, 0, 0.08)',
-  ],
-  [ShadowSelectType.Light]: [
-    '0 1px 6px rgba(0, 0, 0, 0.05), 0 3px 4px rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.08)',
-    '0 3px 10px 2px rgba(0, 0, 0, 0.04), 0 6px 8px rgba(0, 0, 0, 0.05), 0 4px 4px -2px rgba(0, 0, 0, 0.08)',
-    '0 4px 18px 5px rgba(0, 0, 0, 0.05), 0 10px 9px 2px rgba(0, 0, 0, 0.04), 0 3px 5px -3px rgba(0, 0, 0, 0.08)',
-  ],
-  [ShadowSelectType.Default]: [
-    '0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.12)',
-    '0 3px 14px 2px rgba(0, 0, 0, 0.05), 0 8px 10px 1px rgba(0, 0, 0, 0.06), 0 5px 5px -3px rgba(0, 0, 0, 0.1)',
-    '0 6px 30px 5px rgba(0, 0, 0, 0.05), 0 16px 24px 2px rgba(0, 0, 0, 0.04), 0 8px 10px -5px rgba(0, 0, 0, 0.08)',
-  ],
-  [ShadowSelectType.Deep]: [
-    '0 3px 18px rgba(0, 0, 0, 0.06), 0 4px 7px rgba(0, 0, 0, 0.1), 0 2px 7px -1px rgba(0, 0, 0, 0.14)',
-    '0 5px 18px 2px rgba(0, 0, 0, 0.07), 0 10px 15px 1px rgba(0, 0, 0, 0.1), 0 6px 10px -4px rgba(0, 0, 0, 0.14)',
-    '0 8px 33px 5px rgba(0, 0, 0, 0.07), 0 18px 28px 2px rgba(0, 0, 0, 0.07), 0 10px 12px -6px rgba(0, 0, 0, 0.17)',
-  ],
-  [ShadowSelectType.Super_Deep]: [
-    '0 5px 20px rgba(0, 0, 0, 0.08), 0 5px 8px rgba(0, 0, 0, 0.12), 0 5px 10px -1px rgba(0, 0, 0, 0.18)',
-    '0 7px 23px 2px rgba(0, 0, 0, 0.09), 0 12px 17px 1px rgba(0, 0, 0, 0.1), 0 8px 14px -4px rgba(0, 0, 0, 0.18)',
-    '0 11px 37px 5px rgba(0, 0, 0, 0.1), 0 21px 31px 2px rgba(0, 0, 0, 0.12), 0 14px 20px -6px rgba(0, 0, 0, 0.16)',
-  ],
-  [ShadowSelectType.Self_Defined]: ['', '', ''],
+  Super_Light: 1,
+  Light: 2,
+  Default: 3,
+  Deep: 4,
+  Super_Deep: 5,
+  Self_Defined: 6,
 };
 
 export const ShadowSelect = [
@@ -43,6 +14,42 @@ export const ShadowSelect = [
   { label: '深', enLabel: 'deep', value: ShadowSelectType.Deep },
   { label: '超深', enLabel: 'deeper', value: ShadowSelectType.Super_Deep },
   { label: '自定义', enLabel: 'customized', value: ShadowSelectType.Self_Defined, disabled: true },
+];
+
+export const ShadowLabels = Object.fromEntries(ShadowSelect.map((item) => [item.value, item.label]));
+
+// 预设阴影值数组，索引对应 step - 1
+export const ShadowStepArray = [
+  // Super_Light (step=1)
+  [
+    '0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 2px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05)',
+    '0 2px 6px rgba(0, 0, 0, 0.02), 0 4px 6px rgba(0, 0, 0, 0.05), 0 3px 3px rgba(0, 0, 0, 0.06)',
+    '0 4px 10px 3px rgba(0, 0, 0, 0.05), 0 4px 6px 2px rgba(0, 0, 0, 0.04), 0 2px 3px -3px rgba(0, 0, 0, 0.08)',
+  ],
+  // Light (step=2)
+  [
+    '0 1px 6px rgba(0, 0, 0, 0.05), 0 3px 4px rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.08)',
+    '0 3px 10px 2px rgba(0, 0, 0, 0.04), 0 6px 8px rgba(0, 0, 0, 0.05), 0 4px 4px -2px rgba(0, 0, 0, 0.08)',
+    '0 4px 18px 5px rgba(0, 0, 0, 0.05), 0 10px 9px 2px rgba(0, 0, 0, 0.04), 0 3px 5px -3px rgba(0, 0, 0, 0.08)',
+  ],
+  // Default (step=3)
+  [
+    '0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.12)',
+    '0 3px 14px 2px rgba(0, 0, 0, 0.05), 0 8px 10px 1px rgba(0, 0, 0, 0.06), 0 5px 5px -3px rgba(0, 0, 0, 0.1)',
+    '0 6px 30px 5px rgba(0, 0, 0, 0.05), 0 16px 24px 2px rgba(0, 0, 0, 0.04), 0 8px 10px -5px rgba(0, 0, 0, 0.08)',
+  ],
+  // Deep (step=4)
+  [
+    '0 3px 18px rgba(0, 0, 0, 0.06), 0 4px 7px rgba(0, 0, 0, 0.1), 0 2px 7px -1px rgba(0, 0, 0, 0.14)',
+    '0 5px 18px 2px rgba(0, 0, 0, 0.07), 0 10px 15px 1px rgba(0, 0, 0, 0.1), 0 6px 10px -4px rgba(0, 0, 0, 0.14)',
+    '0 8px 33px 5px rgba(0, 0, 0, 0.07), 0 18px 28px 2px rgba(0, 0, 0, 0.07), 0 10px 12px -6px rgba(0, 0, 0, 0.17)',
+  ],
+  // Super_Deep (step=5)
+  [
+    '0 5px 20px rgba(0, 0, 0, 0.08), 0 5px 8px rgba(0, 0, 0, 0.12), 0 5px 10px -1px rgba(0, 0, 0, 0.18)',
+    '0 7px 23px 2px rgba(0, 0, 0, 0.09), 0 12px 17px 1px rgba(0, 0, 0, 0.1), 0 8px 14px -4px rgba(0, 0, 0, 0.18)',
+    '0 11px 37px 5px rgba(0, 0, 0, 0.1), 0 21px 31px 2px rgba(0, 0, 0, 0.12), 0 14px 20px -6px rgba(0, 0, 0, 0.16)',
+  ],
 ];
 
 export const ShadowTypeDetail = [

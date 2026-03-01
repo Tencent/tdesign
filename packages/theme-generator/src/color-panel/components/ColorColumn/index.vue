@@ -35,11 +35,11 @@
       <div v-for="(color, index) in tokenMap" :key="index">
         <t-popup
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
-          :overlayStyle="{ borderRadius: '9px' }"
+          :overlay-style="{ borderRadius: '9px' }"
         >
           <div
             class="block"
@@ -66,7 +66,7 @@
             <color-picker :value="getTokenValue(color.name)" @change="(hex) => changeGradation(hex, color.idx)" />
           </template>
         </t-popup>
-        <div v-if="color.name" @click="handleClickIdx(color.idx)" class="color-content__vertical-list-content">
+        <div v-if="color.name" class="color-content__vertical-list-content" @click="handleClickIdx(color.idx)">
           <div class="color-content__vertical-list-title" :title="color.name">
             {{ color.name.replace('--td-', '') }}
           </div>
@@ -74,7 +74,7 @@
             <span>{{ type }}{{ color.idx }} </span>
             <span>{{ getTokenValue(color.name) }}</span>
           </div>
-          <error-circle-icon class="error-icon" v-if="color.isModified" />
+          <error-circle-icon v-if="color.isModified" class="error-icon" />
         </div>
       </div>
     </div>
@@ -91,12 +91,6 @@ import { getTokenValue, handleAttach } from '@/common/utils';
 
 export default {
   name: 'ColorColumn',
-  props: {
-    type: String,
-    gradientStep: Number,
-    tokenMap: Array,
-  },
-  emit: ['recoverGradation', 'changeGradation'],
   components: {
     TPopup,
     ColorPicker,
@@ -105,6 +99,21 @@ export default {
     ErrorCircleIcon,
   },
   mixins: [langMixin],
+  props: {
+    type: {
+      type: String,
+      default: '',
+    },
+    gradientStep: {
+      type: Number,
+      default: 0,
+    },
+    tokenMap: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  emit: ['recoverGradation', 'changeGradation'],
   data() {
     return {
       activeIdx: 0,

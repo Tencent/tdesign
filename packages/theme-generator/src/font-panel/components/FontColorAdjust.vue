@@ -1,6 +1,6 @@
 <template>
   <div :style="{ width: '100%' }">
-    <t-radio-group class="font-color__type-radio" variant="default-filled" v-model="colorType">
+    <t-radio-group v-model="colorType" class="font-color__type-radio" variant="default-filled">
       <t-radio-button :value="1">{{ lang.font.colorDefault }}</t-radio-button>
     </t-radio-group>
 
@@ -23,11 +23,11 @@
       <div v-for="(color, idx) in flattenPalette.filter((v) => !!v.name)" :key="idx">
         <t-popup
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
-          :overlayStyle="{ borderRadius: '9px' }"
+          :overlay-style="{ borderRadius: '9px' }"
         >
           <div
             class="block"
@@ -51,7 +51,7 @@
             </transition>
           </div>
           <template #content>
-            <color-picker :value="color.value" @change="(hex) => changeColor(hex, idx)" :enable-alpha="true" />
+            <color-picker :value="color.value" :enable-alpha="true" @change="(hex) => changeColor(hex, idx)" />
           </template>
         </t-popup>
         <div v-if="color.name" class="font-color__vertical-list-content">
@@ -78,14 +78,6 @@ import { handleAttach } from '@/common/utils';
 
 export default {
   name: 'FontColorAdjust',
-  props: {
-    type: String,
-    colorPalette: Array,
-    paletteChange: Boolean,
-    originColorPalette: Array,
-  },
-  emit: ['recoverGradation', 'changeGradation'],
-  mixins: [langMixin],
   components: {
     TPopup,
     TRadioGroup,
@@ -93,6 +85,26 @@ export default {
     ColorPicker,
     Edit1Icon,
   },
+  mixins: [langMixin],
+  props: {
+    type: {
+      type: String,
+      default: '',
+    },
+    colorPalette: {
+      type: Array,
+      default: () => [],
+    },
+    paletteChange: {
+      type: Boolean,
+      default: false,
+    },
+    originColorPalette: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  emit: ['recoverGradation', 'changeGradation'],
   data() {
     return {
       activeIdx: 0,

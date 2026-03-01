@@ -16,13 +16,17 @@ import { getTokenValue } from '@/common/utils';
 
 export default {
   name: 'StickyThemeDisplay',
+  mixins: [langMixin],
   props: {
-    top: Number,
+    top: {
+      type: Number,
+      default: 0,
+    },
     theme: {
       type: Object,
+      default: () => ({}),
     },
   },
-  mixins: [langMixin],
   data() {
     return {
       isAnimating: false,
@@ -44,6 +48,11 @@ export default {
     this.brandColor = getTokenValue('--brand-main');
     this.setupStyleObserver();
   },
+  beforeDestroy() {
+    if (this.styleObserver) {
+      this.styleObserver.disconnect();
+    }
+  },
   methods: {
     setupStyleObserver() {
       this.styleObserver = new MutationObserver(this.checkBrandColorChange);
@@ -63,11 +72,6 @@ export default {
         }, 1000);
       }
     },
-  },
-  beforeDestroy() {
-    if (this.styleObserver) {
-      this.styleObserver.disconnect();
-    }
   },
 };
 </script>

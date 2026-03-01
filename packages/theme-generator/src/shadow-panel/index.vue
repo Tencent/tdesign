@@ -12,9 +12,9 @@
         <p class="shadow-content__title">{{ lang.shadow.title }}</p>
         <SegmentSelection
           v-model="step"
-          :selectOptions="selectOptions"
-          :suspendedLabels="suspendedLabels"
-          :disabled="forbidden"
+          :select-options="selectOptions"
+          :suspended-labels="suspendedLabels"
+          :disabled="segmentSelectionDisabled"
         >
           <template #left>
             <div class="shadow-panel__round-box" :style="{ 'box-shadow': leftShadow }"></div>
@@ -43,9 +43,10 @@ import { getOptionFromLocal, modifyToken, updateLocalOption } from '@/common/the
 import { getTokenValue } from '@/common/utils';
 
 import {
+  ShadowLabels,
   ShadowSelect,
-  ShadowSelectDetail,
   ShadowSelectType,
+  ShadowStepArray,
   ShadowTypeDetail,
   ShadowTypeMap,
 } from './built-in/shadow-map';
@@ -53,29 +54,25 @@ import ShadowCard from './components/ShadowCard';
 
 export default {
   name: 'ShadowPanel',
-  props: {
-    top: Number,
-  },
   components: {
     SegmentSelection,
     ShadowCard,
   },
   mixins: [langMixin],
+  props: {
+    top: {
+      type: Number,
+      default: 0,
+    },
+  },
   data() {
     return {
       shadowPalette: [],
       selectOptions: ShadowSelect,
-      selfDefined: ShadowSelectType,
       step: getOptionFromLocal('shadow') || ShadowSelectType.Default,
-      suspendedLabels: {},
+      suspendedLabels: ShadowLabels,
+      segmentSelectionDisabled: false,
     };
-  },
-  created() {
-    this.shadowTypeDetail = ShadowTypeDetail;
-    this.suspendedLabels = this.selectOptions.reduce((acc, option) => {
-      acc[option.value] = this.isEn ? option.enLabel : option.label;
-      return acc;
-    }, {});
   },
   computed: {
     contentStyle() {
@@ -86,50 +83,54 @@ export default {
       };
     },
     leftShadow() {
-      const selectKeys = Object.keys(ShadowSelectDetail);
-      if (selectKeys.length < 1) return '';
-      const shadowArray = ShadowSelectDetail[selectKeys[0]][0];
-      return shadowArray;
+      if (ShadowStepArray.length < 1) return '';
+      return ShadowStepArray[0][0];
     },
     rightShadow() {
-      const selectKeys = Object.keys(ShadowSelectDetail);
-      if (selectKeys.length < 1) return '';
-      // 倒数第二个的，最后一个为自定义
-      const shadowArray = ShadowSelectDetail[selectKeys[selectKeys.length - 2]][0];
-      return shadowArray;
-    },
-    forbidden() {
-      return this.step === ShadowSelectType.Self_Defined;
+      if (ShadowStepArray.length < 2) return '';
+      return ShadowStepArray[ShadowStepArray.length - 1][0];
     },
   },
   watch: {
-    step: {
-      handler(nVal) {
-        updateLocalOption('shadow', nVal !== ShadowSelectType.Default ? nVal : null);
-        // 自定义时去当前系统值
-        if (nVal === ShadowSelectType.Self_Defined) {
-          // this.shadowPalette = this.getCurrentPalette();
-          return;
-        }
-        const shadows = ShadowSelectDetail[nVal];
-        if (!shadows) return;
-        this.shadowPalette = shadows.map((shadow) => this.splitShadowValue(shadow));
-      },
-    },
-    shadowPalette(nVal) {
-      // shadowPalette 值变化时认为有编辑
-      const currentPalette = this.getCurrentPalette();
-      for (let index = 0; index < nVal.length; index++) {
-        const shadow = nVal[index];
-        const current = currentPalette[index];
-        const newShadow = shadow.join(',');
-        if (newShadow === current.join(',')) continue;
-        const { name } = ShadowTypeMap[index];
+    shadowPalette(list) {
+      // 检查当前值是否匹配任何预设
+      const currentShadowList = list.map((v) => v.join(', '));
+      const existStep = ShadowStepArray.findIndex((steps) => {
+        return steps.every((step, i) => {
+          // 标准化比较：去除多余空格
+          const normalizedStep = step.replace(/\s+/g, ' ').trim();
+          const normalizedCurrent = currentShadowList[i]?.replace(/\s+/g, ' ').trim();
+          return normalizedStep === normalizedCurrent;
+        });
+      });
 
-        const isCustom = this.step === ShadowSelectType.Self_Defined;
-        modifyToken(name, isCustom ? newShadow : null);
+      if (existStep === -1) {
+        this.segmentSelectionDisabled = true;
       }
     },
+    step(val) {
+      updateLocalOption('shadow', val !== ShadowSelectType.Default ? val : null);
+      const isCustom = val === ShadowSelectType.Self_Defined;
+      this.segmentSelectionDisabled = isCustom;
+      if (!ShadowStepArray[val - 1]) return;
+
+      // 批量修改 shadow
+      const presetShadows = ShadowStepArray[val - 1];
+      this.shadowPalette = presetShadows.map((shadow, index) => {
+        const shadowArray = this.splitShadowValue(shadow);
+        const newShadow = shadowArray.join(',');
+        modifyToken(ShadowTypeMap[index].name, newShadow, isCustom);
+        return shadowArray;
+      });
+    },
+  },
+  created() {
+    this.shadowTypeDetail = ShadowTypeDetail;
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.initShadowToken();
+    });
   },
   methods: {
     // 拆分 box-shadow 的值 0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%)
@@ -143,30 +144,29 @@ export default {
           return `${value})`;
         });
     },
-    getCurrentPalette() {
-      const currentPalette = [...new Array(ShadowTypeMap.length).keys()].map((_, i) => {
-        const { value, from } = ShadowTypeMap[i];
-        if (value) return value;
-        const data = getTokenValue(from);
-        return this.splitShadowValue(data);
-      });
-      return currentPalette;
-    },
     change(value, index) {
-      this.step = ShadowSelectType.Self_Defined;
       const val = [...this.shadowPalette];
       val[index] = value;
       this.shadowPalette = val;
+
+      // 修改单独的 shadow
+      const newShadow = value.join(',');
+      modifyToken(ShadowTypeMap[index].name, newShadow);
+
+      // 检查是否还匹配当前预设
+      if (ShadowStepArray[this.step - 1]) {
+        const presetShadow = this.splitShadowValue(ShadowStepArray[this.step - 1][index]).join(',');
+        if (newShadow !== presetShadow) {
+          this.segmentSelectionDisabled = true;
+        }
+      }
     },
-    setCurrentPalette() {
-      const currentTokenArr = this.getCurrentPalette();
-      this.shadowPalette = currentTokenArr.map((token) => this.splitShadowValue(token));
+    initShadowToken() {
+      this.shadowPalette = ShadowTypeMap.map((item) => {
+        const data = getTokenValue(item.from);
+        return this.splitShadowValue(data);
+      });
     },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.setCurrentPalette();
-    });
   },
 };
 </script>

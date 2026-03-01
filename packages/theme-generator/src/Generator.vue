@@ -1,12 +1,12 @@
 <template>
   <div class="theme-generator">
     <float-dock
-      :drawerVisible="visible"
-      :showSetting="showSetting"
+      :drawer-visible="visible"
+      :show-setting="showSetting"
       @click-setting="handleClickSetting"
       @trigger-visible="handleTriggerVisible"
     />
-    <panel-drawer :drawerVisible="visible" @panel-drawer-visible="handleDrawerVisible" />
+    <panel-drawer :drawer-visible="visible" @panel-drawer-visible="handleDrawerVisible" />
   </div>
 </template>
 
@@ -18,6 +18,9 @@ import {
   syncThemeToIframe,
   themeStore,
 } from '@/common/themes';
+import { COMP_SIZE_DEFAULT_VALUES, SIZE_DEFAULT_VALUES } from '@/size-panel/built-in/size-map';
+
+const STYLE_LOCK_ID = '__web-components-size-lock__';
 
 import FloatDock from './float-dock';
 import PanelDrawer from './panel-drawer';
@@ -31,6 +34,7 @@ export default {
   props: {
     showSetting: {
       type: [Boolean, String],
+      default: false,
     },
     device: {
       type: String,
@@ -48,8 +52,22 @@ export default {
     initGeneratorVars();
     applyTokenFromLocal();
     syncThemeToIframe(this.device);
+
+    this.initWebComponentsSizeProtection();
   },
   methods: {
+    initWebComponentsSizeProtection() {
+      let styleEl = document.getElementById(STYLE_LOCK_ID);
+
+      if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = STYLE_LOCK_ID;
+        document.head.appendChild(styleEl);
+      }
+
+      const sizeVars = { ...SIZE_DEFAULT_VALUES, ...COMP_SIZE_DEFAULT_VALUES };
+      styleEl.textContent = buildSizeVarsCSS(sizeVars);
+    },
     handleTriggerVisible() {
       this.visible = true;
     },
@@ -61,6 +79,13 @@ export default {
     },
   },
 };
+
+function buildSizeVarsCSS(sizeVars) {
+  const body = Object.entries(sizeVars)
+    .map(([key, val]) => `  ${key}: ${val} !important;`)
+    .join('\n');
+  return `:root {\n${body}\n}`;
+}
 </script>
 
 <style lang="less" scoped>
