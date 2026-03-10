@@ -76,6 +76,13 @@ export const submodules = {
     tagPrefix: '@tdesign-vue-next/chat@',
     repo: 'Tencent/tdesign-vue-next',
   },
+  '@tdesign-react/chat': {
+    title: '## React for AI Chat 发布',
+    changelogUrl:
+      'https://raw.githubusercontent.com/Tencent/tdesign-react/refs/heads/main/packages/tdesign-react-aigc/CHANGELOG.md',
+    tagPrefix: '@tdesign-react/chat@',
+    repo: 'Tencent/tdesign-react',
+  },
   '@tdesign/uniapp-chat': {
     title: '## UniApp for AI Chat 发布',
     changelogUrl:
@@ -99,6 +106,7 @@ export const submodulesKeys: SubmoduleItem[] = [
   'tdesign-vue-starter',
   'tdesign-vue-next-starter',
   'tdesign-react-starter',
-  //'@tdesign-vue-next/chat',
+  '@tdesign-vue-next/chat',
+  '@tdesign-react/chat',
   '@tdesign/uniapp-chat',
 ];
