@@ -157,7 +157,10 @@ function replaceSpecialTags(html) {
       // @用户名 (且不在反引号内)
       .replace(/(?<!`)@([a-zA-Z0-9-_]+)(?!`)/g, '<a href="https://github.com/$1" target="_blank">@$1</a>')
       // 行内 code
-      .replace(/`([^`]+)`/g, (_, param) => `<td-code text="${param}"></td-code>`)
+      .replace(
+        /`([^`]+)`/g,
+        (_, param) => `<td-code text="${param.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"></td-code>`,
+      )
   );
 }
 
