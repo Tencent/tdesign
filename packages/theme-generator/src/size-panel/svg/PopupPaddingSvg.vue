@@ -1,11 +1,5 @@
 <template>
-  <svg
-    width="48"
-    height="48"
-    viewBox="0 0 48 48"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g clip-path="url(#clip0_26566_99945)">
       <rect width="48" height="48" rx="6" fill="#D54941" fill-opacity="0.1" />
       <rect width="10" height="48" fill="#D54941" fill-opacity="0.16" />
@@ -41,15 +35,7 @@
         fill-opacity="0.5"
       />
     </g>
-    <rect
-      x="0.5"
-      y="0.5"
-      width="47"
-      height="47"
-      rx="5.5"
-      stroke="black"
-      stroke-opacity="0.06"
-    />
+    <rect x="0.5" y="0.5" width="47" height="47" rx="5.5" stroke="black" stroke-opacity="0.06" />
     <defs>
       <clipPath id="clip0_26566_99945">
         <rect width="48" height="48" rx="6" fill="white" />
