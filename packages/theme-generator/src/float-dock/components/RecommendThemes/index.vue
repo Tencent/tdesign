@@ -1,7 +1,7 @@
 <template>
   <!-- FIXME：这个布局是不合理的...但鉴于 type 目前只有 “官方推荐” 一种，所以暂时如此 -->
   <div class="recommend-theme">
-    <div :key="idx" v-for="(type, idx) in recommendedThemes">
+    <div v-for="(type, idx) in recommendedThemes" :key="idx">
       <div class="recommend-theme__title">
         {{ isEn ? type.enTitle : type.title }}
       </div>
@@ -13,7 +13,7 @@
               'background-color': theme.value,
             }"
           >
-            <div v-html="theme.subtitle"></div>
+            <div>{{ theme.subtitle }}</div>
             <div v-if="theme.enName === $theme.enName" class="recommend-theme__flex-theme--active">
               <picked-svg />
             </div>
@@ -42,7 +42,16 @@ import PickedSvg from './PickedSvg.vue';
 
 export default {
   name: 'RecommendThemes',
+  components: {
+    PickedSvg,
+  },
   mixins: [langMixin],
+  data() {
+    return {
+      isThemeTabVisible: false,
+      isDrawerVisible: false,
+    };
+  },
   computed: {
     recommendedThemes() {
       return getRecommendThemes(themeStore.device);
@@ -50,15 +59,6 @@ export default {
     $theme() {
       return themeStore.theme;
     },
-  },
-  data() {
-    return {
-      isThemeTabVisible: false,
-      isDrawerVisible: false,
-    };
-  },
-  components: {
-    PickedSvg,
   },
   methods: {
     handleChangeTheme(theme) {
