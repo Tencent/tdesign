@@ -17,21 +17,21 @@ TDesign 是一个 `multi-repo`， TDesign 有如下代码仓库：
 
 ### 桌面端组件库
 
-| 仓库                                                            | 描述              | 状态      |
-| --------------------------------------------------------------- | ----------------- | --------- |
-| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue 2.x 技术栈    | `1.0 LTS` |
-| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue 3.x 技术栈    | `1.0 LTS` |
-| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React 16.x 技术栈 | `1.0 LTS` |
+| 仓库                                                            | 描述                     | 状态      |
+| --------------------------------------------------------------- | ------------------------ | --------- |
+| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | TDesign Vue 组件库       | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-vue-next/latest&color=blue)](https://npmjs.com/package/tdesign-vue-next) |
+| [tdesign-react](https://github.com/Tencent/tdesign-react)       | TDesign React 组件库     | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-react/latest&color=blue)](https://npmjs.com/package/tdesign-react) |
+| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | TDesign Vue2.x 组件库    | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-vue/latest&color=blue)](https://npmjs.com/package/tdesign-vue) |
 
 ### 移动端组件库
 
-| 仓库                                                                    | 描述              | 状态      |
-| ----------------------------------------------------------------------- | ----------------- | --------- |
-| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | 微信小程序        | `1.0 LTS` |
-| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue 3.x 技术栈    | `1.0 LTS` |
-| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React 16.x 技术栈 | `Alpha`   |
-| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | 1.17.0            | `Alpha`   |
-| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | -                 | `Alpha`   |
+| 仓库                                                                    | 描述                            | 状态      |
+| ----------------------------------------------------------------------- | ------------------------------- | --------- |
+| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | TDesign 微信小程序组件库        | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-miniprogram/latest&color=blue)](https://npmjs.com/package/tdesign-miniprogram) |
+| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | TDesign Vue3.x 移动端组件库     | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-mobile-vue/latest&color=blue)](https://npmjs.com/package/tdesign-mobile-vue) |
+| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | TDesign React 移动端组件库      | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=version&url=https://registry.npmjs.org/tdesign-mobile-react/latest&color=orange)](https://npmjs.com/package/tdesign-mobile-react) |
+| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | TDesign Flutter 组件库          | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=latest.version&url=https://pub.dev/api/packages/tdesign_flutter&color=orange)](https://pub.dev/packages/tdesign_flutter) |
+| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | TDesign UniApp 组件库           | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=version&url=https://registry.npmjs.org/tdesign-miniprogram/latest&color=orange)](https://npmjs.com/package/tdesign-miniprogram) |
 
 ### 基础通用仓库
 
