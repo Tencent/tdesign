@@ -31,7 +31,7 @@ TDesign 是一个 `multi-repo`， TDesign 有如下代码仓库：
 | [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | TDesign Vue3.x 移动端组件库     | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-mobile-vue/latest&color=blue)](https://npmjs.com/package/tdesign-mobile-vue) |
 | [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | TDesign React 移动端组件库      | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=version&url=https://registry.npmjs.org/tdesign-mobile-react/latest&color=orange)](https://npmjs.com/package/tdesign-mobile-react) |
 | [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | TDesign Flutter 组件库          | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=latest.version&url=https://pub.dev/api/packages/tdesign_flutter&color=orange)](https://pub.dev/packages/tdesign_flutter) |
-| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | TDesign UniApp 组件库           | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=version&url=https://registry.npmjs.org/tdesign-miniprogram/latest&color=orange)](https://npmjs.com/package/tdesign-miniprogram) |
+| [tdesign-uniapp](https://github.com/Tencent/tdesign-uniapp)             | TDesign UniApp 组件库           | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=version&url=https://registry.npmjs.org/@tdesign/uniapp/latest&color=orange)](https://npmjs.com/package/@tdesign/uniapp) |
 
 ### 基础通用仓库
 
