@@ -18,19 +18,19 @@ The following are the repositories for TDesign：
 
 | Repository                                                      | Description                          | Status    |
 | --------------------------------------------------------------- | ------------------------------------ | --------- |
-| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue UI components lib for TDesign    | `1.0 LTS` |
-| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React UI components lib for TDesign  | `1.0 LTS` |
-| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue2.x UI components lib for TDesign | `1.0 LTS` |
+| [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue UI components lib for TDesign    | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-vue-next/latest&color=blue)](https://npmjs.com/package/tdesign-vue-next) |
+| [tdesign-react](https://github.com/Tencent/tdesign-react)       | React UI components lib for TDesign  | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-react/latest&color=blue)](https://npmjs.com/package/tdesign-react) |
+| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue2.x UI components lib for TDesign | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-vue/latest&color=blue)](https://npmjs.com/package/tdesign-vue) |
 
 ### Repositories for Mobile Components
 
 | Repository                                                              | Description                                      | Status    |
 | ----------------------------------------------------------------------- | ------------------------------------------------ | --------- |
-| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | Wechat MiniProgram UI components lib for TDesign | `1.0 LTS` |
-| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue3.x Mobile UI components lib for TDesign      | `1.0 LTS` |
-| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React Mobile UI components lib for TDesign       | `Alpha`   |
-| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | Flutter UI components lib for TDesign            | `Alpha`   |
-| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | UniApp UI components lib for TDesign             | `Alpha`   |
+| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | Wechat MiniProgram UI components lib for TDesign | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-miniprogram/latest&color=blue)](https://npmjs.com/package/tdesign-miniprogram) |
+| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue3.x Mobile UI components lib for TDesign      | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-mobile-vue/latest&color=blue)](https://npmjs.com/package/tdesign-mobile-vue) |
+| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React Mobile UI components lib for TDesign       | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=version&url=https://registry.npmjs.org/tdesign-mobile-react/latest&color=orange)](https://npmjs.com/package/tdesign-mobile-react) |
+| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | Flutter UI components lib for TDesign            | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=latest.version&url=https://pub.dev/api/packages/tdesign_flutter&color=orange)](https://pub.dev/packages/tdesign_flutter) |
+| [tdesign-uniapp](https://github.com/Tencent/tdesign-uniapp)             | UniApp UI components lib for TDesign             | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=version&url=https://registry.npmjs.org/@tdesign/uniapp/latest&color=orange)](https://npmjs.com/package/@tdesign/uniapp) |
 
 ### Repositories for Shared
 
