@@ -17,6 +17,7 @@ const issueUrlMap = {
   'uniapp-chat': `https://github.com/Tencent/tdesign-miniprogram/issues`,
   flutter: `https://github.com/Tencent/tdesing-flutter/issues`,
   chat: `https://github.com/Tencent/tdesign-vue-next/issues`,
+  'react-chat': `https://github.com/Tencent/tdesign-react/issues`,
 };
 
 function parseUrl() {
