@@ -30,7 +30,9 @@ jobs:
 
       - run: pnpm -F @tdesign/theme-generator run build
 
-      - run: npm i -g npm@latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
 
       - name: Publish Package
         run: pnpm -F @tdesign/theme-generator publish --no-git-checks
