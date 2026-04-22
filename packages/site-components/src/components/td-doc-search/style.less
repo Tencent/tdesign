@@ -6,8 +6,8 @@
 :host {
   display: inline-block;
   position: relative;
-  font-family: var(--td-font-family, 'PingFang SC', 'Microsoft YaHei', sans-serif);
-  color: var(--td-text-color-primary, rgba(0, 0, 0, 0.9));
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
   text-align: left;
 }
 
@@ -24,21 +24,21 @@
   max-width: 100%;
   height: 32px;
   padding: 0 10px 0 32px;
-  background: var(--td-bg-color-container, #fff);
-  border: 1px solid var(--td-component-stroke, #dcdcdc);
-  border-radius: var(--td-radius-default, 3px);
+  background: var(--bg-color-container, #fff);
+  border: 1px solid var(--component-stroke, #dcdcdc);
+  border-radius: var(--border-radius, 3px);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 }
 
 .TDesign-docsearch-trigger:hover {
-  border-color: var(--td-brand-color-hover, #366ef4);
+  border-color: var(--brand-main-hover, #366ef4);
 }
 
 .TDesign-docsearch-trigger:focus-within {
-  border-color: var(--td-brand-color, #0052d9);
-  box-shadow: 0 0 0 2px var(--td-brand-color-focus, rgba(0, 82, 217, 0.2));
+  border-color: var(--brand-main, #0052d9);
+  box-shadow: 0 0 0 2px var(--brand-main-focus, rgba(0, 82, 217, 0.2));
 }
 
 .TDesign-docsearch-trigger__icon {
@@ -49,7 +49,7 @@
   display: inline-flex;
   width: 16px;
   height: 16px;
-  color: var(--td-text-color-placeholder, rgba(0, 0, 0, 0.4));
+  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
   pointer-events: none;
 }
 
@@ -70,11 +70,11 @@
   font-family: inherit;
   font-size: 14px;
   line-height: 22px;
-  color: var(--td-text-color-primary, rgba(0, 0, 0, 0.9));
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
 }
 
 .TDesign-docsearch-trigger__input::placeholder {
-  color: var(--td-text-color-placeholder, rgba(0, 0, 0, 0.4));
+  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
 }
 
 .TDesign-docsearch-trigger__input::-webkit-search-cancel-button,
@@ -115,10 +115,10 @@
   max-height: 70vh;
   display: flex;
   flex-direction: column;
-  background: var(--td-bg-color-container, #fff);
-  border: 1px solid var(--td-component-stroke, #dcdcdc);
-  border-radius: var(--td-radius-medium, 6px);
-  box-shadow: var(--td-shadow-2, 0 4px 16px rgba(0, 0, 0, 0.08));
+  background: var(--bg-color-container, #fff);
+  border: 1px solid var(--component-stroke, #dcdcdc);
+  border-radius: 6px;
+  box-shadow: var(--shadow-2, 0 4px 16px rgba(0, 0, 0, 0.08));
   opacity: 0;
   transform: translateY(-4px);
   pointer-events: none;
@@ -136,7 +136,7 @@
 }
 
 :root[theme-mode='dark'] .TDesign-docsearch-popover {
-  border-color: var(--td-component-stroke, rgba(255, 255, 255, 0.12));
+  border-color: var(--component-stroke, rgba(255, 255, 255, 0.12));
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
@@ -144,8 +144,8 @@
 .TDesign-docsearch-spinner {
   width: 14px;
   height: 14px;
-  border: 2px solid var(--td-component-stroke, #dcdcdc);
-  border-top-color: var(--td-brand-color, #0052d9);
+  border: 2px solid var(--component-stroke, #dcdcdc);
+  border-top-color: var(--brand-main, #0052d9);
   border-radius: 50%;
   animation: td-docsearch-spin 0.8s linear infinite;
 }
@@ -176,7 +176,7 @@
   overflow-y: auto;
   max-height: calc(70vh - 44px - 16px);
   scrollbar-width: thin;
-  scrollbar-color: var(--td-text-color-placeholder, rgba(0, 0, 0, 0.25)) transparent;
+  scrollbar-color: var(--text-placeholder, rgba(0, 0, 0, 0.25)) transparent;
 }
 
 .TDesign-docsearch-cols__left::-webkit-scrollbar,
@@ -185,7 +185,7 @@
 .TDesign-docsearch-cols__right::-webkit-scrollbar-track { background: transparent; }
 .TDesign-docsearch-cols__left::-webkit-scrollbar-thumb,
 .TDesign-docsearch-cols__right::-webkit-scrollbar-thumb {
-  background-color: var(--td-text-color-placeholder, rgba(0, 0, 0, 0.2));
+  background-color: var(--text-placeholder, rgba(0, 0, 0, 0.2));
   border-radius: 20px;
 }
 
@@ -220,23 +220,23 @@
   padding: 8px 10px;
   font-size: 13px;
   line-height: 20px;
-  color: var(--td-text-color-secondary, rgba(0, 0, 0, 0.6));
+  color: var(--text-secondary, rgba(0, 0, 0, 0.6));
   cursor: pointer;
   text-align: right;
-  border-radius: var(--td-radius-default, 3px);
+  border-radius: var(--border-radius, 3px);
   transition:
     background-color 0.15s ease,
     color 0.15s ease;
 }
 
 .TDesign-docsearch-cat:hover {
-  color: var(--td-text-color-primary, rgba(0, 0, 0, 0.9));
-  background: var(--td-bg-color-page, #f3f3f3);
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+  background: var(--bg-color-page, #f3f3f3);
 }
 
 .TDesign-docsearch-cat.is-active {
-  color: var(--td-text-color-primary, rgba(0, 0, 0, 0.9));
-  background: var(--td-bg-color-page, #f3f3f3);
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+  background: var(--bg-color-page, #f3f3f3);
   font-weight: 500;
 }
 
@@ -262,8 +262,8 @@
   font-size: 11px;
   line-height: 18px;
   text-align: center;
-  color: var(--td-text-color-secondary, rgba(0, 0, 0, 0.6));
-  background: var(--td-bg-color-component, rgba(0, 0, 0, 0.06));
+  color: var(--text-secondary, rgba(0, 0, 0, 0.6));
+  background: var(--bg-color-component, rgba(0, 0, 0, 0.06));
   border-radius: 999px;
   font-weight: normal;
   transition:
@@ -273,8 +273,8 @@
 
 .TDesign-docsearch-cat:hover .TDesign-docsearch-cat__badge,
 .TDesign-docsearch-cat.is-active .TDesign-docsearch-cat__badge {
-  color: var(--td-brand-color, #0052d9);
-  background: var(--td-brand-color-light, rgba(0, 82, 217, 0.1));
+  color: var(--brand-main, #0052d9);
+  background: var(--brand-main-light, rgba(0, 82, 217, 0.1));
 }
 
 /* --------- 右栏：命中条目 --------- */
@@ -294,16 +294,16 @@
 .TDesign-docsearch-hit__link {
   display: block;
   padding: 8px 12px;
-  border-radius: var(--td-radius-default, 3px);
+  border-radius: var(--border-radius, 3px);
   text-decoration: none;
-  color: var(--td-text-color-primary, rgba(0, 0, 0, 0.9));
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
 .TDesign-docsearch-hit__link:hover,
 .TDesign-docsearch-hit.is-active .TDesign-docsearch-hit__link {
-  background: var(--td-bg-color-page, #f3f3f3);
+  background: var(--bg-color-page, #f3f3f3);
 }
 
 .TDesign-docsearch-hit__title {
@@ -311,7 +311,7 @@
   font-size: 14px;
   font-weight: 600;
   line-height: 22px;
-  color: var(--td-text-color-primary, rgba(0, 0, 0, 0.9));
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -323,7 +323,7 @@
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
-  color: var(--td-text-color-placeholder, rgba(0, 0, 0, 0.4));
+  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -342,7 +342,7 @@
   font-size: 12px;
   font-weight: 500;
   line-height: 20px;
-  color: var(--td-text-color-secondary, rgba(0, 0, 0, 0.6));
+  color: var(--text-secondary, rgba(0, 0, 0, 0.6));
 }
 
 .TDesign-docsearch-hit__remove {
@@ -358,7 +358,7 @@
   justify-content: center;
   border-radius: 50%;
   cursor: pointer;
-  color: var(--td-text-color-placeholder, rgba(0, 0, 0, 0.4));
+  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
   opacity: 0;
   transition:
     background-color 0.15s ease,
@@ -378,16 +378,16 @@
 }
 
 .TDesign-docsearch-hit__remove:hover {
-  color: var(--td-error-color, #e34d59);
-  background: var(--td-bg-color-container, #fff);
+  color: #e34d59;
+  background: var(--bg-color-container, #fff);
 }
 
 /* 匹配高亮 —— 品牌色文字 + 品牌淡色背景（胶囊块） */
 .TDesign-docsearch-mark {
   padding: 0 2px;
   margin: 0 1px;
-  color: var(--td-brand-color, #0052d9);
-  background: var(--td-brand-color-light, rgba(0, 82, 217, 0.1));
+  color: var(--brand-main, #0052d9);
+  background: var(--brand-main-light, rgba(0, 82, 217, 0.1));
   border-radius: 3px;
   font-weight: inherit;
   text-decoration: none;
@@ -402,14 +402,14 @@
   font-size: 13px;
   font-weight: 500;
   line-height: 20px;
-  color: var(--td-text-color-primary, rgba(0, 0, 0, 0.9));
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
 }
 
 .TDesign-docsearch-empty__desc {
   margin-top: 4px;
   font-size: 12px;
   line-height: 20px;
-  color: var(--td-text-color-placeholder, rgba(0, 0, 0, 0.4));
+  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
 }
 
 /* =========================================================================
@@ -447,7 +447,7 @@
     width: 100%;
     max-width: none;
     padding: 4px;
-    border-bottom: 1px solid var(--td-component-stroke, #dcdcdc);
+    border-bottom: 1px solid var(--component-stroke, #dcdcdc);
     overflow-x: auto;
     overflow-y: hidden;
   }
