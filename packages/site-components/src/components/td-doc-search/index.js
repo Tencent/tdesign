@@ -23,7 +23,7 @@ import {
   DEFAULT_APP_ID,
   DEFAULT_API_KEY,
   DEFAULT_INDEX_NAME,
-  DEFAULT_URL_FILTER,
+  getDefaultUrlFilter,
   DEFAULT_HITS_PER_PAGE,
 } from './algolia.js';
 import { listRecent, addRecent, removeRecent } from './recent.js';
@@ -199,7 +199,7 @@ export default define({
   apiKey: stringProp(DEFAULT_API_KEY),
   indexName: stringProp(DEFAULT_INDEX_NAME),
   // urlFilter 特殊：显式传空串 "" 应被视为"关闭过滤"，所以用 == null 判空而非 || 短路
-  urlFilter: { get: (_h, v) => (v == null ? DEFAULT_URL_FILTER : v), set: (_h, v) => v },
+  urlFilter: { get: (_h, v) => (v == null ? getDefaultUrlFilter() : v), set: (_h, v) => v },
   hitsPerPage: {
     get: (_h, v) => (v != null && v !== '' ? Number(v) : DEFAULT_HITS_PER_PAGE),
     set: (_h, v) => v,

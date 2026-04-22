@@ -9,11 +9,24 @@
 import { stripHtml } from './utils.js';
 
 // 默认后备值（供独立调用 / 未配置时使用）
-export const DEFAULT_APP_ID = '';
-export const DEFAULT_API_KEY = '';
-export const DEFAULT_INDEX_NAME = 'cherry-markdown.online';
-export const DEFAULT_URL_FILTER = '/vue/';
+export const DEFAULT_APP_ID = 'ALGOLIA_API_KEY';
+export const DEFAULT_API_KEY = 'ALGOLIA_APP_ID';
+export const DEFAULT_INDEX_NAME = 'tdesign.tencent.com';
 export const DEFAULT_HITS_PER_PAGE = 20;
+
+/**
+ * 从当前页面 URL 推断 urlFilter。
+ * 匹配 pathname 中第一段路径，如 `/vue-next/`、`/react/`、`/miniprogram/` 等。
+ * 找不到则返回 `'/'` 表示不做框架级过滤。
+ */
+export function getDefaultUrlFilter() {
+  try {
+    const match = window.location.pathname.match(/^\/([^/]+)\//);
+    return match ? `/${match[1]}/` : '/';
+  } catch {
+    return '/';
+  }
+}
 
 const HIGHLIGHT_PRE_TAG = '<mark class="TDesign-docsearch-mark">';
 const HIGHLIGHT_POST_TAG = '</mark>';
@@ -26,7 +39,7 @@ const HIGHLIGHT_POST_TAG = '</mark>';
  * @param {string}      [options.appId]              Algolia Application ID
  * @param {string}      [options.apiKey]             Algolia Search-Only API Key
  * @param {string}      [options.indexName]          索引名
- * @param {string}      [options.urlFilter='/vue/']  仅保留 url 中包含该子串的命中；空串表示不过滤
+ * @param {string}      [options.urlFilter]          仅保留 url 中包含该子串的命中；空串表示不过滤；默认从当前页面 URL 推断
  * @param {number}      [options.hitsPerPage=20]
  * @returns {Promise<Array>} hits
  */
@@ -36,7 +49,7 @@ export async function searchAlgolia({
   appId = DEFAULT_APP_ID,
   apiKey = DEFAULT_API_KEY,
   indexName = DEFAULT_INDEX_NAME,
-  urlFilter = DEFAULT_URL_FILTER,
+  urlFilter = getDefaultUrlFilter(),
   hitsPerPage = DEFAULT_HITS_PER_PAGE,
 } = {}) {
   const q = (query || '').trim();
