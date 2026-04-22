@@ -1,46 +1,472 @@
-.TDesign-doc-search {
+/* ==========================================================================
+ * td-doc-search —— tdesign 风格下拉搜索组件
+ * 全部走 tdesign 设计 token；light / dark 通过 :root[theme-mode='dark'] 自动切换
+ * ========================================================================== */
+
+:host {
+  display: inline-block;
   position: relative;
-  width: 200px;
-  height: 32px;
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+  text-align: left;
+}
+
+/* =========================================================================
+ * 触发输入框（即 trigger）
+ * ========================================================================= */
+.TDesign-docsearch-trigger {
   box-sizing: border-box;
+  position: relative;
   display: inline-flex;
   align-items: center;
+  gap: 8px;
+  width: 200px;
+  max-width: 100%;
+  height: 32px;
+  padding: 0 10px 0 32px;
+  background: var(--bg-color-container, #fff);
+  border: 1px solid var(--component-stroke, #dcdcdc);
+  border-radius: var(--border-radius, 3px);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
 
-  &__icon {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    width: 20px;
-    height: 20px;
-    margin-top: -10px;
-    color: var(--text-secondary);
+.TDesign-docsearch-trigger:hover {
+  border-color: var(--brand-main-hover, #366ef4);
+}
+
+.TDesign-docsearch-trigger:focus-within {
+  border-color: var(--brand-main, #0052d9);
+  box-shadow: 0 0 0 2px var(--brand-main-focus, rgba(0, 82, 217, 0.2));
+}
+
+.TDesign-docsearch-trigger__icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
+  pointer-events: none;
+}
+
+.TDesign-docsearch-trigger__icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.TDesign-docsearch-trigger__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+}
+
+.TDesign-docsearch-trigger__input::placeholder {
+  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
+}
+
+.TDesign-docsearch-trigger__input::-webkit-search-cancel-button,
+.TDesign-docsearch-trigger__input::-webkit-search-decoration {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* 输入框右侧后缀位 —— 当前仅用于显示 loading spinner */
+.TDesign-docsearch-trigger__suffix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* 移动端 */
+@media screen and (max-width: 768px) {
+  .TDesign-docsearch-trigger {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* =========================================================================
+ * Popover 面板（绝对定位到 trigger 下方）
+ * ========================================================================= */
+.TDesign-docsearch-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 1000;
+  width: 520px;
+  max-width: calc(100vw - 32px);
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-color-container, #fff);
+  border: 1px solid var(--component-stroke, #dcdcdc);
+  border-radius: 6px;
+  box-shadow: var(--shadow-2, 0 4px 16px rgba(0, 0, 0, 0.08));
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+  overflow: hidden;
+  text-align: left;
+}
+
+.TDesign-docsearch-popover.is-open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+:root[theme-mode='dark'] .TDesign-docsearch-popover {
+  border-color: var(--component-stroke, rgba(255, 255, 255, 0.12));
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* loading spinner —— 置于输入框右侧后缀位 */
+.TDesign-docsearch-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--component-stroke, #dcdcdc);
+  border-top-color: var(--brand-main, #0052d9);
+  border-radius: 50%;
+  animation: td-docsearch-spin 0.8s linear infinite;
+}
+
+@keyframes td-docsearch-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* =========================================================================
+ * Body（两栏布局）
+ * ========================================================================= */
+.TDesign-docsearch-popover__body {
+  flex: 1;
+  overflow: hidden;
+  padding: 8px;
+}
+
+/* --------- 两栏容器 --------- */
+.TDesign-docsearch-cols {
+  display: flex;
+  align-items: stretch;
+  max-height: calc(70vh - 44px - 16px);
+}
+
+.TDesign-docsearch-cols__left,
+.TDesign-docsearch-cols__right {
+  overflow-y: auto;
+  max-height: calc(70vh - 44px - 16px);
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-placeholder, rgba(0, 0, 0, 0.25)) transparent;
+}
+
+.TDesign-docsearch-cols__left::-webkit-scrollbar,
+.TDesign-docsearch-cols__right::-webkit-scrollbar { width: 6px; }
+.TDesign-docsearch-cols__left::-webkit-scrollbar-track,
+.TDesign-docsearch-cols__right::-webkit-scrollbar-track { background: transparent; }
+.TDesign-docsearch-cols__left::-webkit-scrollbar-thumb,
+.TDesign-docsearch-cols__right::-webkit-scrollbar-thumb {
+  background-color: var(--text-placeholder, rgba(0, 0, 0, 0.2));
+  border-radius: 20px;
+}
+
+.TDesign-docsearch-cols__left {
+  flex: 0 0 36%;
+  max-width: 180px;
+  padding: 4px 8px 4px 4px;
+}
+
+.TDesign-docsearch-cols__right {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 4px 4px 8px;
+}
+
+/* --------- 左栏：分类 --------- */
+.TDesign-docsearch-cat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.TDesign-docsearch-cat {
+  /* flex 容器：title 占剩余宽度并允许换行，badge 永不换行，始终居中于右侧 */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--text-secondary, rgba(0, 0, 0, 0.6));
+  cursor: pointer;
+  text-align: right;
+  border-radius: var(--border-radius, 3px);
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.TDesign-docsearch-cat:hover {
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+  background: var(--bg-color-page, #f3f3f3);
+}
+
+.TDesign-docsearch-cat.is-active {
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+  background: var(--bg-color-page, #f3f3f3);
+  font-weight: 500;
+}
+
+.TDesign-docsearch-cat__title {
+  /* 允许换行；长单词强断；min-width:0 让 flex 能正确收缩 */
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* 分类右侧的计数徽标 —— 显示该分类下的命中数量 */
+.TDesign-docsearch-cat__badge {
+  flex: 0 0 auto; /* 不参与换行 / 收缩 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  box-sizing: border-box;
+  font-size: 11px;
+  line-height: 18px;
+  text-align: center;
+  color: var(--text-secondary, rgba(0, 0, 0, 0.6));
+  background: var(--bg-color-component, rgba(0, 0, 0, 0.06));
+  border-radius: 999px;
+  font-weight: normal;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.TDesign-docsearch-cat:hover .TDesign-docsearch-cat__badge,
+.TDesign-docsearch-cat.is-active .TDesign-docsearch-cat__badge {
+  color: var(--brand-main, #0052d9);
+  background: var(--brand-main-light, rgba(0, 82, 217, 0.1));
+}
+
+/* --------- 右栏：命中条目 --------- */
+.TDesign-docsearch-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.TDesign-docsearch-hit {
+  position: relative;
+}
+
+.TDesign-docsearch-hit__link {
+  display: block;
+  padding: 8px 12px;
+  border-radius: var(--border-radius, 3px);
+  text-decoration: none;
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.TDesign-docsearch-hit__link:hover,
+.TDesign-docsearch-hit.is-active .TDesign-docsearch-hit__link {
+  background: var(--bg-color-page, #f3f3f3);
+}
+
+.TDesign-docsearch-hit__title {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 22px;
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.TDesign-docsearch-hit__subtitle {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --------- 最近搜索（单列，复用 hit 样式） --------- */
+/* 与两栏布局的右栏 (.TDesign-docsearch-cols__right) 保持一致的内边距，
+   以便 hit 的左边缘在两种场景下视觉对齐 */
+.TDesign-docsearch-section {
+  padding: 4px 4px 4px 8px;
+}
+
+.TDesign-docsearch-section__title {
+  /* 标题左内边距对齐 hit__link 的 12px */
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--text-secondary, rgba(0, 0, 0, 0.6));
+}
+
+.TDesign-docsearch-hit__remove {
+  all: unset;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
+  opacity: 0;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.TDesign-docsearch-hit:hover .TDesign-docsearch-hit__remove,
+.TDesign-docsearch-hit.is-active .TDesign-docsearch-hit__remove {
+  opacity: 1;
+}
+
+.TDesign-docsearch-hit__remove svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.TDesign-docsearch-hit__remove:hover {
+  color: #e34d59;
+  background: var(--bg-color-container, #fff);
+}
+
+/* 匹配高亮 —— 品牌色文字 + 品牌淡色背景（胶囊块） */
+.TDesign-docsearch-mark {
+  padding: 0 2px;
+  margin: 0 1px;
+  color: var(--brand-main, #0052d9);
+  background: var(--brand-main-light, rgba(0, 82, 217, 0.1));
+  border-radius: 3px;
+  font-weight: inherit;
+  text-decoration: none;
+}
+
+/* 空态 */
+.TDesign-docsearch-empty {
+  padding: 24px 16px;
+}
+
+.TDesign-docsearch-empty__title {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+}
+
+.TDesign-docsearch-empty__desc {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
+}
+
+/* =========================================================================
+ * Reduced motion
+ * ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .TDesign-docsearch-popover,
+  .TDesign-docsearch-spinner,
+  .TDesign-docsearch-hit__link {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* =========================================================================
+ * 小屏适配
+ * ========================================================================= */
+@media screen and (max-width: 768px) {
+  .TDesign-docsearch-popover {
+    width: calc(100vw - 16px);
+    left: 50%;
+    transform: translate(-50%, -4px);
+  }
+  .TDesign-docsearch-popover.is-open {
+    transform: translate(-50%, 0);
   }
 
-  &__inner {
+  .TDesign-docsearch-cols {
+    flex-direction: column;
+    min-height: 0;
+    max-height: 60vh;
+  }
+  .TDesign-docsearch-cols__left {
+    flex: 0 0 auto;
     width: 100%;
-    height: 100%;
-    padding: 4px 36px 4px 8px;
-    box-sizing: border-box;
-    color: var(--text-secondary);
-    border-radius: var(--border-radius);
-    line-height: 22px;
-    font-size: 14px;
-    border: 1px solid var(--component-border);
-    transition: all .2s linear;
-    outline: none;
-    background: transparent;
-
-    &::placeholder {
-      line-height: 22px;
-    }
-
-    &:hover {
-      border-color: var(--brand-main);
-    }
-    
-    &:focus {
-      border-color: var(--brand-main);
-      box-shadow: 0 0 0 2px var(--brand-main-focus);
-    }
+    max-width: none;
+    padding: 4px;
+    border-bottom: 1px solid var(--component-stroke, #dcdcdc);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .TDesign-docsearch-cat-list {
+    flex-direction: row;
+    gap: 4px;
+    flex-wrap: nowrap;
+  }
+  .TDesign-docsearch-cat {
+    flex-shrink: 0;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 6px 10px;
+    border-radius: 999px;
+  }
+  /* 胶囊内部 title 不再抢占剩余空间，宽度贴合内容 */
+  .TDesign-docsearch-cat__title {
+    flex: 0 1 auto;
+  }
+  .TDesign-docsearch-cols__right {
+    padding: 4px;
   }
 }
