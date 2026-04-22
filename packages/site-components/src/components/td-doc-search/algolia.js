@@ -9,8 +9,8 @@
 import { stripHtml } from './utils.js';
 
 // 默认后备值（供独立调用 / 未配置时使用）
-export const DEFAULT_APP_ID = 'ALGOLIA_API_KEY';
-export const DEFAULT_API_KEY = 'ALGOLIA_APP_ID';
+export const DEFAULT_APP_ID = 'ALGOLIA_APP_ID';
+export const DEFAULT_API_KEY = 'ALGOLIA_API_KEY';
 export const DEFAULT_INDEX_NAME = 'tdesign.tencent.com';
 export const DEFAULT_HITS_PER_PAGE = 20;
 
