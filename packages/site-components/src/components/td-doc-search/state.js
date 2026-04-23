@@ -129,8 +129,12 @@ export function setActiveCategory(host, key) {
 export function resetToRecent(host) {
   host._groups = [];
   host._activeKey = null;
-  host._recent = listRecent();
-  host._flatHits = host._recent.map((r) => ({
+  const allRecent = listRecent();
+  // 按 urlFilter 过滤，只显示当前站点前缀的最近搜索
+  const filter = host.urlFilter;
+  const filtered = filter ? allRecent.filter((r) => r.url && r.url.includes(filter)) : allRecent;
+  host._recent = filtered;
+  host._flatHits = filtered.map((r) => ({
     url: r.url,
     title: r.title,
     breadcrumb: r.breadcrumb,
