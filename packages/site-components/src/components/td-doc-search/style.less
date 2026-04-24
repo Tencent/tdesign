@@ -297,7 +297,9 @@
   text-decoration: none;
   color: var(--text-primary, rgba(0, 0, 0, 0.9));
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .TDesign-docsearch-hit__link:hover,
@@ -345,24 +347,29 @@
 }
 
 .TDesign-docsearch-hit__remove {
-  all: unset;
   position: absolute;
   right: 8px;
   top: 50%;
-  transform: translateY(-50%);
+  translate: 0 -50%;
   width: 20px;
   height: 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
   cursor: pointer;
-  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
+  color: var(--text-placeholder, rgba(0, 0, 0, 0.3));
   opacity: 0;
+  appearance: none;
+  -webkit-appearance: none;
   transition:
-    background-color 0.15s ease,
-    color 0.15s ease,
-    opacity 0.15s ease;
+    color 0.2s ease,
+    opacity 0.15s ease,
+    transform 0.15s ease;
 }
 
 .TDesign-docsearch-hit:hover .TDesign-docsearch-hit__remove,
@@ -377,8 +384,7 @@
 }
 
 .TDesign-docsearch-hit__remove:hover {
-  color: #e34d59;
-  background: var(--bg-color-container, #fff);
+  color: var(--text-primary, rgba(0, 0, 0, 0.7));
 }
 
 /* 匹配高亮 —— 品牌色文字 + 品牌淡色背景（胶囊块） */
