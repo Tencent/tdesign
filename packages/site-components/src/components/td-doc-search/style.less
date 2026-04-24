@@ -297,12 +297,14 @@
   text-decoration: none;
   color: var(--text-primary, rgba(0, 0, 0, 0.9));
   cursor: pointer;
-  transition: color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .TDesign-docsearch-hit__link:hover,
 .TDesign-docsearch-hit.is-active .TDesign-docsearch-hit__link {
-  color: var(--brand-main, #0052d9);
+  background: var(--bg-color-page, #f3f3f3);
 }
 
 .TDesign-docsearch-hit__title {
@@ -310,7 +312,7 @@
   font-size: 14px;
   font-weight: 600;
   line-height: 22px;
-  color: currentColor;
+  color: var(--text-primary, rgba(0, 0, 0, 0.9));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
