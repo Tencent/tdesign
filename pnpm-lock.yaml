@@ -187,8 +187,8 @@ importers:
   site:
     dependencies:
       '@tdesign/site-components':
-        specifier: ^0.19.0
-        version: 0.19.0
+        specifier: ^0.19.1
+        version: 0.19.1
       canvas-3d:
         specifier: ^1.0.14
         version: 1.0.14
@@ -1583,8 +1583,8 @@ packages:
   '@soda/get-current-script@1.0.2':
     resolution: {integrity: sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==}
 
-  '@tdesign/site-components@0.19.0':
-    resolution: {integrity: sha512-yENsNDfmWoNvm8nvSpc1C4iSnzKF31ULwDrmnT75ojNP3Nn04CDtcB8h6EPH0bcIVox+OlTPPaAUFa56a+ob5A==}
+  '@tdesign/site-components@0.19.1':
+    resolution: {integrity: sha512-MMkicxnF31DptWXop5GfNibdzZTMT/Yc/DecjbRD0za1PDwm/DfqApfRSfrdsaH94piN+d/qW3darPcHWD724w==}
 
   '@tootallnate/once@1.1.2':
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
@@ -9330,7 +9330,7 @@ snapshots:
 
   '@soda/get-current-script@1.0.2': {}
 
-  '@tdesign/site-components@0.19.0':
+  '@tdesign/site-components@0.19.1':
     dependencies:
       '@popperjs/core': 2.11.8
       hybrids: 8.2.2
