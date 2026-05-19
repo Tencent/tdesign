@@ -41,7 +41,7 @@ jobs:
           echo the preview URL is $DEPLOY_DOMAIN
           echo "url=$DEPLOY_DOMAIN" >> $GITHUB_OUTPUT
       - name: update status comment
-        uses: actions-cool/maintain-one-comment@v3
+        uses: TDesignOteam/workflows/actions/maintain-one-comment@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
@@ -49,21 +49,21 @@ jobs:
             <!-- [工作流地址](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}) -->
             <!-- AUTO_PREVIEW_HOOK -->
           number: ${{ steps.pr.outputs.id }}
-          body-include: "<!-- AUTO_PREVIEW_HOOK -->"
+          body-include: '<!-- AUTO_PREVIEW_HOOK -->'
 
       - run: |
           rm -rf _site/
 
       - name: The job failed
         if: ${{ failure() }}
-        uses: actions-cool/maintain-one-comment@v3
+        uses: TDesignOteam/workflows/actions/maintain-one-comment@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
             <!-- AUTO_PREVIEW_HOOK -->
           number: ${{ steps.pr.outputs.id }}
-          body-include: "<!-- AUTO_PREVIEW_HOOK -->"
+          body-include: '<!-- AUTO_PREVIEW_HOOK -->'
 
   preview-failed:
     runs-on: ubuntu-latest
@@ -81,11 +81,11 @@ jobs:
         id: pr
         run: echo "id=$(<pr-id.txt)" >> $GITHUB_OUTPUT
       - name: The job failed
-        uses: actions-cool/maintain-one-comment@v3
+        uses: TDesignOteam/workflows/actions/maintain-one-comment@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
             <!-- AUTO_PREVIEW_HOOK -->
           number: ${{ steps.pr.outputs.id }}
-          body-include: "<!-- AUTO_PREVIEW_HOOK -->"
+          body-include: '<!-- AUTO_PREVIEW_HOOK -->'

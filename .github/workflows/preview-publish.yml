@@ -349,7 +349,7 @@ jobs:
             core.setOutput('comment', comment);
 
       - name: comment
-        uses: actions-cool/maintain-one-comment@v3
+        uses: TDesignOteam/workflows/actions/maintain-one-comment@main
         with:
           token: ${{ secrets.TDESIGN_BOT_TOKEN }}
           number: ${{needs.preview-context.outputs.pr_id}}
