@@ -11,6 +11,10 @@ export const themeStore = Vue.observable({
   updateDevice(device) {
     this.device = device;
     this.theme = getInitialTheme(device);
+    // 若用户未自定义过主题色，brandColor 跟随当前主题
+    if (!getOptionFromLocal('color')) {
+      this.brandColor = this.theme.value;
+    }
   },
   updateTheme(theme) {
     this.theme = theme;
