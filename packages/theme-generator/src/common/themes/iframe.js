@@ -1,4 +1,4 @@
-import { extractRootContent, getThemeMode, setUpModeObserver } from '../utils';
+import { getThemeMode, parseRootCss, setUpModeObserver } from '../utils';
 import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile, isUniApp } from './core';
 
 /* ----- 同步亮暗模式 -----  */
@@ -23,7 +23,7 @@ function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
     const style = document.createElement('style');
     style.id = currentModeId;
 
-    const cssString = extractRootContent(themeStyle.innerText);
+    const { rootContent: cssString } = parseRootCss(themeStyle.innerText);
     const selector = uniapp ? 'uni-page-body' : 'body';
     style.textContent = `${selector} {\n${cssString}\n}`;
 
@@ -56,7 +56,8 @@ function handleMobileTokenChange(iframe, styleElement) {
 
 function handleMiniProgramTokenChange(iframe, styleElement, uniapp = false) {
   const selector = uniapp ? 'uni-page-body' : 'body';
-  const updatedCss = `${selector} {\n${extractRootContent(styleElement.innerText)}\n}`;
+  const { rootContent } = parseRootCss(styleElement.innerText);
+  const updatedCss = `${selector} {\n${rootContent}\n}`;
 
   const updatedId = styleElement.id;
   const iframeStyleElement = iframe.contentDocument.getElementById(updatedId);
