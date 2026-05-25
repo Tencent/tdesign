@@ -83,12 +83,21 @@ export function downloadFile(blob, fileName) {
 }
 
 /**
- * 从 CSS 文本中提取 `:root` 中的内容
+ * 解析 CSS 文本，拆分出 `:root` 中的变量内容与其余的选择器规则
  */
-export function extractRootContent(cssText) {
-  // 匹配 {} 内的内容
-  const match = cssText.match(/{([^}]*)}/);
-  return match ? match[1].trim() : '';
+export function parseRootCss(cssText) {
+  if (!cssText) return { rootContent: '', restContent: '' };
+
+  const rootBlockMatch = cssText.match(/:root\s*\{([^}]*)\}/);
+
+  if (!rootBlockMatch) {
+    return { rootContent: '', restContent: cssText.trim() };
+  }
+
+  const rootContent = rootBlockMatch[1].trim();
+  const restContent = cssText.replace(rootBlockMatch[0], '').trim();
+
+  return { rootContent, restContent };
 }
 
 /**

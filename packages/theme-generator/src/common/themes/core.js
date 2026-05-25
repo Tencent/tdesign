@@ -3,7 +3,7 @@ import { Color } from 'tvision-color';
 
 import GENERATOR_VARIABLES from '!raw-loader!./built-in/css/vars.css';
 
-import { appendStyleSheet, clearLocalItem, downloadFile, extractRootContent, setUpModeObserver } from '../utils';
+import { appendStyleSheet, clearLocalItem, downloadFile, parseRootCss, setUpModeObserver } from '../utils';
 
 import {
   MOBILE_RECOMMEND_THEMES,
@@ -94,9 +94,9 @@ export function exportCustomStyleSheet(device) {
   const darkStyleSheet = document.getElementById(CUSTOM_DARK_ID);
   const extraStyleSheet = document.getElementById(CUSTOM_EXTRA_ID);
 
-  const cssString = extractRootContent(styleSheet?.textContent);
-  const darkCssString = extractRootContent(darkStyleSheet?.textContent);
-  const extraCssString = extractRootContent(extraStyleSheet?.textContent);
+  const { rootContent: cssString } = parseRootCss(styleSheet?.textContent);
+  const { rootContent: darkCssString } = parseRootCss(darkStyleSheet?.textContent);
+  const { rootContent: extraCssString, restContent: extraRestCssString } = parseRootCss(extraStyleSheet?.textContent);
 
   let finalCssString;
   if (isUniApp(device)) {
@@ -123,6 +123,7 @@ export function exportCustomStyleSheet(device) {
       page, .page {
         ${extraCssString}
       }
+      ${extraRestCssString}
     `;
   } else if (isMiniProgram(device)) {
     finalCssString = `
@@ -139,6 +140,7 @@ export function exportCustomStyleSheet(device) {
       page, .page {
         ${extraCssString}
       }
+      ${extraRestCssString}
     `;
   } else {
     finalCssString = `
@@ -151,6 +153,7 @@ export function exportCustomStyleSheet(device) {
       :root {
         ${extraCssString}
       }
+      ${extraRestCssString}
     `;
   }
 
