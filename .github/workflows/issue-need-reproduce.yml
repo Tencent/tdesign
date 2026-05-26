@@ -1,0 +1,10 @@
+# 当打上 "Need Reproduce" 标签时，自动提示提供重现实例
+name: issue-need-reproduce
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  call-issue-need-reproduce:
+    uses: TDesignOteam/workflows/.github/workflows/reusable-issue-need-reproduce.yml@main

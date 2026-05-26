@@ -1,0 +1,10 @@
+# 当打上 "help wanted" 标签时，自动留言引导社区贡献
+name: issue-help-wanted
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  call-issue-help-wanted:
+    uses: TDesignOteam/workflows/.github/workflows/reusable-issue-help-wanted.yml@main

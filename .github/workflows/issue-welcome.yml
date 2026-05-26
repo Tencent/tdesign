@@ -1,0 +1,10 @@
+# 当 issue 被创建时，自动回复引导完善信息
+name: issue-welcome
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  call-issue-welcome:
+    uses: TDesignOteam/workflows/.github/workflows/reusable-issue-welcome.yml@main

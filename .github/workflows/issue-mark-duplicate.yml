@@ -1,0 +1,10 @@
+# 当 comment 中回复类似 "Duplicate of #111" 时，自动打标签并关闭 issue
+name: issue-mark-duplicate
+
+on:
+  issue_comment:
+    types: [created, edited]
+
+jobs:
+  call-issue-mark-duplicate:
+    uses: TDesignOteam/workflows/.github/workflows/reusable-issue-mark-duplicate.yml@main
