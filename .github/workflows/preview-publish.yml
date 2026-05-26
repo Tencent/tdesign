@@ -26,7 +26,7 @@ jobs:
       pkg_tdesign_theme_generator: ${{ steps.pkg.outputs.pkg_tdesign_theme_generator }}
     steps:
       - name: Download pr id
-        uses: dawidd6/action-download-artifact@v8
+        uses: dawidd6/action-download-artifact@v21
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: preview-context
     steps:
-      - uses: dawidd6/action-download-artifact@v8
+      - uses: dawidd6/action-download-artifact@v21
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -72,12 +72,12 @@ jobs:
     needs: preview-context
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           repository: Tencent/tdesign-vue
           submodules: recursive
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 18
 
@@ -98,14 +98,14 @@ jobs:
     needs: preview-context
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           repository: Tencent/tdesign-react
           submodules: recursive
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 18
 
@@ -130,14 +130,14 @@ jobs:
     needs: preview-context
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           repository: Tencent/tdesign-vue-next
           submodules: recursive
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 18
 
@@ -162,14 +162,14 @@ jobs:
     needs: preview-context
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           repository: Tencent/tdesign-vue-next
           submodules: recursive
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 18
 
@@ -194,12 +194,12 @@ jobs:
     needs: preview-context
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           repository: Tencent/tdesign-mobile-vue
           submodules: recursive
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 18
 
@@ -220,12 +220,12 @@ jobs:
     needs: preview-context
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           repository: Tencent/tdesign-mobile-react
           submodules: recursive
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 18
 
@@ -245,14 +245,14 @@ jobs:
     needs: preview-context
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           repository: Tencent/tdesign-miniprogram
           submodules: recursive
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 18
 
@@ -286,7 +286,7 @@ jobs:
     steps:
       - name: jobs report
         id: report
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const pr_id = ${{ needs.preview-context.outputs.pr_id }};
