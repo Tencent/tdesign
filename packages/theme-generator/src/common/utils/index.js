@@ -88,16 +88,25 @@ export function downloadFile(blob, fileName) {
 export function parseRootCss(cssText) {
   if (!cssText) return { rootContent: '', restContent: '' };
 
-  const rootBlockMatch = cssText.match(/:root\s*\{([^}]*)\}/);
+  // 匹配以 :root 开头的选择器组（允许逗号分隔的多个选择器，且包含 :root），后接 { ... } 块
+  const rootBlockReg = /(?:^|[\s;}])((?:[^{};]*?:root[^{};]*)\s*\{([^}]*)\})/g;
 
-  if (!rootBlockMatch) {
+  const rootContents = [];
+  let restContent = cssText;
+  let match;
+  while ((match = rootBlockReg.exec(cssText)) !== null) {
+    rootContents.push(match[2].trim());
+    restContent = restContent.replace(match[1], '');
+  }
+
+  if (rootContents.length === 0) {
     return { rootContent: '', restContent: cssText.trim() };
   }
 
-  const rootContent = rootBlockMatch[1].trim();
-  const restContent = cssText.replace(rootBlockMatch[0], '').trim();
-
-  return { rootContent, restContent };
+  return {
+    rootContent: rootContents.join('\n').trim(),
+    restContent: restContent.trim(),
+  };
 }
 
 /**
