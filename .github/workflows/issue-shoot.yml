@@ -1,0 +1,10 @@
+# 当打上 easy/middle/hard 标签时，追加难度分级模板
+name: issue-shoot
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  call-issue-shoot:
+    uses: TDesignOteam/workflows/.github/workflows/reusable-issue-shoot.yml@main
