@@ -31,6 +31,257 @@ jobs:
       - run: pnpm --filter '@tdesign/site-components' --filter '@tdesign/theme-generator' run build
 
       - run: pnpm dlx pkg-pr-new publish './packages/site-components' './packages/theme-generator'
+  
+  build-tdesign-vue-site:
+    if: github.repository == 'Tencent/tdesign' && github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: Tencent/tdesign-vue
+          submodules: recursive
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+
+      - run: npm install
+
+      - run: npm install --save-dev https://pkg.pr.new/Tencent/tdesign/@tdesign/site-components@${{ github.event.number }}
+
+      - run: npm install --save-dev https://pkg.pr.new/Tencent/tdesign/@tdesign/theme-generator@${{ github.event.number }}
+
+      - run: npm run site:preview
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: tdesign-vue-site
+          path: _site
+          retention-days: 5
+
+  build-tdesign-react-site:
+    if: github.repository == 'Tencent/tdesign' && github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: Tencent/tdesign-react
+          submodules: recursive
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+
+      - run: pnpm install
+
+      - name: install @tdesign/site-components from pkg-pr-new
+        run: pnpm add https://pkg.pr.new/Tencent/tdesign/@tdesign/site-components@${{ github.event.number }}
+        working-directory: packages/tdesign-react/site
+
+      - name: install @tdesign/theme-generator from pkg-pr-new
+        run: pnpm add https://pkg.pr.new/Tencent/tdesign/@tdesign/theme-generator@${{ github.event.number }}
+        working-directory: packages/tdesign-react/site
+
+      - run: pnpm run site:preview
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: tdesign-react-site
+          path: packages/tdesign-react/site/dist
+          retention-days: 5
+
+  build-tdesign-vue-next-site:
+    if: github.repository == 'Tencent/tdesign' && github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: Tencent/tdesign-vue-next
+          submodules: recursive
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+
+      - run: pnpm install
+
+      - name: install @tdesign/site-components from pkg-pr-new
+        run: pnpm add https://pkg.pr.new/Tencent/tdesign/@tdesign/site-components@${{ github.event.number }}
+        working-directory: packages/tdesign-vue-next/site
+
+      - name: install @tdesign/theme-generator from pkg-pr-new
+        run: pnpm add https://pkg.pr.new/Tencent/tdesign/@tdesign/theme-generator@${{ github.event.number }}
+        working-directory: packages/tdesign-vue-next/site
+
+      - run: pnpm -C packages/tdesign-vue-next/site run preview
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: tdesign-vue-next-site
+          path: packages/tdesign-vue-next/site/dist
+          retention-days: 5
+
+  build-tdesign-vue-next-chat-site:
+    if: github.repository == 'Tencent/tdesign' && github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: Tencent/tdesign-vue-next
+          submodules: recursive
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+
+      - run: pnpm install
+
+      - name: install @tdesign/site-components from pkg-pr-new
+        run: pnpm add https://pkg.pr.new/Tencent/tdesign/@tdesign/site-components@${{ github.event.number }}
+        working-directory: packages/tdesign-vue-next-chat/site
+
+      - name: install @tdesign/theme-generator from pkg-pr-new
+        run: pnpm add https://pkg.pr.new/Tencent/tdesign/@tdesign/theme-generator@${{ github.event.number }}
+        working-directory: packages/tdesign-vue-next-chat/site
+
+      - run: pnpm -C packages/tdesign-vue-next-chat/site run preview
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: tdesign-vue-next-chat-site
+          path: packages/tdesign-vue-next-chat/site/dist
+          retention-days: 5
+
+  build-tdesign-mobile-vue-site:
+    if: github.repository == 'Tencent/tdesign' && github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: Tencent/tdesign-mobile-vue
+          submodules: recursive
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+
+      - run: npm install
+
+      - run: npm install --save-dev https://pkg.pr.new/Tencent/tdesign/@tdesign/site-components@${{ github.event.number }}
+
+      - run: npm install --save-dev https://pkg.pr.new/Tencent/tdesign/@tdesign/theme-generator@${{ github.event.number }}
+
+      - run: npm run site:preview
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: tdesign-mobile-vue-site
+          path: _site
+          retention-days: 5
+
+  build-tdesign-mobile-react-site:
+    if: github.repository == 'Tencent/tdesign' && github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: Tencent/tdesign-mobile-react
+          submodules: recursive
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+
+      - run: npm install
+
+      - run: npm install --save-dev https://pkg.pr.new/Tencent/tdesign/@tdesign/site-components@${{ github.event.number }}
+
+      - run: npm install --save-dev https://pkg.pr.new/Tencent/tdesign/@tdesign/theme-generator@${{ github.event.number }}
+
+      - run: npm run site:preview
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: tdesign-mobile-react-site
+          path: _site
+          retention-days: 5
+
+  build-tdesign-miniprogram-site:
+    if: github.repository == 'Tencent/tdesign' && github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: Tencent/tdesign-miniprogram
+          submodules: recursive
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+
+      - run: pnpm install
+
+      - run: pnpm add https://pkg.pr.new/Tencent/tdesign/@tdesign/site-components@${{ github.event.number }}
+        working-directory: packages/tdesign-miniprogram/site
+
+      - run: pnpm add https://pkg.pr.new/Tencent/tdesign/@tdesign/theme-generator@${{ github.event.number }}
+        working-directory: packages/tdesign-miniprogram/site
+
+      - run: pnpm -C packages/tdesign-miniprogram/site site:preview
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: tdesign-miniprogram-site
+          path: packages/tdesign-miniprogram/site/dist
+          retention-days: 5
+
+  build-tdesign-uniapp-site:
+    if: github.repository == 'Tencent/tdesign' && github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: Tencent/tdesign-miniprogram
+          submodules: recursive
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+
+      - run: pnpm install
+
+      - run: pnpm add https://pkg.pr.new/Tencent/tdesign/@tdesign/site-components@${{ github.event.number }}
+        working-directory: packages/tdesign-uniapp/site
+
+      - run: pnpm add https://pkg.pr.new/Tencent/tdesign/@tdesign/theme-generator@${{ github.event.number }}
+        working-directory: packages/tdesign-uniapp/site
+
+      - run: pnpm -C packages/tdesign-uniapp/site site:preview
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: tdesign-uniapp-site
+          path: packages/tdesign-uniapp/site/dist
+          retention-days: 5      
+
 
   build-site:
     if: github.repository == 'Tencent/tdesign' && github.event_name == 'pull_request'
