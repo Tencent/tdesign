@@ -1,5 +1,8 @@
 name: Preview_Publish
 
+permissions:
+  contents: read
+
 on:
   workflow_run:
     workflows:
@@ -33,7 +36,13 @@ jobs:
 
       - name: Set pr id
         id: pr
-        run: echo "id=$(cat pr-id.txt)" >> $GITHUB_OUTPUT
+        run: |
+          PR_ID=$(cat pr-id.txt)
+          if [[ ! "$PR_ID" =~ ^[0-9]+$ ]]; then
+            echo "::error::Invalid PR ID: $PR_ID"
+            exit 1
+          fi
+          echo "id=$PR_ID" >> $GITHUB_OUTPUT
 
       - name: site-domain
         id: site-domain
@@ -46,11 +55,14 @@ jobs:
           echo "tdesign_mobile_vue_domain=https://preview-tdesign-mobile-vue-pr-${{ steps.pr.outputs.id }}-tdesign.surge.sh" >> $GITHUB_OUTPUT
           echo "tdesign_mobile_react_domain=https://preview-tdesign-mobile-react-pr-${{ steps.pr.outputs.id }}-tdesign.surge.sh" >> $GITHUB_OUTPUT
           echo "tdesign_miniprogram_domain=https://preview-tdesign-miniprogram-pr-${{ steps.pr.outputs.id }}-tdesign.surge.sh" >> $GITHUB_OUTPUT
+          echo "tdesign_uniapp_domain=https://preview-tdesign-uniapp-pr-${{ steps.pr.outputs.id }}-tdesign.surge.sh" >> $GITHUB_OUTPUT
 
   tdesign-site:
     if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     needs: preview-context
+    environment:
+      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v21
         with:
@@ -65,6 +77,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
+    environment:
+      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v21
         with:
@@ -80,6 +94,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
+    environment:
+      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v21
         with:
@@ -95,6 +111,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
+    environment:
+      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v21
         with:
@@ -110,6 +128,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
+    environment:
+      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v21
         with:
@@ -125,6 +145,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
+    environment:
+      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v21
         with:
@@ -140,6 +162,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
+    environment:
+      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v21
         with:
@@ -155,6 +179,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
+    environment:
+      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v21
         with:
@@ -165,11 +191,12 @@ jobs:
       - run: |
           export DEPLOY_DOMAIN=${{ needs.preview-context.outputs.tdesign_miniprogram_domain }}
           npx surge --project ./ --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
-  
   tdesign-uniapp:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
+    environment:
+      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v21
         with:
@@ -195,13 +222,15 @@ jobs:
       - tdesign-vue-next-chat
       - tdesign-uniapp
     runs-on: ubuntu-latest
+    environment:
+      name: preview
     steps:
       - name: jobs report
         id: report
         uses: actions/github-script@v9
         with:
           script: |
-            const pr_id = ${{ needs.preview-context.outputs.pr_id }};
+            const pr_id = "${{ needs.preview-context.outputs.pr_id }}";
 
             const { data: { jobs } } = await github.rest.actions.listJobsForWorkflowRun({
               owner: context.repo.owner,
@@ -264,7 +293,7 @@ jobs:
       - name: comment
         uses: TDesignOteam/workflows/actions/maintain-one-comment@main
         with:
-          token: ${{ secrets.TDESIGN_BOT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           number: ${{needs.preview-context.outputs.pr_id}}
           body: ${{ steps.report.outputs.comment }}
           body-include: '<!-- AUTO_PREVIEW_HOOK -->'
