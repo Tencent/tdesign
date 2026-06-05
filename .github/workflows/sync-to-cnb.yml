@@ -1,0 +1,13 @@
+name: sync-to-cnb
+on:
+  - push
+  - delete
+
+jobs:
+  call-cnb-sync:
+    uses: TDesignOteam/workflows/.github/workflows/reusable-cnb-sync.yml@main
+    with:
+      github-repo: Tencent/tdesign
+      cnb-repo: tencent/tdesign/tdesign
+    secrets:
+      CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
