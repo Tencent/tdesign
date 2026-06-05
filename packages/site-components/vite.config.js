@@ -17,6 +17,7 @@ export default {
     port: 3000,
     open: '/',
     https: false,
+    allowedHosts: true,
   },
 
   build: {
