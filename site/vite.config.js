@@ -38,6 +38,7 @@ export default ({ mode }) => {
       fs: {
         strict: false,
       },
+      allowedHosts: true,
     },
     plugins: [
       vue({
