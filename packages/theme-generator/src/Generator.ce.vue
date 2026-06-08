@@ -12,7 +12,14 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
-import { applyTokenFromLocal, initGeneratorVars, syncModeToGenerator, syncThemeToIframe, themeStore } from '@/common/themes';
+import {
+  applyTokenFromLocal,
+  initGeneratorVars,
+  syncModeToGenerator,
+  syncThemeToIframe,
+  themeStore,
+} from '@/common/themes';
+import { getShadowRoot } from '@/common/utils';
 import FloatDock from './float-dock';
 import PanelDrawer from './panel-drawer';
 
@@ -38,15 +45,18 @@ const visible = ref(0);
 // 这样 shadowRoot 内的 CSS 变量才能根据 theme-mode 切换
 const themeModeValue = computed(() => props.themeMode || 'light');
 
-watch(themeModeValue, (mode) => {
-  // 同步到 shadowRoot 内部的根元素
-  const wcHost = document.querySelector('td-theme-generator');
-  if (wcHost?.shadowRoot) {
-    const rootEl = wcHost.shadowRoot.querySelector('.theme-generator');
+function syncThemeModeToShadowRoot(mode) {
+  const shadowRoot = getShadowRoot();
+  if (shadowRoot) {
+    const rootEl = shadowRoot.querySelector('.theme-generator');
     if (rootEl) {
       rootEl.setAttribute('theme-mode', mode);
     }
   }
+}
+
+watch(themeModeValue, (mode) => {
+  syncThemeModeToShadowRoot(mode);
 });
 
 function handleTriggerVisible() {
@@ -68,13 +78,7 @@ onMounted(() => {
 
   // 初始化时同步 theme-mode 到 shadowRoot
   if (props.themeMode) {
-    const wcHost = document.querySelector('td-theme-generator');
-    if (wcHost?.shadowRoot) {
-      const rootEl = wcHost.shadowRoot.querySelector('.theme-generator');
-      if (rootEl) {
-        rootEl.setAttribute('theme-mode', props.themeMode);
-      }
-    }
+    syncThemeModeToShadowRoot(props.themeMode);
   }
 });
 </script>

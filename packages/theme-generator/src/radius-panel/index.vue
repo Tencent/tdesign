@@ -86,7 +86,7 @@ import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-v
 import { SegmentSelection, SizeSlider } from '@/common/components';
 import { useLang } from '@/common/i18n';
 import { CUSTOM_EXTRA_ID, getOptionFromLocal, modifyToken, updateLocalOption } from '@/common/themes';
-import { handleAttach } from '@/common/utils';
+import { getElementById, handleAttach } from '@/common/utils';
 
 import { RADIUS_LABELS, RADIUS_OPTIONS, RADIUS_STEP_ARRAY, RADIUS_TOKEN_LIST } from './built-in/radius-map';
 
@@ -101,24 +101,28 @@ const contentStyle = computed(() => {
   const clientHeight = window.innerHeight;
   return {
     overflowY: 'scroll',
-    height: `${clientHeight - (0) - 96}px`,
+    height: `${clientHeight - 0 - 96}px`,
   };
 });
 
-watch(radiusTypeList, (list) => {
-  const currentRadiusList = list.map((v) => v.value);
-  const existStep = RADIUS_STEP_ARRAY.find((steps) => {
-    const arr = steps.filter((v, i) => {
-      const step = typeof v === 'number' ? `${v}px` : v;
-      const currentRadius =
-        typeof currentRadiusList[i] === 'number' ? `${currentRadiusList[i]}px` : currentRadiusList[i]?.trim();
-      return step === currentRadius;
+watch(
+  radiusTypeList,
+  (list) => {
+    const currentRadiusList = list.map((v) => v.value);
+    const existStep = RADIUS_STEP_ARRAY.find((steps) => {
+      const arr = steps.filter((v, i) => {
+        const step = typeof v === 'number' ? `${v}px` : v;
+        const currentRadius =
+          typeof currentRadiusList[i] === 'number' ? `${currentRadiusList[i]}px` : currentRadiusList[i]?.trim();
+        return step === currentRadius;
+      });
+      return arr.length === steps.length;
     });
-    return arr.length === steps.length;
-  });
 
-  if (!existStep) segmentSelectionDisabled.value = true;
-}, { deep: true });
+    if (!existStep) segmentSelectionDisabled.value = true;
+  },
+  { deep: true },
+);
 
 watch(step, (val) => {
   updateLocalOption('radius', val !== 3 ? val : null);
@@ -164,7 +168,7 @@ function formattedRadius(radius) {
 }
 
 function initRadiusToken() {
-  const radiusStyle = document.getElementById(CUSTOM_EXTRA_ID);
+  const radiusStyle = getElementById(CUSTOM_EXTRA_ID);
 
   // 过滤不存在的 Token
   radiusTypeList.value = radiusTypeList.value

@@ -1,4 +1,4 @@
-import { getThemeMode, parseRootCss, setUpModeObserver } from '../utils';
+import { getElementById, getThemeMode, parseRootCss, querySelectorAll, setUpModeObserver } from '../utils';
 import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile, isUniApp } from './core';
 
 /* ----- 同步亮暗模式 -----  */
@@ -12,7 +12,7 @@ function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
   const prevModeId = isDark ? CUSTOM_THEME_ID : CUSTOM_DARK_ID;
   const currentModeId = isDark ? CUSTOM_DARK_ID : CUSTOM_THEME_ID;
 
-  const themeStyle = document.getElementById(isDark ? CUSTOM_DARK_ID : CUSTOM_THEME_ID);
+  const themeStyle = getElementById(isDark ? CUSTOM_DARK_ID : CUSTOM_THEME_ID);
 
   /* 小程序无法通过 root 上的属性来设置，不同模式需要重新更新样式 */
   const iframeDom = iframe.contentDocument;
@@ -108,7 +108,7 @@ function watchThemeModeChange(iframe) {
 function watchThemeTokenChange(iframe) {
   if (!iframe?.contentDocument) return null;
 
-  const allCustomStyles = document.querySelectorAll(`[id^="${CUSTOM_THEME_ID}"]`);
+  const allCustomStyles = querySelectorAll(`[id^="${CUSTOM_THEME_ID}"]`);
   if (!allCustomStyles.length) return null;
 
   const device = iframe.getAttribute('device');

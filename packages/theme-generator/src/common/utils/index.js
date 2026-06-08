@@ -1,14 +1,82 @@
 export * from './animation';
 
 /**
+ * 获取 Web Component 的 shadowRoot（如果处于 WC 模式）
+ */
+export function getShadowRoot() {
+  return document.querySelector('td-theme-generator')?.shadowRoot || null;
+}
+
+/**
+ * 获取样式容器：
+ * - WC 模式下返回 shadowRoot
+ * - 非 WC 模式下返回 document.head
+ */
+export function getStyleContainer() {
+  return getShadowRoot() || document.head;
+}
+
+/**
+ * 在正确的容器中按 ID 查找元素
+ * - WC 模式下搜索 shadowRoot
+ * - 非 WC 模式下搜索 document
+ */
+export function getElementById(id) {
+  const shadowRoot = getShadowRoot();
+  if (shadowRoot) {
+    return shadowRoot.getElementById(id);
+  }
+  return document.getElementById(id);
+}
+
+/**
+ * 在正确的容器中按选择器查找所有元素
+ * - WC 模式下搜索 shadowRoot
+ * - 非 WC 模式下搜索 document
+ */
+export function querySelectorAll(selector) {
+  const shadowRoot = getShadowRoot();
+  if (shadowRoot) {
+    return shadowRoot.querySelectorAll(selector);
+  }
+  return document.querySelectorAll(selector);
+}
+
+/**
+ * 在正确的容器中按选择器查找首个元素
+ * - WC 模式下搜索 shadowRoot
+ * - 非 WC 模式下搜索 document
+ */
+export function querySelector(selector) {
+  const shadowRoot = getShadowRoot();
+  if (shadowRoot) {
+    return shadowRoot.querySelector(selector);
+  }
+  return document.querySelector(selector);
+}
+
+/**
+ * 获取用于设置 CSS 变量的根元素
+ * - WC 模式下返回 shadowRoot 内的 .theme-generator
+ * - 非 WC 模式下返回 document.documentElement
+ */
+export function getCssRoot() {
+  const shadowRoot = getShadowRoot();
+  if (shadowRoot) {
+    return shadowRoot.querySelector('.theme-generator') || document.documentElement;
+  }
+  return document.documentElement;
+}
+
+/**
  * 获取指定 CSS Token 对应的数值
  * - 在 Web Component 模式下，从 shadowRoot 内部获取
  */
 export function getTokenValue(name) {
   // 优先从 shadowRoot 内部获取 CSS 变量
-  const wcHost = document.querySelector('td-theme-generator');
-  const shadowRoot = wcHost?.shadowRoot;
-  const isDarkMode = (shadowRoot?.host?.getAttribute('theme-mode') || document.documentElement.getAttribute('theme-mode')) === 'dark';
+  const shadowRoot = getShadowRoot();
+  const isDarkMode =
+    (shadowRoot?.host?.getAttribute('theme-mode') || document.documentElement.getAttribute('theme-mode')) === 'dark';
 
   let rootElement;
   if (shadowRoot) {
@@ -27,8 +95,8 @@ export function getTokenValue(name) {
  * - 优先从 Web Component 宿主元素读取
  */
 export function getThemeMode() {
-  const wcHost = document.querySelector('td-theme-generator');
-  return wcHost?.getAttribute('theme-mode') || document.documentElement.getAttribute('theme-mode') || 'light';
+  const shadowRoot = getShadowRoot();
+  return shadowRoot?.host?.getAttribute('theme-mode') || document.documentElement.getAttribute('theme-mode') || 'light';
 }
 
 /**
@@ -57,9 +125,9 @@ export function setUpModeObserver(handler) {
   });
 
   // 观察 td-theme-generator 宿主元素（WC 模式）
-  const wcHost = document.querySelector('td-theme-generator');
-  if (wcHost) {
-    observer.observe(wcHost, {
+  const shadowRoot = getShadowRoot();
+  if (shadowRoot?.host) {
+    observer.observe(shadowRoot.host, {
       attributes: true,
       attributeFilter: ['theme-mode'],
     });
@@ -76,20 +144,14 @@ export function setUpModeObserver(handler) {
  */
 export function appendStyleSheet(styleId) {
   let styleSheet;
-  const existSheet = document.getElementById(styleId);
+  const existSheet = getElementById(styleId);
 
   if (!existSheet) {
     styleSheet = document.createElement('style');
     styleSheet.id = styleId;
     styleSheet.type = 'text/css';
 
-    // Web Component 模式：将样式表注入到 shadowRoot 内
-    const wcHost = document.querySelector('td-theme-generator');
-    if (wcHost?.shadowRoot) {
-      wcHost.shadowRoot.appendChild(styleSheet);
-    } else {
-      document.head.appendChild(styleSheet);
-    }
+    getStyleContainer().appendChild(styleSheet);
   } else {
     styleSheet = existSheet;
   }
@@ -100,7 +162,7 @@ export function appendStyleSheet(styleId) {
  * 解决 `Popup` 组件脱离 Shadow DOM 的问题
  */
 export function handleAttach() {
-  return document.querySelector('td-theme-generator')?.shadowRoot?.querySelector?.('.theme-generator') || document.body;
+  return getShadowRoot()?.querySelector?.('.theme-generator') || document.body;
 }
 
 /**

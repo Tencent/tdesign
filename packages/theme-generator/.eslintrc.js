@@ -1,13 +1,22 @@
-const path = require('path');
-
 module.exports = {
   root: true,
-  extends: ['plugin:vue/essential', './../../.eslintrc.js'],
-  parserOptions: {
-    parser: '@babel/eslint-parser',
-    babelOptions: {
-      configFile: path.resolve(__dirname, './babel.config.js'),
-    },
+  env: {
+    node: true,
+    browser: true,
+    es6: true,
   },
-  rules: {},
+  extends: ['plugin:vue/vue3-essential', 'eslint:recommended', 'prettier'],
+  parserOptions: {
+    ecmaVersion: 2021,
+    sourceType: 'module',
+  },
+  globals: {
+    defineProps: 'readonly',
+    defineEmits: 'readonly',
+    defineExpose: 'readonly',
+    withDefaults: 'readonly',
+  },
+  rules: {
+    'vue/multi-word-component-names': 'off',
+  },
 };

@@ -3,7 +3,17 @@ import { Color } from 'tvision-color';
 
 import GENERATOR_VARIABLES from './built-in/css/vars.css?raw';
 
-import { appendStyleSheet, clearLocalItem, downloadFile, parseRootCss, setUpModeObserver } from '../utils';
+import {
+  appendStyleSheet,
+  clearLocalItem,
+  downloadFile,
+  getElementById,
+  getCssRoot,
+  getShadowRoot,
+  parseRootCss,
+  querySelectorAll,
+  setUpModeObserver,
+} from '../utils';
 
 import {
   MOBILE_RECOMMEND_THEMES,
@@ -54,7 +64,7 @@ export function getRecommendThemes(device) {
  */
 export function syncModeToGenerator() {
   setUpModeObserver((theme) => {
-    const generator = document.querySelector('td-theme-generator');
+    const generator = getShadowRoot()?.host || document.querySelector('td-theme-generator');
     if (!generator) return;
     generator.setAttribute('theme-mode', theme);
   });
@@ -90,9 +100,9 @@ export function initThemeStyleSheet(themeName, device) {
 }
 
 export function exportCustomStyleSheet(device) {
-  const styleSheet = document.getElementById(CUSTOM_THEME_ID);
-  const darkStyleSheet = document.getElementById(CUSTOM_DARK_ID);
-  const extraStyleSheet = document.getElementById(CUSTOM_EXTRA_ID);
+  const styleSheet = getElementById(CUSTOM_THEME_ID);
+  const darkStyleSheet = getElementById(CUSTOM_DARK_ID);
+  const extraStyleSheet = getElementById(CUSTOM_EXTRA_ID);
 
   const { rootContent: cssString } = parseRootCss(styleSheet?.textContent);
   const { rootContent: darkCssString } = parseRootCss(darkStyleSheet?.textContent);
@@ -165,7 +175,7 @@ export function exportCustomStyleSheet(device) {
 
 export function modifyToken(tokenName, newVal, saveToLocal = true) {
   // 获取所有可能包含 token 的样式表
-  const styleSheets = document.querySelectorAll(`#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, #${CUSTOM_EXTRA_ID}`);
+  const styleSheets = querySelectorAll(`#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, #${CUSTOM_EXTRA_ID}`);
 
   let tokenFound = false;
   styleSheets.forEach((styleSheet) => {
@@ -343,8 +353,8 @@ export function syncColorTokensToStyle(lightTokenMap, darkTokenMap) {
  * 例如 `--td-brand-focus` ->  2
  */
 export function collectTokenIndexes(tokenArr) {
-  const isDarkMode = document.documentElement.getAttribute('theme-mode') === 'dark';
-  const targetCss = document.querySelector(isDarkMode ? `#${CUSTOM_DARK_ID}` : `#${CUSTOM_THEME_ID}`);
+  const isDarkMode = getCssRoot().getAttribute('theme-mode') === 'dark';
+  const targetCss = getElementById(isDarkMode ? CUSTOM_DARK_ID : CUSTOM_THEME_ID);
 
   return tokenArr
     .map((token) => {
