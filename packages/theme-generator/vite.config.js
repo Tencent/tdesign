@@ -55,6 +55,15 @@ function wcCssPlugin() {
 }
 
 export default defineConfig({
+  server: {
+    host: '0.0.0.0',
+    port: 10002,
+    open: '/',
+    fs: {
+      strict: false,
+    },
+    allowedHosts: true,
+  },
   plugins: [
     vue({
       // Generator.vue 作为 Custom Element 根组件编译
