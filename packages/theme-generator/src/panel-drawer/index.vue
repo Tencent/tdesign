@@ -5,6 +5,8 @@
     :header="false"
     :close-btn="false"
     :prevent-scroll-through="false"
+    :show-overlay="false"
+    :attach="handleAttach"
     :footer="false"
     show-in-attached-element
   >
@@ -25,6 +27,7 @@ import { ref, computed, watch } from 'vue';
 import { Drawer as TDrawer } from 'tdesign-vue-next';
 
 import { themeStore } from '@/common/themes';
+import { handleAttach } from '@/common/utils';
 
 import ColorPanel from '../color-panel';
 import FontPanel from '../font-panel';
@@ -62,13 +65,16 @@ const visible = ref(false);
 
 const refreshId = computed(() => themeStore.refreshId);
 
-watch(() => props.drawerVisible, (v) => {
-  if ((typeof v === 'string' && v === 'false') || v === false) {
-    visible.value = false;
-    return;
-  }
-  visible.value = true;
-});
+watch(
+  () => props.drawerVisible,
+  (v) => {
+    if ((typeof v === 'string' && v === 'false') || v === false) {
+      visible.value = false;
+      return;
+    }
+    visible.value = true;
+  },
+);
 
 watch(visible, (v) => {
   emit('panel-drawer-visible', v);
@@ -80,14 +86,9 @@ function changeActiveTab(tab) {
 </script>
 
 <style lang="less" scoped>
-:deep(.t-drawer__mask) {
-  background: none;
-}
-
 :deep(.t-drawer__content-wrapper) {
   box-shadow: var(--shadow-2);
   border-radius: 12px 0 0 0;
-  position: fixed;
   .t-drawer__body {
     padding: 0;
     background: var(--bg-color-theme-transparent);
