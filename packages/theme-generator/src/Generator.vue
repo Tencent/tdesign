@@ -1,5 +1,5 @@
 <template>
-  <div class="theme-generator">
+  <div class="theme-generator" :theme-mode="themeMode">
     <float-dock
       :drawerVisible="visible"
       :showSetting="showSetting"
@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import {
   applyTokenFromLocal,
   initGeneratorVars,
@@ -19,6 +19,7 @@ import {
   syncThemeToIframe,
   themeStore,
 } from '@/common/themes';
+import { getShadowRoot } from '@/common/utils';
 import FloatDock from './float-dock';
 import PanelDrawer from './panel-drawer';
 
@@ -31,9 +32,32 @@ const props = defineProps({
     type: String,
     default: 'web',
   },
+  // Web Component 宿主元素的 theme-mode 属性
+  themeMode: {
+    type: String,
+    default: '',
+  },
 });
 
 const visible = ref(false);
+
+// 将 themeMode 同步到 shadowRoot 内的根元素
+// 这样 shadowRoot 内的 CSS 变量才能根据 theme-mode 切换
+const themeModeValue = computed(() => props.themeMode || 'light');
+
+function syncThemeModeToShadowRoot(mode) {
+  const shadowRoot = getShadowRoot();
+  if (shadowRoot) {
+    const rootEl = shadowRoot.querySelector('.theme-generator');
+    if (rootEl) {
+      rootEl.setAttribute('theme-mode', mode);
+    }
+  }
+}
+
+watch(themeModeValue, (mode) => {
+  syncThemeModeToShadowRoot(mode);
+});
 
 function handleTriggerVisible() {
   visible.value = true;
@@ -46,15 +70,25 @@ function handleClickSetting() {
 }
 
 onMounted(() => {
-  themeStore.updateDevice(props.device);
+  // Web Component 模式下，attribute → prop 转换可能有时序问题
+  // 从宿主元素 DOM attribute 直接读取 device，确保不会漏掉外部传入的值
+  const host = getShadowRoot()?.host;
+  const device = host?.getAttribute('device') || props.device;
+
+  themeStore.updateDevice(device);
   syncModeToGenerator();
   initGeneratorVars();
   applyTokenFromLocal();
-  syncThemeToIframe(props.device);
+  syncThemeToIframe(device);
+
+  // 初始化时同步 theme-mode 到 shadowRoot
+  if (props.themeMode) {
+    syncThemeModeToShadowRoot(props.themeMode);
+  }
 });
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import './styles/reset.min.css';
 @import './styles/tdesign.min.css';
 

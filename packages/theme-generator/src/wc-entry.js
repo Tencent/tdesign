@@ -1,5 +1,5 @@
 import { defineCustomElement } from 'vue';
-import GeneratorCe from './Generator.ce.vue';
+import GeneratorCe from './Generator.vue';
 
 // wcCssPlugin 会在 JS 产物顶部注入 __WC_ALL_CSS__ 全局变量
 // 包含所有子组件和 TDesign 组件库的 CSS

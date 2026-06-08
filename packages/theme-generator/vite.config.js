@@ -45,6 +45,9 @@ function wcCssPlugin() {
 export default defineConfig({
   plugins: [
     vue({
+      // Generator.vue 作为 Custom Element 根组件编译
+      // 启用 shadow DOM 模式、禁用 scoped 样式（shadow DOM 自带隔离）
+      customElement: /Generator\.vue$/,
       template: {
         compilerOptions: {
           isCustomElement: (tag) => tag.startsWith('td-'),
