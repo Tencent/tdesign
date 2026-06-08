@@ -102,10 +102,6 @@ onBeforeUnmount(() => {
 @import './styles/reset.min.css';
 @import './styles/tdesign.min.css';
 
-.theme-generator {
-  position: relative;
-}
-
 @media screen and (max-width: 960px) {
   .theme-generator {
     display: none;
