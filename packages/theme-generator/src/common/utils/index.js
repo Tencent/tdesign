@@ -2,22 +2,38 @@ export * from './animation';
 
 /**
  * 获取指定 CSS Token 对应的数值
+ * - 在 Web Component 模式下，从 shadowRoot 内部获取
  */
 export function getTokenValue(name) {
-  const isDarkMode = document.documentElement.getAttribute('theme-mode') === 'dark';
-  const rootElement = isDarkMode ? document.querySelector('[theme-mode="dark"]') : document.documentElement;
+  // 优先从 shadowRoot 内部获取 CSS 变量
+  const wcHost = document.querySelector('td-theme-generator');
+  const shadowRoot = wcHost?.shadowRoot;
+  const isDarkMode = (shadowRoot?.host?.getAttribute('theme-mode') || document.documentElement.getAttribute('theme-mode')) === 'dark';
+
+  let rootElement;
+  if (shadowRoot) {
+    rootElement = isDarkMode
+      ? shadowRoot.querySelector('[theme-mode="dark"]') || shadowRoot.querySelector('.theme-generator')
+      : shadowRoot.querySelector('.theme-generator');
+  }
+  if (!rootElement) {
+    rootElement = isDarkMode ? document.querySelector('[theme-mode="dark"]') : document.documentElement;
+  }
   return window.getComputedStyle(rootElement).getPropertyValue(name).toLowerCase().trim();
 }
 
 /**
  * 获取当前亮暗模式 (light / dark)
+ * - 优先从 Web Component 宿主元素读取
  */
 export function getThemeMode() {
-  return document.documentElement.getAttribute('theme-mode') || 'light';
+  const wcHost = document.querySelector('td-theme-generator');
+  return wcHost?.getAttribute('theme-mode') || document.documentElement.getAttribute('theme-mode') || 'light';
 }
 
 /**
  * 创建亮暗变化监听器
+ * - 同时观察 document.documentElement 和 td-theme-generator 宿主元素
  */
 export function setUpModeObserver(handler) {
   let mode = getThemeMode();
@@ -34,10 +50,20 @@ export function setUpModeObserver(handler) {
     }
   });
 
+  // 观察 document.documentElement（非 WC 模式）
   observer.observe(document.documentElement, {
     attributes: true,
     attributeFilter: ['theme-mode'],
   });
+
+  // 观察 td-theme-generator 宿主元素（WC 模式）
+  const wcHost = document.querySelector('td-theme-generator');
+  if (wcHost) {
+    observer.observe(wcHost, {
+      attributes: true,
+      attributeFilter: ['theme-mode'],
+    });
+  }
 
   return observer;
 }
@@ -46,6 +72,7 @@ export function setUpModeObserver(handler) {
  * 按照指定的 Id 生成样式表
  * - 如果存在，则返回已存在的样式表
  * - 如果不存在，则创建一个新的样式表
+ * - 在 Web Component 模式下，向 shadowRoot 注入而非 document.head
  */
 export function appendStyleSheet(styleId) {
   let styleSheet;
@@ -55,7 +82,14 @@ export function appendStyleSheet(styleId) {
     styleSheet = document.createElement('style');
     styleSheet.id = styleId;
     styleSheet.type = 'text/css';
-    document.head.appendChild(styleSheet);
+
+    // Web Component 模式：将样式表注入到 shadowRoot 内
+    const wcHost = document.querySelector('td-theme-generator');
+    if (wcHost?.shadowRoot) {
+      wcHost.shadowRoot.appendChild(styleSheet);
+    } else {
+      document.head.appendChild(styleSheet);
+    }
   } else {
     styleSheet = existSheet;
   }

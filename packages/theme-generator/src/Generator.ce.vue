@@ -1,5 +1,5 @@
 <template>
-  <div class="theme-generator">
+  <div class="theme-generator" :theme-mode="themeMode">
     <float-dock
       :drawerVisible="visible"
       :showSetting="showSetting"
@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { applyTokenFromLocal, initGeneratorVars, syncModeToGenerator, syncThemeToIframe, themeStore } from '@/common/themes';
 import FloatDock from './float-dock';
 import PanelDrawer from './panel-drawer';
@@ -25,9 +25,29 @@ const props = defineProps({
     type: String,
     default: 'web',
   },
+  // Web Component 宿主元素的 theme-mode 属性
+  themeMode: {
+    type: String,
+    default: '',
+  },
 });
 
 const visible = ref(0);
+
+// 将 themeMode 同步到 shadowRoot 内的根元素
+// 这样 shadowRoot 内的 CSS 变量才能根据 theme-mode 切换
+const themeModeValue = computed(() => props.themeMode || 'light');
+
+watch(themeModeValue, (mode) => {
+  // 同步到 shadowRoot 内部的根元素
+  const wcHost = document.querySelector('td-theme-generator');
+  if (wcHost?.shadowRoot) {
+    const rootEl = wcHost.shadowRoot.querySelector('.theme-generator');
+    if (rootEl) {
+      rootEl.setAttribute('theme-mode', mode);
+    }
+  }
+});
 
 function handleTriggerVisible() {
   visible.value = true;
@@ -45,6 +65,17 @@ onMounted(() => {
   initGeneratorVars();
   applyTokenFromLocal();
   syncThemeToIframe(props.device);
+
+  // 初始化时同步 theme-mode 到 shadowRoot
+  if (props.themeMode) {
+    const wcHost = document.querySelector('td-theme-generator');
+    if (wcHost?.shadowRoot) {
+      const rootEl = wcHost.shadowRoot.querySelector('.theme-generator');
+      if (rootEl) {
+        rootEl.setAttribute('theme-mode', props.themeMode);
+      }
+    }
+  }
 });
 </script>
 
