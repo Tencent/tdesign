@@ -8,10 +8,11 @@ export const themeStore = reactive({
   device: 'web',
   theme: TDESIGN_WEB_THEME,
   brandColor: getOptionFromLocal('color') || DEFAULT_THEME_META.value,
-  refreshId: 0,
+  refreshId: 0, // 用于强制刷新绑定了 key 的组件 UI
   updateDevice(device) {
     this.device = device;
     this.theme = getInitialTheme(device);
+    // 若用户未自定义过主题色，brandColor 跟随当前主题
     if (!getOptionFromLocal('color')) {
       this.brandColor = this.theme.value;
     }

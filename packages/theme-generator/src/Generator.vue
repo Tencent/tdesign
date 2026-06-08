@@ -12,7 +12,13 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { applyTokenFromLocal, initGeneratorVars, syncModeToGenerator, syncThemeToIframe, themeStore } from '@/common/themes';
+import {
+  applyTokenFromLocal,
+  initGeneratorVars,
+  syncModeToGenerator,
+  syncThemeToIframe,
+  themeStore,
+} from '@/common/themes';
 import FloatDock from './float-dock';
 import PanelDrawer from './panel-drawer';
 
@@ -27,7 +33,7 @@ const props = defineProps({
   },
 });
 
-const visible = ref(0);
+const visible = ref(false);
 
 function handleTriggerVisible() {
   visible.value = true;
