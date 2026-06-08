@@ -33,7 +33,7 @@
 <script setup>
 import { ref } from 'vue';
 import { ChevronDownIcon } from 'tdesign-icons-vue-next';
-import { collapseAnimation, handleAttach } from '../../utils';
+import { collapseAnimation } from '../../utils';
 
 const { beforeEnter, enter, afterEnter, beforeLeave, leave, afterLeave } = collapseAnimation();
 const isActive = ref(false);
@@ -44,7 +44,8 @@ const isActive = ref(false);
 .fade-leave-active {
   transition: opacity 0.1s;
 }
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 

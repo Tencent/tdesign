@@ -33,7 +33,7 @@ import FontSvg from './FontSvg.vue';
 import RadiusSvg from './RadiusSvg.vue';
 import SizeSvg from './SizeSvg.vue';
 
-const props = defineProps({
+defineProps({
   activeTabIdx: Number,
 });
 

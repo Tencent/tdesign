@@ -34,7 +34,7 @@ import { handleAttach } from '@/common/utils';
 
 import ShadowLayer from './ShadowLayer.vue';
 
-const props = defineProps({
+defineProps({
   shadow: Array,
   detail: Object,
   index: Number,

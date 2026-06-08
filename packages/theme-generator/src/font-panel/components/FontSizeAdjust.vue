@@ -121,9 +121,6 @@ import { FONT_SIZE_LABELS, FONT_SIZE_OPTIONS, FONT_SIZE_STEPS, FONT_SIZE_TOKEN_L
 
 const { lang } = useLang();
 
-const FONT_SIZE_OPTIONS_LOCAL = FONT_SIZE_OPTIONS;
-const FONT_SIZE_LABELS_LOCAL = FONT_SIZE_LABELS;
-
 const step = ref(getOptionFromLocal('font') || 3);
 const hoverIdx = ref(null);
 const tokenType = ref('list');

@@ -93,15 +93,6 @@ const hoverIdx = ref(null);
 const colorType = ref(1);
 
 const flattenPalette = computed(() => flatten(props.colorPalette));
-const originFlattenPalette = computed(() => flatten(props.originColorPalette));
-
-function handleClickIdx(idx) {
-  activeIdx.value = idx;
-}
-
-function handleRecover() {
-  emit('recoverGradation', props.type);
-}
 
 function changeColor(hex, idx) {
   emit('changeGradation', hex, idx, props.type);
@@ -113,7 +104,8 @@ function changeColor(hex, idx) {
 .fade-leave-active {
   transition: opacity 0.1s;
 }
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
