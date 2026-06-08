@@ -2,7 +2,7 @@ import { reactive } from 'vue';
 
 import { DEFAULT_THEME_META, TDESIGN_WEB_THEME } from './built-in';
 import { clearLocalTheme, getDefaultTheme, getOptionFromLocal, initThemeStyleSheet, updateLocalOption } from './core';
-import { getCssRoot } from '../utils';
+import { setCssVar } from '../utils';
 
 export const themeStore = reactive({
   device: 'web',
@@ -30,8 +30,8 @@ export const themeStore = reactive({
   },
   updateBrandColor(color) {
     this.brandColor = color;
-    // WC 模式下设置到 shadowRoot 内的根元素，非 WC 模式下设置到 document.documentElement
-    getCssRoot().style.setProperty('--brand-main', color);
+    // 同时设置到 document.documentElement（影响外部站点）和 shadowRoot 内（影响生成器自身 UI）
+    setCssVar('--brand-main', color);
   },
   incrementRefreshId() {
     this.refreshId++;

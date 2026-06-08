@@ -1,107 +1,117 @@
 export * from './animation';
 
+// 缓存 shadowRoot 引用，避免每次调用都执行 DOM 查询
+// 支持多实例：通过 setShadowRootRef / clearShadowRootRef 管理
+let _shadowRootRef = null;
+
+/**
+ * 设置当前组件实例对应的 shadowRoot 引用
+ * 在 Generator.vue onMounted 时调用，支持多实例场景
+ */
+export function setShadowRootRef(shadowRoot) {
+  _shadowRootRef = shadowRoot;
+}
+
+/**
+ * 清除 shadowRoot 引用
+ * 在 Generator.vue onBeforeUnmount 时调用
+ */
+export function clearShadowRootRef() {
+  _shadowRootRef = null;
+}
+
 /**
  * 获取 Web Component 的 shadowRoot（如果处于 WC 模式）
+ * 优先使用缓存引用，回退到 DOM 查询
  */
 export function getShadowRoot() {
-  return document.querySelector('td-theme-generator')?.shadowRoot || null;
+  if (_shadowRootRef) return _shadowRootRef;
+  // 回退：尝试从 DOM 查找（兼容未调用 setShadowRootRef 的场景）
+  const host = document.querySelector('td-theme-generator');
+  return host?.shadowRoot || null;
 }
 
 /**
  * 获取样式容器：
- * - WC 模式下返回 shadowRoot
- * - 非 WC 模式下返回 document.head
+ * 主题生成器的核心功能是修改外部站点的 CSS 变量，因此主题样式表
+ * 必须写入 document.head（:root 选择器需要匹配 document.documentElement）。
+ * shadowRoot 仅用于隔离生成器自身的 UI，不用于隔离主题变量。
  */
 export function getStyleContainer() {
-  return getShadowRoot() || document.head;
+  return document.head;
 }
 
 /**
  * 在正确的容器中按 ID 查找元素
- * - WC 模式下搜索 shadowRoot
- * - 非 WC 模式下搜索 document
+ * 主题样式表（custom-theme 等）位于 document.head，需要在 document 中查找
  */
 export function getElementById(id) {
-  const shadowRoot = getShadowRoot();
-  if (shadowRoot) {
-    return shadowRoot.getElementById(id);
-  }
   return document.getElementById(id);
 }
 
 /**
  * 在正确的容器中按选择器查找所有元素
- * - WC 模式下搜索 shadowRoot
- * - 非 WC 模式下搜索 document
+ * 主题样式表位于 document，需要在 document 中查找
  */
 export function querySelectorAll(selector) {
-  const shadowRoot = getShadowRoot();
-  if (shadowRoot) {
-    return shadowRoot.querySelectorAll(selector);
-  }
   return document.querySelectorAll(selector);
 }
 
 /**
  * 在正确的容器中按选择器查找首个元素
- * - WC 模式下搜索 shadowRoot
- * - 非 WC 模式下搜索 document
+ * 主题样式表位于 document，需要在 document 中查找
  */
 export function querySelector(selector) {
-  const shadowRoot = getShadowRoot();
-  if (shadowRoot) {
-    return shadowRoot.querySelector(selector);
-  }
   return document.querySelector(selector);
 }
 
 /**
  * 获取用于设置 CSS 变量的根元素
- * - WC 模式下返回 shadowRoot 内的 .theme-generator
- * - 非 WC 模式下返回 document.documentElement
+ * 主题 CSS 使用 :root 选择器，对应 document.documentElement
+ * 无论 WC 模式与否，CSS 变量都设置在外部 document 上以影响站点
  */
 export function getCssRoot() {
-  const shadowRoot = getShadowRoot();
-  if (shadowRoot) {
-    return shadowRoot.querySelector('.theme-generator') || document.documentElement;
-  }
   return document.documentElement;
 }
 
 /**
+ * 同时设置 CSS 变量到 document.documentElement 和 shadowRoot 内的根元素
+ * 外部：影响站点组件样式
+ * 内部：影响生成器自身 UI 样式
+ */
+export function setCssVar(name, value) {
+  document.documentElement.style.setProperty(name, value);
+  // WC 模式下同步到 shadowRoot 内的根元素
+  const shadowRoot = getShadowRoot();
+  if (shadowRoot) {
+    const rootEl = shadowRoot.querySelector('.theme-generator');
+    if (rootEl) {
+      rootEl.style.setProperty(name, value);
+    }
+  }
+}
+
+/**
  * 获取指定 CSS Token 对应的数值
- * - 在 Web Component 模式下，从 shadowRoot 内部获取
+ * 主题变量设置在 document.documentElement 上，从该元素读取
  */
 export function getTokenValue(name) {
-  // 优先从 shadowRoot 内部获取 CSS 变量
-  const shadowRoot = getShadowRoot();
-  const isDarkMode =
-    (shadowRoot?.host?.getAttribute('theme-mode') || document.documentElement.getAttribute('theme-mode')) === 'dark';
-
-  let rootElement;
-  if (shadowRoot) {
-    rootElement = isDarkMode
-      ? shadowRoot.querySelector('[theme-mode="dark"]') || shadowRoot.querySelector('.theme-generator')
-      : shadowRoot.querySelector('.theme-generator');
-  }
-  if (!rootElement) {
-    rootElement = isDarkMode ? document.querySelector('[theme-mode="dark"]') : document.documentElement;
-  }
+  const isDarkMode = document.documentElement.getAttribute('theme-mode') === 'dark';
+  const rootElement = isDarkMode ? document.querySelector('[theme-mode="dark"]') : document.documentElement;
   return window.getComputedStyle(rootElement).getPropertyValue(name).toLowerCase().trim();
 }
 
 /**
  * 获取当前亮暗模式 (light / dark)
- * - 优先从 Web Component 宿主元素读取
+ * 从 document.documentElement 读取
  */
 export function getThemeMode() {
-  const shadowRoot = getShadowRoot();
-  return shadowRoot?.host?.getAttribute('theme-mode') || document.documentElement.getAttribute('theme-mode') || 'light';
+  return document.documentElement.getAttribute('theme-mode') || 'light';
 }
 
 /**
  * 创建亮暗变化监听器
- * - 同时观察 document.documentElement 和 td-theme-generator 宿主元素
+ * 观察 document.documentElement 的 theme-mode 属性变化
  */
 export function setUpModeObserver(handler) {
   let mode = getThemeMode();
@@ -118,20 +128,10 @@ export function setUpModeObserver(handler) {
     }
   });
 
-  // 观察 document.documentElement（非 WC 模式）
   observer.observe(document.documentElement, {
     attributes: true,
     attributeFilter: ['theme-mode'],
   });
-
-  // 观察 td-theme-generator 宿主元素（WC 模式）
-  const shadowRoot = getShadowRoot();
-  if (shadowRoot?.host) {
-    observer.observe(shadowRoot.host, {
-      attributes: true,
-      attributeFilter: ['theme-mode'],
-    });
-  }
 
   return observer;
 }
@@ -140,18 +140,18 @@ export function setUpModeObserver(handler) {
  * 按照指定的 Id 生成样式表
  * - 如果存在，则返回已存在的样式表
  * - 如果不存在，则创建一个新的样式表
- * - 在 Web Component 模式下，向 shadowRoot 注入而非 document.head
+ * - 始终写入 document.head，因为主题 CSS 的 :root 选择器需要匹配 document.documentElement
  */
 export function appendStyleSheet(styleId) {
   let styleSheet;
-  const existSheet = getElementById(styleId);
+  const existSheet = document.getElementById(styleId);
 
   if (!existSheet) {
     styleSheet = document.createElement('style');
     styleSheet.id = styleId;
     styleSheet.type = 'text/css';
 
-    getStyleContainer().appendChild(styleSheet);
+    document.head.appendChild(styleSheet);
   } else {
     styleSheet = existSheet;
   }

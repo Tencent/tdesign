@@ -8,8 +8,6 @@ import {
   clearLocalItem,
   downloadFile,
   getElementById,
-  getCssRoot,
-  getShadowRoot,
   parseRootCss,
   querySelectorAll,
   setUpModeObserver,
@@ -64,7 +62,7 @@ export function getRecommendThemes(device) {
  */
 export function syncModeToGenerator() {
   setUpModeObserver((theme) => {
-    const generator = getShadowRoot()?.host || document.querySelector('td-theme-generator');
+    const generator = document.querySelector('td-theme-generator');
     if (!generator) return;
     generator.setAttribute('theme-mode', theme);
   });
@@ -353,7 +351,7 @@ export function syncColorTokensToStyle(lightTokenMap, darkTokenMap) {
  * 例如 `--td-brand-focus` ->  2
  */
 export function collectTokenIndexes(tokenArr) {
-  const isDarkMode = getCssRoot().getAttribute('theme-mode') === 'dark';
+  const isDarkMode = document.documentElement.getAttribute('theme-mode') === 'dark';
   const targetCss = getElementById(isDarkMode ? CUSTOM_DARK_ID : CUSTOM_THEME_ID);
 
   return tokenArr

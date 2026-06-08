@@ -58,7 +58,10 @@ const props = defineProps({
     required: false,
     default: () => ({}),
   },
-  modelValue: [String, Number],
+  modelValue: {
+    type: [String, Number],
+    default: undefined,
+  },
   disabled: {
     type: Boolean,
     default: false,
@@ -83,19 +86,25 @@ const sliderValue = computed(() => {
   return step.value > maxSliderValue.value ? maxSliderValue.value : step.value;
 });
 
-watch(() => props.modelValue, (val) => {
-  step.value = val;
-});
+watch(
+  () => props.modelValue,
+  (val) => {
+    step.value = val;
+  },
+);
 
 watch(step, (newStep) => {
   emit('update:modelValue', newStep);
 });
 
-watch(() => props.disabled, (val) => {
-  if (val) {
-    step.value = Number(props.selectOptions.find((v) => v.disabled).value);
-  }
-});
+watch(
+  () => props.disabled,
+  (val) => {
+    if (val) {
+      step.value = Number(props.selectOptions.find((v) => v.disabled).value);
+    }
+  },
+);
 
 function handleSelectChange() {
   emit('enable');

@@ -163,13 +163,26 @@ function watchThemeChange(iframe) {
     observers.themeToken = watchThemeTokenChange(iframe);
   };
 
-  iframe.addEventListener('unload', () => {
+  // 清理 observers：监听 iframe 从 DOM 中移除
+  // 使用 MutationObserver 代替 iframe unload 事件，因为后者在跨域 iframe 中不可靠
+  const disconnectObservers = () => {
     Object.values(observers)
       .flat()
       .forEach((observer) => {
         observer.disconnect();
       });
-  }, { once: true });
+  };
+
+  // 当 iframe 被从 DOM 移除时清理
+  if (iframe.parentNode) {
+    const removalObserver = new MutationObserver(() => {
+      if (!iframe.parentNode) {
+        disconnectObservers();
+        removalObserver.disconnect();
+      }
+    });
+    removalObserver.observe(iframe.parentNode, { childList: true });
+  }
 }
 
 /**

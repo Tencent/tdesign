@@ -142,7 +142,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue';
+import { reactive, computed, onMounted, onBeforeUnmount } from 'vue';
 import { CommonCollapse } from '@/common/components';
 import { useLang } from '@/common/i18n';
 import emitter from '@/common/event-bus';
@@ -166,6 +166,10 @@ import {
 
 const { lang } = useLang();
 
+const props = defineProps({
+  top: Number,
+});
+
 const refreshIdMap = reactive({
   'comp-size': 0,
   'comp-padding-tb': 0,
@@ -178,7 +182,7 @@ const contentStyle = computed(() => {
   const clientHeight = window.innerHeight;
   return {
     overflowY: 'scroll',
-    height: `${clientHeight - (0) - 96}px`,
+    height: `${clientHeight - (props.top || 0) - 96}px`,
   };
 });
 

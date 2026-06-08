@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { computed } from 'vue';
 import { ColorPickerPanel as TColorPickerPanel } from 'tdesign-vue-next';
 import { handleAttach } from '../../utils';
 
@@ -27,10 +27,11 @@ const props = defineProps({
 
 const emit = defineEmits(['change']);
 
-const color = ref(props.value);
-
-watch(() => props.value, (val) => {
-  color.value = val;
+const color = computed({
+  get: () => props.value,
+  set: () => {
+    /* v-model handled by @change */
+  },
 });
 
 function handleChange(value) {

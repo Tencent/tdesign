@@ -49,6 +49,7 @@ function checkBrandColorChange() {
 onMounted(() => {
   brandColor.value = getTokenValue('--brand-main');
   styleObserver = new MutationObserver(checkBrandColorChange);
+  // --brand-main 设置在 document.documentElement 上，观察其 style 变化
   styleObserver.observe(document.documentElement, {
     attributes: true,
     attributeFilter: ['style'],

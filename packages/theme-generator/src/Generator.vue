@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import {
   applyTokenFromLocal,
   initGeneratorVars,
@@ -19,7 +19,7 @@ import {
   syncThemeToIframe,
   themeStore,
 } from '@/common/themes';
-import { getShadowRoot } from '@/common/utils';
+import { getShadowRoot, setShadowRootRef, clearShadowRootRef } from '@/common/utils';
 import FloatDock from './float-dock';
 import PanelDrawer from './panel-drawer';
 
@@ -70,9 +70,15 @@ function handleClickSetting() {
 }
 
 onMounted(() => {
+  // 缓存 shadowRoot 引用，避免后续重复 DOM 查询，支持多实例场景
+  const shadowRoot = getShadowRoot();
+  if (shadowRoot) {
+    setShadowRootRef(shadowRoot);
+  }
+
   // Web Component 模式下，attribute → prop 转换可能有时序问题
   // 从宿主元素 DOM attribute 直接读取 device，确保不会漏掉外部传入的值
-  const host = getShadowRoot()?.host;
+  const host = shadowRoot?.host;
   const device = host?.getAttribute('device') || props.device;
 
   themeStore.updateDevice(device);
@@ -85,6 +91,10 @@ onMounted(() => {
   if (props.themeMode) {
     syncThemeModeToShadowRoot(props.themeMode);
   }
+});
+
+onBeforeUnmount(() => {
+  clearShadowRootRef();
 });
 </script>
 

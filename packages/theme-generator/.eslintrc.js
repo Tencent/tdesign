@@ -15,6 +15,7 @@ module.exports = {
     defineEmits: 'readonly',
     defineExpose: 'readonly',
     withDefaults: 'readonly',
+    __WC_ALL_CSS__: 'readonly',
   },
   rules: {
     'vue/multi-word-component-names': 'off',
