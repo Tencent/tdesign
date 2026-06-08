@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import svgLoader from 'vite-svg-loader';
 import { resolve } from 'path';
+import MagicString from 'magic-string';
 
 /**
  * 自定义 Vite 插件：收集所有 CSS，导出为 JS 变量供 Web Component 使用
@@ -34,7 +35,13 @@ function wcCssPlugin() {
         for (const [fileName, file] of Object.entries(bundle)) {
           if (fileName.endsWith('.js') && file.type === 'chunk' && file.isEntry) {
             const cssVarCode = `var __WC_ALL_CSS__ = ${JSON.stringify(allCss)};\n`;
-            file.code = cssVarCode + file.code;
+            const ms = new MagicString(file.code);
+            ms.prepend(cssVarCode);
+            file.code = ms.toString();
+            // 同步更新 sourcemap，避免行号偏移
+            if (file.map) {
+              file.map = ms.generateMap({ hires: 'boundary' });
+            }
           }
         }
       }
