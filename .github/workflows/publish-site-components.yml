@@ -30,6 +30,7 @@ jobs:
 
       - run: pnpm -F @tdesign/site-components run build
 
+      # 为了兼容 oidc 特指定 node 版本最小为 24
       - uses: actions/setup-node@v6
         with:
           node-version: 24
