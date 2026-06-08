@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import svgLoader from 'vite-svg-loader';
 import { resolve } from 'path';
 import MagicString from 'magic-string';
+import remapping from '@ampproject/remapping';
 
 /**
  * 自定义 Vite 插件：收集所有 CSS，导出为 JS 变量供 Web Component 使用
@@ -39,8 +40,12 @@ function wcCssPlugin() {
             ms.prepend(cssVarCode);
             file.code = ms.toString();
             // 同步更新 sourcemap，避免行号偏移
+            // ms.generateMap() 生成增量 map（新代码 → file.code），
+            // 需要通过 remapping 与原始 file.map（file.code → 源文件）合并，
+            // 得到完整的映射链：新代码 → 源文件
             if (file.map) {
-              file.map = ms.generateMap({ hires: 'boundary' });
+              const incrementMap = ms.generateMap({ hires: 'boundary' });
+              file.map = remapping(incrementMap, () => file.map);
             }
           }
         }
