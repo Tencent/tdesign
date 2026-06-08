@@ -155,9 +155,12 @@ const generateBtnWidth = computed(() => {
   return '184px';
 });
 
-watch(() => props.drawerVisible, (v) => {
-  if (!v) isCustomizeDrawerVisible.value = false;
-});
+watch(
+  () => props.drawerVisible,
+  (v) => {
+    if (!v) isCustomizeDrawerVisible.value = false;
+  },
+);
 
 watch(isThemeTabVisible, (v) => {
   setTimeout(() => {
@@ -260,7 +263,7 @@ function resetTheme() {
   }
 }
 .fade-enter-active,
-.fad-leave-active {
+.fade-leave-active {
   transition: opacity 0.3s;
 }
 .fade-enter-from,

@@ -66,7 +66,3 @@
     <rect x="16" y="56" width="8" height="8" fill="#571042" />
   </svg>
 </template>
-
-<script>
-export default {};
-</script>

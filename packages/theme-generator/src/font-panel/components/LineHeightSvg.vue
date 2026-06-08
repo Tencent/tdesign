@@ -23,7 +23,3 @@
     <rect y="31.5" width="48" height="6" fill="#E34D59" fill-opacity="0.2" />
   </svg>
 </template>
-
-<script>
-export default {};
-</script>

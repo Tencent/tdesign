@@ -58,7 +58,7 @@
 </template>
 
 <script setup>
-import { ref, getCurrentInstance } from 'vue';
+import { ref } from 'vue';
 import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue-next';
 
 import { SizeSlider } from './../../common/components';

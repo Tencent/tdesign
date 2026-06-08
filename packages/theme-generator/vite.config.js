@@ -28,10 +28,10 @@ function wcCssPlugin() {
       }
 
       // 将 CSS 注入为全局变量，供 wc-entry.js 读取
+      // 只注入到入口 chunk（isEntry），避免多个 chunk 时重复注入
       if (allCss) {
         for (const [fileName, file] of Object.entries(bundle)) {
-          if (fileName.endsWith('.js') && file.type === 'chunk') {
-            // 在 IIFE 顶部注入 CSS 变量
+          if (fileName.endsWith('.js') && file.type === 'chunk' && file.isEntry) {
             const cssVarCode = `var __WC_ALL_CSS__ = ${JSON.stringify(allCss)};\n`;
             file.code = cssVarCode + file.code;
           }
@@ -76,6 +76,6 @@ export default defineConfig({
     rollupOptions: {
       external: [],
     },
-    minify: false,
+    minify: true,
   },
 });
