@@ -16,10 +16,10 @@
           :suspendedLabels="RADIUS_LABELS"
           :disabled="segmentSelectionDisabled"
         >
-          <template v-slot:left>
+          <template #left>
             <div class="radius-content__round-tag-left" :class="{ disabled: segmentSelectionDisabled }"></div>
           </template>
-          <template v-slot:right>
+          <template #right>
             <div class="radius-content__round-tag-right" :class="{ disabled: segmentSelectionDisabled }"></div>
           </template>
         </SegmentSelection>
@@ -29,12 +29,12 @@
               v-for="(token, idx) in radiusTypeList"
               :key="idx"
               placement="left"
-              showArrow
+              show-arrow
               trigger="click"
-              :destroyOnClose="true"
+              :destroy-on-close="true"
               :attach="handleAttach"
               @visible-change="(v, ctx) => handleVisibleChange(v, ctx, idx)"
-              :overlayStyle="{ borderRadius: '9px' }"
+              :overlay-style="{ borderRadius: '9px' }"
             >
               <t-list-item
                 :style="{
@@ -78,128 +78,111 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import isNumber from 'lodash/isNumber';
-import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue';
+import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue-next';
 
 import { SegmentSelection, SizeSlider } from '@/common/components';
-import { langMixin } from '@/common/i18n';
+import { useLang } from '@/common/i18n';
 import { CUSTOM_EXTRA_ID, getOptionFromLocal, modifyToken, updateLocalOption } from '@/common/themes';
 import { handleAttach } from '@/common/utils';
 
 import { RADIUS_LABELS, RADIUS_OPTIONS, RADIUS_STEP_ARRAY, RADIUS_TOKEN_LIST } from './built-in/radius-map';
 
-export default {
-  name: 'RadiusPanel',
-  components: {
-    TList,
-    TListItem,
-    TPopup,
-    SizeSlider,
-    SegmentSelection,
-  },
-  props: {
-    isRefresh: Boolean,
-  },
-  mixins: [langMixin],
-  data() {
-    return {
-      RADIUS_OPTIONS,
-      RADIUS_LABELS,
-      step: getOptionFromLocal('radius') || 3,
-      hoverIdx: null,
-      segmentSelectionDisabled: false,
-      radiusTypeList: RADIUS_TOKEN_LIST,
-    };
-  },
-  computed: {
-    contentStyle() {
-      const clientHeight = window.innerHeight;
-      return {
-        overflowY: 'scroll',
-        height: `${clientHeight - (this.top || 0) - 96}px`,
-      };
-    },
-  },
-  watch: {
-    radiusTypeList(list) {
-      const currentRadiusList = list.map((v) => v.value);
-      const existStep = RADIUS_STEP_ARRAY.find((steps) => {
-        const arr = steps.filter((v, i) => {
-          const step = typeof v === 'number' ? `${v}px` : v;
-          const currentRadius =
-            typeof currentRadiusList[i] === 'number' ? `${currentRadiusList[i]}px` : currentRadiusList[i]?.trim();
-          return step === currentRadius;
-        });
-        return arr.length === steps.length;
-      });
+const { lang, isEn } = useLang();
 
-      if (!existStep) this.segmentSelectionDisabled = true;
-    },
-    step(val) {
-      updateLocalOption('radius', val !== 3 ? val : null);
-      const isCustom = val === 6;
-      this.segmentSelectionDisabled = isCustom;
-      if (!RADIUS_STEP_ARRAY[val - 1]) return;
+const step = ref(getOptionFromLocal('radius') || 3);
+const hoverIdx = ref(null);
+const segmentSelectionDisabled = ref(false);
+const radiusTypeList = ref(RADIUS_TOKEN_LIST);
 
-      // 批量修改 radius
-      this.radiusTypeList = this.radiusTypeList.map((item, index) => {
-        const preVal = RADIUS_STEP_ARRAY?.[val - 1]?.[index];
-        const formattedVal = typeof preVal === 'number' ? `${preVal}px` : preVal;
-        modifyToken(item.token, formattedVal, isCustom);
+const contentStyle = computed(() => {
+  const clientHeight = window.innerHeight;
+  return {
+    overflowY: 'scroll',
+    height: `${clientHeight - (0) - 96}px`,
+  };
+});
 
-        return {
-          ...item,
-          value: RADIUS_STEP_ARRAY[val - 1][index],
-        };
-      });
-    },
-  },
-  methods: {
-    handleAttach,
-    handleVisibleChange(v, ctx, idx) {
-      if (v) this.hoverIdx = idx;
-      if (!v && ctx.trigger === 'document' && this.hoverIdx === idx) this.hoverIdx = null;
-    },
-    handleChangeRadius(val, idx) {
-      // 修改单独的 radius
-      this.radiusTypeList.splice(idx, 1, {
-        ...this.radiusTypeList[idx],
-        value: val,
-      });
-      modifyToken(this.radiusTypeList[idx]['token'], `${val}px`);
-
-      if (val !== RADIUS_STEP_ARRAY[this.step - 1]?.[idx]) {
-        this.segmentSelectionDisabled = true;
-      }
-    },
-    formattedRadius(radius) {
-      if (radius === '50%') return '50%';
-      if (isNumber(radius)) return `${radius}px`;
-      return radius;
-    },
-    initRadiusToken() {
-      const radiusStyle = document.getElementById(CUSTOM_EXTRA_ID);
-
-      // 过滤不存在的 Token
-      this.radiusTypeList = this.radiusTypeList
-        .map((v) => {
-          const regex = new RegExp(`${v.token}\\s*:\\s*([^;]+);`);
-          const match = regex.exec(radiusStyle.innerText);
-          // 获取 token 对应的实际值
-          if (match) v.value = match[1].trim();
-          return v;
-        })
-        .filter((v) => v.value !== null);
-    },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      // 下一个 tick 再更新避免与 init 的 step 冲突
-      this.initRadiusToken();
+watch(radiusTypeList, (list) => {
+  const currentRadiusList = list.map((v) => v.value);
+  const existStep = RADIUS_STEP_ARRAY.find((steps) => {
+    const arr = steps.filter((v, i) => {
+      const step = typeof v === 'number' ? `${v}px` : v;
+      const currentRadius =
+        typeof currentRadiusList[i] === 'number' ? `${currentRadiusList[i]}px` : currentRadiusList[i]?.trim();
+      return step === currentRadius;
     });
-  },
-};
+    return arr.length === steps.length;
+  });
+
+  if (!existStep) segmentSelectionDisabled.value = true;
+}, { deep: true });
+
+watch(step, (val) => {
+  updateLocalOption('radius', val !== 3 ? val : null);
+  const isCustom = val === 6;
+  segmentSelectionDisabled.value = isCustom;
+  if (!RADIUS_STEP_ARRAY[val - 1]) return;
+
+  // 批量修改 radius
+  radiusTypeList.value = radiusTypeList.value.map((item, index) => {
+    const preVal = RADIUS_STEP_ARRAY[val - 1]?.[index];
+    const formattedVal = typeof preVal === 'number' ? `${preVal}px` : preVal;
+    modifyToken(item.token, formattedVal, isCustom);
+
+    return {
+      ...item,
+      value: RADIUS_STEP_ARRAY[val - 1][index],
+    };
+  });
+});
+
+function handleVisibleChange(v, ctx, idx) {
+  if (v) hoverIdx.value = idx;
+  if (!v && ctx.trigger === 'document' && hoverIdx.value === idx) hoverIdx.value = null;
+}
+
+function handleChangeRadius(val, idx) {
+  // 修改单独的 radius
+  radiusTypeList.value.splice(idx, 1, {
+    ...radiusTypeList.value[idx],
+    value: val,
+  });
+  modifyToken(radiusTypeList.value[idx]['token'], `${val}px`);
+
+  if (val !== RADIUS_STEP_ARRAY[step.value - 1]?.[idx]) {
+    segmentSelectionDisabled.value = true;
+  }
+}
+
+function formattedRadius(radius) {
+  if (radius === '50%') return '50%';
+  if (isNumber(radius)) return `${radius}px`;
+  return radius;
+}
+
+function initRadiusToken() {
+  const radiusStyle = document.getElementById(CUSTOM_EXTRA_ID);
+
+  // 过滤不存在的 Token
+  radiusTypeList.value = radiusTypeList.value
+    .map((v) => {
+      const regex = new RegExp(`${v.token}\\s*:\\s*([^;]+);`);
+      const match = regex.exec(radiusStyle.innerText);
+      // 获取 token 对应的实际值
+      if (match) v.value = match[1].trim();
+      return v;
+    })
+    .filter((v) => v.value !== null);
+}
+
+onMounted(() => {
+  nextTick(() => {
+    initRadiusToken();
+  });
+});
 </script>
 
 <style scoped lang="less">
@@ -304,16 +287,16 @@ export default {
       font-size: 14px;
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
-    /deep/ .t-radio-group {
+    :deep(.t-radio-group) {
       width: 228px;
       border-radius: 6px;
       text-align: center;
       margin-bottom: 8px;
     }
-    /deep/ .t-radio-button {
+    :deep(.t-radio-button) {
       width: 50%;
     }
-    /deep/ .t-list-item {
+    :deep(.t-list-item) {
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -327,7 +310,7 @@ export default {
       }
       cursor: pointer;
     }
-    /deep/ .t-list-item__content {
+    :deep(.t-list-item__content) {
       width: 100%;
     }
   }

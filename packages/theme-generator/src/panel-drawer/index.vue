@@ -1,30 +1,30 @@
 <template>
   <t-drawer
     size="348px"
-    :visible.sync="visible"
+    v-model:visible="visible"
     :header="false"
-    :closeBtn="false"
-    :preventScrollThrough="false"
+    :close-btn="false"
+    :prevent-scroll-through="false"
     :footer="false"
-    showInAttachedElement
+    show-in-attached-element
   >
     <sticky-theme-display />
     <div style="display: flex">
       <switch-tabs :activeTabIdx="activeTabIdx" @changeActiveTab="changeActiveTab" />
-      <color-panel :key="`${$refreshId}-color`" v-show="activeTabIdx === ACTIVE_TAB_MAP.color" />
-      <font-panel :key="`${$refreshId}-font`" v-show="activeTabIdx === ACTIVE_TAB_MAP.font" />
-      <radius-panel :key="`${$refreshId}-radius`" v-show="activeTabIdx === ACTIVE_TAB_MAP.radius" />
-      <shadow-panel :key="`${$refreshId}-shadow`" v-show="activeTabIdx === ACTIVE_TAB_MAP.shadow" />
-      <size-panel :key="`${$refreshId}-size`" v-show="activeTabIdx === ACTIVE_TAB_MAP.size" />
+      <color-panel :key="`${refreshId}-color`" v-show="activeTabIdx === ACTIVE_TAB_MAP.color" />
+      <font-panel :key="`${refreshId}-font`" v-show="activeTabIdx === ACTIVE_TAB_MAP.font" />
+      <radius-panel :key="`${refreshId}-radius`" v-show="activeTabIdx === ACTIVE_TAB_MAP.radius" />
+      <shadow-panel :key="`${refreshId}-shadow`" v-show="activeTabIdx === ACTIVE_TAB_MAP.shadow" />
+      <size-panel :key="`${refreshId}-size`" v-show="activeTabIdx === ACTIVE_TAB_MAP.size" />
     </div>
   </t-drawer>
 </template>
 
-<script>
-import { Drawer as TDrawer } from 'tdesign-vue';
+<script setup>
+import { ref, computed, watch } from 'vue';
+import { Drawer as TDrawer } from 'tdesign-vue-next';
 
 import { themeStore } from '@/common/themes';
-import { handleAttach } from '@/common/utils';
 
 import ColorPanel from '../color-panel';
 import FontPanel from '../font-panel';
@@ -43,69 +43,48 @@ const ACTIVE_TAB_MAP = {
   size: 4,
 };
 
-export default {
-  name: 'PanelDrawer',
-  components: {
-    TDrawer,
-    SwitchTabs,
-    StickyThemeDisplay,
-    ColorPanel,
-    FontPanel,
-    RadiusPanel,
-    ShadowPanel,
-    SizePanel,
+const props = defineProps({
+  showSetting: {
+    type: [String, Boolean],
   },
-  props: {
-    showSetting: {
-      type: [String, Boolean],
-    },
-    theme: {
-      type: [Object, String],
-    },
-    drawerVisible: {
-      type: [String, Number, Boolean],
-    },
+  theme: {
+    type: [Object, String],
   },
-  data() {
-    return {
-      ACTIVE_TAB_MAP,
-      isHeaderShow: true,
-      activeTabIdx: ACTIVE_TAB_MAP.color,
-      visible: false,
-    };
+  drawerVisible: {
+    type: [String, Number, Boolean],
   },
-  computed: {
-    $refreshId() {
-      return themeStore.refreshId;
-    },
-  },
-  watch: {
-    drawerVisible(v) {
-      if ((typeof v === 'string' && v === 'false') || v === false) {
-        this.visible = false;
-        return;
-      }
-      this.visible = true;
-    },
-    visible(v) {
-      this.$emit('panel-drawer-visible', v);
-    },
-  },
-  methods: {
-    handleAttach,
-    changeActiveTab(tab) {
-      this.activeTabIdx = tab;
-    },
-  },
-};
+});
+
+const emit = defineEmits(['panel-drawer-visible']);
+
+const activeTabIdx = ref(ACTIVE_TAB_MAP.color);
+const visible = ref(false);
+
+const refreshId = computed(() => themeStore.refreshId);
+
+watch(() => props.drawerVisible, (v) => {
+  if ((typeof v === 'string' && v === 'false') || v === false) {
+    visible.value = false;
+    return;
+  }
+  visible.value = true;
+});
+
+watch(visible, (v) => {
+  emit('panel-drawer-visible', v);
+});
+
+function changeActiveTab(tab) {
+  activeTabIdx.value = tab;
+}
 </script>
 
 <style lang="less" scoped>
-/deep/ .t-drawer__mask {
+:deep(.t-drawer__mask) {
   background: none;
 }
 
-/deep/ .t-drawer__content-wrapper {
+:deep(.t-drawer__content-wrapper) {
   box-shadow: var(--shadow-2);
   border-radius: 12px 0 0 0;
   position: fixed;
@@ -116,37 +95,37 @@ export default {
   }
 }
 
-/deep/ .t-popup__content {
+:deep(.t-popup__content) {
   font-size: 14px;
   box-shadow: var(--shadow-2), var(--shadow-inset-top), var(--shadow-inset-right), var(--shadow-inset-bottom),
     var(--shadow-inset-left);
 }
 
-/deep/ .t-popup__content:not(.t-tooltip) {
+:deep(.t-popup__content:not(.t-tooltip)) {
   background: var(--bg-color-container);
 }
 
-/deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
+:deep(.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow) {
   left: calc(100% - 16px * 2);
 }
 
-/deep/ .t-popup[data-popper-placement='bottom-start'] .t-popup__arrow {
+:deep(.t-popup[data-popper-placement='bottom-start'] .t-popup__arrow) {
   left: 20px;
 }
 
-/deep/ .t-popup__content:not(.t-tooltip) .t-popup__arrow:before {
+:deep(.t-popup__content:not(.t-tooltip) .t-popup__arrow:before) {
   background: var(--bg-color-container);
 }
 
-/deep/ .t-select__list {
+:deep(.t-select__list) {
   padding: 0;
 }
 
-/deep/ .t-button--variant-text:hover {
+:deep(.t-button--variant-text:hover) {
   background: var(--bg-color-container-hover);
 }
 
-/deep/ .t-input {
+:deep(.t-input) {
   padding-left: 4px !important;
 }
 </style>

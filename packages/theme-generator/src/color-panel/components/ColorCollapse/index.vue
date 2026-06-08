@@ -3,12 +3,12 @@
     <div class="color-collapse__header">
       <t-popup
         placement="left"
-        showArrow
+        show-arrow
         trigger="click"
-        :destroyOnClose="true"
+        :destroy-on-close="true"
         :attach="handleAttach"
-        :overlayStyle="{ borderRadius: '9px' }"
-        :hideEmptyPopup="true"
+        :overlay-style="{ borderRadius: '9px' }"
+        :hide-empty-popup="true"
       >
         <div
           class="block"
@@ -45,11 +45,11 @@
             HEX: {{ mainColor }}
             <t-popup
               placement="top"
-              showArrow
+              show-arrow
               trigger="click"
-              :destroyOnClose="true"
+              :destroy-on-close="true"
               :attach="handleAttach"
-              :overlayStyle="{ borderRadius: '6px' }"
+              :overlay-style="{ borderRadius: '6px' }"
             >
               <file-copy-icon @click="() => copyHex(mainColor)" />
               <template #content>
@@ -60,7 +60,7 @@
         </div>
       </div>
       <div @click="isActive = !isActive">
-        <arrow-icon :isActive="isActive" overlayClassName="color-collapse__arrow" />
+        <ChevronDownIcon :class="['color-collapse__arrow', { 'is-active': isActive }]" />
       </div>
     </div>
     <transition
@@ -70,61 +70,59 @@
       @after-enter="afterEnter"
       @before-leave="beforeLeave"
       @leave="leave"
-      @afterLeave="afterLeave"
+      @after-leave="afterLeave"
     >
       <slot v-if="isActive"></slot>
     </transition>
   </div>
 </template>
-<script>
-import { Edit1Icon, FileCopyIcon } from 'tdesign-icons-vue';
-import { Popup as TPopup } from 'tdesign-vue';
-import ArrowIcon from 'tdesign-vue/es/common-components/fake-arrow';
+
+<script setup>
+import { ref } from 'vue';
+import { Edit1Icon, FileCopyIcon, ChevronDownIcon } from 'tdesign-icons-vue-next';
+import { Popup as TPopup } from 'tdesign-vue-next';
 
 import { ColorPicker } from '@/common/components';
-import { langMixin } from '@/common/i18n';
+import { useLang } from '@/common/i18n';
 import { collapseAnimation, handleAttach } from '@/common/utils';
 
-export default {
-  name: 'ColorCollapse',
-  props: {
-    type: String,
-    title: String,
-    mainColor: String,
-    disabled: Boolean,
-  },
-  mixins: [langMixin],
-  components: { FileCopyIcon, ArrowIcon, TPopup, Edit1Icon, ColorPicker },
-  data() {
-    return {
-      ...collapseAnimation(),
-      isActive: false,
-      isHover: false,
-    };
-  },
-  emit: ['changeMainColor'],
-  methods: {
-    handleAttach,
-    changeColor(hex) {
-      this.$emit('changeMainColor', hex, this.type);
-    },
-    copyHex(hex) {
-      let input = document.createElement('input');
-      input.value = hex;
-      document.body.appendChild(input);
-      input.select();
-      document.execCommand('Copy');
-      input.remove();
-    },
-  },
-};
+const props = defineProps({
+  type: String,
+  title: String,
+  mainColor: String,
+  disabled: Boolean,
+});
+
+const emit = defineEmits(['changeMainColor']);
+
+const { lang } = useLang();
+
+const { beforeEnter, enter, afterEnter, beforeLeave, leave, afterLeave } = collapseAnimation();
+const isActive = ref(false);
+const isHover = ref(false);
+
+function changeColor(hex) {
+  emit('changeMainColor', hex, props.type);
+}
+
+function copyHex(hex) {
+  navigator.clipboard.writeText(hex).catch(() => {
+    let input = document.createElement('input');
+    input.value = hex;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('Copy');
+    input.remove();
+  });
+}
 </script>
+
 <style lang="less" scoped>
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.1s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter-from, .fade-leave-to {
   opacity: 0;
 }
 
@@ -181,7 +179,7 @@ export default {
     align-items: center;
     color: var(--text-secondary);
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
-    /deep/ .t-icon {
+    :deep(.t-icon) {
       margin-left: 4px;
       cursor: pointer;
       transition: color 0.2s;
@@ -196,6 +194,11 @@ export default {
     color: var(--text-primary);
     transform: scale(1.5);
     cursor: pointer;
+    transition: transform 0.3s;
+
+    &.is-active {
+      transform: scale(1.5) rotate(180deg);
+    }
   }
 }
 </style>

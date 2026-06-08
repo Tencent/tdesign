@@ -3,73 +3,63 @@
     <div class="theme-status"></div>
     <div v-if="isAnimating" class="theme-status color-transition"></div>
     <div class="theme-text">
-      <p class="theme-text-title">{{ isEn ? $theme.enName : $theme.name }}</p>
-      <p class="theme-text-subtitle">{{ $theme.subtitleText }}</p>
+      <p class="theme-text-title">{{ isEn ? theme.enName : theme.name }}</p>
+      <p class="theme-text-subtitle">{{ theme.subtitleText }}</p>
     </div>
   </div>
 </template>
 
-<script>
-import { langMixin } from '@/common/i18n';
+<script setup>
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { useLang } from '@/common/i18n';
 import { themeStore } from '@/common/themes';
 import { getTokenValue } from '@/common/utils';
 
-export default {
-  name: 'StickyThemeDisplay',
-  props: {
-    top: Number,
-    theme: {
-      type: Object,
-    },
-  },
-  mixins: [langMixin],
-  data() {
-    return {
-      isAnimating: false,
-      brandColor: null,
-      styleObserver: null,
-    };
-  },
-  computed: {
-    $theme() {
-      return themeStore.theme;
-    },
-    stickyThemeStyle() {
-      return {
-        top: `${this.top}px`,
-      };
-    },
-  },
-  mounted() {
-    this.brandColor = getTokenValue('--brand-main');
-    this.setupStyleObserver();
-  },
-  methods: {
-    setupStyleObserver() {
-      this.styleObserver = new MutationObserver(this.checkBrandColorChange);
-      this.styleObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['style'],
-      });
-    },
-    checkBrandColorChange() {
-      const newColor = getTokenValue('--brand-main');
-      if (newColor && newColor !== this.brandColor) {
-        this.brandColor = newColor;
-        this.isAnimating = true;
+const { isEn } = useLang();
 
-        setTimeout(() => {
-          this.isAnimating = false;
-        }, 1000);
-      }
-    },
+const props = defineProps({
+  top: Number,
+  theme: {
+    type: Object,
   },
-  beforeDestroy() {
-    if (this.styleObserver) {
-      this.styleObserver.disconnect();
-    }
-  },
-};
+});
+
+const isAnimating = ref(false);
+const brandColor = ref(null);
+let styleObserver = null;
+
+const theme = computed(() => themeStore.theme);
+
+const stickyThemeStyle = computed(() => ({
+  top: `${props.top}px`,
+}));
+
+function checkBrandColorChange() {
+  const newColor = getTokenValue('--brand-main');
+  if (newColor && newColor !== brandColor.value) {
+    brandColor.value = newColor;
+    isAnimating.value = true;
+
+    setTimeout(() => {
+      isAnimating.value = false;
+    }, 1000);
+  }
+}
+
+onMounted(() => {
+  brandColor.value = getTokenValue('--brand-main');
+  styleObserver = new MutationObserver(checkBrandColorChange);
+  styleObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['style'],
+  });
+});
+
+onBeforeUnmount(() => {
+  if (styleObserver) {
+    styleObserver.disconnect();
+  }
+});
 </script>
 
 <style scoped lang="less">

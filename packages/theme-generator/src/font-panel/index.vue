@@ -12,7 +12,7 @@
         <p class="font-content__title">{{ lang.font.fontSize }}</p>
         <font-size-adjust />
       </div>
-      <common-collapse v-if="!isMobile($device)">
+      <common-collapse v-if="!isMobile(currentDevice)">
         <template #round>
           <div
             class="block"
@@ -65,11 +65,13 @@
   </div>
 </template>
 
-<script lang="jsx">
+<script setup>
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { CommonCollapse } from '@/common/components';
-import { langMixin } from '@/common/i18n';
+import { useLang } from '@/common/i18n';
 import { isMobile, modifyToken, themeStore } from '@/common/themes';
 import { getTokenValue } from '@/common/utils';
+import emitter from '@/common/event-bus';
 
 import { FONT_COLOR_TOKEN_MAP } from './built-in/font-map';
 
@@ -79,80 +81,62 @@ import FontSizeAdjust from './components/FontSizeAdjust.vue';
 import LineHeightAdjust from './components/LineHeightAdjust.vue';
 import LineHeightSvg from './components/LineHeightSvg.vue';
 
-export default {
-  name: 'FontPanel',
-  props: {
-    top: Number,
-  },
-  components: {
-    CommonCollapse,
-    FontColorAdjust,
-    FontSizeAdjust,
-    FontColorSvg,
-    LineHeightAdjust,
-    LineHeightSvg,
-  },
-  mixins: [langMixin],
-  data() {
+const { lang } = useLang();
+
+const textColorPalette = ref(['']);
+const initTextColorPalette = ref(['']);
+
+const currentDevice = computed(() => themeStore.device);
+
+const contentStyle = computed(() => {
+  const clientHeight = window.innerHeight;
+  return {
+    overflowY: 'scroll',
+    height: `${clientHeight - (0) - 96}px`,
+  };
+});
+
+function changeGradation(hex, idx) {
+  const tokenIdxName = textColorPalette.value[idx].name;
+  textColorPalette.value[idx].value = hex;
+  modifyToken(tokenIdxName, hex);
+}
+
+function getCurrentPalette() {
+  let colorMap = FONT_COLOR_TOKEN_MAP;
+
+  let currentPalette = [...new Array(7).keys()].map((v, i) => {
     return {
-      textColorPalette: [''],
-      initTextColorPalette: [''],
+      ...colorMap[i],
+      value: colorMap[i].value ?? getTokenValue(colorMap[i].from),
     };
-  },
-  computed: {
-    $device() {
-      return themeStore.device;
-    },
-    isTextPaletteChange() {
-      return JSON.stringify(this.textColorPalette) !== JSON.stringify(this.initTextColorPalette);
-    },
-    contentStyle() {
-      const clientHeight = window.innerHeight;
-      return {
-        overflowY: 'scroll',
-        height: `${clientHeight - (this.top || 0) - 96}px`,
-      };
-    },
-  },
-  methods: {
-    isMobile,
-    changeGradation(hex, idx) {
-      const tokenIdxName = this.textColorPalette[idx].name;
-      this.textColorPalette[idx].value = hex;
-      modifyToken(tokenIdxName, hex);
-    },
-    getCurrentPalette() {
-      let colorMap = FONT_COLOR_TOKEN_MAP;
+  });
 
-      let currentPalette = [...new Array(7).keys()].map((v, i) => {
-        return {
-          ...colorMap[i],
-          value: colorMap[i].value ?? getTokenValue(colorMap[i].from),
-        };
-      });
+  return currentPalette;
+}
 
-      return currentPalette;
-    },
-    setFontPalette() {
-      const textColorPalette = this.getCurrentPalette();
-      this.textColorPalette = textColorPalette;
-      this.initTextColorPalette = JSON.parse(JSON.stringify(textColorPalette));
-    },
-  },
-  mounted() {
-    // 确保 custom-theme 被 append 后再同步
-    this.$nextTick(() => {
-      this.setFontPalette();
-    });
-    this.$root.$on('refresh-color-tokens', () => {
-      this.setFontPalette();
-    });
-  },
-};
+function setFontPalette() {
+  const palette = getCurrentPalette();
+  textColorPalette.value = palette;
+  initTextColorPalette.value = JSON.parse(JSON.stringify(palette));
+}
+
+onMounted(() => {
+  nextTick(() => {
+    setFontPalette();
+  });
+  emitter.on('refresh-color-tokens', () => {
+    setFontPalette();
+  });
+});
+
+onBeforeUnmount(() => {
+  emitter.off('refresh-color-tokens');
+});
 </script>
 
 <style scoped lang="less">
-/deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
+:deep(.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow) {
   left: calc(100% - 16px * 2) !important;
 }
 

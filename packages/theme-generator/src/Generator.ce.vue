@@ -48,7 +48,7 @@ onMounted(() => {
 });
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import './styles/reset.min.css';
 @import './styles/tdesign.min.css';
 

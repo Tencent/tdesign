@@ -1,7 +1,7 @@
 import cssbeautify from 'cssbeautify';
 import { Color } from 'tvision-color';
 
-import GENERATOR_VARIABLES from '!raw-loader!./built-in/css/vars.css';
+import GENERATOR_VARIABLES from './built-in/css/vars.css?raw';
 
 import { appendStyleSheet, clearLocalItem, downloadFile, parseRootCss, setUpModeObserver } from '../utils';
 

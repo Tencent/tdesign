@@ -1,5 +1,5 @@
 <template>
-  <!-- FIXME：这个布局是不合理的...但鉴于 type 目前只有 “官方推荐” 一种，所以暂时如此 -->
+  <!-- FIXME：这个布局是不合理的...但鉴于 type 目前只有 "官方推荐" 一种，所以暂时如此 -->
   <div class="recommend-theme">
     <div :key="idx" v-for="(type, idx) in recommendedThemes">
       <div class="recommend-theme__title">
@@ -14,7 +14,7 @@
             }"
           >
             <div v-html="theme.subtitle"></div>
-            <div v-if="theme.enName === $theme.enName" class="recommend-theme__flex-theme--active">
+            <div v-if="theme.enName === currentTheme.enName" class="recommend-theme__flex-theme--active">
               <picked-svg />
             </div>
           </div>
@@ -34,38 +34,21 @@
   </div>
 </template>
 
-<script>
-import { langMixin } from '@/common/i18n';
+<script setup>
+import { computed } from 'vue';
+import { useLang } from '@/common/i18n';
 import { getRecommendThemes, themeStore } from '@/common/themes';
 
 import PickedSvg from './PickedSvg.vue';
 
-export default {
-  name: 'RecommendThemes',
-  mixins: [langMixin],
-  computed: {
-    recommendedThemes() {
-      return getRecommendThemes(themeStore.device);
-    },
-    $theme() {
-      return themeStore.theme;
-    },
-  },
-  data() {
-    return {
-      isThemeTabVisible: false,
-      isDrawerVisible: false,
-    };
-  },
-  components: {
-    PickedSvg,
-  },
-  methods: {
-    handleChangeTheme(theme) {
-      themeStore.updateTheme(theme);
-    },
-  },
-};
+const { isEn } = useLang();
+
+const recommendedThemes = computed(() => getRecommendThemes(themeStore.device));
+const currentTheme = computed(() => themeStore.theme);
+
+function handleChangeTheme(theme) {
+  themeStore.updateTheme(theme);
+}
 </script>
 
 <style lang="less" scoped>

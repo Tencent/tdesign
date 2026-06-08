@@ -11,7 +11,7 @@
         </div>
       </div>
       <div @click="isActive = !isActive">
-        <arrow-icon :isActive="isActive" overlayClassName="common-collapse__arrow" />
+        <ChevronDownIcon :class="['common-collapse__arrow', { 'is-active': isActive }]" />
       </div>
     </div>
     <transition
@@ -21,7 +21,7 @@
       @after-enter="afterEnter"
       @before-leave="beforeLeave"
       @leave="leave"
-      @afterLeave="afterLeave"
+      @after-leave="afterLeave"
     >
       <div v-show="isActive">
         <slot name="content" />
@@ -30,30 +30,13 @@
   </div>
 </template>
 
-<script>
-import ArrowIcon from 'tdesign-vue/es/common-components/fake-arrow';
+<script setup>
+import { ref } from 'vue';
+import { ChevronDownIcon } from 'tdesign-icons-vue-next';
 import { collapseAnimation, handleAttach } from '../../utils';
 
-export default {
-  name: 'CommonCollapse',
-  props: {
-    title: String,
-    colorPalette: Array,
-    type: String,
-  },
-  components: { ArrowIcon },
-
-  data() {
-    return {
-      ...collapseAnimation(),
-      isActive: false,
-      isHover: false,
-    };
-  },
-  methods: {
-    handleAttach,
-  },
-};
+const { beforeEnter, enter, afterEnter, beforeLeave, leave, afterLeave } = collapseAnimation();
+const isActive = ref(false);
 </script>
 
 <style scoped lang="less">
@@ -61,7 +44,7 @@ export default {
 .fade-leave-active {
   transition: opacity 0.1s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter-from, .fade-leave-to {
   opacity: 0;
 }
 
@@ -115,7 +98,7 @@ export default {
     font-size: 12px;
     line-height: 20px;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
-    /deep/ .t-icon {
+    :deep(.t-icon) {
       margin-left: 4px;
       cursor: pointer;
       transition: color 0.2s;
@@ -130,6 +113,11 @@ export default {
     color: var(--text-primary);
     transform: scale(1.5);
     cursor: pointer;
+    transition: transform 0.3s;
+
+    &.is-active {
+      transform: scale(1.5) rotate(180deg);
+    }
   }
 }
 </style>

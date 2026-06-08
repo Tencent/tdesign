@@ -7,12 +7,12 @@
           v-for="(token, idx) in tokenList"
           :key="idx"
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
           @visible-change="(v, ctx) => handleVisibleChange(v, ctx, idx)"
-          :overlayStyle="{ borderRadius: '9px' }"
+          :overlay-style="{ borderRadius: '9px' }"
         >
           <t-list-item
             :style="{
@@ -56,12 +56,15 @@
     </div>
   </div>
 </template>
-<script lang="jsx">
-import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue';
+
+<script setup>
+import { ref, getCurrentInstance } from 'vue';
+import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue-next';
 
 import { SizeSlider } from './../../common/components';
 import { modifyToken } from './../../common/themes';
 import { getTokenValue, handleAttach } from './../../common/utils';
+import emitter from '@/common/event-bus';
 
 import HorizontalPaddingAdjustSvg from '../svg/HorizontalPaddingAdjustSvg.vue';
 import MarginAdjustSvg from '../svg/MarginAdjustSvg.vue';
@@ -69,50 +72,32 @@ import PopupPaddingAdjustSvg from '../svg/PopupPaddingAdjustSvg.vue';
 import SizeAdjustSvg from '../svg/SizeAdjustSvg.vue';
 import VerticalPaddingAdjustSvg from '../svg/VerticalPaddingAdjustSvg.vue';
 
-export default {
-  name: 'SizeAdjust',
-  components: {
-    TList,
-    TListItem,
-    TPopup,
-    SizeSlider,
-    SizeAdjustSvg,
-    HorizontalPaddingAdjustSvg,
-    VerticalPaddingAdjustSvg,
-    MarginAdjustSvg,
-    PopupPaddingAdjustSvg,
-  },
-  props: {
-    tokenList: Array,
-    type: String,
-  },
-  data() {
-    return {
-      hoverIdx: null,
-    };
-  },
-  methods: {
-    getTokenValue,
-    handleAttach,
-    handleVisibleChange(v, ctx, idx) {
-      if (v) this.hoverIdx = idx;
-      if (!v && ctx.trigger === 'document' && this.hoverIdx === idx) this.hoverIdx = null;
-    },
-    handleChangeSize(token, v) {
-      modifyToken(token, `${v}px`);
-      this.$forceUpdate();
-      this.$root.$emit('refresh-size-tokens', this.type);
-    },
-    parseSize(val) {
-      if (typeof val === 'string') {
-        const num = parseFloat(val);
-        return isNaN(num) ? 0 : num;
-      }
-      return val;
-    },
-  },
-};
+const props = defineProps({
+  tokenList: Array,
+  type: String,
+});
+
+const hoverIdx = ref(null);
+
+function handleVisibleChange(v, ctx, idx) {
+  if (v) hoverIdx.value = idx;
+  if (!v && ctx.trigger === 'document' && hoverIdx.value === idx) hoverIdx.value = null;
+}
+
+function handleChangeSize(token, v) {
+  modifyToken(token, `${v}px`);
+  emitter.emit('refresh-size-tokens', props.type);
+}
+
+function parseSize(val) {
+  if (typeof val === 'string') {
+    const num = parseFloat(val);
+    return isNaN(num) ? 0 : num;
+  }
+  return val;
+}
 </script>
+
 <style lang="less" scoped>
 .size-panel {
   &__token-list {
@@ -125,14 +110,14 @@ export default {
       font-size: 14px;
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
-    /deep/ .t-radio-group {
+    :deep(.t-radio-group) {
       width: 228px;
       border-radius: 6px;
       text-align: center;
       margin-bottom: 4px;
     }
 
-    /deep/ .t-list-item {
+    :deep(.t-list-item) {
       margin-bottom: 4px;
       border-radius: 6px;
       cursor: pointer;
@@ -146,7 +131,7 @@ export default {
       }
       cursor: pointer;
     }
-    /deep/ .t-list-item__content {
+    :deep(.t-list-item__content) {
       width: 100%;
     }
   }

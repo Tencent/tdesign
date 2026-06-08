@@ -35,11 +35,11 @@
       <div v-for="(color, index) in tokenMap" :key="index">
         <t-popup
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
-          :overlayStyle="{ borderRadius: '9px' }"
+          :overlay-style="{ borderRadius: '9px' }"
         >
           <div
             class="block"
@@ -80,77 +80,74 @@
     </div>
   </div>
 </template>
-<script>
-import { Edit1Icon, ErrorCircleIcon, LinkUnlinkIcon } from 'tdesign-icons-vue';
-import { Popup as TPopup } from 'tdesign-vue';
+
+<script setup>
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
+import { Edit1Icon, ErrorCircleIcon, LinkUnlinkIcon } from 'tdesign-icons-vue-next';
+import { Popup as TPopup } from 'tdesign-vue-next';
 
 import { ColorPicker } from '@/common/components';
-import { langMixin } from '@/common/i18n';
+import { useLang } from '@/common/i18n';
 import { getTokenFromLocal } from '@/common/themes';
 import { getTokenValue, handleAttach } from '@/common/utils';
+import emitter from '@/common/event-bus';
 
-export default {
-  name: 'ColorColumn',
-  props: {
-    type: String,
-    gradientStep: Number,
-    tokenMap: Array,
-  },
-  emit: ['recoverGradation', 'changeGradation'],
-  components: {
-    TPopup,
-    ColorPicker,
-    LinkUnlinkIcon,
-    Edit1Icon,
-    ErrorCircleIcon,
-  },
-  mixins: [langMixin],
-  data() {
-    return {
-      activeIdx: 0,
-      hoverIdx: null,
-      paletteChanged: this.hasModifiedColors(),
-    };
-  },
-  watch: {
-    tokenMap() {
-      this.paletteChanged = this.hasModifiedColors();
-    },
-  },
-  mounted() {
-    this.$root.$on('refresh-color-tokens', () => {
-      this.$forceUpdate();
-    });
-  },
-  methods: {
-    getTokenValue,
-    handleAttach,
-    handleClickIdx(idx) {
-      this.activeIdx = idx;
-    },
-    handleRecover() {
-      this.paletteChanged = false;
-      this.$emit('recoverGradation', this.type);
-    },
-    changeGradation(hex, idx) {
-      this.paletteChanged = true;
-      this.$emit('changeGradation', hex, idx, this.type);
-    },
-    hasModifiedColors() {
-      const localTokens = getTokenFromLocal();
-      if (!localTokens) return false;
-      const tokenKeys = Object.keys(localTokens);
-      return tokenKeys.some((key) => key.includes(this.type));
-    },
-  },
-};
+const props = defineProps({
+  type: String,
+  gradientStep: Number,
+  tokenMap: Array,
+});
+
+const emit = defineEmits(['recoverGradation', 'changeGradation']);
+
+const { lang } = useLang();
+
+const activeIdx = ref(0);
+const hoverIdx = ref(null);
+const paletteChanged = ref(hasModifiedColors());
+
+watch(() => props.tokenMap, () => {
+  paletteChanged.value = hasModifiedColors();
+});
+
+onMounted(() => {
+  emitter.on('refresh-color-tokens', () => {
+    paletteChanged.value = hasModifiedColors();
+  });
+});
+
+onBeforeUnmount(() => {
+  emitter.off('refresh-color-tokens');
+});
+
+function handleClickIdx(idx) {
+  activeIdx.value = idx;
+}
+
+function handleRecover() {
+  paletteChanged.value = false;
+  emit('recoverGradation', props.type);
+}
+
+function changeGradation(hex, idx) {
+  paletteChanged.value = true;
+  emit('changeGradation', hex, idx, props.type);
+}
+
+function hasModifiedColors() {
+  const localTokens = getTokenFromLocal();
+  if (!localTokens) return false;
+  const tokenKeys = Object.keys(localTokens);
+  return tokenKeys.some((key) => key.includes(props.type));
+}
 </script>
+
 <style scoped lang="less">
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.1s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter-from, .fade-leave-to {
   opacity: 0;
 }
 
@@ -200,7 +197,7 @@ export default {
       justify-content: center;
       cursor: pointer;
 
-      /deep/ .t-icon {
+      :deep(.t-icon) {
         font-size: 16px;
         margin-right: 4px;
       }

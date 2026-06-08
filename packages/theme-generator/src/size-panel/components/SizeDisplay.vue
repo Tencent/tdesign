@@ -16,35 +16,31 @@
     </div>
   </div>
 </template>
-<script lang="jsx">
+
+<script setup>
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { getTokenValue } from '@/common/utils';
+import emitter from '@/common/event-bus';
 import { SIZE_TOKENS } from '../built-in/size-map';
 import SectionDynamicSvg from '../svg/SectionDynamicSvg.vue';
 
-export default {
-  name: 'SizeDisplay',
-  components: {
-    SectionDynamicSvg,
-  },
-  data() {
-    return {
-      SIZE_TOKENS,
-    };
-  },
-  methods: {
-    getTokenValue,
-  },
-  mounted() {
-    this.$nextTick(() => {
-      // 初始化 local 的 token 后更新 size 显示
-      this.$forceUpdate();
-    });
-    this.$root.$on('refresh-size-tokens', () => {
-      this.$forceUpdate();
-    });
-  },
-};
+// Use a reactive key to force re-render instead of $forceUpdate
+const refreshKey = ref(0);
+
+onMounted(() => {
+  nextTick(() => {
+    refreshKey.value++;
+  });
+  emitter.on('refresh-size-tokens', () => {
+    refreshKey.value++;
+  });
+});
+
+onBeforeUnmount(() => {
+  emitter.off('refresh-size-tokens');
+});
 </script>
+
 <style lang="less" scoped>
 .size-panel {
   &__token-list {

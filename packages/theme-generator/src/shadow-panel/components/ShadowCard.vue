@@ -2,10 +2,10 @@
   <div class="shadow-card">
     <t-popup
       placement="left"
-      showArrow
-      destroyOnClose
+      show-arrow
+      destroy-on-close
       :attach="handleAttach"
-      :overlayStyle="{ borderRadius: '9px', padding: '12px 16px 8px' }"
+      :overlay-style="{ borderRadius: '9px', padding: '12px 16px 8px' }"
     >
       <div class="shadow-card__item" :style="{ 'box-shadow': shadow.join(',') }">
         <div class="shadow-card__title">{{ detail.label }}:</div>
@@ -26,34 +26,27 @@
   </div>
 </template>
 
-<script lang="jsx">
-import { Divider as TDivider, Popup as TPopup } from 'tdesign-vue';
+<script setup>
+import { Divider as TDivider, Popup as TPopup } from 'tdesign-vue-next';
 
-import { langMixin } from '@/common/i18n';
+import { useLang } from '@/common/i18n';
 import { handleAttach } from '@/common/utils';
 
 import ShadowLayer from './ShadowLayer.vue';
 
-export default {
-  name: 'ShadowCard',
-  props: {
-    shadow: Array,
-    detail: Object,
-    index: Number,
-  },
-  mixins: [langMixin],
-  components: {
-    TPopup,
-    TDivider,
-    ShadowLayer,
-  },
-  methods: {
-    handleAttach,
-    change(value) {
-      this.$emit('change', value);
-    },
-  },
-};
+const props = defineProps({
+  shadow: Array,
+  detail: Object,
+  index: Number,
+});
+
+const emit = defineEmits(['change']);
+
+const { isEn } = useLang();
+
+function change(value) {
+  emit('change', value);
+}
 </script>
 
 <style scoped lang="less">

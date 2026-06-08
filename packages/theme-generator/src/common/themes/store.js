@@ -1,17 +1,16 @@
-import Vue from 'vue';
+import { reactive } from 'vue';
 
 import { DEFAULT_THEME_META, TDESIGN_WEB_THEME } from './built-in';
 import { clearLocalTheme, getDefaultTheme, getOptionFromLocal, initThemeStyleSheet, updateLocalOption } from './core';
 
-export const themeStore = Vue.observable({
+export const themeStore = reactive({
   device: 'web',
   theme: TDESIGN_WEB_THEME,
   brandColor: getOptionFromLocal('color') || DEFAULT_THEME_META.value,
-  refreshId: 0, // 用于强制刷新绑定了 key 的组件 UI
+  refreshId: 0,
   updateDevice(device) {
     this.device = device;
     this.theme = getInitialTheme(device);
-    // 若用户未自定义过主题色，brandColor 跟随当前主题
     if (!getOptionFromLocal('color')) {
       this.brandColor = this.theme.value;
     }
