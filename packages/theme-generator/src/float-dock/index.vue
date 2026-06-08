@@ -182,7 +182,7 @@ function dragStart(e) {
 }
 
 function handleMousemove(e) {
-  if (!isDragging.value) return false;
+  if (!isDragging.value) return;
   const movedY = startY.value - e.clientY;
   const movedX = startX.value - e.clientX;
   startY.value = e.clientY;

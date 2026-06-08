@@ -22,7 +22,8 @@ function wcCssPlugin() {
       // 收集所有 CSS 文件内容
       for (const [fileName, file] of Object.entries(bundle)) {
         if (fileName.endsWith('.css') && file.type === 'asset') {
-          allCss += file.source + '\n';
+          const source = typeof file.source === 'string' ? file.source : new TextDecoder().decode(file.source);
+          allCss += source + '\n';
           delete bundle[fileName];
         }
       }

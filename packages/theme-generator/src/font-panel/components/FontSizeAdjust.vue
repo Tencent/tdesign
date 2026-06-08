@@ -15,7 +15,7 @@
       </template>
     </SegmentSelection>
     <!-- Token List -->
-    <div class="font-panel__token-list">
+    <div class="font-panel__token-list" v-if="isInitialized">
       <t-radio-group variant="default-filled" v-model="tokenType">
         <t-radio-button value="list">{{ lang.font.steppedMode }}</t-radio-button>
         <t-radio-button value="token">{{ lang.font.tokenMode }}</t-radio-button>
@@ -128,10 +128,11 @@ const step = ref(getOptionFromLocal('font') || 3);
 const hoverIdx = ref(null);
 const tokenType = ref('list');
 const segmentSelectionDisabled = ref(false);
-const tokenTypeList = ref(FONT_SIZE_TOKEN_LIST);
+const tokenTypeList = ref(FONT_SIZE_TOKEN_LIST.map((v) => ({ ...v })));
 const initTokenList = ref([]);
 const ladderTypeList = ref([]);
 const initLadderList = ref([]);
+const isInitialized = ref(false);
 
 watch(tokenTypeList, (list) => {
   const fontSizeStepArray = Object.keys(FONT_SIZE_STEPS).map((v) => FONT_SIZE_STEPS[v]);
@@ -202,6 +203,7 @@ function handleInitFontSize() {
     }
   });
   initLadderList.value = JSON.parse(JSON.stringify(ladderTypeList.value));
+  isInitialized.value = true;
 }
 
 function handleChangeFontSize(v, type, tokenName, idx) {

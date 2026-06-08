@@ -39,7 +39,7 @@ const props = defineProps({
   },
 });
 
-const visible = ref(0);
+const visible = ref(false);
 
 // 将 themeMode 同步到 shadowRoot 内的根元素
 // 这样 shadowRoot 内的 CSS 变量才能根据 theme-mode 切换

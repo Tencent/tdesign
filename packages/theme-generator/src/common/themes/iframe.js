@@ -23,7 +23,7 @@ function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
     const style = document.createElement('style');
     style.id = currentModeId;
 
-    const { rootContent: cssString } = parseRootCss(themeStyle.innerText);
+    const { rootContent: cssString } = parseRootCss(themeStyle.textContent);
     const selector = uniapp ? 'uni-page-body' : 'body';
     style.textContent = `${selector} {\n${cssString}\n}`;
 
@@ -40,7 +40,7 @@ function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
 
 /* ----- 同步 Token -----  */
 function handleMobileTokenChange(iframe, styleElement) {
-  const updatedCss = styleElement.innerText;
+  const updatedCss = styleElement.textContent;
   const iframeStyleElement = iframe.contentDocument.getElementById(styleElement.id);
 
   if (iframeStyleElement) {
@@ -56,7 +56,7 @@ function handleMobileTokenChange(iframe, styleElement) {
 
 function handleMiniProgramTokenChange(iframe, styleElement, uniapp = false) {
   const selector = uniapp ? 'uni-page-body' : 'body';
-  const { rootContent } = parseRootCss(styleElement.innerText);
+  const { rootContent } = parseRootCss(styleElement.textContent);
   const updatedCss = `${selector} {\n${rootContent}\n}`;
 
   const updatedId = styleElement.id;
@@ -163,13 +163,13 @@ function watchThemeChange(iframe) {
     observers.themeToken = watchThemeTokenChange(iframe);
   };
 
-  iframe.unload = () => {
+  iframe.addEventListener('unload', () => {
     Object.values(observers)
       .flat()
       .forEach((observer) => {
         observer.disconnect();
       });
-  };
+  }, { once: true });
 }
 
 /**

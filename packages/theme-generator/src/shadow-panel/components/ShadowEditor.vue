@@ -48,14 +48,14 @@ const emit = defineEmits(['change', 'move']);
 
 const shadow = ref([0, 0, 0, 0]);
 const color = ref('');
-let hasInit = false;
+const hasInit = ref(false);
 
 // init
 shadow.value = splitShadowValue(props.value);
 color.value = getShadowColor(props.value);
 
 watch(shadow, (nVal) => {
-  if (!hasInit) {
+  if (!hasInit.value) {
     return;
   }
   const shadowStr = nVal.map((val) => `${val}px`).join(' ');
@@ -63,8 +63,8 @@ watch(shadow, (nVal) => {
 }, { deep: true });
 
 watch(color, (nVal) => {
-  if (!hasInit) {
-    hasInit = true;
+  if (!hasInit.value) {
+    hasInit.value = true;
     return;
   }
   const shadowStr = shadow.value.map((val) => `${val}px`).join(' ');

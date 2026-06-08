@@ -315,7 +315,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, nextTick } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { Edit1Icon, FileCopyIcon, HelpCircleIcon } from 'tdesign-icons-vue-next';
 import {
   Col as TCol,
@@ -378,6 +378,7 @@ const warningMainColor = ref(getOptionFromLocal('warning') || getTokenValue('--t
 const generationMode = ref(getOptionFromLocal('recommend') === 'true' ? 'recommend' : 'remain');
 const isGrayRelatedToTheme = ref(getOptionFromLocal('neutral') == 'true');
 const isMoreVisible = ref(false);
+let modeObserver = null;
 
 const currentTheme = computed(() => themeStore.theme);
 const currentDevice = computed(() => themeStore.device);
@@ -414,12 +415,18 @@ onMounted(() => {
         changeFunctionColor(color, type, 'init');
       }
     });
-    setUpModeObserver((theme) => {
+    modeObserver = setUpModeObserver((theme) => {
       updateBrandTokenMap();
       updateFunctionTokenMap();
       currentBrandIdx.value = brandIndexes.value[theme];
     });
   });
+});
+
+onBeforeUnmount(() => {
+  if (modeObserver) {
+    modeObserver.disconnect();
+  }
 });
 
 function generateBrandTokenMap(brandIdx) {
