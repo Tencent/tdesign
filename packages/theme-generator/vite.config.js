@@ -11,13 +11,21 @@ import remapping from '@ampproject/remapping';
  * 工作原理：
  * 1. 拦截 Vite 生成的 CSS 文件，删除它们
  * 2. 将 CSS 内容以 __WC_ALL_CSS__ 全局变量的形式注入到 JS 产物中
- * 3. wc-entry.js 读取 __WC_ALL_CSS__ 并传给 defineCustomElement 的 styles 配置
+ * 3. build-entry.js 读取 __WC_ALL_CSS__ 并传给 defineCustomElement 的 styles 配置
  * 4. Vue 3 CE 框架会自动将这些样式注入到 shadowRoot
+ *
+ * Dev 模式：直接读取 node_modules 中的 tdesign.min.css 注入，
+ * 因为 Vite dev 模式下 CSS 通过 HMR 注入 document.head，shadow DOM 无法访问。
  */
 function wcCssPlugin() {
   return {
     name: 'wc-css-plugin',
     enforce: 'post',
+    transform() {
+      // Dev 模式不需要注入，直接跳过
+      // build 模式由 generateBundle 处理
+      return null;
+    },
     generateBundle(_, bundle) {
       let allCss = '';
 
@@ -30,7 +38,7 @@ function wcCssPlugin() {
         }
       }
 
-      // 将 CSS 注入为全局变量，供 wc-entry.js 读取
+      // 将 CSS 注入为全局变量，供 main.js 读取
       // 只注入到入口 chunk（isEntry），避免多个 chunk 时重复注入
       if (allCss) {
         for (const [fileName, file] of Object.entries(bundle)) {
@@ -64,20 +72,7 @@ export default defineConfig({
     },
     allowedHosts: true,
   },
-  plugins: [
-    vue({
-      // Generator.vue 作为 Custom Element 根组件编译
-      // 启用 shadow DOM 模式、禁用 scoped 样式（shadow DOM 自带隔离）
-      customElement: /Generator\.vue$/,
-      template: {
-        compilerOptions: {
-          isCustomElement: (tag) => tag.startsWith('td-'),
-        },
-      },
-    }),
-    svgLoader(),
-    wcCssPlugin(),
-  ],
+  plugins: [vue(), svgLoader(), wcCssPlugin()],
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
@@ -93,7 +88,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/wc-entry.js'),
+      entry: resolve(__dirname, 'src/build-entry.js'),
       name: 'TdThemeGenerator',
       formats: ['iife'],
       fileName: () => 'td-theme-generator.js',

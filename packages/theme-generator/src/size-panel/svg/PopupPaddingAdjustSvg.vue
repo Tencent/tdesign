@@ -37,5 +37,5 @@ const props = defineProps({
   },
 });
 
-const height = computed(() => Math.min(parseInt(props.size, 10), 12));
+const height = computed(() => Math.max(Math.min(parseInt(props.size, 10), 12), 4));
 </script>

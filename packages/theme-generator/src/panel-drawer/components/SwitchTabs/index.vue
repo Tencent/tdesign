@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { shallowRef, computed, onMounted, markRaw } from 'vue';
 import { useLang } from '@/common/i18n';
 import { isMobile, themeStore } from '@/common/themes';
 
@@ -41,7 +41,7 @@ const emit = defineEmits(['changeActiveTab']);
 
 const { lang } = useLang();
 
-const tabs = ref([]);
+const tabs = shallowRef([]);
 
 const filteredTabs = computed(() => {
   // 移动端不显示尺寸配置
@@ -57,23 +57,23 @@ onMounted(() => {
   tabs.value = [
     {
       title: text.color.title,
-      image: ColorSvg,
+      image: markRaw(ColorSvg),
     },
     {
       title: text.font.title,
-      image: FontSvg,
+      image: markRaw(FontSvg),
     },
     {
       title: text.borerRadius.title,
-      image: RadiusSvg,
+      image: markRaw(RadiusSvg),
     },
     {
       title: text.shadow.title,
-      image: BoxshadowSvg,
+      image: markRaw(BoxshadowSvg),
     },
     {
       title: text.size.title,
-      image: SizeSvg,
+      image: markRaw(SizeSvg),
     },
   ];
 });
