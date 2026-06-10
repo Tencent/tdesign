@@ -1,6 +1,6 @@
 <template>
   <t-color-picker-panel
-    v-model="color"
+    :value="props.value"
     :format="format"
     :color-modes="['monochrome']"
     :recent-colors="null"
@@ -13,7 +13,6 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
 import { ColorPickerPanel as TColorPickerPanel } from 'tdesign-vue-next';
 import { handleAttach } from '../../utils';
 
@@ -26,13 +25,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['change']);
-
-const color = computed({
-  get: () => props.value,
-  set: () => {
-    /* v-model handled by @change */
-  },
-});
 
 function handleChange(value) {
   emit('change', value);
