@@ -531,7 +531,12 @@ function recoverGradation(type) {
     changeBrandColor(brandInputColor.value);
     return;
   }
-  const mainColor = { gray: grayMainColor, success: successMainColor, error: errorMainColor, warning: warningMainColor };
+  const mainColor = {
+    gray: grayMainColor,
+    success: successMainColor,
+    error: errorMainColor,
+    warning: warningMainColor,
+  };
   changeFunctionColor(mainColor[type].value, type);
 }
 
@@ -540,8 +545,8 @@ function refreshColorTokens() {
 }
 </script>
 
-<style scoped lang="less">
-:deep(.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow) {
+<style lang="less">
+.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;
 }
 
@@ -569,7 +574,7 @@ function refreshColorTokens() {
     }
   }
 
-  :deep(.t-divider__horizontal) {
+  .t-divider__horizontal {
     margin: 16px 0;
   }
 

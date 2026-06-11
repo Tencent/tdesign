@@ -99,7 +99,7 @@ function changeColor(hex, idx) {
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.1s;
@@ -117,7 +117,7 @@ function changeColor(hex, idx) {
     border-radius: 6px;
     background-color: var(--bg-color-theme-secondary);
 
-    :deep(.t-radio-button) {
+    .t-radio-button {
       flex: 1;
       text-align: center;
       width: 100%;

@@ -189,7 +189,7 @@ onMounted(() => {
 });
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 .radius-content {
   &__content {
     padding: 0;
@@ -291,16 +291,16 @@ onMounted(() => {
       font-size: 14px;
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
-    :deep(.t-radio-group) {
+    .t-radio-group {
       width: 228px;
       border-radius: 6px;
       text-align: center;
       margin-bottom: 8px;
     }
-    :deep(.t-radio-button) {
+    .t-radio-button {
       width: 50%;
     }
-    :deep(.t-list-item) {
+    .t-list-item {
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -314,7 +314,7 @@ onMounted(() => {
       }
       cursor: pointer;
     }
-    :deep(.t-list-item__content) {
+    .t-list-item__content {
       width: 100%;
     }
   }

@@ -31,18 +31,18 @@ function handleChange(value) {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .t-color-picker__format {
   display: flex;
   margin: 12px 0 0 0;
-  :deep(.t-select) {
+  .t-select {
     width: 72px;
     font-size: 14px;
   }
-  :deep(.t-input) {
+  .t-input {
     font-size: 14px;
   }
-  :deep(.t-select__wrap) {
+  .t-select__wrap {
     width: auto;
     margin-right: 8px;
   }

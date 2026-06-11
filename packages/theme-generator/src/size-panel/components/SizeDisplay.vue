@@ -41,7 +41,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .size-panel {
   &__token-list {
     width: 236px;

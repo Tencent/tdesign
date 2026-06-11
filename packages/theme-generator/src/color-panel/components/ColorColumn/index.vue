@@ -106,9 +106,12 @@ const activeIdx = ref(0);
 const hoverIdx = ref(null);
 const paletteChanged = ref(hasModifiedColors());
 
-watch(() => props.tokenMap, () => {
-  paletteChanged.value = hasModifiedColors();
-});
+watch(
+  () => props.tokenMap,
+  () => {
+    paletteChanged.value = hasModifiedColors();
+  },
+);
 
 onMounted(() => {
   emitter.on('refresh-color-tokens', () => {
@@ -142,12 +145,13 @@ function hasModifiedColors() {
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.1s;
 }
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
@@ -197,7 +201,7 @@ function hasModifiedColors() {
       justify-content: center;
       cursor: pointer;
 
-      :deep(.t-icon) {
+      .t-icon {
         font-size: 16px;
         margin-right: 4px;
       }

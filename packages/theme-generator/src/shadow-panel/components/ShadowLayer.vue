@@ -47,7 +47,7 @@ function handleMove(index) {
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 .shadow-layer {
   display: flex;
   flex-direction: column;

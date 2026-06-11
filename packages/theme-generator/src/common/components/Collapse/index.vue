@@ -39,7 +39,7 @@ const { beforeEnter, enter, afterEnter, beforeLeave, leave, afterLeave } = colla
 const isActive = ref(false);
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.1s;
@@ -99,7 +99,7 @@ const isActive = ref(false);
     font-size: 12px;
     line-height: 20px;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
-    :deep(.t-icon) {
+    .t-icon {
       margin-left: 4px;
       cursor: pointer;
       transition: color 0.2s;

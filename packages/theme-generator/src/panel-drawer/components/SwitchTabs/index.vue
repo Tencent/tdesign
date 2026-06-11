@@ -79,7 +79,7 @@ onMounted(() => {
 });
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 .switch-tabs {
   width: 72px;
   height: 100%;

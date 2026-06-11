@@ -117,12 +117,13 @@ function copyHex(hex) {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.1s;
 }
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
@@ -179,7 +180,7 @@ function copyHex(hex) {
     align-items: center;
     color: var(--text-secondary);
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
-    :deep(.t-icon) {
+    .t-icon {
       margin-left: 4px;
       cursor: pointer;
       transition: color 0.2s;

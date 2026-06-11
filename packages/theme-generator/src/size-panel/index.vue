@@ -201,8 +201,8 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped lang="less">
-:deep(.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow) {
+<style lang="less">
+.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;
 }
 

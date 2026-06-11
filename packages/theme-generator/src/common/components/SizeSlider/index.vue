@@ -69,7 +69,7 @@ onMounted(() => {
 });
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .panel {
   &__size-slider {
     border-radius: 9px;
@@ -83,7 +83,7 @@ onMounted(() => {
       background-color: var(--bg-color-code);
     }
   }
-  :deep(.t-input-number) {
+  .t-input-number {
     font-size: 14px !important;
   }
 }

@@ -124,7 +124,7 @@ function renderLabel() {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .segment-panel {
   &__round {
     display: flex;
@@ -161,31 +161,31 @@ function renderLabel() {
         height: 8px;
         z-index: 2;
       }
-      :deep(.t-slider__container) {
+      .t-slider__container {
         position: absolute;
         top: 6px;
         width: 60px;
         left: 8px;
       }
 
-      :deep(.t-slider) {
+      .t-slider {
         padding: 6px 0;
       }
 
-      :deep(.t-slider__rail) {
+      .t-slider__rail {
         height: 8px;
         background-color: var(--bg-color-theme-tertiary);
       }
-      :deep(.t-slider__track) {
+      .t-slider__track {
         height: 8px;
       }
-      :deep(.t-slider__button) {
+      .t-slider__button {
         box-shadow: var(--shadow-1);
       }
     }
 
     &.disabled {
-      :deep(.t-slider__button) {
+      .t-slider__button {
         border-color: var(--bg-color-tag);
         background-color: var(--bg-color-theme-surface);
       }
@@ -196,7 +196,7 @@ function renderLabel() {
     padding: 0;
     margin-left: 8px;
     width: 82px;
-    :deep(.t-input) {
+    .t-input {
       background: var(--bg-color-theme-secondary);
       border: 1px solid transparent;
       height: 32px;
@@ -205,20 +205,20 @@ function renderLabel() {
       transition: border-color 0.2s;
       font-size: 14px;
     }
-    :deep(.t-select) {
+    .t-select {
       font-size: 14px;
     }
-    :deep(.t-select:hover) {
+    .t-select:hover {
       border-color: var(--component-border);
     }
-    :deep(.t-is-active) {
+    .t-is-active {
       border-color: var(--brand-main) !important;
     }
-    :deep(.t-select__right-icon) {
+    .t-select__right-icon {
       color: var(--text-placeholder) !important;
     }
 
-    :deep(.t-select__single) {
+    .t-select__single {
       margin-left: 0;
     }
   }

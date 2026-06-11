@@ -51,7 +51,7 @@ function handleChangeTheme(theme) {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .recommend-theme {
   max-height: 376px;
   border-radius: 32px 32px 0px 0px;

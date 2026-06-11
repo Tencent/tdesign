@@ -49,7 +49,7 @@ function change(value) {
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 .shadow-card {
   display: flex;
   margin-top: 8px;

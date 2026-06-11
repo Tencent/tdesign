@@ -98,7 +98,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import './styles/reset.min.css';
 @import './styles/tdesign.min.css';
 
@@ -107,8 +107,7 @@ onBeforeUnmount(() => {
     display: none;
   }
 }
-</style>
-<style scoped>
+
 .t-popconfirm {
   z-index: 10000;
 }

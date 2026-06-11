@@ -63,7 +63,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 .sticky-theme {
   position: relative;
   display: flex;

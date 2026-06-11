@@ -92,7 +92,7 @@ const contentStyle = computed(() => {
   const clientHeight = window.innerHeight;
   return {
     overflowY: 'scroll',
-    height: `${clientHeight - (0) - 96}px`,
+    height: `${clientHeight - 0 - 96}px`,
   };
 });
 
@@ -135,8 +135,8 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped lang="less">
-:deep(.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow) {
+<style lang="less">
+.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;
 }
 

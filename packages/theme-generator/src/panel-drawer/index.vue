@@ -84,8 +84,8 @@ function changeActiveTab(tab) {
 }
 </script>
 
-<style lang="less" scoped>
-:deep(.t-drawer__content-wrapper) {
+<style lang="less">
+.t-drawer__content-wrapper {
   box-shadow: var(--shadow-2);
   border-radius: 12px 0 0 0;
   position: fixed;
@@ -96,37 +96,37 @@ function changeActiveTab(tab) {
   }
 }
 
-:deep(.t-popup__content) {
+.t-popup__content {
   font-size: 14px;
   box-shadow: var(--shadow-2), var(--shadow-inset-top), var(--shadow-inset-right), var(--shadow-inset-bottom),
     var(--shadow-inset-left);
 }
 
-:deep(.t-popup__content:not(.t-tooltip)) {
+.t-popup__content:not(.t-tooltip) {
   background: var(--bg-color-container);
 }
 
-:deep(.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow) {
+.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2);
 }
 
-:deep(.t-popup[data-popper-placement='bottom-start'] .t-popup__arrow) {
+.t-popup[data-popper-placement='bottom-start'] .t-popup__arrow {
   left: 20px;
 }
 
-:deep(.t-popup__content:not(.t-tooltip) .t-popup__arrow:before) {
+.t-popup__content:not(.t-tooltip) .t-popup__arrow:before {
   background: var(--bg-color-container);
 }
 
-:deep(.t-select__list) {
+.t-select__list {
   padding: 0;
 }
 
-:deep(.t-button--variant-text:hover) {
+.t-button--variant-text:hover {
   background: var(--bg-color-container-hover);
 }
 
-:deep(.t-input) {
+.t-input {
   padding-left: 4px !important;
 }
 </style>

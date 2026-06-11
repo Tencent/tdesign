@@ -181,7 +181,7 @@ onMounted(() => {
 });
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .font-panel {
   &__round-tag-left {
     font-size: 14px;
@@ -241,14 +241,14 @@ onMounted(() => {
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
       margin-bottom: 8px;
     }
-    :deep(.t-radio-group) {
+    .t-radio-group {
       width: 100%;
       text-align: center;
       border-radius: 6px;
       margin-bottom: 4px;
       background-color: var(--bg-color-theme-radio);
     }
-    :deep(.t-radio-button) {
+    .t-radio-button {
       width: 50%;
       padding: 0;
       display: flex;
@@ -256,14 +256,14 @@ onMounted(() => {
       align-items: center;
     }
 
-    :deep(.t-list-item) {
+    .t-list-item {
       margin-bottom: 4px;
       border-radius: 6px;
       padding: 4px 8px;
       cursor: pointer;
       background: var(--bg-color-theme-surface);
     }
-    :deep(.t-list-item__content) {
+    .t-list-item__content {
       width: 100%;
     }
   }

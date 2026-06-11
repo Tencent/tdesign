@@ -244,7 +244,7 @@ function resetTheme() {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @keyframes toConic {
   0% {
     background-position: 0 0;
@@ -305,10 +305,10 @@ function resetTheme() {
   &.is-mouseleave {
     animation: toPure 0.5s cubic-bezier(0.38, 0, 0.24, 1);
   }
-  :deep(.t-button--variant-text:hover) {
+  .t-button--variant-text:hover {
     background: var(--bg-color-container-hover);
   }
-  :deep(.t-button) {
+  .t-button {
     height: 46px;
     width: 100%;
     border-radius: 24px;
@@ -322,7 +322,7 @@ function resetTheme() {
 
   &:hover {
     animation: toConic 0.5s cubic-bezier(0.38, 0, 0.24, 1) forwards;
-    :deep(.t-button) {
+    .t-button {
       background-color: var(--bg-color-card);
       color: var(--text-primary);
     }

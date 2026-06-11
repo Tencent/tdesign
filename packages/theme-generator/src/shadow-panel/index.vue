@@ -69,7 +69,7 @@ const contentStyle = computed(() => {
   const clientHeight = window.innerHeight;
   return {
     overflowY: 'scroll',
-    height: `${clientHeight - (0) - 96}px`,
+    height: `${clientHeight - 0 - 96}px`,
   };
 });
 
@@ -101,19 +101,23 @@ watch(step, (nVal) => {
   shadowPalette.value = shadows.map((shadow) => splitShadowValue(shadow));
 });
 
-watch(shadowPalette, (nVal) => {
-  const currentPalette = getCurrentPalette();
-  for (let index = 0; index < nVal.length; index++) {
-    const shadow = nVal[index];
-    const current = currentPalette[index];
-    const newShadow = shadow.join(',');
-    if (newShadow === current.join(',')) continue;
-    const { name } = ShadowTypeMap[index];
+watch(
+  shadowPalette,
+  (nVal) => {
+    const currentPalette = getCurrentPalette();
+    for (let index = 0; index < nVal.length; index++) {
+      const shadow = nVal[index];
+      const current = currentPalette[index];
+      const newShadow = shadow.join(',');
+      if (newShadow === current.join(',')) continue;
+      const { name } = ShadowTypeMap[index];
 
-    const isCustom = step.value === ShadowSelectType.Self_Defined;
-    modifyToken(name, isCustom ? newShadow : null);
-  }
-}, { deep: true });
+      const isCustom = step.value === ShadowSelectType.Self_Defined;
+      modifyToken(name, isCustom ? newShadow : null);
+    }
+  },
+  { deep: true },
+);
 
 function splitShadowValue(data) {
   const tempData = `${data},`;
@@ -155,8 +159,8 @@ onMounted(() => {
 });
 </script>
 
-<style scoped lang="less">
-:deep(.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow) {
+<style lang="less">
+.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
   left: calc(100% - 16px * 2) !important;
 }
 

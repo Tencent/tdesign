@@ -54,13 +54,17 @@ const hasInit = ref(false);
 shadow.value = splitShadowValue(props.value);
 color.value = getShadowColor(props.value);
 
-watch(shadow, (nVal) => {
-  if (!hasInit.value) {
-    return;
-  }
-  const shadowStr = nVal.map((val) => `${val}px`).join(' ');
-  emit('change', `${shadowStr} ${color.value}`);
-}, { deep: true });
+watch(
+  shadow,
+  (nVal) => {
+    if (!hasInit.value) {
+      return;
+    }
+    const shadowStr = nVal.map((val) => `${val}px`).join(' ');
+    emit('change', `${shadowStr} ${color.value}`);
+  },
+  { deep: true },
+);
 
 watch(color, (nVal) => {
   if (!hasInit.value) {
@@ -110,7 +114,7 @@ function handleMove() {
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 .shadow-layer {
   display: flex;
   flex-direction: column;
@@ -140,7 +144,7 @@ function handleMove() {
       &:last-child {
         margin-bottom: 0;
       }
-      :deep(.t-input--auto-width) {
+      .t-input--auto-width {
         width: auto;
       }
     }
