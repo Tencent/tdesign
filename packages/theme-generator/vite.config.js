@@ -6,24 +6,21 @@ import MagicString from 'magic-string';
 import remapping from '@ampproject/remapping';
 
 /**
- * 自定义 Vite 插件：收集所有 CSS，导出为 JS 变量供 Web Component 使用
+ * 自定义 Vite 插件：收集所有 CSS，注入为全局变量供 build-entry.js 使用
  *
  * 工作原理：
  * 1. 拦截 Vite 生成的 CSS 文件，删除它们
- * 2. 将 CSS 内容以 __WC_ALL_CSS__ 全局变量的形式注入到 JS 产物中
- * 3. build-entry.js 读取 __WC_ALL_CSS__ 并传给 defineCustomElement 的 styles 配置
- * 4. Vue 3 CE 框架会自动将这些样式注入到 shadowRoot
+ * 2. 将 CSS 内容以 __WC_ALL_CSS__ 全局变量的形式注入到 JS 产物顶部
+ * 3. build-entry.js 读取 __WC_ALL_CSS__ 并与组件自身样式合并
  *
- * Dev 模式：直接读取 node_modules 中的 tdesign.min.css 注入，
- * 因为 Vite dev 模式下 CSS 通过 HMR 注入 document.head，shadow DOM 无法访问。
+ * Dev 模式下 Vite 通过 HMR 注入 CSS 到 document.head，无需此插件处理。
  */
 function wcCssPlugin() {
   return {
     name: 'wc-css-plugin',
     enforce: 'post',
     transform() {
-      // Dev 模式不需要注入，直接跳过
-      // build 模式由 generateBundle 处理
+      // Dev 模式由 Vite HMR 处理，此处跳过
       return null;
     },
     generateBundle(_, bundle) {
@@ -38,7 +35,7 @@ function wcCssPlugin() {
         }
       }
 
-      // 将 CSS 注入为全局变量，供 main.js 读取
+      // 将 CSS 注入为全局变量，供 build-entry.js 读取
       // 只注入到入口 chunk（isEntry），避免多个 chunk 时重复注入
       if (allCss) {
         for (const [fileName, file] of Object.entries(bundle)) {
@@ -48,9 +45,6 @@ function wcCssPlugin() {
             ms.prepend(cssVarCode);
             file.code = ms.toString();
             // 同步更新 sourcemap，避免行号偏移
-            // ms.generateMap() 生成增量 map（新代码 → file.code），
-            // 需要通过 remapping 与原始 file.map（file.code → 源文件）合并，
-            // 得到完整的映射链：新代码 → 源文件
             if (file.map) {
               const incrementMap = ms.generateMap({ hires: 'boundary' });
               file.map = remapping(incrementMap, () => file.map);
