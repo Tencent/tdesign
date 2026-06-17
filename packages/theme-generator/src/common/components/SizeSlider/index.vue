@@ -4,7 +4,7 @@
     <div class="panel__size-slider-op">
       <t-input-number
         :disabled="disabled"
-        :value="size"
+        :model-value="size"
         :format="format"
         theme="column"
         @change="handleInputChange"
@@ -12,7 +12,7 @@
       />
       <t-slider
         :disabled="disabled"
-        :value="size"
+        :model-value="size"
         :min="min"
         :max="max"
         :step="step"

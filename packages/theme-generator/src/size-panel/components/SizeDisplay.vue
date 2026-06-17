@@ -18,26 +18,24 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { onMounted, onBeforeUnmount } from 'vue';
 import { getTokenValue } from '@/common/utils';
 import emitter from '@/common/event-bus';
 import { SIZE_TOKENS } from '../built-in/size-map';
 import SectionDynamicSvg from '../svg/SectionDynamicSvg.vue';
 
-// Use a reactive key to force re-render instead of $forceUpdate
-const refreshKey = ref(0);
+// refreshKey 原本用于强制重渲染，但模板中未绑定 :key，
+// 实际重渲染由父组件 refreshId 变化驱动，此处仅监听事件以同步 token 值
+function onRefreshSizeTokens() {
+  // 事件触发时 getTokenValue 读取最新 DOM 值，下次渲染自动反映变化
+}
 
 onMounted(() => {
-  nextTick(() => {
-    refreshKey.value++;
-  });
-  emitter.on('refresh-size-tokens', () => {
-    refreshKey.value++;
-  });
+  emitter.on('refresh-size-tokens', onRefreshSizeTokens);
 });
 
 onBeforeUnmount(() => {
-  emitter.off('refresh-size-tokens');
+  emitter.off('refresh-size-tokens', onRefreshSizeTokens);
 });
 </script>
 

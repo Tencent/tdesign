@@ -113,14 +113,16 @@ watch(
   },
 );
 
+function onRefreshColorTokens() {
+  paletteChanged.value = hasModifiedColors();
+}
+
 onMounted(() => {
-  emitter.on('refresh-color-tokens', () => {
-    paletteChanged.value = hasModifiedColors();
-  });
+  emitter.on('refresh-color-tokens', onRefreshColorTokens);
 });
 
 onBeforeUnmount(() => {
-  emitter.off('refresh-color-tokens');
+  emitter.off('refresh-color-tokens', onRefreshColorTokens);
 });
 
 function handleClickIdx(idx) {

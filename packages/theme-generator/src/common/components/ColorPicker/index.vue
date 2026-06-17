@@ -1,6 +1,6 @@
 <template>
   <t-color-picker-panel
-    :value="props.value"
+    :model-value="props.value"
     :format="format"
     :color-modes="['monochrome']"
     :recent-colors="null"

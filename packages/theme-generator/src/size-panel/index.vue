@@ -186,18 +186,20 @@ const contentStyle = computed(() => {
   };
 });
 
-onMounted(() => {
-  emitter.on('refresh-size-tokens', (type) => {
-    Object.keys(refreshIdMap).forEach((key) => {
-      if (key !== type) {
-        refreshIdMap[key]++;
-      }
-    });
+function onRefreshSizeTokens(type) {
+  Object.keys(refreshIdMap).forEach((key) => {
+    if (key !== type) {
+      refreshIdMap[key]++;
+    }
   });
+}
+
+onMounted(() => {
+  emitter.on('refresh-size-tokens', onRefreshSizeTokens);
 });
 
 onBeforeUnmount(() => {
-  emitter.off('refresh-size-tokens');
+  emitter.off('refresh-size-tokens', onRefreshSizeTokens);
 });
 </script>
 

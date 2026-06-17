@@ -76,6 +76,7 @@ watch(color, (nVal) => {
 });
 
 function splitShadowValue(value) {
+  if (!value) return [0, 0, 0, 0];
   const data = value.match(/(-)?[0-9]+(px)?/g);
   if (!data || data.length < 2) {
     console.log(`invalid shadow value ${value}`);
@@ -97,6 +98,7 @@ function splitShadowValue(value) {
 }
 
 function getShadowColor(value) {
+  if (!value) return 'rgba(0, 0, 0, 0)';
   const data = value.match(/rgb(a)?(.*)/g);
   if (!data || data.length < 1) {
     console.log(`invalid shadow value ${value}`);

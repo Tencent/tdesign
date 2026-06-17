@@ -121,17 +121,19 @@ function setFontPalette() {
   initTextColorPalette.value = JSON.parse(JSON.stringify(palette));
 }
 
+function onRefreshColorTokens() {
+  setFontPalette();
+}
+
 onMounted(() => {
   nextTick(() => {
     setFontPalette();
   });
-  emitter.on('refresh-color-tokens', () => {
-    setFontPalette();
-  });
+  emitter.on('refresh-color-tokens', onRefreshColorTokens);
 });
 
 onBeforeUnmount(() => {
-  emitter.off('refresh-color-tokens');
+  emitter.off('refresh-color-tokens', onRefreshColorTokens);
 });
 </script>
 

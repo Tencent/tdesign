@@ -379,6 +379,7 @@ const generationMode = ref(getOptionFromLocal('recommend') === 'true' ? 'recomme
 const isGrayRelatedToTheme = ref(getOptionFromLocal('neutral') == 'true');
 const isMoreVisible = ref(false);
 let modeObserver = null;
+let cancelColorAnimation = null;
 
 const currentTheme = computed(() => themeStore.theme);
 const currentDevice = computed(() => themeStore.device);
@@ -404,7 +405,7 @@ watch(generationMode, () => {
 
 onMounted(() => {
   nextTick(() => {
-    colorAnimation();
+    cancelColorAnimation = colorAnimation();
     changeBrandColor(brandColor.value, 'init');
     updateFunctionTokenMap();
     // 恢复用户上次选择的功能色
@@ -426,6 +427,9 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (modeObserver) {
     modeObserver.disconnect();
+  }
+  if (cancelColorAnimation) {
+    cancelColorAnimation();
   }
 });
 

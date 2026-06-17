@@ -18,7 +18,7 @@
           :min="1"
           :disabled="disabled"
           :max="maxSliderValue"
-          :value="sliderValue"
+          :model-value="sliderValue"
           @change="handleSliderChange"
           :label="renderLabel"
           :tooltip-props="{ attach: handleAttach }"
