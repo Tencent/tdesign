@@ -5,7 +5,7 @@
     :header="false"
     :close-btn="false"
     :prevent-scroll-through="false"
-    :show-overlay="false"
+    :show-overlay="true"
     :attach="handleAttach"
     :footer="false"
   >
@@ -85,6 +85,11 @@ function changeActiveTab(tab) {
 </script>
 
 <style lang="less">
+/* overlay 透明但可点击关闭，不视觉遮挡页面内容 */
+.t-drawer__mask {
+  background: transparent !important;
+}
+
 .t-drawer__content-wrapper {
   box-shadow: var(--shadow-2);
   border-radius: 12px 0 0 0;
