@@ -19,7 +19,7 @@ import {
   syncThemeToIframe,
   themeStore,
 } from '@/common/themes';
-import { getShadowRoot, setShadowRootRef, clearShadowRootRef } from '@/common/utils';
+import { getShadowRoot, setShadowRootRef, clearShadowRootRef, patchShadowDomPopupClose } from '@/common/utils';
 import FloatDock from './float-dock';
 import PanelDrawer from './panel-drawer';
 
@@ -40,6 +40,7 @@ const props = defineProps({
 });
 
 const visible = ref(false);
+let cleanupPopupPatch = null;
 
 // 将 themeMode 同步到 shadowRoot 内的根元素
 // 这样 shadowRoot 内的 CSS 变量才能根据 theme-mode 切换
@@ -74,6 +75,7 @@ onMounted(() => {
   const shadowRoot = getShadowRoot();
   if (shadowRoot) {
     setShadowRootRef(shadowRoot);
+    cleanupPopupPatch = patchShadowDomPopupClose(shadowRoot);
   }
 
   // Web Component 模式下，attribute → prop 转换可能有时序问题
@@ -95,6 +97,10 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   clearShadowRootRef();
+  if (cleanupPopupPatch) {
+    cleanupPopupPatch();
+    cleanupPopupPatch = null;
+  }
 });
 </script>
 
