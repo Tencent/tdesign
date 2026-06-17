@@ -147,4 +147,29 @@ onBeforeUnmount(() => {
   border-color: var(--brand-main-hover);
   background-color: var(--brand-main-hover);
 }
+
+/* 修复 float-dock 按钮样式被 tdesign.min.css 覆盖的问题
+   .generator-btn .t-button 特异性 (0,2,0) 与 .t-button--shape-square.t-size-l (0,2,0) 相同，
+   仅靠源码顺序决定优先级不够稳健，提升至 (0,3,0) 确保稳赢 */
+.theme-generator .generator-btn .t-button,
+.theme-generator .export-btn .t-button,
+.theme-generator .setting-btn .t-button,
+.theme-generator .recover-btn .t-button {
+  height: 46px;
+  width: 100%;
+  border-radius: 24px;
+  border: none;
+  margin: auto;
+  transition: transform 0.2s, color 0.2s;
+  background-color: var(--bg-color-card);
+  --ripple-color: transparent;
+  color: var(--text-secondary);
+}
+.theme-generator .generator-btn:hover .t-button,
+.theme-generator .export-btn:hover .t-button,
+.theme-generator .setting-btn:hover .t-button,
+.theme-generator .recover-btn:hover .t-button {
+  background-color: var(--bg-color-card);
+  color: var(--text-primary);
+}
 </style>

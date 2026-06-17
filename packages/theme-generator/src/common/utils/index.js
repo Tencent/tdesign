@@ -159,6 +159,41 @@ export function appendStyleSheet(styleId) {
 }
 
 /**
+ * 将 CSS 文本中的 :root 选择器转换为 :host 选择器，
+ * 使动态注入的主题变量在 Shadow DOM 内也能生效。
+ */
+export function transformRootToHost(cssText) {
+  let result = cssText;
+  // :root.dark,:root[theme-mode=dark]{ 或 :root.dark,:root[theme-mode="dark"]{
+  result = result.replace(/:root\.dark,?:root\[theme-mode="?dark"?\]\{/g, ':host.dark,:host([theme-mode="dark"]){');
+  // :root[theme-mode=dark]{ 或 :root[theme-mode="dark"]{
+  result = result.replace(/:root\[theme-mode="?dark"?\]\{/g, ':host([theme-mode="dark"]){');
+  // :root,:root[theme-mode=light]{ 或 :root,:root[theme-mode="light"]{
+  result = result.replace(/:root,?:root\[theme-mode="?light"?\]\{/g, ':host,:host([theme-mode="light"]){');
+  // :root{ → :host{
+  result = result.replace(/:root\{/g, ':host{');
+  return result;
+}
+
+/**
+ * 在 shadowRoot 中创建/更新带 ID 的 <style> 元素，
+ * CSS 内容经 transformRootToHost() 转换，确保 :host 选择器在 Shadow DOM 内生效。
+ */
+export function appendShadowStyleSheet(shadowRoot, styleId, cssText) {
+  if (!shadowRoot) return null;
+  const hostCss = transformRootToHost(cssText);
+  let styleSheet = shadowRoot.getElementById(styleId);
+  if (!styleSheet) {
+    styleSheet = document.createElement('style');
+    styleSheet.id = styleId;
+    styleSheet.type = 'text/css';
+    shadowRoot.appendChild(styleSheet);
+  }
+  styleSheet.textContent = hostCss;
+  return styleSheet;
+}
+
+/**
  * 解决 `Popup` 组件脱离 Shadow DOM 的问题
  */
 export function handleAttach() {

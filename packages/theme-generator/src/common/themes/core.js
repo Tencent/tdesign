@@ -4,10 +4,12 @@ import { Color } from 'tvision-color';
 import GENERATOR_VARIABLES from './built-in/css/vars.css?raw';
 
 import {
+  appendShadowStyleSheet,
   appendStyleSheet,
   clearLocalItem,
   downloadFile,
   getElementById,
+  getShadowRoot,
   parseRootCss,
   querySelectorAll,
   setUpModeObserver,
@@ -47,6 +49,12 @@ export function normalizeDevice(device) {
 export function initGeneratorVars() {
   const siteStylesheet = appendStyleSheet(GENERATOR_ID);
   siteStylesheet.textContent = GENERATOR_VARIABLES;
+
+  // 同步到 shadowRoot，确保 WC 模式下生成器自身 UI 变量可用
+  const shadowRoot = getShadowRoot();
+  if (shadowRoot) {
+    appendShadowStyleSheet(shadowRoot, `wc-${GENERATOR_ID}`, GENERATOR_VARIABLES);
+  }
 }
 
 export function getDefaultTheme(device) {
@@ -93,6 +101,14 @@ export function initThemeStyleSheet(themeName, device) {
   styleSheet.textContent = light;
   darkStyleSheet.textContent = dark;
   extraStyleSheet.textContent = extra;
+
+  // 同步到 shadowRoot，确保 WC 模式下主题变量在 Shadow DOM 内可用
+  const shadowRoot = getShadowRoot();
+  if (shadowRoot) {
+    appendShadowStyleSheet(shadowRoot, `wc-${CUSTOM_THEME_ID}`, light);
+    appendShadowStyleSheet(shadowRoot, `wc-${CUSTOM_DARK_ID}`, dark);
+    appendShadowStyleSheet(shadowRoot, `wc-${CUSTOM_EXTRA_ID}`, extra);
+  }
 
   return theme;
 }
@@ -192,6 +208,21 @@ export function modifyToken(tokenName, newVal, saveToLocal = true) {
 
     updateLocalToken(tokenName, saveToLocal ? newVal : null);
   });
+
+  // 同步到 shadowRoot，确保 WC 模式下 token 修改在 Shadow DOM 内生效
+  const shadowRoot = getShadowRoot();
+  if (shadowRoot && tokenFound) {
+    const shadowSheets = shadowRoot.querySelectorAll(
+      `#wc-${CUSTOM_THEME_ID}, #wc-${CUSTOM_DARK_ID}, #wc-${CUSTOM_EXTRA_ID}`,
+    );
+    shadowSheets.forEach((sheet) => {
+      const reg = new RegExp(`${tokenName}:\\s*(.*?);`);
+      const match = sheet.textContent.match(reg);
+      if (match && match[1] !== newVal) {
+        sheet.textContent = sheet.textContent.replace(`${tokenName}: ${match[1]}`, `${tokenName}: ${newVal}`);
+      }
+    });
+  }
 
   if (!tokenFound) {
     console.warn(`CSS variable: ${tokenName} is not exist`);
@@ -329,6 +360,15 @@ export function updateStyleSheetColor(type, lightPalette, darkPalette, trigger) 
 
   updateColorTokens(styleSheet, lightPalette);
   updateColorTokens(darkStyleSheet, darkPalette);
+
+  // 同步到 shadowRoot，确保 WC 模式下颜色更新在 Shadow DOM 内生效
+  const shadowRoot = getShadowRoot();
+  if (shadowRoot) {
+    const shadowLightSheet = shadowRoot.getElementById(`wc-${CUSTOM_THEME_ID}`);
+    const shadowDarkSheet = shadowRoot.getElementById(`wc-${CUSTOM_DARK_ID}`);
+    if (shadowLightSheet) updateColorTokens(shadowLightSheet, lightPalette);
+    if (shadowDarkSheet) updateColorTokens(shadowDarkSheet, darkPalette);
+  }
 }
 
 export function syncColorTokensToStyle(lightTokenMap, darkTokenMap) {
@@ -344,6 +384,15 @@ export function syncColorTokensToStyle(lightTokenMap, darkTokenMap) {
 
   updateColorTokens(styleSheet, lightTokenMap);
   updateColorTokens(darkStyleSheet, darkTokenMap);
+
+  // 同步到 shadowRoot
+  const shadowRoot = getShadowRoot();
+  if (shadowRoot) {
+    const shadowLightSheet = shadowRoot.getElementById(`wc-${CUSTOM_THEME_ID}`);
+    const shadowDarkSheet = shadowRoot.getElementById(`wc-${CUSTOM_DARK_ID}`);
+    if (shadowLightSheet) updateColorTokens(shadowLightSheet, lightTokenMap);
+    if (shadowDarkSheet) updateColorTokens(shadowDarkSheet, darkTokenMap);
+  }
 }
 
 /**
