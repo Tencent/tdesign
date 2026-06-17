@@ -201,6 +201,62 @@ export function handleAttach() {
 }
 
 /**
+ * 修复 TDesign Popup 在 Shadow DOM 下的 click-outside 关闭行为。
+ *
+ * TDesign Popup 在 document 上以 capture 模式监听 mousedown (onDocumentMouseDown)，
+ * 通过 popperEl.contains(ev.target) 和 triggerEl.contains(ev.target) 判断点击是否在
+ * popup 内。但 Shadow DOM 会将 ev.target 重定向为 shadow host (<td-theme-generator>)，
+ * 导致 contains() 均为 false，popup 被误关闭。
+ *
+ * 修复：在 document 上注册更早的 capture listener，对来自 shadow DOM 内部且在
+ * Popup overlay (data-td-popup / data-td-popup-parent) 内的 mousedown，
+ * 用 stopImmediatePropagation() 阻止 TDesign 的 onDocumentMouseDown 执行。
+ *
+ * 对 shadow DOM 内但不在 popup overlay 内的点击，不拦截，让 Popup 正常关闭。
+ * 对 shadow DOM 外部的点击，不影响原有行为。
+ *
+ * @param {ShadowRoot} shadowRoot - WC 的 shadowRoot 引用
+ * @returns {Function} cleanup 函数，移除 document listener
+ */
+export function patchShadowDomPopupClose(shadowRoot) {
+  if (!shadowRoot?.host) return null;
+
+  function onShadowDomMousedown(ev) {
+    // 只处理 mousedown 事件起源于 shadow DOM 内部的情况
+    // composedPath()[0] 是事件的原始 target（不受 shadow DOM retargeting 影响）
+    const path = ev.composedPath();
+    if (path.length === 0) return;
+
+    // 检查原始 target 是否在 shadow DOM 内
+    // path 包含 shadow root 时说明事件起源于 shadow DOM 内部
+    if (!path.includes(shadowRoot)) return;
+
+    // 检查点击是否在 Popup overlay 或嵌套 popup 内
+    const isInPopup = path.some((el) => {
+      if (!(el instanceof HTMLElement)) return false;
+      return el.hasAttribute('data-td-popup') || el.hasAttribute('data-td-popup-parent');
+    });
+
+    if (isInPopup) {
+      // 点击在 popup overlay 内，阻止 TDesign 的 document capture handler 执行
+      // 防止 popup 被误关闭
+      ev.stopImmediatePropagation();
+    }
+    // 如果不在 popup overlay 内，不拦截，让 TDesign 的 handler 正常关闭 popup
+  }
+
+  // 在 document 上注册 capture 阶段的 listener
+  // 此 listener 必须比 TDesign Popup 的 onDocumentMouseDown 更早注册，
+  // 这样在同一个 capture 阶段中会先执行
+  document.addEventListener('mousedown', onShadowDomMousedown, true);
+
+  // 返回 cleanup 函数
+  return () => {
+    document.removeEventListener('mousedown', onShadowDomMousedown, true);
+  };
+}
+
+/**
  * 将指定内容导出为文件
  * - e.g. `new Blob(['Hello, world!'], { type: 'text/plain' })`
  */

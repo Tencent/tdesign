@@ -66,7 +66,21 @@ export default defineConfig({
     },
     allowedHosts: true,
   },
-  plugins: [vue(), svgLoader(), wcCssPlugin()],
+  plugins: [
+    vue({
+      // Generator.vue 作为 Custom Element 根组件编译
+      // 启用 shadow DOM 模式
+      customElement: /Generator\.vue$/,
+      template: {
+        compilerOptions: {
+          // td- 开头的标签为 Custom Element，不作为 Vue 组件解析
+          isCustomElement: (tag) => tag.startsWith('td-'),
+        },
+      },
+    }),
+    svgLoader(),
+    wcCssPlugin(),
+  ],
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),

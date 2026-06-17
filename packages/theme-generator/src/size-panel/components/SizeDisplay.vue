@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :key="refreshKey">
     <div class="size-panel__token-list">
       <div
         v-for="(token, index) in SIZE_TOKENS"
@@ -18,16 +18,19 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { getTokenValue } from '@/common/utils';
 import emitter from '@/common/event-bus';
 import { SIZE_TOKENS } from '../built-in/size-map';
 import SectionDynamicSvg from '../svg/SectionDynamicSvg.vue';
 
-// refreshKey 原本用于强制重渲染，但模板中未绑定 :key，
-// 实际重渲染由父组件 refreshId 变化驱动，此处仅监听事件以同步 token 值
+// Vue 3 <script setup> 中，只有模板中实际读取的 ref 才会触发重渲染
+// refreshKey 绑定在根元素 :key 上，值变化时强制组件重渲染，
+// 确保 getTokenValue() 读取的最新 DOM 值能反映到 UI
+const refreshKey = ref(0);
+
 function onRefreshSizeTokens() {
-  // 事件触发时 getTokenValue 读取最新 DOM 值，下次渲染自动反映变化
+  refreshKey.value++;
 }
 
 onMounted(() => {
