@@ -589,7 +589,6 @@ import xdLogo from '@/assets/xd-logo.svg';
 import flutterLogo from '@/assets/flutter-logo.svg';
 import sketchLogo from '@/assets/sketch-logo.svg';
 import miniprogramLogo from '@/assets/miniprogram-logo.svg';
-import qqLogo from '@/assets/qq-logo.svg';
 
 import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, xdWebUrl } from '@constants';
 
@@ -687,10 +686,7 @@ export default {
           status: 1,
         },
       ],
-      miniSourceList: [
-        { logo: miniprogramLogo, name: 'Wechat MiniProgram', href: '/miniprogram/', status: 1 },
-        { logo: qqLogo, name: 'QQ MiniProgram', href: '/qq-miniprogram/', status: 2 },
-      ],
+      miniSourceList: [{ logo: miniprogramLogo, name: 'Wechat MiniProgram', href: '/miniprogram/', status: 1 }],
       codeFramework: 'vue',
       codeList: {
         vue: [
