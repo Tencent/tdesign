@@ -127,7 +127,7 @@ export default {
         const { name } = ShadowTypeMap[index];
 
         const isCustom = this.step === ShadowSelectType.Self_Defined;
-        modifyToken(name, isCustom ? newShadow : null);
+        modifyToken(name, newShadow, isCustom);
       }
     },
   },
