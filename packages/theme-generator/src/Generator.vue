@@ -80,6 +80,9 @@ export default {
 .t-popconfirm .t-icon {
   font-size: 20px !important;
 }
+.t-popup__content {
+  box-shadow: var(--shadow-2);
+}
 .t-popup .t-select-option {
   font-size: 14px;
 }
