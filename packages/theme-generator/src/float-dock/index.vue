@@ -83,7 +83,6 @@
         >
           <t-popconfirm
             :content="lang.dock.recoverConfirm"
-            :theme="null"
             :popup-props="{
               attach: handleAttach,
             }"

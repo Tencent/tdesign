@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, markRaw } from 'vue';
 import { useLang } from '@/common/i18n';
 import { isMobile, themeStore } from '@/common/themes';
 
@@ -57,23 +57,23 @@ onMounted(() => {
   tabs.value = [
     {
       title: text.color.title,
-      image: ColorSvg,
+      image: markRaw(ColorSvg),
     },
     {
       title: text.font.title,
-      image: FontSvg,
+      image: markRaw(FontSvg),
     },
     {
       title: text.borerRadius.title,
-      image: RadiusSvg,
+      image: markRaw(RadiusSvg),
     },
     {
       title: text.shadow.title,
-      image: BoxshadowSvg,
+      image: markRaw(BoxshadowSvg),
     },
     {
       title: text.size.title,
-      image: SizeSvg,
+      image: markRaw(SizeSvg),
     },
   ];
 });
