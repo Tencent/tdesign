@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted, nextTick } from 'vue';
 import { RemoveIcon } from 'tdesign-icons-vue-next';
 import { Input as TInput, InputNumber as TInputNumber, Popup as TPopup } from 'tdesign-vue-next';
 
@@ -51,6 +51,12 @@ const emit = defineEmits(['change', 'move']);
 const shadow = ref([0, 0, 0, 0]);
 const color = ref('');
 const hasInit = ref(false);
+
+onMounted(() => {
+  nextTick(() => {
+    hasInit.value = true;
+  });
+});
 
 function splitShadowValue(value) {
   const data = value.match(/(-)?[0-9]+(px)?/g);
@@ -112,7 +118,6 @@ watch(
 watch(color, (nVal) => {
   // 初始化值 不触发 change事件
   if (!hasInit.value) {
-    hasInit.value = true;
     return;
   }
   const shadowStr = shadow.value.map((val) => `${val}px`).join(' ');
