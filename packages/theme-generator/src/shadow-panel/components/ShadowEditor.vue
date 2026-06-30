@@ -94,15 +94,20 @@ function handleMove() {
 shadow.value = splitShadowValue(props.value);
 color.value = getShadowColor(props.value);
 
-watch(shadow, (nVal) => {
-  // 初始化值 不触发 change事件
-  if (!hasInit.value) {
-    // this.hasInit= true;
-    return;
-  }
-  const shadowStr = nVal.map((val) => `${val}px`).join(' ');
-  emit('change', `${shadowStr} ${color.value}`);
-});
+// deep: true —— shadow 是数组 ref，template 用 v-model="shadow[i]" 按索引 mutate，
+// 不加 deep 则 watch 不触发（Vue 2 的 v-model 数组索引编译为 $set 会触发，Vue 3 需 deep）
+watch(
+  shadow,
+  (nVal) => {
+    // 初始化值 不触发 change事件
+    if (!hasInit.value) {
+      return;
+    }
+    const shadowStr = nVal.map((val) => `${val}px`).join(' ');
+    emit('change', `${shadowStr} ${color.value}`);
+  },
+  { deep: true },
+);
 
 watch(color, (nVal) => {
   // 初始化值 不触发 change事件
