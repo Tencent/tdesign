@@ -32,7 +32,7 @@
         }"
       ></div>
 
-      <div v-for="(color, index) in tokenMap" :key="index">
+      <div v-for="(color, index) in colorList" :key="index">
         <t-popup
           placement="left"
           showArrow
@@ -63,7 +63,7 @@
             </transition>
           </div>
           <template #content>
-            <color-picker :value="getTokenValue(color.name)" @change="(hex) => changeGradation(hex, color.idx)" />
+            <color-picker :value="color.value" @change="(hex) => changeGradation(hex, color.idx)" />
           </template>
         </t-popup>
         <div v-if="color.name" @click="handleClickIdx(color.idx)" class="color-content__vertical-list-content">
@@ -72,7 +72,7 @@
           </div>
           <div class="color-content__vertical-list-subtitle">
             <span>{{ type }}{{ color.idx }} </span>
-            <span>{{ getTokenValue(color.name) }}</span>
+            <span>{{ color.value }}</span>
           </div>
           <error-circle-icon class="error-icon" v-if="color.isModified" />
         </div>
@@ -80,77 +80,83 @@
     </div>
   </div>
 </template>
-<script>
-import { Edit1Icon, ErrorCircleIcon, LinkUnlinkIcon } from 'tdesign-icons-vue';
-import { Popup as TPopup } from 'tdesign-vue';
+<script setup>
+import { ref, computed, watch } from 'vue';
+import { Edit1Icon, ErrorCircleIcon, LinkUnlinkIcon } from 'tdesign-icons-vue-next';
+import { Popup as TPopup } from 'tdesign-vue-next';
 
 import { ColorPicker } from '@/common/components';
-import { langMixin } from '@/common/i18n';
-import { getTokenFromLocal } from '@/common/themes';
+import { useLang } from '@/common/i18n';
+import { getTokenFromLocal, themeStore } from '@/common/themes';
 import { getTokenValue, handleAttach } from '@/common/utils';
 
-export default {
-  name: 'ColorColumn',
-  props: {
-    type: String,
-    gradientStep: Number,
-    tokenMap: Array,
+defineOptions({ name: 'ColorColumn' });
+
+const props = defineProps({
+  type: String,
+  gradientStep: Number,
+  tokenMap: Array,
+});
+
+const emit = defineEmits(['recoverGradation', 'changeGradation']);
+
+const { lang } = useLang();
+
+const activeIdx = ref(0);
+const hoverIdx = ref(null);
+const paletteChanged = ref(hasModifiedColors());
+
+// refresh-color-tokens 事件触发后，重新读取 DOM 中的 token 值
+const refreshKey = ref(0);
+watch(
+  () => themeStore.colorRefreshId,
+  () => {
+    refreshKey.value++;
   },
-  emit: ['recoverGradation', 'changeGradation'],
-  components: {
-    TPopup,
-    ColorPicker,
-    LinkUnlinkIcon,
-    Edit1Icon,
-    ErrorCircleIcon,
+);
+
+// 将 tokenMap 与最新的 token 值合并；引用 refreshKey 以便在刷新时重新计算
+const colorList = computed(() => {
+  refreshKey.value;
+  return props.tokenMap.map((color) => ({ ...color, value: getTokenValue(color.name) }));
+});
+
+watch(
+  () => props.tokenMap,
+  () => {
+    paletteChanged.value = hasModifiedColors();
   },
-  mixins: [langMixin],
-  data() {
-    return {
-      activeIdx: 0,
-      hoverIdx: null,
-      paletteChanged: this.hasModifiedColors(),
-    };
-  },
-  watch: {
-    tokenMap() {
-      this.paletteChanged = this.hasModifiedColors();
-    },
-  },
-  mounted() {
-    this.$root.$on('refresh-color-tokens', () => {
-      this.$forceUpdate();
-    });
-  },
-  methods: {
-    getTokenValue,
-    handleAttach,
-    handleClickIdx(idx) {
-      this.activeIdx = idx;
-    },
-    handleRecover() {
-      this.paletteChanged = false;
-      this.$emit('recoverGradation', this.type);
-    },
-    changeGradation(hex, idx) {
-      this.paletteChanged = true;
-      this.$emit('changeGradation', hex, idx, this.type);
-    },
-    hasModifiedColors() {
-      const localTokens = getTokenFromLocal();
-      if (!localTokens) return false;
-      const tokenKeys = Object.keys(localTokens);
-      return tokenKeys.some((key) => key.includes(this.type));
-    },
-  },
-};
+);
+
+// eslint-disable-next-line no-unused-vars
+function handleClickIdx(idx) {
+  activeIdx.value = idx;
+}
+
+// eslint-disable-next-line no-unused-vars
+function handleRecover() {
+  paletteChanged.value = false;
+  emit('recoverGradation', props.type);
+}
+
+function changeGradation(hex, idx) {
+  paletteChanged.value = true;
+  emit('changeGradation', hex, idx, props.type);
+}
+
+function hasModifiedColors() {
+  const localTokens = getTokenFromLocal();
+  if (!localTokens) return false;
+  const tokenKeys = Object.keys(localTokens);
+  return tokenKeys.some((key) => key.includes(props.type));
+}
 </script>
 <style scoped lang="less">
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.1s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter-from, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
 
@@ -200,7 +206,7 @@ export default {
       justify-content: center;
       cursor: pointer;
 
-      /deep/ .t-icon {
+      :deep(.t-icon) {
         font-size: 16px;
         margin-right: 4px;
       }

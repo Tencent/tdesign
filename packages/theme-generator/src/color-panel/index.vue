@@ -314,8 +314,9 @@
   </div>
 </template>
 
-<script lang="jsx">
-import { Edit1Icon, FileCopyIcon, HelpCircleIcon } from 'tdesign-icons-vue';
+<script setup>
+import { ref, computed, watch, onMounted, nextTick } from 'vue';
+import { Edit1Icon, FileCopyIcon, HelpCircleIcon } from 'tdesign-icons-vue-next';
 import {
   Col as TCol,
   Divider as TDivider,
@@ -323,10 +324,10 @@ import {
   Row as TRow,
   Switch as TSwitch,
   Tooltip as TTooltip,
-} from 'tdesign-vue';
+} from 'tdesign-vue-next';
 
 import { ColorPicker } from '@/common/components';
-import { langMixin } from '@/common/i18n';
+import { useLang } from '@/common/i18n';
 import {
   collectTokenIndexes,
   convertFromHex,
@@ -350,212 +351,192 @@ import { ALL_PRESET_COLORS, DEFAULT_COLORS, RECOMMEND_COLORS, SCENE_COLORS } fro
 import ColorCollapse from './components/ColorCollapse';
 import ColorColumn from './components/ColorColumn';
 
-export default {
-  name: 'ColorPanel',
-  props: {
-    top: Number,
-  },
-  mixins: [langMixin],
-  components: {
-    TRow,
-    TCol,
-    TDivider,
-    TPopup,
-    TTooltip,
-    TSwitch,
-    Edit1Icon,
-    HelpCircleIcon,
-    FileCopyIcon,
-    ColorColumn,
-    ColorPicker,
-    ColorCollapse,
-  },
-  data() {
-    return {
-      DEFAULT_COLORS,
-      RECOMMEND_COLORS,
-      SCENE_COLORS,
-      ALL_PRESET_COLORS,
-      functionTokenMap: {
-        gray: [],
-        success: [],
-        error: [],
-        warning: [],
-      },
-      brandInputColor: themeStore.brandColor,
-      brandIndexes: {
-        light: 7,
-        dark: 8,
-      },
-      currentBrandIdx: 7,
-      brandTokenMap: [], // `-td-brand-x` 系列的 token 映射需要根据 brandIdx 动态计算；其它功能色都是固定的
-      grayMainColor: getOptionFromLocal('gray') || getTokenValue('--td-gray-color-4'),
-      successMainColor: getOptionFromLocal('success') || getTokenValue('--td-success-color'),
-      errorMainColor: getOptionFromLocal('error') || getTokenValue('--td-error-color'),
-      warningMainColor: getOptionFromLocal('warning') || getTokenValue('--td-warning-color'),
-      generationMode: getOptionFromLocal('recommend') === 'true' ? 'recommend' : 'remain', // remain: 保留输入, recommend: 智能推荐
-      isGrayRelatedToTheme: getOptionFromLocal('neutral') == 'true',
-      isMoreVisible: false,
-    };
-  },
-  computed: {
-    $theme() {
-      return themeStore.theme;
-    },
-    $device() {
-      return themeStore.device;
-    },
-    isRemainMode() {
-      return this.generationMode === 'remain';
-    },
-    $brandColor() {
-      return themeStore.brandColor;
-    },
-    brandDisplayedColor() {
-      return this.isRemainMode ? this.brandInputColor : this.$brandColor;
-    },
-    contentStyle() {
-      const clientHeight = window.innerHeight;
-      return {
-        overflowY: 'scroll',
-        height: `${clientHeight - (this.top || 0) - 96}px`,
-      };
-    },
-  },
-  watch: {
-    generationMode() {
-      this.changeBrandColor(this.brandDisplayedColor);
-    },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      colorAnimation();
-      this.changeBrandColor(this.$brandColor, 'init');
-      this.updateFunctionTokenMap();
-      // 恢复用户上次选择的功能色
-      const functionColors = ['gray', 'success', 'error', 'warning'];
-      functionColors.forEach((type) => {
-        const color = getOptionFromLocal(type);
-        if (color) {
-          this.changeFunctionColor(color, type, 'init');
-        }
-      });
-      setUpModeObserver((theme) => {
-        this.updateBrandTokenMap();
-        this.updateFunctionTokenMap();
-        this.currentBrandIdx = this.brandIndexes[theme];
-        this.$forceUpdate();
-      });
-    });
-  },
-  methods: {
-    handleAttach,
-    convertFromHex,
-    generateBrandTokenMap(brandIdx) {
-      const hoverIdx = brandIdx - 1;
-      const activeIdx = brandIdx > 8 ? brandIdx : brandIdx + 1;
-      return [
-        { name: '--td-brand-color-light', idx: 1 },
-        { name: '--td-brand-color-focus', idx: isMobile(this.$device) ? 1 : 2 },
-        { name: '--td-brand-color-disabled', idx: 3 },
-        ...(!isMobile(this.$device) ? [{ name: '--td-brand-color-hover', idx: hoverIdx }] : []),
-        { name: '--td-brand-color', idx: brandIdx },
-        { name: '--td-brand-color-active', idx: activeIdx },
-      ];
-    },
-    updateBrandTokenMap() {
-      const brandIdx = this.currentBrandIdx;
-      const extraBrandTokens = this.generateBrandTokenMap(brandIdx);
-      this.brandTokenMap = extraBrandTokens;
-    },
-    updateFunctionTokenMap() {
-      Object.keys(FUNCTION_TOKENS).forEach((type) => {
-        const tokens = FUNCTION_TOKENS[type];
-        this.functionTokenMap[type] = collectTokenIndexes(tokens);
-      });
-    },
-    changeBrandColor(hex, trigger = 'update') {
-      // 备份用户实际输入的颜色
-      // 在智能推荐模式下，它与实际更新的颜色不同
-      this.brandInputColor = hex.toUpperCase();
+defineOptions({ name: 'ColorPanel' });
 
-      const { lightPalette, lightBrandIdx, darkPalette, darkBrandIdx } = generateBrandPalette(hex, this.isRemainMode);
-      this.brandIndexes = {
-        light: lightBrandIdx,
-        dark: darkBrandIdx,
-      };
+const props = defineProps({
+  top: Number,
+});
 
-      const newBrandColor = lightPalette[lightBrandIdx - 1].toUpperCase();
-      themeStore.updateBrandColor(newBrandColor);
-      updateLocalOption(
-        'color',
-        newBrandColor.toLowerCase() !== this.$theme.value.toLowerCase() ? this.brandInputColor : null,
-      );
-      updateLocalOption('recommend', !this.isRemainMode ? 'true' : null);
+const { lang, isEn } = useLang();
 
-      const lightExtraTokens = this.generateBrandTokenMap(lightBrandIdx);
-      const darkExtraTokens = this.generateBrandTokenMap(darkBrandIdx);
+const functionTokenMap = ref({
+  gray: [],
+  success: [],
+  error: [],
+  warning: [],
+});
+const brandInputColor = ref(themeStore.brandColor);
+const brandIndexes = ref({
+  light: 7,
+  dark: 8,
+});
+const currentBrandIdx = ref(7);
+const brandTokenMap = ref([]); // `-td-brand-x` 系列的 token 映射需要根据 brandIdx 动态计算；其它功能色都是固定的
+const grayMainColor = ref(getOptionFromLocal('gray') || getTokenValue('--td-gray-color-4'));
+const successMainColor = ref(getOptionFromLocal('success') || getTokenValue('--td-success-color'));
+const errorMainColor = ref(getOptionFromLocal('error') || getTokenValue('--td-error-color'));
+const warningMainColor = ref(getOptionFromLocal('warning') || getTokenValue('--td-warning-color'));
+const generationMode = ref(getOptionFromLocal('recommend') === 'true' ? 'recommend' : 'remain'); // remain: 保留输入, recommend: 智能推荐
+const isGrayRelatedToTheme = ref(getOptionFromLocal('neutral') == 'true');
+const isMoreVisible = ref(false);
 
-      this.currentBrandIdx = this.brandIndexes[getThemeMode()];
-      const shouldUpdateStyleSheet = this.$brandColor != this.$theme.value || trigger === 'update';
-      if (shouldUpdateStyleSheet) {
-        // 只在用户手动修改主题色时同步 stylesheet，避免覆盖内置主题自身的逻辑
-        updateStyleSheetColor('brand', lightPalette, darkPalette, trigger);
-        syncColorTokensToStyle(lightExtraTokens, darkExtraTokens);
-        this.changeNeutralColor(this.isGrayRelatedToTheme, trigger);
-      }
-
-      this.updateBrandTokenMap();
-    },
-    changeNeutralColor(related, trigger = 'update') {
-      updateLocalOption('neutral', related ? 'true' : null);
-      // grayMainColor 始终保持用户自定义的中性色，不随关联状态改变
-      // 关联时只是借用品牌色作为生成算法的输入
-      const inputHex = related ? this.$brandColor : this.grayMainColor;
-      const palette = generateNeutralPalette(inputHex, related);
-      updateStyleSheetColor('gray', palette, palette, trigger);
-      this.$nextTick(this.refreshColorTokens);
-    },
-    changeFunctionColor(hex, type, trigger = 'update') {
-      if (trigger !== 'init') {
-        updateLocalOption(type, hex);
-      }
-      this[`${type}MainColor`] = hex;
-      if (type === 'gray') {
-        this.changeNeutralColor(this.isGrayRelatedToTheme, trigger);
-        return;
-      }
-      const { lightPalette, darkPalette } = generateFunctionalPalette(hex);
-      updateStyleSheetColor(type, lightPalette, darkPalette, trigger);
-      this.$nextTick(this.refreshColorTokens);
-    },
-    changeGradation(hex, idx, type, saveToLocal = true) {
-      const tokenName = `--td-${type}-color-${idx}`;
-      modifyToken(tokenName, hex, saveToLocal);
-      this.$nextTick(this.refreshColorTokens);
-    },
-    recoverGradation(type) {
-      Array(14) // 最长的情况为 gray 的 14 个色阶（虽然理论上有些 token 用户无法直接在 UI 中修改）
-        .fill(0)
-        .forEach((_, idx) => {
-          const tokenName = `--td-${type}-color-${idx + 1}`;
-          updateLocalToken(tokenName, undefined, false); // 清空本地缓存值
-        });
-      if (type === 'brand') {
-        this.changeBrandColor(this.brandInputColor);
-        return;
-      }
-      this.changeFunctionColor(this[`${type}MainColor`], type);
-    },
-    refreshColorTokens() {
-      this.$root.$emit('refresh-color-tokens');
-    },
-  },
+// 用于动态访问 `this[\`${type}MainColor\`]`
+const mainColorMap = {
+  gray: grayMainColor,
+  success: successMainColor,
+  error: errorMainColor,
+  warning: warningMainColor,
 };
+
+const $theme = computed(() => themeStore.theme);
+const $device = computed(() => themeStore.device);
+const isRemainMode = computed(() => generationMode.value === 'remain');
+const $brandColor = computed(() => themeStore.brandColor);
+const brandDisplayedColor = computed(() => (isRemainMode.value ? brandInputColor.value : $brandColor.value));
+const contentStyle = computed(() => {
+  const clientHeight = window.innerHeight;
+  return {
+    overflowY: 'scroll',
+    height: `${clientHeight - (props.top || 0) - 96}px`,
+  };
+});
+
+function generateBrandTokenMap(brandIdx) {
+  const hoverIdx = brandIdx - 1;
+  const activeIdx = brandIdx > 8 ? brandIdx : brandIdx + 1;
+  return [
+    { name: '--td-brand-color-light', idx: 1 },
+    { name: '--td-brand-color-focus', idx: isMobile($device.value) ? 1 : 2 },
+    { name: '--td-brand-color-disabled', idx: 3 },
+    ...(!isMobile($device.value) ? [{ name: '--td-brand-color-hover', idx: hoverIdx }] : []),
+    { name: '--td-brand-color', idx: brandIdx },
+    { name: '--td-brand-color-active', idx: activeIdx },
+  ];
+}
+
+function updateBrandTokenMap() {
+  const brandIdx = currentBrandIdx.value;
+  const extraBrandTokens = generateBrandTokenMap(brandIdx);
+  brandTokenMap.value = extraBrandTokens;
+}
+
+function updateFunctionTokenMap() {
+  Object.keys(FUNCTION_TOKENS).forEach((type) => {
+    const tokens = FUNCTION_TOKENS[type];
+    functionTokenMap.value[type] = collectTokenIndexes(tokens);
+  });
+}
+
+function changeBrandColor(hex, trigger = 'update') {
+  // 备份用户实际输入的颜色
+  // 在智能推荐模式下，它与实际更新的颜色不同
+  brandInputColor.value = hex.toUpperCase();
+
+  const { lightPalette, lightBrandIdx, darkPalette, darkBrandIdx } = generateBrandPalette(hex, isRemainMode.value);
+  brandIndexes.value = {
+    light: lightBrandIdx,
+    dark: darkBrandIdx,
+  };
+
+  const newBrandColor = lightPalette[lightBrandIdx - 1].toUpperCase();
+  themeStore.updateBrandColor(newBrandColor);
+  updateLocalOption(
+    'color',
+    newBrandColor.toLowerCase() !== $theme.value.value.toLowerCase() ? brandInputColor.value : null,
+  );
+  updateLocalOption('recommend', !isRemainMode.value ? 'true' : null);
+
+  const lightExtraTokens = generateBrandTokenMap(lightBrandIdx);
+  const darkExtraTokens = generateBrandTokenMap(darkBrandIdx);
+
+  currentBrandIdx.value = brandIndexes.value[getThemeMode()];
+  const shouldUpdateStyleSheet = $brandColor.value != $theme.value.value || trigger === 'update';
+  if (shouldUpdateStyleSheet) {
+    // 只在用户手动修改主题色时同步 stylesheet，避免覆盖内置主题自身的逻辑
+    updateStyleSheetColor('brand', lightPalette, darkPalette, trigger);
+    syncColorTokensToStyle(lightExtraTokens, darkExtraTokens);
+    changeNeutralColor(isGrayRelatedToTheme.value, trigger);
+  }
+
+  updateBrandTokenMap();
+}
+
+function changeNeutralColor(related, trigger = 'update') {
+  updateLocalOption('neutral', related ? 'true' : null);
+  // grayMainColor 始终保持用户自定义的中性色，不随关联状态改变
+  // 关联时只是借用品牌色作为生成算法的输入
+  const inputHex = related ? $brandColor.value : grayMainColor.value;
+  const palette = generateNeutralPalette(inputHex, related);
+  updateStyleSheetColor('gray', palette, palette, trigger);
+  nextTick(refreshColorTokens);
+}
+
+function changeFunctionColor(hex, type, trigger = 'update') {
+  if (trigger !== 'init') {
+    updateLocalOption(type, hex);
+  }
+  mainColorMap[type].value = hex;
+  if (type === 'gray') {
+    changeNeutralColor(isGrayRelatedToTheme.value, trigger);
+    return;
+  }
+  const { lightPalette, darkPalette } = generateFunctionalPalette(hex);
+  updateStyleSheetColor(type, lightPalette, darkPalette, trigger);
+  nextTick(refreshColorTokens);
+}
+
+function changeGradation(hex, idx, type, saveToLocal = true) {
+  const tokenName = `--td-${type}-color-${idx}`;
+  modifyToken(tokenName, hex, saveToLocal);
+  nextTick(refreshColorTokens);
+}
+
+function recoverGradation(type) {
+  Array(14) // 最长的情况为 gray 的 14 个色阶（虽然理论上有些 token 用户无法直接在 UI 中修改）
+    .fill(0)
+    .forEach((_, idx) => {
+      const tokenName = `--td-${type}-color-${idx + 1}`;
+      updateLocalToken(tokenName, undefined, false); // 清空本地缓存值
+    });
+  if (type === 'brand') {
+    changeBrandColor(brandInputColor.value);
+    return;
+  }
+  changeFunctionColor(mainColorMap[type].value, type);
+}
+
+function refreshColorTokens() {
+  themeStore.incrementColorRefresh();
+}
+
+watch(generationMode, () => {
+  changeBrandColor(brandDisplayedColor.value);
+});
+
+onMounted(() => {
+  nextTick(() => {
+    colorAnimation();
+    changeBrandColor($brandColor.value, 'init');
+    updateFunctionTokenMap();
+    // 恢复用户上次选择的功能色
+    const functionColors = ['gray', 'success', 'error', 'warning'];
+    functionColors.forEach((type) => {
+      const color = getOptionFromLocal(type);
+      if (color) {
+        changeFunctionColor(color, type, 'init');
+      }
+    });
+    setUpModeObserver((theme) => {
+      updateBrandTokenMap();
+      updateFunctionTokenMap();
+      currentBrandIdx.value = brandIndexes.value[theme];
+    });
+  });
+});
 </script>
 
 <style scoped lang="less">
-/deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
+:deep(.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow) {
   left: calc(100% - 16px * 2) !important;
 }
 
@@ -583,7 +564,7 @@ export default {
     }
   }
 
-  /deep/ .t-divider__horizontal {
+  :deep(.t-divider__horizontal) {
     margin: 16px 0;
   }
 

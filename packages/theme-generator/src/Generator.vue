@@ -10,7 +10,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import {
   applyTokenFromLocal,
   initGeneratorVars,
@@ -22,51 +23,42 @@ import {
 import FloatDock from './float-dock';
 import PanelDrawer from './panel-drawer';
 
-export default {
-  name: 'ThemeGenerator',
-  components: {
-    FloatDock,
-    PanelDrawer,
+defineOptions({ name: 'ThemeGenerator' });
+
+const props = defineProps({
+  showSetting: {
+    type: [Boolean, String],
   },
-  props: {
-    showSetting: {
-      type: [Boolean, String],
-    },
-    device: {
-      type: String,
-      default: 'web',
-    },
+  device: {
+    type: String,
+    default: 'web',
   },
-  data() {
-    return {
-      visible: 0,
-    };
-  },
-  mounted() {
-    themeStore.updateDevice(this.device);
-    syncModeToGenerator();
-    initGeneratorVars();
-    applyTokenFromLocal();
-    syncThemeToIframe(this.device);
-  },
-  methods: {
-    handleTriggerVisible() {
-      this.visible = true;
-    },
-    handleDrawerVisible(v) {
-      this.visible = v;
-    },
-    handleClickSetting() {
-      this.visible = false;
-    },
-  },
-};
+});
+
+const visible = ref(0);
+
+onMounted(() => {
+  themeStore.updateDevice(props.device);
+  syncModeToGenerator();
+  initGeneratorVars();
+  applyTokenFromLocal();
+  syncThemeToIframe(props.device);
+});
+
+function handleTriggerVisible() {
+  visible.value = true;
+}
+
+function handleDrawerVisible(v) {
+  visible.value = v;
+}
+
+function handleClickSetting() {
+  visible.value = false;
+}
 </script>
 
 <style lang="less" scoped>
-@import './styles/reset.min.css';
-@import './styles/tdesign.min.css';
-
 @media screen and (max-width: 960px) {
   .theme-generator {
     display: none;

@@ -1,55 +1,43 @@
 <template>
-    <svg
-      width="48"
-      height="48"
-      viewBox="0 0 48 48"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g clip-path="url(#clip0_26565_99804)">
-        <rect width="48" height="48" rx="6" fill="#D54941" fill-opacity="0.1" />
-        <rect width="17" height="48" fill="#D54941" fill-opacity="0.16" />
-        <rect x="31" width="17" height="48" fill="#D54941" fill-opacity="0.16" />
-        <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
-          d="M1 20H3V23H15V20H17V23V25V28H15V25H3V28H1V25V23V20Z"
-          fill="#D54941"
-          fill-opacity="0.5"
-        />
-        <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
-          d="M45 20H47V23V25V28H45V25H33V28H31V25V23V20H33V23H45V20Z"
-          fill="#D54941"
-          fill-opacity="0.5"
-        />
-      </g>
-      <rect
-        x="0.5"
-        y="0.5"
-        width="47"
-        height="47"
-        rx="5.5"
-        stroke="black"
-        stroke-opacity="0.06"
-      />
-      <defs>
-        <clipPath id="clip0_26565_99804">
-          <rect width="48" height="48" rx="6" fill="white" />
-        </clipPath>
-      </defs>
-    </svg>
-  </template>
-  
-  <script>
-  export default {
-    props: {
-      size: {
-        type: Number,
-        default: 2,
-      },
-    },
-  };
-  </script>
-  
+  <svg :width="viewWidth" height="12" :viewBox="`0 0 ${viewWidth} 12`" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      :d="`M0 3C0 1.34315 1.34315 0 3 0H${4 + width}V12H3C1.34315 12 0 10.6569 0 9V3Z`"
+      fill="#D54941"
+      fill-opacity="0.16"
+    />
+    <rect y="4" width="2" height="4" fill="#F78D94" />
+    <rect x="2" y="5" :width="width" height="2" fill="#F78D94" />
+    <rect :x="2 + width" y="4" width="2" height="4" fill="#F78D94" />
+    <path
+      :d="`M${8 + width} 0H${viewWidth - 3}C${
+        viewWidth - 2
+      }.6569 0 ${viewWidth} 1.34315 ${viewWidth} 3V9C${viewWidth} 10.6569 ${viewWidth - 2}.6569 12 ${
+        viewWidth - 3
+      } 12H${8 + width}V0Z`"
+      fill="#D54941"
+      fill-opacity="0.16"
+    />
+    <rect :x="8 + width" y="4" width="2" height="4" fill="#F78D94" />
+    <rect :x="10 + width" y="5" :width="width" height="2" fill="#F78D94" />
+    <rect :x="viewWidth - 2" y="4" width="2" height="4" fill="#F78D94" />
+  </svg>
+</template>
+
+<script setup>
+import { computed } from 'vue';
+
+const props = defineProps({
+  size: {
+    type: Number,
+    default: 4,
+  },
+});
+
+const width = computed(() => {
+  return Math.min(parseInt(props.size, 10) / 2, 30);
+});
+
+const viewWidth = computed(() => {
+  return Math.min(12 + width.value * 2, 72);
+});
+</script>

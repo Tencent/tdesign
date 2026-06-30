@@ -20,7 +20,9 @@
     </t-input-number>
     <t-popup class="placement top center" placement="left" showArrow destroyOnClose :attach="handleAttach">
       <t-input v-model="color">
-        <div class="shadow-layer__card--sharp" :style="{ background: color }" slot="prefix-icon"></div>
+        <template #prefix-icon>
+          <div class="shadow-layer__card--sharp" :style="{ background: color }"></div>
+        </template>
       </t-input>
       <template #content>
         <color-picker :value="color" enableAlpha format="RGBA" @change="changeColor" />
@@ -29,95 +31,88 @@
   </div>
 </template>
 
-<script lang="jsx">
-import { RemoveIcon } from 'tdesign-icons-vue';
-import { Input as TInput, InputNumber as TInputNumber, Popup as TPopup } from 'tdesign-vue';
+<script setup>
+import { ref, watch } from 'vue';
+import { RemoveIcon } from 'tdesign-icons-vue-next';
+import { Input as TInput, InputNumber as TInputNumber, Popup as TPopup } from 'tdesign-vue-next';
 
 import { ColorPicker } from '@/common/components';
 import { handleAttach } from '@/common/utils';
 
-export default {
-  name: 'ShadowEditor',
-  props: {
-    name: String,
-    value: String,
-  },
-  components: {
-    TInputNumber,
-    TInput,
-    TPopup,
-    RemoveIcon,
-    ColorPicker,
-  },
-  data() {
-    return {
-      shadow: [0, 0, 0, 0],
-      color: '',
-      hasInit: false,
-    };
-  },
-  created() {
-    this.shadow = this.splitShadowValue(this.value);
-    this.color = this.getShadowColor(this.value);
-  },
-  watch: {
-    shadow(nVal) {
-      // 初始化值 不触发 change事件
-      if (!this.hasInit) {
-        // this.hasInit= true;
-        return;
-      }
-      const shadow = nVal.map((val) => `${val}px`).join(' ');
-      this.$emit('change', `${shadow} ${this.color}`);
-    },
-    color(nVal) {
-      // 初始化值 不触发 change事件
-      if (!this.hasInit) {
-        this.hasInit = true;
-        return;
-      }
-      const shadow = this.shadow.map((val) => `${val}px`).join(' ');
-      this.$emit('change', `${shadow} ${nVal}`);
-    },
-  },
-  methods: {
-    handleAttach,
-    splitShadowValue(value) {
-      const data = value.match(/(-)?[0-9]+(px)?/g);
-      if (!data || data.length < 2) {
+defineOptions({ name: 'ShadowEditor' });
+
+const props = defineProps({
+  name: String,
+  value: String,
+});
+
+const emit = defineEmits(['change', 'move']);
+
+const shadow = ref([0, 0, 0, 0]);
+const color = ref('');
+const hasInit = ref(false);
+
+function splitShadowValue(value) {
+  const data = value.match(/(-)?[0-9]+(px)?/g);
+  if (!data || data.length < 2) {
+    console.log(`invalid shadow value ${value}`);
+    return [0, 0, 0, 0];
+  }
+  return data
+    .concat([0, 0])
+    .splice(0, 4)
+    .map((val) => {
+      const num = val.match(/(-)?[0-9]+/g);
+      if (num.length < 1) return 0;
+      try {
+        return Number(num[0]);
+      } catch (error) {
         console.log(`invalid shadow value ${value}`);
-        return [0, 0, 0, 0];
+        return 0;
       }
-      return data
-        .concat([0, 0])
-        .splice(0, 4)
-        .map((val) => {
-          const num = val.match(/(-)?[0-9]+/g);
-          if (num.length < 1) return 0;
-          try {
-            return Number(num[0]);
-          } catch (error) {
-            console.log(`invalid shadow value ${value}`);
-            return 0;
-          }
-        });
-    },
-    getShadowColor(value) {
-      const data = value.match(/rgb(a)?(.*)/g);
-      if (!data || data.length < 1) {
-        console.log(`invalid shadow value ${value}`);
-        return 'rgba(0, 0, 0, 0)';
-      }
-      return data[0].trim();
-    },
-    changeColor(hex) {
-      this.color = hex;
-    },
-    handleMove() {
-      this.$emit('move');
-    },
-  },
-};
+    });
+}
+
+function getShadowColor(value) {
+  const data = value.match(/rgb(a)?(.*)/g);
+  if (!data || data.length < 1) {
+    console.log(`invalid shadow value ${value}`);
+    return 'rgba(0, 0, 0, 0)';
+  }
+  return data[0].trim();
+}
+
+function changeColor(hex) {
+  color.value = hex;
+}
+
+function handleMove() {
+  emit('move');
+}
+
+// created
+shadow.value = splitShadowValue(props.value);
+color.value = getShadowColor(props.value);
+
+watch(shadow, (nVal) => {
+  // 初始化值 不触发 change事件
+  if (!hasInit.value) {
+    // this.hasInit= true;
+    return;
+  }
+  const shadowStr = nVal.map((val) => `${val}px`).join(' ');
+  emit('change', `${shadowStr} ${color.value}`);
+});
+
+watch(color, (nVal) => {
+  // 初始化值 不触发 change事件
+  if (!hasInit.value) {
+    hasInit.value = true;
+    return;
+  }
+  const shadowStr = shadow.value.map((val) => `${val}px`).join(' ');
+  emit('change', `${shadowStr} ${nVal}`);
+});
 </script>
 
 <style scoped lang="less">
@@ -150,7 +145,7 @@ export default {
       &:last-child {
         margin-bottom: 0;
       }
-      /deep/ .t-input--auto-width {
+      :deep(.t-input--auto-width) {
         width: auto;
       }
     }

@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { defineCustomElement } from 'vue';
 
 // TDesign Vue Next 全局基础样式（组件库自身样式）
 import 'tdesign-vue-next/es/style/index.css';
@@ -7,4 +7,8 @@ import './styles/reset.min.css';
 
 import Generator from './Generator.vue';
 
-createApp(Generator).mount('#app');
+const TDThemeGenerator = defineCustomElement(Generator);
+
+customElements.define('td-theme-generator', TDThemeGenerator);
+
+export default TDThemeGenerator;
