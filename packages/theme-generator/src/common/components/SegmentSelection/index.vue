@@ -15,7 +15,7 @@
           }"
         ></div>
         <t-slider
-          :min="1"
+          :min="minSliderValue"
           :disabled="disabled"
           :max="maxSliderValue"
           :value="sliderValue"
@@ -78,6 +78,12 @@ const innerSelectOptions = ref(props.selectOptions);
 const maxSliderValue = computed(() => {
   if (props.selectOptions.length < 2) return 1;
   return props.selectOptions[props.selectOptions.length - 2].value;
+});
+
+// 获取第一个选项的 value 作为 Slider 的最小值
+const minSliderValue = computed(() => {
+  if (props.selectOptions.length < 1) return 0;
+  return props.selectOptions[0].value;
 });
 
 const sliderValue = computed(() => {
