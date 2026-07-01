@@ -13,7 +13,7 @@ jobs:
     outputs:
       services-changed: ${{ steps.services-changed.outputs.changed }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 100
       - uses: marceloprado/has-changed-path@v1
@@ -27,7 +27,7 @@ jobs:
     needs: modify-services
     if: needs.modify-services.outputs.services-changed == 'true'
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v6
         with:
           node-version-file: .node-version
