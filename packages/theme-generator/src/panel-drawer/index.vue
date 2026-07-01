@@ -90,11 +90,12 @@ function changeActiveTab(tab) {
 <style lang="less">
 /* 非 scoped：drawer/popup 通过 :attach teleport 到 .theme-generator 后脱离本组件根节点，
    scoped 的 [data-v-xxx] 前缀会让选择器失配。shadow DOM 已隔离，无需 scoped。 */
-.t-drawer__mask {
+.theme-generator .t-drawer__mask {
+  /* 透明遮罩：用 .theme-generator 祖先选择器提升特异性至 (0,2,0)，
+     确保覆盖 tdesign.min.css 中 .t-drawer__mask 的 --td-mask-active 默认背景 (0,1,0)。
+     drawer 通过 :attach teleport 到 .theme-generator 内（见 utils/index.js handleAttach），故可命中。
+     不设 pointer-events: none，以便 TDesign 的 overlay-click 关闭逻辑能收到 click。 */
   background-color: transparent;
-  /* mask 不拦截宿主页面交互，仅作为点击外部关闭的判定层；
-     content-wrapper 仍可正常点击。 */
-  pointer-events: none;
 }
 
 .t-drawer__content-wrapper {
