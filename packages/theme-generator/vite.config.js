@@ -29,7 +29,13 @@ function stripTdesignComponentCSS() {
 
 export default defineConfig(() => {
   return {
-    plugins: [vue(), stripTdesignComponentCSS()],
+    plugins: [
+      // customElement: true 让所有 SFC 的 <style> 块以 `&inline` 方式导入为字符串，
+      // 并作为 comp.styles 注入 —— 配合 shadowRoot: true，Vue 会把这些样式注入 shadowRoot。
+      // 否则 SFC styles 会被抽到单独 .css 文件，shadowRoot 模式下无法消费。
+      vue({ customElement: true }),
+      stripTdesignComponentCSS(),
+    ],
     resolve: {
       alias: {
         '@': resolve(__dirname, 'src'),
