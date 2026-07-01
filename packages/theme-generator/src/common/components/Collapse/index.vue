@@ -32,7 +32,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import ArrowIcon from 'tdesign-vue-next/es/common-components/fake-arrow';
+import ArrowIcon from 'tdesign-vue-next/common-components/fake-arrow';
 import { collapseAnimation } from '../../utils';
 
 defineOptions({ name: 'CommonCollapse' });

@@ -7,7 +7,8 @@
     <title>TDesign Theme Generator</title>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <!-- dev 也走 Web Component 路径，与 build 产物行为一致（shadowRoot 隔离） -->
+    <td-theme-generator></td-theme-generator>
+    <script type="module" src="/src/wc-entry.js"></script>
   </body>
 </html>

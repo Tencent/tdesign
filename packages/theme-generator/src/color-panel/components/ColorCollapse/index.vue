@@ -80,7 +80,7 @@
 import { ref } from 'vue';
 import { Edit1Icon, FileCopyIcon } from 'tdesign-icons-vue-next';
 import { Popup as TPopup } from 'tdesign-vue-next';
-import ArrowIcon from 'tdesign-vue-next/es/common-components/fake-arrow';
+import ArrowIcon from 'tdesign-vue-next/common-components/fake-arrow';
 
 import { ColorPicker } from '@/common/components';
 import { useLang } from '@/common/i18n';
