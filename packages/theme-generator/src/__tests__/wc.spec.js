@@ -51,10 +51,10 @@ describe('Web Component: <td-theme-generator>', () => {
 
   it('createElement + 挂载后渲染出 .theme-generator 根节点', async () => {
     const el = await mountWC();
-    // 显式断言 light DOM（shadowRoot: false）—— 与原 --inline-vue 行资一致，
-    // TDesign 基础样式注入 document.head 才能生效。若改为 shadow root 会破坏样式。
-    expect(el.shadowRoot).toBeNull();
-    const root = el.querySelector('.theme-generator');
+    // shadowRoot: true —— 样式注入 shadowRoot，与宿主页隔离。
+    // .theme-generator 根节点在 shadowRoot 内。
+    expect(el.shadowRoot).not.toBeNull();
+    const root = el.shadowRoot.querySelector('.theme-generator');
     expect(root).toBeTruthy();
   });
 
@@ -73,8 +73,8 @@ describe('Web Component: <td-theme-generator>', () => {
   it('同一页面可多次创建/销毁实例', async () => {
     const a = await mountWC();
     const b = await mountWC();
-    expect(a.querySelector('.theme-generator')).toBeTruthy();
-    expect(b.querySelector('.theme-generator')).toBeTruthy();
+    expect(a.shadowRoot.querySelector('.theme-generator')).toBeTruthy();
+    expect(b.shadowRoot.querySelector('.theme-generator')).toBeTruthy();
     a.remove();
     b.remove();
   });

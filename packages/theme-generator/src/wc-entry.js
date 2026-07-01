@@ -3,16 +3,21 @@ import { defineCustomElement } from 'vue';
 // TDesign Vue Next 全局基础样式（定制版：加 :host 选择器 + 移除 td-brand-color 系列 Token，
 // 让主题生成器能作为 Web Component 渲染并直接同步外部主题色。由 scripts/build-tdesign-css.mjs 从
 // tdesign-vue-next/dist/tdesign.min.css 重新生成，运行 `npm run build:css` 同步上游。）
-import './styles/tdesign.min.css';
-// 站点级重置样式
-import './styles/reset.min.css';
+// `?inline` 让 Vite 把 CSS 作为字符串导入，而非注入 document.head —— 配合 shadowRoot: true，
+// 这些样式由 defineCustomElement 的 styles 选项注入到 shadowRoot 内，与宿主页样式完全隔离。
+import tdesignCss from './styles/tdesign.min.css?inline';
+import resetCss from './styles/reset.min.css?inline';
 
 import Generator from './Generator.vue';
 
-// shadowRoot: false —— 与原 `--inline-vue` 行为一致：渲染到 light DOM，
-// TDesign 基础样式（注入 document.head）与 handleAttach 的 document.body fallback 才能生效。
-// 若开启 shadow root，head 中的样式无法穿透 shadow 边界，TDesign 组件样式会失效。
-const TDThemeGenerator = defineCustomElement(Generator, { shadowRoot: false });
+// shadowRoot: true —— 样式注入 shadowRoot 内，与宿主页（可能也使用 TDesign）完全隔离，
+// 避免桌面端 tdesign.min.css 的 .t-button / --td-radius-default 等污染宿主页（如 mobile-vue 站点）。
+// 弹层组件（t-popup/t-drawer 等）通过 handleAttach() 挂到 shadowRoot 内的 .theme-generator 节点，
+// 因此也能命中 shadowRoot 内的样式。
+const TDThemeGenerator = defineCustomElement(Generator, {
+  shadowRoot: true,
+  styles: [tdesignCss, resetCss],
+});
 
 customElements.define('td-theme-generator', TDThemeGenerator);
 

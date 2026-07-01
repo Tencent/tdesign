@@ -1,17 +1,35 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import { resolve } from 'node:path';
 
-export default defineConfig(({ command }) => {
-  const isBuild = command === 'build';
-
+// tdesign-vue-next 每个组件都会 `import './style/css.mjs'` 引入自己的 CSS，
+// tdesign-icons-vue-next 也有 `style/css.js` 引入图标 CSS。
+// 但 theme-generator 已通过 `?inline` 导入全量 dist/tdesign.min.css（含所有组件 + 图标样式）。
+// 屏蔽这些组件级 CSS import，避免重复打包 + 单独输出 .css 文件（shadowRoot 模式下无法消费）。
+function stripTdesignComponentCSS() {
   return {
-    plugins: [
-      vue(),
-      // Only inline CSS into JS for the Web Component build (self-contained bundle)
-      ...(isBuild ? [cssInjectedByJsPlugin({ styleId: 'td-theme-generator-style' })] : []),
-    ],
+    name: 'strip-tdesign-component-css',
+    enforce: 'pre',
+    resolveId(source, importer) {
+      if (!importer) return null;
+      // 匹配 tdesign-vue-next / tdesign-icons-vue-next 内的 style/css.{mjs,js}
+      if (/[\\/]style[\\/]css\.(mjs|js)$/.test(source) && /tdesign-(icons-)?vue-next/.test(importer)) {
+        return '\0virtual:empty-style';
+      }
+      return null;
+    },
+    load(id) {
+      if (id === '\0virtual:empty-style') {
+        return 'export default {}';
+      }
+      return null;
+    },
+  };
+}
+
+export default defineConfig(() => {
+  return {
+    plugins: [vue(), stripTdesignComponentCSS()],
     resolve: {
       alias: {
         '@': resolve(__dirname, 'src'),

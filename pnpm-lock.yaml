@@ -165,9 +165,6 @@ importers:
       vite:
         specifier: ^6.3.1
         version: 6.3.1(@types/node@22.9.0)(jiti@1.21.6)(less@4.2.0)(terser@5.33.0)(tsx@4.19.3)
-      vite-plugin-css-injected-by-js:
-        specifier: ^4.0.1
-        version: 4.0.1(vite@6.3.1(@types/node@22.9.0)(jiti@1.21.6)(less@4.2.0)(terser@5.33.0)(tsx@4.19.3))
       vitest:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.9.0)(happy-dom@15.11.7)(jsdom@16.7.0)(less@4.2.0)(terser@5.33.0)
@@ -6386,11 +6383,6 @@ packages:
     resolution: {integrity: sha512-AM9aQ/IPrW/6ENLQg3AGY4K1N2TGZdR5e4gu/MmmR2xR3Ll1+dib+nook92g4TV3PXVyeyxdWwtaCAiUL0hMxA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
-
-  vite-plugin-css-injected-by-js@4.0.1:
-    resolution: {integrity: sha512-WfyRojojQyAO/KzWf+efcXpTPv6zJPXaRmr9EYq5a4v5I3PWCR7kR01hiri2lW6+rHm3a57kpwsf+iahIJi1Qw==}
-    peerDependencies:
-      vite: '>2.0.0-0'
 
   vite-plugin-tdoc@2.0.4:
     resolution: {integrity: sha512-KKoEvlhf78opGCb+WjbOc6TRkzqOEm6rLMmJL9POh8OEa6jOCETs1k81TAaPLaIxuoJxqE4k6IAMchV60XoKpw==}
@@ -13804,10 +13796,6 @@ snapshots:
       - sugarss
       - supports-color
       - terser
-
-  vite-plugin-css-injected-by-js@4.0.1(vite@6.3.1(@types/node@22.9.0)(jiti@1.21.6)(less@4.2.0)(terser@5.33.0)(tsx@4.19.3)):
-    dependencies:
-      vite: 6.3.1(@types/node@22.9.0)(jiti@1.21.6)(less@4.2.0)(terser@5.33.0)(tsx@4.19.3)
 
   vite-plugin-tdoc@2.0.4(@types/markdown-it@12.2.3):
     dependencies:
