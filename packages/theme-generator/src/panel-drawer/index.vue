@@ -7,7 +7,7 @@
       :closeBtn="false"
       :preventScrollThrough="false"
       :footer="false"
-      showInAttachedElement
+      :attach="handleAttach"
     >
       <sticky-theme-display />
       <div style="display: flex">
@@ -27,6 +27,7 @@ import { ref, computed, watch } from 'vue';
 import { Drawer as TDrawer } from 'tdesign-vue-next';
 
 import { themeStore } from '@/common/themes';
+import { handleAttach } from '@/common/utils';
 
 import ColorPanel from '../color-panel';
 import FontPanel from '../font-panel';
@@ -89,12 +90,16 @@ function changeActiveTab(tab) {
 <style lang="less" scoped>
 :deep(.t-drawer__mask) {
   background: none;
+  /* mask 不拦截宿主页面交互，仅作为点击外部关闭的判定层；
+     content-wrapper 仍可正常点击。 */
+  pointer-events: none;
 }
 
 :deep(.t-drawer__content-wrapper) {
   box-shadow: var(--shadow-2);
   border-radius: 12px 0 0 0;
   position: fixed;
+  pointer-events: auto;
   .t-drawer__body {
     padding: 0;
     background: var(--bg-color-theme-transparent);
