@@ -4,13 +4,15 @@ import { resolve } from 'node:path';
 
 // tdesign-vue-next 每个组件都会 `import './style/css.mjs'` 引入自己的 CSS，
 // tdesign-icons-vue-next 也有 `style/css.js` 引入图标 CSS。
-// 但 theme-generator 已通过 `?inline` 导入全量 dist/tdesign.min.css（含所有组件 + 图标样式）。
-// 屏蔽这些组件级 CSS import，避免重复打包 + 单独输出 .css 文件（shadowRoot 模式下无法消费）。
-function stripTdesignComponentCSS() {
+// build（shadowRoot 模式）：已通过 `?inline` 导入全量 dist/tdesign.min.css（含所有组件 + 图标样式），
+//   屏蔽组件级 CSS import 避免重复打包 + 单独输出 .css 文件（shadowRoot 无法消费）。
+// dev（light DOM 模式）：保留组件级 CSS import，让 Vite 正常注入 document.head。
+function stripTdesignComponentCSS({ includeComponentCSS = false } = {}) {
   return {
     name: 'strip-tdesign-component-css',
     enforce: 'pre',
     resolveId(source, importer) {
+      if (includeComponentCSS) return null;
       if (!importer) return null;
       // 匹配 tdesign-vue-next / tdesign-icons-vue-next 内的 style/css.{mjs,js}
       if (/[\\/]style[\\/]css\.(mjs|js)$/.test(source) && /tdesign-(icons-)?vue-next/.test(importer)) {
@@ -27,14 +29,17 @@ function stripTdesignComponentCSS() {
   };
 }
 
-export default defineConfig(() => {
+export default defineConfig(({ command }) => {
+  const isBuild = command === 'build';
+
   return {
     plugins: [
-      // customElement: true 让所有 SFC 的 <style> 块以 `&inline` 方式导入为字符串，
-      // 并作为 comp.styles 注入 —— 配合 shadowRoot: true，Vue 会把这些样式注入 shadowRoot。
-      // 否则 SFC styles 会被抽到单独 .css 文件，shadowRoot 模式下无法消费。
-      vue({ customElement: true }),
-      stripTdesignComponentCSS(),
+      // build（Web Component 产物）：customElement: true 让 SFC <style> 以 &inline 字符串导入，
+      // 作为 comp.styles 注入 —— 配合 shadowRoot: true，Vue 把样式注入 shadowRoot。
+      // dev（createApp 渲染到 #app）：保持默认，SFC <style> 正常注入 document.head。
+      // 否则 dev 模式下 createApp 不消费 comp.styles，样式字符串被丢弃 → 页面无样式。
+      vue(isBuild ? { customElement: true } : {}),
+      stripTdesignComponentCSS({ includeComponentCSS: !isBuild }),
     ],
     resolve: {
       alias: {
