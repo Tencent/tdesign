@@ -91,7 +91,7 @@ function changeActiveTab(tab) {
 /* 非 scoped：drawer/popup 通过 :attach teleport 到 .theme-generator 后脱离本组件根节点，
    scoped 的 [data-v-xxx] 前缀会让选择器失配。shadow DOM 已隔离，无需 scoped。 */
 .t-drawer__mask {
-  background: none;
+  background-color: transparent;
   /* mask 不拦截宿主页面交互，仅作为点击外部关闭的判定层；
      content-wrapper 仍可正常点击。 */
   pointer-events: none;
