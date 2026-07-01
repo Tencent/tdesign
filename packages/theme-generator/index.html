@@ -9,15 +9,17 @@
       /* dev 用的深浅色切换按钮，不进入构建产物 */
       #dev-mode-toggle {
         position: fixed;
-        top: 16px;
-        right: 16px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         z-index: 10000;
         width: 40px;
         height: 40px;
         border-radius: 50%;
         border: 1px solid var(--td-border-level-2, #e7e7e7);
-        background: var(--td-bg-color-container, #fff);
-        color: var(--td-text-primary, #333);
+        background: #000;
+        color: #fff;
+        transition: background-color 0.2s ease;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -48,6 +50,9 @@
       const render = () => {
         const isDark = root.getAttribute('theme-mode') === 'dark';
         toggle.textContent = isDark ? '☀️' : '🌙';
+        // 太阳态用白色背景，月亮态用黑色背景
+        toggle.style.background = isDark ? '#fff' : '#000';
+        toggle.style.color = isDark ? '#000' : '#fff';
       };
       toggle.addEventListener('click', () => {
         const isDark = root.getAttribute('theme-mode') === 'dark';
