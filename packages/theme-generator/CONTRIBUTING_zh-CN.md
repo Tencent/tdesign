@@ -36,7 +36,7 @@ graph TB
   class F themeFill
 ```
 
-`*.min.css` 文件来自 `tdesign-vue` 且经过二次压缩
+`*.min.css` 文件来自 `tdesign-vue-next` 且经过二次压缩
 
 - 额外添加了 `:host` 选择器，确保 Web Components 打包后样式正常
 - 移除 `td-brand-color-x` 系列颜色 Token，使主题生成器能与外部主题色直接同步
