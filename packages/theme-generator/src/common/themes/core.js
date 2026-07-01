@@ -3,7 +3,14 @@ import { Color } from 'tvision-color';
 
 import GENERATOR_VARIABLES from './built-in/css/vars.css?raw';
 
-import { appendStyleSheet, clearLocalItem, downloadFile, parseRootCss, setUpModeObserver } from '../utils';
+import {
+  appendStyleSheet,
+  clearLocalItem,
+  downloadFile,
+  getThemeMode,
+  parseRootCss,
+  setUpModeObserver,
+} from '../utils';
 
 import {
   MOBILE_RECOMMEND_THEMES,
@@ -51,13 +58,18 @@ export function getRecommendThemes(device) {
 
 /**
  * 同步 site 的 亮暗模式给主题生成器 Web Component
+ * shadow DOM 内的 tdesign.min.css 中 `:root[theme-mode]` 因作用域隔离无法命中 `<html>`，
+ * 只有 `:host[theme-mode]` 生效，因此需要把解析后的 mode 同步到 `<td-theme-generator>` 上。
+ * 这里在注册 observer 前先做一次初始同步，覆盖宿主页加载时已处于 dark 的情况。
  */
 export function syncModeToGenerator() {
-  setUpModeObserver((theme) => {
+  const sync = (theme) => {
     const generator = document.querySelector('td-theme-generator');
     if (!generator) return;
     generator.setAttribute('theme-mode', theme);
-  });
+  };
+  sync(getThemeMode());
+  setUpModeObserver(sync);
 }
 
 export function findThemeByEnName(device, enName) {

@@ -19,6 +19,7 @@ import {
   syncThemeToIframe,
   themeStore,
 } from '@/common/themes';
+import { setUpModeObserver } from '@/common/utils';
 
 import FloatDock from './float-dock';
 import PanelDrawer from './panel-drawer';
@@ -43,6 +44,11 @@ onMounted(() => {
   initGeneratorVars();
   applyTokenFromLocal();
   syncThemeToIframe(props.device);
+  // 宿主页亮暗模式切换时，font/shadow/size 面板以 $refreshId 为 key，
+  // bump 后强制重新挂载并重读 token 值（getTokenValue 非响应式，需靠 key 变更触发重渲染）。
+  setUpModeObserver(() => {
+    themeStore.incrementRefreshId();
+  });
 });
 
 function handleTriggerVisible() {

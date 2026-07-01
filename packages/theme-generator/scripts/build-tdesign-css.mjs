@@ -25,14 +25,19 @@ let css = readFileSync(SRC, 'utf8');
 
 // --- (1) Add :host variants for every :root selector in each selector list ---
 // The upstream minified CSS uses selector lists like `:root,:root[theme-mode='light']{...}`.
-// For each selector that starts with :root, append a parallel :host variant
-// (same compound tail, e.g. :root[theme-mode='light'] → :host[theme-mode='light']).
+// For each selector that starts with :root, append a parallel :host variant using the
+// FUNCTIONAL form `:host(<tail>)`. Chrome does NOT match the compound form `:host[attr]`
+// or `:host.class` — only `:host([attr])` / `:host(.class)` match host attributes/classes.
+// Bare `:root` becomes bare `:host` (no parens). Upstream has no `:root <descendant>` rules.
 // At-rules like @-moz-document url-prefix() have no :root selector and pass through.
 css = css.replace(/([^{}]+)\{/g, (m, selectors) => {
   const list = selectors.split(',').map((s) => s.trim()).filter(Boolean);
   const hostVariants = list
     .filter((s) => /^:root(?=[[\].\s,:]|$)/.test(s))
-    .map((s) => s.replace(/:root/g, ':host'));
+    .map((s) => {
+      const tail = s.slice(':root'.length);
+      return tail ? `:host(${tail})` : ':host';
+    });
   if (hostVariants.length === 0) return m;
   return `${list.join(',')},${hostVariants.join(',')}{`;
 });
