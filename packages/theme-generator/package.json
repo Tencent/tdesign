@@ -35,7 +35,7 @@
     "cssbeautify": "^0.3.1",
     "lodash": "^4.17.21",
     "tdesign-icons-vue-next": "^0.4.4",
-    "tdesign-vue-next": "^1.20.2",
+    "tdesign-vue-next": "^1.20.3",
     "tvision-color": "^1.6.0",
     "vue": "^3.5.25"
   },
