@@ -16,10 +16,10 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        border: 1px solid var(--td-border-level-2, #e7e7e7);
+        border: 1px solid rgba(255, 255, 255, 0.5);
         background: #000;
         color: #fff;
-        transition: background-color 0.2s ease;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -50,9 +50,11 @@
       const render = () => {
         const isDark = root.getAttribute('theme-mode') === 'dark';
         toggle.textContent = isDark ? '☀️' : '🌙';
-        // 太阳态用白色背景，月亮态用黑色背景
-        toggle.style.background = isDark ? '#fff' : '#000';
-        toggle.style.color = isDark ? '#000' : '#fff';
+        // 太阳态用浅灰背景，月亮态用黑色背景
+        // 颜色选取避开 dock 背景色（浅色 #EEE / 深色 #2C2C2C）
+        toggle.style.background = isDark ? '#e0e0e0' : '#000';
+        toggle.style.color = isDark ? '#000000' : '#fff';
+        toggle.style.borderColor = isDark ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.5)';
       };
       toggle.addEventListener('click', () => {
         const isDark = root.getAttribute('theme-mode') === 'dark';

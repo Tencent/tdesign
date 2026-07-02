@@ -36,7 +36,7 @@ const props = defineProps({
   },
 });
 
-const visible = ref(0);
+const visible = ref(false);
 
 onMounted(() => {
   themeStore.updateDevice(props.device);

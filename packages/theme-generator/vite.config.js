@@ -38,7 +38,7 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         '@': resolve(__dirname, 'src'),
-        // tdesign-vue-next / tdesign-icons-vue-next 的 lib/ 入口是��样式 ESM 构建
+        // tdesign-vue-next / tdesign-icons-vue-next 的 lib/ 入口是无样式 ESM 构建
         // （不带任何 CSS import）。theme-generator 已通过 `?inline` 导入全量
         // dist/tdesign.min.css 注入 shadowRoot，组件级 CSS 无需再 import，
         // 否则会落到 document.head（shadowRoot 无法消费）造成污染 + 重复打包。
