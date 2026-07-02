@@ -24,7 +24,7 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue';
-import { Drawer as TDrawer } from 'tdesign-vue-next';
+import { Drawer as TDrawer } from 'tdesign-vue-next/lib';
 
 import { themeStore } from '@/common/themes';
 import { handleAttach } from '@/common/utils';

@@ -34,7 +34,7 @@
 <script setup>
 import { ref, watch, onMounted, nextTick } from 'vue';
 import { RemoveIcon } from 'tdesign-icons-vue-next';
-import { Input as TInput, InputNumber as TInputNumber, Popup as TPopup } from 'tdesign-vue-next';
+import { Input as TInput, InputNumber as TInputNumber, Popup as TPopup } from 'tdesign-vue-next/lib';
 
 import { ColorPicker } from '@/common/components';
 import { handleAttach } from '@/common/utils';

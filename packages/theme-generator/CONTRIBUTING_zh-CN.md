@@ -74,3 +74,12 @@ graph TB
 2. **全局状态管理**：避免通过 props 层层传递共享变量，优先使用 `inject`、`mixin` 或 `store` 等
 
 3. **动态编码管理**：避免硬编码数值，特别是 Token 相关的映射，优先从 CSS 中获取配置
+
+4. **组件导入**：TDesign 组件一律从无样式入口 `tdesign-vue-next/lib` 导入，例如：
+
+   ```js
+   import { Button as TButton } from 'tdesign-vue-next/lib';
+   import ArrowIcon from 'tdesign-vue-next/lib/common-components/fake-arrow';
+   ```
+
+   **不要**使用裸导入 `tdesign-vue-next`。原因：本挂件以 Web Component 形式渲染，组件级 CSS 无法落到 shadowRoot 内，全量样式已通过 `?inline` 注入 shadowRoot（见 `src/wc-entry.js`）。裸导入会引入组件级 CSS 污染宿主页并造成重复打包。vite 不再通过 alias 重定向，所以源码中必须显式写全 `lib` 路径。

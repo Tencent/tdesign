@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { Divider as TDivider, Popup as TPopup } from 'tdesign-vue-next';
+import { Divider as TDivider, Popup as TPopup } from 'tdesign-vue-next/lib';
 
 import { useLang } from '@/common/i18n';
 import { handleAttach } from '@/common/utils';

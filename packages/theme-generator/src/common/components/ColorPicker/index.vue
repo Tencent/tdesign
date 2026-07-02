@@ -14,7 +14,7 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-import { ColorPickerPanel as TColorPickerPanel } from 'tdesign-vue-next';
+import { ColorPickerPanel as TColorPickerPanel } from 'tdesign-vue-next/lib';
 import { handleAttach } from '../../utils';
 
 defineOptions({ name: 'ColorPicker', inheritAttrs: false });

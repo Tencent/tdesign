@@ -324,7 +324,7 @@ import {
   Row as TRow,
   Switch as TSwitch,
   Tooltip as TTooltip,
-} from 'tdesign-vue-next';
+} from 'tdesign-vue-next/lib';
 
 import { ColorPicker } from '@/common/components';
 import { useLang } from '@/common/i18n';

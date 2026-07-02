@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 // tdesign-icons-vue-next/esm/index.js 会 `import './style/css.js'` 引入图标 CSS，
 // 但该 CSS（@keyframes t-spin + .t-icon 基础样式）已包含在全量 tdesign.min.css 里
 // （通过 ?inline 注入 shadowRoot）。屏蔽这条 import 避免重复输出 .css 文件。
-// tdesign-vue-next 走 lib/ alias（无样式入口），无需此插件处理。
+// tdesign-vue-next 各组件直接从 'tdesign-vue-next/lib' 导入（无样式入口），无需此插件处理。
 function stripTdesignIconsCSS() {
   return {
     name: 'strip-tdesign-icons-css',
@@ -38,12 +38,6 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         '@': resolve(__dirname, 'src'),
-        // tdesign-vue-next / tdesign-icons-vue-next 的 lib/ 入口是无样式 ESM 构建
-        // （不带任何 CSS import）。theme-generator 已通过 `?inline` 导入全量
-        // dist/tdesign.min.css 注入 shadowRoot，组件级 CSS 无需再 import，
-        // 否则会落到 document.head（shadowRoot 无法消费）造成污染 + 重复打包。
-        // 用 alias 把裸导入 + 子路径导入都重定向到 lib/。
-        'tdesign-vue-next': resolve(__dirname, 'node_modules/tdesign-vue-next/lib'),
       },
       extensions: ['.mjs', '.js', '.json', '.vue'],
     },

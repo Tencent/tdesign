@@ -110,7 +110,7 @@ import {
   Popup as TPopup,
   RadioButton as TRadioButton,
   RadioGroup as TRadioGroup,
-} from 'tdesign-vue-next';
+} from 'tdesign-vue-next/lib';
 
 import { SegmentSelection, SizeSlider } from '@/common/components';
 import { useLang } from '@/common/i18n';

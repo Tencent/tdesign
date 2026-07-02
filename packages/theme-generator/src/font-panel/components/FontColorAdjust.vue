@@ -71,7 +71,7 @@
 import { ref, computed } from 'vue';
 import flatten from 'lodash/flatten';
 import { Edit1Icon } from 'tdesign-icons-vue-next';
-import { Popup as TPopup, RadioButton as TRadioButton, RadioGroup as TRadioGroup } from 'tdesign-vue-next';
+import { Popup as TPopup, RadioButton as TRadioButton, RadioGroup as TRadioGroup } from 'tdesign-vue-next/lib';
 
 import { ColorPicker } from '@/common/components';
 import { useLang } from '@/common/i18n';

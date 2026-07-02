@@ -28,7 +28,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { handleAttach } from '@/common/utils';
-import { InputNumber as TInputNumber, Slider as TSlider } from 'tdesign-vue-next';
+import { InputNumber as TInputNumber, Slider as TSlider } from 'tdesign-vue-next/lib';
 
 defineOptions({ name: 'SizeSlider' });
 

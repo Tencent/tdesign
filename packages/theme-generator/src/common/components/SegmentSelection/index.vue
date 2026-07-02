@@ -42,7 +42,7 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue';
-import { Select as TSelect, Slider as TSlider } from 'tdesign-vue-next';
+import { Select as TSelect, Slider as TSlider } from 'tdesign-vue-next/lib';
 
 import { useLang } from '@/common/i18n';
 import { handleAttach } from '@/common/utils';

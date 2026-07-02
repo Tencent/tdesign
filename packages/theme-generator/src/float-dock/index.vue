@@ -102,7 +102,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { MessagePlugin, Button as TButton, Popconfirm as TPopconfirm, Popup as TPopup } from 'tdesign-vue-next';
+import { MessagePlugin, Button as TButton, Popconfirm as TPopconfirm, Popup as TPopup } from 'tdesign-vue-next/lib';
 
 import { useLang } from '@/common/i18n';
 import { exportCustomStyleSheet, themeStore } from '@/common/themes';

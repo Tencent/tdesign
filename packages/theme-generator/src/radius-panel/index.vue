@@ -81,7 +81,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import isNumber from 'lodash/isNumber';
-import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue-next';
+import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue-next/lib';
 
 import { SegmentSelection, SizeSlider } from '@/common/components';
 import { useLang } from '@/common/i18n';

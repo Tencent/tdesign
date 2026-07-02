@@ -83,7 +83,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
 import { Edit1Icon, ErrorCircleIcon, LinkUnlinkIcon } from 'tdesign-icons-vue-next';
-import { Popup as TPopup } from 'tdesign-vue-next';
+import { Popup as TPopup } from 'tdesign-vue-next/lib';
 
 import { ColorPicker } from '@/common/components';
 import { useLang } from '@/common/i18n';
