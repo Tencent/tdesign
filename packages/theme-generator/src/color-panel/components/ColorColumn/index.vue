@@ -33,7 +33,7 @@
       ></div>
 
       <div v-for="(color, index) in colorList" :key="index">
-        <t-popup
+        <shadow-popup
           placement="left"
           showArrow
           trigger="click"
@@ -65,7 +65,7 @@
           <template #content>
             <color-picker :value="color.value" @change="(hex) => changeGradation(hex, color.idx)" />
           </template>
-        </t-popup>
+        </shadow-popup>
         <div v-if="color.name" @click="handleClickIdx(color.idx)" class="color-content__vertical-list-content">
           <div class="color-content__vertical-list-title" :title="color.name">
             {{ color.name.replace('--td-', '') }}
@@ -83,9 +83,8 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
 import { Edit1Icon, ErrorCircleIcon, LinkUnlinkIcon } from 'tdesign-icons-vue-next';
-import { Popup as TPopup } from 'tdesign-vue-next/lib';
 
-import { ColorPicker } from '@/common/components';
+import { ColorPicker, ShadowPopup } from '@/common/components';
 import { useLang } from '@/common/i18n';
 import { getTokenFromLocal, themeStore } from '@/common/themes';
 import { getTokenValue, handleAttach } from '@/common/utils';

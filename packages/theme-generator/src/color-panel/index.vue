@@ -40,7 +40,7 @@
             </div>
           </t-col>
           <t-col :span="3" :style="{ padding: '0' }">
-            <t-popup
+            <shadow-popup
               showArrow
               placement="bottom-left"
               trigger="hover"
@@ -137,11 +137,11 @@
                   </div>
                 </div>
               </template>
-            </t-popup>
+            </shadow-popup>
           </t-col>
         </t-row>
         <!-- 自定义主题颜色 -->
-        <t-popup
+        <shadow-popup
           placement="bottom-left"
           showArrow
           trigger="click"
@@ -179,7 +179,7 @@
           <template #content>
             <color-picker :value="$brandColor" @change="changeBrandColor" />
           </template>
-        </t-popup>
+        </shadow-popup>
         <div class="color-content__generate-mode">
           <!-- 保留输入 -->
           <div
@@ -320,13 +320,12 @@ import { Edit1Icon, FileCopyIcon, HelpCircleIcon } from 'tdesign-icons-vue-next'
 import {
   Col as TCol,
   Divider as TDivider,
-  Popup as TPopup,
   Row as TRow,
   Switch as TSwitch,
   Tooltip as TTooltip,
 } from 'tdesign-vue-next/lib';
 
-import { ColorPicker } from '@/common/components';
+import { ColorPicker, ShadowPopup } from '@/common/components';
 import { useLang } from '@/common/i18n';
 import {
   collectTokenIndexes,

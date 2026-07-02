@@ -21,7 +21,7 @@
       ></div>
 
       <div v-for="(color, idx) in flattenPalette.filter((v) => !!v.name)" :key="idx">
-        <t-popup
+        <shadow-popup
           placement="left"
           showArrow
           trigger="click"
@@ -53,7 +53,7 @@
           <template #content>
             <color-picker :value="color.value" @change="(hex) => changeColor(hex, idx)" :enable-alpha="true" />
           </template>
-        </t-popup>
+        </shadow-popup>
         <div v-if="color.name" class="font-color__vertical-list-content">
           <div class="font-color__vertical-list-title" :title="color.name">
             {{ color.name }}
@@ -71,9 +71,9 @@
 import { ref, computed } from 'vue';
 import flatten from 'lodash/flatten';
 import { Edit1Icon } from 'tdesign-icons-vue-next';
-import { Popup as TPopup, RadioButton as TRadioButton, RadioGroup as TRadioGroup } from 'tdesign-vue-next/lib';
+import { RadioButton as TRadioButton, RadioGroup as TRadioGroup } from 'tdesign-vue-next/lib';
 
-import { ColorPicker } from '@/common/components';
+import { ColorPicker, ShadowPopup } from '@/common/components';
 import { useLang } from '@/common/i18n';
 import { handleAttach } from '@/common/utils';
 

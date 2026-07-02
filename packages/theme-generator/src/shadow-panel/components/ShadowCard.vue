@@ -1,6 +1,6 @@
 <template>
   <div class="shadow-card">
-    <t-popup
+    <shadow-popup
       placement="left"
       showArrow
       destroyOnClose
@@ -22,13 +22,14 @@
       <template #content>
         <shadow-layer :shadow="shadow" :detail="detail" @change="change"></shadow-layer>
       </template>
-    </t-popup>
+    </shadow-popup>
   </div>
 </template>
 
 <script setup>
-import { Divider as TDivider, Popup as TPopup } from 'tdesign-vue-next/lib';
+import { Divider as TDivider } from 'tdesign-vue-next/lib';
 
+import { ShadowPopup } from '@/common/components';
 import { useLang } from '@/common/i18n';
 import { handleAttach } from '@/common/utils';
 

@@ -1,7 +1,7 @@
 <template>
   <div class="color-collapse">
     <div class="color-collapse__header">
-      <t-popup
+      <shadow-popup
         placement="left"
         showArrow
         trigger="click"
@@ -34,7 +34,7 @@
         <template #content v-if="!disabled">
           <color-picker :value="mainColor" @change="changeColor" />
         </template>
-      </t-popup>
+      </shadow-popup>
       <div class="color-collapse__text">
         <div class="color-collapse__title" @click="isActive = !isActive">
           {{ title }}
@@ -43,7 +43,7 @@
           <slot name="subTitle">
             <!-- 没有 slot 时使用默认内容 -->
             HEX: {{ mainColor }}
-            <t-popup
+            <shadow-popup
               placement="top"
               showArrow
               trigger="click"
@@ -55,7 +55,7 @@
               <template #content>
                 <span :style="{ color: `var(--text-secondary)` }">{{ lang.copied }}</span>
               </template>
-            </t-popup>
+            </shadow-popup>
           </slot>
         </div>
       </div>
@@ -79,10 +79,9 @@
 <script setup>
 import { ref } from 'vue';
 import { Edit1Icon, FileCopyIcon } from 'tdesign-icons-vue-next';
-import { Popup as TPopup } from 'tdesign-vue-next/lib';
 import ArrowIcon from 'tdesign-vue-next/lib/common-components/fake-arrow';
 
-import { ColorPicker } from '@/common/components';
+import { ColorPicker, ShadowPopup } from '@/common/components';
 import { useLang } from '@/common/i18n';
 import { collapseAnimation, handleAttach } from '@/common/utils';
 
