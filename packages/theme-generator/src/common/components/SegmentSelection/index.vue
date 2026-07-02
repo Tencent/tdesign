@@ -15,7 +15,7 @@
           }"
         ></div>
         <t-slider
-          :min="1"
+          :min="minSliderValue"
           :disabled="disabled"
           :max="maxSliderValue"
           :value="sliderValue"
@@ -40,86 +40,96 @@
   </div>
 </template>
 
-<script>
-import { Select as TSelect, Slider as TSlider } from 'tdesign-vue';
+<script setup>
+import { ref, computed, watch } from 'vue';
+import { Select as TSelect, Slider as TSlider } from 'tdesign-vue-next/lib';
 
-import { langMixin } from '@/common/i18n';
+import { useLang } from '@/common/i18n';
 import { handleAttach } from '@/common/utils';
 
-export default {
-  name: 'SegmentSelection',
-  components: {
-    TSlider,
-    TSelect,
+defineOptions({ name: 'SegmentSelection' });
+
+const props = defineProps({
+  selectOptions: {
+    type: Array,
+    required: true,
+    default: () => [],
   },
-  mixins: [langMixin],
-  props: {
-    selectOptions: {
-      type: Array,
-      required: true,
-      default: () => [],
-    },
-    suspendedLabels: {
-      type: Object,
-      required: false,
-      default: () => {},
-    },
-    value: [String, Number],
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
+  suspendedLabels: {
+    type: Object,
+    required: false,
+    default: () => ({}),
   },
-  data() {
-    return {
-      step: this.value,
-      innerSelectOptions: this.selectOptions,
-    };
+  modelValue: [String, Number],
+  disabled: {
+    type: Boolean,
+    default: false,
   },
-  computed: {
-    // 获取倒数第二个选项的 value 作为 Slider 的最大值（忽略自定义）
-    maxSliderValue() {
-      if (this.selectOptions.length < 2) return 1;
-      return this.selectOptions[this.selectOptions.length - 2].value;
-    },
-    sliderValue() {
-      // 如果 step 超过 max（自定义选项），依旧显示 max 值
-      return this.step > this.maxSliderValue ? this.maxSliderValue : this.step;
-    },
+});
+
+const emit = defineEmits(['update:modelValue', 'enable']);
+
+const { isEn } = useLang();
+
+const step = ref(props.modelValue);
+const innerSelectOptions = ref(props.selectOptions);
+
+// 获取倒数第二个选项的 value 作为 Slider 的最大值（忽略自定义）
+const maxSliderValue = computed(() => {
+  if (props.selectOptions.length < 2) return 1;
+  return props.selectOptions[props.selectOptions.length - 2].value;
+});
+
+// 获取第一个选项的 value 作为 Slider 的最小值
+const minSliderValue = computed(() => {
+  if (props.selectOptions.length < 1) return 0;
+  return props.selectOptions[0].value;
+});
+
+const sliderValue = computed(() => {
+  // 如果 step 超过 max（自定义选项），依旧显示 max 值
+  return step.value > maxSliderValue.value ? maxSliderValue.value : step.value;
+});
+
+watch(
+  () => props.modelValue,
+  (val) => {
+    step.value = val;
   },
-  watch: {
-    value(val) {
-      this.step = val;
-    },
-    step(newStep) {
-      this.$emit('input', newStep);
-    },
-    disabled(val) {
-      if (val) {
-        this.step = Number(this.selectOptions.find((v) => v.disabled).value);
-      }
-    },
+);
+
+watch(step, (newStep) => {
+  emit('update:modelValue', newStep);
+});
+
+watch(
+  () => props.disabled,
+  (val) => {
+    if (val) {
+      step.value = Number(props.selectOptions.find((v) => v.disabled).value);
+    }
   },
-  methods: {
-    handleAttach,
-    handleSelectChange() {
-      this.$emit('enable');
-    },
-    handleVisibleChange(val) {
-      if (val && this.disabled) {
-        this.innerSelectOptions = this.selectOptions;
-        return;
-      }
-    },
-    handleSliderChange(v) {
-      if (this.disabled) return;
-      this.step = v;
-    },
-    renderLabel() {
-      return this.suspendedLabels[this.step];
-    },
-  },
-};
+);
+
+function handleSelectChange() {
+  emit('enable');
+}
+
+function handleVisibleChange(val) {
+  if (val && props.disabled) {
+    innerSelectOptions.value = props.selectOptions;
+    return;
+  }
+}
+
+function handleSliderChange(v) {
+  if (props.disabled) return;
+  step.value = v;
+}
+
+function renderLabel() {
+  return props.suspendedLabels[step.value];
+}
 </script>
 
 <style lang="less" scoped>
@@ -159,31 +169,31 @@ export default {
         height: 8px;
         z-index: 2;
       }
-      /deep/ .t-slider__container {
+      :deep(.t-slider__container) {
         position: absolute;
         top: 6px;
         width: 60px;
         left: 8px;
       }
 
-      /deep/ .t-slider {
+      :deep(.t-slider) {
         padding: 6px 0;
       }
 
-      /deep/ .t-slider__rail {
+      :deep(.t-slider__rail) {
         height: 8px;
         background-color: var(--bg-color-theme-tertiary);
       }
-      /deep/ .t-slider__track {
+      :deep(.t-slider__track) {
         height: 8px;
       }
-      /deep/ .t-slider__button {
+      :deep(.t-slider__button) {
         box-shadow: var(--shadow-1);
       }
     }
 
     &.disabled {
-      /deep/ .t-slider__button {
+      :deep(.t-slider__button) {
         border-color: var(--bg-color-tag);
         background-color: var(--bg-color-theme-surface);
       }
@@ -194,7 +204,7 @@ export default {
     padding: 0;
     margin-left: 8px;
     width: 82px;
-    /deep/ .t-input {
+    :deep(.t-input) {
       background: var(--bg-color-theme-secondary);
       border: 1px solid transparent;
       height: 32px;
@@ -203,20 +213,20 @@ export default {
       transition: border-color 0.2s;
       font-size: 14px;
     }
-    /deep/ .t-select {
+    :deep(.t-select) {
       font-size: 14px;
     }
-    /deep/ .t-select:hover {
+    :deep(.t-select:hover) {
       border-color: var(--component-border);
     }
-    /deep/ .t-is-active {
+    :deep(.t-is-active) {
       border-color: var(--brand-main) !important;
     }
-    /deep/ .t-select__right-icon {
+    :deep(.t-select__right-icon) {
       color: var(--text-placeholder) !important;
     }
 
-    /deep/ .t-select__single {
+    :deep(.t-select__single) {
       margin-left: 0;
     }
   }

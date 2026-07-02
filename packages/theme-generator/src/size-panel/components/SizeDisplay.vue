@@ -2,7 +2,7 @@
   <div>
     <div class="size-panel__token-list">
       <div
-        v-for="(token, index) in SIZE_TOKENS"
+        v-for="(item, index) in tokenList"
         :key="index"
         :style="{
           display: 'flex',
@@ -10,40 +10,41 @@
           marginBottom: '8px',
         }"
       >
-        <span><SectionDynamicSvg :size="parseInt(getTokenValue(token), 10)" /></span>
-        <span>{{ token.replace('--td-', '') }} : {{ getTokenValue(token) }}</span>
+        <span><SectionDynamicSvg :size="parseInt(item.value, 10)" /></span>
+        <span>{{ item.token.replace('--td-', '') }} : {{ item.value }}</span>
       </div>
     </div>
   </div>
 </template>
-<script lang="jsx">
+<script setup>
+import { ref, computed, onMounted, watch, nextTick } from 'vue';
 import { getTokenValue } from '@/common/utils';
+import { themeStore } from '@/common/themes';
 import { SIZE_TOKENS } from '../built-in/size-map';
 import SectionDynamicSvg from '../svg/SectionDynamicSvg.vue';
 
-export default {
-  name: 'SizeDisplay',
-  components: {
-    SectionDynamicSvg,
+defineOptions({ name: 'SizeDisplay' });
+
+const refreshKey = ref(0);
+
+onMounted(() => {
+  nextTick(() => {
+    // 初始化 local 的 token 后更新 size 显示
+    refreshKey.value++;
+  });
+});
+
+watch(
+  () => themeStore.sizeRefreshId,
+  () => {
+    refreshKey.value++;
   },
-  data() {
-    return {
-      SIZE_TOKENS,
-    };
-  },
-  methods: {
-    getTokenValue,
-  },
-  mounted() {
-    this.$nextTick(() => {
-      // 初始化 local 的 token 后更新 size 显示
-      this.$forceUpdate();
-    });
-    this.$root.$on('refresh-size-tokens', () => {
-      this.$forceUpdate();
-    });
-  },
-};
+);
+
+const tokenList = computed(() => {
+  refreshKey.value;
+  return SIZE_TOKENS.map((token) => ({ token, value: getTokenValue(token) }));
+});
 </script>
 <style lang="less" scoped>
 .size-panel {

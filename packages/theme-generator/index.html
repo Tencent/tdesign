@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>TDesign Theme Generator</title>
+    <style>
+      /* dev 用的深浅色切换按钮，不进入构建产物 */
+      #dev-mode-toggle {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10000;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        background: #000;
+        color: #fff;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+      /* body 背景跟随 theme-mode 适配 */
+      body {
+        margin: 0;
+        background: var(--td-bg-color-page, #f5f5f5);
+        transition: background-color 0.3s ease;
+      }
+      :root[theme-mode='dark'] body {
+        background: var(--td-bg-color-page, #181818);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- dev 也走 Web Component 路径，与 build 产物行为一致（shadowRoot 隔离） -->
+    <td-theme-generator></td-theme-generator>
+    <!-- dev 用的深浅色切换按钮：切换 documentElement 的 theme-mode 属性，
+         Generator.vue 中的 syncModeToGenerator 会自动同步给 Web Component -->
+    <button id="dev-mode-toggle" title="切换深浅色模式" aria-label="切换深浅色模式">🌙</button>
+    <script type="module" src="/src/wc-entry.js"></script>
+    <script type="module">
+      const toggle = document.getElementById('dev-mode-toggle');
+      const root = document.documentElement;
+      const render = () => {
+        const isDark = root.getAttribute('theme-mode') === 'dark';
+        toggle.textContent = isDark ? '☀️' : '🌙';
+        // 太阳态用浅灰背景，月亮态用黑色背景
+        // 颜色选取避开 dock 背景色（浅色 #EEE / 深色 #2C2C2C）
+        toggle.style.background = isDark ? '#e0e0e0' : '#000';
+        toggle.style.color = isDark ? '#000000' : '#fff';
+        toggle.style.borderColor = isDark ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.5)';
+      };
+      toggle.addEventListener('click', () => {
+        const isDark = root.getAttribute('theme-mode') === 'dark';
+        root.setAttribute('theme-mode', isDark ? 'light' : 'dark');
+      });
+      // 跟随外部属性变化刷新按钮文案
+      new MutationObserver(render).observe(root, { attributes: true, attributeFilter: ['theme-mode'] });
+      render();
+    </script>
+  </body>
+</html>

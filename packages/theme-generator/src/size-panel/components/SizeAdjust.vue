@@ -56,11 +56,12 @@
     </div>
   </div>
 </template>
-<script lang="jsx">
-import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue';
+<script setup>
+import { ref } from 'vue';
+import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue-next/lib';
 
 import { SizeSlider } from './../../common/components';
-import { modifyToken } from './../../common/themes';
+import { modifyToken, themeStore } from './../../common/themes';
 import { getTokenValue, handleAttach } from './../../common/utils';
 
 import HorizontalPaddingAdjustSvg from '../svg/HorizontalPaddingAdjustSvg.vue';
@@ -69,49 +70,32 @@ import PopupPaddingAdjustSvg from '../svg/PopupPaddingAdjustSvg.vue';
 import SizeAdjustSvg from '../svg/SizeAdjustSvg.vue';
 import VerticalPaddingAdjustSvg from '../svg/VerticalPaddingAdjustSvg.vue';
 
-export default {
-  name: 'SizeAdjust',
-  components: {
-    TList,
-    TListItem,
-    TPopup,
-    SizeSlider,
-    SizeAdjustSvg,
-    HorizontalPaddingAdjustSvg,
-    VerticalPaddingAdjustSvg,
-    MarginAdjustSvg,
-    PopupPaddingAdjustSvg,
-  },
-  props: {
-    tokenList: Array,
-    type: String,
-  },
-  data() {
-    return {
-      hoverIdx: null,
-    };
-  },
-  methods: {
-    getTokenValue,
-    handleAttach,
-    handleVisibleChange(v, ctx, idx) {
-      if (v) this.hoverIdx = idx;
-      if (!v && ctx.trigger === 'document' && this.hoverIdx === idx) this.hoverIdx = null;
-    },
-    handleChangeSize(token, v) {
-      modifyToken(token, `${v}px`);
-      this.$forceUpdate();
-      this.$root.$emit('refresh-size-tokens', this.type);
-    },
-    parseSize(val) {
-      if (typeof val === 'string') {
-        const num = parseFloat(val);
-        return isNaN(num) ? 0 : num;
-      }
-      return val;
-    },
-  },
-};
+defineOptions({ name: 'SizeAdjust' });
+
+const props = defineProps({
+  tokenList: Array,
+  type: String,
+});
+
+const hoverIdx = ref(null);
+
+function handleVisibleChange(v, ctx, idx) {
+  if (v) hoverIdx.value = idx;
+  if (!v && ctx.trigger === 'document' && hoverIdx.value === idx) hoverIdx.value = null;
+}
+
+function handleChangeSize(token, v) {
+  modifyToken(token, `${v}px`);
+  themeStore.incrementSizeRefresh(props.type);
+}
+
+function parseSize(val) {
+  if (typeof val === 'string') {
+    const num = parseFloat(val);
+    return isNaN(num) ? 0 : num;
+  }
+  return val;
+}
 </script>
 <style lang="less" scoped>
 .size-panel {
@@ -125,14 +109,14 @@ export default {
       font-size: 14px;
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
-    /deep/ .t-radio-group {
+    :deep(.t-radio-group) {
       width: 228px;
       border-radius: 6px;
       text-align: center;
       margin-bottom: 4px;
     }
 
-    /deep/ .t-list-item {
+    :deep(.t-list-item) {
       margin-bottom: 4px;
       border-radius: 6px;
       cursor: pointer;
@@ -146,7 +130,7 @@ export default {
       }
       cursor: pointer;
     }
-    /deep/ .t-list-item__content {
+    :deep(.t-list-item__content) {
       width: 100%;
     }
   }

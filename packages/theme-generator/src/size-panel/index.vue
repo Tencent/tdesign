@@ -141,9 +141,11 @@
   </div>
 </template>
 
-<script lang="jsx">
+<script setup>
+import { reactive, computed, watch } from 'vue';
 import { CommonCollapse } from '@/common/components';
-import { langMixin } from '@/common/i18n';
+import { useLang } from '@/common/i18n';
+import { themeStore } from '@/common/themes';
 
 import SizeAdjust from './components/SizeAdjust.vue';
 import SizeDisplay from './components/SizeDisplay.vue';
@@ -162,62 +164,45 @@ import {
   COMP_SIZE_MAP,
 } from './built-in/size-map';
 
-export default {
-  name: 'SizePanel',
-  props: {
-    top: Number,
-  },
-  components: {
-    CommonCollapse,
-    SizeDisplay,
-    SizeAdjust,
-    // svg
-    SizeSvg,
-    HorizontalPaddingSvg,
-    VerticalPaddingSvg,
-    PopupPaddingSvg,
-    MarginSvg,
-  },
-  mixins: [langMixin],
-  data() {
-    return {
-      COMP_SIZE_MAP,
-      COMP_PADDING_LR_MAP,
-      COMP_PADDING_TB_MAP,
-      COMP_POPUP_PADDING_MAP,
-      COMP_MARGIN_MAP,
-      refreshIdMap: {
-        'comp-size': 0,
-        'comp-padding-tb': 0,
-        'comp-padding-lr': 0,
-        'popup-padding': 0,
-        'comp-margin': 0,
-      },
-    };
-  },
-  computed: {
-    contentStyle() {
-      const clientHeight = window.innerHeight;
-      return {
-        overflowY: 'scroll',
-        height: `${clientHeight - (this.top || 0) - 96}px`,
-      };
-    },
-  },
-  mounted() {
-    this.$root.$on('refresh-size-tokens', (type) => {
-      Object.keys(this.refreshIdMap).forEach((key) => {
-        if (key !== type) {
-          this.refreshIdMap[key]++;
-        }
-      });
+defineOptions({ name: 'SizePanel' });
+
+const props = defineProps({
+  top: Number,
+});
+
+const { lang } = useLang();
+
+const refreshIdMap = reactive({
+  'comp-size': 0,
+  'comp-padding-tb': 0,
+  'comp-padding-lr': 0,
+  'popup-padding': 0,
+  'comp-margin': 0,
+});
+
+const contentStyle = computed(() => {
+  const clientHeight = window.innerHeight;
+  return {
+    overflowY: 'scroll',
+    height: `${clientHeight - (props.top || 0) - 96}px`,
+  };
+});
+
+watch(
+  () => themeStore.sizeRefreshId,
+  () => {
+    const type = themeStore.sizeRefreshType;
+    Object.keys(refreshIdMap).forEach((key) => {
+      if (key !== type) {
+        refreshIdMap[key]++;
+      }
     });
   },
-};
+);
 </script>
 
 <style scoped lang="less">
-/deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
+:deep(.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow) {
   left: calc(100% - 16px * 2) !important;
 }
 

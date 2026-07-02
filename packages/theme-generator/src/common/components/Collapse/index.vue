@@ -30,30 +30,21 @@
   </div>
 </template>
 
-<script>
-import ArrowIcon from 'tdesign-vue/es/common-components/fake-arrow';
-import { collapseAnimation, handleAttach } from '../../utils';
+<script setup>
+import { ref } from 'vue';
+import ArrowIcon from 'tdesign-vue-next/lib/common-components/fake-arrow';
+import { collapseAnimation } from '../../utils';
 
-export default {
-  name: 'CommonCollapse',
-  props: {
-    title: String,
-    colorPalette: Array,
-    type: String,
-  },
-  components: { ArrowIcon },
+defineOptions({ name: 'CommonCollapse' });
 
-  data() {
-    return {
-      ...collapseAnimation(),
-      isActive: false,
-      isHover: false,
-    };
-  },
-  methods: {
-    handleAttach,
-  },
-};
+defineProps({
+  title: String,
+  colorPalette: Array,
+  type: String,
+});
+
+const { beforeEnter, enter, afterEnter, beforeLeave, leave, afterLeave } = collapseAnimation();
+const isActive = ref(false);
 </script>
 
 <style scoped lang="less">
@@ -61,7 +52,8 @@ export default {
 .fade-leave-active {
   transition: opacity 0.1s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
@@ -115,7 +107,7 @@ export default {
     font-size: 12px;
     line-height: 20px;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
-    /deep/ .t-icon {
+    :deep(.t-icon) {
       margin-left: 4px;
       cursor: pointer;
       transition: color 0.2s;

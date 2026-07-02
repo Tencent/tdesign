@@ -17,6 +17,9 @@ RUN curl -fsSL https://code-server.dev/install.sh | sh \
 
 RUN npm install -g pnpm
 
+RUN npm install -g agent-browser
+RUN agent-browser install --with-deps
+
 # 指定字符集支持命令行输入中文（根据需要选择字符集）
 ENV LANG=C.UTF-8
 ENV LANGUAGE=C.UTF-8

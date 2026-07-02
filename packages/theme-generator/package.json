@@ -4,10 +4,13 @@
   "license": "MIT",
   "description": "TDesign主题配置生成器挂件",
   "scripts": {
-    "dev": "vue-cli-service serve",
-    "build": "vue-cli-service build --target wc --inline-vue --name td-theme-generator src/Generator.vue",
-    "build:watch": "vue-cli-service build --target wc --inline-vue --name td-theme-generator src/Generator.vue --watch",
-    "lint": "vue-cli-service lint"
+    "dev": "vite",
+    "build:css": "node scripts/build-tdesign-css.mjs",
+    "build": "npm run build:css && vite build",
+    "build:watch": "vite build --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .vue,.js --fix"
   },
   "main": "dist/td-theme-generator.js",
   "files": [
@@ -29,27 +32,23 @@
   },
   "homepage": "https://github.com/Tencent/tdesign/blob/main/packages/theme-generator/README.md",
   "dependencies": {
-    "core-js": "^3.8.3",
     "cssbeautify": "^0.3.1",
     "lodash": "^4.17.21",
-    "tdesign-icons-vue": "^0.0.8",
-    "tdesign-vue": "1.13.1-naruto",
+    "tdesign-icons-vue-next": "^0.4.4",
+    "tdesign-vue-next": "^1.20.3",
     "tvision-color": "^1.6.0",
-    "vue": "2.7.14"
+    "vue": "^3.5.25"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.12",
-    "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "eslint-plugin-vue": "^8.0.3",
-    "less": "^4.1.2",
-    "less-loader": "^10.2.0",
-    "raw-loader": "^4.0.2",
-    "vue-loader": "^17.0.0",
-    "vue-svg-loader": "^0.17.0-beta.2",
-    "vue-template-compiler": "2.7.14"
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vitest/coverage-v8": "^2.1.8",
+    "@vue/test-utils": "^2.4.6",
+    "eslint-plugin-vue": "^9.32.0",
+    "happy-dom": "^15.11.7",
+    "less": "^4.2.0",
+    "vite": "^6.3.1",
+    "vitest": "^2.1.8",
+    "vue-eslint-parser": "^9.4.2"
   },
   "browserslist": [
     "> 1%",

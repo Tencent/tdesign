@@ -1,13 +1,16 @@
-import Vue from 'vue';
+import { reactive } from 'vue';
 
 import { DEFAULT_THEME_META, TDESIGN_WEB_THEME } from './built-in';
 import { clearLocalTheme, getDefaultTheme, getOptionFromLocal, initThemeStyleSheet, updateLocalOption } from './core';
 
-export const themeStore = Vue.observable({
+export const themeStore = reactive({
   device: 'web',
   theme: TDESIGN_WEB_THEME,
   brandColor: getOptionFromLocal('color') || DEFAULT_THEME_META.value,
   refreshId: 0, // 用于强制刷新绑定了 key 的组件 UI
+  colorRefreshId: 0, // 颜色 token 变更后，通知消费方面板重新计算
+  sizeRefreshId: 0, // 尺寸 token 变更后，通知消费方面板重新计算
+  sizeRefreshType: null, // 最近一次触发尺寸刷新的类型（由 SizeAdjust 发出）
   updateDevice(device) {
     this.device = device;
     this.theme = getInitialTheme(device);
@@ -33,6 +36,13 @@ export const themeStore = Vue.observable({
   },
   incrementRefreshId() {
     this.refreshId++;
+  },
+  incrementColorRefresh() {
+    this.colorRefreshId++;
+  },
+  incrementSizeRefresh(type = null) {
+    this.sizeRefreshType = type;
+    this.sizeRefreshId++;
   },
 });
 

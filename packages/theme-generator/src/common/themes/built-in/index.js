@@ -1,17 +1,17 @@
-import TDesignOriginal from '!raw-loader!./svg/TDesignOriginal';
-import TencentCloud from '!raw-loader!./svg/TencentCloud';
+import TDesignOriginal from './svg/TDesignOriginal?raw';
+import TencentCloud from './svg/TencentCloud?raw';
 
-import WebTDesignDark from '!raw-loader!./css/web/TDesign/dark.css';
-import WebTDesignExtra from '!raw-loader!./css/web/TDesign/extra.css';
-import WebTDesignLight from '!raw-loader!./css/web/TDesign/light.css';
+import WebTDesignDark from './css/web/TDesign/dark.css?raw';
+import WebTDesignExtra from './css/web/TDesign/extra.css?raw';
+import WebTDesignLight from './css/web/TDesign/light.css?raw';
 
-import MobileTDesignDark from '!raw-loader!./css/mobile/TDesign/dark.css';
-import MobileTDesignExtra from '!raw-loader!./css/mobile/TDesign/extra.css';
-import MobileTDesignLight from '!raw-loader!./css/mobile/TDesign/light.css';
+import MobileTDesignDark from './css/mobile/TDesign/dark.css?raw';
+import MobileTDesignExtra from './css/mobile/TDesign/extra.css?raw';
+import MobileTDesignLight from './css/mobile/TDesign/light.css?raw';
 
-import WebTCloudDark from '!raw-loader!./css/web/TCloud/dark.css';
-import WebTCloudExtra from '!raw-loader!./css/web/TCloud/extra.css';
-import WebTCloudLight from '!raw-loader!./css/web/TCloud/light.css';
+import WebTCloudDark from './css/web/TCloud/dark.css?raw';
+import WebTCloudExtra from './css/web/TCloud/extra.css?raw';
+import WebTCloudLight from './css/web/TCloud/light.css?raw';
 
 export const TENCENT_BLUE = '#0052D9';
 

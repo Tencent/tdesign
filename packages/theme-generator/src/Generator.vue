@@ -10,7 +10,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import {
   applyTokenFromLocal,
   initGeneratorVars,
@@ -18,55 +19,52 @@ import {
   syncThemeToIframe,
   themeStore,
 } from '@/common/themes';
+import { setUpModeObserver } from '@/common/utils';
 
 import FloatDock from './float-dock';
 import PanelDrawer from './panel-drawer';
 
-export default {
-  name: 'ThemeGenerator',
-  components: {
-    FloatDock,
-    PanelDrawer,
+defineOptions({ name: 'ThemeGenerator' });
+
+const props = defineProps({
+  showSetting: {
+    type: [Boolean, String],
   },
-  props: {
-    showSetting: {
-      type: [Boolean, String],
-    },
-    device: {
-      type: String,
-      default: 'web',
-    },
+  device: {
+    type: String,
+    default: 'web',
   },
-  data() {
-    return {
-      visible: 0,
-    };
-  },
-  mounted() {
-    themeStore.updateDevice(this.device);
-    syncModeToGenerator();
-    initGeneratorVars();
-    applyTokenFromLocal();
-    syncThemeToIframe(this.device);
-  },
-  methods: {
-    handleTriggerVisible() {
-      this.visible = true;
-    },
-    handleDrawerVisible(v) {
-      this.visible = v;
-    },
-    handleClickSetting() {
-      this.visible = false;
-    },
-  },
-};
+});
+
+const visible = ref(false);
+
+onMounted(() => {
+  themeStore.updateDevice(props.device);
+  syncModeToGenerator();
+  initGeneratorVars();
+  applyTokenFromLocal();
+  syncThemeToIframe(props.device);
+  // 宿主页亮暗模式切换时，font/shadow/size 面板以 $refreshId 为 key，
+  // bump 后强制重新挂载并重读 token 值（getTokenValue 非响应式，需靠 key 变更触发重渲染）。
+  setUpModeObserver(() => {
+    themeStore.incrementRefreshId();
+  });
+});
+
+function handleTriggerVisible() {
+  visible.value = true;
+}
+
+function handleDrawerVisible(v) {
+  visible.value = v;
+}
+
+function handleClickSetting() {
+  visible.value = false;
+}
 </script>
 
 <style lang="less" scoped>
-@import './styles/reset.min.css';
-@import './styles/tdesign.min.css';
-
 @media screen and (max-width: 960px) {
   .theme-generator {
     display: none;

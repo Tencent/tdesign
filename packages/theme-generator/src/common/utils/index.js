@@ -11,9 +11,14 @@ export function getTokenValue(name) {
 
 /**
  * 获取当前亮暗模式 (light / dark)
+ * 优先识别 `theme-mode` 属性，其次识别 `.dark` class（与 dark.css / tdesign.min.css
+ * 的 `:root.dark` 选择器对齐），均无则视为 light。
  */
 export function getThemeMode() {
-  return document.documentElement.getAttribute('theme-mode') || 'light';
+  const el = document.documentElement;
+  if (el.getAttribute('theme-mode') === 'dark') return 'dark';
+  if (el.classList.contains('dark')) return 'dark';
+  return 'light';
 }
 
 /**
@@ -36,7 +41,7 @@ export function setUpModeObserver(handler) {
 
   observer.observe(document.documentElement, {
     attributes: true,
-    attributeFilter: ['theme-mode'],
+    attributeFilter: ['theme-mode', 'class'],
   });
 
   return observer;
