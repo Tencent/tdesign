@@ -145,6 +145,54 @@ describe('iframe 同步: 小程序 / uniapp', () => {
     expect(webviewLight).toBeTruthy();
     expect(webviewLight.textContent).toContain('body');
     expect(webviewLight.textContent).toContain('--td-brand-color-7');
+
+    // m2w web 预览（无嵌套 webview）路径：previewIframe 本身也应被注入主题
+    const outerLight = outerIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
+    expect(outerLight).toBeTruthy();
+    expect(outerLight.textContent).toContain('--td-brand-color-7');
+  });
+
+  it('miniprogram: m2w web 预览（无嵌套 webview iframe）时主题直接同步到 previewIframe', async () => {
+    // 模拟 aa.html 中的真实结构：td-doc-phone > iframe.mobile-iframe（无嵌套）
+    const previewIframe = createMockIframe('mobile-iframe');
+    previewIframe.setAttribute('class', 'mobile-iframe');
+    syncThemeToIframe('mini-program');
+
+    const docPhone = document.createElement('td-doc-phone');
+    docPhone.appendChild(previewIframe);
+    document.body.appendChild(docPhone);
+
+    await flushObservers();
+
+    // 关键回归点：m2w 预览直接在 previewIframe 内渲染，无嵌套 webview iframe。
+    // 之前小程序路径只调用 watchNestedIframes 查找嵌套 iframe，找不到就什么都不做，
+    // 主题永远不会被注入 previewIframe。现在应直接同步到 previewIframe。
+    expect(previewIframe.dataset.observed).toBe('true');
+    expect(previewIframe.getAttribute('device')).toBe('mini-program');
+
+    const light = previewIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
+    expect(light).toBeTruthy();
+    expect(light.textContent).toContain('body');
+    expect(light.textContent).toContain('--td-brand-color-7');
+  });
+
+  it('miniprogram: m2w web 预览下修改 token 后 previewIframe 内 custom-theme 同步更新', async () => {
+    const previewIframe = createMockIframe('mobile-iframe');
+    syncThemeToIframe('mini-program');
+
+    const docPhone = document.createElement('td-doc-phone');
+    docPhone.appendChild(previewIframe);
+    document.body.appendChild(docPhone);
+
+    await flushObservers();
+
+    modifyToken('--td-brand-color-7', '#ff00ff');
+    await flushObservers();
+
+    const updated = previewIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
+    expect(updated).toBeTruthy();
+    expect(updated.textContent).toContain('#ff00ff');
+    expect(updated.textContent).not.toContain('#0052d9');
   });
 
   it('miniprogram: 修改 token 后嵌套 webview iframe 内 custom-theme 同步更新', async () => {

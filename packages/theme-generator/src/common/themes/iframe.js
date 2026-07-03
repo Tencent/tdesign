@@ -202,14 +202,26 @@ export function syncThemeToIframe(device) {
         if (!previewIframe) return;
 
         if (isMiniProgram(device)) {
-          // 小程序实际的 iframe 嵌套在里面
-          // 同时立即调用并监听 onload：previewIframe 可能已经加载完成，
-          // 此时 onload 不会再触发，仅靠 onload 会导致嵌套 webview 永远不被监听。
+          // 小程序预览有两种渲染模式：
+          // 1. m2w web 预览：直接在 previewIframe 内渲染（无嵌套 iframe），
+          //    需要直接同步主题到 previewIframe 本身。
+          // 2. 开发者工具模拟器：在嵌套的 webview iframe 中渲染，
+          //    需要同步到嵌套 iframe。
+          // 两种情况都覆盖：先给 previewIframe 设置主题同步，
+          // 再查找嵌套 webview iframe。
+          beforeWatchThemeChange(previewIframe, device);
+
+          // watchThemeChange 已设置 previewIframe.onload 用于 iframe 加载后重新初始化观察者；
+          // 这里链式包装，在原有 onload 之后再处理嵌套 iframe，避免覆盖。
+          const prevOnload = previewIframe.onload;
           const handleNested = () => {
+            if (typeof prevOnload === 'function') prevOnload();
             watchNestedIframes(previewIframe.contentDocument, device);
           };
-          handleNested();
           previewIframe.onload = handleNested;
+          // iframe 可能已加载完成（onload 不会再触发），立即检查一次嵌套 iframe。
+          // 只检查嵌套 iframe，不重复执行 prevOnload（watchThemeChange 已初始化过）。
+          watchNestedIframes(previewIframe.contentDocument, device);
         } else {
           beforeWatchThemeChange(previewIframe, device);
         }
