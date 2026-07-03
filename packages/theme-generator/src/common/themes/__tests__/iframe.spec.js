@@ -90,7 +90,9 @@ describe('iframe 同步: 小程序 / uniapp', () => {
     // getElementById 找不到，后续 modifyToken 更新会落到 else 早返回分支，主题修改无效。
     const light = iframe.contentDocument.getElementById(CUSTOM_THEME_ID);
     expect(light).toBeTruthy();
-    expect(light.textContent).toContain('uni-page-body');
+    // 选择器必须与导出逻辑（page, .page）一致，否则 CSS 变量会被 iframe 内
+    // app.wxss 中定义在 page 上的同名变量覆盖，主题色不生效。
+    expect(light.textContent).toContain('page, .page');
     expect(light.textContent).toContain('--td-brand-color-7');
 
     const extra = iframe.contentDocument.getElementById(CUSTOM_EXTRA_ID);
@@ -143,7 +145,7 @@ describe('iframe 同步: 小程序 / uniapp', () => {
 
     const webviewLight = webviewIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
     expect(webviewLight).toBeTruthy();
-    expect(webviewLight.textContent).toContain('body');
+    expect(webviewLight.textContent).toContain('page, .page');
     expect(webviewLight.textContent).toContain('--td-brand-color-7');
 
     // m2w web 预览（无嵌套 webview）路径：previewIframe 本身也应被注入主题
@@ -172,7 +174,7 @@ describe('iframe 同步: 小程序 / uniapp', () => {
 
     const light = previewIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
     expect(light).toBeTruthy();
-    expect(light.textContent).toContain('body');
+    expect(light.textContent).toContain('page, .page');
     expect(light.textContent).toContain('--td-brand-color-7');
   });
 

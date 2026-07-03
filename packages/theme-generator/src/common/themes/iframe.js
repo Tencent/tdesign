@@ -10,7 +10,16 @@ function handleMobileModeChange(iframe, mode) {
   iframe.contentDocument.documentElement.setAttribute('theme-mode', mode);
 }
 
-function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
+// 选择器必须与 exportCustomStyleSheet 导出逻辑一致（core.js）：
+// 小程序 / uni-app 的页面根节点是 `page` 元素或 `.page` 类，不是 `body`。
+// 之前用 `body`（小程序）/ `uni-page-body`（uni-app），CSS 变量定义在 body 上，
+// 会被 iframe 内 app.wxss 中定义在 `page` 上的同名变量覆盖（更近的祖先优先），
+// 导致主题色不生效。统一对齐导出逻辑用 `page, .page`。
+function getMobileSelector() {
+  return 'page, .page';
+}
+
+function handleMiniProgramModeChange(iframe, mode) {
   const isDark = mode === 'dark';
 
   const prevModeId = isDark ? CUSTOM_THEME_ID : CUSTOM_DARK_ID;
@@ -31,7 +40,7 @@ function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
     style.id = currentModeId;
 
     const { rootContent: cssString } = parseRootCss(themeStyle.innerText);
-    const selector = uniapp ? 'uni-page-body' : 'body';
+    const selector = getMobileSelector();
     style.textContent = `${selector} {\n${cssString}\n}`;
 
     iframeDom.head.appendChild(style);
@@ -61,8 +70,8 @@ function handleMobileTokenChange(iframe, styleElement) {
   }
 }
 
-function handleMiniProgramTokenChange(iframe, styleElement, uniapp = false) {
-  const selector = uniapp ? 'uni-page-body' : 'body';
+function handleMiniProgramTokenChange(iframe, styleElement) {
+  const selector = getMobileSelector();
   const { rootContent } = parseRootCss(styleElement.innerText);
   const updatedCss = `${selector} {\n${rootContent}\n}`;
 
@@ -93,7 +102,7 @@ function watchThemeModeChange(iframe) {
   const device = iframe.getAttribute('device');
   const handleModeChange = (mode) => {
     if (isMiniProgram(device) || isUniApp(device)) {
-      handleMiniProgramModeChange(iframe, mode, isUniApp(device));
+      handleMiniProgramModeChange(iframe, mode);
     } else {
       handleMobileModeChange(iframe, mode);
     }
@@ -121,7 +130,7 @@ function watchThemeTokenChange(iframe) {
   const device = iframe.getAttribute('device');
   const handleTokenChange = (styleElement) => {
     if (isMiniProgram(device) || isUniApp(device)) {
-      handleMiniProgramTokenChange(iframe, styleElement, isUniApp(device));
+      handleMiniProgramTokenChange(iframe, styleElement);
     } else {
       handleMobileTokenChange(iframe, styleElement);
     }
