@@ -278,7 +278,7 @@ jobs:
 
       - run: pnpm uniapp build:npm
 
-      - run: NODE_ENV=preview pnpm -C packages/tdesign-uniapp/example build:h5
+      - run: NODE_ENV=preview pnpm -C packages/tdesign-uniapp/example build:h5 --mode development 
 
       - uses: actions/upload-artifact@v7
         with:
