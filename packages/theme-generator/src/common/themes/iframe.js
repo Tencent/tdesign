@@ -1,6 +1,10 @@
 import { getThemeMode, parseRootCss, setUpModeObserver } from '../utils';
 import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile, isUniApp } from './core';
 
+// 标记小程序外层 iframe 的 contentDocument 是否已建立嵌套 iframe 观察，
+// 避免 handleNested 立即调用 + onload 时重复创建 MutationObserver。
+const NESTED_OBSERVED_FLAG = '__tdThemeGeneratorNestedObserved';
+
 /* ----- 同步亮暗模式 -----  */
 function handleMobileModeChange(iframe, mode) {
   iframe.contentDocument.documentElement.setAttribute('theme-mode', mode);
@@ -20,7 +24,10 @@ function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
   // 添加新的
   const currentStyle = iframeDom.getElementById(currentModeId);
   if (!currentStyle) {
-    const style = document.createElement('style');
+    // 用 iframe 自身的 document 创建节点，保证 ownerDocument 一致；
+    // 否则 iframe.contentDocument.getElementById 后续无法命中该节点，
+    // 导致 handleMiniProgramTokenChange 更新失败（小程序/uniapp 主题修改无效）。
+    const style = iframeDom.createElement('style');
     style.id = currentModeId;
 
     const { rootContent: cssString } = parseRootCss(themeStyle.innerText);
@@ -196,9 +203,13 @@ export function syncThemeToIframe(device) {
 
         if (isMiniProgram(device)) {
           // 小程序实际的 iframe 嵌套在里面
-          previewIframe.onload = () => {
+          // 同时立即调用并监听 onload：previewIframe 可能已经加载完成，
+          // 此时 onload 不会再触发，仅靠 onload 会导致嵌套 webview 永远不被监听。
+          const handleNested = () => {
             watchNestedIframes(previewIframe.contentDocument, device);
           };
+          handleNested();
+          previewIframe.onload = handleNested;
         } else {
           beforeWatchThemeChange(previewIframe, device);
         }
@@ -217,6 +228,10 @@ export function syncThemeToIframe(device) {
  */
 function watchNestedIframes(iframeDocument, device) {
   if (!iframeDocument) return;
+  // 同一个 iframe document 只观察一次：handleNested 会立即调用 + onload 时再调用，
+  // 不加守卫会重复创建 MutationObserver。iframe 重新加载后 contentDocument 是新对象，标记自然失效。
+  if (iframeDocument[NESTED_OBSERVED_FLAG]) return;
+  iframeDocument[NESTED_OBSERVED_FLAG] = true;
 
   const handleWatch = () => {
     const nestedIframes = iframeDocument.querySelectorAll('iframe');
