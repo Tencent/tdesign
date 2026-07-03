@@ -18,7 +18,7 @@
     <t-input-number autoWidth theme="normal" v-model="shadow[3]" class="shadow-layer__card--item" placeholder="0px">
       <template #suffix><span class="shadow-layer__suffix">Spread</span></template>
     </t-input-number>
-    <shadow-popup class="placement top center" placement="left" showArrow destroyOnClose :attach="handleAttach">
+    <t-popup class="placement top center" placement="left" showArrow destroyOnClose :attach="handleAttach">
       <t-input v-model="color">
         <template #prefix-icon>
           <div class="shadow-layer__card--sharp" :style="{ background: color }"></div>
@@ -27,16 +27,16 @@
       <template #content>
         <color-picker :value="color" enableAlpha format="RGBA" @change="changeColor" />
       </template>
-    </shadow-popup>
+    </t-popup>
   </div>
 </template>
 
 <script setup>
 import { ref, watch, onMounted, nextTick } from 'vue';
 import { RemoveIcon } from 'tdesign-icons-vue-next';
-import { Input as TInput, InputNumber as TInputNumber } from 'tdesign-vue-next/lib';
+import { Input as TInput, InputNumber as TInputNumber, Popup as TPopup } from 'tdesign-vue-next/lib';
 
-import { ColorPicker, ShadowPopup } from '@/common/components';
+import { ColorPicker } from '@/common/components';
 import { handleAttach } from '@/common/utils';
 
 defineOptions({ name: 'ShadowEditor' });

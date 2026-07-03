@@ -21,7 +21,7 @@
         <t-radio-button value="token">{{ lang.font.tokenMode }}</t-radio-button>
       </t-radio-group>
       <t-list v-if="tokenType === 'list'">
-        <shadow-popup
+        <t-popup
           v-for="(token, idx) in ladderTypeList"
           :key="idx"
           placement="left"
@@ -57,10 +57,10 @@
               :sizeValue="token.value"
               @changeSize="(v) => handleChangeFontSize(v, 'list', token.tokens, idx)"
           /></template>
-        </shadow-popup>
+        </t-popup>
       </t-list>
       <t-list v-else class="token-type-list">
-        <shadow-popup
+        <t-popup
           v-for="(token, idx) in tokenTypeList"
           :key="idx"
           placement="left"
@@ -96,7 +96,7 @@
               :sizeValue="token.value"
               @changeSize="(v) => handleChangeFontSize(v, 'token', token.label, idx)"
           /></template>
-        </shadow-popup>
+        </t-popup>
       </t-list>
     </div>
   </div>
@@ -107,11 +107,12 @@ import { ref, watch, onMounted, nextTick } from 'vue';
 import {
   List as TList,
   ListItem as TListItem,
+  Popup as TPopup,
   RadioButton as TRadioButton,
   RadioGroup as TRadioGroup,
 } from 'tdesign-vue-next/lib';
 
-import { SegmentSelection, ShadowPopup, SizeSlider } from '@/common/components';
+import { SegmentSelection, SizeSlider } from '@/common/components';
 import { useLang } from '@/common/i18n';
 import { getOptionFromLocal, modifyToken, updateLocalOption } from '@/common/themes';
 import { getTokenValue, handleAttach } from '@/common/utils';

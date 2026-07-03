@@ -3,7 +3,7 @@
     <!-- Token List -->
     <div class="size-panel__token-list">
       <t-list>
-        <shadow-popup
+        <t-popup
           v-for="(token, idx) in tokenList"
           :key="idx"
           placement="left"
@@ -51,16 +51,16 @@
               :sizeValue="getTokenValue(`--td-${token.from}`)"
               @changeSize="(v) => handleChangeSize(`--td-${token.from}`, v)"
           /></template>
-        </shadow-popup>
+        </t-popup>
       </t-list>
     </div>
   </div>
 </template>
 <script setup>
 import { ref } from 'vue';
-import { List as TList, ListItem as TListItem } from 'tdesign-vue-next/lib';
+import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue-next/lib';
 
-import { ShadowPopup, SizeSlider } from './../../common/components';
+import { SizeSlider } from './../../common/components';
 import { modifyToken, themeStore } from './../../common/themes';
 import { getTokenValue, handleAttach } from './../../common/utils';
 

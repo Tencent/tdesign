@@ -23,7 +23,7 @@
         <t-radio-button value="time">{{ lang.font.lineHeightSteppedMode }}</t-radio-button>
       </t-radio-group>
       <t-list v-if="tokenType === 'plus'">
-        <shadow-popup
+        <t-popup
           placement="left"
           showArrow
           trigger="click"
@@ -51,10 +51,10 @@
               :sizeValue="lineHeightValue"
               @changeSize="handleChangeFontSize"
           /></template>
-        </shadow-popup>
+        </t-popup>
       </t-list>
       <t-list v-else>
-        <shadow-popup
+        <t-popup
           placement="left"
           showArrow
           trigger="click"
@@ -82,7 +82,7 @@
               :needInteger="false"
               @changeSize="handleChangeFontSize"
           /></template>
-        </shadow-popup>
+        </t-popup>
       </t-list>
     </div>
   </div>
@@ -93,11 +93,12 @@ import { ref, watch, onMounted, nextTick } from 'vue';
 import {
   List as TList,
   ListItem as TListItem,
+  Popup as TPopup,
   RadioButton as TRadioButton,
   RadioGroup as TRadioGroup,
 } from 'tdesign-vue-next/lib';
 
-import { SegmentSelection, ShadowPopup, SizeSlider } from '@/common/components';
+import { SegmentSelection, SizeSlider } from '@/common/components';
 import { useLang } from '@/common/i18n';
 import { getOptionFromLocal, updateLocalOption } from '@/common/themes';
 import { getTokenValue, handleAttach } from '@/common/utils';

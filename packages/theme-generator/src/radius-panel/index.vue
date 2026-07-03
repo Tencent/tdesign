@@ -25,7 +25,7 @@
         </SegmentSelection>
         <div class="radius-content__list">
           <t-list>
-            <shadow-popup
+            <t-popup
               v-for="(token, idx) in radiusTypeList"
               :key="idx"
               placement="left"
@@ -70,7 +70,7 @@
                   :disabled="token.token === '--td-radius-circle'"
                   @changeSize="(v) => handleChangeRadius(v, idx)"
               /></template>
-            </shadow-popup>
+            </t-popup>
           </t-list>
         </div>
       </div>
@@ -81,9 +81,9 @@
 <script setup>
 import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import isNumber from 'lodash/isNumber';
-import { List as TList, ListItem as TListItem } from 'tdesign-vue-next/lib';
+import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue-next/lib';
 
-import { SegmentSelection, ShadowPopup, SizeSlider } from '@/common/components';
+import { SegmentSelection, SizeSlider } from '@/common/components';
 import { useLang } from '@/common/i18n';
 import { CUSTOM_EXTRA_ID, getOptionFromLocal, modifyToken, updateLocalOption } from '@/common/themes';
 import { handleAttach } from '@/common/utils';
