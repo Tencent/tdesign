@@ -7,7 +7,27 @@ const NESTED_OBSERVED_FLAG = '__tdThemeGeneratorNestedObserved';
 
 /* ----- 同步亮暗模式 -----  */
 function handleMobileModeChange(iframe, mode) {
-  iframe.contentDocument.documentElement.setAttribute('theme-mode', mode);
+  const iframeDom = getIframeDoc(iframe, 'handleMobileModeChange');
+  if (!iframeDom) return;
+  iframeDom.documentElement.setAttribute('theme-mode', mode);
+}
+
+// 跨域 iframe 的 contentDocument 为 null，无法注入样式。
+// 仅当同源时（生产环境 tdesign.tencent.com 页面 + iframe 同域）才能同步主题；
+// surge.sh 等预览环境页面与 iframe 跨域，主题同步不可用，console 给出警告而非崩溃。
+function getIframeDoc(iframe, action) {
+  const doc = iframe.contentDocument;
+  if (!doc) {
+    if (!iframe.dataset.crossOriginWarned) {
+      iframe.dataset.crossOriginWarned = 'true';
+      console.warn(
+        `[td-theme-generator] 跨域 iframe 无法同步主题（${action}）。` +
+          `页面与 iframe 必须同源。生产环境（tdesign.tencent.com）不受影响，预览环境（surge.sh）有限制。`,
+      );
+    }
+    return null;
+  }
+  return doc;
 }
 
 // 预览 iframe 的选择器与导出逻辑（core.js 的 `page, .page`）不同：
@@ -29,7 +49,8 @@ function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
   const themeStyle = document.getElementById(isDark ? CUSTOM_DARK_ID : CUSTOM_THEME_ID);
 
   /* 小程序无法通过 root 上的属性来设置，不同模式需要重新更新样式 */
-  const iframeDom = iframe.contentDocument;
+  const iframeDom = getIframeDoc(iframe, 'handleMiniProgramModeChange');
+  if (!iframeDom) return;
 
   // 添加新的
   const currentStyle = iframeDom.getElementById(currentModeId);
@@ -57,38 +78,44 @@ function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
 
 /* ----- 同步 Token -----  */
 function handleMobileTokenChange(iframe, styleElement) {
+  const iframeDom = getIframeDoc(iframe, 'handleMobileTokenChange');
+  if (!iframeDom) return;
+
   const updatedCss = styleElement.innerText;
-  const iframeStyleElement = iframe.contentDocument.getElementById(styleElement.id);
+  const iframeStyleElement = iframeDom.getElementById(styleElement.id);
 
   if (iframeStyleElement) {
     iframeStyleElement.textContent = updatedCss;
   } else {
-    const newStyleElement = iframe.contentDocument.createElement('style');
+    const newStyleElement = iframeDom.createElement('style');
     newStyleElement.id = styleElement.id;
     newStyleElement.type = 'text/css';
     newStyleElement.textContent = updatedCss;
-    iframe.contentDocument.head.appendChild(newStyleElement);
+    iframeDom.head.appendChild(newStyleElement);
   }
 }
 
 function handleMiniProgramTokenChange(iframe, styleElement, uniapp = false) {
+  const iframeDom = getIframeDoc(iframe, 'handleMiniProgramTokenChange');
+  if (!iframeDom) return;
+
   const selector = getMobileSelector(uniapp);
   const { rootContent } = parseRootCss(styleElement.innerText);
   const updatedCss = `${selector} {\n${rootContent}\n}`;
 
   const updatedId = styleElement.id;
-  const iframeStyleElement = iframe.contentDocument.getElementById(updatedId);
+  const iframeStyleElement = iframeDom.getElementById(updatedId);
 
   if (iframeStyleElement) {
     iframeStyleElement.textContent = updatedCss;
   } else {
     if (updatedId === CUSTOM_THEME_ID || updatedId === CUSTOM_DARK_ID) return;
 
-    const newStyleElement = iframe.contentDocument.createElement('style');
+    const newStyleElement = iframeDom.createElement('style');
     newStyleElement.id = styleElement.id;
     newStyleElement.type = 'text/css';
     newStyleElement.textContent = updatedCss;
-    iframe.contentDocument.head.appendChild(newStyleElement);
+    iframeDom.head.appendChild(newStyleElement);
   }
 }
 /* ------------------- */
@@ -223,12 +250,12 @@ export function syncThemeToIframe(device) {
       const prevOnload = previewIframe.onload;
       const handleNested = () => {
         if (typeof prevOnload === 'function') prevOnload();
-        watchNestedIframes(previewIframe.contentDocument, device);
+        watchNestedIframes(getIframeDoc(previewIframe, 'watchNestedIframes'), device);
       };
       previewIframe.onload = handleNested;
       // iframe 可能已加载完成（onload 不会再触发），立即检查一次嵌套 iframe。
       // 只检查嵌套 iframe，不重复执行 prevOnload（watchThemeChange 已初始化过）。
-      watchNestedIframes(previewIframe.contentDocument, device);
+      watchNestedIframes(getIframeDoc(previewIframe, 'watchNestedIframes'), device);
     } else {
       beforeWatchThemeChange(previewIframe, device);
     }
