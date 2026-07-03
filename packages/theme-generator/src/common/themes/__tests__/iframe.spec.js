@@ -90,9 +90,10 @@ describe('iframe 同步: 小程序 / uniapp', () => {
     // getElementById 找不到，后续 modifyToken 更新会落到 else 早返回分支，主题修改无效。
     const light = iframe.contentDocument.getElementById(CUSTOM_THEME_ID);
     expect(light).toBeTruthy();
-    // 选择器必须与导出逻辑（page, .page）一致，否则 CSS 变量会被 iframe 内
-    // app.wxss 中定义在 page 上的同名变量覆盖，主题色不生效。
-    expect(light.textContent).toContain('page, .page');
+    // 预览 iframe 的选择器与导出逻辑不同：导出用 `page, .page`（真实小程序环境），
+    // 预览 iframe 是 H5 渲染，uni-app 的页面根节点是 `uni-page-body`。
+    // 用 `page, .page` 在预览 iframe 内匹配不到任何元素，CSS 变量无处定义。
+    expect(light.textContent).toContain('uni-page-body');
     expect(light.textContent).toContain('--td-brand-color-7');
 
     const extra = iframe.contentDocument.getElementById(CUSTOM_EXTRA_ID);
@@ -145,7 +146,7 @@ describe('iframe 同步: 小程序 / uniapp', () => {
 
     const webviewLight = webviewIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
     expect(webviewLight).toBeTruthy();
-    expect(webviewLight.textContent).toContain('page, .page');
+    expect(webviewLight.textContent).toContain('body');
     expect(webviewLight.textContent).toContain('--td-brand-color-7');
 
     // m2w web 预览（无嵌套 webview）路径：previewIframe 本身也应被注入主题
@@ -174,7 +175,7 @@ describe('iframe 同步: 小程序 / uniapp', () => {
 
     const light = previewIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
     expect(light).toBeTruthy();
-    expect(light.textContent).toContain('page, .page');
+    expect(light.textContent).toContain('body');
     expect(light.textContent).toContain('--td-brand-color-7');
   });
 
@@ -217,5 +218,42 @@ describe('iframe 同步: 小程序 / uniapp', () => {
     expect(updated).toBeTruthy();
     expect(updated.textContent).toContain('#00ff00');
     expect(updated.textContent).not.toContain('#0052d9');
+  });
+
+  it('miniprogram: td-doc-phone > iframe 已在 DOM 中时，syncThemeToIframe 仍能同步', async () => {
+    // 模拟 SPA 已渲染完成：td-doc-phone > iframe 先入 DOM，再调用 syncThemeToIframe。
+    // 之前仅靠 MutationObserver，已存在的节点不会触发 childList，导致漏处理。
+    const previewIframe = createMockIframe('mobile-iframe');
+    const docPhone = document.createElement('td-doc-phone');
+    docPhone.appendChild(previewIframe);
+    document.body.appendChild(docPhone);
+
+    syncThemeToIframe('mini-program');
+
+    await flushObservers();
+
+    // 关键回归点：iframe 已在 DOM 中时，初始扫描应直接处理它（不依赖 MutationObserver）
+    expect(previewIframe.dataset.observed).toBe('true');
+
+    const light = previewIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
+    expect(light).toBeTruthy();
+    expect(light.textContent).toContain('--td-brand-color-7');
+  });
+
+  it('uniapp: td-doc-phone > iframe 已在 DOM 中时，syncThemeToIframe 仍能同步', async () => {
+    const previewIframe = createMockIframe('mobile-iframe');
+    const docPhone = document.createElement('td-doc-phone');
+    docPhone.appendChild(previewIframe);
+    document.body.appendChild(docPhone);
+
+    syncThemeToIframe('uni-app');
+
+    await flushObservers();
+
+    expect(previewIframe.dataset.observed).toBe('true');
+
+    const light = previewIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
+    expect(light).toBeTruthy();
+    expect(light.textContent).toContain('uni-page-body');
   });
 });

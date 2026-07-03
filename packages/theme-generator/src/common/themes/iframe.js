@@ -10,16 +10,17 @@ function handleMobileModeChange(iframe, mode) {
   iframe.contentDocument.documentElement.setAttribute('theme-mode', mode);
 }
 
-// 选择器必须与 exportCustomStyleSheet 导出逻辑一致（core.js）：
-// 小程序 / uni-app 的页面根节点是 `page` 元素或 `.page` 类，不是 `body`。
-// 之前用 `body`（小程序）/ `uni-page-body`（uni-app），CSS 变量定义在 body 上，
-// 会被 iframe 内 app.wxss 中定义在 `page` 上的同名变量覆盖（更近的祖先优先），
-// 导致主题色不生效。统一对齐导出逻辑用 `page, .page`。
-function getMobileSelector() {
-  return 'page, .page';
+// 预览 iframe 的选择器与导出逻辑（core.js 的 `page, .page`）不同：
+// 导出的 app.wxss/app.css 运行在真实小程序/uni-app 环境，根节点是 `page` 元素；
+// 而文档站的预览 iframe 是 H5 渲染：
+//   - 小程序 m2w 预览：内容渲染在 `body` 内，无 `page` 元素
+//   - uni-app H5 预览：页面根节点是 `uni-page-body`，不是 `page`
+// 若用 `page, .page`，预览 iframe 内匹配不到任何元素，CSS 变量无处定义，主题不生效。
+function getMobileSelector(uniapp) {
+  return uniapp ? 'uni-page-body' : 'body';
 }
 
-function handleMiniProgramModeChange(iframe, mode) {
+function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
   const isDark = mode === 'dark';
 
   const prevModeId = isDark ? CUSTOM_THEME_ID : CUSTOM_DARK_ID;
@@ -40,7 +41,7 @@ function handleMiniProgramModeChange(iframe, mode) {
     style.id = currentModeId;
 
     const { rootContent: cssString } = parseRootCss(themeStyle.innerText);
-    const selector = getMobileSelector();
+    const selector = getMobileSelector(uniapp);
     style.textContent = `${selector} {\n${cssString}\n}`;
 
     iframeDom.head.appendChild(style);
@@ -70,8 +71,8 @@ function handleMobileTokenChange(iframe, styleElement) {
   }
 }
 
-function handleMiniProgramTokenChange(iframe, styleElement) {
-  const selector = getMobileSelector();
+function handleMiniProgramTokenChange(iframe, styleElement, uniapp = false) {
+  const selector = getMobileSelector(uniapp);
   const { rootContent } = parseRootCss(styleElement.innerText);
   const updatedCss = `${selector} {\n${rootContent}\n}`;
 
@@ -102,7 +103,7 @@ function watchThemeModeChange(iframe) {
   const device = iframe.getAttribute('device');
   const handleModeChange = (mode) => {
     if (isMiniProgram(device) || isUniApp(device)) {
-      handleMiniProgramModeChange(iframe, mode);
+      handleMiniProgramModeChange(iframe, mode, isUniApp(device));
     } else {
       handleMobileModeChange(iframe, mode);
     }
@@ -130,7 +131,7 @@ function watchThemeTokenChange(iframe) {
   const device = iframe.getAttribute('device');
   const handleTokenChange = (styleElement) => {
     if (isMiniProgram(device) || isUniApp(device)) {
-      handleMiniProgramTokenChange(iframe, styleElement);
+      handleMiniProgramTokenChange(iframe, styleElement, isUniApp(device));
     } else {
       handleMobileTokenChange(iframe, styleElement);
     }
@@ -202,40 +203,44 @@ function beforeWatchThemeChange(iframe, device) {
 export function syncThemeToIframe(device) {
   if (!isMobile(device)) return;
 
-  // 监听 iframe 的加载变化
-  const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'childList') {
-        const docPhone = document.querySelector('td-doc-phone');
-        const previewIframe = docPhone?.querySelector('iframe');
-        if (!previewIframe) return;
+  const handleDocPhoneIframe = () => {
+    const docPhone = document.querySelector('td-doc-phone');
+    const previewIframe = docPhone?.querySelector('iframe');
+    if (!previewIframe) return;
 
-        if (isMiniProgram(device)) {
-          // 小程序预览有两种渲染模式：
-          // 1. m2w web 预览：直接在 previewIframe 内渲染（无嵌套 iframe），
-          //    需要直接同步主题到 previewIframe 本身。
-          // 2. 开发者工具模拟器：在嵌套的 webview iframe 中渲染，
-          //    需要同步到嵌套 iframe。
-          // 两种情况都覆盖：先给 previewIframe 设置主题同步，
-          // 再查找嵌套 webview iframe。
-          beforeWatchThemeChange(previewIframe, device);
+    if (isMiniProgram(device)) {
+      // 小程序预览有两种渲染模式：
+      // 1. m2w web 预览：直接在 previewIframe 内渲染（无嵌套 iframe），
+      //    需要直接同步主题到 previewIframe 本身。
+      // 2. 开发者工具模拟器：在嵌套的 webview iframe 中渲染，
+      //    需要同步到嵌套 iframe。
+      // 两种情况都覆盖：先给 previewIframe 设置主题同步，
+      // 再查找嵌套 webview iframe。
+      beforeWatchThemeChange(previewIframe, device);
 
-          // watchThemeChange 已设置 previewIframe.onload 用于 iframe 加载后重新初始化观察者；
-          // 这里链式包装，在原有 onload 之后再处理嵌套 iframe，避免覆盖。
-          const prevOnload = previewIframe.onload;
-          const handleNested = () => {
-            if (typeof prevOnload === 'function') prevOnload();
-            watchNestedIframes(previewIframe.contentDocument, device);
-          };
-          previewIframe.onload = handleNested;
-          // iframe 可能已加载完成（onload 不会再触发），立即检查一次嵌套 iframe。
-          // 只检查嵌套 iframe，不重复执行 prevOnload（watchThemeChange 已初始化过）。
-          watchNestedIframes(previewIframe.contentDocument, device);
-        } else {
-          beforeWatchThemeChange(previewIframe, device);
-        }
-      }
+      // watchThemeChange 已设置 previewIframe.onload 用于 iframe 加载后重新初始化观察者；
+      // 这里链式包装，在原有 onload 之后再处理嵌套 iframe，避免覆盖。
+      const prevOnload = previewIframe.onload;
+      const handleNested = () => {
+        if (typeof prevOnload === 'function') prevOnload();
+        watchNestedIframes(previewIframe.contentDocument, device);
+      };
+      previewIframe.onload = handleNested;
+      // iframe 可能已加载完成（onload 不会再触发），立即检查一次嵌套 iframe。
+      // 只检查嵌套 iframe，不重复执行 prevOnload（watchThemeChange 已初始化过）。
+      watchNestedIframes(previewIframe.contentDocument, device);
+    } else {
+      beforeWatchThemeChange(previewIframe, device);
     }
+  };
+
+  // 立即检查一次：td-doc-phone > iframe 可能已在 DOM 中（SPA 已渲染完成），
+  // 此时不会再触发 childList MutationObserver，仅靠 observer 会漏掉。
+  handleDocPhoneIframe();
+
+  // 监听后续的 DOM 变化（SPA 路由切换时 td-doc-phone > iframe 重新插入）
+  const observer = new MutationObserver(() => {
+    handleDocPhoneIframe();
   });
 
   observer.observe(document, {
