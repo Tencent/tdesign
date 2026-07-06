@@ -11,14 +11,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import {
-  applyTokenFromLocal,
-  initGeneratorVars,
-  syncModeToGenerator,
-  syncThemeToIframe,
-  themeStore,
-} from '@/common/themes';
+import { ref, onMounted, onUnmounted } from 'vue';
+import { applyTokenFromLocal, syncModeToGenerator, syncThemeToIframe, themeStore } from '@/common/themes';
 import { setUpModeObserver } from '@/common/utils';
 
 import FloatDock from './float-dock';
@@ -37,18 +31,32 @@ const props = defineProps({
 });
 
 const visible = ref(false);
+// 保存 observer 与清理函数，组件卸载时断开，避免泄漏
+let modeSyncObserver = null;
+let refreshObserver = null;
+let iframeCleanup = null;
 
 onMounted(() => {
   themeStore.updateDevice(props.device);
-  syncModeToGenerator();
-  initGeneratorVars();
+  modeSyncObserver = syncModeToGenerator();
+  // initGeneratorVars 不再调用：generator-vars.css 已注入 Shadow Root，
+  // 生成器 UI 专用变量（--brand-main 等）在 Shadow DOM 内直接可用。
   applyTokenFromLocal();
-  syncThemeToIframe(props.device);
+  iframeCleanup = syncThemeToIframe(props.device);
   // 宿主页亮暗模式切换时，font/shadow/size 面板以 $refreshId 为 key，
   // bump 后强制重新挂载并重读 token 值（getTokenValue 非响应式，需靠 key 变更触发重渲染）。
-  setUpModeObserver(() => {
+  refreshObserver = setUpModeObserver(() => {
     themeStore.incrementRefreshId();
   });
+});
+
+onUnmounted(() => {
+  modeSyncObserver?.disconnect();
+  refreshObserver?.disconnect();
+  iframeCleanup?.();
+  modeSyncObserver = null;
+  refreshObserver = null;
+  iframeCleanup = null;
 });
 
 function handleTriggerVisible() {

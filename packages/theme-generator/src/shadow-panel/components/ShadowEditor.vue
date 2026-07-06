@@ -61,7 +61,6 @@ onMounted(() => {
 function splitShadowValue(value) {
   const data = value.match(/(-)?[0-9]+(px)?/g);
   if (!data || data.length < 2) {
-    console.log(`invalid shadow value ${value}`);
     return [0, 0, 0, 0];
   }
   return data
@@ -69,20 +68,14 @@ function splitShadowValue(value) {
     .splice(0, 4)
     .map((val) => {
       const num = val.match(/(-)?[0-9]+/g);
-      if (num.length < 1) return 0;
-      try {
-        return Number(num[0]);
-      } catch (error) {
-        console.log(`invalid shadow value ${value}`);
-        return 0;
-      }
+      if (!num || num.length < 1) return 0;
+      return Number(num[0]);
     });
 }
 
 function getShadowColor(value) {
   const data = value.match(/rgb(a)?(.*)/g);
   if (!data || data.length < 1) {
-    console.log(`invalid shadow value ${value}`);
     return 'rgba(0, 0, 0, 0)';
   }
   return data[0].trim();

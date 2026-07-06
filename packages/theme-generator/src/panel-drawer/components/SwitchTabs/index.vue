@@ -64,7 +64,7 @@ onMounted(() => {
       image: markRaw(FontSvg),
     },
     {
-      title: text.borerRadius.title,
+      title: text.borderRadius.title,
       image: markRaw(RadiusSvg),
     },
     {

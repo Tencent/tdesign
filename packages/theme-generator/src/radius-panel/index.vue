@@ -9,7 +9,7 @@
   >
     <div class="radius-content__content" :style="contentStyle">
       <div class="radius-content__main">
-        <p class="radius-content__title">{{ lang.borerRadius.radiusSize }}</p>
+        <p class="radius-content__title">{{ lang.borderRadius.radiusSize }}</p>
         <SegmentSelection
           v-model="step"
           :selectOptions="RADIUS_OPTIONS"

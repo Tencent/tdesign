@@ -257,3 +257,42 @@ describe('iframe 同步: 小程序 / uniapp', () => {
     expect(light.textContent).toContain('uni-page-body');
   });
 });
+
+describe('syncThemeToIframe: cleanup 返回契约', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+    document.querySelectorAll('style').forEach((el) => el.remove());
+    window.localStorage.clear();
+    setupParentStyles();
+  });
+
+  it('非移动设备返回 noop cleanup，调用不抛错', () => {
+    // web 等非移动设备不需要 iframe 同步，直接返回空函数
+    const cleanup = syncThemeToIframe('web');
+    expect(typeof cleanup).toBe('function');
+    expect(() => cleanup()).not.toThrow();
+  });
+
+  it('移动设备返回 cleanup，调用后新插入的 td-doc-phone > iframe 不再被自动处理', async () => {
+    const cleanup = syncThemeToIframe('uni-app');
+
+    // cleanup 前：插入 iframe 会被 document 级 observer 捕获并处理
+    const iframe1 = createMockIframe('preview-1');
+    const docPhone1 = document.createElement('td-doc-phone');
+    docPhone1.appendChild(iframe1);
+    document.body.appendChild(docPhone1);
+    await flushObservers();
+    expect(iframe1.dataset.observed).toBe('true');
+
+    // 调用 cleanup 断开 document 级 observer
+    cleanup();
+
+    // cleanup 后：新插入的 iframe 不再被处理
+    const iframe2 = createMockIframe('preview-2');
+    const docPhone2 = document.createElement('td-doc-phone');
+    docPhone2.appendChild(iframe2);
+    document.body.appendChild(docPhone2);
+    await flushObservers();
+    expect(iframe2.dataset.observed).toBeUndefined();
+  });
+});

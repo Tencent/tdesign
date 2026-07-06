@@ -107,8 +107,16 @@ function changeColor(hex) {
   emit('changeMainColor', hex, props.type);
 }
 
-function copyHex(hex) {
-  let input = document.createElement('input');
+async function copyHex(hex) {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(hex);
+      return;
+    }
+  } catch {
+    // 降级到 execCommand
+  }
+  const input = document.createElement('input');
   input.value = hex;
   document.body.appendChild(input);
   input.select();

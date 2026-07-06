@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-import { getThemeMode, setUpModeObserver } from '../index';
+import { getThemeMode, setUpModeObserver, getTokenValue } from '../index';
 
 // happy-dom 的 MutationObserver 回调走 microtask 队列，用一个空 setTimeout 刷新到下一个宏任务以稳定等待
 const flushObserver = () => new Promise((resolve) => setTimeout(resolve));
@@ -69,5 +69,38 @@ describe('setUpModeObserver', () => {
     await flushObserver();
     expect(handler).not.toHaveBeenCalled();
     observer.disconnect();
+  });
+});
+
+describe('getTokenValue', () => {
+  // setup.js 的 beforeEach 会清空 documentElement 的 inline style 与属性，
+  // 用例间互不干扰。
+
+  it('从 documentElement 读取 CSS 变量，返回 toLowerCase + trim 后的值', () => {
+    document.documentElement.style.setProperty('--td-test-color', '  #FF0000  ');
+    expect(getTokenValue('--td-test-color')).toBe('#ff0000');
+  });
+
+  it('亮模式与暗模式都从 documentElement 读取（不再切换到 [theme-mode=dark] 元素）', () => {
+    // 行为变更点：旧实现暗模式下改读 document.querySelector('[theme-mode="dark"]')，
+    // 新实现统一读 documentElement，避免命中 td-theme-generator host 等子元素的浅色继承值。
+    document.documentElement.style.setProperty('--td-test-token', 'LightVal');
+    expect(getTokenValue('--td-test-token')).toBe('lightval');
+
+    // 页面上存在另一个带 theme-mode="dark" 的元素，值不同
+    const darkEl = document.createElement('div');
+    darkEl.setAttribute('theme-mode', 'dark');
+    darkEl.style.setProperty('--td-test-token', 'DarkVal');
+    document.body.appendChild(darkEl);
+
+    // 切到 dark 模式：仍应从 documentElement 读取，不会改读 darkEl
+    document.documentElement.setAttribute('theme-mode', 'dark');
+    expect(getTokenValue('--td-test-token')).toBe('lightval');
+
+    darkEl.remove();
+  });
+
+  it('变量不存在时返回空字符串', () => {
+    expect(getTokenValue('--td-not-exist')).toBe('');
   });
 });

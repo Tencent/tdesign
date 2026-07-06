@@ -32,7 +32,11 @@ export const themeStore = reactive({
   },
   updateBrandColor(color) {
     this.brandColor = color;
-    document.documentElement.style.setProperty('--brand-main', color);
+    // 设置在 Shadow Host 上，CSS 自定义属性可继承穿透 Shadow Boundary，
+    // Shadow DOM 内的 :host 规则与生成器 UI 才能读到。
+    // 不设置 document.documentElement，避免污染宿主页且 Shadow DOM 读不到。
+    const host = document.querySelector('td-theme-generator');
+    if (host) host.style.setProperty('--brand-main', color);
   },
   incrementRefreshId() {
     this.refreshId++;

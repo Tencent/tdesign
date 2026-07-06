@@ -32,7 +32,7 @@
       class="segment-panel__select"
       :options="innerSelectOptions"
       @change="handleSelectChange"
-      :onVisibleChange="handleVisibleChange"
+      :onPopupVisibleChange="handleVisibleChange"
       :keys="isEn ? { label: 'enLabel' } : null"
       v-model="step"
       :popup-props="{ attach: handleAttach }"

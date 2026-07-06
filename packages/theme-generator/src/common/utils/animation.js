@@ -59,9 +59,10 @@ export function colorAnimation() {
   const canvas =
     document.querySelector('td-theme-generator')?.shadowRoot?.getElementById('canvas') ||
     document.getElementById('canvas');
-  if (!canvas) return;
+  if (!canvas) return () => {};
   const context = canvas.getContext('2d');
   let time = 0;
+  let rafId = null;
 
   const color = function (x, y, r, g, b) {
     context.fillStyle = `rgb(${r}, ${g}, ${b})`;
@@ -88,8 +89,14 @@ export function colorAnimation() {
       }
     }
     time = time + 0.01;
-    window.requestAnimationFrame(startAnimation);
+    rafId = window.requestAnimationFrame(startAnimation);
   };
 
   startAnimation();
+
+  // 返回取消函数，供调用方在组件卸载时停止动画，避免内存/CPU 泄漏
+  return () => {
+    if (rafId != null) window.cancelAnimationFrame(rafId);
+    rafId = null;
+  };
 }

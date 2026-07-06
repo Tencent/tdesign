@@ -101,7 +101,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { MessagePlugin, Button as TButton, Popconfirm as TPopconfirm, Popup as TPopup } from 'tdesign-vue-next/lib';
 
 import { useLang } from '@/common/i18n';
@@ -161,8 +161,11 @@ watch(
   },
 );
 
+let themeTabTimer = null;
+
 watch(isThemeTabVisible, (v) => {
-  setTimeout(() => {
+  if (themeTabTimer) clearTimeout(themeTabTimer);
+  themeTabTimer = setTimeout(() => {
     isThemeTabContentDisplay.value = v;
   }, 300);
 });
@@ -170,6 +173,10 @@ watch(isThemeTabVisible, (v) => {
 onMounted(() => {
   dockY.value = 24;
   dockX.value = innerWidth / 2;
+});
+
+onUnmounted(() => {
+  if (themeTabTimer) clearTimeout(themeTabTimer);
 });
 
 function dragStart(e) {

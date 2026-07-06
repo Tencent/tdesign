@@ -21,6 +21,8 @@ describe('themeStore', () => {
     themeStore.colorRefreshId = 0;
     themeStore.sizeRefreshId = 0;
     themeStore.sizeRefreshType = null;
+    // 重置 brandColor，避免 updateBrandColor 用例设置的值串扰到后续用例
+    themeStore.brandColor = DEFAULT_THEME_META.value;
   });
 
   it('初始状态：device=web, theme=TDESIGN_WEB_THEME, brandColor 为默认品牌色', () => {
@@ -34,10 +36,17 @@ describe('themeStore', () => {
     expect(themeStore.sizeRefreshType).toBeNull();
   });
 
-  it('updateBrandColor 同步更新 brandColor 与 --brand-main CSS 变量', () => {
+  it('updateBrandColor 同步更新 brandColor 与 Shadow Host 上的 --brand-main CSS 变量', () => {
+    // updateBrandColor 把 --brand-main 设置在 td-theme-generator host 上（Shadow DOM 可继承），
+    // 而非 document.documentElement，避免污染宿主页。
+    const host = document.createElement('td-theme-generator');
+    document.body.appendChild(host);
     themeStore.updateBrandColor('#123456');
     expect(themeStore.brandColor).toBe('#123456');
-    expect(document.documentElement.style.getPropertyValue('--brand-main')).toBe('#123456');
+    expect(host.style.getPropertyValue('--brand-main')).toBe('#123456');
+    // document.documentElement 不应被设置
+    expect(document.documentElement.style.getPropertyValue('--brand-main')).toBe('');
+    host.remove();
   });
 
   it('incrementRefreshId 递增 refreshId', () => {

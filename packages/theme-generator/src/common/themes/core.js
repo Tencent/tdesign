@@ -61,6 +61,8 @@ export function getRecommendThemes(device) {
  * shadow DOM 内的 tdesign.min.css 中 `:root[theme-mode]` 因作用域隔离无法命中 `<html>`，
  * 只有 `:host[theme-mode]` 生效，因此需要把解析后的 mode 同步到 `<td-theme-generator>` 上。
  * 这里在注册 observer 前先做一次初始同步，覆盖宿主页加载时已处于 dark 的情况。
+ *
+ * @returns {MutationObserver} 返回创建的 observer，供调用方在卸载时 disconnect()
  */
 export function syncModeToGenerator() {
   const sync = (theme) => {
@@ -69,7 +71,7 @@ export function syncModeToGenerator() {
     generator.setAttribute('theme-mode', theme);
   };
   sync(getThemeMode());
-  setUpModeObserver(sync);
+  return setUpModeObserver(sync);
 }
 
 export function findThemeByEnName(device, enName) {
@@ -181,17 +183,20 @@ export function modifyToken(tokenName, newVal, saveToLocal = true) {
 
   let tokenFound = false;
   styleSheets.forEach((styleSheet) => {
-    const reg = new RegExp(`${tokenName}:\\s*(.*?);`);
+    // 匹配 `tokenName: <value>;`，容忍冒号后任意空白
+    const reg = new RegExp(`${tokenName}:\\s*([^;]*);`);
     const match = styleSheet.textContent.match(reg);
 
     if (!match) return;
-    if (match[1] === newVal) {
+    const currentVal = match[1].trim();
+    if (currentVal === newVal) {
       tokenFound = true;
       return;
     }
 
-    const currentVal = match[1];
-    styleSheet.textContent = styleSheet.textContent.replace(`${tokenName}: ${currentVal}`, `${tokenName}: ${newVal}`);
+    // 用正则全局替换，不依赖固定空格写法；$1 保留冒号后原始空白
+    const replaceReg = new RegExp(`(${tokenName}:\\s*)[^;]*;`, 'g');
+    styleSheet.textContent = styleSheet.textContent.replace(replaceReg, `$1${newVal};`);
     tokenFound = true;
 
     updateLocalToken(tokenName, saveToLocal ? newVal : null);

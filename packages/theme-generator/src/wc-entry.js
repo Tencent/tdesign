@@ -7,6 +7,11 @@ import { defineCustomElement } from 'vue';
 // 这些样式由 defineCustomElement 的 styles 选项注入到 shadowRoot 内，与宿主页样式完全隔离。
 import tdesignCss from './styles/tdesign.min.css?inline';
 import resetCss from './styles/reset.min.css?inline';
+// 生成器专用变量（--brand-main、--bg-color-card 等），由 build-tdesign-css.mjs
+// 从 vars.css 转换 :root→:host 生成，注入 Shadow Root 供生成器 UI 使用。
+// 不注入 document.head，避免污染宿主页；CSS 自定义属性可继承穿透 Shadow Boundary，
+// 因此 vars.css 中 var(--td-brand-color) 仍能命中宿主页 :root 上的主题变量。
+import generatorVars from './styles/generator-vars.css?inline';
 
 import Generator from './Generator.vue';
 
@@ -16,7 +21,7 @@ import Generator from './Generator.vue';
 // 因此也能命中 shadowRoot 内的样式。
 const TDThemeGenerator = defineCustomElement(Generator, {
   shadowRoot: true,
-  styles: [tdesignCss, resetCss],
+  styles: [tdesignCss, resetCss, generatorVars],
 });
 
 customElements.define('td-theme-generator', TDThemeGenerator);

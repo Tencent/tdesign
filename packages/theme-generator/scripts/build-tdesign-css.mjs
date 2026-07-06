@@ -59,6 +59,30 @@ writeFileSync(resolve(STYLES, 'tdesign.min.css'), tdesignCss + '\n', 'utf8');
 const resetCss = minifyCss(readFileSync(resolve(DIST, 'reset.css'), 'utf8'));
 writeFileSync(resolve(STYLES, 'reset.min.css'), resetCss + '\n', 'utf8');
 
+// ========== generator-vars.css ==========
+// 生成器专用变量（vars.css）原通过 initGeneratorVars 注入 document.head（Light DOM），
+// 但生成器 UI 运行在 Shadow DOM 中，CSS 自定义属性不穿透 Shadow Boundary。
+// 这里把 vars.css 的 :root 选择器转为 :host 变体，生成 generator-vars.css，
+// 由 wc-entry.js 以 ?inline 导入并注入 Shadow Root。
+// 转换规则与 tdesign.min.css 的 :host 变体逻辑一致：
+//   :root                  → :host
+//   :root[theme-mode='x']  → :host([theme-mode='x'])
+//   :root.dark             → :host(.dark)
+const VARS_SRC = resolve(PKG, 'src/common/themes/built-in/css/vars.css');
+let generatorVars = readFileSync(VARS_SRC, 'utf8');
+generatorVars = generatorVars.replace(/([^{}]+)\{/g, (m, selectors) => {
+  const list = selectors.split(',').map((s) => s.trim()).filter(Boolean);
+  const hostVariants = list
+    .filter((s) => /^:root(?=[[\].\s,:]|$)/.test(s))
+    .map((s) => {
+      const tail = s.slice(':root'.length);
+      return tail ? `:host(${tail})` : ':host';
+    });
+  if (hostVariants.length === 0) return m;
+  return `${list.join(',')},${hostVariants.join(',')}{`;
+});
+writeFileSync(resolve(STYLES, 'generator-vars.css'), generatorVars + '\n', 'utf8');
+
 // --- 压缩 CSS（仅用于 reset.css） ---
 // 移除注释 → 折叠空白 → 压缩标点周围空白 → 移除 } 前的分号。
 // 不改动选择器与值本身（保留 -webkit- 前缀、字体名引号等上游原始形态）。
@@ -76,6 +100,7 @@ const brandColorDefs = (tdesignCss.match(/--td-brand-color[a-z0-9-]*\s*:/g) || [
 const hostCount = (tdesignCss.match(/:host/g) || []).length;
 const rootCount = (tdesignCss.match(/:root/g) || []).length;
 const textColorBrand = /--td-text-color-brand\s*:/.test(tdesignCss);
+const varsHostCount = (generatorVars.match(/:host/g) || []).length;
 console.log(JSON.stringify({
   tdesignMinCss: {
     outBytes: tdesignCss.length,
@@ -87,5 +112,9 @@ console.log(JSON.stringify({
   },
   resetMinCss: {
     outBytes: resetCss.length,
+  },
+  generatorVarsCss: {
+    outBytes: generatorVars.length,
+    hostSelectors: varsHostCount,
   },
 }, null, 2));

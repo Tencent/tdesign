@@ -10,10 +10,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useLang } from '@/common/i18n';
 import { themeStore } from '@/common/themes';
-import { getTokenValue } from '@/common/utils';
 
 defineOptions({ name: 'StickyThemeDisplay' });
 
@@ -27,8 +26,6 @@ const props = defineProps({
 const { isEn } = useLang();
 
 const isAnimating = ref(false);
-const brandColor = ref(null);
-let styleObserver = null;
 
 const $theme = computed(() => themeStore.theme);
 
@@ -38,36 +35,19 @@ const stickyThemeStyle = computed(() => {
   };
 });
 
-onMounted(() => {
-  brandColor.value = getTokenValue('--brand-main');
-  setupStyleObserver();
-});
-
-onBeforeUnmount(() => {
-  if (styleObserver) {
-    styleObserver.disconnect();
-  }
-});
-
-function setupStyleObserver() {
-  styleObserver = new MutationObserver(checkBrandColorChange);
-  styleObserver.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['style'],
-  });
-}
-
-function checkBrandColorChange() {
-  const newColor = getTokenValue('--brand-main');
-  if (newColor && newColor !== brandColor.value) {
-    brandColor.value = newColor;
+// 监听 themeStore.brandColor 变化触发过渡动画。
+// --brand-main 现设置在 Shadow Host 上（store.updateBrandColor），
+// 不再设置 document.documentElement，故改用响应式 store 而非 MutationObserver。
+watch(
+  () => themeStore.brandColor,
+  (newColor, oldColor) => {
+    if (!newColor || newColor === oldColor) return;
     isAnimating.value = true;
-
     setTimeout(() => {
       isAnimating.value = false;
     }, 1000);
-  }
-}
+  },
+);
 </script>
 
 <style scoped lang="less">

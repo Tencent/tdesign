@@ -315,7 +315,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, nextTick } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import { Edit1Icon, FileCopyIcon, HelpCircleIcon } from 'tdesign-icons-vue-next';
 import {
   Col as TCol,
@@ -496,7 +496,7 @@ function recoverGradation(type) {
     .fill(0)
     .forEach((_, idx) => {
       const tokenName = `--td-${type}-color-${idx + 1}`;
-      updateLocalToken(tokenName, undefined, false); // 清空本地缓存值
+      updateLocalToken(tokenName, undefined); // 清空本地缓存值
     });
   if (type === 'brand') {
     changeBrandColor(brandInputColor.value);
@@ -513,9 +513,17 @@ watch(generationMode, () => {
   changeBrandColor(brandDisplayedColor.value);
 });
 
+// 保存动画取消函数与模式观察者，组件卸载时清理，避免泄漏
+let cancelColorAnimation = null;
+let modeObserver = null;
+// 标记组件是否已卸载：onMounted 的初始化在 nextTick 内异步执行，
+// 若组件在 tick 前卸载，回调里应跳过启动动画 / observer，避免泄漏。
+let disposed = false;
+
 onMounted(() => {
   nextTick(() => {
-    colorAnimation();
+    if (disposed) return;
+    cancelColorAnimation = colorAnimation();
     changeBrandColor($brandColor.value, 'init');
     updateFunctionTokenMap();
     // 恢复用户上次选择的功能色
@@ -526,12 +534,20 @@ onMounted(() => {
         changeFunctionColor(color, type, 'init');
       }
     });
-    setUpModeObserver((theme) => {
+    modeObserver = setUpModeObserver((theme) => {
       updateBrandTokenMap();
       updateFunctionTokenMap();
       currentBrandIdx.value = brandIndexes.value[theme];
     });
   });
+});
+
+onUnmounted(() => {
+  disposed = true;
+  cancelColorAnimation?.();
+  modeObserver?.disconnect();
+  cancelColorAnimation = null;
+  modeObserver = null;
 });
 </script>
 

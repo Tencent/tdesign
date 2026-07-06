@@ -61,7 +61,7 @@ function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
     const style = iframeDom.createElement('style');
     style.id = currentModeId;
 
-    const { rootContent: cssString } = parseRootCss(themeStyle.innerText);
+    const { rootContent: cssString } = parseRootCss(themeStyle.textContent);
     const selector = getMobileSelector(uniapp);
     style.textContent = `${selector} {\n${cssString}\n}`;
 
@@ -81,7 +81,7 @@ function handleMobileTokenChange(iframe, styleElement) {
   const iframeDom = getIframeDoc(iframe, 'handleMobileTokenChange');
   if (!iframeDom) return;
 
-  const updatedCss = styleElement.innerText;
+  const updatedCss = styleElement.textContent;
   const iframeStyleElement = iframeDom.getElementById(styleElement.id);
 
   if (iframeStyleElement) {
@@ -100,7 +100,7 @@ function handleMiniProgramTokenChange(iframe, styleElement, uniapp = false) {
   if (!iframeDom) return;
 
   const selector = getMobileSelector(uniapp);
-  const { rootContent } = parseRootCss(styleElement.innerText);
+  const { rootContent } = parseRootCss(styleElement.textContent);
   const updatedCss = `${selector} {\n${rootContent}\n}`;
 
   const updatedId = styleElement.id;
@@ -209,13 +209,9 @@ function watchThemeChange(iframe) {
     observers.themeToken = watchThemeTokenChange(iframe);
   };
 
-  iframe.unload = () => {
-    Object.values(observers)
-      .flat()
-      .forEach((observer) => {
-        observer.disconnect();
-      });
-  };
+  // 注：iframe 级 observer 在 iframe 重新加载时由 onload 重建；
+  // iframe 被移除时其 contentDocument 一并销毁，observer 不会继续触发回调。
+  // 顶层 document 级 observer 由 syncThemeToIframe 返回的 cleanup 负责。
 }
 
 /**
@@ -228,9 +224,13 @@ function beforeWatchThemeChange(iframe, device) {
 
 /**
  * 同步站点的主题到移动端的 iframe
+ *
+ * @param {string} device
+ * @returns {Function} cleanup 函数，断开内部创建的 document 级 MutationObserver，
+ *   供调用方在 Web Component 卸载时调用以避免泄漏
  */
 export function syncThemeToIframe(device) {
-  if (!isMobile(device)) return;
+  if (!isMobile(device)) return () => {};
 
   const handleDocPhoneIframe = () => {
     const docPhone = document.querySelector('td-doc-phone');
@@ -276,6 +276,8 @@ export function syncThemeToIframe(device) {
     childList: true,
     subtree: true,
   });
+
+  return () => observer.disconnect();
 }
 
 /**

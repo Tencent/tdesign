@@ -41,12 +41,6 @@ import SwitchTabs from './components/SwitchTabs';
 defineOptions({ name: 'PanelDrawer' });
 
 const props = defineProps({
-  showSetting: {
-    type: [String, Boolean],
-  },
-  theme: {
-    type: [Object, String],
-  },
   drawerVisible: {
     type: [String, Number, Boolean],
   },
