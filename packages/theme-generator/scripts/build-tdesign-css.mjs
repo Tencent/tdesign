@@ -1,14 +1,11 @@
 /* eslint-disable */
 
-// 重新生成 packages/theme-generator/src/styles/tdesign.min.css
-// 数据来源：上游 tdesign-vue-next 的 dist（已压缩，包含全量组件 + token CSS）
-// 在此基础上做两处定制：
-//   1. 为每个 :root 选择器追加 :host 变体（Web Component 兼容，
-//      使声明同时作用于 light DOM 与 shadow DOM）。
-//   2. 移除所有 --td-brand-color* token 定义，让主题生成器
-//      同步宿主页的外部品牌色阶，而不是覆盖它。var(--td-brand-color-*)
-//      的「使用处」保留（如 --td-text-color-brand: var(--td-brand-color-7)），
-//      它们会解析为宿主页定义的值。
+// 重新生成 packages/theme-generator/src/styles/ 下的两个 CSS 文件：
+//   1. tdesign.min.css —— 全量组件 + token CSS，定制 :host 变体 + 移除 brand-color token
+//   2. reset.min.css   —— normalize.css 重置样式，仅压缩，无定制
+//
+// 数据来源：上游 tdesign-vue-next 的 dist 目录。
+// tdesign.min.css 上游已压缩，reset.css 上游未压缩，本脚本对后者做压缩。
 //
 // 运行：npm run build:css
 // 升级 tdesign-vue-next 后需重新运行以从新上游重新生成。
@@ -18,10 +15,11 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PKG = resolve(__dirname, '..');
-const SRC = resolve(PKG, 'node_modules/tdesign-vue-next/dist/tdesign.min.css');
-const OUT = resolve(PKG, 'src/styles/tdesign.min.css');
+const DIST = resolve(PKG, 'node_modules/tdesign-vue-next/dist');
+const STYLES = resolve(PKG, 'src/styles');
 
-let css = readFileSync(SRC, 'utf8');
+// ========== tdesign.min.css ==========
+let tdesignCss = readFileSync(resolve(DIST, 'tdesign.min.css'), 'utf8');
 
 // --- (1) 为每个选择器组中的 :root 选择器追加 :host 变体 ---
 // 上游压缩后的 CSS 使用形如 `:root,:root[theme-mode='light']{...}` 的选择器组。
@@ -30,7 +28,7 @@ let css = readFileSync(SRC, 'utf8');
 // 只有 `:host([attr])` / `:host(.class)` 才能命中 host 的属性/类。
 // 裸 `:root` 转为裸 `:host`（无括号）。上游不存在 `:root <后代>` 规则。
 // @-moz-document url-prefix() 等 at-rule 没有 :root 选择器，原样透传。
-css = css.replace(/([^{}]+)\{/g, (m, selectors) => {
+tdesignCss = tdesignCss.replace(/([^{}]+)\{/g, (m, selectors) => {
   const list = selectors.split(',').map((s) => s.trim()).filter(Boolean);
   const hostVariants = list
     .filter((s) => /^:root(?=[[\].\s,:]|$)/.test(s))
@@ -48,23 +46,46 @@ css = css.replace(/([^{}]+)\{/g, (m, selectors) => {
 // 不会匹配 --td-text-color-brand / --td-text-color-link（前缀不同）。
 // 上游压缩形态为 `--td-brand-color-1:#f2f3ff;`（无空格，分号结尾）。
 // [^;}]* 在下一个 ; 或 } 处停止，因此不会越过下一条声明。
-css = css.replace(/--td-brand-color[a-z0-9-]*\s*:[^;}]*;?/g, '');
+tdesignCss = tdesignCss.replace(/--td-brand-color[a-z0-9-]*\s*:[^;}]*;?/g, '');
 
 // --- (3) 移除 source-map 注释（不发布 .map 文件） ---
-css = css.replace(/\/\*# sourceMappingURL=[^*]*\*\//g, '');
+tdesignCss = tdesignCss.replace(/\/\*# sourceMappingURL=[^*]*\*\//g, '');
 
-writeFileSync(OUT, css + '\n', 'utf8');
+writeFileSync(resolve(STYLES, 'tdesign.min.css'), tdesignCss + '\n', 'utf8');
 
-// --- 校验输出 ---
-const brandColorDefs = (css.match(/--td-brand-color[a-z0-9-]*\s*:/g) || []).length;
-const hostCount = (css.match(/:host/g) || []).length;
-const rootCount = (css.match(/:root/g) || []).length;
-const textColorBrand = /--td-text-color-brand\s*:/.test(css);
+// ========== reset.min.css ==========
+// 上游 reset.css 是带注释的未压缩 normalize.css，无 :root 选择器、无 brand-color token，
+// 因此不需要 tdesign.min.css 的两步定制，仅做压缩。
+const resetCss = minifyCss(readFileSync(resolve(DIST, 'reset.css'), 'utf8'));
+writeFileSync(resolve(STYLES, 'reset.min.css'), resetCss + '\n', 'utf8');
+
+// --- 压缩 CSS（仅用于 reset.css） ---
+// 移除注释 → 折叠空白 → 压缩标点周围空白 → 移除 } 前的分号。
+// 不改动选择器与值本身（保留 -webkit- 前缀、字体名引号等上游原始形态）。
+function minifyCss(css) {
+  return css
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\s+/g, ' ')
+    .replace(/\s*([{};:,])\s*/g, '$1')
+    .replace(/;}/g, '}')
+    .trim();
+}
+
+// ========== 校验输出 ==========
+const brandColorDefs = (tdesignCss.match(/--td-brand-color[a-z0-9-]*\s*:/g) || []).length;
+const hostCount = (tdesignCss.match(/:host/g) || []).length;
+const rootCount = (tdesignCss.match(/:root/g) || []).length;
+const textColorBrand = /--td-text-color-brand\s*:/.test(tdesignCss);
 console.log(JSON.stringify({
-  outBytes: css.length,
-  brandColorDefsRemoved: brandColorDefs === 0,
-  brandColorDefsRemaining: brandColorDefs,
-  hostSelectors: hostCount,
-  rootSelectors: rootCount,
-  textColorBrandKept: textColorBrand,
+  tdesignMinCss: {
+    outBytes: tdesignCss.length,
+    brandColorDefsRemoved: brandColorDefs === 0,
+    brandColorDefsRemaining: brandColorDefs,
+    hostSelectors: hostCount,
+    rootSelectors: rootCount,
+    textColorBrandKept: textColorBrand,
+  },
+  resetMinCss: {
+    outBytes: resetCss.length,
+  },
 }, null, 2));
