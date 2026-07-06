@@ -203,6 +203,8 @@ function watchThemeChange(iframe) {
   observers.themeToken = watchThemeTokenChange(iframe);
 
   iframe.onload = () => {
+    // 先断开旧的 observers 再重新创建，避免泄漏
+    [observers.themeMode, observers.themeToken].flat().forEach((o) => o?.disconnect());
     observers.themeMode = watchThemeModeChange(iframe);
     observers.themeToken = watchThemeTokenChange(iframe);
   };
