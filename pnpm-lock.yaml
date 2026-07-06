@@ -135,8 +135,8 @@ importers:
         specifier: ^0.4.4
         version: 0.4.4(vue@3.5.25(typescript@4.9.5))
       tdesign-vue-next:
-        specifier: https://pkg.pr.new/tdesign-vue-next@6777
-        version: https://pkg.pr.new/tdesign-vue-next@6777(vue@3.5.25(typescript@4.9.5))
+        specifier: https://pkg.pr.new/tdesign-vue-next@6779
+        version: https://pkg.pr.new/tdesign-vue-next@6779(vue@3.5.25(typescript@4.9.5))
       tvision-color:
         specifier: ^1.6.0
         version: 1.6.0
@@ -6036,8 +6036,8 @@ packages:
     peerDependencies:
       vue: '>=3.1.0'
 
-  tdesign-vue-next@https://pkg.pr.new/tdesign-vue-next@6777:
-    resolution: {tarball: https://pkg.pr.new/tdesign-vue-next@6777}
+  tdesign-vue-next@https://pkg.pr.new/tdesign-vue-next@6779:
+    resolution: {tarball: https://pkg.pr.new/tdesign-vue-next@6779}
     version: 1.20.3
     engines: {node: '>= 18'}
     peerDependencies:
@@ -13420,7 +13420,7 @@ snapshots:
       validator: 13.15.35
       vue: 3.5.25(typescript@4.9.5)
 
-  tdesign-vue-next@https://pkg.pr.new/tdesign-vue-next@6777(vue@3.5.25(typescript@4.9.5)):
+  tdesign-vue-next@https://pkg.pr.new/tdesign-vue-next@6779(vue@3.5.25(typescript@4.9.5)):
     dependencies:
       '@babel/runtime': 7.25.6
       '@popperjs/core': 2.11.8
