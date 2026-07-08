@@ -65,6 +65,25 @@
       #dev-toolbar button:hover {
         border-color: var(--td-brand-color, #0052d9);
       }
+      #dev-mode-toggle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      }
+      #dev-mode-toggle.dev-dark {
+        background: #e0e0e0;
+        color: #000;
+        border-color: rgba(0, 0, 0, 0.3);
+      }
+      #dev-mode-toggle:not(.dev-dark) {
+        background: #000;
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.5);
+      }
       #dev-toolbar .dev-sep {
         width: 1px;
         align-self: stretch;
@@ -159,6 +178,7 @@
         gap: 6px;
       }
       #dev-preview .dev-swatch {
+        position: relative;
         height: 48px;
         border-radius: var(--td-radius-default, 3px);
         display: flex;
@@ -168,6 +188,18 @@
         font-size: 10px;
         color: #fff;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      }
+      #dev-preview .dev-swatch::before {
+        content: attr(data-index);
+        position: absolute;
+        top: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 13px;
+        font-weight: 600;
+        color: inherit;
+        text-shadow: inherit;
+        pointer-events: none;
       }
       #dev-preview .dev-text-primary {
         color: var(--td-text-color-primary, #333);
@@ -184,13 +216,138 @@
         margin-top: 6px;
       }
       #dev-preview .dev-input {
+        display: block;
         margin-top: 12px;
+        width: 100%;
+        max-width: 320px;
+        box-sizing: border-box;
         padding: 7px 12px;
         border: 1px solid var(--td-component-stroke, #dcdcdc);
         border-radius: var(--td-radius-default, 3px);
         background: var(--td-bg-color-container, #fff);
         color: var(--td-text-color-primary, #333);
         font-size: 14px;
+      }
+
+      /* 多框架组件预览：纯 HTML 映射 --td-* Token（框架无关，天然多端适配） */
+      #dev-preview .dev-link {
+        color: var(--td-brand-color, #0052d9);
+        font-size: 14px;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      #dev-preview .dev-link:hover {
+        color: var(--td-brand-color-hover, #266fe8);
+      }
+      /* 开关（仅作 Token 可视化，非真实组件） */
+      #dev-preview .dev-switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+        border-radius: 999px;
+        background: var(--td-bg-color-component, #dcdcdc);
+        transition: background-color 0.2s ease;
+        vertical-align: middle;
+      }
+      #dev-preview .dev-switch--on {
+        background: var(--td-brand-color, #0052d9);
+      }
+      #dev-preview .dev-switch-knob {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #fff;
+        transition: transform 0.2s ease;
+      }
+      #dev-preview .dev-switch--on .dev-switch-knob {
+        transform: translateX(20px);
+      }
+      /* 进度条 */
+      #dev-preview .dev-progress {
+        display: inline-block;
+        flex: 1;
+        min-width: 120px;
+        max-width: 240px;
+        height: 8px;
+        border-radius: 999px;
+        background: var(--td-bg-color-component, #e7e7e7);
+        overflow: hidden;
+        vertical-align: middle;
+      }
+      #dev-preview .dev-progress-fill {
+        display: block;
+        height: 100%;
+        background: var(--td-brand-color, #0052d9);
+      }
+
+      /* 框架切换 Tab */
+      #dev-preview .dev-fw-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 16px 0 10px;
+      }
+      #dev-preview .dev-fw-tab {
+        padding: 6px 14px;
+        font-size: 13px;
+        border: 1px solid var(--td-component-stroke, #dcdcdc);
+        border-radius: var(--td-radius-default, 3px);
+        background: var(--td-bg-color-container, #fff);
+        color: var(--td-text-color-primary, #333);
+        cursor: pointer;
+      }
+      #dev-preview .dev-fw-tab:hover {
+        border-color: var(--td-brand-color, #0052d9);
+      }
+      #dev-preview .dev-fw-tab.is-active {
+        background: var(--td-brand-color, #0052d9);
+        border-color: var(--td-brand-color, #0052d9);
+        color: var(--td-text-color-anti, #fff);
+      }
+      /* 代码片段 */
+      #dev-preview .dev-code {
+        margin: 0;
+        padding: 16px;
+        border: 1px solid var(--td-component-stroke, #e8e8e8);
+        border-radius: var(--td-radius-default, 3px);
+        background: var(--td-bg-color-secondarycontainer, #f3f3f3);
+        color: var(--td-text-color-primary, #333);
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        font-size: 12.5px;
+        line-height: 1.7;
+        white-space: pre;
+        overflow-x: auto;
+      }
+      #dev-preview .dev-fw-note {
+        margin: 10px 0 0;
+        font-size: 12px;
+        color: var(--td-text-color-placeholder, #bbb);
+      }
+
+      /* 移动端适配：纯 HTML 预览框架无关，窄屏下收拢边距、代码片段横向滚动 */
+      @media (max-width: 640px) {
+        #dev-preview {
+          margin: 64px auto 80px;
+          padding: 0 12px;
+        }
+        #dev-preview .dev-card {
+          padding: 14px;
+        }
+        #dev-status {
+          font-size: 12px;
+          gap: 4px 12px;
+        }
+        #dev-preview .dev-size-label {
+          flex: 0 0 90px;
+          font-size: 11px;
+        }
+        #dev-preview .dev-size-value {
+          font-size: 11px;
+        }
       }
 
       /* 圆角色阶 */
@@ -282,6 +439,9 @@
         font-size: 12px;
         color: var(--td-text-color-placeholder, #bbb);
         font-variant-numeric: tabular-nums;
+      }
+      #dev-size-section.dev-hidden {
+        display: none;
       }
 
       /* 状态栏 */
@@ -415,7 +575,9 @@
         <span>mode: <b id="dev-status-mode">light</b></span>
         <span><span class="dev-status-dot" id="dev-status-dot"></span>brand: <b id="dev-status-brand">—</b></span>
       </div>
-      <div class="dev-section-title">组件预览（随主题实时变化）</div>
+      <div class="dev-section-title">组件预览（随主题实时变化 · 纯 HTML 映射 5 套 TDesign Token）</div>
+
+      <!-- 共享可视化预览：框架无关，跟随 :root 主题变量，天然多端适配 -->
       <div class="dev-card">
         <div class="dev-row">
           <span class="dev-btn dev-btn--primary">主操作</span>
@@ -427,25 +589,166 @@
           <span class="dev-tag dev-tag--error">Error</span>
           <span class="dev-tag dev-tag--success">Success</span>
         </div>
+        <div class="dev-row" style="margin-top: 12px">
+          <span class="dev-switch dev-switch--on"><span class="dev-switch-knob"></span></span>
+          <span class="dev-progress"><span class="dev-progress-fill" style="width: 60%"></span></span>
+          <a class="dev-link" href="javascript:void(0)">链接</a>
+        </div>
+        <input class="dev-input" placeholder="输入框示例（边框/背景跟随主题）" />
         <div class="dev-text-primary">主文本颜色 --td-text-color-primary，用于标题与重点内容。</div>
         <div class="dev-text-secondary">次要文本颜色 --td-text-color-secondary，用于辅助说明。</div>
         <div class="dev-text-placeholder">占位文本颜色 --td-text-color-placeholder，用于输入框提示。</div>
-        <input class="dev-input" placeholder="输入框示例（边框/背景跟随主题）" />
       </div>
+
+      <!-- 框架切换：各端组件用法（代码），均消费同一套 --td-* Token -->
+      <div class="dev-fw-tabs" id="dev-fw-tabs">
+        <button type="button" class="dev-fw-tab is-active" data-fw="vue-desktop">桌面 Vue</button>
+        <button type="button" class="dev-fw-tab" data-fw="vue-mobile">移动 Vue</button>
+        <button type="button" class="dev-fw-tab" data-fw="react">React</button>
+        <button type="button" class="dev-fw-tab" data-fw="miniprogram">小程序</button>
+        <button type="button" class="dev-fw-tab" data-fw="uniapp">uni-app</button>
+      </div>
+      <pre class="dev-code" data-fw="vue-desktop">
+&lt;template&gt;
+  &lt;t-button theme="primary"&gt;主操作&lt;/t-button&gt;
+  &lt;t-button theme="default"&gt;次操作&lt;/t-button&gt;
+  &lt;t-tag theme="primary"&gt;Brand&lt;/t-tag&gt;
+  &lt;t-input v-model="value" placeholder="输入框" /&gt;
+  &lt;t-switch v-model="checked" /&gt;
+  &lt;t-progress :percentage="60" /&gt;
+&lt;/template&gt;</pre
+      >
+      <pre class="dev-code" data-fw="vue-mobile" hidden>
+&lt;template&gt;
+  &lt;!-- 移动端组件默认 size="large"，触摸区域更大 --&gt;
+  &lt;t-button theme="primary" size="large"&gt;主操作&lt;/t-button&gt;
+  &lt;t-button theme="default" size="large"&gt;次操作&lt;/t-button&gt;
+  &lt;t-tag theme="primary"&gt;Brand&lt;/t-tag&gt;
+  &lt;t-input v-model="value" placeholder="输入框" /&gt;
+  &lt;t-switch v-model="checked" /&gt;
+  &lt;t-progress :percentage="60" /&gt;
+&lt;/template&gt;</pre
+      >
+      <pre class="dev-code" data-fw="react" hidden>
+import { Button, Tag, Input, Switch, Progress } from 'tdesign-react';
+import 'tdesign-react/es/style/index.css';
+
+export default () =&gt; (
+  &lt;&gt;
+    &lt;Button theme="primary"&gt;主操作&lt;/Button&gt;
+    &lt;Button theme="default"&gt;次操作&lt;/Button&gt;
+    &lt;Tag theme="primary"&gt;Brand&lt;/Tag&gt;
+    &lt;Input value={value} onChange={onChange} placeholder="输入框" /&gt;
+    &lt;Switch checked={checked} onChange={onChange} /&gt;
+    &lt;Progress percentage={60} /&gt;
+  &lt;/&gt;
+);</pre
+      >
+      <pre class="dev-code" data-fw="miniprogram" hidden>
+&lt;!-- index.wxml --&gt;
+&lt;t-button theme="primary"&gt;主操作&lt;/t-button&gt;
+&lt;t-button theme="default"&gt;次操作&lt;/t-button&gt;
+&lt;t-tag theme="primary"&gt;Brand&lt;/t-tag&gt;
+&lt;t-input value="{{value}}" placeholder="输入框" /&gt;
+&lt;t-switch checked="{{checked}}" bindchange="onChange" /&gt;
+&lt;t-progress percentage="60" /&gt;
+
+&lt;!-- index.json 注册组件 --&gt;
+{
+  "usingComponents": {
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-tag": "tdesign-miniprogram/tag/tag",
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-switch": "tdesign-miniprogram/switch/switch",
+    "t-progress": "tdesign-miniprogram/progress/progress"
+  }
+}</pre
+      >
+      <pre class="dev-code" data-fw="uniapp" hidden>
+&lt;template&gt;
+  &lt;t-button theme="primary"&gt;主操作&lt;/t-button&gt;
+  &lt;t-button theme="default"&gt;次操作&lt;/t-button&gt;
+  &lt;t-tag theme="primary"&gt;Brand&lt;/t-tag&gt;
+  &lt;t-input v-model="value" placeholder="输入框" /&gt;
+  &lt;t-switch v-model="checked" /&gt;
+  &lt;t-progress :percentage="60" /&gt;
+&lt;/template&gt;
+
+&lt;!-- pages.json 配置 easycom 自动引入 tdesign-uniapp --&gt;
+{
+  "easycom": {
+    "autoscan": true,
+    "custom": { "^t-(.*)": "tdesign-uniapp/$1/$1.vue" }
+  }
+}</pre
+      >
+      <p class="dev-fw-note">
+        以上 5 套 TDesign 共享同一套 --td-* 主题 Token，主题生成器输出的 CSS 变量可直接驱动各端组件换肤。
+      </p>
 
       <div class="dev-section-title">品牌色阶 --td-brand-color-1..10（标注为实时计算值）</div>
       <div class="dev-card">
         <div class="dev-swatches">
-          <div class="dev-swatch" data-var="--td-brand-color-1" style="background: var(--td-brand-color-1)"></div>
-          <div class="dev-swatch" data-var="--td-brand-color-2" style="background: var(--td-brand-color-2)"></div>
-          <div class="dev-swatch" data-var="--td-brand-color-3" style="background: var(--td-brand-color-3)"></div>
-          <div class="dev-swatch" data-var="--td-brand-color-4" style="background: var(--td-brand-color-4)"></div>
-          <div class="dev-swatch" data-var="--td-brand-color-5" style="background: var(--td-brand-color-5)"></div>
-          <div class="dev-swatch" data-var="--td-brand-color-6" style="background: var(--td-brand-color-6)"></div>
-          <div class="dev-swatch" data-var="--td-brand-color-7" style="background: var(--td-brand-color-7)"></div>
-          <div class="dev-swatch" data-var="--td-brand-color-8" style="background: var(--td-brand-color-8)"></div>
-          <div class="dev-swatch" data-var="--td-brand-color-9" style="background: var(--td-brand-color-9)"></div>
-          <div class="dev-swatch" data-var="--td-brand-color-10" style="background: var(--td-brand-color-10)"></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-1"
+            data-index="1"
+            style="background: var(--td-brand-color-1)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-2"
+            data-index="2"
+            style="background: var(--td-brand-color-2)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-3"
+            data-index="3"
+            style="background: var(--td-brand-color-3)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-4"
+            data-index="4"
+            style="background: var(--td-brand-color-4)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-5"
+            data-index="5"
+            style="background: var(--td-brand-color-5)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-6"
+            data-index="6"
+            style="background: var(--td-brand-color-6)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-7"
+            data-index="7"
+            style="background: var(--td-brand-color-7)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-8"
+            data-index="8"
+            style="background: var(--td-brand-color-8)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-9"
+            data-index="9"
+            style="background: var(--td-brand-color-9)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-10"
+            data-index="10"
+            style="background: var(--td-brand-color-10)"
+          ></div>
         </div>
       </div>
 
@@ -603,88 +906,90 @@
         </div>
       </div>
 
-      <div class="dev-section-title">间距/尺寸色阶 --td-size-1..16（随尺寸面板变化）</div>
-      <div class="dev-card">
-        <div class="dev-sizes">
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-1</span>
-            <div class="dev-size-bar" style="width: var(--td-size-1)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-1"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-2</span>
-            <div class="dev-size-bar" style="width: var(--td-size-2)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-2"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-3</span>
-            <div class="dev-size-bar" style="width: var(--td-size-3)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-3"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-4</span>
-            <div class="dev-size-bar" style="width: var(--td-size-4)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-4"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-5</span>
-            <div class="dev-size-bar" style="width: var(--td-size-5)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-5"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-6</span>
-            <div class="dev-size-bar" style="width: var(--td-size-6)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-6"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-7</span>
-            <div class="dev-size-bar" style="width: var(--td-size-7)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-7"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-8</span>
-            <div class="dev-size-bar" style="width: var(--td-size-8)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-8"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-9</span>
-            <div class="dev-size-bar" style="width: var(--td-size-9)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-9"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-10</span>
-            <div class="dev-size-bar" style="width: var(--td-size-10)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-10"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-11</span>
-            <div class="dev-size-bar" style="width: var(--td-size-11)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-11"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-12</span>
-            <div class="dev-size-bar" style="width: var(--td-size-12)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-12"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-13</span>
-            <div class="dev-size-bar" style="width: var(--td-size-13)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-13"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-14</span>
-            <div class="dev-size-bar" style="width: var(--td-size-14)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-14"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-15</span>
-            <div class="dev-size-bar" style="width: var(--td-size-15)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-15"></span>
-          </div>
-          <div class="dev-size-item">
-            <span class="dev-size-label">size-16</span>
-            <div class="dev-size-bar" style="width: var(--td-size-16)"></div>
-            <span class="dev-size-value" data-var-value="--td-size-16"></span>
+      <div id="dev-size-section">
+        <div class="dev-section-title">间距/尺寸色阶 --td-size-*（随尺寸面板变化）</div>
+        <div class="dev-card">
+          <div class="dev-sizes">
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-1</span>
+              <div class="dev-size-bar" style="width: var(--td-size-1)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-1"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-2</span>
+              <div class="dev-size-bar" style="width: var(--td-size-2)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-2"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-3</span>
+              <div class="dev-size-bar" style="width: var(--td-size-3)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-3"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-4</span>
+              <div class="dev-size-bar" style="width: var(--td-size-4)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-4"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-5</span>
+              <div class="dev-size-bar" style="width: var(--td-size-5)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-5"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-6</span>
+              <div class="dev-size-bar" style="width: var(--td-size-6)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-6"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-7</span>
+              <div class="dev-size-bar" style="width: var(--td-size-7)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-7"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-8</span>
+              <div class="dev-size-bar" style="width: var(--td-size-8)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-8"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-9</span>
+              <div class="dev-size-bar" style="width: var(--td-size-9)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-9"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-10</span>
+              <div class="dev-size-bar" style="width: var(--td-size-10)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-10"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-11</span>
+              <div class="dev-size-bar" style="width: var(--td-size-11)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-11"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-12</span>
+              <div class="dev-size-bar" style="width: var(--td-size-12)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-12"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-13</span>
+              <div class="dev-size-bar" style="width: var(--td-size-13)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-13"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-14</span>
+              <div class="dev-size-bar" style="width: var(--td-size-14)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-14"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-15</span>
+              <div class="dev-size-bar" style="width: var(--td-size-15)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-15"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-16</span>
+              <div class="dev-size-bar" style="width: var(--td-size-16)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-16"></span>
+            </div>
           </div>
         </div>
       </div>

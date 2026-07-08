@@ -14,14 +14,18 @@ const showSetting = document.getElementById('dev-show-setting');
 
 /* 重新挂载生成器：device / showSetting 仅在 onMounted 读取，
    运行时改属性不重跑初始化，故需移除并重新创建元素。 */
-function mountGenerator() {
+async function mountGenerator() {
   const device = deviceSelect.value;
   const show = showSetting.checked;
+  const mode = root.getAttribute('theme-mode');
   document.querySelector('td-theme-generator')?.remove();
   const el = document.createElement('td-theme-generator');
   if (device) el.setAttribute('device', device);
   if (show) el.setAttribute('show-setting', '');
+  if (mode) el.setAttribute('theme-mode', mode);
   document.body.appendChild(el);
+  // 非 web 设备不展示尺寸色阶（对应 extra.css 不含 --td-size-*）
+  document.getElementById('dev-size-section')?.classList.toggle('dev-hidden', device !== 'web');
   refreshInspector();
 }
 
@@ -30,27 +34,30 @@ function mountGenerator() {
 deviceSelect.value = localStorage.getItem(DEV_DEVICE_KEY) || 'web';
 showSetting.checked = localStorage.getItem(DEV_SHOW_SETTING_KEY) === 'true';
 
-deviceSelect.addEventListener('change', () => {
+deviceSelect.addEventListener('change', async () => {
   localStorage.setItem(DEV_DEVICE_KEY, deviceSelect.value);
-  mountGenerator();
+  await mountGenerator();
 });
-showSetting.addEventListener('change', () => {
+showSetting.addEventListener('change', async () => {
   localStorage.setItem(DEV_SHOW_SETTING_KEY, String(showSetting.checked));
-  mountGenerator();
+  await mountGenerator();
 });
 
 /* ---------- 重置主题 ---------- */
-document.getElementById('dev-reset').addEventListener('click', () => {
+document.getElementById('dev-reset').addEventListener('click', async () => {
   localStorage.removeItem('custom-theme-options');
   localStorage.removeItem('custom-theme-tokens');
-  mountGenerator();
+  await mountGenerator();
 });
 
 /* ---------- 导出 / 复制 CSS ---------- */
 function collectCss() {
   const ids = [CUSTOM_THEME_ID, CUSTOM_DARK_ID, CUSTOM_EXTRA_ID];
-  const raw = ids.map((id) => document.getElementById(id)?.textContent || '').join('\n');
-  return cssbeautify(raw.trim() || '/* 暂无生成的主题样式 */');
+  const raw = ids
+    .map((id) => document.getElementById(id)?.textContent || '')
+    .join('\n')
+    .trim();
+  return raw ? cssbeautify(raw) : '/* 暂无生成的主题样式 */';
 }
 document.getElementById('dev-export').addEventListener('click', () => {
   const blob = new Blob([collectCss()], { type: 'text/css' });
@@ -165,8 +172,12 @@ function updatePreview() {
 }
 
 function refreshInspector() {
-  inspLight.value = document.getElementById(CUSTOM_THEME_ID)?.textContent || '';
-  inspDark.value = document.getElementById(CUSTOM_DARK_ID)?.textContent || '';
+  const light = document.getElementById(CUSTOM_THEME_ID)?.textContent;
+  const dark = document.getElementById(CUSTOM_DARK_ID)?.textContent;
+  if (light || dark) {
+    inspLight.value = light || '';
+    inspDark.value = dark || '';
+  }
   updatePreview();
   // 重新观察（重挂载后节点被替换）
   inspObserver?.disconnect();
@@ -191,11 +202,7 @@ const toggle = document.getElementById('dev-mode-toggle');
 const renderToggle = () => {
   const isDark = root.getAttribute('theme-mode') === 'dark';
   toggle.textContent = isDark ? '☀️' : '🌙';
-  // 太阳态用浅灰背景，月亮态用黑色背景
-  // 颜色选取避开 dock 背景色（浅色 #EEE / 深色 #2C2C2C）
-  toggle.style.background = isDark ? '#e0e0e0' : '#000';
-  toggle.style.color = isDark ? '#000000' : '#fff';
-  toggle.style.borderColor = isDark ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.5)';
+  toggle.classList.toggle('dev-dark', isDark);
 };
 toggle.addEventListener('click', () => {
   const isDark = root.getAttribute('theme-mode') === 'dark';
@@ -230,4 +237,17 @@ function waitForStylesheetsThenInit() {
     refreshInspector();
   }, 2000);
 }
+/* ---------- 多框架组件预览 Tab（纯 HTML，框架无关） ---------- */
+const fwTabs = document.getElementById('dev-fw-tabs');
+const fwPanels = document.querySelectorAll('#dev-preview .dev-code[data-fw]');
+fwTabs?.addEventListener('click', (e) => {
+  const btn = e.target.closest('.dev-fw-tab');
+  if (!btn) return;
+  const fw = btn.dataset.fw;
+  fwTabs.querySelectorAll('.dev-fw-tab').forEach((t) => t.classList.toggle('is-active', t === btn));
+  fwPanels.forEach((p) => {
+    p.hidden = p.dataset.fw !== fw;
+  });
+});
+
 waitForStylesheetsThenInit();
