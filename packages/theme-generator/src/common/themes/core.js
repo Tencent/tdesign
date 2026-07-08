@@ -1,9 +1,16 @@
 import cssbeautify from 'cssbeautify';
 import { Color } from 'tvision-color';
 
-import GENERATOR_VARIABLES from '!raw-loader!./built-in/css/vars.css';
+import GENERATOR_VARIABLES from './built-in/css/vars.css?raw';
 
-import { appendStyleSheet, clearLocalItem, downloadFile, parseRootCss, setUpModeObserver } from '../utils';
+import {
+  appendStyleSheet,
+  clearLocalItem,
+  downloadFile,
+  getThemeMode,
+  parseRootCss,
+  setUpModeObserver,
+} from '../utils';
 
 import {
   MOBILE_RECOMMEND_THEMES,
@@ -51,13 +58,20 @@ export function getRecommendThemes(device) {
 
 /**
  * 同步 site 的 亮暗模式给主题生成器 Web Component
+ * shadow DOM 内的 tdesign.min.css 中 `:root[theme-mode]` 因作用域隔离无法命中 `<html>`，
+ * 只有 `:host[theme-mode]` 生效，因此需要把解析后的 mode 同步到 `<td-theme-generator>` 上。
+ * 这里在注册 observer 前先做一次初始同步，覆盖宿主页加载时已处于 dark 的情况。
+ *
+ * @returns {MutationObserver} 返回创建的 observer，供调用方在卸载时 disconnect()
  */
 export function syncModeToGenerator() {
-  setUpModeObserver((theme) => {
+  const sync = (theme) => {
     const generator = document.querySelector('td-theme-generator');
     if (!generator) return;
     generator.setAttribute('theme-mode', theme);
-  });
+  };
+  sync(getThemeMode());
+  return setUpModeObserver(sync);
 }
 
 export function findThemeByEnName(device, enName) {
@@ -169,17 +183,20 @@ export function modifyToken(tokenName, newVal, saveToLocal = true) {
 
   let tokenFound = false;
   styleSheets.forEach((styleSheet) => {
-    const reg = new RegExp(`${tokenName}:\\s*(.*?);`);
+    // 匹配 `tokenName: <value>;`，容忍冒号后任意空白
+    const reg = new RegExp(`${tokenName}:\\s*([^;]*);`);
     const match = styleSheet.textContent.match(reg);
 
     if (!match) return;
-    if (match[1] === newVal) {
+    const currentVal = match[1].trim();
+    if (currentVal === newVal) {
       tokenFound = true;
       return;
     }
 
-    const currentVal = match[1];
-    styleSheet.textContent = styleSheet.textContent.replace(`${tokenName}: ${currentVal}`, `${tokenName}: ${newVal}`);
+    // 用正则全局替换，不依赖固定空格写法；$1 保留冒号后原始空白
+    const replaceReg = new RegExp(`(${tokenName}:\\s*)[^;]*;`, 'g');
+    styleSheet.textContent = styleSheet.textContent.replace(replaceReg, `$1${newVal};`);
     tokenFound = true;
 
     updateLocalToken(tokenName, saveToLocal ? newVal : null);

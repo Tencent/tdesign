@@ -1,15 +1,7 @@
 <template>
-  <svg
-    :width="viewWidth"
-    height="12"
-    :viewBox="`0 0 ${viewWidth} 12`"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg :width="viewWidth" height="12" :viewBox="`0 0 ${viewWidth} 12`" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
-      :d="`M0 3C0 1.34315 1.34315 0 3 0H${
-        4 + width
-      }V12H3C1.34315 12 0 10.6569 0 9V3Z`"
+      :d="`M0 3C0 1.34315 1.34315 0 3 0H${4 + width}V12H3C1.34315 12 0 10.6569 0 9V3Z`"
       fill="#D54941"
       fill-opacity="0.16"
     />
@@ -19,9 +11,9 @@
     <path
       :d="`M${8 + width} 0H${viewWidth - 3}C${
         viewWidth - 2
-      }.6569 0 ${viewWidth} 1.34315 ${viewWidth} 3V9C${viewWidth} 10.6569 ${
-        viewWidth - 2
-      }.6569 12 ${viewWidth - 3} 12H${8 + width}V0Z`"
+      }.6569 0 ${viewWidth} 1.34315 ${viewWidth} 3V9C${viewWidth} 10.6569 ${viewWidth - 2}.6569 12 ${
+        viewWidth - 3
+      } 12H${8 + width}V0Z`"
       fill="#D54941"
       fill-opacity="0.16"
     />
@@ -31,21 +23,21 @@
   </svg>
 </template>
 
-<script>
-export default {
-  props: {
-    size: {
-      type: Number,
-      default: 4,
-    },
+<script setup>
+import { computed } from 'vue';
+
+const props = defineProps({
+  size: {
+    type: Number,
+    default: 4,
   },
-  computed: {
-    width() {
-      return Math.min(parseInt(this.size, 10) / 2, 30);
-    },
-    viewWidth() {
-      return Math.min(12 + this.width * 2, 72);
-    },
-  },
-};
+});
+
+const width = computed(() => {
+  return Math.min(parseInt(props.size, 10) / 2, 30);
+});
+
+const viewWidth = computed(() => {
+  return Math.min(12 + width.value * 2, 72);
+});
 </script>

@@ -10,63 +10,69 @@
   </div>
 </template>
 
-<script>
-import {
-  applyTokenFromLocal,
-  initGeneratorVars,
-  syncModeToGenerator,
-  syncThemeToIframe,
-  themeStore,
-} from '@/common/themes';
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue';
+import { applyTokenFromLocal, syncModeToGenerator, syncThemeToIframe, themeStore } from '@/common/themes';
+import { setUpModeObserver } from '@/common/utils';
 
 import FloatDock from './float-dock';
 import PanelDrawer from './panel-drawer';
 
-export default {
-  name: 'ThemeGenerator',
-  components: {
-    FloatDock,
-    PanelDrawer,
+defineOptions({ name: 'ThemeGenerator' });
+
+const props = defineProps({
+  showSetting: {
+    type: [Boolean, String],
   },
-  props: {
-    showSetting: {
-      type: [Boolean, String],
-    },
-    device: {
-      type: String,
-      default: 'web',
-    },
+  device: {
+    type: String,
+    default: 'web',
   },
-  data() {
-    return {
-      visible: 0,
-    };
-  },
-  mounted() {
-    themeStore.updateDevice(this.device);
-    syncModeToGenerator();
-    initGeneratorVars();
-    applyTokenFromLocal();
-    syncThemeToIframe(this.device);
-  },
-  methods: {
-    handleTriggerVisible() {
-      this.visible = true;
-    },
-    handleDrawerVisible(v) {
-      this.visible = v;
-    },
-    handleClickSetting() {
-      this.visible = false;
-    },
-  },
-};
+});
+
+const visible = ref(false);
+// 保存 observer 与清理函数，组件卸载时断开，避免泄漏
+let modeSyncObserver = null;
+let refreshObserver = null;
+let iframeCleanup = null;
+
+onMounted(() => {
+  themeStore.updateDevice(props.device);
+  modeSyncObserver = syncModeToGenerator();
+  // initGeneratorVars 不再调用：generator-vars.css 已注入 Shadow Root，
+  // 生成器 UI 专用变量（--brand-main 等）在 Shadow DOM 内直接可用。
+  applyTokenFromLocal();
+  iframeCleanup = syncThemeToIframe(props.device);
+  // 宿主页亮暗模式切换时，font/shadow/size 面板以 $refreshId 为 key，
+  // bump 后强制重新挂载并重读 token 值（getTokenValue 非响应式，需靠 key 变更触发重渲染）。
+  refreshObserver = setUpModeObserver(() => {
+    themeStore.incrementRefreshId();
+  });
+});
+
+onUnmounted(() => {
+  modeSyncObserver?.disconnect();
+  refreshObserver?.disconnect();
+  iframeCleanup?.();
+  modeSyncObserver = null;
+  refreshObserver = null;
+  iframeCleanup = null;
+});
+
+function handleTriggerVisible() {
+  visible.value = true;
+}
+
+function handleDrawerVisible(v) {
+  visible.value = v;
+}
+
+function handleClickSetting() {
+  visible.value = false;
+}
 </script>
 
 <style lang="less" scoped>
-@import './styles/reset.min.css';
-@import './styles/tdesign.min.css';
-
 @media screen and (max-width: 960px) {
   .theme-generator {
     display: none;

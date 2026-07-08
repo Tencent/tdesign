@@ -2,18 +2,27 @@ export * from './animation';
 
 /**
  * 获取指定 CSS Token 对应的数值
+ *
+ * 主题变量（--td-brand-color 等）始终定义在 Light DOM 的 :root 样式表上
+ * （custom-theme / custom-theme-dark 等 style 标签）。
+ * 不论亮暗模式都从 document.documentElement 读取，避免命中 td-theme-generator
+ * host 元素（它继承的是浅色值，暗色下读值会错误）。
  */
 export function getTokenValue(name) {
-  const isDarkMode = document.documentElement.getAttribute('theme-mode') === 'dark';
-  const rootElement = isDarkMode ? document.querySelector('[theme-mode="dark"]') : document.documentElement;
+  const rootElement = document.documentElement;
   return window.getComputedStyle(rootElement).getPropertyValue(name).toLowerCase().trim();
 }
 
 /**
  * 获取当前亮暗模式 (light / dark)
+ * 优先识别 `theme-mode` 属性，其次识别 `.dark` class（与 dark.css / tdesign.min.css
+ * 的 `:root.dark` 选择器对齐），均无则视为 light。
  */
 export function getThemeMode() {
-  return document.documentElement.getAttribute('theme-mode') || 'light';
+  const el = document.documentElement;
+  if (el.getAttribute('theme-mode') === 'dark') return 'dark';
+  if (el.classList.contains('dark')) return 'dark';
+  return 'light';
 }
 
 /**
@@ -36,7 +45,7 @@ export function setUpModeObserver(handler) {
 
   observer.observe(document.documentElement, {
     attributes: true,
-    attributeFilter: ['theme-mode'],
+    attributeFilter: ['theme-mode', 'class'],
   });
 
   return observer;
@@ -64,6 +73,10 @@ export function appendStyleSheet(styleId) {
 
 /**
  * 解决 `Popup` 组件脱离 Shadow DOM 的问题
+ *
+ * 注：当前返回页面首个 td-theme-generator 实例的 shadowRoot 内挂载点。
+ * 生成器按单例设计（每页一个实例），多实例场景下挂载点可能错误，
+ * 若未来需要支持多实例，需改为从当前组件实例的根节点向上查找 host。
  */
 export function handleAttach() {
   return document.querySelector('td-theme-generator')?.shadowRoot?.querySelector?.('.theme-generator') || document.body;

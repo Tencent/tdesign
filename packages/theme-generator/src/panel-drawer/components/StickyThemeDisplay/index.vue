@@ -9,67 +9,45 @@
   </div>
 </template>
 
-<script>
-import { langMixin } from '@/common/i18n';
+<script setup>
+import { ref, computed, watch } from 'vue';
+import { useLang } from '@/common/i18n';
 import { themeStore } from '@/common/themes';
-import { getTokenValue } from '@/common/utils';
 
-export default {
-  name: 'StickyThemeDisplay',
-  props: {
-    top: Number,
-    theme: {
-      type: Object,
-    },
-  },
-  mixins: [langMixin],
-  data() {
-    return {
-      isAnimating: false,
-      brandColor: null,
-      styleObserver: null,
-    };
-  },
-  computed: {
-    $theme() {
-      return themeStore.theme;
-    },
-    stickyThemeStyle() {
-      return {
-        top: `${this.top}px`,
-      };
-    },
-  },
-  mounted() {
-    this.brandColor = getTokenValue('--brand-main');
-    this.setupStyleObserver();
-  },
-  methods: {
-    setupStyleObserver() {
-      this.styleObserver = new MutationObserver(this.checkBrandColorChange);
-      this.styleObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['style'],
-      });
-    },
-    checkBrandColorChange() {
-      const newColor = getTokenValue('--brand-main');
-      if (newColor && newColor !== this.brandColor) {
-        this.brandColor = newColor;
-        this.isAnimating = true;
+defineOptions({ name: 'StickyThemeDisplay' });
 
-        setTimeout(() => {
-          this.isAnimating = false;
-        }, 1000);
-      }
-    },
+const props = defineProps({
+  top: Number,
+  theme: {
+    type: Object,
   },
-  beforeDestroy() {
-    if (this.styleObserver) {
-      this.styleObserver.disconnect();
-    }
+});
+
+const { isEn } = useLang();
+
+const isAnimating = ref(false);
+
+const $theme = computed(() => themeStore.theme);
+
+const stickyThemeStyle = computed(() => {
+  return {
+    top: `${props.top}px`,
+  };
+});
+
+// 监听 themeStore.brandColor 变化触发过渡动画。
+// --brand-main 现设置在 Shadow Host 上（store.updateBrandColor），
+// 不再设置 document.documentElement，故改用响应式 store 而非 MutationObserver。
+watch(
+  () => themeStore.brandColor,
+  (newColor, oldColor) => {
+    if (!newColor || newColor === oldColor) return;
+    isAnimating.value = true;
+    setTimeout(() => {
+      isAnimating.value = false;
+    }, 1000);
   },
-};
+);
 </script>
 
 <style scoped lang="less">

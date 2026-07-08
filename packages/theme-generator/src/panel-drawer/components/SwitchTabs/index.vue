@@ -22,8 +22,9 @@
   </div>
 </template>
 
-<script>
-import { langMixin } from '@/common/i18n';
+<script setup>
+import { ref, computed, onMounted, markRaw } from 'vue';
+import { useLang } from '@/common/i18n';
 import { isMobile, themeStore } from '@/common/themes';
 
 import BoxshadowSvg from './BoxshadowSvg.vue';
@@ -32,59 +33,54 @@ import FontSvg from './FontSvg.vue';
 import RadiusSvg from './RadiusSvg.vue';
 import SizeSvg from './SizeSvg.vue';
 
-export default {
-  name: 'SwitchTabs',
-  props: {
-    activeTabIdx: Number,
-  },
-  computed: {
-    $device() {
-      return themeStore.device;
+defineOptions({ name: 'SwitchTabs' });
+
+defineProps({
+  activeTabIdx: Number,
+});
+
+const emit = defineEmits(['changeActiveTab']);
+
+const { lang } = useLang();
+
+const tabs = ref([]);
+
+const $device = computed(() => themeStore.device);
+
+const filteredTabs = computed(() => {
+  // 移动端不显示尺寸配置
+  return isMobile($device.value) ? tabs.value.filter((tab) => tab.title !== lang.size.title) : tabs.value;
+});
+
+onMounted(() => {
+  const text = lang;
+  tabs.value = [
+    {
+      title: text.color.title,
+      image: markRaw(ColorSvg),
     },
-    filteredTabs() {
-      // 移动端不显示尺寸配置
-      return isMobile(this.$device) ? this.tabs.filter((tab) => tab.title !== this.lang.size.title) : this.tabs;
+    {
+      title: text.font.title,
+      image: markRaw(FontSvg),
     },
-  },
-  components: { ColorSvg, FontSvg, RadiusSvg, BoxshadowSvg, SizeSvg },
-  emit: ['changeActiveTab'],
-  mixins: [langMixin],
-  data() {
-    return {
-      tabs: [],
-    };
-  },
-  methods: {
-    handleClickPanel(idx) {
-      this.$emit('changeActiveTab', idx);
+    {
+      title: text.borderRadius.title,
+      image: markRaw(RadiusSvg),
     },
-  },
-  mounted() {
-    const text = this.lang;
-    this.tabs = [
-      {
-        title: text.color.title,
-        image: ColorSvg,
-      },
-      {
-        title: text.font.title,
-        image: FontSvg,
-      },
-      {
-        title: text.borerRadius.title,
-        image: RadiusSvg,
-      },
-      {
-        title: text.shadow.title,
-        image: BoxshadowSvg,
-      },
-      {
-        title: text.size.title,
-        image: SizeSvg,
-      },
-    ];
-  },
-};
+    {
+      title: text.shadow.title,
+      image: markRaw(BoxshadowSvg),
+    },
+    {
+      title: text.size.title,
+      image: markRaw(SizeSvg),
+    },
+  ];
+});
+
+function handleClickPanel(idx) {
+  emit('changeActiveTab', idx);
+}
 </script>
 
 <style scoped lang="less">
