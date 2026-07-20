@@ -128,10 +128,9 @@ export default {
         ry: ryIcon,
       },
       previewUrl: {
-        web: 'https://codesign.qq.com/s/dqN2925D7qjaBXe?active-screen=xDP39qAvLNl9wlK&menu_aside=null&minimap=close',
-        mobile: 'https://codesign.qq.com/s/YDgGjYv28y9wEVQ?active-screen=GD5OjERAdXO93eA&menu_aside=null&minimap=close',
-        'web-chart':
-          'https://codesign.qq.com/s/kv8398d7m59nKeg?active-screen=6ym7ZRGAEOYjAYE&menu_aside=null&minimap=close',
+        web: 'https://codesign.qq.com/s/705849079455594?menu_aside=null',
+        mobile: 'https://codesign.qq.com/s/705854516818782?menu_aside=null',
+        'web-chart': 'https://codesign.qq.com/s/705850116517658?menu_aside=null',
       },
     };
   },
