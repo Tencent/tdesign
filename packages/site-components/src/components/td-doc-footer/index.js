@@ -11,12 +11,11 @@ import vueLogo from '@images/groups/vue-logo.svg?raw';
 import reactLogo from '@images/groups/react-logo.svg?raw';
 import wxLogo from '@images/groups/wx-logo.svg?raw';
 
-import designQrcodeIcon from '@images/groups/design-group.png';
-import flutterQrcodeIcon from '@images/groups/flutter-group.png';
-import vue2QrcodeIcon from '@images/groups/vue2-group.png';
-import vue3QrcodeIcon from '@images/groups/vue3-group.png';
-import reactQrcodeIcon from '@images/groups/react-group.png';
-import wxQrcodeIcon from '@images/groups/wx-group.png';
+import designGroupIcon from '@images/groups/design-group.png';
+import flutterGroupIcon from '@images/groups/flutter-group.png';
+import vueGroupIcon from '@images/groups/vue-group.png';
+import reactGroupIcon from '@images/groups/react-group.png';
+import wxGroupIcon from '@images/groups/wx-group.png';
 
 import style from './style.less?inline';
 import portalStyle from './portal.less?inline';
@@ -25,13 +24,12 @@ const footerLinks = getFooterConfig();
 const locale = getLocale();
 const currentYear = new Date().getFullYear();
 
-const qrcodeMap = {
-  vue2: vue2QrcodeIcon,
-  vue3: vue3QrcodeIcon,
-  react: reactQrcodeIcon,
-  wx: wxQrcodeIcon,
-  design: designQrcodeIcon,
-  flutter: flutterQrcodeIcon,
+const groupCodeMap = {
+  vue: vueGroupIcon,
+  react: reactGroupIcon,
+  wx: wxGroupIcon,
+  flutter: flutterGroupIcon,
+  design: designGroupIcon,
 };
 export default define({
   tag: 'td-doc-footer',
@@ -48,7 +46,7 @@ export default define({
     const { displayQrCode } = host;
 
     const handleHoverLogo = (type) => {
-      host.displayQrCode = qrcodeMap[type];
+      host.displayQrCode = groupCodeMap[type];
     };
 
     return html`
@@ -63,13 +61,9 @@ export default define({
               >
                 <div class="TDesign-doc-footer__qrcode-trigger">
                   <div>
-                    <div class="qrcode" onmouseenter="${() => handleHoverLogo('vue2')}">
+                    <div class="qrcode" onmouseenter="${() => handleHoverLogo('vue')}">
                       <i innerHTML="${vueLogo}"></i>
-                      <span>Vue 2</span>
-                    </div>
-                    <div class="qrcode" onmouseenter="${() => handleHoverLogo('vue3')}">
-                      <i innerHTML="${vueLogo}"></i>
-                      <span>Vue 3</span>
+                      <span>Vue </span>
                     </div>
                     <div class="qrcode" onmouseenter="${() => handleHoverLogo('react')}">
                       <i innerHTML="${reactLogo}"></i>
