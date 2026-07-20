@@ -11,12 +11,6 @@ import vueLogo from '@images/groups/vue-logo.svg?raw';
 import reactLogo from '@images/groups/react-logo.svg?raw';
 import wxLogo from '@images/groups/wx-logo.svg?raw';
 
-import designGroupIcon from '@images/groups/design-group.png';
-import flutterGroupIcon from '@images/groups/flutter-group.png';
-import vueGroupIcon from '@images/groups/vue-group.png';
-import reactGroupIcon from '@images/groups/react-group.png';
-import wxGroupIcon from '@images/groups/wx-group.png';
-
 import style from './style.less?inline';
 import portalStyle from './portal.less?inline';
 
@@ -25,12 +19,13 @@ const locale = getLocale();
 const currentYear = new Date().getFullYear();
 
 const groupCodeMap = {
-  vue: vueGroupIcon,
-  react: reactGroupIcon,
-  wx: wxGroupIcon,
-  flutter: flutterGroupIcon,
-  design: designGroupIcon,
+  vue: `https://tdesign.gtimg.com/site/wecom-group/vue-group.png`,
+  react: `https://tdesign.gtimg.com/site/wecom-group/react-group.png`,
+  wx: `https://tdesign.gtimg.com/site/wecom-group/wx-group.png`,
+  flutter: `https://tdesign.gtimg.com/site/wecom-group/flutter-group.png`,
+  design: `https://tdesign.gtimg.com/site/wecom-group/design-group.png`,
 };
+
 export default define({
   tag: 'td-doc-footer',
   mobileBodyStyle,
