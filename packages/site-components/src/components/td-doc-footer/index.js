@@ -11,6 +11,12 @@ import vueLogo from '@images/groups/vue-logo.svg?raw';
 import reactLogo from '@images/groups/react-logo.svg?raw';
 import wxLogo from '@images/groups/wx-logo.svg?raw';
 
+import designGroup from '@images/groups/design-group.png';
+import flutterGroup from '@images/groups/flutter-group.png';
+import vueGroup from '@images/groups/vue-group.png';
+import reactGroup from '@images/groups/react-group.png';
+import wxGroup from '@images/groups/wx-group.png';
+
 import style from './style.less?inline';
 import portalStyle from './portal.less?inline';
 
@@ -19,11 +25,11 @@ const locale = getLocale();
 const currentYear = new Date().getFullYear();
 
 const groupCodeMap = {
-  vue: `https://tdesign.gtimg.com/site/wecom-group/vue-group.png`,
-  react: `https://tdesign.gtimg.com/site/wecom-group/react-group.png`,
-  wx: `https://tdesign.gtimg.com/site/wecom-group/wx-group.png`,
-  flutter: `https://tdesign.gtimg.com/site/wecom-group/flutter-group.png`,
-  design: `https://tdesign.gtimg.com/site/wecom-group/design-group.png`,
+  vue: vueGroup,
+  react: reactGroup,
+  wx: wxGroup,
+  flutter: flutterGroup,
+  design: designGroup,
 };
 
 export default define({
