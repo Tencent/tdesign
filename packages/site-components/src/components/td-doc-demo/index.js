@@ -27,9 +27,9 @@ export default define({
         invalidate();
       }
 
-      window.addEventListener('localStorage', themeChange);
+      window.addEventListener('storageChange', themeChange);
 
-      return () => window.removeEventListener('localStorage', themeChange);
+      return () => window.removeEventListener('storageChange', themeChange);
     },
   },
   activeStyleMap: {
