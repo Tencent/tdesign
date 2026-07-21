@@ -30,7 +30,7 @@
             transition: 'width .3s',
           }"
         >
-          <t-button variant="outline" shape="square" size="large">
+          <t-button variant="outline" shape="circle" size="large">
             <template #icon>
               <palette-svg />
             </template>
@@ -48,7 +48,7 @@
             transition: 'width .3s',
           }"
         >
-          <t-button variant="outline" shape="square" size="large">
+          <t-button variant="outline" shape="circle" size="large">
             <template #icon>
               <adjust-svg />
             </template>
@@ -58,7 +58,7 @@
           </t-button>
         </div>
         <div v-if="showSetting" class="setting-btn" :style="{ width: '48px', marginLeft: '4px' }">
-          <t-button variant="outline" shape="square" size="large" @click="triggerSettingDrawer">
+          <t-button variant="outline" shape="circle" size="large" @click="triggerSettingDrawer">
             <template #icon>
               <setting-svg />
             </template>
@@ -66,11 +66,25 @@
         </div>
         <div
           v-if="isCustomizeDrawerVisible || isThemeTabVisible"
+          class="upload-btn"
+          :style="{ width: '48px', margin: '0 4px' }"
+        >
+          <t-tooltip :content="lang.dock.uploadTips" placement="top" :attach="handleAttach" zIndex="9999">
+            <t-button variant="outline" shape="circle" size="large" @click="handleUploadClick">
+              <template #icon>
+                <upload-svg />
+              </template>
+            </t-button>
+          </t-tooltip>
+          <input ref="fileInput" type="file" accept=".css" style="display: none" @change="handleFileChange" />
+        </div>
+        <div
+          v-if="isCustomizeDrawerVisible || isThemeTabVisible"
           class="export-btn"
           @click="handleDownload"
           :style="{ width: '48px', margin: '0 4px' }"
         >
-          <t-button variant="outline" shape="square" size="large">
+          <t-button variant="outline" shape="circle" size="large">
             <template #icon>
               <download-svg />
             </template>
@@ -89,7 +103,7 @@
             }"
             @confirm="resetTheme"
           >
-            <t-button variant="outline" shape="square" size="large">
+            <t-button variant="outline" shape="circle" size="large">
               <template #icon>
                 <recover-svg />
               </template>
@@ -102,7 +116,13 @@
 </template>
 
 <script>
-import { MessagePlugin, Button as TButton, Popconfirm as TPopconfirm, Popup as TPopup } from 'tdesign-vue';
+import {
+  MessagePlugin,
+  Button as TButton,
+  Popconfirm as TPopconfirm,
+  Popup as TPopup,
+  Tooltip as TTooltip,
+} from 'tdesign-vue';
 
 import { langMixin } from '@/common/i18n';
 import { exportCustomStyleSheet, themeStore } from '@/common/themes';
@@ -115,6 +135,7 @@ import DownloadSvg from './svg/DownloadSvg.vue';
 import PaletteSvg from './svg/PaletteSvg.vue';
 import RecoverSvg from './svg/RecoverSvg.vue';
 import SettingSvg from './svg/SettingSvg.vue';
+import UploadSvg from './svg/UploadSvg.vue';
 
 export default {
   name: 'FloatDock',
@@ -122,12 +143,14 @@ export default {
     TButton,
     TPopup,
     TPopconfirm,
+    TTooltip,
     RecommendThemes,
     DownloadSvg,
     RecoverSvg,
     PaletteSvg,
     AdjustSvg,
     SettingSvg,
+    UploadSvg,
   },
   props: {
     drawerVisible: { type: [Boolean, Number] },
@@ -214,6 +237,20 @@ export default {
       exportCustomStyleSheet(this.$device);
       MessagePlugin.success(this.lang.dock.downloadTips);
     },
+    handleUploadClick() {
+      this.$refs.fileInput.value = '';
+      this.$refs.fileInput.click();
+    },
+    handleFileChange(e) {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        themeStore.importCustomTheme(evt.target.result);
+        MessagePlugin.success(this.lang.dock.uploadSuccess);
+      };
+      reader.readAsText(file);
+    },
     triggerSettingDrawer() {
       this.$emit('click-setting');
     },
@@ -294,6 +331,7 @@ export default {
 }
 .generator-btn,
 .export-btn,
+.upload-btn,
 .setting-btn,
 .recover-btn {
   border-radius: 32px;
@@ -315,7 +353,6 @@ export default {
     background: var(--bg-color-container-hover);
   }
   /deep/ .t-button {
-    height: 46px;
     width: 100%;
     border-radius: 24px;
     border: none;
