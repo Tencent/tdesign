@@ -14,6 +14,14 @@ function getLineStyle(host) {
   return `width: ${offsetWidth}px; left: ${offsetLeft}px`;
 }
 
+function decodeSlotContent(content) {
+  try {
+    return decodeURIComponent(content);
+  } catch {
+    return content;
+  }
+}
+
 function extractSlots(host) {
   const slotsEl = Array.from(host.querySelectorAll('td-code-block > [slot]'));
   const slotsName = [];
@@ -24,7 +32,7 @@ function extractSlots(host) {
     slotsContentMap[s.slot] = {
       name: s.slot,
       lang: s.lang,
-      content: decodeURIComponent(s.innerHTML),
+      content: decodeSlotContent(s.innerHTML),
     };
   });
 
