@@ -27,7 +27,7 @@ title: 从构思到生产：一个组件的诞生
   - 必需参与的角色：技术栈 PMC 负责同学、交互设计师、视觉设计师、UI 开发同学、API 制定者、各技术栈开发同学
   - 讨论内容：API 设置是否满足业务场景需求，是否留有扩展空间（组件易用性与灵活性 trade-off）；API 描述等是否框架无关，能够在多个技术栈中实现；交互稿是否满足需求，是否提供了所有场景的 demo
   - 会后需要明确交互稿调整后定稿时间
-- 交互设计师撰写该组件的设计指南（例：https://tdesign.tencent.com/vue-next/components/button?tab=design）
+- 交互设计师撰写该组件的设计指南（ 例：https://tdesign.tencent.com/vue-next/components/button?tab=design ）
 - 视觉设计师根据调整后的交互稿，产出设计稿及时在群中同步
 - 负责组件进展的 PMC 同学录入 API 管理平台：https://github.com/Tdesignoteam/tdesign-api
 
