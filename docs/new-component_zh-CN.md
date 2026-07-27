@@ -42,7 +42,7 @@ tdesign-api 提供了一个可以本地运行的、有 UI 界面的 API 维护�
 ## 开发阶段
 
 - 负责 UI 开发的同学按照设计稿独立在 [common](https://github.com/Tencent/tdesign-common) 中开发组件 UI（LESS），UI demo 需要包括交互稿中给出的各类使用场景的静态样式。提交 PR 后在群中同步信息，如果有其他技术栈开发同学需要与 PMC 同学一起 CR UI 实现，没问题后合入 PR
-- 组件开发：各技术栈开发同学使用 cli 工具拉取生成本技术栈的组件 API 定义相关文件（例：https://github.com/Tencent/tdesign-vue/blob/develop/src/button/props.ts），根据定义文件和 UI 实现进行组件逻辑开发
+- 组件开发：各技术栈开发同学使用 cli 工具拉取生成本技术栈的组件 API 定义相关文件（ 例：https://github.com/Tencent/tdesign-vue/blob/develop/src/button/props.ts ），根据定义文件和 UI 实现进行组件逻辑开发
 - 开发完成后提交 PR，各 CI 环节执行通过后需要邀请 PMC 同学进行 CR，如果在提交 PR 过程中遇到问题，可以先参考指引：https://tdesign.tencent.com/about/contributing
 
 ### why Git submodule？
