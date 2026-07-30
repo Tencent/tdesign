@@ -176,35 +176,29 @@ export default define({
         }
       }
 
-      changeTitlePos();
-
-      mediaQuery.addEventListener('change', () => {
+      function handleMediaChange() {
         changeTitlePos();
         checkDescribeLineOverflow(host);
-      });
-      window.addEventListener('resize', () => {
+      }
+
+      function handleResize() {
         changeTitlePos();
         const currentWidth = window.innerWidth;
         if (currentWidth !== lastWidth) {
           lastWidth = currentWidth;
           checkDescribeLineOverflow(host);
         }
-      });
+      }
+
+      changeTitlePos();
+
+      mediaQuery.addEventListener('change', handleMediaChange);
+      window.addEventListener('resize', handleResize);
       document.addEventListener('scroll', changeTitlePos);
 
       return () => {
-        mediaQuery.removeEventListener('change', () => {
-          changeTitlePos();
-          checkDescribeLineOverflow(host);
-        });
-        window.removeEventListener('resize', () => {
-          changeTitlePos();
-          const currentWidth = window.innerWidth;
-          if (currentWidth !== lastWidth) {
-            lastWidth = currentWidth;
-            checkDescribeLineOverflow(host);
-          }
-        });
+        mediaQuery.removeEventListener('change', handleMediaChange);
+        window.removeEventListener('resize', handleResize);
         document.removeEventListener('scroll', changeTitlePos);
       };
     },
