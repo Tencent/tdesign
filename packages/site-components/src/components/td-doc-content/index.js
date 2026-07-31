@@ -50,6 +50,8 @@ export default define({
     get: (_host, lastValue) => lastValue || undefined,
     set: (_host, value) => value,
     connect: () => {
+      let demoLoadObserver;
+
       function changeTocHeight() {
         const { scrollTop } = document.documentElement;
         // 固定右侧目录
@@ -88,17 +90,12 @@ export default define({
       }
 
       function waitForDemoLoad() {
-        const observer = new MutationObserver(() => {
-          for (const selector of CONTENT_SELECTORS) {
-            const targetElement = document.querySelector(selector);
-            if (targetElement) {
-              observer.disconnect();
-              handleAnchorScroll();
-              break;
-            }
-          }
+        if (handleDemoLoad()) return;
+
+        demoLoadObserver = new MutationObserver(() => {
+          if (handleDemoLoad()) demoLoadObserver.disconnect();
         });
-        observer.observe(document.body, { childList: true, subtree: true });
+        demoLoadObserver.observe(document.body, { childList: true, subtree: true });
       }
 
       // 加载后跳转到锚点定位处
@@ -115,14 +112,26 @@ export default define({
         window.scrollTo({ top: offsetTop - 120, left: 0 });
       }
 
+      function handleDemoLoad() {
+        const hasDemoContent = CONTENT_SELECTORS.some((selector) => document.querySelector(selector));
+        if (!hasDemoContent) return false;
+        handleAnchorScroll();
+        return true;
+      }
+
       document.addEventListener('scroll', changeTocHeight);
       document.addEventListener('click', proxyTitleAnchor);
-      window.addEventListener('load', waitForDemoLoad);
+      if (document.readyState === 'complete') {
+        waitForDemoLoad();
+      } else {
+        window.addEventListener('load', waitForDemoLoad);
+      }
 
       return () => {
         document.removeEventListener('scroll', changeTocHeight);
         document.removeEventListener('click', proxyTitleAnchor);
         window.removeEventListener('load', waitForDemoLoad);
+        demoLoadObserver?.disconnect();
       };
     },
   },
