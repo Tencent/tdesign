@@ -1,7 +1,14 @@
 import Vue from 'vue';
 
 import { DEFAULT_THEME_META, TDESIGN_WEB_THEME } from './built-in';
-import { clearLocalTheme, getDefaultTheme, getOptionFromLocal, initThemeStyleSheet, updateLocalOption } from './core';
+import {
+  clearLocalTheme,
+  getDefaultTheme,
+  getOptionFromLocal,
+  importCustomThemeCSS,
+  initThemeStyleSheet,
+  updateLocalOption,
+} from './core';
 
 export const themeStore = Vue.observable({
   device: 'web',
@@ -33,6 +40,16 @@ export const themeStore = Vue.observable({
   },
   incrementRefreshId() {
     this.refreshId++;
+  },
+  /**
+   * Import a user-uploaded theme.css, split it into the three stylesheets
+   * (custom-theme / custom-theme-dark / custom-theme-extra) and trigger a global refresh.
+   *
+   * @param {string} cssText - raw CSS text read from the uploaded file
+   */
+  importCustomTheme(cssText) {
+    importCustomThemeCSS(cssText);
+    this.incrementRefreshId();
   },
 });
 
