@@ -28,7 +28,7 @@ jobs:
     if: needs.modify-services.outputs.services-changed == 'true'
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
       - run: node ./services/update-components-notice.js

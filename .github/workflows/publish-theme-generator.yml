@@ -22,7 +22,7 @@ jobs:
 
       - uses: pnpm/action-setup@v6
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
 
@@ -31,7 +31,7 @@ jobs:
       - run: pnpm -F @tdesign/theme-generator run build
 
       # 为了兼容 oidc 特指定 node 版本最小为 24
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
 
