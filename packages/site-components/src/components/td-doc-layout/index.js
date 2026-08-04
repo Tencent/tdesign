@@ -5,8 +5,7 @@ import style from './style.less?inline';
 export default define({
   tag: 'td-doc-layout',
   loaded: {
-    get: (_host, lastValue) => lastValue || false,
-    set: (_host, value) => value,
+    value: (_host, v) => v || false,
     connect: (host, key) => {
       function onLoad() {
         Object.assign(host, { [key]: true });

@@ -81,14 +81,11 @@ export default define({
   showCode: false,
   language: 'markup',
   panel: {
-    set: (host, value, lastValue) => {
+    value: (host, v) => v || host.panelList[0]?.value,
+    observe: (host, value, lastValue) => {
       if (value && lastValue !== value) {
         dispatch(host, 'PanelChange', { detail: { value } });
       }
-      return value;
-    },
-    get: (host, lastValue) => lastValue || host.panelList[0]?.value,
-    observe: (host) => {
       if (!host.shadowRoot) return;
 
       const lineEl = host.shadowRoot.querySelector('.active-line');
@@ -96,12 +93,10 @@ export default define({
     },
   },
   panelList: {
-    get: (host, lastValue) => lastValue || [],
-    set: (host, value) => value,
+    value: (host, v) => v || [],
   },
   configList: {
-    get: (host, lastValue) => lastValue || [],
-    set: (host, value) => value,
+    value: (host, v) => v || [],
   },
   render: (host) => {
     const { code, language, showCode, configList, panelList, panel } = host;

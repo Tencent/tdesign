@@ -3,7 +3,7 @@ import style from './style.less?inline';
 
 export default define({
   tag: 'td-portal',
-  visible: false,
+  visible: { value: false, reflect: true },
   portalStyle: '',
   render: (host) => {
     return html`

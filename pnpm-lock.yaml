@@ -86,8 +86,8 @@ importers:
         specifier: ^2.11.5
         version: 2.11.8
       hybrids:
-        specifier: 8.2.2
-        version: 8.2.2
+        specifier: ^9.0.0
+        version: 9.1.22
       nprogress:
         specifier: ^0.2.0
         version: 0.2.0
@@ -4464,6 +4464,11 @@ packages:
 
   hybrids@8.2.2:
     resolution: {integrity: sha512-xCangE3oItxeWMNKHLa0yn0MHi0MHBtGLIz0Ty7PwdcBBN2sQ0mrBvVSf4lLMyBFNO7x47/2lO13FSJB/SkPyw==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+
+  hybrids@9.1.22:
+    resolution: {integrity: sha512-SsUk8GyP4g1zdSa+Da1tT+PCv1m/4yNPCjKzHOawEjJIl/Dyoyid5t6rtLX09ma+PANQ/FWyXzlhZJlLaeLpeg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -12866,6 +12871,8 @@ snapshots:
   husky@8.0.3: {}
 
   hybrids@8.2.2: {}
+
+  hybrids@9.1.22: {}
 
   iconv-lite@0.4.24:
     dependencies:

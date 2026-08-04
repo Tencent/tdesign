@@ -38,8 +38,7 @@ export default define({
   platform: 'web',
   displayQrCode: '',
   patchDom: {
-    get: (_host, lastValue) => lastValue || false,
-    set: (_host, value) => value,
+    value: (_host, v) => v || false,
     connect: patchShadowDomIntoDom,
   },
   render: (host) => {

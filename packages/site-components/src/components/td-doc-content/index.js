@@ -47,8 +47,7 @@ export default define({
   pageStatus: 'show',
   mobileBodyStyle,
   fixedAnchor: {
-    get: (_host, lastValue) => lastValue || undefined,
-    set: (_host, value) => value,
+    value: (_host, v) => v || undefined,
     connect: () => {
       let demoLoadObserver;
 
