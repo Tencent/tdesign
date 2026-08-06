@@ -16,10 +16,8 @@ export default define({
   mode: 'auto', // auto open
   currentLangIndex: 0,
   languages: undefined, // multiple languages display
-  currentRenderCode: '',
   theme: {
-    get: (host, lastValue) => lastValue || localStorage.getItem('--tdesign-theme') || 'light',
-    set: (host, value) => value,
+    value: (host, v) => v || localStorage.getItem('--tdesign-theme') || 'light',
     connect(host, key, invalidate) {
       function themeChange() {
         const theme = localStorage.getItem('--tdesign-theme');
@@ -33,8 +31,7 @@ export default define({
     },
   },
   activeStyleMap: {
-    get: (_host, lastValue) => lastValue || undefined,
-    set: (_host, value) => value,
+    value: (_host, v) => v || undefined,
     connect: (host, key) => {
       function handleResize() {
         if (!host.shadowRoot) {
@@ -79,7 +76,6 @@ export default define({
     const currentLang = languageArr[currentLangIndex] || '';
     const currentCode = host.dataset?.[currentLang] || host.dataset?.[currentLang.toLocaleLowerCase()] || code;
     const highlightCode = Prism.highlight(currentCode, Prism.languages[language], language);
-    host.currentRenderCode = currentCode;
     const activeStyle = activeStyleMap && languageArr.length ? activeStyleMap[languageArr[currentLangIndex]] : {};
     const showCodeStyle = {
       transitionDuration: '.2s',
