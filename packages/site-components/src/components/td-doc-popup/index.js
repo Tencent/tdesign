@@ -29,12 +29,10 @@ export default define({
   placement: 'bottom-end',
   triggerType: 'hover',
   equalWidth: {
-    get: (_host, lastValue) => parseBoolean(lastValue, false),
-    set: (_host, value) => parseBoolean(value, false),
+    value: (_host, v) => parseBoolean(v, false),
   },
   visible: {
-    get: (host, lastValue) => lastValue || false,
-    set: (host, value) => value,
+    value: (host, v) => v || false,
     connect: (host) => {
       const { reference, placement } = host;
       let resizeObserver;

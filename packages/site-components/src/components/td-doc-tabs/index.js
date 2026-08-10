@@ -34,22 +34,19 @@ export default define({
   autoScroll: true,
   // 记录每个 tab 的滚动距离
   tabScrollMap: {
-    get: (host, lastValue) => {
+    value: (host, v) => {
       const tabMap = {};
       host.tabs.forEach(({ tab }) => {
         tabMap[tab] = 0;
       });
-      return lastValue || tabMap;
+      return v || tabMap;
     },
-    set: (_host, value) => value,
   },
   tabs: {
-    get: (_host, lastValue) => lastValue || defaultTabs,
-    set: (_host, value) => value,
+    value: (_host, v) => v || defaultTabs,
   },
   blockStyleMap: {
-    get: (_host, lastValue) => lastValue || undefined,
-    set: (_host, value) => value,
+    value: (_host, v) => v || undefined,
     connect: (host, key) => {
       function handleResize() {
         if (!host.shadowRoot) {
