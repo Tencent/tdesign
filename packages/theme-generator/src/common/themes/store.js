@@ -29,7 +29,8 @@ export const themeStore = Vue.observable({
   },
   updateBrandColor(color) {
     this.brandColor = color;
-    document.documentElement.style.setProperty('--brand-main', color);
+    // Site components consume this alias, so keep it linked to the mode-aware brand token.
+    document.documentElement.style.setProperty('--brand-main', 'var(--td-brand-color)');
   },
   incrementRefreshId() {
     this.refreshId++;
