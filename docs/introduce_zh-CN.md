@@ -14,7 +14,7 @@ TDesign 具有统一的 [价值观](https://tdesign.tencent.com/design/values)�
 
 为了应对这一情况，腾讯内部建立了 [开源协同委员会](https://m.thepaper.cn/yidian_promDetail.jsp?contid=4653692&from=yidian)，参考开源社区的组织方式，将同类项目的不同技术团队聚合在一起，开源共建。TDesign 在这样的背景下应运而生，在腾讯内部以开源协同的方式，共建一个完善、易用的设计体系和组件库产品。
 
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-oteam.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
+<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/images/introduce-oteam.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
 ## TDesign 的发展
 
@@ -54,7 +54,7 @@ TDesign 官方提供了多种业界主流的开发技术栈支持。目前，TDe
 
 除了常规设计资源，TDesign 还提供了辅助设计工具如 [Sketch 设计插件](https://tdesign.tencent.com/source)，也支持在 [即时设计、Pixso、墨刀 ](https://tdesign.tencent.com/source)等市面常用设计工具中使用 TDesign 设计物料。
 
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-resources.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
+<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/images/introduce-resources.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
 ### 一致
 
@@ -62,13 +62,13 @@ TDesign 将腾讯内部多年设计经验提炼总结为专业的设计指南，
 
 基于 TDesign 的设计体系规范，TDesign 同时上线了组件库的桌面端和移动端，提供了多个技术栈实现版本。通过一系列协作流程和辅助工具，保证各技术栈 [组件 API](https://tdesign.tencent.com/apis) 和实现产物一致。借助这些能力，使得项目即便使用了多种不同的技术架构或技术栈，开发者也可通过 TDesign 通用设计组件库进行开发，显著降低学习成本，在构建统一/多端覆盖/跨技术栈的前端应用时更具优势。
 
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-components.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
+<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/images/introduce-components.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
 ### 易用
 
 TDesign 设计体系在形成过程中，提炼了不同业务、场景的设计经验，提供了通用的 [设计指南](https://tdesign.tencent.com/design/offices) 以降低使用门槛。对于不同企业产品的品牌定制需求，TDesign 支持使用者对设计风格进行扩展，目前已经将设计样式梳理归纳为 [Design Token](https://tdesign.tencent.com/design/color#header-21)，形成一套企业内部的语义化设计规范，方便后续进行统一的管理和使用扩展。
 
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-easy.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
+<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/images/introduce-easy.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
 在主题配置方面，TDesign 提供了明亮和 [暗色 ](https://tdesign.tencent.com/design/dark)两种模式，支持一键切换，提升用户的使用体验。后续，TDesign 还会推出针对于不同垂直领域的行业组件，覆盖更多的业务范围。产品团队可以借助内置的行业主题，快速配置对应需求，启动业务开发。
 

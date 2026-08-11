@@ -16,7 +16,7 @@ In 2019, Tencent established the [Open Source Collaboration Committee](<(https:/
 
 TDesign is the collaborative outcome of frontend and design under Tencent's open-source collaboration, with the aim to jointly build a comprehensive and versatile design system and component library.
 
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-oteam.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
+<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/images/introduce-oteam.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
 ## Development of TDesign
 
@@ -75,7 +75,7 @@ To improve collaboration efficiency between developers and designers, TDesign pr
 
 In addition to regular design resources, TDesign also provides auxiliary design tools such as [Sketch plugins](https://tdesign.tencent.com/source) and supports the use of TDesign design materials in other design tools like [即时设计、Pixso、墨刀 ](https://tdesign.tencent.com/source).
 
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-resources.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
+<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/images/introduce-resources.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
 ### Consistency
 
@@ -83,13 +83,13 @@ TDesign distills Tencent's years of design experience into professional design g
 
 Based on TDesign's design system standards, TDesign has launched both desktop and mobile versions of the component library, offering multiple tech stack implementations. A series of collaborative workflows and auxiliary tools ensure consistency among the [component APIs](https://tdesign.tencent.com/apis) and implementation outcomes of components across various tech stacks. With these capabilities, even if a project uses different technology architectures or tech stacks, developers can leverage TDesign's universal design component library for development, significantly reduce learning costs, and gain a competitive edge when building unified, cross-platform, and cross-tech stack applications.
 
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-components.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
+<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/images/introduce-components.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
 ### Usability
 
 TDesign has distilled design experiences from various businesses and scenarios during the formation of the TDesign design system, providing universal [design guidelines](https://tdesign.tencent.com/design/offices) to lower the barriers to entry. For the brand customization needs of different enterprise products, TDesign allows users to extend design styles. Currently, design styles have been organized and summarized as [Design Tokens](https://tdesign.tencent.com/design/color#header-21), forming a set of semantically-based design standards within the enterprise, facilitating unified management and upcoming expansion.
 
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-easy.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
+<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/images/introduce-easy.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
 In terms of component theme configuration, TDesign offers bright mode and [dark mode](https://tdesign.tencent.com/design/dark), supporting one-click switching to enhance the user experience. In the future, TDesign will also introduce industry-specific components for various vertical domains, covering a broader range of business areas. Product teams can configure corresponding requirements and start business development using the built-in industry themes.
 
