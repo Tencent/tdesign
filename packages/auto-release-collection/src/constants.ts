@@ -39,7 +39,7 @@ export const submodules = {
     repo: 'Tencent/tdesign-flutter',
   },
   '@tdesign/uniapp': {
-    title: '## UniApp for Mobile 发布',
+    title: '## Uniapp for Mobile 发布',
     changelogUrl:
       'https://raw.githubusercontent.com/Tencent/tdesign-miniprogram/refs/heads/main/packages/tdesign-uniapp/CHANGELOG.md',
     tagPrefix: '@tdesign/uniapp@',
@@ -77,14 +77,14 @@ export const submodules = {
     repo: 'Tencent/tdesign-vue-next',
   },
   '@tdesign-react/chat': {
-    title: '## React for AI Chat 发布',
+    title: '## Uniappfor AI Chat 发布',
     changelogUrl:
       'https://raw.githubusercontent.com/Tencent/tdesign-react/refs/heads/main/packages/tdesign-react-aigc/CHANGELOG.md',
     tagPrefix: '@tdesign-react/chat@',
     repo: 'Tencent/tdesign-react',
   },
   '@tdesign/uniapp-chat': {
-    title: '## UniApp for AI Chat 发布',
+    title: '## Uniapp for AI Chat 发布',
     changelogUrl:
       'https://raw.githubusercontent.com/Tencent/tdesign-miniprogram/refs/heads/main/packages/tdesign-uniapp-chat/CHANGELOG.md',
     tagPrefix: '@tdesign/uniapp-chat@',

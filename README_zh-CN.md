@@ -31,7 +31,7 @@ TDesign 是一个 `multi-repo`， TDesign 有如下代码仓库：
 | [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | TDesign Vue3.x 移动端组件库 | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-mobile-vue/latest&color=blue)](https://npmjs.com/package/tdesign-mobile-vue)           |
 | [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | TDesign React 移动端组件库  | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=version&url=https://registry.npmjs.org/tdesign-mobile-react/latest&color=orange)](https://npmjs.com/package/tdesign-mobile-react) |
 | [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | TDesign Flutter 组件库      | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=latest.version&url=https://pub.dev/api/packages/tdesign_flutter&color=orange)](https://pub.dev/packages/tdesign_flutter)          |
-| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | TDesign UniApp 组件库       | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=version&url=https://registry.npmjs.org/@tdesign/uniapp/latest&color=orange)](https://npmjs.com/package/@tdesign/uniapp)           |
+| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | TDesign Uniapp 组件库       | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=version&url=https://registry.npmjs.org/@tdesign/uniapp/latest&color=orange)](https://npmjs.com/package/@tdesign/uniapp)           |
 
 ### 基础通用仓库
 
@@ -67,7 +67,7 @@ TDesign 在创建之初就秉承开源协作的原则，包括源代码在内的
 
 很多同学从个人项目中试用组件库开始，到提交第一个 `Bug Issue`，再到提交第一个 `Feature MR`，最后逐步参与到 `Code Review` 和方案制定工作中，成为核心贡献者。在过去的一年中，TDesign 关闭了 1k+ `Issue`，进行了 5k+ 次 `CR`，保持 [每周迭代](https://tdesign.tencent.com/vue/components/changelog) 发布新版本。
 
-组件库目前支持[多个端和主流技术栈](#仓库)，桌面端 Vue2、Vue3、React 和移动端 Vue3、微信小程序均已发布 1.x 版本，移动端 React、Flutter 和 UniApp 已发布 `Alpha` 内测版本。
+组件库目前支持[多个端和主流技术栈](#仓库)，桌面端 Vue2、Vue3、React 和移动端 Vue3、微信小程序均已发布 1.x 版本，移动端 React、Flutter 和 Uniapp 已发布 `Alpha` 内测版本。
 
 ## 为什么开源
 

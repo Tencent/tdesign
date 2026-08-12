@@ -24,7 +24,7 @@ TDesign was founded with the principles of open-source collaboration from the be
 
 Many participants started by trying out the component library in their personal projects, advancing to submit their first Issue, then their first Feature MR, and gradually becoming involved in Code Review and solution-formulating tasks, eventually turning into core contributors. In the past year, TDesign has closed 1k+ issues and conducted 5k+ Code Reviews to maintained a [weekly iterative release](<(https://tdesign.tencent.com/vue/components/changelog)>) of new versions.
 
-TDesign currently supports [multiple platforms and mainstream front-end UI framework](#Repositories). Desktop versions for Vue2, Vue3, and React, as well as mobile versions for Vue3 and WeChat Mini Programs, have all released their 1.x versions. Mobile versions for React, Flutter, and UniApp have released Alpha test versions.
+TDesign currently supports [multiple platforms and mainstream front-end UI framework](#Repositories). Desktop versions for Vue2, Vue3, and React, as well as mobile versions for Vue3 and WeChat Mini Programs, have all released their 1.x versions. Mobile versions for React, Flutter, and Uniapp have released Alpha test versions.
 
 ## Repositories
 

@@ -26,8 +26,8 @@ export const CUSTOM_OPTIONS_ID = `${CUSTOM_THEME_ID}-options`;
 export const CUSTOM_TOKEN_ID = `${CUSTOM_THEME_ID}-tokens`;
 
 export const isMiniProgram = (device) => device === 'mini-program';
-export const isUniApp = (device) => device === 'uni-app';
-export const isMobile = (device) => device === 'mobile' || isMiniProgram(device) || isUniApp(device);
+export const isUniapp = (device) => device === 'uni-app';
+export const isMobile = (device) => device === 'mobile' || isMiniProgram(device) || isUniapp(device);
 
 export function normalizeDevice(device) {
   return isMobile(device) ? 'mobile' : 'web';
@@ -99,7 +99,7 @@ export function exportCustomStyleSheet(device) {
   const { rootContent: extraCssString, restContent: extraRestCssString } = parseRootCss(extraStyleSheet?.textContent);
 
   let finalCssString;
-  if (isUniApp(device)) {
+  if (isUniapp(device)) {
     finalCssString = `
       @media (prefers-color-scheme: light) {
         /* #ifdef H5 */
