@@ -1,5 +1,5 @@
 import { getThemeMode, parseRootCss, setUpModeObserver } from '../utils';
-import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile, isUniApp } from './core';
+import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile, isUniapp } from './core';
 
 /* ----- 同步亮暗模式 -----  */
 function handleMobileModeChange(iframe, mode) {
@@ -85,8 +85,8 @@ function watchThemeModeChange(iframe) {
 
   const device = iframe.getAttribute('device');
   const handleModeChange = (mode) => {
-    if (isMiniProgram(device) || isUniApp(device)) {
-      handleMiniProgramModeChange(iframe, mode, isUniApp(device));
+    if (isMiniProgram(device) || isUniapp(device)) {
+      handleMiniProgramModeChange(iframe, mode, isUniapp(device));
     } else {
       handleMobileModeChange(iframe, mode);
     }
@@ -113,8 +113,8 @@ function watchThemeTokenChange(iframe) {
 
   const device = iframe.getAttribute('device');
   const handleTokenChange = (styleElement) => {
-    if (isMiniProgram(device) || isUniApp(device)) {
-      handleMiniProgramTokenChange(iframe, styleElement, isUniApp(device));
+    if (isMiniProgram(device) || isUniapp(device)) {
+      handleMiniProgramTokenChange(iframe, styleElement, isUniapp(device));
     } else {
       handleMobileTokenChange(iframe, styleElement);
     }
