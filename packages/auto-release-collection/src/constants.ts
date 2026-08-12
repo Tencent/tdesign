@@ -84,7 +84,7 @@ export const submodules = {
     repo: 'Tencent/tdesign-react',
   },
   '@tdesign/uniapp-chat': {
-    title: '## UniApp for AI Chat 发布',
+    title: '## Uniapp for AI Chat 发布',
     changelogUrl:
       'https://raw.githubusercontent.com/Tencent/tdesign-miniprogram/refs/heads/main/packages/tdesign-uniapp-chat/CHANGELOG.md',
     tagPrefix: '@tdesign/uniapp-chat@',
