@@ -56,7 +56,7 @@ importers:
         version: 34.0.0(stylelint@15.11.0(typescript@4.9.5))
       stylelint-config-standard-less:
         specifier: ^2.0.0
-        version: 2.0.0(postcss@8.5.25)(stylelint@15.11.0(typescript@4.9.5))
+        version: 2.0.0(postcss@8.5.26)(stylelint@15.11.0(typescript@4.9.5))
 
   packages/auto-release-collection:
     dependencies:
@@ -205,8 +205,8 @@ importers:
         specifier: ^1.29.0
         version: 1.29.0
       tdesign-icons-view:
-        specifier: ^0.5.9
-        version: 0.5.9(typescript@4.9.5)
+        specifier: ^0.5.10
+        version: 0.5.10(typescript@4.9.5)
       tdesign-icons-vue:
         specifier: ^0.4.1
         version: 0.4.1(vue@2.7.14)
@@ -1595,8 +1595,8 @@ packages:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
     engines: {node: '>=10.13.0'}
 
-  '@tsconfig/node10@1.0.12':
-    resolution: {integrity: sha512-UCYBaeFvM11aU2y3YPZ//O5Rhj+xKyzy7mvcIoAjASbigy8mHMryP5cK7dgjlz2hWxh1g5pLw084E0a/wlUSFQ==}
+  '@tsconfig/node10@1.0.13':
+    resolution: {integrity: sha512-gcLdvR9HO1ZJBypsOGqaP6TFEzb6vIta0KSTLt9NAQ6pXQO3cRgSVyCN6pzYqI9DlJgY71XKO0dpDhCf08b3pg==}
 
   '@tsconfig/node12@1.0.11':
     resolution: {integrity: sha512-cqefuRsh12pWyGsIoBKJA9luFu3mRxCA+ORZvA4ktLSzIuCUtWVxGIuXigEwO5/ywWFMZ2QEGKWvkZG1zDMTag==}
@@ -3268,8 +3268,8 @@ packages:
   dayjs@1.11.10:
     resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==}
 
-  dayjs@1.11.21:
-    resolution: {integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==}
+  dayjs@1.11.23:
+    resolution: {integrity: sha512-QDTCU0M0MxR3hQfnlDJfwekQiaanm1ubOD231u73WBckQ/fsamwRLiE2GBz6D3a/xF1NgfiDLJjXBa1hYOYTtQ==}
 
   de-indent@1.0.2:
     resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
@@ -5558,8 +5558,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nanoid@3.3.17:
-    resolution: {integrity: sha512-xQLf0A3HOMlgHq0n247/LRuAOYmB7dXJ/DvAxGvsSBij45XtBSmQycu+F8ODbHwns/XyFZagyL1+J0Offw1E0g==}
+  nanoid@3.3.18:
+    resolution: {integrity: sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -6206,8 +6206,8 @@ packages:
     resolution: {integrity: sha512-56rxCq7G/XfB4EkXq9Egn5GCqugWvDFjafDOThIdMBsI15iqPqR5r15TfSr1YPYeEI19YeaXMCbY6u88Y76GLQ==}
     engines: {node: ^10 || ^12 || >=14}
 
-  postcss@8.5.25:
-    resolution: {integrity: sha512-DTPx3RWSSnWyzLxQnlH0rJP+EW5ekl16ZU4/psbIhA0e53kJfdgaN5vKM+xP7yJtXVu+nfdVFmlgFDEKAe4Pyw==}
+  postcss@8.5.26:
+    resolution: {integrity: sha512-u82N74LFzG8ca+dD8puPnplTXoGH4fTPpVGuIbt36G3qvNlkvfD0lEAZSxaly3KX8TS/L1A1gsCEmvKmBcVbkQ==}
     engines: {node: ^10 || ^12 || >=14}
 
   postcss@8.5.3:
@@ -7076,11 +7076,11 @@ packages:
   tdesign-icons-svg@0.0.1:
     resolution: {integrity: sha512-4l05CgPXwI33Y6hU8ytKYIIXVznR22x6blhhtB6MntSHj2xrA+Unx4U/qy+Do/lCMtYao9q1wVkaZvxNjuX7jw==}
 
-  tdesign-icons-view@0.5.9:
-    resolution: {integrity: sha512-tzSaN/S3HfAhNVtjiN3Ygon7LF6BZGVFb0H8eY7J1yHBbQA4+xjPVwpx3HeH/LzBVw8/3VeyEjnaMCnIZvr9jw==}
+  tdesign-icons-view@0.5.10:
+    resolution: {integrity: sha512-9CODyNIl75xMbGeMK37m8rxwnhJC0vFgzwpkfT2AFAJUagC08iBXGwlx7bPnUYUAhGoWLO3BUBu1Qd8Y8ShW9Q==}
 
-  tdesign-icons-vue-next@0.4.8:
-    resolution: {integrity: sha512-JLinPtu6Zq/HfUpsTKRnmwOrkBXZhDhwWbFXbA5mRJtiW/hbLq1DKI9bwW8EtNCcXh4BPzPg3TpzVeGTM5tqQw==}
+  tdesign-icons-vue-next@0.4.10:
+    resolution: {integrity: sha512-TOmy4cP5tXiLk5/rC6ZheRw+qeokqTytl4HLE+7qZYc185kPq659ATyn9a1i+c5ZSU3eHPY79kIaJUEOl7OoyQ==}
     peerDependencies:
       vue: ^3.0.0
 
@@ -9402,7 +9402,7 @@ snapshots:
 
   '@trysound/sax@0.2.0': {}
 
-  '@tsconfig/node10@1.0.12':
+  '@tsconfig/node10@1.0.13':
     optional: true
 
   '@tsconfig/node12@1.0.11':
@@ -10041,7 +10041,7 @@ snapshots:
       '@vue/shared': 3.5.41
       estree-walker: 2.0.2
       magic-string: 0.30.21
-      postcss: 8.5.25
+      postcss: 8.5.26
       source-map-js: 1.2.1
 
   '@vue/compiler-ssr@3.5.41':
@@ -11445,7 +11445,7 @@ snapshots:
 
   dayjs@1.11.10: {}
 
-  dayjs@1.11.21: {}
+  dayjs@1.11.23: {}
 
   de-indent@1.0.2: {}
 
@@ -14214,7 +14214,7 @@ snapshots:
 
   nanoid@3.3.11: {}
 
-  nanoid@3.3.17: {}
+  nanoid@3.3.18: {}
 
   nanoid@3.3.7: {}
 
@@ -14655,9 +14655,9 @@ snapshots:
     dependencies:
       postcss: 8.4.47
 
-  postcss-less@6.0.0(postcss@8.5.25):
+  postcss-less@6.0.0(postcss@8.5.26):
     dependencies:
-      postcss: 8.5.25
+      postcss: 8.5.26
 
   postcss-loader@6.2.1(postcss@8.4.47)(webpack@5.94.0):
     dependencies:
@@ -14824,9 +14824,9 @@ snapshots:
       picocolors: 1.1.0
       source-map-js: 1.2.1
 
-  postcss@8.5.25:
+  postcss@8.5.26:
     dependencies:
-      nanoid: 3.3.17
+      nanoid: 3.3.18
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
@@ -15687,35 +15687,35 @@ snapshots:
       postcss: 8.4.47
       postcss-selector-parser: 6.1.2
 
-  stylelint-config-recommended-less@2.0.0(postcss@8.5.25)(stylelint@15.11.0(typescript@4.9.5)):
+  stylelint-config-recommended-less@2.0.0(postcss@8.5.26)(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
-      postcss-less: 6.0.0(postcss@8.5.25)
+      postcss-less: 6.0.0(postcss@8.5.26)
       stylelint: 15.11.0(typescript@4.9.5)
       stylelint-config-recommended: 13.0.0(stylelint@15.11.0(typescript@4.9.5))
-      stylelint-less: 2.0.0(postcss@8.5.25)(stylelint@15.11.0(typescript@4.9.5))
+      stylelint-less: 2.0.0(postcss@8.5.26)(stylelint@15.11.0(typescript@4.9.5))
     optionalDependencies:
-      postcss: 8.5.25
+      postcss: 8.5.26
 
   stylelint-config-recommended@13.0.0(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
       stylelint: 15.11.0(typescript@4.9.5)
 
-  stylelint-config-standard-less@2.0.0(postcss@8.5.25)(stylelint@15.11.0(typescript@4.9.5)):
+  stylelint-config-standard-less@2.0.0(postcss@8.5.26)(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
       stylelint: 15.11.0(typescript@4.9.5)
-      stylelint-config-recommended-less: 2.0.0(postcss@8.5.25)(stylelint@15.11.0(typescript@4.9.5))
+      stylelint-config-recommended-less: 2.0.0(postcss@8.5.26)(stylelint@15.11.0(typescript@4.9.5))
       stylelint-config-standard: 34.0.0(stylelint@15.11.0(typescript@4.9.5))
     optionalDependencies:
-      postcss: 8.5.25
+      postcss: 8.5.26
 
   stylelint-config-standard@34.0.0(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
       stylelint: 15.11.0(typescript@4.9.5)
       stylelint-config-recommended: 13.0.0(stylelint@15.11.0(typescript@4.9.5))
 
-  stylelint-less@2.0.0(postcss@8.5.25)(stylelint@15.11.0(typescript@4.9.5)):
+  stylelint-less@2.0.0(postcss@8.5.26)(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
-      postcss: 8.5.25
+      postcss: 8.5.26
       postcss-resolve-nested-selector: 0.1.6
       postcss-value-parser: 4.2.0
       stylelint: 15.11.0(typescript@4.9.5)
@@ -15838,17 +15838,17 @@ snapshots:
 
   tdesign-icons-svg@0.0.1: {}
 
-  tdesign-icons-view@0.5.9(typescript@4.9.5):
+  tdesign-icons-view@0.5.10(typescript@4.9.5):
     dependencies:
       '@popperjs/core': 2.11.8
       lodash: 4.18.1
-      tdesign-icons-vue-next: 0.4.8(vue@3.5.41(typescript@4.9.5))
+      tdesign-icons-vue-next: 0.4.10(vue@3.5.41(typescript@4.9.5))
       tdesign-vue-next: 1.17.7(vue@3.5.41(typescript@4.9.5))
       vue: 3.5.41(typescript@4.9.5)
     transitivePeerDependencies:
       - typescript
 
-  tdesign-icons-vue-next@0.4.8(vue@3.5.41(typescript@4.9.5)):
+  tdesign-icons-vue-next@0.4.10(vue@3.5.41(typescript@4.9.5)):
     dependencies:
       '@babel/runtime': 7.29.7
       vue: 3.5.41(typescript@4.9.5)
@@ -15885,11 +15885,11 @@ snapshots:
       '@types/sortablejs': 1.15.9
       '@types/tinycolor2': 1.4.6
       '@types/validator': 13.15.10
-      dayjs: 1.11.21
+      dayjs: 1.11.23
       lodash-es: 4.18.1
       mitt: 3.0.1
       sortablejs: 1.15.7
-      tdesign-icons-vue-next: 0.4.8(vue@3.5.41(typescript@4.9.5))
+      tdesign-icons-vue-next: 0.4.10(vue@3.5.41(typescript@4.9.5))
       tinycolor2: 1.6.0
       validator: 13.15.35
       vue: 3.5.41(typescript@4.9.5)
@@ -16067,7 +16067,7 @@ snapshots:
   ts-node@10.9.2(@types/node@22.9.0)(typescript@4.9.5):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.12
+      '@tsconfig/node10': 1.0.13
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
