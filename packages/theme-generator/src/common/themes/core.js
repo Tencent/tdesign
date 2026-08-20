@@ -251,6 +251,90 @@ export function clearLocalTheme() {
   localStorage.removeItem(CUSTOM_TOKEN_ID);
 }
 
+/**
+ * Parse uploaded theme.css and split it into light / dark / extra stylesheets.
+ *
+ * Expected input format (web):
+ *   :root, :root[theme-mode="light"] { ...light tokens... }
+ *   :root.dark, :root[theme-mode="dark"] { ...dark tokens... }
+ *   :root { ...extra tokens... }
+ *   ...other rules...
+ *
+ * @param {string} cssText - raw CSS text from the uploaded file
+ * @returns {{ light: string, dark: string, extra: string, rest: string }}
+ */
+export function parseUploadedThemeCss(cssText) {
+  if (!cssText) return { light: '', dark: '', extra: '', rest: '' };
+
+  // Regex to capture a full CSS rule block: selector { content }
+  const blockReg = /([^{}]+)\{([^{}]*)\}/g;
+
+  let light = '';
+  let dark = '';
+  let extra = '';
+  let rest = cssText;
+
+  let match;
+  while ((match = blockReg.exec(cssText)) !== null) {
+    const selector = match[1].trim();
+    const content = match[2].trim();
+    const fullBlock = match[0];
+
+    const isLightRoot =
+      /^:root(\s*,\s*:root\[theme-mode=["']light["']\])?$/.test(selector) ||
+      /^:root\[theme-mode=["']light["']\](\s*,\s*:root)?$/.test(selector);
+
+    const isDarkRoot = /(:root\.dark|:root\[theme-mode=["']dark["']\])/.test(selector);
+
+    const isExtraRoot = selector === ':root';
+
+    if (isDarkRoot) {
+      dark += content + '\n';
+      rest = rest.replace(fullBlock, '');
+    } else if (isLightRoot) {
+      light += content + '\n';
+      rest = rest.replace(fullBlock, '');
+    } else if (isExtraRoot) {
+      extra += content + '\n';
+      rest = rest.replace(fullBlock, '');
+    }
+  }
+
+  return {
+    light: light.trim(),
+    dark: dark.trim(),
+    extra: extra.trim(),
+    rest: rest.trim(),
+  };
+}
+
+/**
+ * Import a user-uploaded theme.css, split it into the three stylesheets
+ * (custom-theme / custom-theme-dark / custom-theme-extra) and apply them.
+ *
+ * @param {string} cssText - raw CSS text from the uploaded file
+ */
+export function importCustomThemeCSS(cssText) {
+  const { light, dark, extra, rest } = parseUploadedThemeCss(cssText);
+
+  const styleSheet = appendStyleSheet(CUSTOM_THEME_ID);
+  const darkStyleSheet = appendStyleSheet(CUSTOM_DARK_ID);
+  const extraStyleSheet = appendStyleSheet(CUSTOM_EXTRA_ID);
+
+  if (light) {
+    // Wrap back into :root block so the existing token-update logic still works
+    styleSheet.textContent = `:root, :root[theme-mode="light"] {\n${light}\n}`;
+  }
+  if (dark) {
+    darkStyleSheet.textContent = `:root.dark, :root[theme-mode="dark"] {\n${dark}\n}`;
+  }
+  // extra + any remaining rules go into the extra stylesheet
+  const extraContent = [extra ? `:root {\n${extra}\n}` : '', rest].filter(Boolean).join('\n');
+  if (extraContent) {
+    extraStyleSheet.textContent = extraContent;
+  }
+}
+
 export function convertFromHex(color, format) {
   return `(${Color.colorTransform(color, 'hex', format).join(',')})`;
 }
