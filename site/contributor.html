@@ -70,18 +70,20 @@
       fetch(CONTRIBUTORS_API)
         .then((res) => res.json())
         .then((data) => {
-          const seen = new Set();
-          const userList = [];
+          const users = new Map();
 
-          function addUsers(users) {
-            if (!Array.isArray(users)) return;
-            users.forEach((name) => {
+          function addUsers(names) {
+            if (!Array.isArray(names)) return;
+            names.forEach((name) => {
               const trimmed = String(name).trim();
               if (!trimmed) return;
               const key = trimmed.toLowerCase();
-              if (seen.has(key)) return;
-              seen.add(key);
-              userList.push(trimmed);
+              const existing = users.get(key);
+              if (existing) {
+                existing.count += 1;
+                return;
+              }
+              users.set(key, { name: trimmed, count: 1 });
             });
           }
 
@@ -94,12 +96,19 @@
 
             addUsers(value.contributors);
             addUsers(value.pmcs);
-            Object.values(value).forEach(collectTaskUsers);
+            Object.entries(value).forEach(([key, child]) => {
+              if (key === 'contributors' || key === 'pmcs' || key === 'design') return;
+              collectTaskUsers(child);
+            });
           }
 
           const design = (data && data.design) || {};
           Object.values(design).forEach(addUsers);
           collectTaskUsers(data);
+
+          const userList = Array.from(users.values())
+            .sort((a, b) => b.count - a.count)
+            .map((item) => item.name);
 
           renderList(userList);
         })
