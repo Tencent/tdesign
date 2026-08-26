@@ -104,7 +104,8 @@ import mastergoIcon from '@/assets/mastergo-logo.svg';
 import ryIcon from '@/assets/ry-logo.svg';
 
 import { webSourceList, mobileSourceList, sourceDownloadUrl, webChartSourceList } from '@/constants';
-import { webDesignContributor, mobileDesignContributor, webChartDesignContributor } from '@/contributor';
+
+const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
 
 export default {
   data() {
@@ -112,9 +113,9 @@ export default {
       webSourceList,
       mobileSourceList,
       webChartSourceList,
-      webDesignContributor,
-      mobileDesignContributor,
-      webChartDesignContributor,
+      webDesignContributor: [],
+      mobileDesignContributor: [],
+      webChartDesignContributor: [],
       iconMap: {
         figma: figmaIcon,
         sketch: sketchIcon,
@@ -181,6 +182,7 @@ export default {
       if (currentTab !== 'icons') this.tab = currentTab;
       else window.open('/icons-en', '_blank');
     };
+    this.fetchDesignContributors();
     fetch(sourceDownloadUrl)
       .then((res) => res.json())
       .then((res) => {
@@ -196,6 +198,31 @@ export default {
   },
 
   methods: {
+    fetchDesignContributors() {
+      fetch(contributorsUrl)
+        .then((res) => res.json())
+        .then((data) => {
+          const design = (data && data.design) || {};
+          const normalize = (list) => {
+            const seen = new Set();
+            const result = [];
+            (list || []).forEach((name) => {
+              const trimmed = String(name).trim();
+              if (!trimmed) return;
+              const key = trimmed.toLowerCase();
+              if (seen.has(key)) return;
+              seen.add(key);
+              result.push(trimmed);
+            });
+            return result;
+          };
+
+          this.webDesignContributor = normalize(design.web);
+          this.mobileDesignContributor = normalize(design.mobile);
+          this.webChartDesignContributor = normalize(design.chart);
+        })
+        .catch((err) => console.error(err));
+    },
     handleSourceClick(item) {
       if (item.status === -1 || !item.actionUrl) return;
 
