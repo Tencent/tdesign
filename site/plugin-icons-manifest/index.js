@@ -1,17 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 
-// tdesign-icons-view 提供独立的 manifest 产物子路径，
-// 可直接导入图标分类清单（filled / outline）。
+// 从 tdesign-icons-view/manifest 子路径导入图标分类清单
 import { manifest } from 'tdesign-icons-view/manifest';
 
 /**
- * vite 插件：site 构建时从 tdesign-icons-view 提取图标清单，
- * 序列化为 icons_manifest.json 输出到构建产物目录。
- *
- * tdesign-icons-view 作为 Web Component 会单独发布 manifest 产物
- * （`tdesign-icons-view/manifest`），构建时直接引入即可，
- * 无需再从打包产物中以正则解析 manifest。
+ * vite 插件：构建结束时将图标分类清单序列化为
+ * icons_manifest.json 写入构建产物目录。
  */
 export default function iconsManifestPlugin() {
   let outDir;
