@@ -7081,8 +7081,8 @@ packages:
     peerDependencies:
       vue: ^3.0.0
 
-  tdesign-icons-vue-next@https://pkg.pr.new/Tencent/tdesign-icons/tdesign-icons-vue-next@a84f4ca:
-    resolution: {tarball: https://pkg.pr.new/Tencent/tdesign-icons/tdesign-icons-vue-next@a84f4ca}
+  tdesign-icons-vue-next@https://pkg.pr.new/Tencent/tdesign-icons/tdesign-icons-vue-next@a9dc835:
+    resolution: {tarball: https://pkg.pr.new/Tencent/tdesign-icons/tdesign-icons-vue-next@a9dc835}
     version: 0.4.11
     peerDependencies:
       vue: ^3.0.0
@@ -8830,7 +8830,7 @@ snapshots:
     dependencies:
       conventional-changelog-angular: 1.6.6
       conventional-commits-parser: 3.2.4
-      lodash: 4.17.21
+      lodash: 4.18.1
 
   '@commitlint/read@8.3.6':
     dependencies:
@@ -11139,7 +11139,7 @@ snapshots:
     dependencies:
       JSONStream: 1.3.5
       is-text-path: 1.0.1
-      lodash: 4.17.21
+      lodash: 4.18.1
       meow: 8.1.2
       split2: 3.2.2
       through2: 4.0.2
@@ -12539,7 +12539,7 @@ snapshots:
   git-raw-commits@2.0.11:
     dependencies:
       dargs: 7.0.0
-      lodash: 4.17.21
+      lodash: 4.18.1
       meow: 8.1.2
       split2: 3.2.2
       through2: 4.0.2
@@ -12779,7 +12779,7 @@ snapshots:
     dependencies:
       '@types/html-minifier-terser': 6.1.0
       html-minifier-terser: 6.1.0
-      lodash: 4.17.21
+      lodash: 4.18.1
       pretty-error: 4.0.0
       tapable: 2.2.1
     optionalDependencies:
@@ -12949,7 +12949,7 @@ snapshots:
       cli-width: 3.0.0
       external-editor: 3.1.0
       figures: 3.2.0
-      lodash: 4.17.21
+      lodash: 4.18.1
       mute-stream: 0.0.8
       ora: 5.4.1
       run-async: 2.4.1
@@ -15840,7 +15840,7 @@ snapshots:
     dependencies:
       '@popperjs/core': 2.11.8
       lodash: 4.18.1
-      tdesign-icons-vue-next: https://pkg.pr.new/Tencent/tdesign-icons/tdesign-icons-vue-next@a84f4ca(vue@3.5.42(typescript@4.9.5))
+      tdesign-icons-vue-next: https://pkg.pr.new/Tencent/tdesign-icons/tdesign-icons-vue-next@a9dc835(vue@3.5.42(typescript@4.9.5))
       tdesign-vue-next: 1.17.7(vue@3.5.42(typescript@4.9.5))
       vue: 3.5.42(typescript@4.9.5)
     transitivePeerDependencies:
@@ -15851,7 +15851,7 @@ snapshots:
       '@babel/runtime': 7.29.7
       vue: 3.5.42(typescript@4.9.5)
 
-  tdesign-icons-vue-next@https://pkg.pr.new/Tencent/tdesign-icons/tdesign-icons-vue-next@a84f4ca(vue@3.5.42(typescript@4.9.5)):
+  tdesign-icons-vue-next@https://pkg.pr.new/Tencent/tdesign-icons/tdesign-icons-vue-next@a9dc835(vue@3.5.42(typescript@4.9.5)):
     dependencies:
       '@babel/runtime': 7.29.7
       vue: 3.5.42(typescript@4.9.5)
