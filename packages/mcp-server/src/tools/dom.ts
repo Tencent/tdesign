@@ -48,9 +48,10 @@ async function loadCompDom(names: string[], framework: Framework) {
   const { exist, nonExist } = await checkCompsExistence(names, framework);
   const existResults: Record<string, any> = {};
 
+  const domUrl = addTdPrefix(getDomPrefix(framework));
+
   for (const name of Object.keys(exist)) {
     const parentComponent = exist[name];
-    const domUrl = addTdPrefix(getDomPrefix(framework));
     const domFileUrl = `${domUrl}/${parentComponent}.html`;
 
     const domContent = await loadFileContent(domFileUrl);
