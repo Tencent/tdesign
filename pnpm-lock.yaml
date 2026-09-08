@@ -205,8 +205,8 @@ importers:
         specifier: ^1.29.0
         version: 1.29.0
       tdesign-icons-view:
-        specifier: https://pkg.pr.new/tdesign-icons-view@307
-        version: https://pkg.pr.new/tdesign-icons-view@307(typescript@4.9.5)
+        specifier: ^0.5.12
+        version: 0.5.12(typescript@4.9.5)
       tdesign-icons-vue:
         specifier: ^0.4.1
         version: 0.4.1(vue@2.7.14)
@@ -7072,18 +7072,11 @@ packages:
   tdesign-icons-svg@0.0.1:
     resolution: {integrity: sha512-4l05CgPXwI33Y6hU8ytKYIIXVznR22x6blhhtB6MntSHj2xrA+Unx4U/qy+Do/lCMtYao9q1wVkaZvxNjuX7jw==}
 
-  tdesign-icons-view@https://pkg.pr.new/tdesign-icons-view@307:
-    resolution: {tarball: https://pkg.pr.new/tdesign-icons-view@307}
-    version: 0.5.11
+  tdesign-icons-view@0.5.12:
+    resolution: {integrity: sha512-Wm51IxHOpkOA87HD1AdoEAiZoES/Oy0gUCz2CJQ3UPQF7XSs2KFqWqnNyrtdXbaxPZoTQjZnt9OaencfBcPiOA==}
 
   tdesign-icons-vue-next@0.4.11:
     resolution: {integrity: sha512-lBkRUy8bdb6lQLFOOkSb1LPdl4CmZRewrc8SOUlmWkDD/DG3BTsSd/ZQ4Z767pPSlypyvxwSwcJgRv6+zjubAQ==}
-    peerDependencies:
-      vue: ^3.0.0
-
-  tdesign-icons-vue-next@https://pkg.pr.new/Tencent/tdesign-icons/tdesign-icons-vue-next@a9dc835:
-    resolution: {tarball: https://pkg.pr.new/Tencent/tdesign-icons/tdesign-icons-vue-next@a9dc835}
-    version: 0.4.11
     peerDependencies:
       vue: ^3.0.0
 
@@ -15836,22 +15829,17 @@ snapshots:
 
   tdesign-icons-svg@0.0.1: {}
 
-  tdesign-icons-view@https://pkg.pr.new/tdesign-icons-view@307(typescript@4.9.5):
+  tdesign-icons-view@0.5.12(typescript@4.9.5):
     dependencies:
       '@popperjs/core': 2.11.8
       lodash: 4.18.1
-      tdesign-icons-vue-next: https://pkg.pr.new/Tencent/tdesign-icons/tdesign-icons-vue-next@a9dc835(vue@3.5.42(typescript@4.9.5))
+      tdesign-icons-vue-next: 0.4.11(vue@3.5.42(typescript@4.9.5))
       tdesign-vue-next: 1.17.7(vue@3.5.42(typescript@4.9.5))
       vue: 3.5.42(typescript@4.9.5)
     transitivePeerDependencies:
       - typescript
 
   tdesign-icons-vue-next@0.4.11(vue@3.5.42(typescript@4.9.5)):
-    dependencies:
-      '@babel/runtime': 7.29.7
-      vue: 3.5.42(typescript@4.9.5)
-
-  tdesign-icons-vue-next@https://pkg.pr.new/Tencent/tdesign-icons/tdesign-icons-vue-next@a9dc835(vue@3.5.42(typescript@4.9.5)):
     dependencies:
       '@babel/runtime': 7.29.7
       vue: 3.5.42(typescript@4.9.5)
