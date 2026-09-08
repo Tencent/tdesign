@@ -20,3 +20,4 @@ packages/mcp-server/docs
 
 ## test
 coverage
+packages/mcp-server/scripts/dom/snapshots/**/__snapshots__
