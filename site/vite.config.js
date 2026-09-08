@@ -1,8 +1,8 @@
 import path from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue2';
-import tdocPlugin from './plugin-tdoc/index.js';
-import iconsManifestPlugin from './plugin-icons-manifest/index.js';
+import tdocPlugin from './plugins/tdoc/index.js';
+import iconsManifestPlugin from './plugins/icons-manifest/index.js';
 
 const publicPathMap = {
   preview: '/',
