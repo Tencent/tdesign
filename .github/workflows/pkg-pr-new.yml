@@ -33,7 +33,7 @@ jobs:
       - run: pnpm --filter '@tdesign/site-components' --filter '@tdesign/theme-generator' run build
       - run: pnpm --filter tdesign-mcp-server run build:mcp
 
-      - run: pnpm dlx pkg-pr-new publish './packages/site-components' './packages/theme-generator' 'packages/mcp-server/server'
+      - run: pnpm dlx pkg-pr-new publish './packages/site-components' './packages/theme-generator' './packages/mcp-server/server'
   
   build-tdesign-vue-site:
     if: github.repository == 'Tencent/tdesign' && github.event_name == 'pull_request'
