@@ -22,7 +22,7 @@ export default function iconsManifestPlugin() {
         const json = `${JSON.stringify(manifest, null, 2)}\n`;
         const dir = path.resolve(outDir);
         fs.mkdirSync(dir, { recursive: true });
-        const target = path.join(dir, 'icons_manifest.json');
+        const target = path.join(dir, 'icons-manifest.json');
         fs.writeFileSync(target, json, 'utf8');
         // eslint-disable-next-line no-console
         console.log(`[plugin-icons-manifest] 已生成 ${target}`);
