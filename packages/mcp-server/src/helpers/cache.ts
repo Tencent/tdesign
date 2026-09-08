@@ -60,11 +60,8 @@ export const loadFileContent = async (path: string) => {
 
     return await fetchRemoteContent(`${DOCS_ONLINE_URL}${path}`);
   } catch (error) {
-    if (error instanceof Error && error.message) {
-      return error.message;
-    } else {
-      return error;
-    }
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`加载文档内容失败: ${message}`);
   }
 };
 

@@ -51,20 +51,23 @@ async function loadCompChangelog(names: string[], framework: Framework, version?
     const normalizedName = normalizeKey(parentComponent);
     const matchedKey = normalizedMap[normalizedName];
 
-    const logs = changelog[matchedKey]
-      ?.filter((item: any) => !version || compareVersion(item.version, version) >= 0)
-      .map((item: any) => {
-        const cleanedLog: any = {};
-        for (const key in item) {
-          if (Array.isArray(item[key])) {
-            const typeWithoutEmoji = key.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "").trim();
-            cleanedLog[typeWithoutEmoji] = item[key].map((str: string) => cleanText(str, CHANGELOG_RULE_MAP).trim());
-          } else if (key === "version") {
-            cleanedLog[key] = item[key];
-          }
-        }
-        return cleanedLog;
-      });
+    const matchedChangelog = changelog[matchedKey];
+    const logs = Array.isArray(matchedChangelog)
+      ? matchedChangelog
+          .filter((item: any) => !version || compareVersion(item.version, version) >= 0)
+          .map((item: any) => {
+            const cleanedLog: any = {};
+            for (const key in item) {
+              if (Array.isArray(item[key])) {
+                const typeWithoutEmoji = key.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "").trim();
+                cleanedLog[typeWithoutEmoji] = item[key].map((str: string) => cleanText(str, CHANGELOG_RULE_MAP).trim());
+              } else if (key === "version") {
+                cleanedLog[key] = item[key];
+              }
+            }
+            return cleanedLog;
+          })
+      : [];
 
     existResults[name] = logs.length > 0 ? logs : "日志不存在";
   }
