@@ -6,7 +6,7 @@ import {
   isMiniProgram,
   MINIPROGRAM_DEMO_EXTS,
   type Framework
-} from "@tdesign-mcp-server/common";
+} from "../../common";
 
 import { checkCompsExistence, loadFileContent } from "../helpers";
 import { ComponentsSchema } from "../prompts";

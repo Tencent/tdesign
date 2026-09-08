@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { FRAMEWORKS } from "@tdesign-mcp-server/common";
+import { FRAMEWORKS } from "../../common";
 
 export const FrameworkSchema = z.object({
   framework: z.enum(FRAMEWORKS).describe("如果用户没有指定，根据 package.json 中的依赖判断")

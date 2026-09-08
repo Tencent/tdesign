@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 
-import { getDirname, isProduction } from "@tdesign-mcp-server/common";
+import { getDirname, isProduction } from "../../common";
 
 const __dirname = getDirname(import.meta.url);
 

@@ -1,4 +1,4 @@
-import { getPlatformByFramework, isChatFramework, type Framework } from "@tdesign-mcp-server/common";
+import { getPlatformByFramework, isChatFramework, type Framework } from "../../common";
 
 import { loadFileContent } from "./cache";
 import { convert2PascalCase } from "./format";

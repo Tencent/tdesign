@@ -14,6 +14,6 @@
       "@tdesign-mcp-server/docs-mobile-react/*": ["./docs/tdesign-mobile-react/*"]
     }
   },
-  "include": ["common/**/*", "scripts/**/*", "server/**/*"],
+  "include": ["common/**/*", "scripts/**/*", "src/**/*"],
   "exclude": ["docs/**/*"]
 }

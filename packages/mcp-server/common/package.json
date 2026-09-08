@@ -1,8 +1,0 @@
-{
-  "name": "@tdesign-mcp-server/common",
-  "main": "index.ts",
-  "type": "module",
-  "dependencies": {
-    "dotenv": "^17.2.1"
-  }
-}

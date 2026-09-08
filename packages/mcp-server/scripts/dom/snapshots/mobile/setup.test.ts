@@ -5,7 +5,7 @@ import { cleanup, render } from "@testing-library/react";
 import React from "react";
 import { expect, test, vi } from "vitest";
 
-import { getDirname } from "@tdesign-mcp-server/common";
+import { getDirname } from "../../../../common";
 import { getDocsOutputDir } from "../../../utils/path";
 
 // jsdom 不支持 canvas，mock getContext 避免报错

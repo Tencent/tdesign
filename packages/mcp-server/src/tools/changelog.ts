@@ -5,7 +5,7 @@ import {
   cleanText,
   compareVersion,
   type Framework
-} from "@tdesign-mcp-server/common";
+} from "../../common";
 
 import { checkCompsExistence, loadFileContent } from "../helpers";
 import { ChangelogsSchema } from "../prompts";

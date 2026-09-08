@@ -5,7 +5,7 @@ import path from "path";
 import { promisify } from "util";
 const execPromise = promisify(exec);
 
-import { addTdPrefix, FRAMEWORKS, getDirname, isChatFramework, isUniapp } from "@tdesign-mcp-server/common";
+import { addTdPrefix, FRAMEWORKS, getDirname, isChatFramework, isUniapp } from "../common";
 import { TD_REPOS_ROOT } from "./utils/path";
 
 const __dirname = getDirname(import.meta.url);
@@ -25,7 +25,7 @@ const TD_REQUIRED_REPOS = ["common", ...FRAMEWORKS, "icons"].filter(
 
 async function gitClone(repoUrl: string) {
   console.log(`Cloning repository from ${repoUrl}...`);
-  await execPromise(`cd ${TD_REPOS_ROOT} && git clone ${repoUrl} --depth=1`);
+  await execPromise(`mkdir -p ${TD_REPOS_ROOT} && cd ${TD_REPOS_ROOT} && git clone ${repoUrl} --depth=1`);
   console.log("Repository cloned successfully!\n");
 }
 
@@ -36,6 +36,7 @@ async function gitPull(repoPath: string) {
 }
 
 async function prepareTDesignRepos() {
+  console.log(`TDesign repos root: ${TD_REPOS_ROOT}`);
   for (const repo of TD_REQUIRED_REPOS) {
     const localRepoPath = path.join(TD_REPOS_ROOT, addTdPrefix(repo));
     const repoUrl = `${TENCENT_GITHUB_URL}${addTdPrefix(repo)}`;
@@ -55,7 +56,7 @@ async function executeTypeScript(scriptPath: string) {
 
 async function extractDocs() {
   await executeTypeScript(path.join(__dirname, "docs/index.ts"));
-  const { stdout, stderr } = await execPromise("npm run build:snap", { cwd: __dirname });
+  const { stdout, stderr } = await execPromise("npm run build:snap", { cwd: path.join(__dirname, "..") });
   if (stdout) console.log(stdout);
   if (stderr) console.error(stderr);
   await executeTypeScript(path.join(__dirname, "dom/index.ts"));

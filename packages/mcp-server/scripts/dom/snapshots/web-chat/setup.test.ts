@@ -4,7 +4,7 @@ import path from "path";
 import { cleanup } from "@testing-library/react";
 import { test } from "vitest";
 
-import { getDirname } from "@tdesign-mcp-server/common";
+import { getDirname } from "../../../../common";
 
 const __dirname = getDirname(import.meta.url);
 const CUSTOM_TEST_DIR = path.join(__dirname, "./custom");

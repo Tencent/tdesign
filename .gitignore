@@ -16,6 +16,7 @@ dist
 results
 static_site
 lib
+packages/mcp-server/docs
 
 ## test
 coverage

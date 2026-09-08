@@ -5,7 +5,7 @@ import { cleanup, render } from "@testing-library/react";
 import React from "react";
 import { expect, test } from "vitest";
 
-import { getDirname, isChatComponent } from "@tdesign-mcp-server/common";
+import { getDirname, isChatComponent } from "../../../../common";
 import { getDocsOutputDir } from "../../../utils/path";
 
 const __dirname = getDirname(import.meta.url);

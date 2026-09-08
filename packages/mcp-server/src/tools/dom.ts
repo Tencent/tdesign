@@ -7,7 +7,7 @@ import {
   isChatFramework,
   isMiniProgram,
   isUniapp
-} from "@tdesign-mcp-server/common";
+} from "../../common";
 
 import { checkCompsExistence, loadFileContent } from "../helpers";
 import { ComponentsSchema } from "../prompts";

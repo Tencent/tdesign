@@ -12,12 +12,17 @@ import {
   isMonorepo,
   isUniapp,
   type Framework
-} from "@tdesign-mcp-server/common";
+} from "../../common";
 
 const __dirname = getDirname(import.meta.url);
 
-/* 所有 tdesign-* 系列仓库的公共父目录（默认各端框架与当前项目在同一目录） */
-export const TD_REPOS_ROOT = path.join(__dirname, "../../../../../");
+/*
+ * 所有 tdesign-* 系列仓库的公共父目录（各框架仓库的克隆/读取根目录）。
+ * 默认约定：与当前 tdesign 仓库同级放置，即从本文件上溯到仓库根（4 级）再上一级；
+ * 也可以用环境变量 TD_REPOS_ROOT 显式指定，便于在 mono/沙盒/CI 中把仓库 clone 到工作区内。
+ */
+const MONO_REPO_ROOT = path.resolve(__dirname, "../../../../");
+export const TD_REPOS_ROOT = path.resolve(process.env.TD_REPOS_ROOT || path.join(MONO_REPO_ROOT, ".."));
 
 export const TD_DOCS_OUTPUT_DIR = path.join(__dirname, "../../docs");
 

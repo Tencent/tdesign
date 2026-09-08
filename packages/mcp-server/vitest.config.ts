@@ -12,9 +12,9 @@ export default defineConfig({
   resolve: {
     preserveSymlinks: false,
     alias: {
-      "@tdesign-mcp-server/docs-react": path.resolve(__dirname, "../docs/tdesign-react"),
-      "@tdesign-mcp-server/docs-react-chat": path.resolve(__dirname, "../docs/tdesign-react-chat"),
-      "@tdesign-mcp-server/docs-mobile-react": path.resolve(__dirname, "../docs/tdesign-mobile-react"),
+      "@tdesign-mcp-server/docs-react": path.resolve(__dirname, "docs/tdesign-react"),
+      "@tdesign-mcp-server/docs-react-chat": path.resolve(__dirname, "docs/tdesign-react-chat"),
+      "@tdesign-mcp-server/docs-mobile-react": path.resolve(__dirname, "docs/tdesign-mobile-react"),
       // 省得 Docs 目录下也安装依赖
       "lodash-es": path.resolve(__dirname, "./node_modules/lodash-es"),
       "tdesign-mobile-react": path.resolve(__dirname, "./node_modules/tdesign-mobile-react"),
@@ -26,7 +26,7 @@ export default defineConfig({
   },
   test: {
     environment: "happy-dom",
-    exclude: ["**/dom/snapshots/miniprogram/**", "**/node_modules/**"],
+    exclude: ["**/scripts/dom/snapshots/miniprogram/**", "**/node_modules/**"],
     testTimeout: 10000,
     server: {
       deps: {

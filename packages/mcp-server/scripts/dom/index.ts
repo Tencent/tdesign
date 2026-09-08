@@ -11,7 +11,7 @@ import {
   MINIPROGRAM_DOM_RULE_MAP,
   UNIAPP_DOM_RULE_MAP,
   type RuleMap
-} from "@tdesign-mcp-server/common";
+} from "../../common";
 import { TD_DOCS_OUTPUT_DIR } from "../utils/path";
 
 const __dirname = getDirname(import.meta.url);

@@ -1,13 +1,13 @@
 import { promises as fs } from "fs";
 import path from "path";
 
-import { DOCS_SOURCE_MODE, getDirname, isLocalMode, isProduction } from "@tdesign-mcp-server/common";
+import { DOCS_SOURCE_MODE, getDirname, isLocalMode, isProduction } from "../../common";
 
 const __dirname = getDirname(import.meta.url);
 
 const DOCS_ONLINE_URL = "https://tdesign.gtimg.com/mcp/";
 
-const docsDir = isProduction && isLocalMode ? "../../docs/" : "../../../docs/";
+const docsDir = isProduction && isLocalMode ? "../docs/" : "../../docs/";
 const DOCS_LOCAL_PATH = path.join(__dirname, docsDir);
 
 class MemoryCache {

@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { addTdPrefix, type Framework } from "@tdesign-mcp-server/common";
+import { addTdPrefix, type Framework } from "../../common";
 
 import { loadFileContent } from "../helpers";
 import { FrameworkSchema } from "../prompts";
