@@ -86,7 +86,8 @@ function customRender({ source, md }) {
 
   const mdSegment = {
     ...pageData,
-    docMd: md.render(`${pageData.toc ? '[toc]\n' : ''}${content}`).html,
+    // eslint-disable-next-line no-useless-call
+    docMd: md.render.call(md, `${pageData.toc ? '[toc]\n' : ''}${content}`).html,
   };
 
   return mdSegment;
