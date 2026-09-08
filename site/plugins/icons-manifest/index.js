@@ -12,15 +12,16 @@ export default function iconsManifestPlugin() {
     name: 'tdesign-icons-manifest',
     enforce: 'pre',
     configResolved(config) {
-      outDir = config.build && config.build.outDir;
+      // outDir 相对 config.root（如 _site / ../_site），基于 root 解析为绝对路径，
+      // 避免依赖 process.cwd() 导致在非 site 目录构建时写错位置。
+      outDir = path.resolve(config.root, config.build && config.build.outDir || 'dist');
     },
     async closeBundle() {
       if (!outDir) return;
       try {
         const json = `${JSON.stringify(manifest)}\n`;
-        const dir = path.resolve(outDir);
-        fs.mkdirSync(dir, { recursive: true });
-        const target = path.join(dir, 'icons-manifest.json');
+        fs.mkdirSync(outDir, { recursive: true });
+        const target = path.join(outDir, 'icons-manifest.json');
         fs.writeFileSync(target, json, 'utf8');
         // eslint-disable-next-line no-console
         console.log(`[plugin-icons-manifest] 已生成 ${target}`);
