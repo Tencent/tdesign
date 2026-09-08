@@ -29,7 +29,7 @@ export default function iconsManifestPlugin() {
       } catch (error) {
         // 构建不应因图标清单生成失败而中断，仅告警
         // eslint-disable-next-line no-console
-        console.warn('[plugin-icons-manifest] 生成 icons_manifest.json 失败：', error && error.message);
+        console.warn('[plugin-icons-manifest] 生成 icons-manifest.json 失败：', error && error.message);
       }
     },
   };
