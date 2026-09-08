@@ -19,7 +19,7 @@ export default function iconsManifestPlugin() {
     async closeBundle() {
       if (!outDir) return;
       try {
-        const json = `${JSON.stringify(manifest, null, 2)}\n`;
+        const json = `${JSON.stringify(manifest)}\n`;
         const dir = path.resolve(outDir);
         fs.mkdirSync(dir, { recursive: true });
         const target = path.join(dir, 'icons-manifest.json');
