@@ -1,0 +1,5 @@
+<t-popup
+  visible="{{visible}}"
+>
+  <view class="block"> Popup Content </view>
+</t-popup>

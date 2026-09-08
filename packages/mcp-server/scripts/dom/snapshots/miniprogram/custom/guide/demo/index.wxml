@@ -1,0 +1,20 @@
+<view>
+  <view class="main-title">
+    <view class="title-major">用户引导标题</view>
+    <view class="title-sub"> 按钮用于开启一个闭环的操作任务，如"删除"对象、"购买"商品等。 </view>
+  </view>
+  <view class="field label-field">
+    <t-input label="标签文字" layout="vertical" placeholder="请输入文字"></t-input>
+  </view>
+  <view class="field">
+    <t-input label="标签文字" layout="vertical" placeholder="请输入文字"></t-input>
+  </view>
+  <view class="action">
+    <t-button block theme="light" size="large">重置</t-button>
+    <t-button block theme="primary" size="large">确定</t-button>
+  </view>
+</view>
+
+<t-guide id="t-guide" current="{{current}}" steps="{{steps}}" bind:skip="close" bind:finish="close">
+  <view slot="body-2" class="slot-body">slot展示 用户引导的说明文案</view>
+</t-guide>

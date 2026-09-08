@@ -1,0 +1,13 @@
+{
+  "name": "tdesign-mcp-server-mono",
+  "version": "0.2.4",
+  "private": true,
+  "description": "TDesign MCP Server packages",
+  "scripts": {
+    "build:docs+dom": "pnpm -C scripts build:docs+dom",
+    "build:mcp": "pnpm -C server build:mcp",
+    "build:mcp-stdio": "pnpm -C server build:mcp-stdio",
+    "build:mcp-http": "pnpm -C server build:mcp-http",
+    "start:mcp-http": "pnpm -C server start:mcp-http"
+  }
+}

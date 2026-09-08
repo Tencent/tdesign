@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "t-pull-down-refresh": "tdesign-miniprogram/pull-down-refresh/pull-down-refresh",
+    "t-skeleton": "tdesign-miniprogram/skeleton/skeleton"
+  }
+}
