@@ -3,11 +3,13 @@ on:
   push:
     branches: [main]
     paths:
+      - 'packages/mcp-server/**'
       - 'packages/site-components/**'
       - 'packages/theme-generator/**'
   pull_request:
     branches: [main]
     paths:
+      - 'packages/mcp-server/**'
       - 'packages/site-components/**'
       - 'packages/theme-generator/**'
       - 'site/**'
