@@ -14,7 +14,7 @@ $:
 
   vscode:
     - docker:
-        build: .cnb/Dockerfile
+        image: docker.cnb.cool/tencent/tdesign/default-dev-env:latest
         volumes:
           - node_modules:cow
           - .pnpm-store:cow
