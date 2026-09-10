@@ -1,0 +1,26 @@
+<t-pull-down-refresh
+  value="{{enable}}"
+  loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}"
+  usingCustomNavbar
+  bind:refresh="onRefresh"
+>
+  <!-- 包裹页面全部内容 -->
+  <view class="demo">
+    <view class="pulldown-refresh__content">
+      <t-skeleton rowCol="{{rowCol1}}" loading></t-skeleton>
+      <view class="row">
+        <t-skeleton rowCol="{{rowCol2}}" loading></t-skeleton>
+        <t-skeleton rowCol="{{rowCol2}}" loading></t-skeleton>
+      </view>
+      <view class="row">
+        <t-skeleton rowCol="{{rowCol2}}" loading></t-skeleton>
+        <t-skeleton rowCol="{{rowCol2}}" loading></t-skeleton>
+      </view>
+      <view class="row">
+        <t-skeleton rowCol="{{rowCol2}}" loading></t-skeleton>
+        <t-skeleton rowCol="{{rowCol2}}" loading></t-skeleton>
+      </view>
+      <view class="text">拖拽该区域演示 顶部下拉刷新</view>
+    </view>
+  </view>
+</t-pull-down-refresh>

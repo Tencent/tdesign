@@ -1,0 +1,9 @@
+{
+  "component": true,
+  "usingComponents": {
+    "t-indexes": "tdesign-miniprogram/indexes/indexes",
+    "t-indexes-anchor": "tdesign-miniprogram/indexes-anchor/indexes-anchor",
+    "t-cell-group": "tdesign-miniprogram/cell-group/cell-group",
+    "t-cell": "tdesign-miniprogram/cell/cell"
+  }
+}

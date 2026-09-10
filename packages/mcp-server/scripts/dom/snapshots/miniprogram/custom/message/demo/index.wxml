@@ -1,0 +1,6 @@
+<t-message
+  visible="{{visible}}"
+  content="这是一条消息通知"
+  offset="{{[90, 32]}}"
+  closeBtn="{{true}}"
+/>
