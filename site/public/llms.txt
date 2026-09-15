@@ -52,7 +52,7 @@
 ### 移动端（Mobile）
 
 #### 基础组件
-- 移动端 Vue 3 组件库（tdesign-mobile-vue，Vue 3.x 技术栈）: [索引](https://static.tdesign.tencent.com/vue-mobile/llms.txt) · [完整文档](https://static.tdesign.tencent.com/vue-mobile/llms-full.txt)
+- 移动端 Vue 3 组件库（tdesign-mobile-vue，Vue 3.x 技术栈）: [索引](https://static.tdesign.tencent.com/mobile-vue/llms.txt) · [完整文档](https://static.tdesign.tencent.com/mobile-vue/llms-full.txt)
 - 移动端 React 组件库（tdesign-mobile-react，React 18.x 技术栈）: [索引](https://static.tdesign.tencent.com/mobile-react/llms.txt) · [完整文档](https://static.tdesign.tencent.com/mobile-react/llms-full.txt)
 - 微信小程序组件库（tdesign-miniprogram）: [索引](https://static.tdesign.tencent.com/miniprogram/llms.txt) · [完整文档](https://static.tdesign.tencent.com/miniprogram/llms-full.txt)
 - UniApp 组件库（@tdesign/uniapp）: [索引](https://static.tdesign.tencent.com/uniapp/llms.txt) · [完整文档](https://static.tdesign.tencent.com/uniapp/llms-full.txt)
