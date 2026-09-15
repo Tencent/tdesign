@@ -60,5 +60,4 @@ async function extractDocs() {
   if (stdout) console.log(stdout);
   if (stderr) console.error(stderr);
   await executeTypeScript(path.join(__dirname, "dom/index.ts"));
-  await executeTypeScript(path.join(__dirname, "icon/index.ts"));
 }

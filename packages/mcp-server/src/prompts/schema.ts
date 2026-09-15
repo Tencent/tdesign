@@ -21,7 +21,7 @@ export const IconSchema = z.object({
   keywords: z
     .array(z.string())
     .min(1)
-    .describe("用于匹配图标名的关键词列表（仅支持英文）"),
+    .describe("用于匹配图标的关键词列表（支持中英文，匹配图标名、中文关键词与分类）"),
   limit: z
     .number()
     .int()

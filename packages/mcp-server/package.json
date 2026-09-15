@@ -16,7 +16,6 @@
     "build:docs+dom": "tsx ./scripts/index.ts",
     "build:docs": "tsx ./scripts/docs/index.ts",
     "build:dom": "npm run build:snap && tsx ./scripts/dom/index.ts",
-    "build:icon": "tsx ./scripts/icon/index.ts",
     "build:snap": "npm run build:snap:web && npm run build:snap:web-chat && npm run build:snap:mobile && npm run build:snap:mini",
     "build:snap:web": "vitest run -u scripts/dom/snapshots/web",
     "build:snap:web-chat": "vitest run -u scripts/dom/snapshots/web-chat",
