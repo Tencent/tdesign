@@ -77,7 +77,7 @@ export const submodules = {
     repo: 'Tencent/tdesign-vue-next',
   },
   '@tdesign-react/chat': {
-    title: '## Uniappfor AI Chat 发布',
+    title: '## React for AI Chat 发布',
     changelogUrl:
       'https://raw.githubusercontent.com/Tencent/tdesign-react/refs/heads/main/packages/tdesign-react-aigc/CHANGELOG.md',
     tagPrefix: '@tdesign-react/chat@',
