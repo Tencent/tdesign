@@ -61,6 +61,12 @@
 - UniApp AI Chat 组件（@tdesign-uniapp/chat，面向 AI 对话场景的组件库）: [索引](https://static.tdesign.tencent.com/uniapp-chat/llms.txt) · [完整文档](https://static.tdesign.tencent.com/uniapp-chat/llms-full.txt)
 - 微信小程序 AI Chat 组件（tdesign-miniprogram，面向 AI 对话场景的组件库）: [索引](https://static.tdesign.tencent.com/miniprogram-chat/llms.txt) · [完整文档](https://static.tdesign.tencent.com/miniprogram-chat/llms-full.txt)
 
+## TDesign MCP Server
+
+TDesign 官方提供 MCP Server（tdesign-mcp-server），为 AI 助手提供多框架的组件知识，支持组件文档查询、组件列表、DOM 结构、图标搜索与变更日志等工具：
+
+- [npm 包](https://www.npmjs.com/package/tdesign-mcp-server): `npx -y tdesign-mcp-server@latest`
+
 ## Optional
 
 - [TDesign 官网](https://tdesign.tencent.com/)
