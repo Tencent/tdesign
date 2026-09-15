@@ -8,7 +8,7 @@
 - AI 对话：`react-chat` / `vue-next-chat` / `miniprogram-chat` / `uniapp-chat`
 
 ### 🔨 支持工具
-- [x] `search-icons`：搜索可用的图标列表，适用场景：图标查找与名称确认
+- [x] `search-icon`：搜索可用的图标列表，适用场景：图标查找与名称确认
 - [x] `get-component-docs`：获取组件的文档，适用场景：代码生成和代码转换
 - [x] `get-component-dom`：获取组件的 DOM 结构，适用场景：转换自定义的 CSS 样式
 - [x] `get-component-list`：获取所有可用的组件列表，适用场景：选择合适组件进行组合实现不存在的功能
