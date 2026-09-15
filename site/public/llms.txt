@@ -1,0 +1,67 @@
+# TDesign
+
+> TDesign 是企业级设计体系，包含统一的设计语言、设计指南、设计资产与开箱即用的 UI 组件库。
+
+本文档为 TDesign 主站点的内容导航，便于 AI 助手快速定位设计指南与相关资源页面。
+
+## 设计指南
+
+- [价值观](https://tdesign.tencent.com/design/values): TDesign 为了在开源体系的基础上打造具有自身品牌特色且好⽤的产品，秉承包容、多元、进化、连接的价值观。
+- [Color 色彩](https://tdesign.tencent.com/design/color): 色彩在产品中起到传递信息、创建层级、表达情感、构建一致性的目的。
+- [Fonts 字体](https://tdesign.tencent.com/design/fonts): 字体遵循好用、好记和美观的设计原则，让内容更有规律和韵律。
+- [Motion 动效](https://tdesign.tencent.com/design/motion): 动效可以让界面表达明确、清晰、流畅，从而增强用户感知。
+- [Icon 图标](https://tdesign.tencent.com/design/icon): Icon 作为UI构成中重要的元素，一定程度上影响UI界面整体呈现出的风格。
+- [Layout 布局](https://tdesign.tencent.com/design/layout): 用于组织网页的框架结构，可以影响用户的浏览顺序。清晰的的布局和数据展示可以帮助用户高效的获取信息。
+- [Dark Mode 深色模式](https://tdesign.tencent.com/design/dark): 深色模式是一种夜间友好的颜色主题，帮助用户更沉浸式的工作。
+- [如何搭建整体框架](https://tdesign.tencent.com/design/offices): 在明确系统功能分类和结构后，先选择合适的页面导航和布局，建立基础的中后台框架。
+- [如何设计高频任务](https://tdesign.tencent.com/design/offices-task): 明确整体框架和页面布局后，根据业务场景，对相关任务流程进行设计。
+
+## 关于
+
+- [关于我们](https://tdesign.tencent.com/about/introduce)
+- [整体方案](https://tdesign.tencent.com/about/tech)
+- [后续计划](https://tdesign.tencent.com/about/roadmap)
+- [常见问题](https://tdesign.tencent.com/about/faq)
+- [社区资源](https://tdesign.tencent.com/about/awesome)
+- [发布汇总](https://tdesign.tencent.com/about/release): 为你带来TDesign最新的发布动态
+- [如何贡献](https://tdesign.tencent.com/about/contributing)
+- [组件开发流程](https://tdesign.tencent.com/about/new-component)
+- [联系我们](https://tdesign.tencent.com/about/contact)
+
+## 资源
+
+- [设计资源](https://tdesign.tencent.com/source)
+- [行业组件](https://tdesign.tencent.com/trade)
+- [图标资源](https://tdesign.tencent.com/icons)
+
+## 各技术栈组件库
+
+各技术栈站点提供 `llms.txt`（内容索引）与 `llms-full.txt`（完整文档）两种文件：
+
+### 桌面端（Web）
+
+#### 基础组件
+- Vue 2 组件库（tdesign-vue，Vue 2.x 技术栈）: [索引](https://static.tdesign.tencent.com/vue/llms.txt) · [完整文档](https://static.tdesign.tencent.com/vue/llms-full.txt)
+- Vue 3 组件库（tdesign-vue-next，Vue 3.x 技术栈）: [索引](https://static.tdesign.tencent.com/vue-next/llms.txt) · [完整文档](https://static.tdesign.tencent.com/vue-next/llms-full.txt)
+- React 组件库（tdesign-react，React 16.x 技术栈）: [索引](https://static.tdesign.tencent.com/react/llms.txt) · [完整文档](https://static.tdesign.tencent.com/react/llms-full.txt)
+
+#### 高阶组件
+- Vue 3 AI Chat 组件（@tdesign-vue-next/chat，面向 AI 对话场景的组件库）: [索引](https://static.tdesign.tencent.com/vue-next-chat/llms.txt) · [完整文档](https://static.tdesign.tencent.com/vue-next-chat/llms-full.txt)
+- React AI Chat 组件（@tdesign-react/chat，面向 AI 对话场景的组件库）: [索引](https://static.tdesign.tencent.com/react-chat/llms.txt) · [完整文档](https://static.tdesign.tencent.com/react-chat/llms-full.txt)
+
+### 移动端（Mobile）
+
+#### 基础组件
+- 移动端 Vue 3 组件库（tdesign-mobile-vue，Vue 3.x 技术栈）: [索引](https://static.tdesign.tencent.com/vue-mobile/llms.txt) · [完整文档](https://static.tdesign.tencent.com/vue-mobile/llms-full.txt)
+- 移动端 React 组件库（tdesign-mobile-react，React 18.x 技术栈）: [索引](https://static.tdesign.tencent.com/mobile-react/llms.txt) · [完整文档](https://static.tdesign.tencent.com/mobile-react/llms-full.txt)
+- 微信小程序组件库（tdesign-miniprogram）: [索引](https://static.tdesign.tencent.com/miniprogram/llms.txt) · [完整文档](https://static.tdesign.tencent.com/miniprogram/llms-full.txt)
+- UniApp 组件库（@tdesign/uniapp）: [索引](https://static.tdesign.tencent.com/uniapp/llms.txt) · [完整文档](https://static.tdesign.tencent.com/uniapp/llms-full.txt)
+
+#### 高阶组件
+- UniApp AI Chat 组件（@tdesign-uniapp/chat，面向 AI 对话场景的组件库）: [索引](https://static.tdesign.tencent.com/uniapp-chat/llms.txt) · [完整文档](https://static.tdesign.tencent.com/uniapp-chat/llms-full.txt)
+- 微信小程序 AI Chat 组件（tdesign-miniprogram，面向 AI 对话场景的组件库）: [索引](https://static.tdesign.tencent.com/miniprogram-chat/llms.txt) · [完整文档](https://static.tdesign.tencent.com/miniprogram-chat/llms-full.txt)
+
+## Optional
+
+- [TDesign 官网](https://tdesign.tencent.com/)
+- [GitHub 仓库](https://github.com/Tencent/tdesign)
