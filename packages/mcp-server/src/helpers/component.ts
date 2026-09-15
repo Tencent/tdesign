@@ -12,8 +12,9 @@ export const checkCompsExistence = async (names: string[], fw: Framework) => {
   const aliasMap = mapData?.alias;
   const originalMap = mapData?.components;
 
-  // 相当于返回报错信息
-  if (!originalMap) return mapData;
+  if (!originalMap) {
+    throw new Error("组件列表数据格式异常");
+  }
 
   // 存储父组件与原始组件的映射关系
   const exist: Record<string, string> = {};

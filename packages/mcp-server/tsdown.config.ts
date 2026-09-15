@@ -7,7 +7,7 @@ const shared: Options = {
   minify: true,
   dts: false,
   sourcemap: false,
-  clean: false,
+  clean: true,
   define: {
     "process.env.NODE_ENV": '"production"'
   }

@@ -26,6 +26,9 @@
   "bin": {
     "tdesign-mcp-server": "dist/stdio.js"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "files": [
     "dist",
     "README.md"
