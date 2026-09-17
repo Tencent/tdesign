@@ -5,6 +5,8 @@ export default {
     adjustText: 'Variables',
     recoverConfirm: 'Are you sure to recover TDesign default theme?',
     downloadTips: 'current theme has been downloaded',
+    uploadTips: 'Import CSS',
+    uploadSuccess: 'CSS imported successfully',
   },
   color: {
     title: 'Color',
