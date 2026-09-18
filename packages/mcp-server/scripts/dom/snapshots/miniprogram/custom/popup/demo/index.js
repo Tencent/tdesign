@@ -1,0 +1,6 @@
+Component({
+  data: {
+    visible: true,
+  },
+
+});

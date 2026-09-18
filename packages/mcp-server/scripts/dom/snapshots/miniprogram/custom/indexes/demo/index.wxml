@@ -1,0 +1,14 @@
+<t-indexes
+  current="{{current}}"
+  index-list="{{indexList}}"
+  sticky-offset="{{stickyOffset}}"
+  bind:select="onSelect"
+  bind:change="onChange"
+>
+  <block wx:for="{{list}}" wx:key="index">
+    <t-indexes-anchor index="{{item.index}}" />
+    <t-cell-group>
+      <t-cell wx:for="{{item.children}}" wx:key="city" wx:for-item="city" title="{{city}}" aria-role="button" />
+    </t-cell-group>
+  </block>
+</t-indexes>

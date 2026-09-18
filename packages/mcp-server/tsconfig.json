@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@tdesign-mcp-server/docs-react/*": ["./docs/tdesign-react/*"],
+      "@tdesign-mcp-server/docs-mobile-react/*": ["./docs/tdesign-mobile-react/*"]
+    }
+  },
+  "include": ["common/**/*", "scripts/**/*", "src/**/*"],
+  "exclude": ["docs/**/*"]
+}

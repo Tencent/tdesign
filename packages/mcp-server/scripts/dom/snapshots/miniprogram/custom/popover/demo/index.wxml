@@ -1,0 +1,9 @@
+<t-popover
+  placement="top"
+  theme="dark"
+  data-target="normal"
+  visible="{{visible}}"
+  closeOnClickOutside="{{false}}"
+>
+  <view slot="content">弹出气泡内容</view>
+</t-popover>

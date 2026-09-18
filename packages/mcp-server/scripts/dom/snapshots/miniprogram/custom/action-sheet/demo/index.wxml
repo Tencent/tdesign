@@ -1,0 +1,8 @@
+<t-action-sheet
+  id="t-action-sheet"
+  usingCustomNavbar
+  visible="{{visible}}"
+  description="{{description}}"
+  cancel-text="{{cancelText}}"
+  items="{{items}}"
+/>

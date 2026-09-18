@@ -1,0 +1,5 @@
+<t-drawer
+  visible="{{visible}}"
+  placement="{{placement}}"
+  items="{{sidebar}}"
+/>

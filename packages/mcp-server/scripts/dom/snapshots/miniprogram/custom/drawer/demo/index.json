@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "t-drawer": "tdesign-miniprogram/drawer/drawer"
+  }
+}

@@ -11,7 +11,10 @@
     "site": "pnpm run build:components && pnpm run --filter tdesign-site build",
     "site:preview": "pnpm run build:components && pnpm run --filter tdesign-site site:preview",
     "auto-release-collection": "pnpm run --filter auto-release-collection start",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "build:mcp": "pnpm run --filter tdesign-mcp-server build:mcp",
+    "build:mcp-docs": "pnpm run --filter tdesign-mcp-server build:docs+dom",
+    "start:mcp": "pnpm run --filter tdesign-mcp-server start:mcp-http"
   },
   "license": "MIT",
   "dependencies": {
