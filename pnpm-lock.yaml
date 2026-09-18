@@ -205,8 +205,8 @@ importers:
         specifier: ^1.29.0
         version: 1.29.0
       tdesign-icons-view:
-        specifier: ^0.5.12
-        version: 0.5.12(typescript@4.9.5)
+        specifier: ^0.5.13
+        version: 0.5.13(typescript@4.9.5)
       tdesign-icons-vue:
         specifier: ^0.4.1
         version: 0.4.1(vue@2.7.14)
@@ -7072,8 +7072,8 @@ packages:
   tdesign-icons-svg@0.0.1:
     resolution: {integrity: sha512-4l05CgPXwI33Y6hU8ytKYIIXVznR22x6blhhtB6MntSHj2xrA+Unx4U/qy+Do/lCMtYao9q1wVkaZvxNjuX7jw==}
 
-  tdesign-icons-view@0.5.12:
-    resolution: {integrity: sha512-Wm51IxHOpkOA87HD1AdoEAiZoES/Oy0gUCz2CJQ3UPQF7XSs2KFqWqnNyrtdXbaxPZoTQjZnt9OaencfBcPiOA==}
+  tdesign-icons-view@0.5.13:
+    resolution: {integrity: sha512-9ZT9OVLNnrBzv1H/2am5WWDv5TOIMglIxxvoY7EVWVHAQicIOMfwPqBLGYL7NNHSNNYiJHao8MnGD76gdmLSNQ==}
 
   tdesign-icons-vue-next@0.4.11:
     resolution: {integrity: sha512-lBkRUy8bdb6lQLFOOkSb1LPdl4CmZRewrc8SOUlmWkDD/DG3BTsSd/ZQ4Z767pPSlypyvxwSwcJgRv6+zjubAQ==}
@@ -7100,8 +7100,8 @@ packages:
     peerDependencies:
       vue: ^2.6.12
 
-  tdesign-vue-next@1.17.7:
-    resolution: {integrity: sha512-mV/9mm/nIS+tfx1oUG1IMMmTPFeZfLmP8bIVEa7S9CpVke2+Yei5i8RBXmDwF/d+OaDoKVgwUq08goSIZfRePQ==}
+  tdesign-vue-next@1.20.8:
+    resolution: {integrity: sha512-grrvotFU6BOUsqHtf5WPlkeLiOqkAukA4/a1Hz0FY2onNCHecNf4SgPbk3ei1GRoCcKg9Nsw4YUx8iJjccJ67w==}
     engines: {node: '>= 18'}
     peerDependencies:
       vue: '>=3.1.0'
@@ -15829,12 +15829,12 @@ snapshots:
 
   tdesign-icons-svg@0.0.1: {}
 
-  tdesign-icons-view@0.5.12(typescript@4.9.5):
+  tdesign-icons-view@0.5.13(typescript@4.9.5):
     dependencies:
       '@popperjs/core': 2.11.8
       lodash: 4.18.1
       tdesign-icons-vue-next: 0.4.11(vue@3.5.42(typescript@4.9.5))
-      tdesign-vue-next: 1.17.7(vue@3.5.42(typescript@4.9.5))
+      tdesign-vue-next: 1.20.8(vue@3.5.42(typescript@4.9.5))
       vue: 3.5.42(typescript@4.9.5)
     transitivePeerDependencies:
       - typescript
@@ -15868,7 +15868,7 @@ snapshots:
       classnames: 2.5.1
       vue: 2.7.14
 
-  tdesign-vue-next@1.17.7(vue@3.5.42(typescript@4.9.5)):
+  tdesign-vue-next@1.20.8(vue@3.5.42(typescript@4.9.5)):
     dependencies:
       '@babel/runtime': 7.29.7
       '@popperjs/core': 2.11.8
