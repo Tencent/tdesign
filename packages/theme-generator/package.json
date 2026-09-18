@@ -1,6 +1,6 @@
 {
   "name": "@tdesign/theme-generator",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "license": "MIT",
   "description": "TDesign 主题配置生成器挂件",
   "scripts": {
