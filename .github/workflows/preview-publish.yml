@@ -29,7 +29,7 @@ jobs:
       tdesign_uniapp_domain: ${{ steps.site-domain.outputs.tdesign_uniapp_domain }}
     steps:
       - name: Download pr id
-        uses: dawidd6/action-download-artifact@v21
+        uses: dawidd6/action-download-artifact@v24
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -65,7 +65,7 @@ jobs:
     environment:
       name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v21
+      - uses: dawidd6/action-download-artifact@v24
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -81,7 +81,7 @@ jobs:
     environment:
       name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v21
+      - uses: dawidd6/action-download-artifact@v24
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -98,7 +98,7 @@ jobs:
     environment:
       name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v21
+      - uses: dawidd6/action-download-artifact@v24
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -115,7 +115,7 @@ jobs:
     environment:
       name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v21
+      - uses: dawidd6/action-download-artifact@v24
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -132,7 +132,7 @@ jobs:
     environment:
       name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v21
+      - uses: dawidd6/action-download-artifact@v24
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -149,7 +149,7 @@ jobs:
     environment:
       name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v21
+      - uses: dawidd6/action-download-artifact@v24
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -166,7 +166,7 @@ jobs:
     environment:
       name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v21
+      - uses: dawidd6/action-download-artifact@v24
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -183,7 +183,7 @@ jobs:
     environment:
       name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v21
+      - uses: dawidd6/action-download-artifact@v24
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -199,7 +199,7 @@ jobs:
     environment:
       name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v21
+      - uses: dawidd6/action-download-artifact@v24
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}

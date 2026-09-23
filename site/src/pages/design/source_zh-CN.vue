@@ -101,7 +101,8 @@ import mastergoIcon from '@/assets/mastergo-logo.svg';
 import ryIcon from '@/assets/ry-logo.svg';
 
 import { webSourceList, mobileSourceList, sourceDownloadUrl, webChartSourceList } from '@/constants';
-import { webDesignContributor, mobileDesignContributor, webChartDesignContributor } from '@/contributor';
+
+const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
 
 export default {
   data() {
@@ -109,9 +110,9 @@ export default {
       webSourceList,
       mobileSourceList,
       webChartSourceList,
-      webDesignContributor,
-      mobileDesignContributor,
-      webChartDesignContributor,
+      webDesignContributor: [],
+      mobileDesignContributor: [],
+      webChartDesignContributor: [],
       iconMap: {
         figma: figmaIcon,
         sketch: sketchIcon,
@@ -125,10 +126,9 @@ export default {
         ry: ryIcon,
       },
       previewUrl: {
-        web: 'https://codesign.qq.com/s/dqN2925D7qjaBXe?active-screen=xDP39qAvLNl9wlK&menu_aside=null&minimap=close',
-        mobile: 'https://codesign.qq.com/s/YDgGjYv28y9wEVQ?active-screen=GD5OjERAdXO93eA&menu_aside=null&minimap=close',
-        'web-chart':
-          'https://codesign.qq.com/s/kv8398d7m59nKeg?active-screen=6ym7ZRGAEOYjAYE&menu_aside=null&minimap=close',
+        web: 'https://codesign.qq.com/s/705849079455594?menu_aside=null',
+        mobile: 'https://codesign.qq.com/s/705854516818782?menu_aside=null',
+        'web-chart': 'https://codesign.qq.com/s/705850116517658?menu_aside=null',
       },
     };
   },
@@ -180,6 +180,8 @@ export default {
       else window.open('/icons', '_blank');
     };
 
+    this.fetchDesignContributors();
+
     fetch(sourceDownloadUrl)
       .then((res) => res.json())
       .then((res) => {
@@ -195,6 +197,30 @@ export default {
   },
 
   methods: {
+    fetchDesignContributors() {
+      fetch(contributorsUrl)
+        .then((res) => res.json())
+        .then((data) => {
+          const design = (data && data.design) || {};
+          const normalize = (list) => {
+            const seen = new Set();
+            const result = [];
+            (list || []).forEach((name) => {
+              const trimmed = String(name).trim();
+              if (!trimmed) return;
+              const key = trimmed.toLowerCase();
+              if (seen.has(key)) return;
+              seen.add(key);
+              result.push(trimmed);
+            });
+            return result;
+          };
+          this.webDesignContributor = normalize(design.web);
+          this.mobileDesignContributor = normalize(design.mobile);
+          this.webChartDesignContributor = normalize(design.chart);
+        })
+        .catch((err) => console.error(err));
+    },
     handleSourceClick(item) {
       if (item.status === -1 || !item.actionUrl) return;
 

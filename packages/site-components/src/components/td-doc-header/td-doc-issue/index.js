@@ -105,8 +105,7 @@ function fetchGithubIssueNum(host, name, state = 'open', framework) {
 export default define({
   tag: 'td-doc-issue',
   openNum: {
-    get: (_host, lastValue) => lastValue || '',
-    set: (_host, value) => value,
+    value: (_host, v) => v || '',
     connect: (host) => {
       const [, framework, componentName] = parseUrl();
       if (!componentName) return;
@@ -114,8 +113,7 @@ export default define({
     },
   },
   closedNum: {
-    get: (_host, lastValue) => lastValue || '',
-    set: (_host, value) => value,
+    value: (_host, v) => v || '',
     connect: (host) => {
       const [, framework, componentName] = parseUrl();
       if (!componentName) return;

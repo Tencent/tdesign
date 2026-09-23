@@ -45,14 +45,13 @@ function initBlockStyleMap(host) {
 export default define({
   tag: 'td-theme-tabs',
   theme: {
-    get: (_host, lastValue) => lastValue || 'light',
-    set: (_host, value) => {
-      if (value) {
-        localStorage.setItem('--tdesign-theme', value);
+    value: (_host, v) => {
+      if (v) {
+        localStorage.setItem('--tdesign-theme', v);
         window.dispatchEvent(storageChangeEvent);
       }
 
-      return value;
+      return v || 'light';
     },
     connect: (host, key, invalidate) => {
       const lastTheme = localStorage.getItem('--tdesign-theme');
@@ -69,8 +68,7 @@ export default define({
     },
   },
   blockStyleMap: {
-    get: (_host, lastValue) => lastValue || undefined,
-    set: (_host, value) => value,
+    value: (_host, v) => v || undefined,
   },
   render: (host) => {
     const { theme, blockStyleMap } = host;

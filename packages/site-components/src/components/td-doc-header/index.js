@@ -58,8 +58,7 @@ function iframeOnload(host) {
 export default define({
   tag: 'td-doc-header',
   spline: {
-    get: (_host, lastValue) => lastValue || '',
-    set: (_host, value) => value,
+    value: (_host, v) => v || '',
     connect: (host) => {
       const observer = watchHtmlMode((themeMode) => handleModeChange(themeMode, host));
 
@@ -75,21 +74,17 @@ export default define({
   },
   platform: 'web',
   changelog: {
-    get: (_host, lastValue) => parseBoolean(lastValue, true),
-    set: (_host, value) => parseBoolean(value, true),
+    value: (_host, v) => parseBoolean(v, true),
   },
   changelogEn: {
-    get: (_host, lastValue) => parseBoolean(lastValue, true),
-    set: (_host, value) => parseBoolean(value, true),
+    value: (_host, v) => parseBoolean(v, true),
   },
   mobileBodyStyle,
   shouldShowPopup: {
-    get: (_host, lastValue) => lastValue || false,
-    set: (_host, value) => value,
+    value: (_host, v) => v || false,
   },
   docInfo: {
-    get: (_host, lastValue) => lastValue || undefined,
-    set: (_host, value) => value,
+    value: (_host, v) => v || undefined,
     observe: (host, value) => {
       if (document.getElementById('__td_doc_title__') || !value) return;
 
@@ -103,8 +98,7 @@ export default define({
     },
   },
   fixedTitle: {
-    get: (_host, lastValue) => lastValue || undefined,
-    set: (_host, value) => value,
+    value: (_host, v) => v || undefined,
     connect: (host) => {
       const mediaQuery = window.matchMedia('(max-width: 1200px)');
       let lastWidth = window.innerWidth;
@@ -176,42 +170,35 @@ export default define({
         }
       }
 
-      changeTitlePos();
-
-      mediaQuery.addEventListener('change', () => {
+      function handleMediaChange() {
         changeTitlePos();
         checkDescribeLineOverflow(host);
-      });
-      window.addEventListener('resize', () => {
+      }
+
+      function handleResize() {
         changeTitlePos();
         const currentWidth = window.innerWidth;
         if (currentWidth !== lastWidth) {
           lastWidth = currentWidth;
           checkDescribeLineOverflow(host);
         }
-      });
+      }
+
+      changeTitlePos();
+
+      mediaQuery.addEventListener('change', handleMediaChange);
+      window.addEventListener('resize', handleResize);
       document.addEventListener('scroll', changeTitlePos);
 
       return () => {
-        mediaQuery.removeEventListener('change', () => {
-          changeTitlePos();
-          checkDescribeLineOverflow(host);
-        });
-        window.removeEventListener('resize', () => {
-          changeTitlePos();
-          const currentWidth = window.innerWidth;
-          if (currentWidth !== lastWidth) {
-            lastWidth = currentWidth;
-            checkDescribeLineOverflow(host);
-          }
-        });
+        mediaQuery.removeEventListener('change', handleMediaChange);
+        window.removeEventListener('resize', handleResize);
         document.removeEventListener('scroll', changeTitlePos);
       };
     },
   },
   showIssue: {
-    get: (_host, lastValue) => parseBoolean(lastValue, true),
-    set: (_host, value) => parseBoolean(value, true),
+    value: (_host, v) => parseBoolean(v, true),
   },
 
   render: (host) => {

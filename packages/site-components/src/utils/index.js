@@ -56,8 +56,7 @@ export function isGlobalConfigPage() {
 
 // 手机定位特殊处理
 export const mobileBodyStyle = {
-  get: (host, lastValue) => lastValue || {},
-  set: (host, value) => value,
+  value: (host, v) => v || {},
   connect: (host) => {
     // 响应手机定位
     const handleResize = () => {

@@ -1,7 +1,7 @@
 import { html, define } from 'hybrids';
 import style from './style.less?inline';
 
-const apiUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
+const apiUrl = import.meta.env.VITE_CONTRIBUTORS_API_URL;
 
 function renderContributors(list) {
   if (!list.length) return html``;
@@ -62,8 +62,7 @@ export default define({
   framework: '',
   componentName: '',
   contributorsData: {
-    get: (host, lastValue) => lastValue || {},
-    set: (host, value) => value,
+    value: (host, v) => v || {},
     connect: (host, key, invalidate) => {
       const cache = sessionStorage.getItem('__tdesign_contributors__');
 

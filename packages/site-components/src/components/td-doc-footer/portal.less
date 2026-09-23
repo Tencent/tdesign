@@ -2,8 +2,28 @@
 .TDesign-doc__qrcode-inner {
   padding: 12px;
   box-sizing: border-box;
-  background-color: #fff;
+  background-color: var(--bg-color-container);
   border-radius: 6px;
+
+  img {
+    display: block;
+    border-radius: 2px;
+  }
+}
+
+/**
+ * 深色模式下二维码反色为浅码，并用 contrast 补偿：
+ * 白底(255) → 36(#242424)、黑码(0) → 219(浅灰)，
+ * 使图片底色与 --bg-color-container 弹层背景一致，整体和谐；微信/QQ 均支持识别反色二维码
+ */
+:root[theme-mode="dark"] .TDesign-doc__qrcode-inner img {
+  filter: invert(1) contrast(0.718);
+}
+
+/* 深色模式下弹层、内框、箭头统一使用容器背景，避免边缘色差 */
+:root[theme-mode="dark"] .TDesign-doc__qrcode-popup {
+  --portal-background: var(--bg-color-container);
+  --portal-filter: none;
 }
 
 .TDesign-doc__qrcode-popup::after {
@@ -12,10 +32,9 @@
   width: 16px;
   height: 16px;
   transform: rotate(45deg);
-  transform: rotate(45deg);
-  background: #fff;
-  border-bottom: 1px solid #fff;
-  border-right: 1px solid #fff;
+  background: var(--bg-color-container);
+  border-bottom: 1px solid var(--bg-color-container);
+  border-right: 1px solid var(--bg-color-container);
   top: 64px;
   right: -4px;
 }

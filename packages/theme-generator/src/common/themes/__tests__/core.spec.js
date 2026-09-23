@@ -18,7 +18,7 @@ import {
   normalizeDevice,
   isMobile,
   isMiniProgram,
-  isUniApp,
+  isUniapp,
   getDefaultTheme,
   getRecommendThemes,
   findThemeByEnName,
@@ -27,7 +27,7 @@ import {
 import { parseRootCss } from '../../utils';
 import { TDESIGN_WEB_THEME, TDESIGN_MOBILE_THEME, WEB_RECOMMEND_THEMES, MOBILE_RECOMMEND_THEMES } from '../built-in';
 
-describe('normalizeDevice / isMobile / isMiniProgram / isUniApp', () => {
+describe('normalizeDevice / isMobile / isMiniProgram / isUniapp', () => {
   it('web 设备归一化为 web', () => {
     expect(normalizeDevice('web')).toBe('web');
   });
@@ -42,11 +42,11 @@ describe('normalizeDevice / isMobile / isMiniProgram / isUniApp', () => {
     expect(isMobile('uni-app')).toBe(true);
     expect(isMobile('web')).toBe(false);
   });
-  it('isMiniProgram / isUniApp 精确匹配', () => {
+  it('isMiniProgram / isUniapp 精确匹配', () => {
     expect(isMiniProgram('mini-program')).toBe(true);
-    expect(isUniApp('uni-app')).toBe(true);
+    expect(isUniapp('uni-app')).toBe(true);
     expect(isMiniProgram('web')).toBe(false);
-    expect(isUniApp('mobile')).toBe(false);
+    expect(isUniapp('mobile')).toBe(false);
   });
 });
 

@@ -41,8 +41,7 @@ function extractSlots(host) {
 export default define({
   tag: 'td-code-block',
   panel: {
-    get: (host, lastValue) => lastValue || '',
-    set: (host, value) => value,
+    value: (host, v) => v || '',
     observe: (host) => {
       if (!host.shadowRoot) return;
 

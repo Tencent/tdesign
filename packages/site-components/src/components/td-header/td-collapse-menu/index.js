@@ -62,12 +62,10 @@ function renderLinks({ headerList, baseComponentsLinks, platform, framework }) {
 export default define({
   tag: 'td-collapse-menu',
   headerList: {
-    get: (_host, lastValue) => lastValue || [],
-    set: (_host, value) => value,
+    value: (_host, v) => v || [],
   },
   baseComponentsLinks: {
-    get: (_host, lastValue) => lastValue || [],
-    set: (_host, value) => value,
+    value: (_host, v) => v || [],
   },
   platform: 'web',
   framework: 'vue',

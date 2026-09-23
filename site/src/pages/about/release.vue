@@ -32,7 +32,7 @@ import mila from 'markdown-it-link-attributes';
 
 const RELEASE_API = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/release';
 
-const titleReg = /<h[23]>\s*(Vue|React|Miniprogram|Flutter|UniApp|Figma|Sketch|Axure|AdobeXD|TDesign)/g;
+const titleReg = /<h[23]>\s*(Vue|React|Miniprogram|Flutter|Uniapp|Figma|Sketch|Axure|AdobeXD|TDesign)/g;
 
 const mdRender = new MarkdownIt({
   linkify: true,
@@ -195,7 +195,7 @@ export default {
             background-image: url(@/assets/flutter-logo.svg);
           }
 
-          &[name^='UniApp'] {
+          &[name^='Uniapp'] {
             background-image: url(@/assets/uniapp-logo.png);
           }
 

@@ -25,8 +25,7 @@ export default define({
   QRCode: () => QRCode,
   qrCanvas: ({ render }) => render().querySelector('#qrcode'),
   qrcodeUrl: {
-    get: (host, lastValue) => lastValue,
-    set: (host, value) => value,
+    value: (host, v) => v,
     connect: (host) => {
       requestAnimationFrame(() => {
         const qrcodeSlot = host.querySelector('[slot="qrcode"]');
@@ -42,8 +41,7 @@ export default define({
     },
   },
   fixedStyle: {
-    get: (host, lastValue) => lastValue || {},
-    set: (host, value) => value,
+    value: (host, v) => v || {},
     connect: (host, key) => {
       function handleScroll() {
         const isMobileResponse = window.innerWidth < 960;

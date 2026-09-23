@@ -579,7 +579,6 @@ import Banner from './banner.vue';
 import Avatar from './avatar.vue';
 import ComponentList from './component-list.vue';
 import Prismjs from 'prismjs';
-import { contributors } from './constants';
 
 import vueLogo from '@/assets/vue-logo.svg';
 import reactLogo from '@/assets/react-logo.svg';
@@ -594,6 +593,7 @@ import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, x
 
 const brandUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/brand/list';
 const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
+const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
 
 const isIntranet = location.host.includes('woa.com'); // 部分动态或内容只能通过内网访问
 let ticking = false;
@@ -632,7 +632,7 @@ export default {
       brandList: [],
       newsList: [],
       tabTransformWidth: 0,
-      contributors: contributors.slice(),
+      contributors: [],
       topContributors: [],
       bottomContributors: [],
       windowWidth: window.innerWidth,
@@ -864,7 +864,7 @@ export default {
 
   mounted() {
     this.watchHtmlMode();
-    this.changeContributors();
+    this.fetchContributors();
     this.getBrandList();
     this.getNews();
     window.addEventListener('resize', this.handleResize);
@@ -925,12 +925,34 @@ export default {
         });
       });
     },
+    fetchContributors() {
+      fetch(contributorsUrl)
+        .then((res) => res.json())
+        .then((data) => {
+          const design = (data && data.design) || {};
+          const raw = [].concat(design.web || [], design.mobile || [], design.chart || []);
+          const seen = new Set();
+          const list = [];
+          raw.forEach((name) => {
+            const trimmed = String(name).trim();
+            if (!trimmed) return;
+            const key = trimmed.toLowerCase();
+            if (seen.has(key)) return;
+            seen.add(key);
+            list.push(trimmed);
+          });
+          this.contributors = list;
+          this.changeContributors();
+        })
+        .catch((err) => console.error(err));
+    },
     handleIntroClick(item) {
       if (!item.status) return;
       window.open(item.href, '_blank');
     },
     changeContributors() {
       const { contributorCount, contributors } = this;
+      if (!contributors.length) return;
       this.topContributors = contributors.slice(0, contributorCount);
       this.bottomContributors = contributors.slice(-contributorCount);
 

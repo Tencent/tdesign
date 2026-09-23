@@ -167,8 +167,7 @@ function replaceSpecialTags(html) {
 export default define({
   tag: 'td-doc-changelog',
   changelogEn: {
-    get: (_host, lastValue) => parseBoolean(lastValue, false),
-    set: (_host, value) => value,
+    value: (_host, v) => parseBoolean(v, false),
   },
   visible: {
     value: false,

@@ -18,11 +18,11 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || (github.repository == 'Tencent/tdesign' && startsWith(github.head_ref, 'release/'))
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: pnpm/action-setup@v6
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
 
@@ -31,7 +31,7 @@ jobs:
       - run: pnpm -F @tdesign/site-components run build
 
       # 为了兼容 oidc 特指定 node 版本最小为 24
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
 
