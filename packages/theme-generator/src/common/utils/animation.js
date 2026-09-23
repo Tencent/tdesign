@@ -7,19 +7,19 @@ export function collapseAnimation() {
     el.dataset.oldPaddingTop = el.style.paddingTop;
     el.dataset.oldPaddingBottom = el.style.paddingBottom;
 
-    el.style.height = "0";
-    el.style.paddingTop = "0";
-    el.style.paddingBottom = "0";
+    el.style.height = '0';
+    el.style.paddingTop = '0';
+    el.style.paddingBottom = '0';
   };
   const enter = (el) => {
     el.dataset.oldOverflow = el.style.overflow;
     el.style.height = `${el.scrollHeight}px`;
     el.style.paddingTop = el.dataset.oldPaddingTop;
     el.style.paddingBottom = el.dataset.oldPaddingBottom;
-    el.style.overflow = "hidden";
+    el.style.overflow = 'hidden';
   };
   const afterEnter = (el) => {
-    el.style.height = "";
+    el.style.height = '';
     el.style.overflow = el.dataset.oldOverflow;
   };
   const beforeLeave = (el) => {
@@ -28,17 +28,17 @@ export function collapseAnimation() {
     el.dataset.oldOverflow = el.style.overflow;
 
     el.style.height = `${el.scrollHeight}px`;
-    el.style.overflow = "hidden";
+    el.style.overflow = 'hidden';
   };
   const leave = (el) => {
     if (el.scrollHeight !== 0) {
-      el.style.height = "0";
-      el.style.paddingTop = "0";
-      el.style.paddingBottom = "0";
+      el.style.height = '0';
+      el.style.paddingTop = '0';
+      el.style.paddingBottom = '0';
     }
   };
   const afterLeave = (el) => {
-    el.style.height = "";
+    el.style.height = '';
     el.style.overflow = el.dataset.oldOverflow;
     el.style.paddingTop = el.dataset.oldPaddingTop;
     el.style.paddingBottom = el.dataset.oldPaddingBottom;
@@ -57,13 +57,12 @@ export function collapseAnimation() {
 // refer to https://dev.to/jordienr/how-to-make-animated-gradients-like-stripe-56nh
 export function colorAnimation() {
   const canvas =
-    document
-      .querySelector("td-theme-generator")
-      ?.shadowRoot?.getElementById("canvas") ||
-    document.getElementById("canvas");
-  if (!canvas) return;
-  const context = canvas.getContext("2d");
+    document.querySelector('td-theme-generator')?.shadowRoot?.getElementById('canvas') ||
+    document.getElementById('canvas');
+  if (!canvas) return () => {};
+  const context = canvas.getContext('2d');
   let time = 0;
+  let rafId = null;
 
   const color = function (x, y, r, g, b) {
     context.fillStyle = `rgb(${r}, ${g}, ${b})`;
@@ -74,23 +73,12 @@ export function colorAnimation() {
   };
 
   const G = function (x, y, time) {
-    return Math.floor(
-      192 +
-        64 *
-          Math.sin(
-            (x * x * Math.cos(time / 4) + y * y * Math.sin(time / 3)) / 300
-          )
-    );
+    return Math.floor(192 + 64 * Math.sin((x * x * Math.cos(time / 4) + y * y * Math.sin(time / 3)) / 300));
   };
 
   const B = function (x, y, time) {
     return Math.floor(
-      192 +
-        64 *
-          Math.sin(
-            5 * Math.sin(time / 9) +
-              ((x - 100) * (x - 100) + (y - 100) * (y - 100)) / 1100
-          )
+      192 + 64 * Math.sin(5 * Math.sin(time / 9) + ((x - 100) * (x - 100) + (y - 100) * (y - 100)) / 1100),
     );
   };
 
@@ -101,8 +89,14 @@ export function colorAnimation() {
       }
     }
     time = time + 0.01;
-    window.requestAnimationFrame(startAnimation);
+    rafId = window.requestAnimationFrame(startAnimation);
   };
 
   startAnimation();
+
+  // 返回取消函数，供调用方在组件卸载时停止动画，避免内存/CPU 泄漏
+  return () => {
+    if (rafId != null) window.cancelAnimationFrame(rafId);
+    rafId = null;
+  };
 }

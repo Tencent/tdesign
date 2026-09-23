@@ -34,38 +34,24 @@
   </div>
 </template>
 
-<script>
-import { langMixin } from '@/common/i18n';
+<script setup>
+import { computed } from 'vue';
+
+import { useLang } from '@/common/i18n';
 import { getRecommendThemes, themeStore } from '@/common/themes';
 
 import PickedSvg from './PickedSvg.vue';
 
-export default {
-  name: 'RecommendThemes',
-  mixins: [langMixin],
-  computed: {
-    recommendedThemes() {
-      return getRecommendThemes(themeStore.device);
-    },
-    $theme() {
-      return themeStore.theme;
-    },
-  },
-  data() {
-    return {
-      isThemeTabVisible: false,
-      isDrawerVisible: false,
-    };
-  },
-  components: {
-    PickedSvg,
-  },
-  methods: {
-    handleChangeTheme(theme) {
-      themeStore.updateTheme(theme);
-    },
-  },
-};
+defineOptions({ name: 'RecommendThemes' });
+
+const { isEn } = useLang();
+
+const recommendedThemes = computed(() => getRecommendThemes(themeStore.device));
+const $theme = computed(() => themeStore.theme);
+
+function handleChangeTheme(theme) {
+  themeStore.updateTheme(theme);
+}
 </script>
 
 <style lang="less" scoped>

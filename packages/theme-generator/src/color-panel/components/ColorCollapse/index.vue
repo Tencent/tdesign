@@ -76,55 +76,60 @@
     </transition>
   </div>
 </template>
-<script>
-import { Edit1Icon, FileCopyIcon } from 'tdesign-icons-vue';
-import { Popup as TPopup } from 'tdesign-vue';
-import ArrowIcon from 'tdesign-vue/es/common-components/fake-arrow';
+<script setup>
+import { ref } from 'vue';
+import { Edit1Icon, FileCopyIcon } from 'tdesign-icons-vue-next';
+import { Popup as TPopup } from 'tdesign-vue-next/lib';
+import ArrowIcon from 'tdesign-vue-next/lib/common-components/fake-arrow';
 
 import { ColorPicker } from '@/common/components';
-import { langMixin } from '@/common/i18n';
+import { useLang } from '@/common/i18n';
 import { collapseAnimation, handleAttach } from '@/common/utils';
 
-export default {
-  name: 'ColorCollapse',
-  props: {
-    type: String,
-    title: String,
-    mainColor: String,
-    disabled: Boolean,
-  },
-  mixins: [langMixin],
-  components: { FileCopyIcon, ArrowIcon, TPopup, Edit1Icon, ColorPicker },
-  data() {
-    return {
-      ...collapseAnimation(),
-      isActive: false,
-      isHover: false,
-    };
-  },
-  emit: ['changeMainColor'],
-  methods: {
-    handleAttach,
-    changeColor(hex) {
-      this.$emit('changeMainColor', hex, this.type);
-    },
-    copyHex(hex) {
-      let input = document.createElement('input');
-      input.value = hex;
-      document.body.appendChild(input);
-      input.select();
-      document.execCommand('Copy');
-      input.remove();
-    },
-  },
-};
+defineOptions({ name: 'ColorCollapse' });
+
+const props = defineProps({
+  type: String,
+  title: String,
+  mainColor: String,
+  disabled: Boolean,
+});
+
+const emit = defineEmits(['changeMainColor']);
+
+const { lang } = useLang();
+
+const { beforeEnter, enter, afterEnter, beforeLeave, leave, afterLeave } = collapseAnimation();
+const isActive = ref(false);
+const isHover = ref(false);
+
+function changeColor(hex) {
+  emit('changeMainColor', hex, props.type);
+}
+
+async function copyHex(hex) {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(hex);
+      return;
+    }
+  } catch {
+    // 降级到 execCommand
+  }
+  const input = document.createElement('input');
+  input.value = hex;
+  document.body.appendChild(input);
+  input.select();
+  document.execCommand('Copy');
+  input.remove();
+}
 </script>
 <style lang="less" scoped>
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.1s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter-from, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
 
@@ -181,7 +186,7 @@ export default {
     align-items: center;
     color: var(--text-secondary);
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
-    /deep/ .t-icon {
+    :deep(.t-icon) {
       margin-left: 4px;
       cursor: pointer;
       transition: color 0.2s;

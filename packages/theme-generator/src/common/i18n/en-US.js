@@ -46,7 +46,7 @@ export default {
     popupPadding: 'popup Padding',
     margin: 'margin',
   },
-  borerRadius: {
+  borderRadius: {
     title: 'Border',
     radiusSize: 'Border Radius',
   },

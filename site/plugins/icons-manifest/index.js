@@ -14,7 +14,7 @@ export default function iconsManifestPlugin() {
     configResolved(config) {
       // outDir 相对 config.root（如 _site / ../_site），基于 root 解析为绝对路径，
       // 避免依赖 process.cwd() 导致在非 site 目录构建时写错位置。
-      outDir = path.resolve(config.root, config.build && config.build.outDir || 'dist');
+      outDir = path.resolve(config.root, (config.build && config.build.outDir) || 'dist');
     },
     async closeBundle() {
       if (!outDir) return;

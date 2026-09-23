@@ -12,50 +12,49 @@
   />
 </template>
 
-<script>
-import { ColorPickerPanel as TColorPickerPanel } from 'tdesign-vue';
+<script setup>
+import { ref, watch } from 'vue';
+import { ColorPickerPanel as TColorPickerPanel } from 'tdesign-vue-next/lib';
 import { handleAttach } from '../../utils';
 
-export default {
-  inheritAttrs: false,
-  name: 'ColorPicker',
-  components: {
-    TColorPickerPanel,
+defineOptions({ name: 'ColorPicker', inheritAttrs: false });
+
+const props = defineProps({
+  value: String,
+  format: {
+    type: String,
+    default: 'HEX',
   },
-  props: {
-    value: String,
-    format: {
-      type: String,
-      default: 'HEX',
-    },
+});
+
+const emit = defineEmits(['change']);
+
+const color = ref(props.value);
+
+watch(
+  () => props.value,
+  (val) => {
+    color.value = val;
   },
-  emit: ['change'],
-  data() {
-    return {
-      color: this.value,
-    };
-  },
-  methods: {
-    handleAttach,
-    handleChange(value) {
-      this.$emit('change', value);
-    },
-  },
-};
+);
+
+function handleChange(value) {
+  emit('change', value);
+}
 </script>
 
 <style lang="less" scoped>
 .t-color-picker__format {
   display: flex;
   margin: 12px 0 0 0;
-  /deep/ .t-select {
+  :deep(.t-select) {
     width: 72px;
     font-size: 14px;
   }
-  /deep/ .t-input {
+  :deep(.t-input) {
     font-size: 14px;
   }
-  /deep/ .t-select__wrap {
+  :deep(.t-select__wrap) {
     width: auto;
     margin-right: 8px;
   }

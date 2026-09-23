@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>TDesign Theme Generator</title>
+    <style>
+      /* body 背景跟随 theme-mode 适配 */
+      body {
+        margin: 0;
+        background: var(--td-bg-color-page, #f5f5f5);
+        transition: background-color 0.3s ease;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      }
+      :root[theme-mode='dark'] body {
+        background: var(--td-bg-color-page, #181818);
+      }
+
+      /* ============ dev 工具栏（不进入构建产物） ============ */
+      #dev-toolbar {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 100000;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        max-width: calc(100vw - 32px);
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: #fff;
+        color: #333;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+        font-size: 13px;
+      }
+      :root[theme-mode='dark'] #dev-toolbar {
+        background: #2c2c2c;
+        color: #e6e6e6;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+      }
+      #dev-toolbar .dev-field {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      #dev-toolbar select,
+      #dev-toolbar button {
+        font-size: 13px;
+        line-height: 1.4;
+        padding: 4px 10px;
+        border-radius: 6px;
+        border: 1px solid #dcdcdc;
+        background: #f7f7f7;
+        color: inherit;
+        cursor: pointer;
+      }
+      :root[theme-mode='dark'] #dev-toolbar select,
+      :root[theme-mode='dark'] #dev-toolbar button {
+        border-color: #4a4a4a;
+        background: #3a3a3a;
+        color: #e6e6e6;
+      }
+      #dev-toolbar button:hover {
+        border-color: var(--td-brand-color, #0052d9);
+      }
+      #dev-mode-toggle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      }
+      #dev-mode-toggle.dev-dark {
+        background: #e0e0e0;
+        color: #000;
+        border-color: rgba(0, 0, 0, 0.3);
+      }
+      #dev-mode-toggle:not(.dev-dark) {
+        background: #000;
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+      #dev-toolbar .dev-sep {
+        width: 1px;
+        align-self: stretch;
+        background: #e0e0e0;
+        margin: 0 2px;
+      }
+      :root[theme-mode='dark'] #dev-toolbar .dev-sep {
+        background: #4a4a4a;
+      }
+      #dev-toolbar .dev-title {
+        font-weight: 600;
+        opacity: 0.7;
+        letter-spacing: 0.5px;
+      }
+
+      /* ============ 轻量变量预览区（不进入构建产物） ============ */
+      #dev-preview {
+        max-width: 860px;
+        margin: 92px auto 120px;
+        padding: 0 16px;
+      }
+      #dev-preview .dev-section-title {
+        color: var(--td-text-color-secondary, #666);
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 28px 0 12px;
+      }
+      #dev-preview .dev-card {
+        background: var(--td-bg-color-container, #fff);
+        border: 1px solid var(--td-component-stroke, #e8e8e8);
+        border-radius: var(--td-radius-default, 3px);
+        box-shadow: var(--td-shadow-2, 0 3px 14px rgba(0, 0, 0, 0.06));
+        padding: 20px;
+      }
+      #dev-preview .dev-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+      }
+      #dev-preview .dev-btn {
+        padding: 7px 18px;
+        border-radius: var(--td-radius-default, 3px);
+        font-size: 14px;
+        cursor: pointer;
+        border: 1px solid transparent;
+      }
+      #dev-preview .dev-btn--primary {
+        background: var(--td-brand-color, #0052d9);
+        color: var(--td-text-color-anti, #fff);
+      }
+      #dev-preview .dev-btn--outline {
+        background: transparent;
+        border-color: var(--td-component-stroke, #dcdcdc);
+        color: var(--td-text-color-primary, #333);
+      }
+      #dev-preview .dev-btn--warning {
+        background: var(--td-warning-color, #e37318);
+        color: var(--td-text-color-anti, #fff);
+      }
+      #dev-preview .dev-btn--danger {
+        background: var(--td-error-color, #d54941);
+        color: var(--td-text-color-anti, #fff);
+      }
+      #dev-preview .dev-tag {
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        line-height: 20px;
+      }
+      #dev-preview .dev-tag--brand {
+        background: var(--td-brand-color-light, #f2f3ff);
+        color: var(--td-brand-color-7, #0052d9);
+      }
+      #dev-preview .dev-tag--warning {
+        background: var(--td-warning-color-1, #fff1e9);
+        color: var(--td-warning-color-7, #954500);
+      }
+      #dev-preview .dev-tag--error {
+        background: var(--td-error-color-1, #fff0ed);
+        color: var(--td-error-color-7, #ad352f);
+      }
+      #dev-preview .dev-tag--success {
+        background: var(--td-success-color-1, #e3f9e9);
+        color: var(--td-success-color-7, #006c45);
+      }
+      #dev-preview .dev-swatches {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+        gap: 6px;
+      }
+      #dev-preview .dev-swatch {
+        position: relative;
+        height: 48px;
+        border-radius: var(--td-radius-default, 3px);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 4px;
+        font-size: 10px;
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      }
+      #dev-preview .dev-swatch::before {
+        content: attr(data-index);
+        position: absolute;
+        top: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 13px;
+        font-weight: 600;
+        color: inherit;
+        text-shadow: inherit;
+        pointer-events: none;
+      }
+      #dev-preview .dev-text-primary {
+        color: var(--td-text-color-primary, #333);
+        font-size: 15px;
+      }
+      #dev-preview .dev-text-secondary {
+        color: var(--td-text-color-secondary, #888);
+        font-size: 14px;
+        margin-top: 6px;
+      }
+      #dev-preview .dev-text-placeholder {
+        color: var(--td-text-color-placeholder, #bbb);
+        font-size: 14px;
+        margin-top: 6px;
+      }
+      #dev-preview .dev-input {
+        display: block;
+        margin-top: 12px;
+        width: 100%;
+        max-width: 320px;
+        box-sizing: border-box;
+        padding: 7px 12px;
+        border: 1px solid var(--td-component-stroke, #dcdcdc);
+        border-radius: var(--td-radius-default, 3px);
+        background: var(--td-bg-color-container, #fff);
+        color: var(--td-text-color-primary, #333);
+        font-size: 14px;
+      }
+
+      /* 多框架组件预览：纯 HTML 映射 --td-* Token（框架无关，天然多端适配） */
+      #dev-preview .dev-link {
+        color: var(--td-brand-color, #0052d9);
+        font-size: 14px;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      #dev-preview .dev-link:hover {
+        color: var(--td-brand-color-hover, #266fe8);
+      }
+      /* 开关（仅作 Token 可视化，非真实组件） */
+      #dev-preview .dev-switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+        border-radius: 999px;
+        background: var(--td-bg-color-component, #dcdcdc);
+        transition: background-color 0.2s ease;
+        vertical-align: middle;
+      }
+      #dev-preview .dev-switch--on {
+        background: var(--td-brand-color, #0052d9);
+      }
+      #dev-preview .dev-switch-knob {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #fff;
+        transition: transform 0.2s ease;
+      }
+      #dev-preview .dev-switch--on .dev-switch-knob {
+        transform: translateX(20px);
+      }
+      /* 进度条 */
+      #dev-preview .dev-progress {
+        display: inline-block;
+        flex: 1;
+        min-width: 120px;
+        max-width: 240px;
+        height: 8px;
+        border-radius: 999px;
+        background: var(--td-bg-color-component, #e7e7e7);
+        overflow: hidden;
+        vertical-align: middle;
+      }
+      #dev-preview .dev-progress-fill {
+        display: block;
+        height: 100%;
+        background: var(--td-brand-color, #0052d9);
+      }
+
+      /* 框架切换 Tab */
+      #dev-preview .dev-fw-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 16px 0 10px;
+      }
+      #dev-preview .dev-fw-tab {
+        padding: 6px 14px;
+        font-size: 13px;
+        border: 1px solid var(--td-component-stroke, #dcdcdc);
+        border-radius: var(--td-radius-default, 3px);
+        background: var(--td-bg-color-container, #fff);
+        color: var(--td-text-color-primary, #333);
+        cursor: pointer;
+      }
+      #dev-preview .dev-fw-tab:hover {
+        border-color: var(--td-brand-color, #0052d9);
+      }
+      #dev-preview .dev-fw-tab.is-active {
+        background: var(--td-brand-color, #0052d9);
+        border-color: var(--td-brand-color, #0052d9);
+        color: var(--td-text-color-anti, #fff);
+      }
+      /* 代码片段 */
+      #dev-preview .dev-code {
+        margin: 0;
+        padding: 16px;
+        border: 1px solid var(--td-component-stroke, #e8e8e8);
+        border-radius: var(--td-radius-default, 3px);
+        background: var(--td-bg-color-secondarycontainer, #f3f3f3);
+        color: var(--td-text-color-primary, #333);
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        font-size: 12.5px;
+        line-height: 1.7;
+        white-space: pre;
+        overflow-x: auto;
+      }
+      #dev-preview .dev-fw-note {
+        margin: 10px 0 0;
+        font-size: 12px;
+        color: var(--td-text-color-placeholder, #bbb);
+      }
+
+      /* 移动端适配：纯 HTML 预览框架无关，窄屏下收拢边距、代码片段横向滚动 */
+      @media (max-width: 640px) {
+        #dev-preview {
+          margin: 64px auto 80px;
+          padding: 0 12px;
+        }
+        #dev-preview .dev-card {
+          padding: 14px;
+        }
+        #dev-status {
+          font-size: 12px;
+          gap: 4px 12px;
+        }
+        #dev-preview .dev-size-label {
+          flex: 0 0 90px;
+          font-size: 11px;
+        }
+        #dev-preview .dev-size-value {
+          font-size: 11px;
+        }
+      }
+
+      /* 圆角色阶 */
+      #dev-preview .dev-radii {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+        gap: 14px;
+      }
+      #dev-preview .dev-radius-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+      #dev-preview .dev-radius-box {
+        width: 100%;
+        height: 52px;
+        background: var(--td-brand-color-7, #0052d9);
+        border: 1px solid var(--td-component-stroke, #dcdcdc);
+      }
+      #dev-preview .dev-radius-label {
+        font-size: 12px;
+        color: var(--td-text-color-secondary, #888);
+      }
+
+      /* 阴影色阶 */
+      #dev-preview .dev-shadows {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 18px;
+      }
+      #dev-preview .dev-shadow-box {
+        height: 84px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--td-bg-color-container, #fff);
+        color: var(--td-text-color-secondary, #888);
+        font-size: 13px;
+        border-radius: var(--td-radius-default, 3px);
+      }
+
+      /* 字号 / 行高色阶 */
+      #dev-preview .dev-fonts {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      #dev-preview .dev-font-item {
+        color: var(--td-text-color-primary, #333);
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+      }
+      #dev-preview .dev-font-item .dev-font-name {
+        flex: 0 0 160px;
+        font-size: 12px;
+        color: var(--td-text-color-placeholder, #bbb);
+      }
+      #dev-preview .dev-font-item .dev-font-sample {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* 间距/尺寸色阶 */
+      #dev-preview .dev-sizes {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      #dev-preview .dev-size-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      #dev-preview .dev-size-label {
+        flex: 0 0 90px;
+        font-size: 12px;
+        color: var(--td-text-color-secondary, #888);
+      }
+      #dev-preview .dev-size-bar {
+        height: 16px;
+        background: var(--td-brand-color-7, #0052d9);
+        border-radius: var(--td-radius-small, 2px);
+        min-width: 2px;
+      }
+      #dev-preview .dev-size-value {
+        font-size: 12px;
+        color: var(--td-text-color-placeholder, #bbb);
+        font-variant-numeric: tabular-nums;
+      }
+      #dev-size-section.dev-hidden {
+        display: none;
+      }
+
+      /* 状态栏 */
+      #dev-status {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 16px;
+        padding: 10px 14px;
+        margin-bottom: 8px;
+        border-radius: var(--td-radius-default, 3px);
+        background: var(--td-bg-color-secondarycontainer, #f3f3f3);
+        color: var(--td-text-color-secondary, #888);
+        font-size: 13px;
+      }
+      #dev-status b {
+        color: var(--td-text-color-primary, #333);
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+      }
+      #dev-status .dev-status-dot {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: var(--td-radius-circle, 50%);
+        border: 1px solid var(--td-component-stroke, #ddd);
+        vertical-align: middle;
+        margin-right: 2px;
+      }
+
+      /* ============ Token 检视面板（不进入构建产物） ============ */
+      #dev-inspector {
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 100000;
+        height: 100vh;
+        width: 420px;
+        max-width: 90vw;
+        background: #1e1e1e;
+        color: #d4d4d4;
+        box-shadow: -4px 0 16px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        transform: translateX(100%);
+        transition: transform 0.25s ease;
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      }
+      #dev-inspector.dev-open {
+        transform: translateX(0);
+      }
+      #dev-inspector .dev-insp-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        border-bottom: 1px solid #333;
+        font-size: 13px;
+      }
+      #dev-inspector .dev-insp-head button {
+        background: transparent;
+        border: none;
+        color: #d4d4d4;
+        font-size: 18px;
+        cursor: pointer;
+      }
+      #dev-inspector .dev-insp-body {
+        flex: 1;
+        overflow: auto;
+        padding: 0;
+      }
+      #dev-inspector .dev-insp-block {
+        border-bottom: 1px solid #333;
+      }
+      #dev-inspector .dev-insp-block > .dev-insp-label {
+        position: sticky;
+        top: 0;
+        background: #252525;
+        padding: 6px 14px;
+        font-size: 12px;
+        color: #9cdcfe;
+      }
+      #dev-inspector textarea {
+        width: 100%;
+        box-sizing: border-box;
+        min-height: 160px;
+        border: none;
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 10px 14px;
+        font: inherit;
+        font-size: 12px;
+        line-height: 1.5;
+        resize: vertical;
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- dev 也走 Web Component 路径，与 build 产物行为一致（shadowRoot 隔离） -->
+    <td-theme-generator></td-theme-generator>
+
+    <!-- ============ dev 工具栏 ============ -->
+    <div id="dev-toolbar">
+      <span class="dev-title">DEV</span>
+      <span class="dev-field">
+        <label for="dev-device">device</label>
+        <select id="dev-device">
+          <option value="web">web</option>
+          <option value="mobile">mobile</option>
+          <option value="mini-program">mini-program</option>
+          <option value="uni-app">uni-app</option>
+        </select>
+      </span>
+      <span class="dev-field">
+        <label for="dev-show-setting">showSetting</label>
+        <input type="checkbox" id="dev-show-setting" />
+      </span>
+      <span class="dev-sep"></span>
+      <button id="dev-reset" type="button">重置主题</button>
+      <button id="dev-export" type="button">导出 CSS</button>
+      <button id="dev-copy" type="button">复制 CSS</button>
+      <button id="dev-insp-toggle" type="button">检视面板</button>
+      <span class="dev-sep"></span>
+      <button id="dev-mode-toggle" type="button" title="切换深浅色模式" aria-label="切换深浅色模式">🌙</button>
+    </div>
+
+    <!-- ============ 轻量变量预览区 ============ -->
+    <div id="dev-preview">
+      <div id="dev-status">
+        <span>device: <b id="dev-status-device">web</b></span>
+        <span>mode: <b id="dev-status-mode">light</b></span>
+        <span><span class="dev-status-dot" id="dev-status-dot"></span>brand: <b id="dev-status-brand">—</b></span>
+      </div>
+      <div class="dev-section-title">组件预览（随主题实时变化 · 纯 HTML 映射 5 套 TDesign Token）</div>
+
+      <!-- 共享可视化预览：框架无关，跟随 :root 主题变量，天然多端适配 -->
+      <div class="dev-card">
+        <div class="dev-row">
+          <span class="dev-btn dev-btn--primary">主操作</span>
+          <span class="dev-btn dev-btn--outline">次操作</span>
+          <span class="dev-btn dev-btn--warning">警告</span>
+          <span class="dev-btn dev-btn--danger">危险</span>
+          <span class="dev-tag dev-tag--brand">Brand</span>
+          <span class="dev-tag dev-tag--warning">Warning</span>
+          <span class="dev-tag dev-tag--error">Error</span>
+          <span class="dev-tag dev-tag--success">Success</span>
+        </div>
+        <div class="dev-row" style="margin-top: 12px">
+          <span class="dev-switch dev-switch--on"><span class="dev-switch-knob"></span></span>
+          <span class="dev-progress"><span class="dev-progress-fill" style="width: 60%"></span></span>
+          <a class="dev-link" href="javascript:void(0)">链接</a>
+        </div>
+        <input class="dev-input" placeholder="输入框示例（边框/背景跟随主题）" />
+        <div class="dev-text-primary">主文本颜色 --td-text-color-primary，用于标题与重点内容。</div>
+        <div class="dev-text-secondary">次要文本颜色 --td-text-color-secondary，用于辅助说明。</div>
+        <div class="dev-text-placeholder">占位文本颜色 --td-text-color-placeholder，用于输入框提示。</div>
+      </div>
+
+      <!-- 框架切换：各端组件用法（代码），均消费同一套 --td-* Token -->
+      <div class="dev-fw-tabs" id="dev-fw-tabs">
+        <button type="button" class="dev-fw-tab is-active" data-fw="vue-desktop">桌面 Vue</button>
+        <button type="button" class="dev-fw-tab" data-fw="vue-mobile">移动 Vue</button>
+        <button type="button" class="dev-fw-tab" data-fw="react">React</button>
+        <button type="button" class="dev-fw-tab" data-fw="miniprogram">小程序</button>
+        <button type="button" class="dev-fw-tab" data-fw="uniapp">uni-app</button>
+      </div>
+      <pre class="dev-code" data-fw="vue-desktop">
+&lt;template&gt;
+  &lt;t-button theme="primary"&gt;主操作&lt;/t-button&gt;
+  &lt;t-button theme="default"&gt;次操作&lt;/t-button&gt;
+  &lt;t-tag theme="primary"&gt;Brand&lt;/t-tag&gt;
+  &lt;t-input v-model="value" placeholder="输入框" /&gt;
+  &lt;t-switch v-model="checked" /&gt;
+  &lt;t-progress :percentage="60" /&gt;
+&lt;/template&gt;</pre
+      >
+      <pre class="dev-code" data-fw="vue-mobile" hidden>
+&lt;template&gt;
+  &lt;!-- 移动端组件默认 size="large"，触摸区域更大 --&gt;
+  &lt;t-button theme="primary" size="large"&gt;主操作&lt;/t-button&gt;
+  &lt;t-button theme="default" size="large"&gt;次操作&lt;/t-button&gt;
+  &lt;t-tag theme="primary"&gt;Brand&lt;/t-tag&gt;
+  &lt;t-input v-model="value" placeholder="输入框" /&gt;
+  &lt;t-switch v-model="checked" /&gt;
+  &lt;t-progress :percentage="60" /&gt;
+&lt;/template&gt;</pre
+      >
+      <pre class="dev-code" data-fw="react" hidden>
+import { Button, Tag, Input, Switch, Progress } from 'tdesign-react';
+import 'tdesign-react/es/style/index.css';
+
+export default () =&gt; (
+  &lt;&gt;
+    &lt;Button theme="primary"&gt;主操作&lt;/Button&gt;
+    &lt;Button theme="default"&gt;次操作&lt;/Button&gt;
+    &lt;Tag theme="primary"&gt;Brand&lt;/Tag&gt;
+    &lt;Input value={value} onChange={onChange} placeholder="输入框" /&gt;
+    &lt;Switch checked={checked} onChange={onChange} /&gt;
+    &lt;Progress percentage={60} /&gt;
+  &lt;/&gt;
+);</pre
+      >
+      <pre class="dev-code" data-fw="miniprogram" hidden>
+&lt;!-- index.wxml --&gt;
+&lt;t-button theme="primary"&gt;主操作&lt;/t-button&gt;
+&lt;t-button theme="default"&gt;次操作&lt;/t-button&gt;
+&lt;t-tag theme="primary"&gt;Brand&lt;/t-tag&gt;
+&lt;t-input value="{{value}}" placeholder="输入框" /&gt;
+&lt;t-switch checked="{{checked}}" bindchange="onChange" /&gt;
+&lt;t-progress percentage="60" /&gt;
+
+&lt;!-- index.json 注册组件 --&gt;
+{
+  "usingComponents": {
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-tag": "tdesign-miniprogram/tag/tag",
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-switch": "tdesign-miniprogram/switch/switch",
+    "t-progress": "tdesign-miniprogram/progress/progress"
+  }
+}</pre
+      >
+      <pre class="dev-code" data-fw="uniapp" hidden>
+&lt;template&gt;
+  &lt;t-button theme="primary"&gt;主操作&lt;/t-button&gt;
+  &lt;t-button theme="default"&gt;次操作&lt;/t-button&gt;
+  &lt;t-tag theme="primary"&gt;Brand&lt;/t-tag&gt;
+  &lt;t-input v-model="value" placeholder="输入框" /&gt;
+  &lt;t-switch v-model="checked" /&gt;
+  &lt;t-progress :percentage="60" /&gt;
+&lt;/template&gt;
+
+&lt;!-- pages.json 配置 easycom 自动引入 tdesign-uniapp --&gt;
+{
+  "easycom": {
+    "autoscan": true,
+    "custom": { "^t-(.*)": "tdesign-uniapp/$1/$1.vue" }
+  }
+}</pre
+      >
+      <p class="dev-fw-note">
+        以上 5 套 TDesign 共享同一套 --td-* 主题 Token，主题生成器输出的 CSS 变量可直接驱动各端组件换肤。
+      </p>
+
+      <div class="dev-section-title">品牌色阶 --td-brand-color-1..10（标注为实时计算值）</div>
+      <div class="dev-card">
+        <div class="dev-swatches">
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-1"
+            data-index="1"
+            style="background: var(--td-brand-color-1)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-2"
+            data-index="2"
+            style="background: var(--td-brand-color-2)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-3"
+            data-index="3"
+            style="background: var(--td-brand-color-3)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-4"
+            data-index="4"
+            style="background: var(--td-brand-color-4)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-5"
+            data-index="5"
+            style="background: var(--td-brand-color-5)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-6"
+            data-index="6"
+            style="background: var(--td-brand-color-6)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-7"
+            data-index="7"
+            style="background: var(--td-brand-color-7)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-8"
+            data-index="8"
+            style="background: var(--td-brand-color-8)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-9"
+            data-index="9"
+            style="background: var(--td-brand-color-9)"
+          ></div>
+          <div
+            class="dev-swatch"
+            data-var="--td-brand-color-10"
+            data-index="10"
+            style="background: var(--td-brand-color-10)"
+          ></div>
+        </div>
+      </div>
+
+      <div class="dev-section-title">圆角色阶 --td-radius-*（随圆角面板变化）</div>
+      <div class="dev-card">
+        <div class="dev-radii">
+          <div class="dev-radius-item">
+            <div class="dev-radius-box" style="border-radius: var(--td-radius-small)"></div>
+            <div class="dev-radius-label">small</div>
+          </div>
+          <div class="dev-radius-item">
+            <div class="dev-radius-box" style="border-radius: var(--td-radius-medium)"></div>
+            <div class="dev-radius-label">medium</div>
+          </div>
+          <div class="dev-radius-item">
+            <div class="dev-radius-box" style="border-radius: var(--td-radius-large)"></div>
+            <div class="dev-radius-label">large</div>
+          </div>
+          <div class="dev-radius-item">
+            <div class="dev-radius-box" style="border-radius: var(--td-radius-default)"></div>
+            <div class="dev-radius-label">default</div>
+          </div>
+          <div class="dev-radius-item">
+            <div class="dev-radius-box" style="border-radius: var(--td-radius-extra)"></div>
+            <div class="dev-radius-label">extra</div>
+          </div>
+          <div class="dev-radius-item">
+            <div class="dev-radius-box" style="border-radius: var(--td-radius-round)"></div>
+            <div class="dev-radius-label">round</div>
+          </div>
+          <div class="dev-radius-item">
+            <div class="dev-radius-box" style="border-radius: var(--td-radius-circle)"></div>
+            <div class="dev-radius-label">circle</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dev-section-title">阴影色阶 --td-shadow-*（随阴影面板变化）</div>
+      <div class="dev-card">
+        <div class="dev-shadows">
+          <div class="dev-shadow-box" style="box-shadow: var(--td-shadow-1)">shadow-1</div>
+          <div class="dev-shadow-box" style="box-shadow: var(--td-shadow-2)">shadow-2</div>
+          <div class="dev-shadow-box" style="box-shadow: var(--td-shadow-3)">shadow-3</div>
+          <div class="dev-shadow-box" style="box-shadow: var(--td-shadow-inset-top)">inset-top</div>
+        </div>
+      </div>
+
+      <div class="dev-section-title">字号 / 行高色阶 --td-font-size-* / --td-line-height-*（随字体面板变化）</div>
+      <div class="dev-card">
+        <div class="dev-fonts">
+          <div class="dev-font-item">
+            <span class="dev-font-name">title-large</span
+            ><span
+              class="dev-font-sample"
+              style="font-size: var(--td-font-size-title-large); line-height: var(--td-line-height-title-large)"
+              >设计与开发的一站式解决方案</span
+            >
+          </div>
+          <div class="dev-font-item">
+            <span class="dev-font-name">headline-medium</span
+            ><span
+              class="dev-font-sample"
+              style="font-size: var(--td-font-size-headline-medium); line-height: var(--td-line-height-headline-medium)"
+              >设计与开发的一站式解决方案</span
+            >
+          </div>
+          <div class="dev-font-item">
+            <span class="dev-font-name">body-medium</span
+            ><span
+              class="dev-font-sample"
+              style="font-size: var(--td-font-size-body-medium); line-height: var(--td-line-height-body-medium)"
+              >设计与开发的一站式解决方案</span
+            >
+          </div>
+          <div class="dev-font-item">
+            <span class="dev-font-name">body-small</span
+            ><span
+              class="dev-font-sample"
+              style="font-size: var(--td-font-size-body-small); line-height: var(--td-line-height-body-small)"
+              >设计与开发的一站式解决方案</span
+            >
+          </div>
+          <div class="dev-font-item">
+            <span class="dev-font-name">link-medium</span
+            ><span
+              class="dev-font-sample"
+              style="font-size: var(--td-font-size-link-medium); line-height: var(--td-line-height-link-medium)"
+              >设计与开发的一站式解决方案</span
+            >
+          </div>
+          <div class="dev-font-item">
+            <span class="dev-font-name">mark-medium</span
+            ><span
+              class="dev-font-sample"
+              style="font-size: var(--td-font-size-mark-medium); line-height: var(--td-line-height-mark-medium)"
+              >设计与开发的一站式解决方案</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="dev-section-title">功能色阶 warning / error / success（随颜色面板变化）</div>
+      <div class="dev-card">
+        <div class="dev-swatches">
+          <div class="dev-swatch" data-var="--td-warning-color-1" style="background: var(--td-warning-color-1)"></div>
+          <div class="dev-swatch" data-var="--td-warning-color-2" style="background: var(--td-warning-color-2)"></div>
+          <div class="dev-swatch" data-var="--td-warning-color-3" style="background: var(--td-warning-color-3)"></div>
+          <div class="dev-swatch" data-var="--td-warning-color-4" style="background: var(--td-warning-color-4)"></div>
+          <div class="dev-swatch" data-var="--td-warning-color-5" style="background: var(--td-warning-color-5)"></div>
+          <div class="dev-swatch" data-var="--td-warning-color-6" style="background: var(--td-warning-color-6)"></div>
+          <div class="dev-swatch" data-var="--td-warning-color-7" style="background: var(--td-warning-color-7)"></div>
+          <div class="dev-swatch" data-var="--td-warning-color-8" style="background: var(--td-warning-color-8)"></div>
+          <div class="dev-swatch" data-var="--td-warning-color-9" style="background: var(--td-warning-color-9)"></div>
+          <div class="dev-swatch" data-var="--td-warning-color-10" style="background: var(--td-warning-color-10)"></div>
+          <div class="dev-swatch" data-var="--td-error-color-1" style="background: var(--td-error-color-1)"></div>
+          <div class="dev-swatch" data-var="--td-error-color-2" style="background: var(--td-error-color-2)"></div>
+          <div class="dev-swatch" data-var="--td-error-color-3" style="background: var(--td-error-color-3)"></div>
+          <div class="dev-swatch" data-var="--td-error-color-4" style="background: var(--td-error-color-4)"></div>
+          <div class="dev-swatch" data-var="--td-error-color-5" style="background: var(--td-error-color-5)"></div>
+          <div class="dev-swatch" data-var="--td-error-color-6" style="background: var(--td-error-color-6)"></div>
+          <div class="dev-swatch" data-var="--td-error-color-7" style="background: var(--td-error-color-7)"></div>
+          <div class="dev-swatch" data-var="--td-error-color-8" style="background: var(--td-error-color-8)"></div>
+          <div class="dev-swatch" data-var="--td-error-color-9" style="background: var(--td-error-color-9)"></div>
+          <div class="dev-swatch" data-var="--td-error-color-10" style="background: var(--td-error-color-10)"></div>
+          <div class="dev-swatch" data-var="--td-success-color-1" style="background: var(--td-success-color-1)"></div>
+          <div class="dev-swatch" data-var="--td-success-color-2" style="background: var(--td-success-color-2)"></div>
+          <div class="dev-swatch" data-var="--td-success-color-3" style="background: var(--td-success-color-3)"></div>
+          <div class="dev-swatch" data-var="--td-success-color-4" style="background: var(--td-success-color-4)"></div>
+          <div class="dev-swatch" data-var="--td-success-color-5" style="background: var(--td-success-color-5)"></div>
+          <div class="dev-swatch" data-var="--td-success-color-6" style="background: var(--td-success-color-6)"></div>
+          <div class="dev-swatch" data-var="--td-success-color-7" style="background: var(--td-success-color-7)"></div>
+          <div class="dev-swatch" data-var="--td-success-color-8" style="background: var(--td-success-color-8)"></div>
+          <div class="dev-swatch" data-var="--td-success-color-9" style="background: var(--td-success-color-9)"></div>
+          <div class="dev-swatch" data-var="--td-success-color-10" style="background: var(--td-success-color-10)"></div>
+        </div>
+      </div>
+
+      <div class="dev-section-title">中性色阶 --td-gray-color-1..14</div>
+      <div class="dev-card">
+        <div class="dev-swatches">
+          <div class="dev-swatch" data-var="--td-gray-color-1" style="background: var(--td-gray-color-1)"></div>
+          <div class="dev-swatch" data-var="--td-gray-color-2" style="background: var(--td-gray-color-2)"></div>
+          <div class="dev-swatch" data-var="--td-gray-color-3" style="background: var(--td-gray-color-3)"></div>
+          <div class="dev-swatch" data-var="--td-gray-color-4" style="background: var(--td-gray-color-4)"></div>
+          <div class="dev-swatch" data-var="--td-gray-color-5" style="background: var(--td-gray-color-5)"></div>
+          <div class="dev-swatch" data-var="--td-gray-color-6" style="background: var(--td-gray-color-6)"></div>
+          <div class="dev-swatch" data-var="--td-gray-color-7" style="background: var(--td-gray-color-7)"></div>
+          <div class="dev-swatch" data-var="--td-gray-color-8" style="background: var(--td-gray-color-8)"></div>
+          <div class="dev-swatch" data-var="--td-gray-color-9" style="background: var(--td-gray-color-9)"></div>
+          <div class="dev-swatch" data-var="--td-gray-color-10" style="background: var(--td-gray-color-10)"></div>
+          <div class="dev-swatch" data-var="--td-gray-color-11" style="background: var(--td-gray-color-11)"></div>
+          <div class="dev-swatch" data-var="--td-gray-color-12" style="background: var(--td-gray-color-12)"></div>
+          <div class="dev-swatch" data-var="--td-gray-color-13" style="background: var(--td-gray-color-13)"></div>
+          <div class="dev-swatch" data-var="--td-gray-color-14" style="background: var(--td-gray-color-14)"></div>
+        </div>
+      </div>
+
+      <div id="dev-size-section">
+        <div class="dev-section-title">间距/尺寸色阶 --td-size-*（随尺寸面板变化）</div>
+        <div class="dev-card">
+          <div class="dev-sizes">
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-1</span>
+              <div class="dev-size-bar" style="width: var(--td-size-1)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-1"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-2</span>
+              <div class="dev-size-bar" style="width: var(--td-size-2)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-2"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-3</span>
+              <div class="dev-size-bar" style="width: var(--td-size-3)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-3"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-4</span>
+              <div class="dev-size-bar" style="width: var(--td-size-4)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-4"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-5</span>
+              <div class="dev-size-bar" style="width: var(--td-size-5)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-5"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-6</span>
+              <div class="dev-size-bar" style="width: var(--td-size-6)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-6"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-7</span>
+              <div class="dev-size-bar" style="width: var(--td-size-7)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-7"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-8</span>
+              <div class="dev-size-bar" style="width: var(--td-size-8)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-8"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-9</span>
+              <div class="dev-size-bar" style="width: var(--td-size-9)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-9"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-10</span>
+              <div class="dev-size-bar" style="width: var(--td-size-10)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-10"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-11</span>
+              <div class="dev-size-bar" style="width: var(--td-size-11)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-11"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-12</span>
+              <div class="dev-size-bar" style="width: var(--td-size-12)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-12"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-13</span>
+              <div class="dev-size-bar" style="width: var(--td-size-13)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-13"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-14</span>
+              <div class="dev-size-bar" style="width: var(--td-size-14)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-14"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-15</span>
+              <div class="dev-size-bar" style="width: var(--td-size-15)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-15"></span>
+            </div>
+            <div class="dev-size-item">
+              <span class="dev-size-label">size-16</span>
+              <div class="dev-size-bar" style="width: var(--td-size-16)"></div>
+              <span class="dev-size-value" data-var-value="--td-size-16"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Token 检视面板 ============ -->
+    <aside id="dev-inspector">
+      <div class="dev-insp-head">
+        <span>生成 Token 检视（#custom-theme / #custom-theme-dark）</span>
+        <button id="dev-insp-close" type="button" aria-label="关闭检视面板">×</button>
+      </div>
+      <div class="dev-insp-body">
+        <div class="dev-insp-block">
+          <div class="dev-insp-label">Light</div>
+          <textarea id="dev-insp-light" readonly spellcheck="false"></textarea>
+        </div>
+        <div class="dev-insp-block">
+          <div class="dev-insp-label">Dark</div>
+          <textarea id="dev-insp-dark" readonly spellcheck="false"></textarea>
+        </div>
+      </div>
+    </aside>
+
+    <script type="module" src="/src/wc-entry.js"></script>
+    <!-- dev 调试面板逻辑（独立 module，便于裸导入 cssbeautify 走常规转译） -->
+    <script type="module" src="/src/dev-tools.js"></script>
+  </body>
+</html>

@@ -88,113 +88,101 @@
   </div>
 </template>
 
-<script lang="jsx">
+<script setup>
+import { ref, watch, onMounted, nextTick } from 'vue';
 import {
   List as TList,
   ListItem as TListItem,
   Popup as TPopup,
   RadioButton as TRadioButton,
   RadioGroup as TRadioGroup,
-} from 'tdesign-vue';
+} from 'tdesign-vue-next/lib';
 
 import { SegmentSelection, SizeSlider } from '@/common/components';
-import { langMixin } from '@/common/i18n';
+import { useLang } from '@/common/i18n';
 import { getOptionFromLocal, updateLocalOption } from '@/common/themes';
 import { getTokenValue, handleAttach } from '@/common/utils';
 
 import { LINE_HEIGHT_OPTIONS, LINE_HEIGHT_STEPS, updateLineHeightTokens } from '../built-in/line-height-map';
 
-export default {
-  name: 'LineHeightAdjust',
-  components: {
-    TList,
-    TListItem,
-    TRadioGroup,
-    TRadioButton,
-    TPopup,
-    SizeSlider,
-    SegmentSelection,
-  },
-  mixins: [langMixin],
-  data() {
-    return {
-      isHover: null,
-      /* 存入 local 的 line-height 结构为 ${tokenType}_${lineHeightValue}
-         例如：plus_8 和 time_1.5  */
-      tokenType: 'plus', // 固定（plus） or 递增（time）
-      step: 3, // 默认
-      lineHeightValue: LINE_HEIGHT_STEPS[3],
-      lineHeightOptions: LINE_HEIGHT_OPTIONS,
-      lineHeightLabels: Object.fromEntries(LINE_HEIGHT_OPTIONS.map((item, index) => [index + 1, item.label])),
-      segmentSelectionDisabled: false,
-    };
-  },
-  watch: {
-    step(v) {
-      if (!LINE_HEIGHT_STEPS[v]) return;
-      this.lineHeightValue = LINE_HEIGHT_STEPS[v];
+defineOptions({ name: 'LineHeightAdjust' });
 
-      updateLocalOption('line-height', v !== 3 ? `plus_${this.lineHeightValue}` : null);
-      updateLineHeightTokens(this.lineHeightValue, this.tokenType);
-    },
-    tokenType(type) {
-      const defaultVal = type === 'time' ? 1.5 : 8;
+const { lang } = useLang();
 
-      const localLineHeight = getOptionFromLocal('line-height');
-      const lineHeightParts = localLineHeight?.split('_');
+const isHover = ref(null);
+/* 存入 local 的 line-height 结构为 ${tokenType}_${lineHeightValue}
+   例如：plus_8 和 time_1.5  */
+const tokenType = ref('plus'); // 固定（plus） or 递增（time）
+const step = ref(3); // 默认
+const lineHeightValue = ref(LINE_HEIGHT_STEPS[3]);
+const lineHeightOptions = LINE_HEIGHT_OPTIONS;
+const lineHeightLabels = Object.fromEntries(LINE_HEIGHT_OPTIONS.map((item, index) => [index + 1, item.label]));
+const segmentSelectionDisabled = ref(false);
 
-      if (type === lineHeightParts?.[0]) {
-        const suffixVal = lineHeightParts[1];
-        this.lineHeightValue = suffixVal;
-      } else {
-        this.lineHeightValue = defaultVal;
-      }
-      updateLocalOption('line-height', this.step == 3 ? `${type}_${this.lineHeightValue}` : null);
-      updateLineHeightTokens(this.lineHeightValue, type);
-    },
-  },
-  methods: {
-    getTokenValue,
-    handleAttach,
-    initStep() {
-      const localLineHeight = getOptionFromLocal('line-height');
-      if (!localLineHeight) return;
-      const lineHeightParts = localLineHeight.split('_');
-      if (lineHeightParts[0].startsWith('time')) {
-        this.tokenType = 'time';
-        return;
-      } else {
-        this.tokenType = 'plus';
-      }
+watch(step, (v) => {
+  if (!LINE_HEIGHT_STEPS[v]) return;
+  lineHeightValue.value = LINE_HEIGHT_STEPS[v];
 
-      const suffixVal = lineHeightParts[1];
-      const stepKey = Number(Object.keys(LINE_HEIGHT_STEPS).find((key) => LINE_HEIGHT_STEPS[key] == suffixVal));
+  updateLocalOption('line-height', v !== 3 ? `plus_${lineHeightValue.value}` : null);
+  updateLineHeightTokens(lineHeightValue.value, tokenType.value);
+});
 
-      if (stepKey >= 0) this.step = stepKey;
-      this.lineHeightValue = suffixVal;
-    },
-    handleVisibleChange(v) {
-      this.isHover = v;
-    },
-    handleChangeFontSize(v) {
-      this.lineHeightValue = v;
+watch(tokenType, (type) => {
+  const defaultVal = type === 'time' ? 1.5 : 8;
 
-      const isTimeCalc = this.tokenType === 'time';
+  const localLineHeight = getOptionFromLocal('line-height');
+  const lineHeightParts = localLineHeight?.split('_');
 
-      updateLineHeightTokens(v, this.tokenType);
-      updateLocalOption('line-height', `${isTimeCalc ? 'time' : 'plus'}_${v}`);
+  if (type === lineHeightParts?.[0]) {
+    const suffixVal = lineHeightParts[1];
+    lineHeightValue.value = suffixVal;
+  } else {
+    lineHeightValue.value = defaultVal;
+  }
+  updateLocalOption('line-height', step.value == 3 ? `${type}_${lineHeightValue.value}` : null);
+  updateLineHeightTokens(lineHeightValue.value, type);
+});
 
-      if (!isTimeCalc && !Object.values(LINE_HEIGHT_STEPS).includes(v)) {
-        this.segmentSelectionDisabled = true;
-      }
-    },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.initStep();
-    });
-  },
-};
+function initStep() {
+  const localLineHeight = getOptionFromLocal('line-height');
+  if (!localLineHeight) return;
+  const lineHeightParts = localLineHeight.split('_');
+  if (lineHeightParts[0].startsWith('time')) {
+    tokenType.value = 'time';
+    return;
+  } else {
+    tokenType.value = 'plus';
+  }
+
+  const suffixVal = lineHeightParts[1];
+  const stepKey = Number(Object.keys(LINE_HEIGHT_STEPS).find((key) => LINE_HEIGHT_STEPS[key] == suffixVal));
+
+  if (stepKey >= 0) step.value = stepKey;
+  lineHeightValue.value = suffixVal;
+}
+
+function handleVisibleChange(v) {
+  isHover.value = v;
+}
+
+function handleChangeFontSize(v) {
+  lineHeightValue.value = v;
+
+  const isTimeCalc = tokenType.value === 'time';
+
+  updateLineHeightTokens(v, tokenType.value);
+  updateLocalOption('line-height', `${isTimeCalc ? 'time' : 'plus'}_${v}`);
+
+  if (!isTimeCalc && !Object.values(LINE_HEIGHT_STEPS).includes(v)) {
+    segmentSelectionDisabled.value = true;
+  }
+}
+
+onMounted(() => {
+  nextTick(() => {
+    initStep();
+  });
+});
 </script>
 
 <style lang="less" scoped>
@@ -257,14 +245,14 @@ export default {
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
       margin-bottom: 8px;
     }
-    /deep/ .t-radio-group {
+    :deep(.t-radio-group) {
       width: 100%;
       text-align: center;
       border-radius: 6px;
       margin-bottom: 4px;
       background-color: var(--bg-color-theme-radio);
     }
-    /deep/ .t-radio-button {
+    :deep(.t-radio-button) {
       width: 50%;
       padding: 0;
       display: flex;
@@ -272,14 +260,14 @@ export default {
       align-items: center;
     }
 
-    /deep/ .t-list-item {
+    :deep(.t-list-item) {
       margin-bottom: 4px;
       border-radius: 6px;
       padding: 4px 8px;
       cursor: pointer;
       background: var(--bg-color-theme-surface);
     }
-    /deep/ .t-list-item__content {
+    :deep(.t-list-item__content) {
       width: 100%;
     }
   }

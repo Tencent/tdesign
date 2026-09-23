@@ -46,7 +46,7 @@ export default {
     popupPadding: '弹出层边距',
     margin: '组件间距',
   },
-  borerRadius: {
+  borderRadius: {
     title: '圆角',
     radiusSize: '圆角大小',
   },
