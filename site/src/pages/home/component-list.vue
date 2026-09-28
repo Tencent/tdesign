@@ -67,7 +67,7 @@ export default {
     this.watchList();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('touchstart', this.playVideo);
     !this.isMobile && this.intersectionObserver.disconnect();
   },

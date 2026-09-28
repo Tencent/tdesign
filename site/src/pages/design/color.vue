@@ -268,252 +268,252 @@ export default {
           {
             topTitle: 'Contrast Ratio 6.54:1',
             leftTxt: 'Blue7 Brand Color',
-            rightTxt: '#0052d9'
+            rightTxt: '#0052d9',
           },
           {
             leftTxt: 'Blue1',
-            rightTxt: '#f2f3ff'
+            rightTxt: '#f2f3ff',
           },
           {
             leftTxt: 'Blue2',
-            rightTxt: '#d9e1ff'
+            rightTxt: '#d9e1ff',
           },
           {
             leftTxt: 'Blue3',
-            rightTxt: '#b5c7ff'
+            rightTxt: '#b5c7ff',
           },
           {
             leftTxt: 'Blue4',
-            rightTxt: '#8eabff'
+            rightTxt: '#8eabff',
           },
           {
             leftTxt: 'Blue5',
-            rightTxt: '#618dff'
+            rightTxt: '#618dff',
           },
           {
             leftTxt: 'Blue6',
-            rightTxt: '#366ef4'
+            rightTxt: '#366ef4',
           },
           {
             leftTxt: 'Blue7',
-            rightTxt: '#0052d9'
+            rightTxt: '#0052d9',
           },
           {
             leftTxt: 'Blue8',
-            rightTxt: '#003cab'
+            rightTxt: '#003cab',
           },
           {
             leftTxt: 'Blue9',
-            rightTxt: '#002a7c'
+            rightTxt: '#002a7c',
           },
           {
             leftTxt: 'Blue10',
-            rightTxt: '#001a57'
-          }
+            rightTxt: '#001a57',
+          },
         ],
         list1: [
           {
             topTitle: 'Contrast Ratio 4.32:1',
             leftTxt: 'Red6 Error Color',
-            rightTxt: '#d54941'
+            rightTxt: '#d54941',
           },
           {
             leftTxt: 'Red1',
-            rightTxt: '#fff0ed'
+            rightTxt: '#fff0ed',
           },
           {
             leftTxt: 'Red2',
-            rightTxt: '#ffd8d2'
+            rightTxt: '#ffd8d2',
           },
           {
             leftTxt: 'Red3',
-            rightTxt: '#ffb9b0'
+            rightTxt: '#ffb9b0',
           },
           {
             leftTxt: 'Red4',
-            rightTxt: '#ff9285'
+            rightTxt: '#ff9285',
           },
           {
             leftTxt: 'Red5',
-            rightTxt: '#f6685d'
+            rightTxt: '#f6685d',
           },
           {
             leftTxt: 'Red6',
-            rightTxt: '#d54941'
+            rightTxt: '#d54941',
           },
           {
             leftTxt: 'Red7',
-            rightTxt: '#ad352f'
+            rightTxt: '#ad352f',
           },
           {
             leftTxt: 'Red8',
-            rightTxt: '#881f1c'
+            rightTxt: '#881f1c',
           },
           {
             leftTxt: 'Red9',
-            rightTxt: '#68070a'
+            rightTxt: '#68070a',
           },
           {
             leftTxt: 'Red10',
-            rightTxt: '#490002'
-          }
+            rightTxt: '#490002',
+          },
         ],
         list2: [
           {
             topTitle: 'Contrast Ratio 3.12:1',
             leftTxt: 'Orange5 Warning Color',
-            rightTxt: '#e37318'
+            rightTxt: '#e37318',
           },
           {
             leftTxt: 'Orange1',
-            rightTxt: '#fff1e9'
+            rightTxt: '#fff1e9',
           },
           {
             leftTxt: 'Orange2',
-            rightTxt: '#ffd9c2'
+            rightTxt: '#ffd9c2',
           },
           {
             leftTxt: 'Orange3',
-            rightTxt: '#ffb98c'
+            rightTxt: '#ffb98c',
           },
           {
             leftTxt: 'Orange4',
-            rightTxt: '#fa9550'
+            rightTxt: '#fa9550',
           },
           {
             leftTxt: 'Orange5',
-            rightTxt: '#e37318'
+            rightTxt: '#e37318',
           },
           {
             leftTxt: 'Orange6',
-            rightTxt: '#be5a00'
+            rightTxt: '#be5a00',
           },
           {
             leftTxt: 'Orange7',
-            rightTxt: '#954500'
+            rightTxt: '#954500',
           },
           {
             leftTxt: 'Orange8',
-            rightTxt: '#713300'
+            rightTxt: '#713300',
           },
           {
             leftTxt: 'Orange9',
-            rightTxt: '#532300'
+            rightTxt: '#532300',
           },
           {
             leftTxt: 'Orange10',
-            rightTxt: '#3b1700'
-          }
+            rightTxt: '#3b1700',
+          },
         ],
         list3: [
           {
             topTitle: 'Contrast Ratio 3.16:1',
             leftTxt: 'Green5 Success Color',
-            rightTxt: '#2ba471'
+            rightTxt: '#2ba471',
           },
           {
             leftTxt: 'Green1',
-            rightTxt: '#e3f9e9'
+            rightTxt: '#e3f9e9',
           },
           {
             leftTxt: 'Green2',
-            rightTxt: '#c6f3d7'
+            rightTxt: '#c6f3d7',
           },
           {
             leftTxt: 'Green3',
-            rightTxt: '#92dab2'
+            rightTxt: '#92dab2',
           },
           {
             leftTxt: 'Green4',
-            rightTxt: '#56c08d'
+            rightTxt: '#56c08d',
           },
           {
             leftTxt: 'Green5',
-            rightTxt: '#2ba471'
+            rightTxt: '#2ba471',
           },
           {
             leftTxt: 'Green6',
-            rightTxt: '#008858'
+            rightTxt: '#008858',
           },
           {
             leftTxt: 'Green7',
-            rightTxt: '#006c45'
+            rightTxt: '#006c45',
           },
           {
             leftTxt: 'Green8',
-            rightTxt: '#005334'
+            rightTxt: '#005334',
           },
           {
             leftTxt: 'Green9',
-            rightTxt: '#003b23'
+            rightTxt: '#003b23',
           },
           {
             leftTxt: 'Green10',
-            rightTxt: '#002515'
-          }
-        ]
+            rightTxt: '#002515',
+          },
+        ],
       },
       listNeutralLeft: [
         {
           leftTxt: 'White',
-          rightTxt: '#ffffff'
+          rightTxt: '#ffffff',
         },
         {
           leftTxt: 'Gray1  L96',
-          rightTxt: '#f3f3f3'
+          rightTxt: '#f3f3f3',
         },
         {
           leftTxt: 'Gray2  L94',
-          rightTxt: '#eeeeee'
+          rightTxt: '#eeeeee',
         },
         {
           leftTxt: 'Gray3  L92',
-          rightTxt: '#e8e8e8'
+          rightTxt: '#e8e8e8',
         },
         {
           leftTxt: 'Gray4  L88',
-          rightTxt: '#dddddd'
+          rightTxt: '#dddddd',
         },
         {
           leftTxt: 'Gray5  L80',
-          rightTxt: '#c6c6c6'
+          rightTxt: '#c6c6c6',
         },
         {
           leftTxt: 'Gray6  L68',
-          rightTxt: '#a6a6a6'
+          rightTxt: '#a6a6a6',
         },
         {
           leftTxt: 'Gray7  L58',
-          rightTxt: '#8b8b8b'
+          rightTxt: '#8b8b8b',
         },
         {
           leftTxt: 'Gray8  L50',
-          rightTxt: '#777777'
+          rightTxt: '#777777',
         },
         {
           leftTxt: 'Gray9  L40',
-          rightTxt: '#5e5e5e'
+          rightTxt: '#5e5e5e',
         },
         {
           leftTxt: 'Gray10  L32',
-          rightTxt: '#4b4b4b'
+          rightTxt: '#4b4b4b',
         },
         {
           leftTxt: 'Gray11  L24',
-          rightTxt: '#393939'
+          rightTxt: '#393939',
         },
         {
           leftTxt: 'Gray12  L18',
-          rightTxt: '#2c2c2c'
+          rightTxt: '#2c2c2c',
         },
         {
           leftTxt: 'Gray13  L14',
-          rightTxt: '#242424'
+          rightTxt: '#242424',
         },
         {
           leftTxt: 'Gray14  L8',
-          rightTxt: '#181818'
-        }
+          rightTxt: '#181818',
+        },
       ],
       listNeutralRight: [
         {
@@ -525,10 +525,10 @@ export default {
               font: 'Font Gy1',
               fontColor: '#000000 90%',
               text: 'Text',
-              size: 'AAA 17.5'
+              size: 'AAA 17.5',
             },
-            { roundBg: 'rgba(0, 0, 0, 0.6)', font: 'Font Gy2', fontColor: '#000000 60%', text: 'Text', size: 'AA 5.7' }
-          ]
+            { roundBg: 'rgba(0, 0, 0, 0.6)', font: 'Font Gy2', fontColor: '#000000 60%', text: 'Text', size: 'AA 5.7' },
+          ],
         },
         {
           color: 'Gray1',
@@ -539,10 +539,10 @@ export default {
               font: 'Font Gy1',
               fontColor: '#000000 90%',
               text: 'Text',
-              size: 'AAA 15.8'
+              size: 'AAA 15.8',
             },
-            { roundBg: 'rgba(0, 0, 0, 0.6)', font: 'Font Gy2', fontColor: '#000000 60%', text: 'Text', size: 'AA 5.1' }
-          ]
+            { roundBg: 'rgba(0, 0, 0, 0.6)', font: 'Font Gy2', fontColor: '#000000 60%', text: 'Text', size: 'AA 5.1' },
+          ],
         },
         {
           color: 'Gray2',
@@ -553,11 +553,11 @@ export default {
               font: 'Font Gy1',
               fontColor: '#000000 90%',
               text: 'Text',
-              size: 'AAA 15.1'
+              size: 'AAA 15.1',
             },
-            { roundBg: 'rgba(0, 0, 0, 0.6)', font: 'Font Gy2', fontColor: '#000000 60%', text: 'Text', size: 'AA 4.9' }
-          ]
-        }
+            { roundBg: 'rgba(0, 0, 0, 0.6)', font: 'Font Gy2', fontColor: '#000000 60%', text: 'Text', size: 'AA 4.9' },
+          ],
+        },
       ],
       listBrandLeft: [
         { colorName: 'L96', color: '#f2f3ff' },
@@ -573,7 +573,7 @@ export default {
         { colorName: 'L24', color: '#00328b' },
         { colorName: 'L18', color: '#00266e' },
         { colorName: 'L14', color: '#001e5c' },
-        { colorName: 'L8', color: '#001442' }
+        { colorName: 'L8', color: '#001442' },
       ],
       listBrandRight: [
         { colorName: 'BlueGray1  L96', colorTxt: '#f3f3f4' },
@@ -589,193 +589,193 @@ export default {
         { colorName: 'BlueGray11  L24', colorTxt: '#323843' },
         { colorName: 'BlueGray12  L18', colorTxt: '#272b34' },
         { colorName: 'BlueGray13  L14', colorTxt: '#20232b' },
-        { colorName: 'BlueGray14  L8', colorTxt: '#15181d' }
+        { colorName: 'BlueGray14  L8', colorTxt: '#15181d' },
       ],
       listExpand: {
         list: [
           {
             leftTxt: 'Cyan5',
-            rightTxt: '#029cd4'
+            rightTxt: '#029cd4',
           },
           {
             leftTxt: 'Cyan1',
-            rightTxt: '#e8f5ff'
+            rightTxt: '#e8f5ff',
           },
           {
             leftTxt: 'Cyan2',
-            rightTxt: '#c4e8ff'
+            rightTxt: '#c4e8ff',
           },
           {
             leftTxt: 'Cyan3',
-            rightTxt: '#85d3ff'
+            rightTxt: '#85d3ff',
           },
           {
             leftTxt: 'Cyan4',
-            rightTxt: '#41b8f2'
+            rightTxt: '#41b8f2',
           },
           {
             leftTxt: 'Cyan5',
-            rightTxt: '#029cd4'
+            rightTxt: '#029cd4',
           },
           {
             leftTxt: 'Cyan6',
-            rightTxt: '#0080b0'
+            rightTxt: '#0080b0',
           },
           {
             leftTxt: 'Cyan7',
-            rightTxt: '#00668e'
+            rightTxt: '#00668e',
           },
           {
             leftTxt: 'Cyan8',
-            rightTxt: '#004e6d'
+            rightTxt: '#004e6d',
           },
           {
             leftTxt: 'Cyan9',
-            rightTxt: '#003850'
+            rightTxt: '#003850',
           },
           {
             leftTxt: 'Cyan10',
-            rightTxt: '#002536'
-          }
+            rightTxt: '#002536',
+          },
         ],
         list1: [
           {
             leftTxt: 'Purple6',
-            rightTxt: '#8e56dd'
+            rightTxt: '#8e56dd',
           },
           {
             leftTxt: 'Purple1',
-            rightTxt: '#fbf0ff'
+            rightTxt: '#fbf0ff',
           },
           {
             leftTxt: 'Purple2',
-            rightTxt: '#eedcff'
+            rightTxt: '#eedcff',
           },
           {
             leftTxt: 'Purple3',
-            rightTxt: '#dcbfff'
+            rightTxt: '#dcbfff',
           },
           {
             leftTxt: 'Purple4',
-            rightTxt: '#c69cff'
+            rightTxt: '#c69cff',
           },
           {
             leftTxt: 'Purple5',
-            rightTxt: '#ad75fe'
+            rightTxt: '#ad75fe',
           },
           {
             leftTxt: 'Purple6',
-            rightTxt: '#8e56dd'
+            rightTxt: '#8e56dd',
           },
           {
             leftTxt: 'Purple7',
-            rightTxt: '#7137bf'
+            rightTxt: '#7137bf',
           },
           {
             leftTxt: 'Purple8',
-            rightTxt: '#5610a4'
+            rightTxt: '#5610a4',
           },
           {
             leftTxt: 'Purple9',
-            rightTxt: '#3b007b'
+            rightTxt: '#3b007b',
           },
           {
             leftTxt: 'Purple10',
-            rightTxt: '#280057'
-          }
+            rightTxt: '#280057',
+          },
         ],
         list2: [
           {
             leftTxt: 'Yellow4',
-            rightTxt: '#f5ba18'
+            rightTxt: '#f5ba18',
           },
           {
             leftTxt: 'Yellow1',
-            rightTxt: '#fff5e4'
+            rightTxt: '#fff5e4',
           },
           {
             leftTxt: 'Yellow2',
-            rightTxt: '#ffe7b5'
+            rightTxt: '#ffe7b5',
           },
           {
             leftTxt: 'Yellow3',
-            rightTxt: '#ffd36d'
+            rightTxt: '#ffd36d',
           },
           {
             leftTxt: 'Yellow4',
-            rightTxt: '#f5ba18'
+            rightTxt: '#f5ba18',
           },
           {
             leftTxt: 'Yellow5',
-            rightTxt: '#d8a100'
+            rightTxt: '#d8a100',
           },
           {
             leftTxt: 'Yellow6',
-            rightTxt: '#b38500'
+            rightTxt: '#b38500',
           },
           {
             leftTxt: 'Yellow7',
-            rightTxt: '#8b6600'
+            rightTxt: '#8b6600',
           },
           {
             leftTxt: 'Yellow8',
-            rightTxt: '#654900'
+            rightTxt: '#654900',
           },
           {
             leftTxt: 'Yellow9',
-            rightTxt: '#443000'
+            rightTxt: '#443000',
           },
           {
             leftTxt: 'Yellow10',
-            rightTxt: '#2b1d00'
-          }
+            rightTxt: '#2b1d00',
+          },
         ],
         list3: [
           {
             leftTxt: 'Pink5',
-            rightTxt: '#e851b3'
+            rightTxt: '#e851b3',
           },
           {
             leftTxt: 'Pink1',
-            rightTxt: '#fff0f6'
+            rightTxt: '#fff0f6',
           },
           {
             leftTxt: 'Pink2',
-            rightTxt: '#ffd8eb'
+            rightTxt: '#ffd8eb',
           },
           {
             leftTxt: 'Pink3',
-            rightTxt: '#ffaedc'
+            rightTxt: '#ffaedc',
           },
           {
             leftTxt: 'Pink4',
-            rightTxt: '#ff79cd'
+            rightTxt: '#ff79cd',
           },
           {
             leftTxt: 'Pink5',
-            rightTxt: '#e851b3'
+            rightTxt: '#e851b3',
           },
           {
             leftTxt: 'Pink6',
-            rightTxt: '#c43695'
+            rightTxt: '#c43695',
           },
           {
             leftTxt: 'Pink7',
-            rightTxt: '#a12279'
+            rightTxt: '#a12279',
           },
           {
             leftTxt: 'Pink8',
-            rightTxt: '#800a5f'
+            rightTxt: '#800a5f',
           },
           {
             leftTxt: 'Pink9',
-            rightTxt: '#610046'
+            rightTxt: '#610046',
           },
           {
             leftTxt: 'Pink10',
-            rightTxt: '#43002f'
-          }
-        ]
+            rightTxt: '#43002f',
+          },
+        ],
       },
       listGuideUi: [
         {
@@ -789,8 +789,8 @@ export default {
             { color: '#F3F3F3', colorTxt: 'gray-1' },
             { color: '#E7E7E7', colorTxt: 'gray-3' },
             { color: 'rgba(0,0,0,.9)', colorTxt: 'fontgray-1' },
-            { color: 'rgba(0,0,0,.6)', colorTxt: 'fontgray-2' }
-          ]
+            { color: 'rgba(0,0,0,.6)', colorTxt: 'fontgray-2' },
+          ],
         },
         {
           name: 'Global Token',
@@ -803,8 +803,8 @@ export default {
             { colorN: 'bg-color-container-hover:', colorTxt: '@gray-color-1' },
             { colorN: 'bg-color-container-active:', colorTxt: '@gray-color-3' },
             { colorN: 'text-color-primary:', colorTxt: '@font-gray-1' },
-            { colorN: 'text-color-secondary:', colorTxt: '@font-gray-2' }
-          ]
+            { colorN: 'text-color-secondary:', colorTxt: '@font-gray-2' },
+          ],
         },
         {
           name: '组件 Token',
@@ -817,10 +817,10 @@ export default {
             { colorN: 'table-bg-hover:', colorTxt: '@bg-color-container-hover' },
             { colorN: 'table-bg-active:', colorTxt: '@bg-color-container-active' },
             { colorN: 'menu-tabstext-select:', colorTxt: '@text-color-primary' },
-            { colorN: 'menu-tabstext:', colorTxt: '@text-color-secondary' }
-          ]
-        }
-      ]
+            { colorN: 'menu-tabstext:', colorTxt: '@text-color-secondary' },
+          ],
+        },
+      ],
     };
   },
 
@@ -849,7 +849,7 @@ export default {
       document.body.removeChild(textarea);
 
       this.$message.success('复制成功');
-    }
-  }
+    },
+  },
 };
 </script>

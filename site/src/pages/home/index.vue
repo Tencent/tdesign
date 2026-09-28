@@ -53,7 +53,7 @@
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -82,7 +82,7 @@
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -119,7 +119,7 @@
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -148,7 +148,7 @@
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -183,7 +183,7 @@
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -212,7 +212,7 @@
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -305,7 +305,7 @@
             <div class="component-board">
               <div class="component-board-item">
                 <t-input clearable placeholder="Please enter account">
-                  <desktop-icon slot="prefix-icon"></desktop-icon>
+                  <template #prefixIcon><desktop-icon /></template>
                 </t-input>
                 <t-select v-model="componentModel.selectValue" multiple placeholder="请选择">
                   <t-option
@@ -377,7 +377,7 @@
               <div class="component-board-item">
                 <div class="component-board-item-row">
                   <t-button>
-                    <icon name="file" slot="icon" />
+                    <template #icon><icon name="file" /></template>
                     Primary Button
                   </t-button>
                   <t-button theme="default">Button</t-button>
@@ -466,8 +466,8 @@
                 ref="topAvatars"
                 v-for="(item, index) in topContributors"
                 :key="index + 'top'"
-                :href="item | githubUrl"
-                :src="item | githubAvatar"
+                :href="githubUrl(item)"
+                :src="githubAvatar(item)"
               />
             </div>
           </div>
@@ -482,8 +482,8 @@
                 ref="bottomAvatars"
                 v-for="(item, index) in bottomContributors"
                 :key="index + 'bottom'"
-                :href="item | githubUrl"
-                :src="item | githubAvatar"
+                :href="githubUrl(item)"
+                :src="githubAvatar(item)"
               />
             </div>
           </div>
@@ -574,7 +574,7 @@
 </template>
 
 <script>
-import { DesktopIcon, Icon } from 'tdesign-icons-vue';
+import { DesktopIcon, Icon } from 'tdesign-icons-vue-next';
 import Banner from './banner.vue';
 import Avatar from './avatar.vue';
 import ComponentList from './component-list.vue';
@@ -606,23 +606,6 @@ export default {
     Banner,
     Avatar,
     ComponentList,
-  },
-
-  filters: {
-    githubAvatar(v) {
-      return `https://avatars.githubusercontent.com/${v}`;
-    },
-    githubUrl(v) {
-      return `https://github.com/${v}`;
-    },
-    statusText(v) {
-      if (v === 0) return 'In Progress';
-      if (v === 1) return 'Stable';
-      if (v === 2) return 'Alpha';
-      if (v === 3) return 'Beta';
-      if (v === 4) return 'Rc';
-      return '';
-    },
   },
 
   data() {
@@ -872,7 +855,7 @@ export default {
     this.initTabTimer();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.randomTimer);
     clearInterval(this.avatarTimer);
     clearInterval(this.tabTimer);
@@ -882,6 +865,20 @@ export default {
   },
 
   methods: {
+    githubAvatar(v) {
+      return `https://avatars.githubusercontent.com/${v}`;
+    },
+    githubUrl(v) {
+      return `https://github.com/${v}`;
+    },
+    statusText(v) {
+      if (v === 0) return 'In Progress';
+      if (v === 1) return 'Stable';
+      if (v === 2) return 'Alpha';
+      if (v === 3) return 'Beta';
+      if (v === 4) return 'Rc';
+      return '';
+    },
     handleMousemove(event) {
       if (ticking) return;
       ticking = true;

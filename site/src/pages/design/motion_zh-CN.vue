@@ -406,38 +406,38 @@
 
     <a ref="downloadBtn" href="" download="动效自查表.xls">
       <t-button class="download-btn" shape="circle" theme="default">
-        <img width="16" src="./assets/motion/download.svg" slot="icon" />
+        <template #icon><img width="16" src="./assets/motion/download.svg" /></template>
       </t-button>
     </a>
   </div>
 </template>
 
 <script lang="jsx">
-import lottie from 'lottie-web'
-import anchorMixin from '../mixins/anchor'
+import lottie from 'lottie-web';
+import anchorMixin from '../mixins/anchor';
 
-import xAxis from './assets/motion/X_Axis.json'
-import xAxisDark from './assets/motion/X_Axis_dark.json'
-import yAxis from './assets/motion/Y_Axis.json'
-import yAxisDark from './assets/motion/Y_Axis_dark.json'
-import zAxis from './assets/motion/Z_Axis.json'
-import zAxisDark from './assets/motion/Z_Axis_dark.json'
-import containerTrans from './assets/motion/container_trans.json'
-import containerTransDark from './assets/motion/container_trans_dark.json'
-import containerTransSample from './assets/motion/container_trans_sample.json'
-import containerTransSampleDark from './assets/motion/container_trans_sample_dark.json'
-import fadeInOut from './assets/motion/fade_in_out.json'
-import fadeInOutDark from './assets/motion/fade_in_out_dark.json'
+import xAxis from './assets/motion/X_Axis.json';
+import xAxisDark from './assets/motion/X_Axis_dark.json';
+import yAxis from './assets/motion/Y_Axis.json';
+import yAxisDark from './assets/motion/Y_Axis_dark.json';
+import zAxis from './assets/motion/Z_Axis.json';
+import zAxisDark from './assets/motion/Z_Axis_dark.json';
+import containerTrans from './assets/motion/container_trans.json';
+import containerTransDark from './assets/motion/container_trans_dark.json';
+import containerTransSample from './assets/motion/container_trans_sample.json';
+import containerTransSampleDark from './assets/motion/container_trans_sample_dark.json';
+import fadeInOut from './assets/motion/fade_in_out.json';
+import fadeInOutDark from './assets/motion/fade_in_out_dark.json';
 
 const lottieProps = {
   renderer: 'svg',
   loop: true,
-  autoplay: true
-}
+  autoplay: true,
+};
 
 export default {
   mixins: [anchorMixin],
-  data () {
+  data() {
     return {
       axisValue: 'x',
       slowValue: 'easing',
@@ -454,103 +454,103 @@ export default {
           value: '6',
           // eslint-disable-next-line
           content: (h) => <span>计算场景（高性能计算）</span>,
-        }
-      ]
-    }
+        },
+      ],
+    };
   },
 
-  mounted () {
-    this.loadAxisMotion()
-    this.loadContainerMotion()
-    this.loadFadeMotion()
-    this.initDownloadTable()
+  mounted() {
+    this.loadAxisMotion();
+    this.loadContainerMotion();
+    this.loadFadeMotion();
+    this.initDownloadTable();
   },
 
   methods: {
-    changeAxis (value) {
-      this.axisValue = value
+    changeAxis(value) {
+      this.axisValue = value;
     },
-    loadAxisMotion () {
+    loadAxisMotion() {
       lottie.loadAnimation({
         ...lottieProps,
         container: this.$refs.axisX,
-        animationData: xAxis
-      })
+        animationData: xAxis,
+      });
       lottie.loadAnimation({
         ...lottieProps,
         container: this.$refs.axisXDark,
-        animationData: xAxisDark
-      })
+        animationData: xAxisDark,
+      });
       lottie.loadAnimation({
         ...lottieProps,
         container: this.$refs.axisY,
-        animationData: yAxis
-      })
+        animationData: yAxis,
+      });
       lottie.loadAnimation({
         ...lottieProps,
         container: this.$refs.axisYDark,
-        animationData: yAxisDark
-      })
+        animationData: yAxisDark,
+      });
       lottie.loadAnimation({
         ...lottieProps,
         container: this.$refs.axisZ,
-        animationData: zAxis
-      })
+        animationData: zAxis,
+      });
       lottie.loadAnimation({
         ...lottieProps,
         container: this.$refs.axisZDark,
-        animationData: zAxisDark
-      })
+        animationData: zAxisDark,
+      });
     },
-    loadContainerMotion () {
+    loadContainerMotion() {
       lottie.loadAnimation({
         ...lottieProps,
         container: this.$refs.containerMotion,
-        animationData: containerTrans
-      })
+        animationData: containerTrans,
+      });
       lottie.loadAnimation({
         ...lottieProps,
         container: this.$refs.containerMotionDark,
-        animationData: containerTransDark
-      })
+        animationData: containerTransDark,
+      });
       lottie.loadAnimation({
         ...lottieProps,
         container: this.$refs.containerMotionSample,
-        animationData: containerTransSample
-      })
+        animationData: containerTransSample,
+      });
       lottie.loadAnimation({
         ...lottieProps,
         container: this.$refs.containerMotionSampleDark,
-        animationData: containerTransSampleDark
-      })
+        animationData: containerTransSampleDark,
+      });
     },
-    loadFadeMotion () {
+    loadFadeMotion() {
       lottie.loadAnimation({
         ...lottieProps,
         container: this.$refs.fadeMotion,
-        animationData: fadeInOut
-      })
+        animationData: fadeInOut,
+      });
       lottie.loadAnimation({
         ...lottieProps,
         container: this.$refs.fadeMotionDark,
-        animationData: fadeInOutDark
-      })
+        animationData: fadeInOutDark,
+      });
     },
 
-    changeSlow (value) {
-      this.slowValue = value
+    changeSlow(value) {
+      this.slowValue = value;
     },
 
-    initDownloadTable () {
-      const tableContent = this.$refs.tableCheck.outerHTML
-      const html = `<html><head><meta charset='utf-8' /></head><body>${tableContent}</body></html>`
+    initDownloadTable() {
+      const tableContent = this.$refs.tableCheck.outerHTML;
+      const html = `<html><head><meta charset='utf-8' /></head><body>${tableContent}</body></html>`;
 
       const blob = new Blob([html], {
-        type: 'application/vnd.ms-excel'
-      })
+        type: 'application/vnd.ms-excel',
+      });
 
-      this.$refs.downloadBtn.href = URL.createObjectURL(blob)
-    }
-  }
-}
+      this.$refs.downloadBtn.href = URL.createObjectURL(blob);
+    },
+  },
+};
 </script>

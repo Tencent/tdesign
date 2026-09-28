@@ -395,7 +395,7 @@
       </tbody>
       <thead>
         <th></th>
-        <th> Can my animation be clearly perceived?</th>
+        <th>Can my animation be clearly perceived?</th>
         <th></th>
       </thead>
       <tbody>
@@ -471,7 +471,7 @@
               <t-icon name="check-circle-filled" />
             </label>
           </td>
-          <td> Can necessary information still be conveyed statically if the animation is deleted?</td>
+          <td>Can necessary information still be conveyed statically if the animation is deleted?</td>
           <td></td>
         </tr>
       </tbody>
@@ -479,7 +479,7 @@
 
     <a ref="downloadBtn" href="" download="动效自查表.xls">
       <t-button class="download-btn" shape="circle" theme="default">
-        <img width="16" src="./assets/motion/download.svg" slot="icon" />
+        <template #icon><img width="16" src="./assets/motion/download.svg" /></template>
       </t-button>
     </a>
   </div>

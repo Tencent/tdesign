@@ -3,7 +3,7 @@
     "browser": true,
     "es2021": true
   },
-  "extends": ["plugin:vue/essential", "standard","prettier"],
+  "extends": ["plugin:vue/vue3-essential", "standard", "prettier"],
   "parserOptions": {
     "ecmaVersion": "latest",
     "parser": "@typescript-eslint/parser",
@@ -16,6 +16,7 @@
   "plugins": ["vue", "@typescript-eslint"],
   "rules": {
     "indent": ["error", 2],
-    "vue/multi-word-component-names": 0
+    "vue/multi-word-component-names": 0,
+    "vue/no-deprecated-slot-attribute": 0
   }
 }

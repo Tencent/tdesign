@@ -91,7 +91,7 @@ export default {
     this.reploadImage();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     // 离开当前页面时，可以调用该方法取消掉requestAnimationFrame
     this.canvas3dLight && this.canvas3dLight.cancelAnimationFrame();
     this.canvas3dDark && this.canvas3dDark.cancelAnimationFrame();

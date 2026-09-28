@@ -82,9 +82,9 @@
         <span class="step title">Font Size</span>
         <span class="title">Size</span>
       </div>
-      <template v-for="(item, i) in fontList">
-        <div :key="i" v-if="item.type === 'divider'" class="divider"></div>
-        <div v-else :key="i" :class="['font-' + item.fontSize]">
+      <template v-for="(item, i) in fontList" :key="i">
+        <div v-if="item.type === 'divider'" class="divider"></div>
+        <div v-else :class="['font-' + item.fontSize]">
           <span class="step">{{ item.step }}</span>
           <span>{{ item.size }}</span>
           <span v-if="item.desc" class="desc">{{ item.desc }}</span>

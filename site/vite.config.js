@@ -1,6 +1,6 @@
 import path from 'path';
 import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue2';
+import vue from '@vitejs/plugin-vue';
 import tdocPlugin from './plugins/tdoc/index.js';
 import iconsManifestPlugin from './plugins/icons-manifest/index.js';
 
@@ -44,6 +44,11 @@ export default ({ mode }) => {
     plugins: [
       vue({
         include: /(\.md|\.vue)$/,
+        template: {
+          compilerOptions: {
+            isCustomElement: (tag) => tag.startsWith('td-'),
+          },
+        },
       }),
       tdocPlugin(),
       iconsManifestPlugin(),

@@ -97,9 +97,7 @@ export default {
       // -webkit-animation: r1 6s cubic-bezier(0.38, 0, 0.24, 1) infinite;
       opacity: 0;
       visibility: hidden;
-      transition:
-        opacity 0.2s linear,
-        visibility 0.2s linear;
+      transition: opacity 0.2s linear, visibility 0.2s linear;
     }
 
     img {

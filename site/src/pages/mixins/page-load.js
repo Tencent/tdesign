@@ -1,23 +1,23 @@
 export default {
-  data () {
+  data() {
     return {
-      loaded: false
-    }
+      loaded: false,
+    };
   },
 
   computed: {
-    contentStyle () {
-      const { loaded } = this
-      return { visibility: loaded ? 'visible' : 'hidden' }
-    }
+    contentStyle() {
+      const { loaded } = this;
+      return { visibility: loaded ? 'visible' : 'hidden' };
+    },
   },
 
   methods: {
-    contentLoaded (callback) {
+    contentLoaded(callback) {
       requestAnimationFrame(() => {
-        this.loaded = true
-        callback()
-      })
-    }
-  }
-}
+        this.loaded = true;
+        callback();
+      });
+    },
+  },
+};

@@ -67,7 +67,7 @@ const routes = [
     component: () => import('./pages/icons/index.vue'),
   },
   {
-    path: '*',
+    path: '/:pathMatch(.*)*',
     redirect: '/',
   },
 ];

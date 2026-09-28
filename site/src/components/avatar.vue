@@ -1,23 +1,18 @@
 <template>
   <span :class="_class" :style="_style">
-    <img
-      :src="imgSrc"
-      alt="user avatar"
-      @error="onError"
-      v-if="!error && imgSrc"
-    >
-    <div class="tdesign-avatar-name">{{username}}</div>
+    <img :src="imgSrc" alt="user avatar" @error="onError" v-if="!error && imgSrc" />
+    <div class="tdesign-avatar-name">{{ username }}</div>
   </span>
 </template>
 <script>
-function getSrc (username, src) {
+function getSrc(username, src) {
   if (username) {
     // return `http://dcloud.oa.com/Public/Avatar/${username}.png`;
     // return `http://r.hrc.oa.com/photo/500/${username}.png`;
-    return `https://dayu.oa.com/avatars/${username}/profile.jpg`
+    return `https://dayu.oa.com/avatars/${username}/profile.jpg`;
   }
 
-  return src || ''
+  return src || '';
 }
 
 export default {
@@ -28,7 +23,7 @@ export default {
      */
     type: {
       type: String,
-      default: 'round'
+      default: 'round',
     },
     /**
      * 头像大小
@@ -36,46 +31,49 @@ export default {
      */
     size: {
       type: String,
-      default: 'default'
+      default: 'default',
     },
     username: String,
     src: String,
     width: [String, Number],
-    height: [String, Number]
+    height: [String, Number],
   },
-  data () {
+  data() {
     return {
       prefixCls: 'tdesign-avatar',
-      error: false
-    }
+      error: false,
+    };
   },
   computed: {
-    _class () {
-      return [this.prefixCls, {
-        [`${this.prefixCls}__lg`]: this.size === 'large',
-        [`${this.prefixCls}__square`]: this.type === 'square',
-        [`${this.prefixCls}__default`]: this.error || !this.imgSrc
-      }]
+    _class() {
+      return [
+        this.prefixCls,
+        {
+          [`${this.prefixCls}__lg`]: this.size === 'large',
+          [`${this.prefixCls}__square`]: this.type === 'square',
+          [`${this.prefixCls}__default`]: this.error || !this.imgSrc,
+        },
+      ];
     },
-    _style () {
+    _style() {
       if (this.width) {
         return {
           width: `${this.width}px`,
-          height: `${this.width}px`
-        }
+          height: `${this.width}px`,
+        };
       }
-      return {}
+      return {};
     },
-    imgSrc () {
-      return getSrc(this.username, this.src)
-    }
+    imgSrc() {
+      return getSrc(this.username, this.src);
+    },
   },
   methods: {
-    onError () {
-      this.error = true
-    }
-  }
-}
+    onError() {
+      this.error = true;
+    },
+  },
+};
 </script>
 
 <style lang="less">

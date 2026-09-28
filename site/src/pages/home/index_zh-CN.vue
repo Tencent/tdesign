@@ -12,22 +12,25 @@
                 <t-tag class="tds-intro-button" theme="primary" style="height: 24px; cursor: pointer"
                   >腾讯 “端服务” 联盟产品</t-tag
                 >
-                <div class="tds-intro" slot="content">
-                  <h4>腾讯 “端服务” 联盟产品</h4>
-                  <p>
-                    腾讯端服务（Tencent Device-oriented
-                    Service，简称TDS），是由腾讯大前端技术委员会发起并创立的腾讯集团内的大前端技术产品联盟。
-                  </p>
-                </div>
-                <div slot="icon" />
-                <div slot="cancelBtn" />
-                <t-button
-                  slot="confirmBtn"
-                  size="small"
-                  style="margin-left: 8px"
-                  @click="() => handleIntroClick('https://tds.qq.com/?from=tdesign')"
-                  >查看详情</t-button
-                >
+                <template #content>
+                  <div class="tds-intro">
+                    <h4>腾讯 “端服务” 联盟产品</h4>
+                    <p>
+                      腾讯端服务（Tencent Device-oriented
+                      Service，简称TDS），是由腾讯大前端技术委员会发起并创立的腾讯集团内的大前端技术产品联盟。
+                    </p>
+                  </div>
+                </template>
+                <template #icon><div /></template>
+                <template #cancelBtn><div /></template>
+                <template #confirmBtn>
+                  <t-button
+                    size="small"
+                    style="margin-left: 8px"
+                    @click="() => handleIntroClick('https://tds.qq.com/?from=tdesign')"
+                    >查看详情</t-button
+                  >
+                </template>
               </t-popconfirm>
             </div>
           </h2>
@@ -76,7 +79,7 @@
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -105,7 +108,7 @@
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -141,7 +144,7 @@
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -170,7 +173,7 @@
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -205,7 +208,7 @@
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -234,7 +237,7 @@
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -326,7 +329,7 @@
             <div class="component-board">
               <div class="component-board-item">
                 <t-input clearable placeholder="请输入用户名">
-                  <desktop-icon slot="prefix-icon"></desktop-icon>
+                  <template #prefixIcon><desktop-icon /></template>
                 </t-input>
                 <t-select v-model="componentModel.selectValue" multiple placeholder="请选择">
                   <t-option
@@ -398,7 +401,7 @@
               <div class="component-board-item">
                 <div class="component-board-item-row">
                   <t-button>
-                    <icon slot="icon" name="file" />
+                    <template #icon><icon name="file" /></template>
                     主要按钮
                   </t-button>
                   <t-button theme="default">按钮</t-button>
@@ -480,8 +483,8 @@
                 v-for="(item, index) in topContributors"
                 ref="topAvatars"
                 :key="index + 'top'"
-                :href="item | githubUrl"
-                :src="item | githubAvatar"
+                :href="githubUrl(item)"
+                :src="githubAvatar(item)"
               />
             </div>
           </div>
@@ -496,8 +499,8 @@
                 v-for="(item, index) in bottomContributors"
                 ref="bottomAvatars"
                 :key="index + 'bottom'"
-                :href="item | githubUrl"
-                :src="item | githubAvatar"
+                :href="githubUrl(item)"
+                :src="githubAvatar(item)"
               />
             </div>
           </div>
@@ -581,7 +584,7 @@
 </template>
 
 <script>
-import { DesktopIcon, Icon } from 'tdesign-icons-vue';
+import { DesktopIcon, Icon } from 'tdesign-icons-vue-next';
 import Banner from './banner.vue';
 import Avatar from './avatar.vue';
 import ComponentList from './component-list.vue';
@@ -614,23 +617,6 @@ export default {
     Banner,
     Avatar,
     ComponentList,
-  },
-
-  filters: {
-    githubAvatar(v) {
-      return `https://avatars.githubusercontent.com/${v}`;
-    },
-    githubUrl(v) {
-      return `https://github.com/${v}`;
-    },
-    statusText(v) {
-      if (v === 0) return '待上线';
-      if (v === 1) return 'Stable';
-      if (v === 2) return 'Alpha';
-      if (v === 3) return 'Beta';
-      if (v === 4) return 'Rc';
-      return '';
-    },
   },
 
   data() {
@@ -891,6 +877,20 @@ export default {
   },
 
   methods: {
+    githubAvatar(v) {
+      return `https://avatars.githubusercontent.com/${v}`;
+    },
+    githubUrl(v) {
+      return `https://github.com/${v}`;
+    },
+    statusText(v) {
+      if (v === 0) return '待上线';
+      if (v === 1) return 'Stable';
+      if (v === 2) return 'Alpha';
+      if (v === 3) return 'Beta';
+      if (v === 4) return 'Rc';
+      return '';
+    },
     handleMousemove(event) {
       if (ticking) return;
       ticking = true;

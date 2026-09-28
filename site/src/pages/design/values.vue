@@ -136,7 +136,7 @@ export default {
     window.addEventListener('touchstart', this.playAllVideo);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('touchstart', this.playAllVideo);
   },
 

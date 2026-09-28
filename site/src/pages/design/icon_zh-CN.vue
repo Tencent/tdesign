@@ -234,7 +234,7 @@
 
 <script>
 import anchorMixin from '../mixins/anchor';
-import { Link1Icon } from 'tdesign-icons-vue';
+import { Link1Icon } from 'tdesign-icons-vue-next';
 export default {
   mixins: [anchorMixin],
   components: {

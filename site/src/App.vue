@@ -31,7 +31,7 @@ export default {
     window.addEventListener('load', this.handleHashScroll);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('load', this.handleHashScroll);
   },
 

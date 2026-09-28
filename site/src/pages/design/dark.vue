@@ -89,50 +89,50 @@
 </template>
 
 <script>
-import anchorMixin from '../mixins/anchor'
+import anchorMixin from '../mixins/anchor';
 
 export default {
   mixins: [anchorMixin],
 
-  data () {
+  data() {
     return {
       dataSource: [
         {
           index: 0,
           token: '@text-color-primary',
           name: 'Title',
-          color: '#ffffff 90%'
+          color: '#ffffff 90%',
         },
         {
           index: 1,
           token: '@text-color-secondary',
           name: 'Secondary Text',
-          color: '#ffffff 60%'
+          color: '#ffffff 60%',
         },
         {
           index: 2,
           token: '@text-color-placeholder',
           name: 'Placeholder Text',
-          color: '#ffffff 40%'
+          color: '#ffffff 40%',
         },
         {
           index: 3,
           token: '@text-color-disabled',
           name: 'Disabled Text',
-          color: '#ffffff 26%'
-        }
+          color: '#ffffff 26%',
+        },
       ],
       columns: [
         { ellipsis: true, colKey: 'token', title: 'token' },
         { ellipsis: true, colKey: 'name', title: 'name' },
-        { ellipsis: true, colKey: 'color', title: 'value' }
+        { ellipsis: true, colKey: 'color', title: 'value' },
       ],
       colorList: {
         list: [
           {
             topTitle: 'Blue',
             leftTxt: 'Blue6',
-            rightTxt: '#2174FF'
+            rightTxt: '#2174FF',
           },
           { leftTxt: 'Blue1', rightTxt: '#1E2C60' },
           { leftTxt: 'Blue2', rightTxt: '#062E9A' },
@@ -143,13 +143,13 @@ export default {
           { leftTxt: 'Blue7', rightTxt: '#478DFF' },
           { leftTxt: 'Blue8', rightTxt: '#69A1FF' },
           { leftTxt: 'Blue9', rightTxt: '#8CB8FF' },
-          { leftTxt: 'Blue10', rightTxt: '#ABCAFF' }
+          { leftTxt: 'Blue10', rightTxt: '#ABCAFF' },
         ],
         list1: [
           {
             topTitle: 'Cyan',
             leftTxt: 'Cyan6',
-            rightTxt: '#3CB1FB'
+            rightTxt: '#3CB1FB',
           },
           { leftTxt: 'Cyan1', rightTxt: '#05437D' },
           { leftTxt: 'Cyan2', rightTxt: '#06579E' },
@@ -160,13 +160,13 @@ export default {
           { leftTxt: 'Cyan7', rightTxt: '#67C9FC' },
           { leftTxt: 'Cyan8', rightTxt: '#8FDDFF' },
           { leftTxt: 'Cyan9', rightTxt: '#BDEFFF' },
-          { leftTxt: 'Cyan10', rightTxt: '#E0F9FF' }
+          { leftTxt: 'Cyan10', rightTxt: '#E0F9FF' },
         ],
         list2: [
           {
             topTitle: 'Purple',
             leftTxt: 'Purple6',
-            rightTxt: '#B382F0'
+            rightTxt: '#B382F0',
           },
           { leftTxt: 'Purple1', rightTxt: '#451981' },
           { leftTxt: 'Purple2', rightTxt: '#5A2D96' },
@@ -177,13 +177,13 @@ export default {
           { leftTxt: 'Purple7', rightTxt: '#CB96FF' },
           { leftTxt: 'Purple8', rightTxt: '#DDB5FF' },
           { leftTxt: 'Purple9', rightTxt: '#EACFFF' },
-          { leftTxt: 'Purple10', rightTxt: '#F7EBFF' }
+          { leftTxt: 'Purple10', rightTxt: '#F7EBFF' },
         ],
         list3: [
           {
             topTitle: 'Pink',
             leftTxt: 'Pink6',
-            rightTxt: '#FF70CF'
+            rightTxt: '#FF70CF',
           },
           { leftTxt: 'Pink1', rightTxt: '#7B0554' },
           { leftTxt: 'Pink2', rightTxt: '#9B066D' },
@@ -194,13 +194,13 @@ export default {
           { leftTxt: 'Pink7', rightTxt: '#FF99E4' },
           { leftTxt: 'Pink8', rightTxt: '#FFBDF4' },
           { leftTxt: 'Pink9', rightTxt: '#FFDBFD' },
-          { leftTxt: 'Pink10', rightTxt: '#FFF2FF' }
+          { leftTxt: 'Pink10', rightTxt: '#FFF2FF' },
         ],
         list4: [
           {
             topTitle: 'Red',
             leftTxt: 'Red6',
-            rightTxt: '#FB6E77'
+            rightTxt: '#FB6E77',
           },
           { leftTxt: 'Red1', rightTxt: '#730524' },
           { leftTxt: 'Red2', rightTxt: '#960627' },
@@ -211,13 +211,13 @@ export default {
           { leftTxt: 'Red7', rightTxt: '#FF9195' },
           { leftTxt: 'Red8', rightTxt: '#FFB5B8' },
           { leftTxt: 'Red9', rightTxt: '#FFD6D8' },
-          { leftTxt: 'Red10', rightTxt: '#FFF2F2' }
+          { leftTxt: 'Red10', rightTxt: '#FFF2F2' },
         ],
         list5: [
           {
             topTitle: 'Orange',
             leftTxt: 'Orange6',
-            rightTxt: '#ED8139'
+            rightTxt: '#ED8139',
           },
           { leftTxt: 'Orange1', rightTxt: '#692204' },
           { leftTxt: 'Orange2', rightTxt: '#873105' },
@@ -228,13 +228,13 @@ export default {
           { leftTxt: 'Orange7', rightTxt: '#FF9852' },
           { leftTxt: 'Orange8', rightTxt: '#FFB97D' },
           { leftTxt: 'Orange9', rightTxt: '#FFD8AD' },
-          { leftTxt: 'Orange10', rightTxt: '#FFF4E5' }
+          { leftTxt: 'Orange10', rightTxt: '#FFF4E5' },
         ],
         list6: [
           {
             topTitle: 'Yellow',
             leftTxt: 'Yellow6',
-            rightTxt: '#D29E08'
+            rightTxt: '#D29E08',
           },
           { leftTxt: 'Yellow1', rightTxt: '#5E3B04' },
           { leftTxt: 'Yellow2', rightTxt: '#754E05' },
@@ -245,13 +245,13 @@ export default {
           { leftTxt: 'Yellow7', rightTxt: '#EBB30E' },
           { leftTxt: 'Yellow8', rightTxt: '#FBCC30' },
           { leftTxt: 'Yellow9', rightTxt: '#FFE682' },
-          { leftTxt: 'Yellow10', rightTxt: '#FFF9C2' }
+          { leftTxt: 'Yellow10', rightTxt: '#FFF9C2' },
         ],
         list7: [
           {
             topTitle: 'Green',
             leftTxt: 'Green6',
-            rightTxt: '#07A872'
+            rightTxt: '#07A872',
           },
           { leftTxt: 'Green1', rightTxt: '#034116' },
           { leftTxt: 'Green2', rightTxt: '#035428' },
@@ -262,39 +262,39 @@ export default {
           { leftTxt: 'Green7', rightTxt: '#37BF8E' },
           { leftTxt: 'Green8', rightTxt: '#71D5AE' },
           { leftTxt: 'Green9', rightTxt: '#B3E8D1' },
-          { leftTxt: 'Green10', rightTxt: '#E8F7F1' }
-        ]
-      }
-    }
+          { leftTxt: 'Green10', rightTxt: '#E8F7F1' },
+        ],
+      },
+    };
   },
   methods: {
     copyColor(color) {
       if ('clipboard' in navigator) {
-        navigator.clipboard.writeText(color)
-        this.$message.success('复制成功')
+        navigator.clipboard.writeText(color);
+        this.$message.success('复制成功');
         return;
       }
 
-      const textarea = document.createElement('textarea')
-      textarea.textContent = color
-      textarea.style.width = 0
-      textarea.style.height = 0
-      document.body.appendChild(textarea)
+      const textarea = document.createElement('textarea');
+      textarea.textContent = color;
+      textarea.style.width = 0;
+      textarea.style.height = 0;
+      document.body.appendChild(textarea);
 
-      const selection = document.getSelection()
-      const range = document.createRange()
-      range.selectNode(textarea)
-      selection.removeAllRanges()
-      selection.addRange(range)
+      const selection = document.getSelection();
+      const range = document.createRange();
+      range.selectNode(textarea);
+      selection.removeAllRanges();
+      selection.addRange(range);
 
-      document.execCommand('copy')
-      selection.removeAllRanges()
-      document.body.removeChild(textarea)
+      document.execCommand('copy');
+      selection.removeAllRanges();
+      document.body.removeChild(textarea);
 
-      this.$message.success('复制成功')
-    }
-  }
-}
+      this.$message.success('复制成功');
+    },
+  },
+};
 </script>
 
 <style lang="less">
