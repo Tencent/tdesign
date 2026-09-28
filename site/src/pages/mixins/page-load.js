@@ -1,23 +1,21 @@
-export default {
-  data() {
-    return {
-      loaded: false,
-    };
-  },
+import { computed, ref } from 'vue';
 
-  computed: {
-    contentStyle() {
-      const { loaded } = this;
-      return { visibility: loaded ? 'visible' : 'hidden' };
-    },
-  },
+export default function usePageLoad() {
+  const loaded = ref(false);
+  const contentStyle = computed(() => ({
+    visibility: loaded.value ? 'visible' : 'hidden',
+  }));
 
-  methods: {
-    contentLoaded(callback) {
-      requestAnimationFrame(() => {
-        this.loaded = true;
-        callback();
-      });
-    },
-  },
-};
+  function contentLoaded(callback) {
+    requestAnimationFrame(() => {
+      loaded.value = true;
+      callback();
+    });
+  }
+
+  return {
+    loaded,
+    contentStyle,
+    contentLoaded,
+  };
+}

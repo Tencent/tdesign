@@ -1,46 +1,44 @@
-export default {
-  data() {
-    return {
-      catalog: [],
-    };
-  },
-  mounted() {
-    this.genAnchor();
-  },
-  methods: {
-    // 生成目录
-    genAnchor() {
-      if (!this.$refs.article) return;
-      const articleContent = this.$refs.article;
-      const nodes = ['H2', 'H3'];
-      const titles = [];
-      articleContent.childNodes.forEach((e, index) => {
-        if (nodes.includes(e.nodeName)) {
-          const id = `header-${index}`;
-          e.setAttribute('id', id);
-          titles.push({
-            id,
-            title: e.innerHTML,
-            level: Number(e.nodeName.substring(1, 2)),
-            nodeName: e.nodeName,
-            children: [],
-          });
-        }
-      });
+import { onMounted, ref } from 'vue';
 
-      const isEveryLevel3 = titles.every((t) => t.level === 3);
-      this.catalog = titles.reduce((acc, curr) => {
-        if (isEveryLevel3) {
-          acc.push(curr);
-        } else {
-          if (curr.level === 2) {
-            acc.push(curr);
-          } else if (curr.level === 3) {
-            acc[acc.length - 1].children.push(curr);
-          }
-        }
-        return acc;
-      }, []);
-    },
-  },
-};
+export default function useAnchor() {
+  const article = ref(null);
+  const catalog = ref([]);
+
+  function genAnchor() {
+    if (!article.value) return;
+
+    const nodes = ['H2', 'H3'];
+    const titles = [];
+    article.value.childNodes.forEach((element, index) => {
+      if (!nodes.includes(element.nodeName)) return;
+
+      const id = `header-${index}`;
+      element.setAttribute('id', id);
+      titles.push({
+        id,
+        title: element.innerHTML,
+        level: Number(element.nodeName.substring(1, 2)),
+        nodeName: element.nodeName,
+        children: [],
+      });
+    });
+
+    const isEveryLevel3 = titles.every((title) => title.level === 3);
+    catalog.value = titles.reduce((result, current) => {
+      if (isEveryLevel3 || current.level === 2) {
+        result.push(current);
+      } else if (current.level === 3) {
+        result[result.length - 1]?.children.push(current);
+      }
+      return result;
+    }, []);
+  }
+
+  onMounted(genAnchor);
+
+  return {
+    article,
+    catalog,
+    genAnchor,
+  };
+}

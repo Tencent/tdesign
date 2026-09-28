@@ -10,59 +10,53 @@
   </td-doc-layout>
 </template>
 
-<script>
+<script setup>
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
 import siteConfig from '../../site.config';
 
 const { docs: designDocs } = JSON.parse(JSON.stringify(siteConfig.design).replace(/component:.+/g, ''));
 
-export default {
-  data() {
-    return {
-      timer: null,
-    };
-  },
+const route = useRoute();
+const router = useRouter();
+const tdDocAside = ref();
+const tdDocContent = ref();
+const tdDocHeader = ref();
+const asideList = computed(() => designDocs);
+let timer = null;
 
-  computed: {
-    asideList() {
-      if (this.$route.path.includes('/design')) return designDocs;
-      return designDocs;
-    },
-  },
-  watch: {
-    $route(v) {
-      this.$refs.tdDocContent.pageStatus = 'hidden';
+const initDocHeader = () => {
+  const { meta } = route;
 
-      requestAnimationFrame(() => {
-        this.initDocHeader();
-        this.$refs.tdDocContent.pageStatus = 'show';
-      });
-    },
-  },
-
-  mounted() {
-    this.$refs.tdDocAside.routerList = this.asideList;
-    this.$refs.tdDocAside.onchange = ({ detail }) => {
-      if (this.$route.path === detail) return;
-      this.$router.push(detail);
-      window.scrollTo(0, 0);
-    };
-
-    this.initDocHeader();
-    this.$refs.tdDocContent.pageStatus = 'show';
-  },
-  methods: {
-    initDocHeader() {
-      const { meta } = this.$route;
-
-      if (this.$route.path.includes('/design/')) {
-        clearTimeout(this.timer);
-        this.$refs.tdDocHeader.docInfo = meta;
-        this.$refs.tdDocHeader.spline = '';
-        this.timer = setTimeout(() => {
-          this.$refs.tdDocHeader.spline = meta.spline || '';
-        }, 500);
-      }
-    },
-  },
+  if (route.path.includes('/design/')) {
+    clearTimeout(timer);
+    tdDocHeader.value.docInfo = meta;
+    tdDocHeader.value.spline = '';
+    timer = setTimeout(() => {
+      tdDocHeader.value.spline = meta.spline || '';
+    }, 500);
+  }
 };
+
+watch(route, () => {
+  tdDocContent.value.pageStatus = 'hidden';
+
+  requestAnimationFrame(() => {
+    initDocHeader();
+    tdDocContent.value.pageStatus = 'show';
+  });
+});
+
+onMounted(() => {
+  tdDocAside.value.routerList = asideList.value;
+  tdDocAside.value.onchange = ({ detail }) => {
+    if (route.path === detail) return;
+    router.push(detail);
+    window.scrollTo(0, 0);
+  };
+
+  initDocHeader();
+  tdDocContent.value.pageStatus = 'show';
+});
 </script>

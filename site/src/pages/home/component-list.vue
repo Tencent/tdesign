@@ -13,7 +13,7 @@
         webkit-playsinline
         x5-video-player
         preload="auto"
-        ref="lightVideo"
+        ref="lightVideoRef"
       >
         <source :src="lightVideo" type="video/mp4" />
       </video>
@@ -32,7 +32,7 @@
         webkit-playsinline
         x5-video-player
         preload="auto"
-        ref="darkVideo"
+        ref="darkVideoRef"
       >
         <source :src="darkVideo" type="video/mp4" />
       </video>
@@ -40,78 +40,71 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    themeMode: {
-      type: String,
-      default: 'light',
-    },
+<script setup>
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+
+const props = defineProps({
+  themeMode: {
+    type: String,
+    default: 'light',
   },
+});
 
-  data() {
-    return {
-      lightVideo: 'https://tdesign.gtimg.com/site/images/component-light.mp4',
-      darkVideo: 'https://tdesign.gtimg.com/site/images/component-dark.mp4',
-    };
-  },
+const lightVideo = 'https://tdesign.gtimg.com/site/images/component-light.mp4';
+const darkVideo = 'https://tdesign.gtimg.com/site/images/component-dark.mp4';
+const listWrapper = ref();
+const lightVideoRef = ref();
+const darkVideoRef = ref();
+const isMobile = computed(() => /(iPhone|iPod|iOS|Android)/i.test(navigator.userAgent));
+let intersectionObserver;
 
-  computed: {
-    isMobile() {
-      return /(iPhone|iPod|iOS|Android)/i.test(navigator.userAgent);
-    },
-  },
+function playVideo() {
+  darkVideoRef.value.paused && darkVideoRef.value.play();
+  lightVideoRef.value.paused && lightVideoRef.value.play();
+}
 
-  mounted() {
-    window.addEventListener('touchstart', this.playVideo);
-    this.watchList();
-  },
+function togglePlay(theme) {
+  if (isMobile.value) return;
 
-  beforeUnmount() {
-    window.removeEventListener('touchstart', this.playVideo);
-    !this.isMobile && this.intersectionObserver.disconnect();
-  },
+  if (theme === 'dark') {
+    darkVideoRef.value.play();
+    lightVideoRef.value.pause();
+  } else {
+    lightVideoRef.value.play();
+    darkVideoRef.value.pause();
+  }
+}
 
-  watch: {
-    themeMode(v) {
-      this.togglePlay(v);
-    },
-  },
+function watchList() {
+  if (isMobile.value) return;
 
-  methods: {
-    playVideo() {
-      this.$refs.darkVideo.paused && this.$refs.darkVideo.play();
-      this.$refs.lightVideo.paused && this.$refs.lightVideo.play();
-    },
+  intersectionObserver = new IntersectionObserver((entries) => {
+    if (entries[0].intersectionRatio <= 0) {
+      lightVideoRef.value.pause();
+      darkVideoRef.value.pause();
+      return;
+    }
 
-    togglePlay(theme) {
-      if (this.isMobile) return;
+    const currentThemeMode = document.documentElement.getAttribute('theme-mode');
+    togglePlay(currentThemeMode);
+  });
+  intersectionObserver.observe(listWrapper.value);
+}
 
-      if (theme === 'dark') {
-        this.$refs.darkVideo.play();
-        this.$refs.lightVideo.pause();
-      } else {
-        this.$refs.lightVideo.play();
-        this.$refs.darkVideo.pause();
-      }
-    },
-    watchList() {
-      if (this.isMobile) return;
+watch(
+  () => props.themeMode,
+  (value) => togglePlay(value),
+);
 
-      this.intersectionObserver = new IntersectionObserver((entries) => {
-        if (entries[0].intersectionRatio <= 0) {
-          this.$refs.lightVideo.pause();
-          this.$refs.darkVideo.pause();
-          return;
-        }
+onMounted(() => {
+  window.addEventListener('touchstart', playVideo);
+  watchList();
+});
 
-        const currentThemeMode = document.documentElement.getAttribute('theme-mode');
-        this.togglePlay(currentThemeMode);
-      });
-      this.intersectionObserver.observe(this.$refs.listWrapper);
-    },
-  },
-};
+onBeforeUnmount(() => {
+  window.removeEventListener('touchstart', playVideo);
+  !isMobile.value && intersectionObserver.disconnect();
+});
 </script>
 
 <style lang="less">

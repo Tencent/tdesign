@@ -88,213 +88,242 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor';
+<script setup>
+import { getCurrentInstance, onMounted, reactive, ref, toRefs } from 'vue';
 
-export default {
-  mixins: [anchorMixin],
+const article = ref(null);
+const catalog = ref([]);
+const { proxy } = getCurrentInstance();
 
-  data() {
-    return {
-      dataSource: [
-        {
-          index: 0,
-          token: '@text-color-primary',
-          name: 'Title',
-          color: '#ffffff 90%',
-        },
-        {
-          index: 1,
-          token: '@text-color-secondary',
-          name: 'Secondary Text',
-          color: '#ffffff 60%',
-        },
-        {
-          index: 2,
-          token: '@text-color-placeholder',
-          name: 'Placeholder Text',
-          color: '#ffffff 40%',
-        },
-        {
-          index: 3,
-          token: '@text-color-disabled',
-          name: 'Disabled Text',
-          color: '#ffffff 26%',
-        },
-      ],
-      columns: [
-        { ellipsis: true, colKey: 'token', title: 'token' },
-        { ellipsis: true, colKey: 'name', title: 'name' },
-        { ellipsis: true, colKey: 'color', title: 'value' },
-      ],
-      colorList: {
-        list: [
-          {
-            topTitle: 'Blue',
-            leftTxt: 'Blue6',
-            rightTxt: '#2174FF',
-          },
-          { leftTxt: 'Blue1', rightTxt: '#1E2C60' },
-          { leftTxt: 'Blue2', rightTxt: '#062E9A' },
-          { leftTxt: 'Blue3', rightTxt: '#073AB5' },
-          { leftTxt: 'Blue4', rightTxt: '#084DCD' },
-          { leftTxt: 'Blue5', rightTxt: '#0957D9' },
-          { leftTxt: 'Blue6', rightTxt: '#2174FF' },
-          { leftTxt: 'Blue7', rightTxt: '#478DFF' },
-          { leftTxt: 'Blue8', rightTxt: '#69A1FF' },
-          { leftTxt: 'Blue9', rightTxt: '#8CB8FF' },
-          { leftTxt: 'Blue10', rightTxt: '#ABCAFF' },
-        ],
-        list1: [
-          {
-            topTitle: 'Cyan',
-            leftTxt: 'Cyan6',
-            rightTxt: '#3CB1FB',
-          },
-          { leftTxt: 'Cyan1', rightTxt: '#05437D' },
-          { leftTxt: 'Cyan2', rightTxt: '#06579E' },
-          { leftTxt: 'Cyan3', rightTxt: '#086CC0' },
-          { leftTxt: 'Cyan4', rightTxt: '#0B83DF' },
-          { leftTxt: 'Cyan5', rightTxt: '#0F98FA' },
-          { leftTxt: 'Cyan6', rightTxt: '#3CB1FB' },
-          { leftTxt: 'Cyan7', rightTxt: '#67C9FC' },
-          { leftTxt: 'Cyan8', rightTxt: '#8FDDFF' },
-          { leftTxt: 'Cyan9', rightTxt: '#BDEFFF' },
-          { leftTxt: 'Cyan10', rightTxt: '#E0F9FF' },
-        ],
-        list2: [
-          {
-            topTitle: 'Purple',
-            leftTxt: 'Purple6',
-            rightTxt: '#B382F0',
-          },
-          { leftTxt: 'Purple1', rightTxt: '#451981' },
-          { leftTxt: 'Purple2', rightTxt: '#5A2D96' },
-          { leftTxt: 'Purple3', rightTxt: '#7141AC' },
-          { leftTxt: 'Purple4', rightTxt: '#8755C2' },
-          { leftTxt: 'Purple5', rightTxt: '#9E6CD8' },
-          { leftTxt: 'Purple6', rightTxt: '#B382F0' },
-          { leftTxt: 'Purple7', rightTxt: '#CB96FF' },
-          { leftTxt: 'Purple8', rightTxt: '#DDB5FF' },
-          { leftTxt: 'Purple9', rightTxt: '#EACFFF' },
-          { leftTxt: 'Purple10', rightTxt: '#F7EBFF' },
-        ],
-        list3: [
-          {
-            topTitle: 'Pink',
-            leftTxt: 'Pink6',
-            rightTxt: '#FF70CF',
-          },
-          { leftTxt: 'Pink1', rightTxt: '#7B0554' },
-          { leftTxt: 'Pink2', rightTxt: '#9B066D' },
-          { leftTxt: 'Pink3', rightTxt: '#BC088A' },
-          { leftTxt: 'Pink4', rightTxt: '#D435A0' },
-          { leftTxt: 'Pink5', rightTxt: '#ED53B7' },
-          { leftTxt: 'Pink6', rightTxt: '#FF70CF' },
-          { leftTxt: 'Pink7', rightTxt: '#FF99E4' },
-          { leftTxt: 'Pink8', rightTxt: '#FFBDF4' },
-          { leftTxt: 'Pink9', rightTxt: '#FFDBFD' },
-          { leftTxt: 'Pink10', rightTxt: '#FFF2FF' },
-        ],
-        list4: [
-          {
-            topTitle: 'Red',
-            leftTxt: 'Red6',
-            rightTxt: '#FB6E77',
-          },
-          { leftTxt: 'Red1', rightTxt: '#730524' },
-          { leftTxt: 'Red2', rightTxt: '#960627' },
-          { leftTxt: 'Red3', rightTxt: '#B01C37' },
-          { leftTxt: 'Red4', rightTxt: '#C9384A' },
-          { leftTxt: 'Red5', rightTxt: '#E35661' },
-          { leftTxt: 'Red6', rightTxt: '#FB6E77' },
-          { leftTxt: 'Red7', rightTxt: '#FF9195' },
-          { leftTxt: 'Red8', rightTxt: '#FFB5B8' },
-          { leftTxt: 'Red9', rightTxt: '#FFD6D8' },
-          { leftTxt: 'Red10', rightTxt: '#FFF2F2' },
-        ],
-        list5: [
-          {
-            topTitle: 'Orange',
-            leftTxt: 'Orange6',
-            rightTxt: '#ED8139',
-          },
-          { leftTxt: 'Orange1', rightTxt: '#692204' },
-          { leftTxt: 'Orange2', rightTxt: '#873105' },
-          { leftTxt: 'Orange3', rightTxt: '#A24006' },
-          { leftTxt: 'Orange4', rightTxt: '#C25110' },
-          { leftTxt: 'Orange5', rightTxt: '#D66724' },
-          { leftTxt: 'Orange6', rightTxt: '#ED8139' },
-          { leftTxt: 'Orange7', rightTxt: '#FF9852' },
-          { leftTxt: 'Orange8', rightTxt: '#FFB97D' },
-          { leftTxt: 'Orange9', rightTxt: '#FFD8AD' },
-          { leftTxt: 'Orange10', rightTxt: '#FFF4E5' },
-        ],
-        list6: [
-          {
-            topTitle: 'Yellow',
-            leftTxt: 'Yellow6',
-            rightTxt: '#D29E08',
-          },
-          { leftTxt: 'Yellow1', rightTxt: '#5E3B04' },
-          { leftTxt: 'Yellow2', rightTxt: '#754E05' },
-          { leftTxt: 'Yellow3', rightTxt: '#8C6106' },
-          { leftTxt: 'Yellow4', rightTxt: '#A37407' },
-          { leftTxt: 'Yellow5', rightTxt: '#BA8907' },
-          { leftTxt: 'Yellow6', rightTxt: '#D29E08' },
-          { leftTxt: 'Yellow7', rightTxt: '#EBB30E' },
-          { leftTxt: 'Yellow8', rightTxt: '#FBCC30' },
-          { leftTxt: 'Yellow9', rightTxt: '#FFE682' },
-          { leftTxt: 'Yellow10', rightTxt: '#FFF9C2' },
-        ],
-        list7: [
-          {
-            topTitle: 'Green',
-            leftTxt: 'Green6',
-            rightTxt: '#07A872',
-          },
-          { leftTxt: 'Green1', rightTxt: '#034116' },
-          { leftTxt: 'Green2', rightTxt: '#035428' },
-          { leftTxt: 'Green3', rightTxt: '#046939' },
-          { leftTxt: 'Green4', rightTxt: '#057E4C' },
-          { leftTxt: 'Green5', rightTxt: '#06935F' },
-          { leftTxt: 'Green6', rightTxt: '#07A872' },
-          { leftTxt: 'Green7', rightTxt: '#37BF8E' },
-          { leftTxt: 'Green8', rightTxt: '#71D5AE' },
-          { leftTxt: 'Green9', rightTxt: '#B3E8D1' },
-          { leftTxt: 'Green10', rightTxt: '#E8F7F1' },
-        ],
-      },
-    };
-  },
-  methods: {
-    copyColor(color) {
-      if ('clipboard' in navigator) {
-        navigator.clipboard.writeText(color);
-        this.$message.success('复制成功');
-        return;
-      }
+function genAnchor() {
+  if (!article.value) return;
+  const nodes = ['H2', 'H3'];
+  const titles = [];
+  article.value.childNodes.forEach((element, index) => {
+    if (nodes.includes(element.nodeName)) {
+      const id = `header-${index}`;
+      element.setAttribute('id', id);
+      titles.push({
+        id,
+        title: element.innerHTML,
+        level: Number(element.nodeName.substring(1, 2)),
+        nodeName: element.nodeName,
+        children: [],
+      });
+    }
+  });
 
-      const textarea = document.createElement('textarea');
-      textarea.textContent = color;
-      textarea.style.width = 0;
-      textarea.style.height = 0;
-      document.body.appendChild(textarea);
+  const isEveryLevel3 = titles.every((title) => title.level === 3);
+  catalog.value = titles.reduce((result, current) => {
+    if (isEveryLevel3 || current.level === 2) {
+      result.push(current);
+    } else if (current.level === 3) {
+      result[result.length - 1].children.push(current);
+    }
+    return result;
+  }, []);
+}
 
-      const selection = document.getSelection();
-      const range = document.createRange();
-      range.selectNode(textarea);
-      selection.removeAllRanges();
-      selection.addRange(range);
+onMounted(genAnchor);
 
-      document.execCommand('copy');
-      selection.removeAllRanges();
-      document.body.removeChild(textarea);
-
-      this.$message.success('复制成功');
+const state = reactive({
+  dataSource: [
+    {
+      index: 0,
+      token: '@text-color-primary',
+      name: 'Title',
+      color: '#ffffff 90%',
     },
+    {
+      index: 1,
+      token: '@text-color-secondary',
+      name: 'Secondary Text',
+      color: '#ffffff 60%',
+    },
+    {
+      index: 2,
+      token: '@text-color-placeholder',
+      name: 'Placeholder Text',
+      color: '#ffffff 40%',
+    },
+    {
+      index: 3,
+      token: '@text-color-disabled',
+      name: 'Disabled Text',
+      color: '#ffffff 26%',
+    },
+  ],
+  columns: [
+    { ellipsis: true, colKey: 'token', title: 'token' },
+    { ellipsis: true, colKey: 'name', title: 'name' },
+    { ellipsis: true, colKey: 'color', title: 'value' },
+  ],
+  colorList: {
+    list: [
+      {
+        topTitle: 'Blue',
+        leftTxt: 'Blue6',
+        rightTxt: '#2174FF',
+      },
+      { leftTxt: 'Blue1', rightTxt: '#1E2C60' },
+      { leftTxt: 'Blue2', rightTxt: '#062E9A' },
+      { leftTxt: 'Blue3', rightTxt: '#073AB5' },
+      { leftTxt: 'Blue4', rightTxt: '#084DCD' },
+      { leftTxt: 'Blue5', rightTxt: '#0957D9' },
+      { leftTxt: 'Blue6', rightTxt: '#2174FF' },
+      { leftTxt: 'Blue7', rightTxt: '#478DFF' },
+      { leftTxt: 'Blue8', rightTxt: '#69A1FF' },
+      { leftTxt: 'Blue9', rightTxt: '#8CB8FF' },
+      { leftTxt: 'Blue10', rightTxt: '#ABCAFF' },
+    ],
+    list1: [
+      {
+        topTitle: 'Cyan',
+        leftTxt: 'Cyan6',
+        rightTxt: '#3CB1FB',
+      },
+      { leftTxt: 'Cyan1', rightTxt: '#05437D' },
+      { leftTxt: 'Cyan2', rightTxt: '#06579E' },
+      { leftTxt: 'Cyan3', rightTxt: '#086CC0' },
+      { leftTxt: 'Cyan4', rightTxt: '#0B83DF' },
+      { leftTxt: 'Cyan5', rightTxt: '#0F98FA' },
+      { leftTxt: 'Cyan6', rightTxt: '#3CB1FB' },
+      { leftTxt: 'Cyan7', rightTxt: '#67C9FC' },
+      { leftTxt: 'Cyan8', rightTxt: '#8FDDFF' },
+      { leftTxt: 'Cyan9', rightTxt: '#BDEFFF' },
+      { leftTxt: 'Cyan10', rightTxt: '#E0F9FF' },
+    ],
+    list2: [
+      {
+        topTitle: 'Purple',
+        leftTxt: 'Purple6',
+        rightTxt: '#B382F0',
+      },
+      { leftTxt: 'Purple1', rightTxt: '#451981' },
+      { leftTxt: 'Purple2', rightTxt: '#5A2D96' },
+      { leftTxt: 'Purple3', rightTxt: '#7141AC' },
+      { leftTxt: 'Purple4', rightTxt: '#8755C2' },
+      { leftTxt: 'Purple5', rightTxt: '#9E6CD8' },
+      { leftTxt: 'Purple6', rightTxt: '#B382F0' },
+      { leftTxt: 'Purple7', rightTxt: '#CB96FF' },
+      { leftTxt: 'Purple8', rightTxt: '#DDB5FF' },
+      { leftTxt: 'Purple9', rightTxt: '#EACFFF' },
+      { leftTxt: 'Purple10', rightTxt: '#F7EBFF' },
+    ],
+    list3: [
+      {
+        topTitle: 'Pink',
+        leftTxt: 'Pink6',
+        rightTxt: '#FF70CF',
+      },
+      { leftTxt: 'Pink1', rightTxt: '#7B0554' },
+      { leftTxt: 'Pink2', rightTxt: '#9B066D' },
+      { leftTxt: 'Pink3', rightTxt: '#BC088A' },
+      { leftTxt: 'Pink4', rightTxt: '#D435A0' },
+      { leftTxt: 'Pink5', rightTxt: '#ED53B7' },
+      { leftTxt: 'Pink6', rightTxt: '#FF70CF' },
+      { leftTxt: 'Pink7', rightTxt: '#FF99E4' },
+      { leftTxt: 'Pink8', rightTxt: '#FFBDF4' },
+      { leftTxt: 'Pink9', rightTxt: '#FFDBFD' },
+      { leftTxt: 'Pink10', rightTxt: '#FFF2FF' },
+    ],
+    list4: [
+      {
+        topTitle: 'Red',
+        leftTxt: 'Red6',
+        rightTxt: '#FB6E77',
+      },
+      { leftTxt: 'Red1', rightTxt: '#730524' },
+      { leftTxt: 'Red2', rightTxt: '#960627' },
+      { leftTxt: 'Red3', rightTxt: '#B01C37' },
+      { leftTxt: 'Red4', rightTxt: '#C9384A' },
+      { leftTxt: 'Red5', rightTxt: '#E35661' },
+      { leftTxt: 'Red6', rightTxt: '#FB6E77' },
+      { leftTxt: 'Red7', rightTxt: '#FF9195' },
+      { leftTxt: 'Red8', rightTxt: '#FFB5B8' },
+      { leftTxt: 'Red9', rightTxt: '#FFD6D8' },
+      { leftTxt: 'Red10', rightTxt: '#FFF2F2' },
+    ],
+    list5: [
+      {
+        topTitle: 'Orange',
+        leftTxt: 'Orange6',
+        rightTxt: '#ED8139',
+      },
+      { leftTxt: 'Orange1', rightTxt: '#692204' },
+      { leftTxt: 'Orange2', rightTxt: '#873105' },
+      { leftTxt: 'Orange3', rightTxt: '#A24006' },
+      { leftTxt: 'Orange4', rightTxt: '#C25110' },
+      { leftTxt: 'Orange5', rightTxt: '#D66724' },
+      { leftTxt: 'Orange6', rightTxt: '#ED8139' },
+      { leftTxt: 'Orange7', rightTxt: '#FF9852' },
+      { leftTxt: 'Orange8', rightTxt: '#FFB97D' },
+      { leftTxt: 'Orange9', rightTxt: '#FFD8AD' },
+      { leftTxt: 'Orange10', rightTxt: '#FFF4E5' },
+    ],
+    list6: [
+      {
+        topTitle: 'Yellow',
+        leftTxt: 'Yellow6',
+        rightTxt: '#D29E08',
+      },
+      { leftTxt: 'Yellow1', rightTxt: '#5E3B04' },
+      { leftTxt: 'Yellow2', rightTxt: '#754E05' },
+      { leftTxt: 'Yellow3', rightTxt: '#8C6106' },
+      { leftTxt: 'Yellow4', rightTxt: '#A37407' },
+      { leftTxt: 'Yellow5', rightTxt: '#BA8907' },
+      { leftTxt: 'Yellow6', rightTxt: '#D29E08' },
+      { leftTxt: 'Yellow7', rightTxt: '#EBB30E' },
+      { leftTxt: 'Yellow8', rightTxt: '#FBCC30' },
+      { leftTxt: 'Yellow9', rightTxt: '#FFE682' },
+      { leftTxt: 'Yellow10', rightTxt: '#FFF9C2' },
+    ],
+    list7: [
+      {
+        topTitle: 'Green',
+        leftTxt: 'Green6',
+        rightTxt: '#07A872',
+      },
+      { leftTxt: 'Green1', rightTxt: '#034116' },
+      { leftTxt: 'Green2', rightTxt: '#035428' },
+      { leftTxt: 'Green3', rightTxt: '#046939' },
+      { leftTxt: 'Green4', rightTxt: '#057E4C' },
+      { leftTxt: 'Green5', rightTxt: '#06935F' },
+      { leftTxt: 'Green6', rightTxt: '#07A872' },
+      { leftTxt: 'Green7', rightTxt: '#37BF8E' },
+      { leftTxt: 'Green8', rightTxt: '#71D5AE' },
+      { leftTxt: 'Green9', rightTxt: '#B3E8D1' },
+      { leftTxt: 'Green10', rightTxt: '#E8F7F1' },
+    ],
   },
-};
+});
+const { dataSource, columns, colorList } = toRefs(state);
+
+function copyColor(color) {
+  if ('clipboard' in navigator) {
+    navigator.clipboard.writeText(color);
+    proxy.$message.success('复制成功');
+    return;
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.textContent = color;
+  textarea.style.width = 0;
+  textarea.style.height = 0;
+  document.body.appendChild(textarea);
+
+  const selection = document.getSelection();
+  const range = document.createRange();
+  range.selectNode(textarea);
+  selection.removeAllRanges();
+  selection.addRange(range);
+
+  document.execCommand('copy');
+  selection.removeAllRanges();
+  document.body.removeChild(textarea);
+
+  proxy.$message.success('复制成功');
+}
 </script>
 
 <style lang="less">

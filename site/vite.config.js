@@ -21,6 +21,7 @@ export default ({ mode }) => {
         '@docs': path.resolve(__dirname, '../docs'),
         '@constants': path.resolve(__dirname, './src/constants'),
         '@components': path.resolve(__dirname, './src/components'),
+        'vue-router': path.resolve(__dirname, './node_modules/vue-router'),
       },
     },
     build: {

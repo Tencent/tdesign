@@ -23,52 +23,38 @@
   </t-dialog>
 </template>
 
-<script>
-export default {
-  props: {
-    visible: Boolean,
-    downloadItem: Object,
-  },
+<script setup>
+import { computed, ref } from 'vue';
 
-  data() {
-    return {
-      email: '',
-    };
-  },
+const props = defineProps({
+  visible: Boolean,
+  downloadItem: Object,
+});
+const emit = defineEmits(['update:visible']);
 
-  computed: {
-    visibleSync: {
-      get() {
-        return this.visible;
-      },
-      set(v) {
-        this.$emit('update:visible', v);
-      },
-    },
-    legalEmail() {
-      return /^[A-Za-z0-9\-\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.email);
-    },
-  },
+const email = ref('');
+const visibleSync = computed({
+  get: () => props.visible,
+  set: (value) => emit('update:visible', value),
+});
+const legalEmail = computed(() => /^[A-Za-z0-9\-\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(email.value));
 
-  methods: {
-    downloadCancel() {
-      this.visibleSync = false;
-    },
-    downloadConfirm() {
-      const { downloadItem, email } = this;
-      if (!email || !downloadItem) return;
+function downloadCancel() {
+  visibleSync.value = false;
+}
 
-      window.open(downloadItem.actionUrl, '_blank');
-      this.visibleSync = false;
-      aegis.reportEvent({
-        name: '设计资源下载', // 必填
-        ext1: email,
-        ext2: downloadItem.title,
-        ext3: downloadItem.actionUrl,
-      });
-    },
-  },
-};
+function downloadConfirm() {
+  if (!email.value || !props.downloadItem) return;
+
+  window.open(props.downloadItem.actionUrl, '_blank');
+  visibleSync.value = false;
+  aegis.reportEvent({
+    name: '设计资源下载',
+    ext1: email.value,
+    ext2: props.downloadItem.title,
+    ext3: props.downloadItem.actionUrl,
+  });
+}
 </script>
 
 <style lang="less">

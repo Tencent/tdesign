@@ -232,18 +232,45 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor';
+<script setup>
+import { onMounted, ref } from 'vue';
 import { Link1Icon } from 'tdesign-icons-vue-next';
-export default {
-  mixins: [anchorMixin],
-  components: {
-    Link1Icon,
-  },
-  methods: {
-    handleClickBtn() {
-      window.open('/icons', ',_blank');
-    },
-  },
+
+const article = ref();
+const catalog = ref([]);
+
+const genAnchor = () => {
+  if (!article.value) return;
+  const nodes = ['H2', 'H3'];
+  const titles = [];
+  article.value.childNodes.forEach((element, index) => {
+    if (nodes.includes(element.nodeName)) {
+      const id = `header-${index}`;
+      element.setAttribute('id', id);
+      titles.push({
+        id,
+        title: element.innerHTML,
+        level: Number(element.nodeName.substring(1, 2)),
+        nodeName: element.nodeName,
+        children: [],
+      });
+    }
+  });
+
+  const isEveryLevel3 = titles.every((title) => title.level === 3);
+  catalog.value = titles.reduce((result, current) => {
+    if (isEveryLevel3 || current.level === 2) {
+      result.push(current);
+    } else if (current.level === 3) {
+      result[result.length - 1].children.push(current);
+    }
+    return result;
+  }, []);
 };
+
+const handleClickBtn = () => {
+  window.open('/icons', ',_blank');
+};
+
+onMounted(genAnchor);
 </script>

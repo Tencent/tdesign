@@ -221,66 +221,87 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor';
+<script setup>
+import { onMounted, ref } from 'vue';
 
-export default {
-  mixins: [anchorMixin],
-  data() {
-    return {
-      dataSource: [
-        {
-          cut: 'sm',
-          cutValue: '768px',
-          range: '768px-991px',
-          colWidth: '16px',
-          grid: 'Content blocks stack or scale based on different breakpoints',
-          device: 'Pad',
-        },
-        {
-          cut: 'md',
-          cutValue: '992px',
-          range: '992px-1199px',
-          colWidth: '16px',
-          grid: 'Content blocks stack or scale based on different breakpoints',
-          device: 'Super small size laptop',
-        },
-        {
-          cut: 'lg',
-          cutValue: '1200px',
-          range: 'Greater than 1200px',
-          colWidth: '16px',
-          grid: 'When the viewport width is greater than the breakpoint value, it always stays arranged horizontally',
-          device: 'Small size laptop',
-        },
-      ],
-      columns: [
-        { width: 104, ellipsis: true, colKey: 'cut', title: 'Breakpoint' },
-        { width: 140, ellipsis: true, colKey: 'cutValue', title: 'Breakpoint Value' },
-        { width: 144, ellipsis: true, colKey: 'range', title: 'Responsive Range' },
-        { width: 104, colKey: 'colWidth', title: 'Gutter Width' },
-        { colKey: 'grid', title: 'grid' },
-        { width: 200, ellipsis: true, colKey: 'device', title: 'Reference Display Device' },
-      ],
-      rowKey: 'cut',
-      size: 'small',
-    };
+const article = ref();
+const catalog = ref([]);
+const dataSource = [
+  {
+    cut: 'sm',
+    cutValue: '768px',
+    range: '768px-991px',
+    colWidth: '16px',
+    grid: 'Content blocks stack or scale based on different breakpoints',
+    device: 'Pad',
   },
-  methods: {
-    rowspanAndColspan({ col, rowIndex }) {
-      if (col.colKey === 'colWidth' && rowIndex === 0) {
-        return {
-          rowspan: 3,
-        };
-      }
-      if (col.colKey === 'grid' && rowIndex === 0) {
-        return {
-          rowspan: 2,
-        };
-      }
-    },
+  {
+    cut: 'md',
+    cutValue: '992px',
+    range: '992px-1199px',
+    colWidth: '16px',
+    grid: 'Content blocks stack or scale based on different breakpoints',
+    device: 'Super small size laptop',
   },
+  {
+    cut: 'lg',
+    cutValue: '1200px',
+    range: 'Greater than 1200px',
+    colWidth: '16px',
+    grid: 'When the viewport width is greater than the breakpoint value, it always stays arranged horizontally',
+    device: 'Small size laptop',
+  },
+];
+const columns = [
+  { width: 104, ellipsis: true, colKey: 'cut', title: 'Breakpoint' },
+  { width: 140, ellipsis: true, colKey: 'cutValue', title: 'Breakpoint Value' },
+  { width: 144, ellipsis: true, colKey: 'range', title: 'Responsive Range' },
+  { width: 104, colKey: 'colWidth', title: 'Gutter Width' },
+  { colKey: 'grid', title: 'grid' },
+  { width: 200, ellipsis: true, colKey: 'device', title: 'Reference Display Device' },
+];
+const rowKey = 'cut';
+const size = 'small';
+
+const genAnchor = () => {
+  if (!article.value) return;
+  const nodes = ['H2', 'H3'];
+  const titles = [];
+  article.value.childNodes.forEach((element, index) => {
+    if (nodes.includes(element.nodeName)) {
+      const id = `header-${index}`;
+      element.setAttribute('id', id);
+      titles.push({
+        id,
+        title: element.innerHTML,
+        level: Number(element.nodeName.substring(1, 2)),
+        nodeName: element.nodeName,
+        children: [],
+      });
+    }
+  });
+
+  const isEveryLevel3 = titles.every((title) => title.level === 3);
+  catalog.value = titles.reduce((result, current) => {
+    if (isEveryLevel3 || current.level === 2) {
+      result.push(current);
+    } else if (current.level === 3) {
+      result[result.length - 1].children.push(current);
+    }
+    return result;
+  }, []);
 };
+
+const rowspanAndColspan = ({ col, rowIndex }) => {
+  if (col.colKey === 'colWidth' && rowIndex === 0) {
+    return { rowspan: 3 };
+  }
+  if (col.colKey === 'grid' && rowIndex === 0) {
+    return { rowspan: 2 };
+  }
+};
+
+onMounted(genAnchor);
 </script>
 
 <style lang="less">

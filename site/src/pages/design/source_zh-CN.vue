@@ -88,7 +88,10 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { computed, onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
 import figmaIcon from '@/assets/figma-logo.svg';
 import sketchIcon from '@/assets/sketch-logo.svg';
 import xdIcon from '@/assets/xd-logo.svg';
@@ -104,133 +107,122 @@ import { webSourceList, mobileSourceList, sourceDownloadUrl, webChartSourceList 
 
 const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
 
-export default {
-  data() {
-    return {
-      webSourceList,
-      mobileSourceList,
-      webChartSourceList,
-      webDesignContributor: [],
-      mobileDesignContributor: [],
-      webChartDesignContributor: [],
-      iconMap: {
-        figma: figmaIcon,
-        sketch: sketchIcon,
-        xd: xdIcon,
-        axure: axureIcon,
-        codesign: codesignIcon,
-        jssj: jssjIcon,
-        pixso: pixsoIcon,
-        md: mdIcon,
-        mastergo: mastergoIcon,
-        ry: ryIcon,
-      },
-      previewUrl: {
-        web: 'https://codesign.qq.com/s/705849079455594?menu_aside=null',
-        mobile: 'https://codesign.qq.com/s/705854516818782?menu_aside=null',
-        'web-chart': 'https://codesign.qq.com/s/705850116517658?menu_aside=null',
-      },
-    };
-  },
-  computed: {
-    designContributor() {
-      const map = {
-        web: this.webDesignContributor,
-        mobile: this.mobileDesignContributor,
-        'web-chart': this.webChartDesignContributor,
-      };
-      return map[this.tab];
-    },
-    sourceList() {
-      const map = {
-        web: this.webSourceList,
-        mobile: this.mobileSourceList,
-        'web-chart': this.webChartSourceList,
-      };
-      return map[this.tab];
-    },
-    tab: {
-      get() {
-        return this.$route.query.tab || 'web';
-      },
-      set(v) {
-        if (this.$route.query.tab !== v) this.$router.push({ query: { tab: v } });
-      },
-    },
-    footerStyle() {
-      return {
-        '--content-padding-right': '0',
-        '--content-max-width': '1440px',
-        '--content-padding-left-right': '48px',
-        '--footer-inner-position': 'relative',
-        '--footer-logo-position': 'unset',
-      };
-    },
-  },
-
-  mounted() {
-    this.$refs.tabs.tabs = [
-      { tab: 'web', name: '桌面端组件库' },
-      { tab: 'mobile', name: '移动端组件库' },
-      { tab: 'web-chart', name: '桌面端图表库' },
-      { tab: 'icons', name: '图标资源' },
-    ];
-    this.$refs.tabs.onchange = ({ detail: currentTab }) => {
-      if (currentTab !== 'icons') this.tab = currentTab;
-      else window.open('/icons', '_blank');
-    };
-
-    this.fetchDesignContributors();
-
-    fetch(sourceDownloadUrl)
-      .then((res) => res.json())
-      .then((res) => {
-        this.webSourceList = this.webSourceList.map((item) => {
-          item.watch = res[item.id];
-          return item;
-        });
-        this.mobileSourceList = this.mobileSourceList.map((item) => {
-          item.watch = res[item.id];
-          return item;
-        });
-      });
-  },
-
-  methods: {
-    fetchDesignContributors() {
-      fetch(contributorsUrl)
-        .then((res) => res.json())
-        .then((data) => {
-          const design = (data && data.design) || {};
-          const normalize = (list) => {
-            const seen = new Set();
-            const result = [];
-            (list || []).forEach((name) => {
-              const trimmed = String(name).trim();
-              if (!trimmed) return;
-              const key = trimmed.toLowerCase();
-              if (seen.has(key)) return;
-              seen.add(key);
-              result.push(trimmed);
-            });
-            return result;
-          };
-          this.webDesignContributor = normalize(design.web);
-          this.mobileDesignContributor = normalize(design.mobile);
-          this.webChartDesignContributor = normalize(design.chart);
-        })
-        .catch((err) => console.error(err));
-    },
-    handleSourceClick(item) {
-      if (item.status === -1 || !item.actionUrl) return;
-
-      if (window._horizon) {
-        window._horizon.send('资源下载', 'click', item.eventLabel, item.actionUrl);
-      }
-      window.open(item.actionUrl, '_blank');
-    },
-  },
+const route = useRoute();
+const router = useRouter();
+const tabs = ref();
+const currentWebSourceList = ref(webSourceList);
+const currentMobileSourceList = ref(mobileSourceList);
+const webDesignContributor = ref([]);
+const mobileDesignContributor = ref([]);
+const webChartDesignContributor = ref([]);
+const iconMap = {
+  figma: figmaIcon,
+  sketch: sketchIcon,
+  xd: xdIcon,
+  axure: axureIcon,
+  codesign: codesignIcon,
+  jssj: jssjIcon,
+  pixso: pixsoIcon,
+  md: mdIcon,
+  mastergo: mastergoIcon,
+  ry: ryIcon,
 };
+const previewUrl = {
+  web: 'https://codesign.qq.com/s/705849079455594?menu_aside=null',
+  mobile: 'https://codesign.qq.com/s/705854516818782?menu_aside=null',
+  'web-chart': 'https://codesign.qq.com/s/705850116517658?menu_aside=null',
+};
+const tab = computed({
+  get: () => route.query.tab || 'web',
+  set: (value) => {
+    if (route.query.tab !== value) router.push({ query: { tab: value } });
+  },
+});
+const designContributor = computed(() => {
+  const map = {
+    web: webDesignContributor.value,
+    mobile: mobileDesignContributor.value,
+    'web-chart': webChartDesignContributor.value,
+  };
+  return map[tab.value];
+});
+const sourceList = computed(() => {
+  const map = {
+    web: currentWebSourceList.value,
+    mobile: currentMobileSourceList.value,
+    'web-chart': webChartSourceList,
+  };
+  return map[tab.value];
+});
+const footerStyle = computed(() => ({
+  '--content-padding-right': '0',
+  '--content-max-width': '1440px',
+  '--content-padding-left-right': '48px',
+  '--footer-inner-position': 'relative',
+  '--footer-logo-position': 'unset',
+}));
+
+const fetchDesignContributors = () => {
+  fetch(contributorsUrl)
+    .then((res) => res.json())
+    .then((data) => {
+      const design = (data && data.design) || {};
+      const normalize = (list) => {
+        const seen = new Set();
+        const result = [];
+        (list || []).forEach((name) => {
+          const trimmed = String(name).trim();
+          if (!trimmed) return;
+          const key = trimmed.toLowerCase();
+          if (seen.has(key)) return;
+          seen.add(key);
+          result.push(trimmed);
+        });
+        return result;
+      };
+      webDesignContributor.value = normalize(design.web);
+      mobileDesignContributor.value = normalize(design.mobile);
+      webChartDesignContributor.value = normalize(design.chart);
+    })
+    .catch((err) => console.error(err));
+};
+
+const handleSourceClick = (item) => {
+  if (item.status === -1 || !item.actionUrl) return;
+
+  if (window._horizon) {
+    window._horizon.send('资源下载', 'click', item.eventLabel, item.actionUrl);
+  }
+  window.open(item.actionUrl, '_blank');
+};
+
+onMounted(() => {
+  tabs.value.tabs = [
+    { tab: 'web', name: '桌面端组件库' },
+    { tab: 'mobile', name: '移动端组件库' },
+    { tab: 'web-chart', name: '桌面端图表库' },
+    { tab: 'icons', name: '图标资源' },
+  ];
+  tabs.value.onchange = ({ detail: currentTab }) => {
+    if (currentTab !== 'icons') tab.value = currentTab;
+    else window.open('/icons', '_blank');
+  };
+
+  fetchDesignContributors();
+
+  fetch(sourceDownloadUrl)
+    .then((res) => res.json())
+    .then((res) => {
+      currentWebSourceList.value = currentWebSourceList.value.map((item) => {
+        item.watch = res[item.id];
+        return item;
+      });
+      currentMobileSourceList.value = currentMobileSourceList.value.map((item) => {
+        item.watch = res[item.id];
+        return item;
+      });
+    });
+});
 </script>
 
 <style lang="less" scoped>

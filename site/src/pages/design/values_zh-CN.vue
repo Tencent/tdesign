@@ -102,41 +102,59 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor';
+<script setup>
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 
-export default {
-  mixins: [anchorMixin],
-  data() {
-    return {
-      gif1: encodeURI('https://tdesign.gtimg.com/site/images/包容.mp4'),
-      gif2: encodeURI('https://tdesign.gtimg.com/site/images/多元.mp4'),
-      gif3: encodeURI('https://tdesign.gtimg.com/site/images/进化.mp4'),
-      gif4: encodeURI('https://tdesign.gtimg.com/site/images/连接.mp4'),
+const article = ref(null);
+const catalog = ref([]);
+const gif1 = encodeURI('https://tdesign.gtimg.com/site/images/包容.mp4');
+const gif2 = encodeURI('https://tdesign.gtimg.com/site/images/多元.mp4');
+const gif3 = encodeURI('https://tdesign.gtimg.com/site/images/进化.mp4');
+const gif4 = encodeURI('https://tdesign.gtimg.com/site/images/连接.mp4');
 
-      // gif1: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E5%8C%85%E5%AE%B9.gif',
-      // gif2: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E5%A4%9A%E5%85%83.gif',
-      // gif3: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E8%BF%9B%E5%8C%96.gif',
-      // gif4: 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/%E8%BF%9E%E6%8E%A5.gif',
-    };
-  },
-
-  mounted() {
-    window.addEventListener('touchstart', this.playAllVideo);
-  },
-
-  beforeUnmount() {
-    window.removeEventListener('touchstart', this.playAllVideo);
-  },
-
-  methods: {
-    playAllVideo() {
-      Array.from(this.$refs.article.querySelectorAll('video')).forEach((item) => {
-        if (item.paused) item.play();
+function genAnchor() {
+  if (!article.value) return;
+  const nodes = ['H2', 'H3'];
+  const titles = [];
+  article.value.childNodes.forEach((element, index) => {
+    if (nodes.includes(element.nodeName)) {
+      const id = `header-${index}`;
+      element.setAttribute('id', id);
+      titles.push({
+        id,
+        title: element.innerHTML,
+        level: Number(element.nodeName.substring(1, 2)),
+        nodeName: element.nodeName,
+        children: [],
       });
-    },
-  },
-};
+    }
+  });
+
+  const isEveryLevel3 = titles.every((title) => title.level === 3);
+  catalog.value = titles.reduce((result, current) => {
+    if (isEveryLevel3 || current.level === 2) {
+      result.push(current);
+    } else if (current.level === 3) {
+      result[result.length - 1].children.push(current);
+    }
+    return result;
+  }, []);
+}
+
+function playAllVideo() {
+  Array.from(article.value.querySelectorAll('video')).forEach((item) => {
+    if (item.paused) item.play();
+  });
+}
+
+onMounted(() => {
+  genAnchor();
+  window.addEventListener('touchstart', playAllVideo);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('touchstart', playAllVideo);
+});
 </script>
 
 <style lang="less" scoped>

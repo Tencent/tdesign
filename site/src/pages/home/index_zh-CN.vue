@@ -583,7 +583,9 @@
   </section>
 </template>
 
-<script>
+<script setup>
+import { computed, onBeforeUnmount, onMounted, reactive, ref, toRefs, watch } from 'vue';
+
 import { DesktopIcon, Icon } from 'tdesign-icons-vue-next';
 import Banner from './banner.vue';
 import Avatar from './avatar.vue';
@@ -609,454 +611,466 @@ const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.
 const isIntranet = location.host.includes('woa.com'); // 部分动态或内容只能通过内网访问
 let ticking = false;
 
-export default {
-  name: 'SiteHome',
-  components: {
-    DesktopIcon,
-    Icon,
-    Banner,
-    Avatar,
-    ComponentList,
-  },
-
-  data() {
-    return {
-      contributorCount: 8,
-      currentTab: 0,
-      brandList: [],
-      newsList: [],
-      tabTransformWidth: 0,
-      contributors: [],
-      topContributors: [],
-      bottomContributors: [],
-      windowWidth: window.innerWidth,
-      themeMode: 'light',
-      stepsTimers: [],
-      stepsCounts: [0, 0, 0],
-      tabTimer: null,
-      // status 1 上线、2 alpha、3 beta、0 待上线
-      sourceList: [
-        { logo: vueLogo, name: 'Vue', href: '/vue/', status: 1 },
-        { logo: vueLogo, name: 'Vue Next', href: '/vue-next/', status: 1 },
-        { logo: reactLogo, name: 'React', href: '/react/', status: 1 },
-      ],
-      designList: [
-        {
-          logo: figmaLogo,
-          name: 'Figma',
-          href: figmaWebUrl,
-          status: 1,
-        },
-        {
-          logo: sketchLogo,
-          name: 'Sketch',
-          href: sketchWebUrl,
-          status: 1,
-        },
-        {
-          logo: axLogo,
-          name: 'Axure',
-          href: axWebUrl,
-          status: 1,
-        },
-        {
-          logo: xdLogo,
-          name: 'AdobeXD',
-          href: xdWebUrl,
-          status: 1,
-        },
-      ],
-      mobileSourceList: [
-        { logo: vueLogo, name: 'Vue Next', href: '/mobile-vue/', status: 1 },
-        { logo: reactLogo, name: 'React', href: '/mobile-react/', status: 2 },
-        { logo: uniappLogo, name: 'Uniapp', href: '/uniapp/', status: 2 },
-        { logo: flutterLogo, name: 'Flutter', href: '/flutter/', status: 2 },
-      ],
-      mobileDesignList: [
-        { logo: figmaLogo, name: 'Figma', href: figmaMobileUrl, status: 1 },
-        {
-          logo: sketchLogo,
-          name: 'Sketch',
-          href: sketchMobileUrl,
-          status: 1,
-        },
-      ],
-      miniSourceList: [{ logo: miniprogramLogo, name: '微信小程序', href: '/miniprogram/', status: 1 }],
-      codeFramework: 'vue',
-      codeList: {
-        vue: [
-          { type: 'bash', code: 'npm i tdesign-vue' },
-          { type: 'javascript', code: "import Vue from 'vue';" },
-          { type: 'javascript', code: "import TDesign from 'tdesign-vue';" },
-          { type: 'javascript', code: "import 'tdesign-vue/es/style/index.css';" },
-          { type: 'javascript', code: 'Vue.use(TDesign);' },
-        ],
-        'vue-next': [
-          { type: 'bash', code: 'npm i tdesign-vue-next' },
-          { type: 'javascript', code: "import { createApp } from 'vue';" },
-          { type: 'javascript', code: "import TDesign from 'tdesign-vue-next';" },
-          { type: 'javascript', code: "import 'tdesign-vue-next/es/style/index.css';" },
-          { type: 'javascript', code: 'createApp(App).use(TDesign);' },
-        ],
-        react: [
-          { type: 'bash', code: 'npm i tdesign-react' },
-          { type: 'javascript', code: "import { Button } from 'tdesign-react';" },
-          { type: 'javascript', code: "import 'tdesign-react/es/style/index.css';" },
-          { type: 'javascript', code: '' },
-        ],
-        miniprogram: [
-          { type: 'bash', code: 'npm i tdesign-miniprogram' },
-          { type: 'javascript', code: '{ "usingComponents": { "t-tag": "tdesign-miniprogram/tag/tag" } }' },
-          { type: 'javascript', code: '<t-tag theme="primary">重要</t-tag>' },
-          { type: 'javascript', code: '' },
-        ],
-        'mobile-vue': [
-          { type: 'bash', code: 'npm i tdesign-mobile-vue' },
-          { type: 'javascript', code: "import { createApp } from 'vue';" },
-          { type: 'javascript', code: "import TDesign from 'tdesign-mobile-vue';" },
-          { type: 'javascript', code: "import 'tdesign-mobile-vue/es/style/index.css';" },
-          { type: 'javascript', code: 'createApp(App).use(TDesign);' },
-        ],
-        'mobile-react': [
-          { type: 'bash', code: 'npm i tdesign-mobile-react' },
-          { type: 'javascript', code: "import { Button } from 'tdesign-mobile-react';" },
-          { type: 'javascript', code: "import 'tdesign-mobile-react/es/style/index.css';" },
-          { type: 'javascript', code: '' },
-        ],
-        flutter: [
-          { type: 'bash', code: 'flutter pub add tdesign_flutter' },
-          { type: 'javascript', code: "import 'package:tdesign_flutter/tdesign_flutter.dart';" },
-          {
-            type: 'javascript',
-            code: "TDTag _buildTag(BuildContext context) { return const TDTag('TDesign'); }",
-          },
-          { type: 'javascript', code: '' },
-        ],
+const state = reactive({
+  contributorCount: 8,
+  currentTab: 0,
+  brandList: [],
+  newsList: [],
+  tabTransformWidth: 0,
+  contributors: [],
+  topContributors: [],
+  bottomContributors: [],
+  windowWidth: window.innerWidth,
+  themeMode: 'light',
+  stepsTimers: [],
+  stepsCounts: [0, 0, 0],
+  tabTimer: null,
+  // status 1 上线、2 alpha、3 beta、0 待上线
+  sourceList: [
+    { logo: vueLogo, name: 'Vue', href: '/vue/', status: 1 },
+    { logo: vueLogo, name: 'Vue Next', href: '/vue-next/', status: 1 },
+    { logo: reactLogo, name: 'React', href: '/react/', status: 1 },
+  ],
+  designList: [
+    {
+      logo: figmaLogo,
+      name: 'Figma',
+      href: figmaWebUrl,
+      status: 1,
+    },
+    {
+      logo: sketchLogo,
+      name: 'Sketch',
+      href: sketchWebUrl,
+      status: 1,
+    },
+    {
+      logo: axLogo,
+      name: 'Axure',
+      href: axWebUrl,
+      status: 1,
+    },
+    {
+      logo: xdLogo,
+      name: 'AdobeXD',
+      href: xdWebUrl,
+      status: 1,
+    },
+  ],
+  mobileSourceList: [
+    { logo: vueLogo, name: 'Vue Next', href: '/mobile-vue/', status: 1 },
+    { logo: reactLogo, name: 'React', href: '/mobile-react/', status: 2 },
+    { logo: uniappLogo, name: 'Uniapp', href: '/uniapp/', status: 2 },
+    { logo: flutterLogo, name: 'Flutter', href: '/flutter/', status: 2 },
+  ],
+  mobileDesignList: [
+    { logo: figmaLogo, name: 'Figma', href: figmaMobileUrl, status: 1 },
+    {
+      logo: sketchLogo,
+      name: 'Sketch',
+      href: sketchMobileUrl,
+      status: 1,
+    },
+  ],
+  miniSourceList: [{ logo: miniprogramLogo, name: '微信小程序', href: '/miniprogram/', status: 1 }],
+  codeFramework: 'vue',
+  codeList: {
+    vue: [
+      { type: 'bash', code: 'npm i tdesign-vue' },
+      { type: 'javascript', code: "import Vue from 'vue';" },
+      { type: 'javascript', code: "import TDesign from 'tdesign-vue';" },
+      { type: 'javascript', code: "import 'tdesign-vue/es/style/index.css';" },
+      { type: 'javascript', code: 'Vue.use(TDesign);' },
+    ],
+    'vue-next': [
+      { type: 'bash', code: 'npm i tdesign-vue-next' },
+      { type: 'javascript', code: "import { createApp } from 'vue';" },
+      { type: 'javascript', code: "import TDesign from 'tdesign-vue-next';" },
+      { type: 'javascript', code: "import 'tdesign-vue-next/es/style/index.css';" },
+      { type: 'javascript', code: 'createApp(App).use(TDesign);' },
+    ],
+    react: [
+      { type: 'bash', code: 'npm i tdesign-react' },
+      { type: 'javascript', code: "import { Button } from 'tdesign-react';" },
+      { type: 'javascript', code: "import 'tdesign-react/es/style/index.css';" },
+      { type: 'javascript', code: '' },
+    ],
+    miniprogram: [
+      { type: 'bash', code: 'npm i tdesign-miniprogram' },
+      { type: 'javascript', code: '{ "usingComponents": { "t-tag": "tdesign-miniprogram/tag/tag" } }' },
+      { type: 'javascript', code: '<t-tag theme="primary">重要</t-tag>' },
+      { type: 'javascript', code: '' },
+    ],
+    'mobile-vue': [
+      { type: 'bash', code: 'npm i tdesign-mobile-vue' },
+      { type: 'javascript', code: "import { createApp } from 'vue';" },
+      { type: 'javascript', code: "import TDesign from 'tdesign-mobile-vue';" },
+      { type: 'javascript', code: "import 'tdesign-mobile-vue/es/style/index.css';" },
+      { type: 'javascript', code: 'createApp(App).use(TDesign);' },
+    ],
+    'mobile-react': [
+      { type: 'bash', code: 'npm i tdesign-mobile-react' },
+      { type: 'javascript', code: "import { Button } from 'tdesign-mobile-react';" },
+      { type: 'javascript', code: "import 'tdesign-mobile-react/es/style/index.css';" },
+      { type: 'javascript', code: '' },
+    ],
+    flutter: [
+      { type: 'bash', code: 'flutter pub add tdesign_flutter' },
+      { type: 'javascript', code: "import 'package:tdesign_flutter/tdesign_flutter.dart';" },
+      {
+        type: 'javascript',
+        code: "TDTag _buildTag(BuildContext context) { return const TDTag('TDesign'); }",
       },
-      componentModel: {
-        selectValue: ['1'],
-        selectOptions: [
-          { label: '市场部', value: '1' },
-          { label: '财务部', value: '2' },
-          { label: '研发部', value: '3' },
-        ],
-        menuExpanded: ['dashboard'],
-        treeData: [
+      { type: 'javascript', code: '' },
+    ],
+  },
+  componentModel: {
+    selectValue: ['1'],
+    selectOptions: [
+      { label: '市场部', value: '1' },
+      { label: '财务部', value: '2' },
+      { label: '研发部', value: '3' },
+    ],
+    menuExpanded: ['dashboard'],
+    treeData: [
+      {
+        value: '1',
+        label: '公司总部',
+      },
+      {
+        value: '2',
+        label: '华东大区',
+        children: [
           {
-            value: '1',
-            label: '公司总部',
+            value: '2.1',
+            label: '市场部',
           },
           {
-            value: '2',
-            label: '华东大区',
-            children: [
-              {
-                value: '2.1',
-                label: '市场部',
-              },
-              {
-                value: '2.2',
-                label: '财务部',
-              },
-            ],
+            value: '2.2',
+            label: '财务部',
+          },
+        ],
+      },
+      {
+        value: '3',
+        label: '华南大区',
+        children: [
+          {
+            value: '3.1',
+            label: '市场部',
           },
           {
-            value: '3',
-            label: '华南大区',
-            children: [
-              {
-                value: '3.1',
-                label: '市场部',
-              },
-              {
-                value: '3.2',
-                label: '财务部',
-              },
-            ],
+            value: '3.2',
+            label: '财务部',
           },
         ],
-        sliderValue: 60,
-        colorList1: [
-          '#ecf2fe',
-          '#d4e3fc',
-          '#bbd3fb',
-          '#96bbf8',
-          '#699ef5',
-          '#4787f0',
-          '#266fe8',
-          '#0052d9',
-          '#0034b5',
-          '#001f97',
-        ],
-        colorList2: [
-          '#ebedf1',
-          '#e3e6eB',
-          '#d6dbe3',
-          '#bcc4d0',
-          '#97a3b7',
-          '#7787a2',
-          '#5f7292',
-          '#4b5b76',
-          '#3c485c',
-          '#2c3645',
-        ],
       },
-    };
+    ],
+    sliderValue: 60,
+    colorList1: [
+      '#ecf2fe',
+      '#d4e3fc',
+      '#bbd3fb',
+      '#96bbf8',
+      '#699ef5',
+      '#4787f0',
+      '#266fe8',
+      '#0052d9',
+      '#0034b5',
+      '#001f97',
+    ],
+    colorList2: [
+      '#ebedf1',
+      '#e3e6eB',
+      '#d6dbe3',
+      '#bcc4d0',
+      '#97a3b7',
+      '#7787a2',
+      '#5f7292',
+      '#4b5b76',
+      '#3c485c',
+      '#2c3645',
+    ],
   },
+});
 
-  computed: {
-    footerStyle() {
-      return {
-        '--content-padding-right': '0',
-        '--content-max-width': '1440px',
-        '--content-padding-left-right': '48px',
-        '--footer-inner-position': 'relative',
-        '--footer-logo-position': 'unset',
-      };
-    },
-  },
+const {
+  contributorCount,
+  currentTab,
+  brandList,
+  newsList,
+  tabTransformWidth,
+  topContributors,
+  bottomContributors,
+  windowWidth,
+  themeMode,
+  sourceList,
+  designList,
+  mobileSourceList,
+  mobileDesignList,
+  miniSourceList,
+  codeFramework,
+  codeList,
+  componentModel,
+} = toRefs(state);
+const topAvatars = ref([]);
+const bottomAvatars = ref([]);
+const footerStyle = computed(() => ({
+  '--content-padding-right': '0',
+  '--content-max-width': '1440px',
+  '--content-padding-left-right': '48px',
+  '--footer-inner-position': 'relative',
+  '--footer-logo-position': 'unset',
+}));
+let randomTimer;
+let avatarTimer;
+let observer;
 
-  watch: {
-    currentTab: {
-      handler(tab) {
-        if (this.windowWidth >= 888) {
-          if (tab === 0) this.tabTransformWidth = 0;
-          else if (tab === 1) this.tabTransformWidth = 1048;
-          else this.tabTransformWidth = 1048 + 480 + this.windowWidth * 0.5;
-        } else {
-          if (tab === 0) this.tabTransformWidth = 0;
-          else if (tab === 1) this.tabTransformWidth = this.windowWidth - 20;
-          else this.tabTransformWidth = this.windowWidth * 2;
-        }
-      },
-    },
-    codeFramework: {
-      immediate: true,
-      handler() {
-        requestAnimationFrame(() => {
-          Prismjs.highlightAll();
-        });
-      },
-    },
-    windowWidth: {
-      immediate: true,
-      handler(v) {
-        if (v > 750 && v < 960) {
-          this.contributorCount = 6;
-        } else if (v < 750) {
-          this.contributorCount = 3;
-        } else {
-          this.contributorCount = 8;
-        }
-      },
-    },
-    contributorCount() {
-      clearInterval(this.randomTimer);
-      clearInterval(this.avatarTimer);
-      this.changeContributors();
-    },
-  },
+function githubAvatar(value) {
+  return `https://avatars.githubusercontent.com/${value}`;
+}
 
-  mounted() {
-    this.watchHtmlMode();
-    this.fetchContributors();
-    this.getBrandList();
-    this.getNews();
-    window.addEventListener('resize', this.handleResize);
-    window.addEventListener('mousemove', this.handleMousemove);
-    this.initTabTimer();
-  },
+function githubUrl(value) {
+  return `https://github.com/${value}`;
+}
 
-  beforeUnmount() {
-    clearInterval(this.randomTimer);
-    clearInterval(this.avatarTimer);
-    clearInterval(this.tabTimer);
-    this.observer.disconnect();
-    window.removeEventListener('resize', this.handleResize);
-    window.removeEventListener('mousemove', this.handleMousemove);
-  },
+function statusText(value) {
+  if (value === 0) return '待上线';
+  if (value === 1) return 'Stable';
+  if (value === 2) return 'Alpha';
+  if (value === 3) return 'Beta';
+  if (value === 4) return 'Rc';
+  return '';
+}
 
-  methods: {
-    githubAvatar(v) {
-      return `https://avatars.githubusercontent.com/${v}`;
-    },
-    githubUrl(v) {
-      return `https://github.com/${v}`;
-    },
-    statusText(v) {
-      if (v === 0) return '待上线';
-      if (v === 1) return 'Stable';
-      if (v === 2) return 'Alpha';
-      if (v === 3) return 'Beta';
-      if (v === 4) return 'Rc';
-      return '';
-    },
-    handleMousemove(event) {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(() => {
-        this.checkMousePosition(event);
-        ticking = false;
+function handleMousemove(event) {
+  if (ticking) return;
+  ticking = true;
+  window.requestAnimationFrame(() => {
+    checkMousePosition(event);
+    ticking = false;
+  });
+}
+
+function checkMousePosition(event) {
+  const element = document.querySelector('#moduleBoard');
+  if (!element) return;
+  const isOver = element.contains(event.target);
+  if (isOver) {
+    clearInterval(state.tabTimer);
+    state.tabTimer = null;
+    return;
+  }
+  if (state.tabTimer) return;
+  initTabTimer();
+}
+
+function initTabTimer() {
+  clearInterval(state.tabTimer);
+  state.tabTimer = setInterval(() => {
+    state.currentTab = state.currentTab === 2 ? 0 : state.currentTab + 1;
+  }, 4000);
+}
+
+function handleClickNews(url) {
+  if (url) window.open(url, '_blank');
+}
+
+function getNews() {
+  fetch(newsUrl).then((data) => {
+    data.json().then((list) => {
+      state.newsList = isIntranet ? list : list.filter((value) => !value.isIntranet);
+    });
+  });
+}
+
+function getBrandList() {
+  fetch(brandUrl).then((data) => {
+    data.json().then((list) => {
+      state.brandList = list;
+    });
+  });
+}
+
+function fetchContributors() {
+  fetch(contributorsUrl)
+    .then((res) => res.json())
+    .then((data) => {
+      const design = (data && data.design) || {};
+      const raw = [].concat(design.web || [], design.mobile || [], design.chart || []);
+      const seen = new Set();
+      const list = [];
+      raw.forEach((name) => {
+        const trimmed = String(name).trim();
+        if (!trimmed) return;
+        const key = trimmed.toLowerCase();
+        if (seen.has(key)) return;
+        seen.add(key);
+        list.push(trimmed);
       });
-    },
-    checkMousePosition(event) {
-      const element = document.querySelector('#moduleBoard');
-      if (!element) return;
-      const isOver = element.contains(event.target);
-      if (isOver) {
-        clearInterval(this.tabTimer);
-        this.tabTimer = null;
-        return;
+      state.contributors = list;
+      changeContributors();
+    })
+    .catch((err) => console.error(err));
+}
+
+function handleIntroClick(item) {
+  if (typeof item === 'string') {
+    window.open(item, '_blank');
+    return;
+  }
+  if (!item.status) return;
+  window.open(item.href, '_blank');
+}
+
+function changeContributors() {
+  const { contributorCount, contributors } = state;
+  if (!contributors.length) return;
+  state.topContributors = contributors.slice(0, contributorCount);
+  state.bottomContributors = contributors.slice(-contributorCount);
+
+  let unshowContributors = contributors.slice(contributorCount, -contributorCount);
+
+  avatarTimer = setInterval(() => {
+    const r1 = Math.floor(Math.random() * contributorCount);
+    const r2 = Math.floor(Math.random() * contributorCount);
+    if (topAvatars.value[r1].$el) {
+      topAvatars.value[r1].$el.classList.toggle('active');
+      bottomAvatars.value[r2].$el.classList.toggle('active');
+    }
+
+    setTimeout(() => {
+      if (topAvatars.value[r1]?.$el) {
+        topAvatars.value[r1].$el.classList.remove('active');
+        bottomAvatars.value[r2].$el.classList.remove('active');
       }
-      if (this.tabTimer) return;
-      this.initTabTimer();
-    },
-    initTabTimer() {
-      clearInterval(this.tabTimer);
-      this.tabTimer = setInterval(() => {
-        this.currentTab = this.currentTab === 2 ? 0 : this.currentTab + 1;
-      }, 4000);
-    },
-    handleClickNews(url) {
-      if (url) window.open(url, '_blank');
-    },
-    getNews() {
-      fetch(newsUrl).then((data) => {
-        data.json().then((list) => {
-          this.newsList = isIntranet ? list : list.filter((v) => !v.isIntranet);
-        });
+    }, 5000);
+  }, 2500);
+
+  randomTimer = setInterval(() => {
+    const r1 = Math.floor(Math.random() * contributorCount);
+    const r2 = Math.floor(Math.random() * contributorCount);
+
+    let nextShows = unshowContributors.splice(0, 2);
+    if (nextShows.length !== 2) {
+      unshowContributors = contributors.filter((contributor) => {
+        return !state.topContributors.includes(contributor) && !state.bottomContributors.includes(contributor);
       });
-    },
-    getBrandList() {
-      fetch(brandUrl).then((data) => {
-        data.json().then((list) => {
-          this.brandList = list;
-        });
-      });
-    },
-    fetchContributors() {
-      fetch(contributorsUrl)
-        .then((res) => res.json())
-        .then((data) => {
-          const design = (data && data.design) || {};
-          const raw = [].concat(design.web || [], design.mobile || [], design.chart || []);
-          const seen = new Set();
-          const list = [];
-          raw.forEach((name) => {
-            const trimmed = String(name).trim();
-            if (!trimmed) return;
-            const key = trimmed.toLowerCase();
-            if (seen.has(key)) return;
-            seen.add(key);
-            list.push(trimmed);
-          });
-          this.contributors = list;
-          this.changeContributors();
-        })
-        .catch((err) => console.error(err));
-    },
-    handleIntroClick(item) {
-      if (typeof item === 'string') {
-        window.open(item, '_blank');
-        return;
+      nextShows = unshowContributors.splice(0, 2);
+    }
+
+    if (topAvatars.value[r1].$el) {
+      topAvatars.value[r1].$el.classList.add('change');
+      bottomAvatars.value[r2].$el.classList.add('change');
+    }
+    setTimeout(() => {
+      state.topContributors.splice(r1, 1, nextShows[0]);
+      state.bottomContributors.splice(r2, 1, nextShows[1]);
+    }, 500);
+    setTimeout(() => {
+      if (topAvatars.value[r1].$el) {
+        topAvatars.value[r1].$el.classList.remove('change');
+        bottomAvatars.value[r2].$el.classList.remove('change');
       }
-      if (!item.status) return;
-      window.open(item.href, '_blank');
-    },
-    changeContributors() {
-      const { contributorCount, contributors } = this;
-      if (!contributors.length) return;
-      this.topContributors = contributors.slice(0, contributorCount);
-      this.bottomContributors = contributors.slice(-contributorCount);
+    }, 1500);
+  }, 2500);
+}
 
-      let unshowContributors = contributors.slice(contributorCount, -contributorCount);
+function handleResize() {
+  state.windowWidth = window.innerWidth;
+  state.currentTab = 0;
+}
 
-      this.avatarTimer = setInterval(() => {
-        const r1 = Math.floor(Math.random() * contributorCount);
-        const r2 = Math.floor(Math.random() * contributorCount);
-        if (this.$refs.topAvatars[r1].$el) {
-          this.$refs.topAvatars[r1].$el.classList.toggle('active');
-          this.$refs.bottomAvatars[r2].$el.classList.toggle('active');
-        }
+function watchHtmlMode() {
+  state.themeMode = document.documentElement.getAttribute('theme-mode') || 'light';
+  const targetNode = document.documentElement;
+  const callback = (mutationsList) => {
+    for (const mutation of mutationsList) {
+      if (mutation.attributeName === 'theme-mode') {
+        const mode = mutation.target.getAttribute('theme-mode') || 'light';
+        if (mode) state.themeMode = mode;
+      }
+    }
+  };
 
-        setTimeout(() => {
-          if (this.$refs.topAvatars[r1]?.$el) {
-            this.$refs.topAvatars[r1].$el.classList.remove('active');
-            this.$refs.bottomAvatars[r2].$el.classList.remove('active');
-          }
-        }, 5000);
-      }, 2500);
+  observer = new MutationObserver(callback);
+  observer.observe(targetNode, { attributes: true });
+}
 
-      this.randomTimer = setInterval(() => {
-        const r1 = Math.floor(Math.random() * contributorCount);
-        const r2 = Math.floor(Math.random() * contributorCount);
+function stepsStart(_event, index) {
+  clearInterval(state.stepsTimers[index]);
+  const el = document.querySelectorAll('.steps-image')[index];
+  const { height } = el.getBoundingClientRect();
+  state.stepsTimers[index] = setInterval(() => {
+    if (state.stepsCounts[index] >= 24) return;
+    state.stepsCounts[index] += 1;
+    Object.assign(el.style, { backgroundPositionY: `-${height * state.stepsCounts[index]}px` });
+  }, 40);
+}
 
-        let nextShows = unshowContributors.splice(0, 2);
-        if (nextShows.length !== 2) {
-          unshowContributors = contributors.filter((c) => {
-            return !this.topContributors.includes(c) && !this.bottomContributors.includes(c);
-          });
-          nextShows = unshowContributors.splice(0, 2);
-        }
+function stepsEnd(_event, index) {
+  clearInterval(state.stepsTimers[index]);
+  const el = document.querySelectorAll('.steps-image')[index];
+  const { height } = el.getBoundingClientRect();
+  state.stepsTimers[index] = setInterval(() => {
+    if (state.stepsCounts[index] <= 0) return;
+    state.stepsCounts[index] -= 1;
+    Object.assign(el.style, { backgroundPositionY: `-${height * state.stepsCounts[index]}px` });
+  }, 40);
+}
 
-        if (this.$refs.topAvatars[r1].$el) {
-          this.$refs.topAvatars[r1].$el.classList.add('change');
-          this.$refs.bottomAvatars[r2].$el.classList.add('change');
-        }
-        setTimeout(() => {
-          this.topContributors.splice(r1, 1, nextShows[0]);
-          this.bottomContributors.splice(r2, 1, nextShows[1]);
-        }, 500);
-        setTimeout(() => {
-          if (this.$refs.topAvatars[r1].$el) {
-            this.$refs.topAvatars[r1].$el.classList.remove('change');
-            this.$refs.bottomAvatars[r2].$el.classList.remove('change');
-          }
-        }, 1500);
-      }, 2500);
-    },
-    handleResize() {
-      this.windowWidth = window.innerWidth;
-      this.currentTab = 0;
-    },
-    watchHtmlMode() {
-      this.themeMode = document.documentElement.getAttribute('theme-mode') || 'light';
+watch(currentTab, (tab) => {
+  if (state.windowWidth >= 888) {
+    if (tab === 0) state.tabTransformWidth = 0;
+    else if (tab === 1) state.tabTransformWidth = 1048;
+    else state.tabTransformWidth = 1048 + 480 + state.windowWidth * 0.5;
+  } else {
+    if (tab === 0) state.tabTransformWidth = 0;
+    else if (tab === 1) state.tabTransformWidth = state.windowWidth - 20;
+    else state.tabTransformWidth = state.windowWidth * 2;
+  }
+});
 
-      const targetNode = document.documentElement;
-      const config = { attributes: true };
-
-      const callback = (mutationsList) => {
-        for (const mutation of mutationsList) {
-          if (mutation.attributeName === 'theme-mode') {
-            const themeMode = mutation.target.getAttribute('theme-mode') || 'light';
-            if (themeMode) this.themeMode = themeMode;
-          }
-        }
-      };
-
-      this.observer = new MutationObserver(callback);
-      this.observer.observe(targetNode, config);
-    },
-    stepsStart(e, index) {
-      clearInterval(this.stepsTimers[index]);
-      const el = document.querySelectorAll('.steps-image')[index];
-      const { height } = el.getBoundingClientRect();
-      this.stepsTimers[index] = setInterval(() => {
-        if (this.stepsCounts[index] >= 24) return;
-        this.stepsCounts[index] += 1;
-        Object.assign(el.style, { backgroundPositionY: `-${height * this.stepsCounts[index]}px` });
-      }, 40);
-    },
-    stepsEnd(e, index) {
-      clearInterval(this.stepsTimers[index]);
-      const el = document.querySelectorAll('.steps-image')[index];
-      const { height } = el.getBoundingClientRect();
-      this.stepsTimers[index] = setInterval(() => {
-        if (this.stepsCounts[index] <= 0) return;
-        this.stepsCounts[index] -= 1;
-        Object.assign(el.style, { backgroundPositionY: `-${height * this.stepsCounts[index]}px` });
-      }, 40);
-    },
+watch(
+  codeFramework,
+  () => {
+    requestAnimationFrame(() => Prismjs.highlightAll());
   },
-};
+  { immediate: true },
+);
+
+watch(
+  windowWidth,
+  (value) => {
+    if (value > 750 && value < 960) state.contributorCount = 6;
+    else if (value < 750) state.contributorCount = 3;
+    else state.contributorCount = 8;
+  },
+  { immediate: true },
+);
+
+watch(contributorCount, () => {
+  clearInterval(randomTimer);
+  clearInterval(avatarTimer);
+  changeContributors();
+});
+
+onMounted(() => {
+  watchHtmlMode();
+  fetchContributors();
+  getBrandList();
+  getNews();
+  window.addEventListener('resize', handleResize);
+  window.addEventListener('mousemove', handleMousemove);
+  initTabTimer();
+});
+
+onBeforeUnmount(() => {
+  clearInterval(randomTimer);
+  clearInterval(avatarTimer);
+  clearInterval(state.tabTimer);
+  observer.disconnect();
+  window.removeEventListener('resize', handleResize);
+  window.removeEventListener('mousemove', handleMousemove);
+});
 </script>

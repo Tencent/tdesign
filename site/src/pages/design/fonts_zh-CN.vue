@@ -167,8 +167,43 @@
   </div>
 </template>
 
-<script>
-import anchorMixin from '../mixins/anchor';
+<script setup>
+import { getCurrentInstance, onMounted, reactive, ref, toRefs } from 'vue';
+
+const article = ref(null);
+const catalog = ref([]);
+const { proxy } = getCurrentInstance();
+
+function genAnchor() {
+  if (!article.value) return;
+  const nodes = ['H2', 'H3'];
+  const titles = [];
+  article.value.childNodes.forEach((element, index) => {
+    if (nodes.includes(element.nodeName)) {
+      const id = `header-${index}`;
+      element.setAttribute('id', id);
+      titles.push({
+        id,
+        title: element.innerHTML,
+        level: Number(element.nodeName.substring(1, 2)),
+        nodeName: element.nodeName,
+        children: [],
+      });
+    }
+  });
+
+  const isEveryLevel3 = titles.every((title) => title.level === 3);
+  catalog.value = titles.reduce((result, current) => {
+    if (isEveryLevel3 || current.level === 2) {
+      result.push(current);
+    } else if (current.level === 3) {
+      result[result.length - 1].children.push(current);
+    }
+    return result;
+  }, []);
+}
+
+onMounted(genAnchor);
 
 const fontDownloadUrl =
   'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/design-source/TCloudNumber%20v1.010.zip';
@@ -181,70 +216,64 @@ function genFontSize(num) {
   return result;
 }
 
-export default {
-  mixins: [anchorMixin],
-  data() {
-    return {
-      dialogVisible: false,
-      fontDownloadUrl,
-      fontList: [
-        { step: 'base', size: '10px 移动端最小', fontSize: 10, desc: '第一字阶' },
-        { step: '+2', size: '12px 桌面端最小', fontSize: 12 },
-        { step: '+2', size: '14px 正文', fontSize: 14 },
-        { step: '+2', size: '16px TDesign', fontSize: 16 },
-        { type: 'divider' },
-        { step: '+4', size: '20px TDesign', fontSize: 20, desc: '第二字阶' },
-        { step: '+4', size: '24px TDesign', fontSize: 24 },
-        { step: '+4', size: '28px TDesign', fontSize: 28 },
-        { step: '+8', size: '36px TDesign', fontSize: 36 },
-        { step: '+12', size: '48px TDesign', fontSize: 48 },
-        { step: '+16', size: '64px TDesign', fontSize: 64 },
-      ],
-      fontSize: 48,
-      fontSelectList: genFontSize(64),
-      fontColorListLeft: [
-        { background: 'rgba(0, 0, 0, 0.9)', color: '#fff', text: 'Font Gy1', style: '#000000 90%' },
-        { background: 'rgba(0, 0, 0, 0.6)', color: '#fff', text: 'Font Gy2', style: '#000000 60%' },
-        { background: 'rgba(0, 0, 0, 0.4)', color: '#fff', text: 'Font Gy3', style: '#000000 40%' },
-        { background: 'rgba(0, 0, 0, 0.26)', color: '#fff', text: 'Font Gy4', style: '#000000 26%' },
-      ],
-      fontColorListRight: [
-        { background: 'rgba(255, 255, 255, 1)', color: 'rgba(0,0,0,.9)', text: 'Font Wh1', style: '#ffffff 100%' },
-        { background: 'rgba(255, 255, 255, 0.55)', color: '#fff', text: 'Font Wh2', style: '#ffffff 55%' },
-        { background: 'rgba(255, 255, 255, 0.35)', color: '#fff', text: 'Font Wh3', style: '#ffffff 35%' },
-        { background: 'rgba(255, 255, 255, 0.22)', color: '#fff', text: 'Font Wh4', style: '#ffffff 22%' },
-      ],
-    };
-  },
+const state = reactive({
+  dialogVisible: false,
+  fontDownloadUrl,
+  fontList: [
+    { step: 'base', size: '10px 移动端最小', fontSize: 10, desc: '第一字阶' },
+    { step: '+2', size: '12px 桌面端最小', fontSize: 12 },
+    { step: '+2', size: '14px 正文', fontSize: 14 },
+    { step: '+2', size: '16px TDesign', fontSize: 16 },
+    { type: 'divider' },
+    { step: '+4', size: '20px TDesign', fontSize: 20, desc: '第二字阶' },
+    { step: '+4', size: '24px TDesign', fontSize: 24 },
+    { step: '+4', size: '28px TDesign', fontSize: 28 },
+    { step: '+8', size: '36px TDesign', fontSize: 36 },
+    { step: '+12', size: '48px TDesign', fontSize: 48 },
+    { step: '+16', size: '64px TDesign', fontSize: 64 },
+  ],
+  fontSize: 48,
+  fontSelectList: genFontSize(64),
+  fontColorListLeft: [
+    { background: 'rgba(0, 0, 0, 0.9)', color: '#fff', text: 'Font Gy1', style: '#000000 90%' },
+    { background: 'rgba(0, 0, 0, 0.6)', color: '#fff', text: 'Font Gy2', style: '#000000 60%' },
+    { background: 'rgba(0, 0, 0, 0.4)', color: '#fff', text: 'Font Gy3', style: '#000000 40%' },
+    { background: 'rgba(0, 0, 0, 0.26)', color: '#fff', text: 'Font Gy4', style: '#000000 26%' },
+  ],
+  fontColorListRight: [
+    { background: 'rgba(255, 255, 255, 1)', color: 'rgba(0,0,0,.9)', text: 'Font Wh1', style: '#ffffff 100%' },
+    { background: 'rgba(255, 255, 255, 0.55)', color: '#fff', text: 'Font Wh2', style: '#ffffff 55%' },
+    { background: 'rgba(255, 255, 255, 0.35)', color: '#fff', text: 'Font Wh3', style: '#ffffff 35%' },
+    { background: 'rgba(255, 255, 255, 0.22)', color: '#fff', text: 'Font Wh4', style: '#ffffff 22%' },
+  ],
+});
+const { fontList, fontSize, fontSelectList, fontColorListLeft, fontColorListRight } = toRefs(state);
 
-  methods: {
-    copyColor(color) {
-      if ('clipboard' in navigator) {
-        navigator.clipboard.writeText(color);
-        this.$message.success('复制成功');
-        return;
-      }
+function copyColor(color) {
+  if ('clipboard' in navigator) {
+    navigator.clipboard.writeText(color);
+    proxy.$message.success('复制成功');
+    return;
+  }
 
-      const textarea = document.createElement('textarea');
-      textarea.textContent = color;
-      textarea.style.width = 0;
-      textarea.style.height = 0;
-      document.body.appendChild(textarea);
+  const textarea = document.createElement('textarea');
+  textarea.textContent = color;
+  textarea.style.width = 0;
+  textarea.style.height = 0;
+  document.body.appendChild(textarea);
 
-      const selection = document.getSelection();
-      const range = document.createRange();
-      range.selectNode(textarea);
-      selection.removeAllRanges();
-      selection.addRange(range);
+  const selection = document.getSelection();
+  const range = document.createRange();
+  range.selectNode(textarea);
+  selection.removeAllRanges();
+  selection.addRange(range);
 
-      document.execCommand('copy');
-      selection.removeAllRanges();
-      document.body.removeChild(textarea);
+  document.execCommand('copy');
+  selection.removeAllRanges();
+  document.body.removeChild(textarea);
 
-      this.$message.success('复制成功');
-    },
-  },
-};
+  proxy.$message.success('复制成功');
+}
 </script>
 
 <style lang="less">

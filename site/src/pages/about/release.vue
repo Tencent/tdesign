@@ -26,7 +26,10 @@
   </td-doc-content>
 </template>
 
-<script>
+<script setup>
+import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+
 import MarkdownIt from 'markdown-it';
 import mila from 'markdown-it-link-attributes';
 
@@ -43,59 +46,49 @@ const mdRender = new MarkdownIt({
   },
 });
 
-export default {
-  data() {
-    return {
-      mdRender,
-      release: [],
-    };
-  },
-  mounted() {
-    this.pageInit();
-    this.fetchReleases();
-  },
+const route = useRoute();
+const tdDocHeader = ref();
+const release = ref([]);
 
-  computed: {
-    releaseTimeList() {
-      return this.release.map((item) => ({
-        title: this.formatTime(item.published_at),
-        id: this.formatTime(item.published_at).replace(/\s/g, '-'),
-      }));
-    },
-  },
-  methods: {
-    formatTime(time) {
-      return `${new Date(time).toDateString()}（${new Date(time).toLocaleDateString()}）`;
-    },
-    pageInit() {
-      const { meta } = this.$route;
-      this.$refs.tdDocHeader.docInfo = meta;
-    },
-    fetchReleases() {
-      const cache = sessionStorage.getItem('__tdesign_release__');
+const formatTime = (time) => `${new Date(time).toDateString()}（${new Date(time).toLocaleDateString()}）`;
+const releaseTimeList = computed(() =>
+  release.value.map((item) => ({
+    title: formatTime(item.published_at),
+    id: formatTime(item.published_at).replace(/\s/g, '-'),
+  })),
+);
 
-      if (cache) {
-        const data = JSON.parse(cache);
-        this.release = data.map((item) => {
-          item.body = this.mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1');
-          return item;
-        });
-      } else {
-        fetch(RELEASE_API)
-          .then((res) => res.json())
-          .then((data) => {
-            sessionStorage.setItem('__tdesign_release__', JSON.stringify(data));
-
-            this.release = data.map((item) => {
-              item.body = this.mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1');
-              return item;
-            });
-          })
-          .catch((err) => console.error(err));
-      }
-    },
-  },
+const pageInit = () => {
+  const { meta } = route;
+  tdDocHeader.value.docInfo = meta;
 };
+
+const renderReleases = (data) =>
+  data.map((item) => {
+    item.body = mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1');
+    return item;
+  });
+
+const fetchReleases = () => {
+  const cache = sessionStorage.getItem('__tdesign_release__');
+
+  if (cache) {
+    release.value = renderReleases(JSON.parse(cache));
+  } else {
+    fetch(RELEASE_API)
+      .then((res) => res.json())
+      .then((data) => {
+        sessionStorage.setItem('__tdesign_release__', JSON.stringify(data));
+        release.value = renderReleases(data);
+      })
+      .catch((err) => console.error(err));
+  }
+};
+
+onMounted(() => {
+  pageInit();
+  fetchReleases();
+});
 </script>
 
 <style lang="less">

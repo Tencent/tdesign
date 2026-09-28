@@ -30,39 +30,40 @@ export default function mdToVue(options) {
       </td-doc-content>
     </template>
 
-    <script>
+    <script setup>
+      import { computed, onMounted, ref } from 'vue';
+      import { useRoute, useRouter } from 'vue-router';
       import Prismjs from 'prismjs';
 
-      export default {
-        computed: {
-          tab: {
-            get() {
-              return this.$route.query.tab || 'demo';
-            },
-            set(v) {
-              if (this.$route.query.tab !== v)
-                this.$router.push({ query: { tab: v } });
-            }
-          },
-        },
+      const emit = defineEmits(['loaded']);
+      const route = useRoute();
+      const router = useRouter();
+      const tdDocContent = ref(null);
+      const tdDocHeader = ref(null);
 
-        mounted() {
-          const { tdDocContent, tdDocHeader } = this.$refs;
-
-          if (tdDocHeader) {
-            tdDocHeader.docInfo = {
-              title: \`${mdSegment.title}\`,
-              desc: \`${mdSegment.description}\`,
-            };
+      const tab = computed({
+        get: () => route.query.tab || 'demo',
+        set: (value) => {
+          if (route.query.tab !== value) {
+            router.push({ query: { tab: value } });
           }
-
-          Prismjs.highlightAll();
-    
-          this.$emit('loaded', () => {
-            tdDocContent.pageStatus = 'show';
-          });
         },
-      };
+      });
+
+      onMounted(() => {
+        if (tdDocHeader.value) {
+          tdDocHeader.value.docInfo = {
+            title: \`${mdSegment.title}\`,
+            desc: \`${mdSegment.description}\`,
+          };
+        }
+
+        Prismjs.highlightAll();
+
+        emit('loaded', () => {
+          tdDocContent.value.pageStatus = 'show';
+        });
+      });
     </script>
   `;
 

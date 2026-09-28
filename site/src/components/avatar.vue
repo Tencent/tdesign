@@ -4,7 +4,9 @@
     <div class="tdesign-avatar-name">{{ username }}</div>
   </span>
 </template>
-<script>
+<script setup>
+import { computed, ref } from 'vue';
+
 function getSrc(username, src) {
   if (username) {
     // return `http://dcloud.oa.com/Public/Avatar/${username}.png`;
@@ -15,65 +17,51 @@ function getSrc(username, src) {
   return src || '';
 }
 
-export default {
-  props: {
-    /**
-     * 头像类型
-     * @member square | round
-     */
-    type: {
-      type: String,
-      default: 'round',
-    },
-    /**
-     * 头像大小
-     * @member large | default | small
-     */
-    size: {
-      type: String,
-      default: 'default',
-    },
-    username: String,
-    src: String,
-    width: [String, Number],
-    height: [String, Number],
+const props = defineProps({
+  /**
+   * 头像类型
+   * @member square | round
+   */
+  type: {
+    type: String,
+    default: 'round',
   },
-  data() {
-    return {
-      prefixCls: 'tdesign-avatar',
-      error: false,
-    };
+  /**
+   * 头像大小
+   * @member large | default | small
+   */
+  size: {
+    type: String,
+    default: 'default',
   },
-  computed: {
-    _class() {
-      return [
-        this.prefixCls,
-        {
-          [`${this.prefixCls}__lg`]: this.size === 'large',
-          [`${this.prefixCls}__square`]: this.type === 'square',
-          [`${this.prefixCls}__default`]: this.error || !this.imgSrc,
-        },
-      ];
-    },
-    _style() {
-      if (this.width) {
-        return {
-          width: `${this.width}px`,
-          height: `${this.width}px`,
-        };
-      }
-      return {};
-    },
-    imgSrc() {
-      return getSrc(this.username, this.src);
-    },
+  username: String,
+  src: String,
+  width: [String, Number],
+  height: [String, Number],
+});
+
+const prefixCls = 'tdesign-avatar';
+const error = ref(false);
+const imgSrc = computed(() => getSrc(props.username, props.src));
+const _class = computed(() => [
+  prefixCls,
+  {
+    [`${prefixCls}__lg`]: props.size === 'large',
+    [`${prefixCls}__square`]: props.type === 'square',
+    [`${prefixCls}__default`]: error.value || !imgSrc.value,
   },
-  methods: {
-    onError() {
-      this.error = true;
-    },
-  },
-};
+]);
+const _style = computed(() => {
+  if (!props.width) return {};
+  return {
+    width: `${props.width}px`,
+    height: `${props.width}px`,
+  };
+});
+
+function onError() {
+  error.value = true;
+}
 </script>
 
 <style lang="less">
