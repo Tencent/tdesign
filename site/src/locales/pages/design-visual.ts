@@ -1,5 +1,5 @@
-const image = (name) => ({ type: 'img', image: name });
-const text = (type, value, className) => ({ type, text: value, class: className });
+const image = (name: string) => ({ type: 'img', image: name });
+const text = (type: string, value: string, className?: string) => ({ type, text: value, class: className });
 const rule = { type: 'hr' };
 const table = { type: 'table' };
 

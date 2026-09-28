@@ -208,10 +208,10 @@
   </div>
 </template>
 
-<script setup>
-import { computed, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+<script setup lang="ts">
+import { computed, h, nextTick, onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import lottie from 'lottie-web';
+import lottie, { type AnimationItem } from 'lottie-web';
 
 import messages from '../../locales/pages/design-motion-icon';
 import xAxis from './assets/motion/X_Axis.json';
@@ -228,9 +228,19 @@ import fadeInOut from './assets/motion/fade_in_out.json';
 import fadeInOutDark from './assets/motion/fade_in_out_dark.json';
 
 const { locale, t } = useI18n({ messages });
-const lottieProps = { renderer: 'svg', loop: true, autoplay: true };
-const animations = [];
-let downloadUrl;
+const lottieProps = { renderer: 'svg' as const, loop: true, autoplay: true };
+const animations: AnimationItem[] = [];
+let downloadUrl: string | undefined;
+
+interface Anchor {
+  id: string;
+  title: string;
+  level: number;
+  children: Anchor[];
+}
+
+type AxisValue = 'x' | 'y' | 'z';
+type SlowValue = 'easing' | 'ease-out' | 'ease-in' | 'linear';
 
 const durationRows = [
   { token: '@duration-mobile-base', usageKey: 'motion.duration.mobileBase', value: '100ms' },
@@ -274,10 +284,10 @@ const checkSections = [
   },
 ];
 
-const article = ref();
-const catalog = ref([]);
-const axisValue = ref('x');
-const slowValue = ref('easing');
+const article = ref<HTMLElement | null>(null);
+const catalog = ref<Anchor[]>([]);
+const axisValue = ref<AxisValue>('x');
+const slowValue = ref<SlowValue>('easing');
 const value = ref('');
 const options = computed(() => [
   { label: t('motion.brand.options.architecture'), value: '1' },
@@ -292,38 +302,38 @@ const options = computed(() => [
   },
 ]);
 
-const axisX = ref();
-const axisXDark = ref();
-const axisY = ref();
-const axisYDark = ref();
-const axisZ = ref();
-const axisZDark = ref();
-const containerMotion = ref();
-const containerMotionDark = ref();
-const containerMotionSample = ref();
-const containerMotionSampleDark = ref();
-const fadeMotion = ref();
-const fadeMotionDark = ref();
-const tableCheck = ref();
-const downloadBtn = ref();
+const axisX = ref<HTMLElement | null>(null);
+const axisXDark = ref<HTMLElement | null>(null);
+const axisY = ref<HTMLElement | null>(null);
+const axisYDark = ref<HTMLElement | null>(null);
+const axisZ = ref<HTMLElement | null>(null);
+const axisZDark = ref<HTMLElement | null>(null);
+const containerMotion = ref<HTMLElement | null>(null);
+const containerMotionDark = ref<HTMLElement | null>(null);
+const containerMotionSample = ref<HTMLElement | null>(null);
+const containerMotionSampleDark = ref<HTMLElement | null>(null);
+const fadeMotion = ref<HTMLElement | null>(null);
+const fadeMotionDark = ref<HTMLElement | null>(null);
+const tableCheck = ref<HTMLTableElement | null>(null);
+const downloadBtn = ref<HTMLAnchorElement | null>(null);
 
 const genAnchor = () => {
   if (!article.value) return;
-  const titles = [];
+  const titles: Anchor[] = [];
   Array.from(article.value.children).forEach((element, index) => {
     if (['H2', 'H3'].includes(element.nodeName)) {
       const id = element.id || `header-${index}`;
       element.id = id;
       titles.push({
         id,
-        title: element.textContent,
+        title: element.textContent ?? '',
         level: Number(element.nodeName.slice(1)),
         children: [],
       });
     }
   });
   const isEveryLevel3 = titles.every((title) => title.level === 3);
-  catalog.value = titles.reduce((result, current) => {
+  catalog.value = titles.reduce<Anchor[]>((result, current) => {
     if (isEveryLevel3 || current.level === 2) {
       result.push(current);
     } else {
@@ -334,7 +344,7 @@ const genAnchor = () => {
 };
 
 const loadAnimations = () => {
-  [
+  const animationConfigs: Array<[Ref<HTMLElement | null>, object]> = [
     [axisX, xAxis],
     [axisXDark, xAxisDark],
     [axisY, yAxis],
@@ -347,16 +357,21 @@ const loadAnimations = () => {
     [containerMotionSampleDark, containerTransSampleDark],
     [fadeMotion, fadeInOut],
     [fadeMotionDark, fadeInOutDark],
-  ].forEach(([container, animationData]) => {
+  ];
+
+  animationConfigs.forEach(([container, animationData]) => {
+    if (!container.value) return;
     animations.push(lottie.loadAnimation({ ...lottieProps, container: container.value, animationData }));
   });
 };
 
-const changeAxis = (newValue) => {
-  axisValue.value = newValue;
+const changeAxis = (newValue: unknown) => {
+  if (newValue === 'x' || newValue === 'y' || newValue === 'z') axisValue.value = newValue;
 };
-const changeSlow = (newValue) => {
-  slowValue.value = newValue;
+const changeSlow = (newValue: unknown) => {
+  if (newValue === 'easing' || newValue === 'ease-out' || newValue === 'ease-in' || newValue === 'linear') {
+    slowValue.value = newValue;
+  }
 };
 
 const initDownloadTable = () => {

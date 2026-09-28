@@ -50,7 +50,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import AdobeXDWeb from './assets/Adobe-XD-Web.png';
 import AdobeXDWebDark from './assets/Adobe-XD-Web-dark.png';
 import AdobeXDMobile from './assets/Adobe-XD-Mobile.png';
@@ -92,7 +92,31 @@ import {
   xdWebUrl,
 } from '@constants';
 
-const baseList = [
+type ResourceStatus = 0 | 1 | 2 | 3;
+
+interface ResourceItem {
+  title: string;
+  detail: string;
+  status: ResourceStatus;
+  imgUrl: string;
+  imgUrlDark: string;
+  actionUrl?: string;
+}
+
+interface AegisReporter {
+  reportEvent(event: { name: string; ext1?: string; ext2?: string }): void;
+}
+
+interface HorizonReporter {
+  send(category: string, action: string, title: string, url: string): void;
+}
+
+type AnalyticsWindow = Window & {
+  aegis?: AegisReporter;
+  _horizon?: HorizonReporter;
+};
+
+const baseList: ResourceItem[] = [
   {
     title: 'Figma 桌面端组件库',
     detail: '适用于中后台场景的 Figma 文件',
@@ -173,7 +197,7 @@ const baseList = [
   },
 ];
 
-const utilList = [
+const utilList: ResourceItem[] = [
   {
     title: 'TDesign Maker',
     detail:
@@ -219,8 +243,8 @@ const utilList = [
   },
 ];
 
-function getStatusClass(status) {
-  const map = {
+function getStatusClass(status: ResourceStatus): string {
+  const map: Record<ResourceStatus, string> = {
     0: '',
     1: 'tdesign-source-block-tag-todo',
     2: 'tdesign-source-block-tag-waiting',
@@ -229,20 +253,21 @@ function getStatusClass(status) {
   return map[status];
 }
 
-function getStatusText(status) {
-  const map = { 0: '', 1: '待上线', 2: '进行中', 3: '最新' };
+function getStatusText(status: ResourceStatus): string {
+  const map: Record<ResourceStatus, string> = { 0: '', 1: '待上线', 2: '进行中', 3: '最新' };
   return map[status];
 }
 
-function download(item) {
+function download(item: ResourceItem): void {
   if (!item.actionUrl) return;
 
-  window.aegis?.reportEvent({
+  const analytics = window as AnalyticsWindow;
+  analytics.aegis?.reportEvent({
     name: '设计资源下载',
     ext1: item.title,
     ext2: item.actionUrl,
   });
-  window._horizon?.send('资源下载', 'click', item.title, item.actionUrl);
+  analytics._horizon?.send('资源下载', 'click', item.title, item.actionUrl);
   window.open(item.actionUrl, '_blank');
 }
 </script>

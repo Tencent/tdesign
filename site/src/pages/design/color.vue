@@ -28,7 +28,7 @@
         </div>
       </div>
       <h3>{{ t('color.functional.title') }}</h3>
-      <p v-for="paragraph in tm('color.functional.description')" :key="paragraph">{{ paragraph }}</p>
+      <p v-for="paragraph in functionalDescription" :key="paragraph">{{ paragraph }}</p>
 
       <div class="tdesign-color-features">
         <div class="tdesign-color-features-lists" v-for="(item, index) in listFeatures" :key="index">
@@ -183,23 +183,99 @@
   </div>
 </template>
 
-<script setup>
-import { getCurrentInstance, onMounted, reactive, ref, toRefs } from 'vue';
+<script setup lang="ts">
+import { computed, getCurrentInstance, onMounted, reactive, ref, toRefs } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import designVisualMessages from '../../locales/pages/design-visual';
 
-const article = ref(null);
-const catalog = ref([]);
-const { proxy } = getCurrentInstance();
+interface Anchor {
+  id: string;
+  title: string;
+  level: number;
+  nodeName: string;
+  children: Anchor[];
+}
+
+interface MessageApi {
+  success: (message: string) => void;
+}
+
+interface PaletteColor {
+  topTitle?: string;
+  leftTxt: string;
+  rightTxt: string;
+}
+
+interface NeutralColor {
+  leftTxt: string;
+  rightTxt: string;
+}
+
+interface ContrastItem {
+  roundBg: string;
+  font: string;
+  fontColor: string;
+  text: string;
+  size: string;
+}
+
+interface NeutralContrast {
+  color: string;
+  icon: string;
+  column: ContrastItem[];
+}
+
+interface BrandColorLeft {
+  colorName: string;
+  color: string;
+  colorTxt?: string;
+}
+
+interface BrandColorRight {
+  colorName: string;
+  colorTxt: string;
+}
+
+interface GuideTokenContent {
+  color?: string;
+  colorTxt: string;
+  colorN?: string;
+}
+
+interface GuideToken {
+  name: string;
+  title: string;
+  content: GuideTokenContent[];
+}
+
+interface ColorPageState {
+  listFeatures: Record<string, PaletteColor[]>;
+  listNeutralLeft: NeutralColor[];
+  listNeutralRight: NeutralContrast[];
+  listBrandLeft: BrandColorLeft[];
+  listBrandRight: BrandColorRight[];
+  listExpand: Record<string, PaletteColor[]>;
+}
+
+function localeArray<T>(value: unknown): T[] {
+  return Array.isArray(value) ? (value as T[]) : [];
+}
+
+const article = ref<HTMLElement | null>(null);
+const catalog = ref<Anchor[]>([]);
+const instance = getCurrentInstance();
+if (!instance) throw new Error('color.vue must be initialized inside a component instance');
+const message = instance.appContext.config.globalProperties.$message as MessageApi;
 const { t, tm } = useI18n({ messages: designVisualMessages });
+const functionalDescription = computed(() => localeArray<string>(tm('color.functional.description')));
 
 function genAnchor() {
   if (!article.value) return;
   const nodes = ['H2', 'H3'];
-  const titles = [];
+  const titles: Anchor[] = [];
   article.value.childNodes.forEach((element, index) => {
-    if (nodes.includes(element.nodeName)) {
+    if (element instanceof HTMLElement && nodes.includes(element.nodeName)) {
       const id = `header-${index}`;
       element.setAttribute('id', id);
       titles.push({
@@ -213,11 +289,12 @@ function genAnchor() {
   });
 
   const isEveryLevel3 = titles.every((title) => title.level === 3);
-  catalog.value = titles.reduce((result, current) => {
+  catalog.value = titles.reduce<Anchor[]>((result, current) => {
     if (isEveryLevel3 || current.level === 2) {
       result.push(current);
     } else if (current.level === 3) {
-      result[result.length - 1].children.push(current);
+      const parent = result[result.length - 1];
+      if (parent) parent.children.push(current);
     }
     return result;
   }, []);
@@ -225,7 +302,7 @@ function genAnchor() {
 
 onMounted(genAnchor);
 
-const state = reactive({
+const state = reactive<ColorPageState>({
   listFeatures: {
     list: [
       {
@@ -742,22 +819,27 @@ const state = reactive({
   },
 });
 const { listFeatures, listNeutralLeft, listNeutralRight, listBrandLeft, listBrandRight, listExpand } = toRefs(state);
-const listGuideUi = tm('color.guideTokens');
+const listGuideUi = computed(() => localeArray<GuideToken>(tm('color.guideTokens')));
 
-function copyColor(color) {
+function copyColor(color: string | undefined) {
+  if (!color) return;
   if ('clipboard' in navigator) {
     navigator.clipboard.writeText(color);
-    proxy.$message.success(t('color.copySuccess'));
+    message.success(t('color.copySuccess'));
     return;
   }
 
   const textarea = document.createElement('textarea');
   textarea.textContent = color;
-  textarea.style.width = 0;
-  textarea.style.height = 0;
+  textarea.style.width = '0';
+  textarea.style.height = '0';
   document.body.appendChild(textarea);
 
   const selection = document.getSelection();
+  if (!selection) {
+    document.body.removeChild(textarea);
+    return;
+  }
   const range = document.createRange();
   range.selectNode(textarea);
   selection.removeAllRanges();
@@ -767,6 +849,6 @@ function copyColor(color) {
   selection.removeAllRanges();
   document.body.removeChild(textarea);
 
-  proxy.$message.success(t('color.copySuccess'));
+  message.success(t('color.copySuccess'));
 }
 </script>

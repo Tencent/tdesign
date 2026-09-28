@@ -6,7 +6,7 @@ export default function usePageLoad() {
     visibility: loaded.value ? 'visible' : 'hidden',
   }));
 
-  function contentLoaded(callback) {
+  function contentLoaded(callback: () => void): void {
     requestAnimationFrame(() => {
       loaded.value = true;
       callback();

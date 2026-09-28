@@ -1,6 +1,36 @@
+import type { Component } from 'vue';
+import type { Locale } from './i18n';
 import siteMessages from './locales/site';
 
-const designComponents = {
+type PageLoader = () => Promise<{ default: Component }>;
+type DesignPageKey = 'values' | 'color' | 'fonts' | 'motion' | 'icon' | 'layout' | 'dark' | 'offices' | 'officesTask';
+type AboutPageKey =
+  | 'introduce'
+  | 'tech'
+  | 'roadmap'
+  | 'faq'
+  | 'awesome'
+  | 'release'
+  | 'contributing'
+  | 'newComponent'
+  | 'contact';
+
+export interface SiteDoc {
+  name?: string;
+  title: string;
+  path?: string;
+  meta?: {
+    locale: Locale;
+    documentTitle: string;
+    title: string;
+    desc?: string;
+    spline?: string;
+  };
+  component?: PageLoader;
+  children?: SiteDoc[];
+}
+
+const designComponents: Record<Exclude<DesignPageKey, 'offices' | 'officesTask'>, PageLoader> = {
   values: () => import('@/pages/design/values.vue'),
   color: () => import('@/pages/design/color.vue'),
   fonts: () => import('@/pages/design/fonts.vue'),
@@ -10,7 +40,10 @@ const designComponents = {
   dark: () => import('@/pages/design/dark.vue'),
 };
 
-const markdownComponents = {
+const markdownComponents: Record<
+  Locale,
+  Record<Exclude<AboutPageKey, 'release'> | 'offices' | 'officesTask', PageLoader>
+> = {
   'zh-CN': {
     offices: () => import('@docs/design/offices_zh-CN.md'),
     officesTask: () => import('@docs/design/offices-task_zh-CN.md'),
@@ -37,7 +70,7 @@ const markdownComponents = {
   },
 };
 
-const designSplines = {
+const designSplines: Record<DesignPageKey, string> = {
   values: 'design-value',
   color: 'design-color',
   fonts: 'design-font',
@@ -49,15 +82,15 @@ const designSplines = {
   officesTask: 'design-layout',
 };
 
-function localizePath(path, locale) {
+function localizePath(path: string, locale: Locale): string {
   return locale === 'en-US' ? `${path}-en` : path;
 }
 
-function localizeName(name, locale) {
+function localizeName(name: string, locale: Locale): string {
   return locale === 'en-US' ? `${name}-en` : name;
 }
 
-function createDesignPage(key, locale, component) {
+function createDesignPage(key: DesignPageKey, locale: Locale, component: PageLoader): SiteDoc {
   const [title, desc] = siteMessages[locale].design.pages[key];
   return {
     name: localizeName(key, locale),
@@ -74,7 +107,7 @@ function createDesignPage(key, locale, component) {
   };
 }
 
-function createAboutPage(key, locale, component) {
+function createAboutPage(key: AboutPageKey, locale: Locale, component: PageLoader): SiteDoc {
   const title = siteMessages[locale].about.pages[key];
   const pathName = key === 'newComponent' ? 'new-component' : key;
   return {
@@ -90,7 +123,10 @@ function createAboutPage(key, locale, component) {
   };
 }
 
-export function createSiteConfig(locale = 'zh-CN') {
+export function createSiteConfig(locale: string = 'zh-CN') {
+  if (locale !== 'zh-CN' && locale !== 'en-US') {
+    throw new Error(`Unsupported locale: ${locale}`);
+  }
   const messages = siteMessages[locale];
   const markdown = markdownComponents[locale];
 
@@ -107,7 +143,7 @@ export function createSiteConfig(locale = 'zh-CN') {
         {
           name: localizeName('global', locale),
           title: messages.design.groups.global,
-          children: ['color', 'fonts', 'motion', 'icon', 'layout', 'dark'].map((key) =>
+          children: (['color', 'fonts', 'motion', 'icon', 'layout', 'dark'] as const).map((key) =>
             createDesignPage(key, locale, designComponents[key]),
           ),
         },

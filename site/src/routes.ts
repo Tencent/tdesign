@@ -1,14 +1,18 @@
-import { createSiteConfig, siteMessages } from './site.config';
+import type { RouteRecordRaw } from 'vue-router';
+import type { Locale } from './i18n';
+import { createSiteConfig, type SiteDoc, siteMessages } from './site.config';
 
-function getDocsRoutes(docs) {
-  let docsRoutes = [];
-  let docRoute;
+function getDocsRoutes(docs: SiteDoc[]): RouteRecordRaw[] {
+  let docsRoutes: RouteRecordRaw[] = [];
 
   docs.forEach((item) => {
     if (item.children) {
       docsRoutes = docsRoutes.concat(getDocsRoutes(item.children));
     } else {
-      docRoute = {
+      if (!item.name || !item.path || !item.component) {
+        throw new Error(`Incomplete documentation route: ${item.name}`);
+      }
+      const docRoute: RouteRecordRaw = {
         name: item.name,
         path: item.path,
         meta: item.meta || {},
@@ -20,7 +24,7 @@ function getDocsRoutes(docs) {
   return docsRoutes;
 }
 
-function createLocalizedRoutes(locale) {
+function createLocalizedRoutes(locale: Locale): RouteRecordRaw[] {
   const isEnglish = locale === 'en-US';
   const suffix = isEnglish ? '-en' : '';
   const config = createSiteConfig(locale);
@@ -70,7 +74,7 @@ function createLocalizedRoutes(locale) {
   ];
 }
 
-export default [
+const routes: RouteRecordRaw[] = [
   ...createLocalizedRoutes('zh-CN'),
   ...createLocalizedRoutes('en-US'),
   {
@@ -78,3 +82,5 @@ export default [
     redirect: '/',
   },
 ];
+
+export default routes;

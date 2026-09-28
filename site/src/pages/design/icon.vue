@@ -180,7 +180,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { nextTick, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Link1Icon } from 'tdesign-icons-vue-next';
@@ -190,20 +190,27 @@ import messages from '../../locales/pages/design-motion-icon';
 const goodImage = 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/good.png';
 const badImage = 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/bad.png';
 
+interface Anchor {
+  id: string;
+  title: string;
+  level: number;
+  children: Anchor[];
+}
+
 const { locale, t } = useI18n({ messages });
-const article = ref();
-const catalog = ref([]);
+const article = ref<HTMLElement | null>(null);
+const catalog = ref<Anchor[]>([]);
 
 const genAnchor = () => {
   if (!article.value) return;
-  const titles = [];
+  const titles: Anchor[] = [];
   Array.from(article.value.children).forEach((element, index) => {
     if (['H2', 'H3'].includes(element.nodeName)) {
       const id = `header-${index}`;
       element.id = id;
       titles.push({
         id,
-        title: element.textContent,
+        title: element.textContent ?? '',
         level: Number(element.nodeName.slice(1)),
         children: [],
       });
@@ -211,7 +218,7 @@ const genAnchor = () => {
   });
 
   const isEveryLevel3 = titles.every((title) => title.level === 3);
-  catalog.value = titles.reduce((result, current) => {
+  catalog.value = titles.reduce<Anchor[]>((result, current) => {
     if (isEveryLevel3 || current.level === 2) {
       result.push(current);
     } else {

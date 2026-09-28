@@ -5,13 +5,13 @@
   </td-doc-layout>
 </template>
 
-<script setup>
-import { computed, onBeforeUnmount, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
+<script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, watch, type CSSProperties } from 'vue';
+import { useRoute, type RouteMeta } from 'vue-router';
 
 const route = useRoute();
 
-const headerStyle = computed(() => {
+const headerStyle = computed<CSSProperties>(() => {
   if (route.meta.fixedHeader) {
     return {
       position: 'fixed',
@@ -27,7 +27,7 @@ const headerStyle = computed(() => {
   return { display: 'none' };
 });
 
-function handleHashScroll() {
+function handleHashScroll(): void {
   const hash = decodeURIComponent(route.hash);
   requestAnimationFrame(() => {
     const anchorEl = document.getElementById(hash.slice(1));
@@ -41,8 +41,8 @@ function handleHashScroll() {
 
 watch(
   () => route.meta,
-  (meta) => {
-    document.title = meta?.documentTitle || 'TDesign';
+  (meta: RouteMeta) => {
+    document.title = typeof meta.documentTitle === 'string' ? meta.documentTitle : 'TDesign';
   },
   { immediate: true },
 );

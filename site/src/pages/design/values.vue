@@ -17,7 +17,7 @@
       <h2>{{ section.title }}</h2>
       <video
         autoplay
-        loop="loop"
+        loop
         muted
         defaultMuted
         playsinline
@@ -34,15 +34,28 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import messages from '@/locales/pages/design-basic';
 
-const article = ref(null);
-const catalog = ref([]);
+interface Anchor {
+  id: string;
+  title: string;
+  level: number;
+  nodeName: string;
+  children: Anchor[];
+}
+
+interface ValueSection {
+  key: string;
+  video: string;
+}
+
+const article = ref<HTMLElement | null>(null);
+const catalog = ref<Anchor[]>([]);
 const { locale, t } = useI18n({ messages });
-const values = [
+const values: ReadonlyArray<readonly [ValueSection['key'], ValueSection['video']]> = [
   ['inclusiveness', '包容'],
   ['diversity', '多元'],
   ['evolution', '进化'],
@@ -60,14 +73,14 @@ const sections = computed(() =>
 function genAnchor() {
   if (!article.value) return;
   const nodes = ['H2', 'H3'];
-  const titles = [];
+  const titles: Anchor[] = [];
   article.value.childNodes.forEach((element, index) => {
-    if (nodes.includes(element.nodeName)) {
+    if (element instanceof HTMLElement && nodes.includes(element.nodeName)) {
       const id = `header-${index}`;
       element.setAttribute('id', id);
       titles.push({
         id,
-        title: element.textContent,
+        title: element.textContent ?? '',
         level: Number(element.nodeName.substring(1, 2)),
         nodeName: element.nodeName,
         children: [],
@@ -76,19 +89,20 @@ function genAnchor() {
   });
 
   const isEveryLevel3 = titles.every((title) => title.level === 3);
-  catalog.value = titles.reduce((result, current) => {
+  catalog.value = titles.reduce<Anchor[]>((result, current) => {
     if (isEveryLevel3 || current.level === 2) {
       result.push(current);
     } else if (current.level === 3) {
-      result[result.length - 1].children.push(current);
+      const parent = result[result.length - 1];
+      if (parent) parent.children.push(current);
     }
     return result;
   }, []);
 }
 
-function playAllVideo() {
-  Array.from(article.value.querySelectorAll('video')).forEach((item) => {
-    if (item.paused) item.play();
+function playAllVideo(_event: TouchEvent) {
+  article.value?.querySelectorAll<HTMLVideoElement>('video').forEach((video) => {
+    if (video.paused) video.play();
   });
 }
 

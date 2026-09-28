@@ -33,29 +33,73 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import designVisualMessages from '../../locales/pages/design-visual';
 
+interface Anchor {
+  id: string;
+  title: string;
+  level: number;
+  nodeName: string;
+  children: Anchor[];
+}
+
+interface ContentBlock {
+  type: 'h2' | 'h3' | 'h4' | 'p' | 'img' | 'hr' | 'table';
+  text?: string;
+  class?: string;
+  image?: string;
+}
+
+interface LayoutTableRow {
+  cut: string;
+  cutValue: string;
+  range: string;
+  colWidth: string;
+  grid: string;
+  device: string;
+}
+
+interface LayoutTableColumn {
+  width?: number;
+  ellipsis?: boolean;
+  colKey: keyof LayoutTableRow;
+  title: string;
+}
+
+interface SpanParams {
+  col: LayoutTableColumn;
+  rowIndex: number;
+}
+
+function localeArray<T>(value: unknown): T[] {
+  return Array.isArray(value) ? (value as T[]) : [];
+}
+
 const { tm } = useI18n({ messages: designVisualMessages });
-const article = ref();
-const catalog = ref([]);
-const contentBlocks = computed(() => tm('layout.content'));
-const dataSource = computed(() => tm('layout.table.rows'));
-const columns = computed(() => tm('layout.table.columns'));
-const layoutImages = import.meta.glob('./assets/layout/*.jpg', { eager: true, import: 'default' });
-const getLayoutImage = (image) => layoutImages[`./assets/layout/${image}`];
+const article = ref<HTMLElement | null>(null);
+const catalog = ref<Anchor[]>([]);
+const contentBlocks = computed(() => localeArray<ContentBlock>(tm('layout.content')));
+const dataSource = computed(() => localeArray<LayoutTableRow>(tm('layout.table.rows')));
+const columns = computed(() => localeArray<LayoutTableColumn>(tm('layout.table.columns')));
+const layoutImages = import.meta.glob('./assets/layout/*.jpg', {
+  eager: true,
+  import: 'default',
+}) as Record<string, string>;
+const getLayoutImage = (image?: string): string | undefined =>
+  image ? layoutImages[`./assets/layout/${image}`] : undefined;
 const rowKey = 'cut';
 const size = 'small';
 
 const genAnchor = () => {
   if (!article.value) return;
   const nodes = ['H2', 'H3'];
-  const titles = [];
+  const titles: Anchor[] = [];
   article.value.childNodes.forEach((element, index) => {
-    if (nodes.includes(element.nodeName)) {
+    if (element instanceof HTMLElement && nodes.includes(element.nodeName)) {
       const id = `header-${index}`;
       element.setAttribute('id', id);
       titles.push({
@@ -69,17 +113,18 @@ const genAnchor = () => {
   });
 
   const isEveryLevel3 = titles.every((title) => title.level === 3);
-  catalog.value = titles.reduce((result, current) => {
+  catalog.value = titles.reduce<Anchor[]>((result, current) => {
     if (isEveryLevel3 || current.level === 2) {
       result.push(current);
     } else if (current.level === 3) {
-      result[result.length - 1].children.push(current);
+      const parent = result[result.length - 1];
+      if (parent) parent.children.push(current);
     }
     return result;
   }, []);
 };
 
-const rowspanAndColspan = ({ col, rowIndex }) => {
+const rowspanAndColspan = ({ col, rowIndex }: SpanParams): { rowspan: number } | undefined => {
   if (col.colKey === 'colWidth' && rowIndex === 0) {
     return { rowspan: 3 };
   }

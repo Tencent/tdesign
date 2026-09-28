@@ -1,9 +1,7 @@
-import mdToVue from './md-to-vue.js';
+import mdToVue from './md-to-vue';
 
 export default {
   render({ source, file, md }) {
-    const sfc = mdToVue({ md, file, source });
-
-    return sfc;
+    return mdToVue({ md, file, source });
   },
 };

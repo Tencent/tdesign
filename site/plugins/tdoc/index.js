@@ -1,10 +1,10 @@
 import vitePluginTdoc from 'vite-plugin-tdoc';
 
-import transforms from './transforms.js';
+import transforms from './transforms';
 
 export default () =>
   vitePluginTdoc({
-    transforms, // 解析markdown 数据
+    transforms,
     markdown: {
       anchor: {
         tabIndex: false,

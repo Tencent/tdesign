@@ -4,40 +4,30 @@
     <div class="tdesign-avatar-name">{{ username }}</div>
   </span>
 </template>
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from 'vue';
+import type { CSSProperties } from 'vue';
 
-function getSrc(username, src) {
+interface AvatarProps {
+  type?: 'square' | 'round';
+  size?: 'large' | 'default' | 'small';
+  username?: string;
+  src?: string;
+  width?: string | number;
+  height?: string | number;
+}
+
+function getSrc(username?: string, src?: string): string {
   if (username) {
-    // return `http://dcloud.oa.com/Public/Avatar/${username}.png`;
-    // return `http://r.hrc.oa.com/photo/500/${username}.png`;
-    return `https://dayu.oa.com/avatars/${username}/profile.jpg`;
+    return `https://dayu.woa.com/avatars/${username}/profile.jpg`;
   }
 
   return src || '';
 }
 
-const props = defineProps({
-  /**
-   * 头像类型
-   * @member square | round
-   */
-  type: {
-    type: String,
-    default: 'round',
-  },
-  /**
-   * 头像大小
-   * @member large | default | small
-   */
-  size: {
-    type: String,
-    default: 'default',
-  },
-  username: String,
-  src: String,
-  width: [String, Number],
-  height: [String, Number],
+const props = withDefaults(defineProps<AvatarProps>(), {
+  type: 'round',
+  size: 'default',
 });
 
 const prefixCls = 'tdesign-avatar';
@@ -51,7 +41,7 @@ const _class = computed(() => [
     [`${prefixCls}__default`]: error.value || !imgSrc.value,
   },
 ]);
-const _style = computed(() => {
+const _style = computed<CSSProperties>(() => {
   if (!props.width) return {};
   return {
     width: `${props.width}px`,
@@ -59,7 +49,7 @@ const _style = computed(() => {
   };
 });
 
-function onError() {
+function onError(_event: Event): void {
   error.value = true;
 }
 </script>

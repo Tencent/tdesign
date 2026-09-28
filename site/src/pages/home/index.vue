@@ -74,7 +74,6 @@
                     :class="{
                       'content-tag': true,
                       disabled: !item.status,
-                      stable: item.status === 1,
                       alpha: item.status === 2,
                       beta: item.status === 3,
                       rc: item.status === 4,
@@ -103,7 +102,6 @@
                     :class="{
                       'content-tag': true,
                       disabled: !item.status,
-                      stable: item.status === 1,
                       alpha: item.status === 2,
                       beta: item.status === 3,
                       rc: item.status === 4,
@@ -140,7 +138,6 @@
                     :class="{
                       'content-tag': true,
                       disabled: !item.status,
-                      stable: item.status === 1,
                       alpha: item.status === 2,
                       beta: item.status === 3,
                       rc: item.status === 4,
@@ -169,7 +166,6 @@
                     :class="{
                       'content-tag': true,
                       disabled: !item.status,
-                      stable: item.status === 1,
                       alpha: item.status === 2,
                       beta: item.status === 3,
                       rc: item.status === 4,
@@ -204,7 +200,6 @@
                     :class="{
                       'content-tag': true,
                       disabled: !item.status,
-                      stable: item.status === 1,
                       alpha: item.status === 2,
                       beta: item.status === 3,
                       rc: item.status === 4,
@@ -233,7 +228,6 @@
                     :class="{
                       'content-tag': true,
                       disabled: !item.status,
-                      stable: item.status === 1,
                       alpha: item.status === 2,
                       beta: item.status === 3,
                       rc: item.status === 4,
@@ -444,7 +438,7 @@
                     class="color-block"
                     v-for="color in componentModel.colorList1"
                     :key="color"
-                    :style="{ background: [color] }"
+                    :style="{ background: color }"
                   ></span>
                 </div>
                 <div class="color-block-wrapper">
@@ -452,7 +446,7 @@
                     class="color-block"
                     v-for="color in componentModel.colorList2"
                     :key="color"
-                    :style="{ background: [color] }"
+                    :style="{ background: color }"
                   ></span>
                 </div>
               </div>
@@ -590,7 +584,7 @@
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -598,6 +592,7 @@ import { DesktopIcon, Icon } from 'tdesign-icons-vue-next';
 import Banner from './banner.vue';
 import Avatar from './avatar.vue';
 import ComponentList from './component-list.vue';
+// @ts-expect-error prismjs does not publish TypeScript declarations.
 import Prismjs from 'prismjs';
 
 import vueLogo from '@/assets/vue-logo.svg';
@@ -617,12 +612,77 @@ const brandUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/brand/list'
 const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
 const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
 
+type ResourceStatus = 0 | 1 | 2 | 3 | 4;
+type CodeFramework = 'vue' | 'vue-next' | 'react' | 'miniprogram' | 'mobile-vue' | 'mobile-react' | 'flutter';
+type ThemeMode = 'light' | 'dark';
+
+interface ResourceItem {
+  logo: string;
+  nameKey: string;
+  href: string;
+  status: ResourceStatus;
+}
+
+interface CodeItem {
+  type: string;
+  code?: string;
+  codeKey?: string;
+}
+
+interface NewsItem {
+  title: string;
+  desc: string;
+  date: string;
+  url?: string;
+  isIntranet?: boolean;
+}
+
+interface BrandItem {
+  title: string;
+  logo: string;
+  width: string | number;
+}
+
+interface HomeState {
+  contributorCount: number;
+  currentTab: number;
+  brandList: BrandItem[];
+  newsList: NewsItem[];
+  tabTransformWidth: number;
+  contributors: string[];
+  topContributors: string[];
+  bottomContributors: string[];
+  windowWidth: number;
+  themeMode: ThemeMode;
+  stepsTimers: Array<number | undefined>;
+  stepsCounts: number[];
+  tabTimer: number | null;
+  sourceList: ResourceItem[];
+  designList: ResourceItem[];
+  mobileSourceList: ResourceItem[];
+  mobileDesignList: ResourceItem[];
+  miniSourceList: ResourceItem[];
+  codeFramework: CodeFramework;
+  codeList: Record<CodeFramework, CodeItem[]>;
+  componentModel: {
+    selectValue: string[];
+    menuExpanded: string[];
+    sliderValue: number;
+    colorList1: string[];
+    colorList2: string[];
+  };
+}
+
+interface AvatarInstance {
+  $el: HTMLElement;
+}
+
 const isIntranet = location.host.includes('woa.com'); // 部分动态或内容只能通过内网访问
 let ticking = false;
 
 const { t } = useI18n({ messages: homeMessages });
 
-const state = reactive({
+const state = reactive<HomeState>({
   contributorCount: 8,
   currentTab: 0,
   brandList: [],
@@ -792,8 +852,8 @@ const {
   codeList,
   componentModel,
 } = toRefs(state);
-const topAvatars = ref([]);
-const bottomAvatars = ref([]);
+const topAvatars = ref<AvatarInstance[]>([]);
+const bottomAvatars = ref<AvatarInstance[]>([]);
 const componentSelectOptions = computed(() => [
   { label: t('home.componentDemo.departments.marketing'), value: '1' },
   { label: t('home.componentDemo.departments.finance'), value: '2' },
@@ -840,19 +900,19 @@ const footerStyle = computed(() => ({
   '--footer-inner-position': 'relative',
   '--footer-logo-position': 'unset',
 }));
-let randomTimer;
-let avatarTimer;
-let observer;
+let randomTimer: number | undefined;
+let avatarTimer: number | undefined;
+let observer: MutationObserver | null = null;
 
-function githubAvatar(value) {
+function githubAvatar(value: string): string {
   return `https://avatars.githubusercontent.com/${value}`;
 }
 
-function githubUrl(value) {
+function githubUrl(value: string): string {
   return `https://github.com/${value}`;
 }
 
-function statusText(value) {
+function statusText(value: ResourceStatus): string {
   if (value === 0) return t('home.status.pending');
   if (value === 1) return t('home.status.stable');
   if (value === 2) return t('home.status.alpha');
@@ -861,11 +921,11 @@ function statusText(value) {
   return '';
 }
 
-function displayCode(item) {
-  return item.codeKey ? t(item.codeKey) : item.code;
+function displayCode(item: CodeItem): string {
+  return item.codeKey ? String(t(item.codeKey)) : item.code ?? '';
 }
 
-function handleMousemove(event) {
+function handleMousemove(event: MouseEvent): void {
   if (ticking) return;
   ticking = true;
   window.requestAnimationFrame(() => {
@@ -874,12 +934,12 @@ function handleMousemove(event) {
   });
 }
 
-function checkMousePosition(event) {
-  const element = document.querySelector('#moduleBoard');
+function checkMousePosition(event: MouseEvent): void {
+  const element = document.querySelector<HTMLElement>('#moduleBoard');
   if (!element) return;
-  const isOver = element.contains(event.target);
+  const isOver = event.target instanceof Node && element.contains(event.target);
   if (isOver) {
-    clearInterval(state.tabTimer);
+    if (state.tabTimer !== null) clearInterval(state.tabTimer);
     state.tabTimer = null;
     return;
   }
@@ -887,41 +947,88 @@ function checkMousePosition(event) {
   initTabTimer();
 }
 
-function initTabTimer() {
-  clearInterval(state.tabTimer);
-  state.tabTimer = setInterval(() => {
+function initTabTimer(): void {
+  if (state.tabTimer !== null) clearInterval(state.tabTimer);
+  state.tabTimer = window.setInterval(() => {
     state.currentTab = state.currentTab === 2 ? 0 : state.currentTab + 1;
   }, 4000);
 }
 
-function handleClickNews(url) {
+function handleClickNews(url?: string): void {
   if (url) window.open(url, '_blank');
 }
 
-function getNews() {
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function parseNews(value: unknown): NewsItem[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
+    if (
+      !isRecord(item) ||
+      typeof item.title !== 'string' ||
+      typeof item.desc !== 'string' ||
+      typeof item.date !== 'string'
+    ) {
+      return [];
+    }
+    return [
+      {
+        title: item.title,
+        desc: item.desc,
+        date: item.date,
+        url: typeof item.url === 'string' ? item.url : undefined,
+        isIntranet: item.isIntranet === true,
+      },
+    ];
+  });
+}
+
+function parseBrands(value: unknown): BrandItem[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
+    if (
+      !isRecord(item) ||
+      typeof item.title !== 'string' ||
+      typeof item.logo !== 'string' ||
+      (typeof item.width !== 'string' && typeof item.width !== 'number')
+    ) {
+      return [];
+    }
+    return [{ title: item.title, logo: item.logo, width: item.width }];
+  });
+}
+
+function getNews(): void {
   fetch(newsUrl).then((data) => {
-    data.json().then((list) => {
+    data.json().then((value: unknown) => {
+      const list = parseNews(value);
       state.newsList = isIntranet ? list : list.filter((value) => !value.isIntranet);
     });
   });
 }
 
-function getBrandList() {
+function getBrandList(): void {
   fetch(brandUrl).then((data) => {
-    data.json().then((list) => {
-      state.brandList = list;
+    data.json().then((value: unknown) => {
+      state.brandList = parseBrands(value);
     });
   });
 }
 
-function fetchContributors() {
+function fetchContributors(): void {
   fetch(contributorsUrl)
     .then((res) => res.json())
-    .then((data) => {
-      const design = (data && data.design) || {};
-      const raw = [].concat(design.web || [], design.mobile || [], design.chart || []);
-      const seen = new Set();
-      const list = [];
+    .then((data: unknown) => {
+      const design = isRecord(data) && isRecord(data.design) ? data.design : {};
+      const raw: unknown[] = [
+        ...(Array.isArray(design.web) ? design.web : []),
+        ...(Array.isArray(design.mobile) ? design.mobile : []),
+        ...(Array.isArray(design.chart) ? design.chart : []),
+      ];
+      const seen = new Set<string>();
+      const list: string[] = [];
       raw.forEach((name) => {
         const trimmed = String(name).trim();
         if (!trimmed) return;
@@ -936,7 +1043,7 @@ function fetchContributors() {
     .catch((err) => console.error(err));
 }
 
-function handleIntroClick(item) {
+function handleIntroClick(item: ResourceItem | string): void {
   if (typeof item === 'string') {
     window.open(item, '_blank');
     return;
@@ -945,7 +1052,7 @@ function handleIntroClick(item) {
   window.open(item.href, '_blank');
 }
 
-function changeContributors() {
+function changeContributors(): void {
   const { contributorCount, contributors } = state;
   if (!contributors.length) return;
   state.topContributors = contributors.slice(0, contributorCount);
@@ -953,23 +1060,25 @@ function changeContributors() {
 
   let unshowContributors = contributors.slice(contributorCount, -contributorCount);
 
-  avatarTimer = setInterval(() => {
+  avatarTimer = window.setInterval(() => {
     const r1 = Math.floor(Math.random() * contributorCount);
     const r2 = Math.floor(Math.random() * contributorCount);
-    if (topAvatars.value[r1].$el) {
-      topAvatars.value[r1].$el.classList.toggle('active');
-      bottomAvatars.value[r2].$el.classList.toggle('active');
+    const topAvatar = topAvatars.value[r1];
+    const bottomAvatar = bottomAvatars.value[r2];
+    if (topAvatar?.$el && bottomAvatar?.$el) {
+      topAvatar.$el.classList.toggle('active');
+      bottomAvatar.$el.classList.toggle('active');
     }
 
     setTimeout(() => {
-      if (topAvatars.value[r1]?.$el) {
-        topAvatars.value[r1].$el.classList.remove('active');
-        bottomAvatars.value[r2].$el.classList.remove('active');
+      if (topAvatar?.$el && bottomAvatar?.$el) {
+        topAvatar.$el.classList.remove('active');
+        bottomAvatar.$el.classList.remove('active');
       }
     }, 5000);
   }, 2500);
 
-  randomTimer = setInterval(() => {
+  randomTimer = window.setInterval(() => {
     const r1 = Math.floor(Math.random() * contributorCount);
     const r2 = Math.floor(Math.random() * contributorCount);
 
@@ -981,36 +1090,37 @@ function changeContributors() {
       nextShows = unshowContributors.splice(0, 2);
     }
 
-    if (topAvatars.value[r1].$el) {
-      topAvatars.value[r1].$el.classList.add('change');
-      bottomAvatars.value[r2].$el.classList.add('change');
+    const topAvatar = topAvatars.value[r1];
+    const bottomAvatar = bottomAvatars.value[r2];
+    if (topAvatar?.$el && bottomAvatar?.$el) {
+      topAvatar.$el.classList.add('change');
+      bottomAvatar.$el.classList.add('change');
     }
     setTimeout(() => {
       state.topContributors.splice(r1, 1, nextShows[0]);
       state.bottomContributors.splice(r2, 1, nextShows[1]);
     }, 500);
     setTimeout(() => {
-      if (topAvatars.value[r1].$el) {
-        topAvatars.value[r1].$el.classList.remove('change');
-        bottomAvatars.value[r2].$el.classList.remove('change');
+      if (topAvatar?.$el && bottomAvatar?.$el) {
+        topAvatar.$el.classList.remove('change');
+        bottomAvatar.$el.classList.remove('change');
       }
     }, 1500);
   }, 2500);
 }
 
-function handleResize() {
+function handleResize(): void {
   state.windowWidth = window.innerWidth;
   state.currentTab = 0;
 }
 
-function watchHtmlMode() {
-  state.themeMode = document.documentElement.getAttribute('theme-mode') || 'light';
+function watchHtmlMode(): void {
+  state.themeMode = document.documentElement.getAttribute('theme-mode') === 'dark' ? 'dark' : 'light';
   const targetNode = document.documentElement;
-  const callback = (mutationsList) => {
+  const callback = (mutationsList: MutationRecord[]): void => {
     for (const mutation of mutationsList) {
       if (mutation.attributeName === 'theme-mode') {
-        const mode = mutation.target.getAttribute('theme-mode') || 'light';
-        if (mode) state.themeMode = mode;
+        state.themeMode = (mutation.target as Element).getAttribute('theme-mode') === 'dark' ? 'dark' : 'light';
       }
     }
   };
@@ -1019,22 +1129,24 @@ function watchHtmlMode() {
   observer.observe(targetNode, { attributes: true });
 }
 
-function stepsStart(_event, index) {
+function stepsStart(_event: MouseEvent, index: number): void {
   clearInterval(state.stepsTimers[index]);
-  const el = document.querySelectorAll('.steps-image')[index];
+  const el = document.querySelectorAll<HTMLElement>('.steps-image')[index];
+  if (!el) return;
   const { height } = el.getBoundingClientRect();
-  state.stepsTimers[index] = setInterval(() => {
+  state.stepsTimers[index] = window.setInterval(() => {
     if (state.stepsCounts[index] >= 24) return;
     state.stepsCounts[index] += 1;
     Object.assign(el.style, { backgroundPositionY: `-${height * state.stepsCounts[index]}px` });
   }, 40);
 }
 
-function stepsEnd(_event, index) {
+function stepsEnd(_event: MouseEvent, index: number): void {
   clearInterval(state.stepsTimers[index]);
-  const el = document.querySelectorAll('.steps-image')[index];
+  const el = document.querySelectorAll<HTMLElement>('.steps-image')[index];
+  if (!el) return;
   const { height } = el.getBoundingClientRect();
-  state.stepsTimers[index] = setInterval(() => {
+  state.stepsTimers[index] = window.setInterval(() => {
     if (state.stepsCounts[index] <= 0) return;
     state.stepsCounts[index] -= 1;
     Object.assign(el.style, { backgroundPositionY: `-${height * state.stepsCounts[index]}px` });
@@ -1090,8 +1202,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
   clearInterval(randomTimer);
   clearInterval(avatarTimer);
-  clearInterval(state.tabTimer);
-  observer.disconnect();
+  if (state.tabTimer !== null) clearInterval(state.tabTimer);
+  observer?.disconnect();
   window.removeEventListener('resize', handleResize);
   window.removeEventListener('mousemove', handleMousemove);
 });

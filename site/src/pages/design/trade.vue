@@ -36,14 +36,22 @@
   </div>
 </template>
 
-<script setup>
-import { computed } from 'vue';
+<script setup lang="ts">
+import { computed, type CSSProperties } from 'vue';
 import { useI18n } from 'vue-i18n';
 import messages from '@/locales/pages/trade';
 
-const safeTeamUrl = import.meta.env.VITE_SAFE_TEAM_URL;
+interface TradeCard {
+  key: string;
+  className: string;
+  descriptionKeys: string[];
+  hasLink?: boolean;
+  href?: string;
+}
+
+const safeTeamUrl: string | undefined = import.meta.env.VITE_SAFE_TEAM_URL;
 const { t } = useI18n({ messages });
-const cards = [
+const cards: TradeCard[] = [
   {
     key: 'creatorCommerce',
     className: 'power',
@@ -91,7 +99,7 @@ const cards = [
   },
 ];
 
-const footerStyle = computed(() => ({
+const footerStyle = computed<CSSProperties>(() => ({
   '--content-padding-right': '0',
   '--content-max-width': '1440px',
   '--content-padding-left-right': '48px',

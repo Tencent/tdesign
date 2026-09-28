@@ -21,7 +21,7 @@ export default function mdToVue(options) {
           </td-doc-header>`
     : '';
 
-  const sfc = `
+  return `
     <template>
       <td-doc-content ref="tdDocContent" page-status="hidden">
         ${docHeader}
@@ -66,30 +66,35 @@ export default function mdToVue(options) {
       });
     </script>
   `;
-
-  return sfc;
 }
 
-// 解析 markdown 内容
 function customRender({ source, md }) {
   const { content, data } = matter(source);
-  // console.log('data', data);
-
-  // md top data
   const pageData = {
     spline: '',
     toc: true,
     title: '',
     description: '',
     tdDocHeader: true,
-    ...data,
+    ...normalizePageData(data),
   };
 
-  const mdSegment = {
+  return {
     ...pageData,
     // eslint-disable-next-line no-useless-call
     docMd: md.render.call(md, `${pageData.toc ? '[toc]\n' : ''}${content}`).html,
   };
+}
 
-  return mdSegment;
+function normalizePageData(data) {
+  if (!data || typeof data !== 'object') return {};
+
+  return {
+    ...(typeof data.spline === 'string' ? { spline: data.spline } : {}),
+    ...(typeof data.toc === 'boolean' ? { toc: data.toc } : {}),
+    ...(typeof data.title === 'string' ? { title: data.title } : {}),
+    ...(typeof data.description === 'string' ? { description: data.description } : {}),
+    ...(typeof data.tdDocHeader === 'boolean' ? { tdDocHeader: data.tdDocHeader } : {}),
+    ...(typeof data.isDesign === 'boolean' ? { isDesign: data.isDesign } : {}),
+  };
 }

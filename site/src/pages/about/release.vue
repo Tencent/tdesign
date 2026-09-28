@@ -26,15 +26,25 @@
   </td-doc-content>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
+import type { RouteMeta } from 'vue-router';
 
 import MarkdownIt from 'markdown-it';
 import mila from 'markdown-it-link-attributes';
 
 const RELEASE_API = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/release';
+
+type Release = {
+  id: number | string;
+  body: string;
+} & Record<'published_at', string>;
+
+interface DocHeaderElement extends HTMLElement {
+  docInfo: RouteMeta;
+}
 
 const titleReg = /<h[23]>\s*(Vue|React|Miniprogram|Flutter|Uniapp|Figma|Sketch|Axure|AdobeXD|TDesign)/g;
 
@@ -49,10 +59,11 @@ const mdRender = new MarkdownIt({
 
 const route = useRoute();
 const { locale } = useI18n({ useScope: 'global' });
-const tdDocHeader = ref();
-const release = ref([]);
+const tdDocHeader = ref<DocHeaderElement | null>(null);
+const release = ref<Release[]>([]);
 
-const formatTime = (time) => new Intl.DateTimeFormat(locale.value, { dateStyle: 'long' }).format(new Date(time));
+const formatTime = (time: string) =>
+  new Intl.DateTimeFormat(locale.value, { dateStyle: 'long' }).format(new Date(time));
 const releaseTimeList = computed(() =>
   release.value.map((item) => ({
     title: formatTime(item.published_at),
@@ -61,29 +72,48 @@ const releaseTimeList = computed(() =>
 );
 
 const pageInit = () => {
-  const { meta } = route;
-  tdDocHeader.value.docInfo = meta;
+  if (tdDocHeader.value) tdDocHeader.value.docInfo = route.meta;
 };
 
-const renderReleases = (data) =>
-  data.map((item) => {
-    item.body = mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1');
-    return item;
-  });
+const isRelease = (value: unknown): value is Release => {
+  if (typeof value !== 'object' || value === null) return false;
+  const item = value as Record<string, unknown>;
+  return (
+    (typeof item.id === 'number' || typeof item.id === 'string') &&
+    typeof item.published_at === 'string' &&
+    typeof item.body === 'string'
+  );
+};
 
-const fetchReleases = () => {
+const parseReleases = (value: unknown): Release[] => (Array.isArray(value) ? value.filter(isRelease) : []);
+
+const renderReleases = (data: Release[]): Release[] =>
+  data.map((item) => ({
+    ...item,
+    body: mdRender.render(item.body).replace(titleReg, '<h2> <i name="$1"></i> $1'),
+  }));
+
+const fetchReleases = async () => {
   const cache = sessionStorage.getItem('__tdesign_release__');
 
   if (cache) {
-    release.value = renderReleases(JSON.parse(cache));
-  } else {
-    fetch(RELEASE_API)
-      .then((res) => res.json())
-      .then((data) => {
-        sessionStorage.setItem('__tdesign_release__', JSON.stringify(data));
-        release.value = renderReleases(data);
-      })
-      .catch((err) => console.error(err));
+    try {
+      release.value = renderReleases(parseReleases(JSON.parse(cache) as unknown));
+      return;
+    } catch {
+      sessionStorage.removeItem('__tdesign_release__');
+    }
+  }
+
+  try {
+    const response = await fetch(RELEASE_API);
+    if (!response.ok) throw new Error(`Release API request failed: ${response.status}`);
+    const data: unknown = await response.json();
+    const releases = parseReleases(data);
+    sessionStorage.setItem('__tdesign_release__', JSON.stringify(releases));
+    release.value = renderReleases(releases);
+  } catch (error: unknown) {
+    console.error(error);
   }
 };
 

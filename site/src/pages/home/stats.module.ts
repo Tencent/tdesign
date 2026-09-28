@@ -1,4 +1,26 @@
-const Stats = function () {
+interface StatsPanel {
+  dom: HTMLCanvasElement;
+  update(value: number, maxValue: number): void;
+}
+
+interface StatsInstance {
+  REVISION: number;
+  dom: HTMLDivElement;
+  domElement: HTMLDivElement;
+  addPanel(panel: StatsPanel): StatsPanel;
+  showPanel(id: number): void;
+  setMode(id: number): void;
+  begin(): void;
+  end(): number;
+  update(): void;
+}
+
+interface StatsFactory {
+  (): StatsInstance;
+  Panel(name: string, fg: string, bg: string): StatsPanel;
+}
+
+const Stats = function (): StatsInstance {
   let mode = 0;
 
   const container = document.createElement('div');
@@ -14,14 +36,14 @@ const Stats = function () {
 
   //
 
-  function addPanel(panel) {
+  function addPanel(panel: StatsPanel): StatsPanel {
     container.appendChild(panel.dom);
     return panel;
   }
 
-  function showPanel(id) {
+  function showPanel(id: number): void {
     for (let i = 0; i < container.children.length; i++) {
-      container.children[i].style.display = i === id ? 'block' : 'none';
+      (container.children[i] as HTMLElement).style.display = i === id ? 'block' : 'none';
     }
 
     mode = id;
@@ -29,16 +51,16 @@ const Stats = function () {
 
   //
 
-  let beginTime = (performance || Date).now();
+  let beginTime = performance.now();
   let prevTime = beginTime;
   let frames = 0;
 
-  const fpsPanel = addPanel(new Stats.Panel('FPS', '#0ff', '#002'));
-  const msPanel = addPanel(new Stats.Panel('MS', '#0f0', '#020'));
+  const fpsPanel = addPanel(Stats.Panel('FPS', '#0ff', '#002'));
+  const msPanel = addPanel(Stats.Panel('MS', '#0f0', '#020'));
 
-  let memPanel;
-  if (self.performance && self.performance.memory) {
-    memPanel = addPanel(new Stats.Panel('MB', '#f08', '#201'));
+  let memPanel: StatsPanel | undefined;
+  if (self.performance.memory) {
+    memPanel = addPanel(Stats.Panel('MB', '#f08', '#201'));
   }
 
   showPanel(0);
@@ -51,14 +73,14 @@ const Stats = function () {
     addPanel: addPanel,
     showPanel: showPanel,
 
-    begin: function () {
-      beginTime = (performance || Date).now();
+    begin: function (): void {
+      beginTime = performance.now();
     },
 
-    end: function () {
+    end: function (): number {
       frames++;
 
-      const time = (performance || Date).now();
+      const time = performance.now();
 
       msPanel.update(time - beginTime, 200);
 
@@ -70,6 +92,7 @@ const Stats = function () {
 
         if (memPanel) {
           const memory = performance.memory;
+          if (!memory) return time;
           memPanel.update(memory.usedJSHeapSize / 1048576, memory.jsHeapSizeLimit / 1048576);
         }
       }
@@ -77,7 +100,7 @@ const Stats = function () {
       return time;
     },
 
-    update: function () {
+    update: function (): void {
       beginTime = this.end();
     },
 
@@ -86,9 +109,9 @@ const Stats = function () {
     domElement: container,
     setMode: showPanel,
   };
-};
+} as StatsFactory;
 
-Stats.Panel = function (name, fg, bg) {
+Stats.Panel = function (name: string, fg: string, bg: string): StatsPanel {
   let min = Infinity;
   let max = 0;
   const round = Math.round;
@@ -109,6 +132,9 @@ Stats.Panel = function (name, fg, bg) {
   canvas.style.cssText = 'width:80px;height:48px';
 
   const context = canvas.getContext('2d');
+  if (!context) {
+    throw new Error('Canvas 2D context is unavailable');
+  }
   context.font = 'bold ' + 9 * PR + 'px Helvetica,Arial,sans-serif';
   context.textBaseline = 'top';
 
@@ -126,7 +152,7 @@ Stats.Panel = function (name, fg, bg) {
   return {
     dom: canvas,
 
-    update: function (value, maxValue) {
+    update: function (value: number, maxValue: number): void {
       min = Math.min(min, value);
       max = Math.max(max, value);
 

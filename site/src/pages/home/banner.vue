@@ -48,14 +48,16 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
-import Canvas3d from 'canvas-3d';
+// @ts-expect-error canvas-3d does not publish TypeScript declarations; its boundary is narrowed below.
+import Canvas3dLibrary from 'canvas-3d';
 import modelData from './assets/banner.glb';
 import hdrData from './assets/banner.hdr';
 import modelDataDark from './assets/banner-dark.glb';
 import hdrDataDark from './assets/banner-dark.hdr';
+// @ts-expect-error three@0.127.0 does not publish TypeScript declarations.
 import * as THREE from 'three';
 // import Stats from './stats.module';
 // const stats = new Stats();
@@ -65,21 +67,55 @@ const WIDTH = 1056;
 const HEIGHT = 640;
 const SCALE = 15.1;
 
-const props = defineProps({
-  themeMode: {
-    type: String,
-    default: 'light',
-  },
+type ThemeMode = 'light' | 'dark';
+
+interface AnimationActionLike {
+  loop: unknown;
+  timeScale: number;
+  play: () => void;
+}
+
+interface AnimationClipLike {
+  name: string;
+}
+
+interface AnimationMixerLike {
+  clipAction: (clip: AnimationClipLike) => AnimationActionLike;
+  addEventListener: (type: 'finished', listener: (event: unknown) => void) => void;
+}
+
+interface Canvas3dInstance {
+  animate: () => void;
+  cancelAnimationFrame: () => void;
+  shouldRender: () => boolean;
+  loadAssert: () => Promise<unknown>;
+  addMesh: () => void;
+  model: {
+    rotation: { x: number; y: number; z: number };
+    position: { x: number; y: number; z: number };
+  };
+  gltf: { animations: AnimationClipLike[] };
+  scene: unknown;
+  mixer: AnimationMixerLike;
+  sphereAnimate?: boolean;
+  cubeAnimate?: boolean;
+}
+
+const Canvas3d = Canvas3dLibrary as unknown as new (options: unknown) => Canvas3dInstance;
+const AnimationMixer = THREE.AnimationMixer as unknown as new (scene: unknown) => AnimationMixerLike;
+
+const props = withDefaults(defineProps<{ themeMode?: ThemeMode }>(), {
+  themeMode: 'light',
 });
 
 const showCanvas = ref(true);
 const imageLoaded = ref(false);
-const canvasLight = ref();
-const canvasDark = ref();
-let canvas3dLight;
-let canvas3dDark;
+const canvasLight = ref<HTMLCanvasElement | null>(null);
+const canvasDark = ref<HTMLCanvasElement | null>(null);
+let canvas3dLight: Canvas3dInstance | null = null;
+let canvas3dDark: Canvas3dInstance | null = null;
 
-function reploadImage() {
+function reploadImage(): void {
   const preloadImages = [
     `${CDN_BASE}/site/images/breathe-top.png`,
     `${CDN_BASE}/site/images/breathe-bottom.png`,
@@ -89,10 +125,10 @@ function reploadImage() {
   console.time('preload');
   Promise.all(
     preloadImages.map((url) => {
-      return new Promise((resolve) => {
+      return new Promise<void>((resolve) => {
         const image = new Image();
         image.src = url;
-        image.onload = resolve;
+        image.onload = () => resolve();
       });
     }),
   )
@@ -105,7 +141,7 @@ function reploadImage() {
     });
 }
 
-function initWebgl() {
+function initWebgl(): void {
   // 移动端不渲染 webgl
   if (/(iPhone|iPod|iOS|Android)/i.test(navigator.userAgent)) {
     showCanvas.value = false;
@@ -120,7 +156,7 @@ function initWebgl() {
   }
 }
 
-function renderWebgl(theme = 'light') {
+function renderWebgl(theme: ThemeMode = 'light'): Canvas3dInstance {
   const canvas3d = new Canvas3d({
     canvasData: {
       dom: theme === 'light' ? canvasLight.value : canvasDark.value,
@@ -190,9 +226,9 @@ function renderWebgl(theme = 'light') {
         maxHorizon: Math.PI / 5,
         minHorizon: -Math.PI / 5,
       },
-      enterHandle: (e) => {},
-      moveHandle: (e) => {},
-      outHandle: (e) => {},
+      enterHandle: () => {},
+      moveHandle: () => {},
+      outHandle: () => {},
     },
     // requestAnimationHandler() {
     //   stats.update();
@@ -218,13 +254,13 @@ function renderWebgl(theme = 'light') {
         canvas3d.addMesh();
         // 动画
         const animationsOriginal = canvas3d.gltf.animations;
-        canvas3d.mixer = new THREE.AnimationMixer(canvas3d.scene);
+        canvas3d.mixer = new AnimationMixer(canvas3d.scene);
         // 中间树的第一段动画
-        const treeTrigger = document.querySelector(`.banner-trigger4.${theme}`);
+        const treeTrigger = document.querySelector<HTMLElement>(`.banner-trigger4.${theme}`);
         const treeAnimationStage1 = animationsOriginal.filter((item) => {
           return item.name.indexOf('stage1') > -1;
         });
-        const treeActionStage1 = [];
+        const treeActionStage1: AnimationActionLike[] = [];
         treeAnimationStage1.forEach((item) => {
           const stage1Action = canvas3d.mixer.clipAction(item);
           stage1Action.loop = THREE.LoopOnce;
@@ -236,13 +272,13 @@ function renderWebgl(theme = 'light') {
         const treeAnimationStage2 = animationsOriginal.filter((item) => {
           return item.name.indexOf('stage2') > -1;
         });
-        const treeActionStage2 = [];
+        const treeActionStage2: AnimationActionLike[] = [];
         treeAnimationStage2.forEach((item) => {
           const stage2Action = canvas3d.mixer.clipAction(item);
           treeActionStage2.push(stage2Action);
         });
 
-        canvas3d.mixer.addEventListener('finished', (e) => {
+        canvas3d.mixer.addEventListener('finished', () => {
           treeActionStage2.forEach((item) => {
             item.play();
           });
@@ -264,37 +300,39 @@ function renderWebgl(theme = 'light') {
         // };
 
         // 左下角球的动画 sphere
-        const sphereTrigger = document.querySelector(`.banner-trigger1.${theme}`);
+        const sphereTrigger = document.querySelector<HTMLElement>(`.banner-trigger1.${theme}`);
         const sphereAnimation = animationsOriginal.filter((item) => {
           return item.name === 'spheric';
         });
-        sphereTrigger.onmouseover = () => {
-          if (canvas3d.sphereAnimate) return;
-          sphereAnimation.forEach((item) => {
-            const action = canvas3d.mixer.clipAction(item);
-            action.play();
-          });
-          canvas3d.sphereAnimate = true;
-        };
+        if (sphereTrigger)
+          sphereTrigger.onmouseover = () => {
+            if (canvas3d.sphereAnimate) return;
+            sphereAnimation.forEach((item) => {
+              const action = canvas3d.mixer.clipAction(item);
+              action.play();
+            });
+            canvas3d.sphereAnimate = true;
+          };
         // 右下角立方体的动画
-        const cubeTrigger = document.querySelector(`.banner-trigger3.${theme}`);
+        const cubeTrigger = document.querySelector<HTMLElement>(`.banner-trigger3.${theme}`);
         const cubeAnimation = animationsOriginal.filter((item) => {
           return item.name === 'Cube2';
         });
-        cubeTrigger.onmouseover = () => {
-          if (canvas3d.cubeAnimate) return;
-          cubeAnimation.forEach((item) => {
-            const action = canvas3d.mixer.clipAction(item);
-            action.play();
-          });
-          canvas3d.cubeAnimate = true;
-        };
+        if (cubeTrigger)
+          cubeTrigger.onmouseover = () => {
+            if (canvas3d.cubeAnimate) return;
+            cubeAnimation.forEach((item) => {
+              const action = canvas3d.mixer.clipAction(item);
+              action.play();
+            });
+            canvas3d.cubeAnimate = true;
+          };
 
         // 默认其他动画
         const defaultAnimation = animationsOriginal.filter((item) => {
           return item.name.indexOf('default') > -1;
         });
-        const defaultAction = [];
+        const defaultAction: AnimationActionLike[] = [];
         defaultAnimation.forEach((item) => {
           const action = canvas3d.mixer.clipAction(item);
           defaultAction.push(action);
@@ -302,28 +340,30 @@ function renderWebgl(theme = 'light') {
         });
 
         // hover 时，中间树的动画加速
-        treeTrigger.onmouseover = () => {
-          treeActionStage1.forEach((item) => {
-            item.timeScale = 2.2;
-          });
-          treeActionStage2.forEach((item) => {
-            item.timeScale = 2.2;
-          });
-          defaultAction.forEach((item) => {
-            item.timeScale = 1.1;
-          });
-        };
-        treeTrigger.onmouseout = () => {
-          treeActionStage1.forEach((item) => {
-            item.timeScale = 1;
-          });
-          treeActionStage2.forEach((item) => {
-            item.timeScale = 1;
-          });
-          defaultAction.forEach((item) => {
-            item.timeScale = 1;
-          });
-        };
+        if (treeTrigger)
+          treeTrigger.onmouseover = () => {
+            treeActionStage1.forEach((item) => {
+              item.timeScale = 2.2;
+            });
+            treeActionStage2.forEach((item) => {
+              item.timeScale = 2.2;
+            });
+            defaultAction.forEach((item) => {
+              item.timeScale = 1.1;
+            });
+          };
+        if (treeTrigger)
+          treeTrigger.onmouseout = () => {
+            treeActionStage1.forEach((item) => {
+              item.timeScale = 1;
+            });
+            treeActionStage2.forEach((item) => {
+              item.timeScale = 1;
+            });
+            defaultAction.forEach((item) => {
+              item.timeScale = 1;
+            });
+          };
       });
   } else {
     console.log('当前环境不适宜渲染3d');

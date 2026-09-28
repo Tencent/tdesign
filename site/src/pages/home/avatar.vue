@@ -4,11 +4,11 @@
   </a>
 </template>
 
-<script setup>
-defineProps({
-  href: String,
-  src: String,
-});
+<script setup lang="ts">
+defineProps<{
+  href?: string;
+  src?: string;
+}>();
 </script>
 
 <style lang="less">

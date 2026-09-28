@@ -7,7 +7,8 @@
     "preview": "vite preview",
     "site": "run-s build",
     "site:preview": "vite build --mode preview",
-    "lint:fix": "eslint --ext .vue,.js,.ts,.tsx ./src --fix"
+    "lint:fix": "eslint --ext .vue,.js,.ts,.tsx ./src --fix",
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@tdesign/site-components": "^0.19.3",
@@ -43,15 +44,16 @@
     "eslint-plugin-vue": "^8.2.0",
     "gray-matter": "^4.0.3",
     "husky": "^3.0.7",
-    "less": "^4.1.2",
+    "less": "^4.9.1",
     "lint-staged": "8.1.5",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.5",
     "rimraf": "^3.0.2",
     "standard-version": "^7.0.1",
-    "typescript": "^4.5.2",
+    "typescript": "^5.8.3",
     "vite": "^6.3.1",
-    "vite-plugin-tdoc": "^2.0.0"
+    "vite-plugin-tdoc": "^2.0.0",
+    "vue-tsc": "^2.2.10"
   },
   "config": {
     "commitizen": {

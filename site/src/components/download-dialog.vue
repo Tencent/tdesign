@@ -23,32 +23,49 @@
   </t-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from 'vue';
 
-const props = defineProps({
-  visible: Boolean,
-  downloadItem: Object,
-});
-const emit = defineEmits(['update:visible']);
+interface DownloadItem {
+  title: string;
+  actionUrl: string;
+}
+
+interface AegisReporter {
+  reportEvent(event: { name: string; ext1?: string; ext2?: string; ext3?: string }): void;
+}
+
+const props = withDefaults(
+  defineProps<{
+    visible?: boolean;
+    downloadItem?: DownloadItem;
+  }>(),
+  {
+    visible: false,
+  },
+);
+const emit = defineEmits<{
+  (event: 'update:visible', value: boolean): void;
+}>();
 
 const email = ref('');
 const visibleSync = computed({
   get: () => props.visible,
-  set: (value) => emit('update:visible', value),
+  set: (value: boolean) => emit('update:visible', value),
 });
 const legalEmail = computed(() => /^[A-Za-z0-9\-\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(email.value));
 
-function downloadCancel() {
+function downloadCancel(): void {
   visibleSync.value = false;
 }
 
-function downloadConfirm() {
+function downloadConfirm(): void {
   if (!email.value || !props.downloadItem) return;
 
   window.open(props.downloadItem.actionUrl, '_blank');
   visibleSync.value = false;
-  aegis.reportEvent({
+  const { aegis } = window as Window & { aegis?: AegisReporter };
+  aegis?.reportEvent({
     name: '设计资源下载',
     ext1: email.value,
     ext2: props.downloadItem.title,

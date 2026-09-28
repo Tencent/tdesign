@@ -54,65 +54,6 @@
   </head>
   <body>
     <div id="list"></div>
-    <script>
-      const CONTRIBUTORS_API =
-        'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
-
-      function renderList(userList) {
-        document.getElementById('list').innerHTML = userList
-          .map(
-            (n) =>
-              `<a href="https://github.com/${n}" target="_blank" rel="noopener noreferrer" title="${n}" data-github-id="${n}" aria-label="${n}"><img src="https://avatars.githubusercontent.com/${n}" alt="${n}"></a>`,
-          )
-          .join('');
-      }
-
-      fetch(CONTRIBUTORS_API)
-        .then((res) => res.json())
-        .then((data) => {
-          const users = new Map();
-
-          function addUsers(names) {
-            if (!Array.isArray(names)) return;
-            names.forEach((name) => {
-              const trimmed = String(name).trim();
-              if (!trimmed) return;
-              const key = trimmed.toLowerCase();
-              const existing = users.get(key);
-              if (existing) {
-                existing.count += 1;
-                return;
-              }
-              users.set(key, { name: trimmed, count: 1 });
-            });
-          }
-
-          function collectTaskUsers(value) {
-            if (Array.isArray(value)) {
-              value.forEach(collectTaskUsers);
-              return;
-            }
-            if (!value || typeof value !== 'object') return;
-
-            addUsers(value.contributors);
-            addUsers(value.pmcs);
-            Object.entries(value).forEach(([key, child]) => {
-              if (key === 'contributors' || key === 'pmcs' || key === 'design') return;
-              collectTaskUsers(child);
-            });
-          }
-
-          const design = (data && data.design) || {};
-          Object.values(design).forEach(addUsers);
-          collectTaskUsers(data);
-
-          const userList = Array.from(users.values())
-            .sort((a, b) => b.count - a.count)
-            .map((item) => item.name);
-
-          renderList(userList);
-        })
-        .catch((err) => console.error(err));
-    </script>
+    <script type="module" src="/src/contributor.ts"></script>
   </body>
 </html>

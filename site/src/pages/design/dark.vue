@@ -55,14 +55,52 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, getCurrentInstance, nextTick, onMounted, reactive, ref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import messages from '@/locales/pages/design-basic';
 
-const article = ref(null);
-const catalog = ref([]);
-const { proxy } = getCurrentInstance();
+interface Anchor {
+  id: string;
+  title: string;
+  level: number;
+  nodeName: string;
+  children: Anchor[];
+}
+
+interface MessageApi {
+  success: (message: string) => void;
+}
+
+interface TextRow {
+  index: number;
+  token: string;
+  name: string;
+  color: string;
+}
+
+interface TextColumn {
+  ellipsis: boolean;
+  colKey: keyof Omit<TextRow, 'index'>;
+}
+
+interface PaletteColor {
+  topTitle?: string;
+  leftTxt: string;
+  rightTxt: string;
+}
+
+interface DarkPageState {
+  dataSource: TextRow[];
+  columns: TextColumn[];
+  colorList: Record<string, PaletteColor[]>;
+}
+
+const article = ref<HTMLElement | null>(null);
+const catalog = ref<Anchor[]>([]);
+const instance = getCurrentInstance();
+if (!instance) throw new Error('dark.vue must be initialized inside a component instance');
+const message = instance.appContext.config.globalProperties.$message as MessageApi;
 const { locale, t } = useI18n({ messages });
 const principles = computed(() =>
   ['contentFirst', 'readingComfort', 'consistency', 'wcag'].map((key) => ({
@@ -75,14 +113,14 @@ const principles = computed(() =>
 function genAnchor() {
   if (!article.value) return;
   const nodes = ['H2', 'H3'];
-  const titles = [];
+  const titles: Anchor[] = [];
   article.value.childNodes.forEach((element, index) => {
-    if (nodes.includes(element.nodeName)) {
+    if (element instanceof HTMLElement && nodes.includes(element.nodeName)) {
       const id = `header-${index}`;
       element.setAttribute('id', id);
       titles.push({
         id,
-        title: element.textContent,
+        title: element.textContent ?? '',
         level: Number(element.nodeName.substring(1, 2)),
         nodeName: element.nodeName,
         children: [],
@@ -91,11 +129,12 @@ function genAnchor() {
   });
 
   const isEveryLevel3 = titles.every((title) => title.level === 3);
-  catalog.value = titles.reduce((result, current) => {
+  catalog.value = titles.reduce<Anchor[]>((result, current) => {
     if (isEveryLevel3 || current.level === 2) {
       result.push(current);
     } else if (current.level === 3) {
-      result[result.length - 1].children.push(current);
+      const parent = result[result.length - 1];
+      if (parent) parent.children.push(current);
     }
     return result;
   }, []);
@@ -107,7 +146,7 @@ watch(locale, async () => {
   genAnchor();
 });
 
-const state = reactive({
+const state = reactive<DarkPageState>({
   dataSource: [
     {
       index: 0,
@@ -313,20 +352,24 @@ const colorList = computed(() =>
   ),
 );
 
-function copyColor(color) {
+function copyColor(color: string) {
   if ('clipboard' in navigator) {
     navigator.clipboard.writeText(color);
-    proxy.$message.success(t('common.copied'));
+    message.success(t('common.copied'));
     return;
   }
 
   const textarea = document.createElement('textarea');
   textarea.textContent = color;
-  textarea.style.width = 0;
-  textarea.style.height = 0;
+  textarea.style.width = '0';
+  textarea.style.height = '0';
   document.body.appendChild(textarea);
 
   const selection = document.getSelection();
+  if (!selection) {
+    document.body.removeChild(textarea);
+    return;
+  }
   const range = document.createRange();
   range.selectNode(textarea);
   selection.removeAllRanges();
@@ -336,7 +379,7 @@ function copyColor(color) {
   selection.removeAllRanges();
   document.body.removeChild(textarea);
 
-  proxy.$message.success(t('common.copied'));
+  message.success(t('common.copied'));
 }
 </script>
 

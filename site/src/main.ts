@@ -26,16 +26,17 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  setLocale(to.meta.locale || getLocaleFromPath(to.path));
+  const locale = to.meta.locale === 'en-US' || to.meta.locale === 'zh-CN' ? to.meta.locale : getLocaleFromPath(to.path);
+  setLocale(locale);
   if (to.name !== from.name) {
-    window.NProgress && NProgress.start?.();
+    window.NProgress?.start?.();
   }
   next();
 });
 
 router.afterEach(() => {
-  window.NProgress && NProgress.done?.();
-  document.querySelector('td-stats')?.track?.();
+  window.NProgress?.done?.();
+  document.querySelector<HTMLElement>('td-stats')?.track?.();
 });
 
 const app = createApp(App);

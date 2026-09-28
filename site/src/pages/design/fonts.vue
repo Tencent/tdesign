@@ -123,27 +123,63 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, getCurrentInstance, nextTick, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import messages from '@/locales/pages/design-basic';
 
-const article = ref(null);
-const catalog = ref([]);
-const { proxy } = getCurrentInstance();
+interface Anchor {
+  id: string;
+  title: string;
+  level: number;
+  nodeName: string;
+  children: Anchor[];
+}
+
+interface MessageApi {
+  success: (message: string) => void;
+}
+
+interface FontSizeOption {
+  label: string;
+  value: number;
+}
+
+type FontListItem =
+  | { type: 'divider' }
+  | {
+      type?: undefined;
+      step: string;
+      size: string;
+      fontSize: number;
+      desc?: string;
+    };
+
+interface FontColor {
+  background: string;
+  color: string;
+  text: string;
+  style: string;
+}
+
+const article = ref<HTMLElement | null>(null);
+const catalog = ref<Anchor[]>([]);
+const instance = getCurrentInstance();
+if (!instance) throw new Error('fonts.vue must be initialized inside a component instance');
+const message = instance.appContext.config.globalProperties.$message as MessageApi;
 const { locale, t } = useI18n({ messages });
 
 function genAnchor() {
   if (!article.value) return;
   const nodes = ['H2', 'H3'];
-  const titles = [];
+  const titles: Anchor[] = [];
   article.value.childNodes.forEach((element, index) => {
-    if (nodes.includes(element.nodeName)) {
+    if (element instanceof HTMLElement && nodes.includes(element.nodeName)) {
       const id = `header-${index}`;
       element.setAttribute('id', id);
       titles.push({
         id,
-        title: element.textContent,
+        title: element.textContent ?? '',
         level: Number(element.nodeName.substring(1, 2)),
         nodeName: element.nodeName,
         children: [],
@@ -152,11 +188,12 @@ function genAnchor() {
   });
 
   const isEveryLevel3 = titles.every((title) => title.level === 3);
-  catalog.value = titles.reduce((result, current) => {
+  catalog.value = titles.reduce<Anchor[]>((result, current) => {
     if (isEveryLevel3 || current.level === 2) {
       result.push(current);
     } else if (current.level === 3) {
-      result[result.length - 1].children.push(current);
+      const parent = result[result.length - 1];
+      if (parent) parent.children.push(current);
     }
     return result;
   }, []);
@@ -171,8 +208,8 @@ watch(locale, async () => {
 const fontDownloadUrl =
   'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/design-source/TCloudNumber%20v1.010.zip';
 
-function genFontSize(num) {
-  const result = [];
+function genFontSize(num: number): FontSizeOption[] {
+  const result: FontSizeOption[] = [];
   for (let i = 10; i <= num; i += 2) {
     result.push({ label: t('fonts.size.option', { size: i }), value: i });
   }
@@ -180,7 +217,7 @@ function genFontSize(num) {
 }
 
 const fontSize = ref(48);
-const fontList = computed(() => [
+const fontList = computed<FontListItem[]>(() => [
   {
     step: t('fonts.size.baseStep'),
     size: t('fonts.size.items.mobileMinimum'),
@@ -199,7 +236,7 @@ const fontList = computed(() => [
   })),
 ]);
 const fontSelectList = computed(() => genFontSize(64));
-const fontColorListLeft = computed(() =>
+const fontColorListLeft = computed<FontColor[]>(() =>
   [90, 60, 40, 26].map((opacity, index) => ({
     background: `rgba(0, 0, 0, ${opacity / 100})`,
     color: '#fff',
@@ -207,7 +244,7 @@ const fontColorListLeft = computed(() =>
     style: t('fonts.color.grayValue', { opacity }),
   })),
 );
-const fontColorListRight = computed(() =>
+const fontColorListRight = computed<FontColor[]>(() =>
   [100, 55, 35, 22].map((opacity, index) => ({
     background: `rgba(255, 255, 255, ${opacity / 100})`,
     color: index ? '#fff' : 'rgba(0,0,0,.9)',
@@ -216,20 +253,24 @@ const fontColorListRight = computed(() =>
   })),
 );
 
-function copyColor(color) {
+function copyColor(color: string) {
   if ('clipboard' in navigator) {
     navigator.clipboard.writeText(color);
-    proxy.$message.success(t('common.copied'));
+    message.success(t('common.copied'));
     return;
   }
 
   const textarea = document.createElement('textarea');
   textarea.textContent = color;
-  textarea.style.width = 0;
-  textarea.style.height = 0;
+  textarea.style.width = '0';
+  textarea.style.height = '0';
   document.body.appendChild(textarea);
 
   const selection = document.getSelection();
+  if (!selection) {
+    document.body.removeChild(textarea);
+    return;
+  }
   const range = document.createRange();
   range.selectNode(textarea);
   selection.removeAllRanges();
@@ -239,7 +280,7 @@ function copyColor(color) {
   selection.removeAllRanges();
   document.body.removeChild(textarea);
 
-  proxy.$message.success(t('common.copied'));
+  message.success(t('common.copied'));
 }
 </script>
 
