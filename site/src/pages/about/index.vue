@@ -10,19 +10,20 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
-import siteConfig from '../../site.config';
-import siteEnConfig from '../../site-en.config';
-
-const { docs: aboutDocs } = JSON.parse(JSON.stringify(siteConfig.about).replace(/component:.+/g, ''));
-const { docs: aboutEnDocs } = JSON.parse(JSON.stringify(siteEnConfig.about).replace(/component:.+/g, ''));
+import { createSiteConfig } from '../../site.config';
 
 const route = useRoute();
 const router = useRouter();
+const { locale } = useI18n({ useScope: 'global' });
 const tdDocAside = ref();
 const loaded = ref(false);
-const asideList = computed(() => (route.path.includes('en') ? aboutEnDocs : aboutDocs));
+const asideList = computed(() => {
+  const { docs } = createSiteConfig(locale.value).about;
+  return JSON.parse(JSON.stringify(docs));
+});
 const contentStyle = computed(() => ({ visibility: loaded.value ? 'visible' : 'hidden' }));
 
 const contentLoaded = (callback) => {

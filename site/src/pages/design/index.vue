@@ -12,18 +12,21 @@
 
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
-import siteEnConfig from '../../site-en.config';
-
-const { docs: designDocs } = JSON.parse(JSON.stringify(siteEnConfig.design).replace(/component:.+/g, ''));
+import { createSiteConfig } from '../../site.config';
 
 const route = useRoute();
 const router = useRouter();
+const { locale } = useI18n();
 const tdDocAside = ref();
 const tdDocContent = ref();
 const tdDocHeader = ref();
-const asideList = computed(() => designDocs);
+const asideList = computed(() => {
+  const { docs } = createSiteConfig(locale.value).design;
+  return JSON.parse(JSON.stringify(docs));
+});
 let timer = null;
 
 const initDocHeader = () => {
@@ -46,6 +49,10 @@ watch(route, () => {
     initDocHeader();
     tdDocContent.value.pageStatus = 'show';
   });
+});
+
+watch(asideList, (list) => {
+  if (tdDocAside.value) tdDocAside.value.routerList = list;
 });
 
 onMounted(() => {

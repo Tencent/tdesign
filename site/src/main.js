@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import TDesign from 'tdesign-vue-next';
 import routes from './routes';
 import App from './App.vue';
+import { getLocaleFromPath, i18n, setLocale } from './i18n';
 import '@/style/index.less';
 
 // import tdesign style;
@@ -25,6 +26,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  setLocale(to.meta.locale || getLocaleFromPath(to.path));
   if (to.name !== from.name) {
     window.NProgress && NProgress.start?.();
   }
@@ -41,5 +43,6 @@ const app = createApp(App);
 app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('td-');
 
 app.use(TDesign);
+app.use(i18n);
 app.use(router);
 app.mount('#app');

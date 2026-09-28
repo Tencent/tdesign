@@ -2,295 +2,209 @@
   <div ref="article" name="DESIGN" class="doc-icon">
     <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
       <ol class="tdesign-toc_list">
-        <li class="tdesign-toc_list_item" v-for="anchor in catalog" :key="anchor.id">
-          <a class="tdesign-toc_list_item_a" :href="'#' + anchor.id">{{ anchor.title }} </a>
-          <ol class="tdesign-toc_list" v-if="anchor.children.length">
-            <li class="tdesign-toc_list_item" v-for="subAnchor in anchor.children" :key="subAnchor.id">
-              <a class="tdesign-toc_list_item_a" :href="'#' + subAnchor.id">{{ subAnchor.title }} </a>
+        <li v-for="anchor in catalog" :key="anchor.id" class="tdesign-toc_list_item">
+          <a class="tdesign-toc_list_item_a" :href="`#${anchor.id}`">{{ anchor.title }} </a>
+          <ol v-if="anchor.children.length" class="tdesign-toc_list">
+            <li v-for="subAnchor in anchor.children" :key="subAnchor.id" class="tdesign-toc_list_item">
+              <a class="tdesign-toc_list_item_a" :href="`#${subAnchor.id}`">{{ subAnchor.title }} </a>
             </li>
           </ol>
         </li>
       </ol>
     </nav>
 
-    <h2>Summary</h2>
-    <p>
-      Icons are an important element of UI design, and to some extent, they affect the style of the entire UI interface.
-      In the early stage of TDesign, a set of linear icons is provided for use in middle and back-end scenarios. These
-      icons are designed with a universal standard, which fits the default TDesign style - linear and rounded.
-    </p>
+    <h2>{{ t('icon.summaryTitle') }}</h2>
+    <p>{{ t('icon.summary') }}</p>
 
-    <h2>Principle</h2>
-    <h3>Simplicity</h3>
-    <p>
-      Ensure parameters are simplified during production, avoid decimals and non-integer angles wherever possible.
-      Remove excess anchor points when processing lines and outlines, and avoid unnecessary embellishments when
-      outputting icons to maintain simplicity.
-    </p>
+    <h2>{{ t('icon.principleTitle') }}</h2>
+    <h3>{{ t('icon.simplicityTitle') }}</h3>
+    <p>{{ t('icon.simplicity') }}</p>
     <img src="./assets/icon/simplify-1.png" alt="" />
 
-    <h3>Accuracy</h3>
-    <p>
-      Avoid using graphics with vague meanings in designs. When representing the same thing with multiple graphics,
-      choose the most common style and adapt as needed. Follow naming conventions when outputting, and use precise
-      descriptions to make it easier for others to find them.
-    </p>
+    <h3>{{ t('icon.accuracyTitle') }}</h3>
+    <p>{{ t('icon.accuracy') }}</p>
     <img src="./assets/icon/accurate-1.png" alt="" />
 
-    <h3>Moderation</h3>
-    <p>
-      As a standalone visual entity, individual icons should have a reasonable sense of line density and graphical
-      compatibility. When dealing with necessary high-density icons, rhythm should be considered, and they should be
-      comfortable and non-oppressive. Icon series should follow the principles of moderation, keeping changes within a
-      certain range.
-    </p>
+    <h3>{{ t('icon.moderationTitle') }}</h3>
+    <p>{{ t('icon.moderation') }}</p>
     <img src="./assets/icon/moderate-1.png" alt="" />
 
-    <h2>Specification</h2>
-    <h3>Grid Specification</h3>
-    <p>
-      The grid serves as the underlying framework for chart and icon drawing, forming the foundation for all attribute
-      design. Key elements such as the length and weight of lines, and the size and proportion of icons, are all defined
-      based on this structure. Icons are commonly output in four sizes: 16x16px, 20x20px, 24x24px, and 32x32px. These
-      sizes ensure clear display on standard screens. TDesign has ultimately selected the 24x24px size as the unified
-      grid size for icon creation. Icons are designed at this size and then scaled down proportionally to 16x16px after
-      vector outlining for final delivery. This approach aims to maintain compatibility with the default sizing of
-      components from version 1.0, avoiding the need for additional icon size adjustments.
-    </p>
+    <h2>{{ t('icon.specificationTitle') }}</h2>
+    <h3>{{ t('icon.gridTitle') }}</h3>
+    <p>{{ t('icon.grid') }}</p>
     <img src="./assets/icon/grid-1.png" alt="" />
     <hr />
-
-    <p>
-      Due to the pixel grid's nature, strokes with non-integer pixel values undergo anti-aliasing, producing
-      semi-transparent gray pixels. This results in blurred edges and compromised visual clarity. Therefore, all strokes
-      must be strictly aligned to the pixel grid during creation to maximize icon sharpness.
-    </p>
+    <p>{{ t('icon.pixel') }}</p>
     <img src="./assets/icon/grid-2.png" alt="" />
-
     <hr />
-    <p>When centering symmetrical graphics, visual balance should not be compromised for strict grid alignment.</p>
+    <p>{{ t('icon.symmetry') }}</p>
     <div class="legend">
       <div class="item">
         <img src="./assets/icon/grid-3-left.png" />
-        <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/good.png" />
+        <img class="tag" :src="goodImage" />
       </div>
-
       <div class="item">
         <img src="./assets/icon/grid-3-right.png" />
-        <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/bad.png" />
+        <img class="tag" :src="badImage" />
       </div>
     </div>
 
-    <h3>Canvas and Guidelines</h3>
-    <p>
-      The canvas serves as the practical work area for icon design, controlling composition, limiting size, and
-      adjusting spacing. In TDesign, the active canvas should be confined to the central 20x20px area of the grid. In
-      specific cases, such as elongated icons or those with protruding corners, content extension is permitted to ensure
-      a unified visual weight.
-    </p>
+    <h3>{{ t('icon.canvasTitle') }}</h3>
+    <p>{{ t('icon.canvas') }}</p>
     <img src="./assets/icon/canvas-1.png" alt="" />
     <hr />
-
-    <p>
-      Auxiliary lines help standardize icon dimensions and dictate the paths of lines. Icons should be drawn according
-      to these guidelines as much as possible to maintain a unified visual weight across the entire set. We have
-      standardized the paths for basic shapes—such as circles, squares, and diagonals—within the grid, forming a
-      comprehensive auxiliary line system. During the design process, the appropriate guidelines should be selected
-      based on the characteristics of the graphic to control its form.
-    </p>
+    <p>{{ t('icon.guidelines') }}</p>
     <img src="./assets/icon/canvas-2.png" alt="" />
     <hr />
-
-    <p>
-      The choice of auxiliary lines should be guided by the form of the graphic. When necessary, elements may extend
-      beyond these lines; never compromise the design solely to conform to the guidelines.
-    </p>
+    <p>{{ t('icon.guidelineChoice') }}</p>
     <div class="legend">
       <div class="item">
         <img src="./assets/icon/canvas-3-left.png" />
-        <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/good.png" />
+        <img class="tag" :src="goodImage" />
       </div>
-
       <div class="item">
         <img src="./assets/icon/canvas-3-right.png" />
-        <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/bad.png" />
+        <img class="tag" :src="badImage" />
       </div>
     </div>
     <hr />
-
-    <p>
-      When creating directional icons, it is advisable to extend a minimal visual element (in multiples of 0.25px) in
-      the opposite direction of the pointer to balance the composition.
-    </p>
+    <p>{{ t('icon.direction') }}</p>
     <img src="./assets/icon/canvas-4.png" alt="" />
 
-    <h3>Line</h3>
-    <p>
-      To ensure universality, all icons in this system use a 2px stroke width,which is configurable on
-      <t-link theme="primary" href="/icons" target="blank">🔗 TDesign Icons </t-link>
-    </p>
+    <h3>{{ t('icon.lineTitle') }}</h3>
+    <i18n-t keypath="icon.line" tag="p">
+      <template #link>
+        <t-link theme="primary" :href="locale === 'en-US' ? '/icons-en' : '/icons'" target="blank">
+          {{ t('icon.iconSite') }}
+        </t-link>
+      </template>
+    </i18n-t>
     <img src="./assets/icon/line-1.png" alt="" />
     <img src="./assets/icon/line-2.png" alt="" style="margin-top: 16px" />
-
     <hr />
-
-    <p>
-      When determining the length of long lines, it is recommended to use multiples of 2. This simplifies the process of
-      creating symmetrical layouts.
-    </p>
+    <p>{{ t('icon.longLine') }}</p>
     <img src="./assets/icon/line-3.png" alt="" />
     <hr />
-
-    <p>
-      As a general rule, line ends should have square (90-degree) caps. However, when depicting typographic graphics or
-      those with three-dimensional perspective, they should align tangentially to the grid.
-    </p>
+    <p>{{ t('icon.lineEnd') }}</p>
     <div class="legend">
       <div class="item">
         <img src="./assets/icon/line-4-left.png" />
-        <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/good.png" />
+        <img class="tag" :src="goodImage" />
       </div>
-
       <div class="item">
         <img src="./assets/icon/line-4-right.png" />
-        <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/bad.png" />
+        <img class="tag" :src="badImage" />
       </div>
     </div>
     <hr />
 
-    <h3>Corners</h3>
-    <p>
-      When treating corners, the rounding should be determined by the graphic's meaning. Appropriate rounding enhances
-      the visual message, rather than defaulting to sharp angles.
-    </p>
+    <h3>{{ t('icon.cornersTitle') }}</h3>
+    <p>{{ t('icon.corners') }}</p>
     <img src="./assets/icon/round-1.png" alt="" />
-
     <div class="legend">
       <div class="item">
         <img src="./assets/icon/round-2-left.png" />
-        <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/good.png" />
+        <img class="tag" :src="goodImage" />
       </div>
-
       <div class="item">
         <img src="./assets/icon/round-2-right.png" />
-        <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/bad.png" />
+        <img class="tag" :src="badImage" />
       </div>
     </div>
 
-    <h3>Angle</h3>
-    <p>
-      If a line needs to be slanted, it is advisable to align it with the 45° guide or use a multiple of 15° within the
-      grid. This ensures higher line clarity in low-resolution scenarios.
-    </p>
+    <h3>{{ t('icon.angleTitle') }}</h3>
+    <p>{{ t('icon.angle') }}</p>
     <img src="./assets/icon/angle-1.png" alt="" />
     <hr />
-
-    <p>Consider not only the angles of the positive shapes but also those of the negative spaces.</p>
+    <p>{{ t('icon.negativeAngle') }}</p>
     <div class="legend">
-      <div class="item">
-        <img src="./assets/icon/angle-2-left.png" />
-      </div>
-
-      <div class="item">
-        <img src="./assets/icon/angle-2-right.png" />
-      </div>
+      <div class="item"><img src="./assets/icon/angle-2-left.png" /></div>
+      <div class="item"><img src="./assets/icon/angle-2-right.png" /></div>
     </div>
 
-    <h3>Breaks</h3>
-    <p>
-      Breaks, often used in composite icons, require case-by-case width analysis to balance visual weight. Max. width: ≤
-      2px, in multiples of 0.5px.
-    </p>
+    <h3>{{ t('icon.breaksTitle') }}</h3>
+    <p>{{ t('icon.breaks') }}</p>
     <div class="legend">
-      <div class="item">
-        <img src="./assets/icon/fracture-1-left.png" />
-      </div>
-
-      <div class="item">
-        <img src="./assets/icon/fracture-1-right.png" />
-      </div>
+      <div class="item"><img src="./assets/icon/fracture-1-left.png" /></div>
+      <div class="item"><img src="./assets/icon/fracture-1-right.png" /></div>
     </div>
 
-    <h3>Stackable Universal Accessory</h3>
-    <p>
-      To accommodate diverse main graphics under unified standards, medium and small universal accessories are provided.
-    </p>
+    <h3>{{ t('icon.accessoryTitle') }}</h3>
+    <p>{{ t('icon.accessory') }}</p>
     <img src="./assets/icon/variety-1.png" alt="" />
     <hr />
-    <p>
-      When using, it is necessary to select the appropriate size and determine the placement based on the specific form
-      of the main graphic.
-    </p>
+    <p>{{ t('icon.accessoryUse') }}</p>
     <img src="./assets/icon/variety-2.png" alt="" />
 
-    <h3>Simplicity</h3>
-    <p>Seek simplicity in the internal structure and external outline while ensuring high recognition.</p>
+    <h3>{{ t('icon.complexityTitle') }}</h3>
+    <p>{{ t('icon.complexity') }}</p>
     <div class="legend">
       <div class="item">
         <img src="./assets/icon/easy-1-left.png" />
-        <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/good.png" />
+        <img class="tag" :src="goodImage" />
       </div>
-
       <div class="item">
         <img src="./assets/icon/easy-1-right.png" />
-        <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/bad.png" />
+        <img class="tag" :src="badImage" />
       </div>
     </div>
-
     <div class="legend">
       <div class="item">
         <img src="./assets/icon/easy-1-left-bottom.png" />
-        <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/good.png" />
+        <img class="tag" :src="goodImage" />
       </div>
-
       <div class="item">
         <img src="./assets/icon/easy-1-right-bottom.png" />
-        <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/bad.png" />
+        <img class="tag" :src="badImage" />
       </div>
     </div>
 
-    <h3>Arc</h3>
-    <p>Arc line processing prioritizes using full circles where possible.</p>
+    <h3>{{ t('icon.arcTitle') }}</h3>
+    <p>{{ t('icon.arc') }}</p>
     <div class="legend">
       <div class="item">
         <img src="./assets/icon/arc-1-left.png" />
-        <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/good.png" />
+        <img class="tag" :src="goodImage" />
       </div>
-
       <div class="item">
         <img src="./assets/icon/arc-1-right.png" />
-        <img class="tag" src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/bad.png" />
+        <img class="tag" :src="badImage" />
       </div>
     </div>
 
     <t-divider>
       <div class="icons-page-btn" @click="handleClickBtn">
-        <link-1-icon style="margin-right: 8px" :size="20" />Visit TDesign Icons
+        <link-1-icon style="margin-right: 8px" :size="20" />{{ t('icon.visit') }}
       </div>
     </t-divider>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Link1Icon } from 'tdesign-icons-vue-next';
 
+import messages from '../../locales/pages/design-motion-icon';
+
+const goodImage = 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/good.png';
+const badImage = 'https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/bad.png';
+
+const { locale, t } = useI18n({ messages });
 const article = ref();
 const catalog = ref([]);
 
 const genAnchor = () => {
   if (!article.value) return;
-  const nodes = ['H2', 'H3'];
   const titles = [];
-  article.value.childNodes.forEach((element, index) => {
-    if (nodes.includes(element.nodeName)) {
+  Array.from(article.value.children).forEach((element, index) => {
+    if (['H2', 'H3'].includes(element.nodeName)) {
       const id = `header-${index}`;
-      element.setAttribute('id', id);
+      element.id = id;
       titles.push({
         id,
-        title: element.innerHTML,
-        level: Number(element.nodeName.substring(1, 2)),
-        nodeName: element.nodeName,
+        title: element.textContent,
+        level: Number(element.nodeName.slice(1)),
         children: [],
       });
     }
@@ -300,16 +214,20 @@ const genAnchor = () => {
   catalog.value = titles.reduce((result, current) => {
     if (isEveryLevel3 || current.level === 2) {
       result.push(current);
-    } else if (current.level === 3) {
-      result[result.length - 1].children.push(current);
+    } else {
+      result[result.length - 1]?.children.push(current);
     }
     return result;
   }, []);
 };
 
 const handleClickBtn = () => {
-  window.open('/icons', ',_blank');
+  window.open('/icons', '_blank');
 };
 
 onMounted(genAnchor);
+watch(locale, async () => {
+  await nextTick();
+  genAnchor();
+});
 </script>

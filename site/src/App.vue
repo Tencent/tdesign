@@ -10,10 +10,9 @@ import { computed, onBeforeUnmount, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const fixedHeaderList = ['home', 'home-en', 'source', 'source-en', 'trade', 'icons', 'icons-en'];
 
 const headerStyle = computed(() => {
-  if (fixedHeaderList.includes(route.name)) {
+  if (route.meta.fixedHeader) {
     return {
       position: 'fixed',
       top: 0,

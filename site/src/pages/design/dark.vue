@@ -13,60 +13,27 @@
       </ol>
     </nav>
 
-    <h2>Summary</h2>
-    <p>
-      Dark mode is a night-friendly color theme that focuses on minimum color contrast required for the readability of
-      each element in the UI interface, to ensure an excellent reading experience.
-    </p>
+    <h2>{{ t('dark.summary.title') }}</h2>
+    <p>{{ t('dark.summary.description') }}</p>
 
-    <img class="starter" src="./assets/mode/starter.png" />
+    <img class="starter" src="./assets/mode/starter.png" :alt="t('dark.summary.imageAlt')" />
 
-    <h2>Principle</h2>
-    <h3>Content First</h3>
-    <p>
-      It is necessary to prioritize content legibility in a dark mode. Text content should be ensured to be easy to
-      read, rather than needlessly flashy.
-    </p>
+    <h2>{{ t('dark.principles.title') }}</h2>
+    <template v-for="principle in principles" :key="principle.key">
+      <h3>{{ principle.title }}</h3>
+      <p>{{ principle.description }}</p>
+    </template>
 
-    <h3>Reading Comfort</h3>
-    <p>
-      Try to avoid using highly saturated colors, as they can cause a visual "vibration" effect when viewed on darker
-      surfaces. Instead, using low saturation or slightly softer colors can reduce visual fatigue and ensure reading
-      comfort.
-    </p>
-
-    <h3>Maintain Consistency in Information</h3>
-    <p>To maintain consistency in information hierarchy when switching between light mode and dark mode</p>
-
-    <h3>Meeting WCAG2.0 Standard</h3>
-    <p>
-      According to WCAG2.0 Design Standard, visual presentation of text and the contrast ratio between text and
-      background should be at least 1:4.5 to ensure that all text content is clear and easily readable with sufficient
-      contrast.
-    </p>
-
-    <h2>Text</h2>
-    <p>
-      When light-colored text appears on a dark background, the contrast ratio between the body text and the background
-      should be at least 1:4.5 (AA standard). In TDesign, in addition to ensuring text legibility, we also hope that
-      text of different gradients will have consistent visual perception after switching between light and dark modes.
-      Therefore, the opacity has been adjusted accordingly for the transition.
-    </p>
+    <h2>{{ t('dark.text.title') }}</h2>
+    <p>{{ t('dark.text.description') }}</p>
 
     <t-table style="margin: 16px 0" bordered :data="dataSource" :columns="columns" rowKey="index" size="small" />
 
-    <h2>Color</h2>
-    <p>
-      In the TDesign color system, the color palette for the dark mode is derived through calculations based on the
-      light color algorithm. The establishment of color gradients also adopts a method that combines the CIElab and HSL
-      color spaces with interpolation to ensure uniform color changes and equal brightness among multiple colors.
-    </p>
-    <p>
-      TDesign provides 8 sets of commonly used basic color palettes, with each extended color having 10 levels of color
-      gradients.
-    </p>
+    <h2>{{ t('dark.color.title') }}</h2>
+    <p>{{ t('dark.color.description') }}</p>
+    <p>{{ t('dark.color.paletteDescription') }}</p>
 
-    <h3>Basic Palette</h3>
+    <h3>{{ t('dark.color.basicPalette') }}</h3>
 
     <div class="color-board">
       <div class="color-board-lists" v-for="(item, index) in colorList" :key="index">
@@ -89,11 +56,21 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted, reactive, ref, toRefs } from 'vue';
+import { computed, getCurrentInstance, nextTick, onMounted, reactive, ref, toRefs, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import messages from '@/locales/pages/design-basic';
 
 const article = ref(null);
 const catalog = ref([]);
 const { proxy } = getCurrentInstance();
+const { locale, t } = useI18n({ messages });
+const principles = computed(() =>
+  ['contentFirst', 'readingComfort', 'consistency', 'wcag'].map((key) => ({
+    key,
+    title: t(`dark.principles.items.${key}.title`),
+    description: t(`dark.principles.items.${key}.description`),
+  })),
+);
 
 function genAnchor() {
   if (!article.value) return;
@@ -105,7 +82,7 @@ function genAnchor() {
       element.setAttribute('id', id);
       titles.push({
         id,
-        title: element.innerHTML,
+        title: element.textContent,
         level: Number(element.nodeName.substring(1, 2)),
         nodeName: element.nodeName,
         children: [],
@@ -125,38 +102,42 @@ function genAnchor() {
 }
 
 onMounted(genAnchor);
+watch(locale, async () => {
+  await nextTick();
+  genAnchor();
+});
 
 const state = reactive({
   dataSource: [
     {
       index: 0,
       token: '@text-color-primary',
-      name: 'Title',
+      name: 'title',
       color: '#ffffff 90%',
     },
     {
       index: 1,
       token: '@text-color-secondary',
-      name: 'Secondary Text',
+      name: 'secondary',
       color: '#ffffff 60%',
     },
     {
       index: 2,
       token: '@text-color-placeholder',
-      name: 'Placeholder Text',
+      name: 'placeholder',
       color: '#ffffff 40%',
     },
     {
       index: 3,
       token: '@text-color-disabled',
-      name: 'Disabled Text',
+      name: 'disabled',
       color: '#ffffff 26%',
     },
   ],
   columns: [
-    { ellipsis: true, colKey: 'token', title: 'token' },
-    { ellipsis: true, colKey: 'name', title: 'name' },
-    { ellipsis: true, colKey: 'color', title: 'value' },
+    { ellipsis: true, colKey: 'token' },
+    { ellipsis: true, colKey: 'name' },
+    { ellipsis: true, colKey: 'color' },
   ],
   colorList: {
     list: [
@@ -297,12 +278,45 @@ const state = reactive({
     ],
   },
 });
-const { dataSource, columns, colorList } = toRefs(state);
+const { dataSource: rawDataSource, columns: rawColumns, colorList: rawColorList } = toRefs(state);
+const dataSource = computed(() =>
+  rawDataSource.value.map((item) => ({
+    ...item,
+    name: t(`dark.text.rows.${item.name}`),
+  })),
+);
+const columns = computed(() =>
+  rawColumns.value.map((column) => ({
+    ...column,
+    title: t(`dark.text.columns.${column.colKey}`),
+  })),
+);
+const colorList = computed(() =>
+  Object.fromEntries(
+    Object.entries(rawColorList.value).map(([key, colors]) => [
+      key,
+      colors.map((color) => {
+        const match = color.leftTxt.match(/^([A-Za-z]+)(\d+)$/);
+        if (!match) return color;
+        const [, family, level] = match;
+        const familyKey = family.toLowerCase();
+        return {
+          ...color,
+          topTitle: color.topTitle ? t(`dark.color.families.${familyKey}`) : undefined,
+          leftTxt: t('dark.color.colorLabel', {
+            family: t(`dark.color.families.${familyKey}`),
+            level,
+          }),
+        };
+      }),
+    ]),
+  ),
+);
 
 function copyColor(color) {
   if ('clipboard' in navigator) {
     navigator.clipboard.writeText(color);
-    proxy.$message.success('复制成功');
+    proxy.$message.success(t('common.copied'));
     return;
   }
 
@@ -322,7 +336,7 @@ function copyColor(color) {
   selection.removeAllRanges();
   document.body.removeChild(textarea);
 
-  proxy.$message.success('复制成功');
+  proxy.$message.success(t('common.copied'));
 }
 </script>
 

@@ -2,15 +2,12 @@
   <div class="tdesign-document tdesign-source-page">
     <div class="tdesign-source-header">
       <div class="content">
-        <h1>Design Resources</h1>
+        <h1>{{ t('source.title') }}</h1>
         <div class="description">
+          <p>{{ t('source.introduction') }}</p>
           <p>
-            Here are the download links for TDesign-related design resources and design tools. More design resources are
-            being sorted out and perfected.
-          </p>
-          <p>
-            If you have any suggestions or feedback, please send an email to tdesign@tencent.com or submit an
-            <a href="https://github.com/Tencent/tdesign/issues" target="_blank">issue</a>
+            {{ t('source.feedback') }}
+            <a href="https://github.com/Tencent/tdesign/issues" target="_blank">{{ t('source.issue') }}</a>
           </p>
         </div>
 
@@ -20,7 +17,7 @@
 
     <div class="tdesign-source-content">
       <div class="tdesign-source-content-box">
-        <h2 class="tdesign-source-content__title">Resource Preview</h2>
+        <h2 class="tdesign-source-content__title">{{ t('source.preview') }}</h2>
       </div>
       <div class="tdesign-source-content__iframe-wrap">
         <iframe
@@ -43,18 +40,18 @@
           >
             <div class="tdesign-source-content__list-item-inner">
               <div :class="['mask', [item.icon]]"></div>
-              <span class="source-tag new" v-if="item.status === 1">Latest</span>
-              <span class="source-tag doing" v-else-if="item.status === 2">Updating</span>
-              <span class="source-tag todo" v-else-if="item.status === -1">In Progress</span>
+              <span class="source-tag new" v-if="item.status === 1">{{ t('source.status.latest') }}</span>
+              <span class="source-tag doing" v-else-if="item.status === 2">{{ t('source.status.updating') }}</span>
+              <span class="source-tag todo" v-else-if="item.status === -1">{{ t('source.status.upcoming') }}</span>
               <img :src="iconMap[item.icon]" class="source-icon" width="32" />
-              <h3 class="source-title">{{ item.title }}</h3>
+              <h3 class="source-title">{{ getSourceTitle(item) }}</h3>
               <div class="source-detail">
                 <span class="source-detail-watch" v-if="item.watch">
                   <t-icon name="browse" size="16px" />
                   {{ item.watch }}
                 </span>
                 <span class="source-detail-time">
-                  {{ item.descriptionEn }}
+                  {{ getSourceDescription(item) }}
                 </span>
                 <t-icon
                   class="source-detail-action"
@@ -70,8 +67,7 @@
       </div>
 
       <div class="tdesign-source-content-box">
-        <h2 class="tdesign-source-content__title">Contributors</h2>
-        <!-- <a class="contributor-link" href="" target="_blank">怎样参与 TDesign 设计资源开源共建？</a> -->
+        <h2 class="tdesign-source-content__title">{{ t('source.contributors') }}</h2>
         <div class="contributor-list">
           <a
             class="contributor-avatar"
@@ -92,7 +88,8 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import figmaIcon from '@/assets/figma-logo.svg';
@@ -107,11 +104,13 @@ import mastergoIcon from '@/assets/mastergo-logo.svg';
 import ryIcon from '@/assets/ry-logo.svg';
 
 import { webSourceList, mobileSourceList, sourceDownloadUrl, webChartSourceList } from '@/constants';
+import messages from '@/locales/pages/design-shell';
 
 const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
 
 const route = useRoute();
 const router = useRouter();
+const { locale, t } = useI18n({ messages });
 const tabs = ref();
 const currentWebSourceList = ref(webSourceList);
 const currentMobileSourceList = ref(mobileSourceList);
@@ -135,6 +134,12 @@ const previewUrl = {
   mobile: 'https://codesign.qq.com/s/705854516818782?menu_aside=null',
   'web-chart': 'https://codesign.qq.com/s/705850116517658?menu_aside=null',
 };
+const tabList = computed(() => [
+  { tab: 'web', name: t('source.tabs.web') },
+  { tab: 'mobile', name: t('source.tabs.mobile') },
+  { tab: 'web-chart', name: t('source.tabs.webChart') },
+  { tab: 'icons', name: t('source.tabs.icons') },
+]);
 const tab = computed({
   get: () => route.query.tab || 'web',
   set: (value) => {
@@ -164,6 +169,8 @@ const footerStyle = computed(() => ({
   '--footer-inner-position': 'relative',
   '--footer-logo-position': 'unset',
 }));
+const getSourceDescription = (item) => (locale.value === 'en-US' ? item.descriptionEn : item.description);
+const getSourceTitle = (item) => t(`source.resourceTitles.${item.id}`);
 
 const fetchDesignContributors = () => {
   fetch(contributorsUrl)
@@ -200,16 +207,15 @@ const handleSourceClick = (item) => {
   window.open(item.actionUrl, '_blank');
 };
 
+watch(tabList, (list) => {
+  if (tabs.value) tabs.value.tabs = list;
+});
+
 onMounted(() => {
-  tabs.value.tabs = [
-    { tab: 'web', name: 'Desktop' },
-    { tab: 'mobile', name: 'Mobile' },
-    { tab: 'web-chart', name: 'Desktop Chart' },
-    { tab: 'icons', name: 'Icons' },
-  ];
+  tabs.value.tabs = tabList.value;
   tabs.value.onchange = ({ detail: currentTab }) => {
     if (currentTab !== 'icons') tab.value = currentTab;
-    else window.open('/icons-en', '_blank');
+    else window.open(locale.value === 'en-US' ? '/icons-en' : '/icons', '_blank');
   };
   fetchDesignContributors();
   fetch(sourceDownloadUrl)

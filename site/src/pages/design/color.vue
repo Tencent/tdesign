@@ -14,45 +14,21 @@
         </ol>
       </nav>
 
-      <h2>Summary</h2>
-      <p>
-        TDesign's color system follows the values of inclusiveness, diversity, evolution and connectivity, taking into
-        account the application needs of color and complying with accessibility standards. TDesign also provides a
-        complete and easy-to-use set of official color palettes.
-      </p>
-      <h2>TDesign Official Palette</h2>
-      <p>
-        TDesign official palette a default palette widely applicable to mid-to-back-end business scenarios. It consists
-        of four parts: theme colors, functional colors, neutral colors, and extended colors.
-      </p>
-      <h3>Theme colors</h3>
-      <p>
-        The theme color is the most core and frequently used color in a product. It is often used to emphasize
-        information, guide operations, and largely determines the overall tone and style of a product. TDesign uses
-        Tencent Blue as the default theme color, which embodies the brand's characteristics and ecological concept of
-        technological innovation and open sharing. Its stable and neutral temperament also has broad applicability in
-        mid-to-back-end design.
-      </p>
+      <h2>{{ t('color.summary.title') }}</h2>
+      <p>{{ t('color.summary.description') }}</p>
+      <h2>{{ t('color.palette.title') }}</h2>
+      <p>{{ t('color.palette.description') }}</p>
+      <h3>{{ t('color.theme.title') }}</h3>
+      <p>{{ t('color.theme.description') }}</p>
       <div class="tdesign-color-theme">
-        <p>Tencent Blue</p>
+        <p>{{ t('color.theme.name') }}</p>
         <div class="tdesign-color-theme-b">
           <p>rgba(0, 82, 217, 1)</p>
           <p>#0052d9</p>
         </div>
       </div>
-      <h3>Functional Colors</h3>
-      <p>
-        Functional colors refer to colors used for specific scenarios and to express special semantics, such as success,
-        failure, warning, links, etc. We have defined four functional colors, selecting hues based on the general
-        meaning of colors and from a perspective of visual consistency with the brand color. They are also evaluated
-        based on comprehensive consideration of WCAG 2.0 standards to meet usability standards.
-      </p>
-      <p>
-        In TDesign's color system, each functional color extends to 10 levels, which is enough to cover various design
-        scenarios. The color levels are developed using the HCT color space, combined with the interpolation of
-        saturation and brightness under different hues to optimize the curve, ensuring a uniform change in color and
-        equal brightness among multiple colors.
-      </p>
+      <h3>{{ t('color.functional.title') }}</h3>
+      <p v-for="paragraph in tm('color.functional.description')" :key="paragraph">{{ paragraph }}</p>
 
       <div class="tdesign-color-features">
         <div class="tdesign-color-features-lists" v-for="(item, index) in listFeatures" :key="index">
@@ -71,12 +47,8 @@
           </div>
         </div>
       </div>
-      <h3>Neutral Colors</h3>
-      <p>
-        Neutral colors consist of a range of gray and black colors. Considering that neutral colors are also used to
-        distinguish interface layering in dark mode, they are expanded to 14 in CIELab based on brightness. The contrast
-        between commonly used text and their color is greater than 4.5, meeting the WCAG 2.0 standard.
-      </p>
+      <h3>{{ t('color.neutral.title') }}</h3>
+      <p>{{ t('color.neutral.description') }}</p>
       <div class="tdesign-color-neutral">
         <div class="tdesign-color-neutral-l">
           <div class="tdesign-color-neutral-l-lists">
@@ -116,13 +88,8 @@
           </div>
         </div>
       </div>
-      <h3>Brand-color-bias Neutral colors</h3>
-      <p>
-        In addition, in application scenarios such as page templates, color bias is added to the gray and black colors
-        at various levels to highlight the brand atmosphere. The RGB color mixing model is used in the process, and
-        after many attempts, the ratio of brand color blending is determined to be 8%-12%, and the same rules as
-        ordinary neutral colors are applied.
-      </p>
+      <h3>{{ t('color.brandNeutral.title') }}</h3>
+      <p>{{ t('color.brandNeutral.description') }}</p>
       <div class="tdesign-color-neutral-brand">
         <div class="tdesign-color-neutral-brand-l">
           <div class="tdesign-color-neutral-brand-l-lists">
@@ -168,17 +135,11 @@
               <span>{{ item.colorTxt }}</span>
             </div>
           </div>
-          <p class="tag">Average(r,g,b) = 0.12*(r1,b1,g1) + 0.88*(r2,b2,g2)</p>
+          <p class="tag">{{ t('color.brandNeutral.formula') }}</p>
         </div>
       </div>
-      <h3>Extended Colors</h3>
-      <p>
-        Extended colors are a series of colors extended from functional colors. In scenarios that require more colors
-        such as data visualization and illustration scenes, the same method of HCT and interpolation fitting curves is
-        used. In addition to the functional colors of blue, red, yellow, and green, the TDesign color system is expanded
-        to 8 main colors, including purple, sky blue, yellow, and pink extended colors. Each extended color has 10
-        levels to ensure uniform color changes and equal brightness among multiple colors.
-      </p>
+      <h3>{{ t('color.extended.title') }}</h3>
+      <p>{{ t('color.extended.description') }}</p>
       <div class="tdesign-color-expand tdesign-color-features">
         <div class="tdesign-color-features-lists" v-for="(item, index) in listExpand" :key="index">
           <div
@@ -195,14 +156,9 @@
           </div>
         </div>
       </div>
-      <h2>Application Guidelines</h2>
-      <h3>UI Application Guidelines</h3>
-      <p>
-        In TDesign, Tencent Blue is the main interactive color, and because of the complexity of component
-        implementation, we have standardized the color usage rules using Design Tokens. For ease of management and
-        readability, we have defined global semantic tokens and component tokens. Once you understand the rules of
-        global semantic tokens, you can understand the color usage rules of components in TDesign.
-      </p>
+      <h2>{{ t('color.application.title') }}</h2>
+      <h3>{{ t('color.application.uiTitle') }}</h3>
+      <p>{{ t('color.application.uiDescription') }}</p>
       <div class="tdesign-guide-ui-box">
         <div class="tdesign-guide-ui">
           <div class="tdesign-guide-ui-item" v-for="(item, index) in listGuideUi" :key="index">
@@ -220,48 +176,23 @@
         <div class="tdesign-guide-ui-arr tdesign-guide-ui-arr--position"></div>
       </div>
 
-      <h3>Data Visualization Application Guidelines</h3>
-      <p>
-        In a design system, data visualization in chart form is also a common application scenario, so the TDesign color
-        system fully considers the color application in data visualization, striving to become a compatible color
-        system. TVision, as an important part of the design system library, uses the extended colors from the TDesign
-        official color palette as the basis for its coloring, ensuring the consistency and brand continuity of charts
-        and UI. The most commonly used qualitative and continuous color palettes are shown in the figure below, and the
-        recognition degrees have been verified using CIE ΔE 2000 combined with the contrast ratio. TVision will be made
-        available in the future, providing more complete visual color guidance for everyone.
-      </p>
+      <h3>{{ t('color.application.dataTitle') }}</h3>
+      <p>{{ t('color.application.dataDescription') }}</p>
       <img src="./assets/color/board.svg" />
-      <!-- <div class="tdesign-color-data">
-        <div class="tdesign-color-data-lists" v-for="(item, index) in listFeatures" :key="index + 'color-data'">
-          <div
-            class="tdesign-color-data-list"
-            v-for="(item, index) in item"
-            :key="index"
-            :style="{ background: item.rightTxt }"
-          ></div>
-        </div>
-        <div class="tdesign-color-data-lists" v-for="(item, index) in listExpand" :key="index + 'color-data2'">
-          <div
-            class="tdesign-color-data-list"
-            v-for="(item, index) in item"
-            :key="index"
-            :style="{ background: item.rightTxt }"
-          ></div>
-        </div>
-      </div> -->
-      <!-- <h2>TDesign 智能色板</h2>
-      <p>如果需要定制化自己的色板，TDesign 提供了 <a class="link" target="_blank" href="https://tvision.oa.com/t7/">基于CIELab的色板生成工具</a>，可以方便的生成完整的色板。
-        目前工具还处于内测阶段，欢迎体验反馈。</p> -->
     </div>
   </div>
 </template>
 
 <script setup>
 import { getCurrentInstance, onMounted, reactive, ref, toRefs } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import designVisualMessages from '../../locales/pages/design-visual';
 
 const article = ref(null);
 const catalog = ref([]);
 const { proxy } = getCurrentInstance();
+const { t, tm } = useI18n({ messages: designVisualMessages });
 
 function genAnchor() {
   if (!article.value) return;
@@ -298,8 +229,8 @@ const state = reactive({
   listFeatures: {
     list: [
       {
-        topTitle: 'Contrast Ratio 6.54:1',
-        leftTxt: 'Blue7 Brand Color',
+        topTitle: t('color.paletteLabels.blueContrast'),
+        leftTxt: t('color.paletteLabels.brand'),
         rightTxt: '#0052d9',
       },
       {
@@ -345,8 +276,8 @@ const state = reactive({
     ],
     list1: [
       {
-        topTitle: 'Contrast Ratio 4.32:1',
-        leftTxt: 'Red6 Error Color',
+        topTitle: t('color.paletteLabels.redContrast'),
+        leftTxt: t('color.paletteLabels.error'),
         rightTxt: '#d54941',
       },
       {
@@ -392,8 +323,8 @@ const state = reactive({
     ],
     list2: [
       {
-        topTitle: 'Contrast Ratio 3.12:1',
-        leftTxt: 'Orange5 Warning Color',
+        topTitle: t('color.paletteLabels.orangeContrast'),
+        leftTxt: t('color.paletteLabels.warning'),
         rightTxt: '#e37318',
       },
       {
@@ -439,8 +370,8 @@ const state = reactive({
     ],
     list3: [
       {
-        topTitle: 'Contrast Ratio 3.16:1',
-        leftTxt: 'Green5 Success Color',
+        topTitle: t('color.paletteLabels.greenContrast'),
+        leftTxt: t('color.paletteLabels.success'),
         rightTxt: '#2ba471',
       },
       {
@@ -809,58 +740,14 @@ const state = reactive({
       },
     ],
   },
-  listGuideUi: [
-    {
-      name: 'Palette',
-      title: 'Color - Levels',
-      content: [
-        { color: '#366ef4', colorTxt: 'blue-6' },
-        { color: '#0052D9', colorTxt: 'blue-7' },
-        { color: '#003cab', colorTxt: 'blue-8' },
-        { color: '#FFFFFF', colorTxt: 'white' },
-        { color: '#F3F3F3', colorTxt: 'gray-1' },
-        { color: '#E7E7E7', colorTxt: 'gray-3' },
-        { color: 'rgba(0,0,0,.9)', colorTxt: 'fontgray-1' },
-        { color: 'rgba(0,0,0,.6)', colorTxt: 'fontgray-2' },
-      ],
-    },
-    {
-      name: 'Global Token',
-      title: 'Container Text - Color - layout: @palette',
-      content: [
-        { colorN: 'brand-color-hover:', colorTxt: '@blue-color-6' },
-        { colorN: 'brand-color:', colorTxt: '@blue-color-7' },
-        { colorN: 'brand-color-active:', colorTxt: '@blue-color-8' },
-        { colorN: 'bg-color-container:', colorTxt: '@white-color' },
-        { colorN: 'bg-color-container-hover:', colorTxt: '@gray-color-1' },
-        { colorN: 'bg-color-container-active:', colorTxt: '@gray-color-3' },
-        { colorN: 'text-color-primary:', colorTxt: '@font-gray-1' },
-        { colorN: 'text-color-secondary:', colorTxt: '@font-gray-2' },
-      ],
-    },
-    {
-      name: '组件 Token',
-      title: '组件 - 背景文字描边 - 交互层级: @全局语义Token',
-      content: [
-        { colorN: 'button-bg-hover:', colorTxt: '@brand-color-hover' },
-        { colorN: 'button-bg:', colorTxt: '@brand-color' },
-        { colorN: 'button-bg-active:', colorTxt: '@brand-color-active' },
-        { colorN: 'table-bg:', colorTxt: '@bg-color-container' },
-        { colorN: 'table-bg-hover:', colorTxt: '@bg-color-container-hover' },
-        { colorN: 'table-bg-active:', colorTxt: '@bg-color-container-active' },
-        { colorN: 'menu-tabstext-select:', colorTxt: '@text-color-primary' },
-        { colorN: 'menu-tabstext:', colorTxt: '@text-color-secondary' },
-      ],
-    },
-  ],
 });
-const { listFeatures, listNeutralLeft, listNeutralRight, listBrandLeft, listBrandRight, listExpand, listGuideUi } =
-  toRefs(state);
+const { listFeatures, listNeutralLeft, listNeutralRight, listBrandLeft, listBrandRight, listExpand } = toRefs(state);
+const listGuideUi = tm('color.guideTokens');
 
 function copyColor(color) {
   if ('clipboard' in navigator) {
     navigator.clipboard.writeText(color);
-    proxy.$message.success('复制成功');
+    proxy.$message.success(t('color.copySuccess'));
     return;
   }
 
@@ -880,6 +767,6 @@ function copyColor(color) {
   selection.removeAllRanges();
   document.body.removeChild(textarea);
 
-  proxy.$message.success('复制成功');
+  proxy.$message.success(t('color.copySuccess'));
 }
 </script>

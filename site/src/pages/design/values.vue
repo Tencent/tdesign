@@ -13,115 +13,49 @@
       </ol>
     </nav>
 
-    <h2>Inclusiveness</h2>
-    <video
-      autoplay
-      loop="loop"
-      muted
-      defaultMuted
-      playsinline
-      x5-playsinline
-      webkit-playsinline
-      x5-video-player
-      x5-video-player-type="h5"
-      preload="auto"
-    >
-      <source :src="gif1" type="video/mp4" />
-    </video>
-    <p>
-      TDesign is an inclusive design system that emphasizes the pursuit of a people-centric and inclusive approach in
-      providing products and services for businesses, ensuring that everyone benefits. In the process of building,
-      TDesign requires that the underlying business be understood and the diversity of business scenarios be understood,
-      in order to identify commonalities and characteristics in complex business scenarios, ensuring that everyone can
-      coexist flexibly in the same environment. It can satisfy immediate needs and adapt to broader scenarios, while
-      providing customization space for different products, ensuring that different products reflect their own
-      characteristics. TDesign can also provide suitable services for a wider range of products.
-    </p>
-
-    <h2>Diversity</h2>
-    <video
-      autoplay
-      loop="loop"
-      muted
-      defaultMuted
-      playsinline
-      x5-playsinline
-      webkit-playsinline
-      x5-video-player
-      x5-video-player-type="h5"
-      preload="auto"
-    >
-      <source :src="gif2" type="video/mp4" />
-    </video>
-    <p>
-      In a professional environment, we expect TDesign to maintain diversity. We realize that it's impossible to
-      standardize everything in the world, so TDesign as a design system needs to constantly incorporate new
-      perspectives, adapt to future technological changes and experience innovations, and continually grow and
-      diversify. Based on Tencent's business and also serving businesses, TDesign is continually enriched with diverse
-      content through mutual feedback with business users. While ensuring consistent values, TDesign seeks to meet the
-      needs of multiple business scenarios and empower different business types within Tencent's ecosystem, exploring
-      more opportunities for diversity.
-    </p>
-
-    <h2>Evolution</h2>
-    <video
-      autoplay
-      loop="loop"
-      muted
-      defaultMuted
-      playsinline
-      x5-playsinline
-      webkit-playsinline
-      x5-video-player
-      x5-video-player-type="h5"
-      preload="auto"
-    >
-      <source :src="gif3" type="video/mp4" />
-    </video>
-    <p>
-      Evolution is the most understood and adhered to principle of creation by humans so far, and TDesign's design
-      system also follows this principle. It remains sensitive to design, resonates with trends, and pushes for
-      continuous evolution of the overall style. TDesign strives to maintain its core while improving its product matrix
-      with a developmental perspective, while considering more possibilities in the design process, leaving room for
-      technological developments, changes in experience patterns, design trends, and upgrades of enterprises and
-      products. At the same time, it ensures the continuity and persistence of iterative optimization of the system.
-    </p>
-
-    <h2>Connectivity</h2>
-    <video
-      autoplay
-      loop="loop"
-      muted
-      defaultMuted
-      playsinline
-      x5-playsinline
-      webkit-playsinline
-      x5-video-player
-      x5-video-player-type="h5"
-      preload="auto"
-    >
-      <source :src="gif4" type="video/mp4" />
-    </video>
-    <p>
-      "Connecting everything" is deeply imprinted in Tencent's genes. In this process, as a basic service of Tencent's
-      ecosystem, TDesign needs to play a connecting and open role, not only supporting the stable operation of massive
-      internal businesses, but also providing leading industry solutions to meet the needs of building full-scenario
-      ecosystem capabilities. TDesign will continue to cover Tencent's cutting-edge technologies, strategic experience,
-      and material asset openness and sharing, making every effort to connect, empower users, enterprises, and the
-      ecosystem, and ultimately connect to the future.
-    </p>
+    <template v-for="section in sections" :key="section.key">
+      <h2>{{ section.title }}</h2>
+      <video
+        autoplay
+        loop="loop"
+        muted
+        defaultMuted
+        playsinline
+        x5-playsinline
+        webkit-playsinline
+        x5-video-player
+        x5-video-player-type="h5"
+        preload="auto"
+      >
+        <source :src="section.video" type="video/mp4" />
+      </video>
+      <p>{{ section.description }}</p>
+    </template>
   </div>
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import messages from '@/locales/pages/design-basic';
 
 const article = ref(null);
 const catalog = ref([]);
-const gif1 = encodeURI('https://tdesign.gtimg.com/site/images/包容.mp4');
-const gif2 = encodeURI('https://tdesign.gtimg.com/site/images/多元.mp4');
-const gif3 = encodeURI('https://tdesign.gtimg.com/site/images/进化.mp4');
-const gif4 = encodeURI('https://tdesign.gtimg.com/site/images/连接.mp4');
+const { locale, t } = useI18n({ messages });
+const values = [
+  ['inclusiveness', '包容'],
+  ['diversity', '多元'],
+  ['evolution', '进化'],
+  ['connectivity', '连接'],
+];
+const sections = computed(() =>
+  values.map(([key, video]) => ({
+    key,
+    title: t(`values.sections.${key}.title`),
+    description: t(`values.sections.${key}.description`),
+    video: encodeURI(`https://tdesign.gtimg.com/site/images/${video}.mp4`),
+  })),
+);
 
 function genAnchor() {
   if (!article.value) return;
@@ -133,7 +67,7 @@ function genAnchor() {
       element.setAttribute('id', id);
       titles.push({
         id,
-        title: element.innerHTML,
+        title: element.textContent,
         level: Number(element.nodeName.substring(1, 2)),
         nodeName: element.nodeName,
         children: [],
@@ -161,6 +95,11 @@ function playAllVideo() {
 onMounted(() => {
   genAnchor();
   window.addEventListener('touchstart', playAllVideo);
+});
+
+watch(locale, async () => {
+  await nextTick();
+  genAnchor();
 });
 
 onBeforeUnmount(() => {

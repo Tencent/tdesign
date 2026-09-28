@@ -28,6 +28,7 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 import MarkdownIt from 'markdown-it';
@@ -47,14 +48,15 @@ const mdRender = new MarkdownIt({
 });
 
 const route = useRoute();
+const { locale } = useI18n({ useScope: 'global' });
 const tdDocHeader = ref();
 const release = ref([]);
 
-const formatTime = (time) => `${new Date(time).toDateString()}（${new Date(time).toLocaleDateString()}）`;
+const formatTime = (time) => new Intl.DateTimeFormat(locale.value, { dateStyle: 'long' }).format(new Date(time));
 const releaseTimeList = computed(() =>
   release.value.map((item) => ({
     title: formatTime(item.published_at),
-    id: formatTime(item.published_at).replace(/\s/g, '-'),
+    id: new Date(item.published_at).toISOString().slice(0, 10),
   })),
 );
 
