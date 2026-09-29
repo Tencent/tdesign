@@ -20,11 +20,11 @@ export default function useAnchor() {
     article.value.childNodes.forEach((element, index) => {
       if (!(element instanceof HTMLElement) || !nodes.includes(element.nodeName)) return;
 
-      const id = `header-${index}`;
+      const id = element.id || `header-${index}`;
       element.setAttribute('id', id);
       titles.push({
         id,
-        title: element.innerHTML,
+        title: element.textContent ?? '',
         level: Number(element.nodeName.substring(1, 2)),
         nodeName: element.nodeName,
         children: [],

@@ -12,26 +12,10 @@
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import type { RouteMeta } from 'vue-router';
 
 import siteConfig from '../../site.config';
 import siteEnConfig from '../../site-en.config';
-
-interface AsidePage {
-  name?: string;
-  title: string;
-  path?: string;
-  meta?: RouteMeta;
-}
-
-interface AsideRoute {
-  title: string;
-  children: AsidePage[];
-}
-
-type DocAsideElement = HTMLElement & {
-  routerList: AsideRoute[];
-};
+import type { AsideRoute, DocAsideElement } from '../types';
 
 const route = useRoute();
 const router = useRouter();

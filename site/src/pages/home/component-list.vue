@@ -43,7 +43,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
-type ThemeMode = 'light' | 'dark';
+import type { ThemeMode } from '@/pages/types';
 
 const props = withDefaults(defineProps<{ themeMode?: ThemeMode }>(), {
   themeMode: 'light',

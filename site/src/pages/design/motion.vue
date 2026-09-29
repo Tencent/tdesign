@@ -214,6 +214,7 @@ import { useI18n } from 'vue-i18n';
 import lottie, { type AnimationItem } from 'lottie-web';
 
 import messages from '../../locales/pages/design-motion-icon';
+import useAnchor from '../mixins/anchor';
 import xAxis from './assets/motion/X_Axis.json';
 import xAxisDark from './assets/motion/X_Axis_dark.json';
 import yAxis from './assets/motion/Y_Axis.json';
@@ -231,13 +232,6 @@ const { locale, t } = useI18n({ messages });
 const lottieProps = { renderer: 'svg' as const, loop: true, autoplay: true };
 const animations: AnimationItem[] = [];
 let downloadUrl: string | undefined;
-
-interface Anchor {
-  id: string;
-  title: string;
-  level: number;
-  children: Anchor[];
-}
 
 type AxisValue = 'x' | 'y' | 'z';
 type SlowValue = 'easing' | 'ease-out' | 'ease-in' | 'linear';
@@ -284,8 +278,7 @@ const checkSections = [
   },
 ];
 
-const article = ref<HTMLElement | null>(null);
-const catalog = ref<Anchor[]>([]);
+const { article, catalog, genAnchor } = useAnchor();
 const axisValue = ref<AxisValue>('x');
 const slowValue = ref<SlowValue>('easing');
 const value = ref('');
@@ -316,32 +309,6 @@ const fadeMotion = ref<HTMLElement | null>(null);
 const fadeMotionDark = ref<HTMLElement | null>(null);
 const tableCheck = ref<HTMLTableElement | null>(null);
 const downloadBtn = ref<HTMLAnchorElement | null>(null);
-
-const genAnchor = () => {
-  if (!article.value) return;
-  const titles: Anchor[] = [];
-  Array.from(article.value.children).forEach((element, index) => {
-    if (['H2', 'H3'].includes(element.nodeName)) {
-      const id = element.id || `header-${index}`;
-      element.id = id;
-      titles.push({
-        id,
-        title: element.textContent ?? '',
-        level: Number(element.nodeName.slice(1)),
-        children: [],
-      });
-    }
-  });
-  const isEveryLevel3 = titles.every((title) => title.level === 3);
-  catalog.value = titles.reduce<Anchor[]>((result, current) => {
-    if (isEveryLevel3 || current.level === 2) {
-      result.push(current);
-    } else {
-      result[result.length - 1]?.children.push(current);
-    }
-    return result;
-  }, []);
-};
 
 const loadAnimations = () => {
   const animationConfigs: Array<[Ref<HTMLElement | null>, object]> = [
@@ -383,7 +350,6 @@ const initDownloadTable = () => {
 };
 
 onMounted(() => {
-  genAnchor();
   loadAnimations();
   initDownloadTable();
 });

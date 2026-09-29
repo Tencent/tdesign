@@ -35,25 +35,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import messages from '@/locales/pages/design-basic';
 
-interface Anchor {
-  id: string;
-  title: string;
-  level: number;
-  nodeName: string;
-  children: Anchor[];
-}
+import useAnchor from '../mixins/anchor';
 
 interface ValueSection {
   key: string;
   video: string;
 }
 
-const article = ref<HTMLElement | null>(null);
-const catalog = ref<Anchor[]>([]);
+const { article, catalog, genAnchor } = useAnchor();
 const { locale, t } = useI18n({ messages });
 const values: ReadonlyArray<readonly [ValueSection['key'], ValueSection['video']]> = [
   ['inclusiveness', '包容'],
@@ -70,36 +63,6 @@ const sections = computed(() =>
   })),
 );
 
-function genAnchor() {
-  if (!article.value) return;
-  const nodes = ['H2', 'H3'];
-  const titles: Anchor[] = [];
-  article.value.childNodes.forEach((element, index) => {
-    if (element instanceof HTMLElement && nodes.includes(element.nodeName)) {
-      const id = `header-${index}`;
-      element.setAttribute('id', id);
-      titles.push({
-        id,
-        title: element.textContent ?? '',
-        level: Number(element.nodeName.substring(1, 2)),
-        nodeName: element.nodeName,
-        children: [],
-      });
-    }
-  });
-
-  const isEveryLevel3 = titles.every((title) => title.level === 3);
-  catalog.value = titles.reduce<Anchor[]>((result, current) => {
-    if (isEveryLevel3 || current.level === 2) {
-      result.push(current);
-    } else if (current.level === 3) {
-      const parent = result[result.length - 1];
-      if (parent) parent.children.push(current);
-    }
-    return result;
-  }, []);
-}
-
 function playAllVideo(_event: TouchEvent) {
   article.value?.querySelectorAll<HTMLVideoElement>('video').forEach((video) => {
     if (video.paused) video.play();
@@ -107,7 +70,6 @@ function playAllVideo(_event: TouchEvent) {
 }
 
 onMounted(() => {
-  genAnchor();
   window.addEventListener('touchstart', playAllVideo);
 });
 

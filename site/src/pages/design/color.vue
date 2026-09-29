@@ -184,28 +184,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, onMounted, reactive, ref, toRefs } from 'vue';
+import { computed, getCurrentInstance, reactive, toRefs } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import designVisualMessages from '../../locales/pages/design-visual';
-
-interface Anchor {
-  id: string;
-  title: string;
-  level: number;
-  nodeName: string;
-  children: Anchor[];
-}
-
-interface MessageApi {
-  success: (message: string) => void;
-}
-
-interface PaletteColor {
-  topTitle?: string;
-  leftTxt: string;
-  rightTxt: string;
-}
+import useAnchor from '../mixins/anchor';
+import type { MessageApi, PaletteColor } from '../types';
+import { localeArray } from '../../locales/locale-array';
 
 interface NeutralColor {
   leftTxt: string;
@@ -258,49 +243,12 @@ interface ColorPageState {
   listExpand: Record<string, PaletteColor[]>;
 }
 
-function localeArray<T>(value: unknown): T[] {
-  return Array.isArray(value) ? (value as T[]) : [];
-}
-
-const article = ref<HTMLElement | null>(null);
-const catalog = ref<Anchor[]>([]);
+const { article, catalog } = useAnchor();
 const instance = getCurrentInstance();
 if (!instance) throw new Error('color.vue must be initialized inside a component instance');
 const message = instance.appContext.config.globalProperties.$message as MessageApi;
 const { t, tm } = useI18n({ messages: designVisualMessages });
 const functionalDescription = computed(() => localeArray<string>(tm('color.functional.description')));
-
-function genAnchor() {
-  if (!article.value) return;
-  const nodes = ['H2', 'H3'];
-  const titles: Anchor[] = [];
-  article.value.childNodes.forEach((element, index) => {
-    if (element instanceof HTMLElement && nodes.includes(element.nodeName)) {
-      const id = `header-${index}`;
-      element.setAttribute('id', id);
-      titles.push({
-        id,
-        title: element.innerHTML,
-        level: Number(element.nodeName.substring(1, 2)),
-        nodeName: element.nodeName,
-        children: [],
-      });
-    }
-  });
-
-  const isEveryLevel3 = titles.every((title) => title.level === 3);
-  catalog.value = titles.reduce<Anchor[]>((result, current) => {
-    if (isEveryLevel3 || current.level === 2) {
-      result.push(current);
-    } else if (current.level === 3) {
-      const parent = result[result.length - 1];
-      if (parent) parent.children.push(current);
-    }
-    return result;
-  }, []);
-}
-
-onMounted(genAnchor);
 
 const state = reactive<ColorPageState>({
   listFeatures: {

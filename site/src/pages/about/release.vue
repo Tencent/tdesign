@@ -30,10 +30,11 @@
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
-import type { RouteMeta } from 'vue-router';
 
 import MarkdownIt from 'markdown-it';
 import mila from 'markdown-it-link-attributes';
+
+import type { DocHeaderElement } from '../types';
 
 const RELEASE_API = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/release';
 
@@ -41,10 +42,6 @@ type Release = {
   id: number | string;
   body: string;
 } & Record<'published_at', string>;
-
-interface DocHeaderElement extends HTMLElement {
-  docInfo: RouteMeta;
-}
 
 const titleReg = /<h[23]>\s*(Vue|React|Miniprogram|Flutter|Uniapp|Figma|Sketch|Axure|AdobeXD|TDesign)/g;
 

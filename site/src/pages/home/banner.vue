@@ -62,12 +62,11 @@ import * as THREE from 'three';
 // import Stats from './stats.module';
 // const stats = new Stats();
 import { CDN_BASE } from '@constants';
+import type { ThemeMode } from '@/pages/types';
 
 const WIDTH = 1056;
 const HEIGHT = 640;
 const SCALE = 15.1;
-
-type ThemeMode = 'light' | 'dark';
 
 interface AnimationActionLike {
   loop: unknown;

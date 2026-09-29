@@ -34,18 +34,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import designVisualMessages from '../../locales/pages/design-visual';
-
-interface Anchor {
-  id: string;
-  title: string;
-  level: number;
-  nodeName: string;
-  children: Anchor[];
-}
+import useAnchor from '../mixins/anchor';
+import { localeArray } from '../../locales/locale-array';
 
 interface ContentBlock {
   type: 'h2' | 'h3' | 'h4' | 'p' | 'img' | 'hr' | 'table';
@@ -75,13 +69,8 @@ interface SpanParams {
   rowIndex: number;
 }
 
-function localeArray<T>(value: unknown): T[] {
-  return Array.isArray(value) ? (value as T[]) : [];
-}
-
 const { tm } = useI18n({ messages: designVisualMessages });
-const article = ref<HTMLElement | null>(null);
-const catalog = ref<Anchor[]>([]);
+const { article, catalog } = useAnchor();
 const contentBlocks = computed(() => localeArray<ContentBlock>(tm('layout.content')));
 const dataSource = computed(() => localeArray<LayoutTableRow>(tm('layout.table.rows')));
 const columns = computed(() => localeArray<LayoutTableColumn>(tm('layout.table.columns')));
@@ -94,36 +83,6 @@ const getLayoutImage = (image?: string): string | undefined =>
 const rowKey = 'cut';
 const size = 'small';
 
-const genAnchor = () => {
-  if (!article.value) return;
-  const nodes = ['H2', 'H3'];
-  const titles: Anchor[] = [];
-  article.value.childNodes.forEach((element, index) => {
-    if (element instanceof HTMLElement && nodes.includes(element.nodeName)) {
-      const id = `header-${index}`;
-      element.setAttribute('id', id);
-      titles.push({
-        id,
-        title: element.innerHTML,
-        level: Number(element.nodeName.substring(1, 2)),
-        nodeName: element.nodeName,
-        children: [],
-      });
-    }
-  });
-
-  const isEveryLevel3 = titles.every((title) => title.level === 3);
-  catalog.value = titles.reduce<Anchor[]>((result, current) => {
-    if (isEveryLevel3 || current.level === 2) {
-      result.push(current);
-    } else if (current.level === 3) {
-      const parent = result[result.length - 1];
-      if (parent) parent.children.push(current);
-    }
-    return result;
-  }, []);
-};
-
 const rowspanAndColspan = ({ col, rowIndex }: SpanParams): { rowspan: number } | undefined => {
   if (col.colKey === 'colWidth' && rowIndex === 0) {
     return { rowspan: 3 };
@@ -132,8 +91,6 @@ const rowspanAndColspan = ({ col, rowIndex }: SpanParams): { rowspan: number } |
     return { rowspan: 2 };
   }
 };
-
-onMounted(genAnchor);
 </script>
 
 <style lang="less">

@@ -56,21 +56,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, nextTick, onMounted, reactive, ref, toRefs, watch } from 'vue';
+import { computed, getCurrentInstance, nextTick, reactive, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import messages from '@/locales/pages/design-basic';
 
-interface Anchor {
-  id: string;
-  title: string;
-  level: number;
-  nodeName: string;
-  children: Anchor[];
-}
-
-interface MessageApi {
-  success: (message: string) => void;
-}
+import useAnchor from '../mixins/anchor';
+import type { MessageApi, PaletteColor } from '../types';
 
 interface TextRow {
   index: number;
@@ -84,20 +75,13 @@ interface TextColumn {
   colKey: keyof Omit<TextRow, 'index'>;
 }
 
-interface PaletteColor {
-  topTitle?: string;
-  leftTxt: string;
-  rightTxt: string;
-}
-
 interface DarkPageState {
   dataSource: TextRow[];
   columns: TextColumn[];
   colorList: Record<string, PaletteColor[]>;
 }
 
-const article = ref<HTMLElement | null>(null);
-const catalog = ref<Anchor[]>([]);
+const { article, catalog, genAnchor } = useAnchor();
 const instance = getCurrentInstance();
 if (!instance) throw new Error('dark.vue must be initialized inside a component instance');
 const message = instance.appContext.config.globalProperties.$message as MessageApi;
@@ -110,37 +94,6 @@ const principles = computed(() =>
   })),
 );
 
-function genAnchor() {
-  if (!article.value) return;
-  const nodes = ['H2', 'H3'];
-  const titles: Anchor[] = [];
-  article.value.childNodes.forEach((element, index) => {
-    if (element instanceof HTMLElement && nodes.includes(element.nodeName)) {
-      const id = `header-${index}`;
-      element.setAttribute('id', id);
-      titles.push({
-        id,
-        title: element.textContent ?? '',
-        level: Number(element.nodeName.substring(1, 2)),
-        nodeName: element.nodeName,
-        children: [],
-      });
-    }
-  });
-
-  const isEveryLevel3 = titles.every((title) => title.level === 3);
-  catalog.value = titles.reduce<Anchor[]>((result, current) => {
-    if (isEveryLevel3 || current.level === 2) {
-      result.push(current);
-    } else if (current.level === 3) {
-      const parent = result[result.length - 1];
-      if (parent) parent.children.push(current);
-    }
-    return result;
-  }, []);
-}
-
-onMounted(genAnchor);
 watch(locale, async () => {
   await nextTick();
   genAnchor();

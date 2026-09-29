@@ -13,30 +13,14 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute, useRouter, type RouteMeta } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import siteConfig, { type SiteDoc } from '../../site.config';
 import siteEnConfig from '../../site-en.config';
-
-interface AsideRoute {
-  name?: string;
-  title: string;
-  path?: string;
-  meta?: RouteMeta;
-  children?: AsideRoute[];
-}
-
-type DocAsideElement = HTMLElement & {
-  routerList: AsideRoute[];
-};
+import type { AsideRoute, DocAsideElement, DocHeaderElement } from '../types';
 
 interface DocContentElement extends HTMLElement {
   pageStatus: 'hidden' | 'show';
-}
-
-interface DocHeaderElement extends HTMLElement {
-  docInfo: RouteMeta;
-  spline: string;
 }
 
 const route = useRoute();

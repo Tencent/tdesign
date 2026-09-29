@@ -605,6 +605,7 @@ import uniappLogo from '@/assets/uniapp-logo.png';
 import sketchLogo from '@/assets/sketch-logo.svg';
 import miniprogramLogo from '@/assets/miniprogram-logo.svg';
 import homeMessages from '@/locales/pages/home';
+import type { ThemeMode } from '@/pages/types';
 
 import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, xdWebUrl } from '@constants';
 
@@ -614,7 +615,6 @@ const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.
 
 type ResourceStatus = 0 | 1 | 2 | 3 | 4;
 type CodeFramework = 'vue' | 'vue-next' | 'react' | 'miniprogram' | 'mobile-vue' | 'mobile-react' | 'flutter';
-type ThemeMode = 'light' | 'dark';
 
 interface ResourceItem {
   logo: string;
