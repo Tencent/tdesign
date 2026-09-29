@@ -1,10 +1,13 @@
+/// <reference types="node" />
+
 import path from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+
 import tdocPlugin from './plugins/tdoc';
 import iconsManifestPlugin from './plugins/icons-manifest';
 
-const publicPathMap = {
+const publicPathMap: Record<string, string | undefined> = {
   preview: '/',
   production: 'https://static.tdesign.tencent.com/',
 };

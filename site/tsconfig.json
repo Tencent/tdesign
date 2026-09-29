@@ -23,5 +23,5 @@
       "@components/*": ["src/components/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.vue", "src/env.d.ts", "plugins/**/*.ts"]
+  "include": ["src/**/*.ts", "src/**/*.vue", "src/env.d.ts", "plugins/**/*.ts", "vite.config.ts"]
 }
