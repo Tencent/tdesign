@@ -5,6 +5,8 @@ export default {
     adjustText: '主参数调节',
     recoverConfirm: '你确定恢复 TDesign 的默认主题吗?',
     downloadTips: '已下载当前主题配置文件',
+    uploadTips: '导入 CSS',
+    uploadSuccess: '主题已导入',
   },
   color: {
     title: '色彩',
