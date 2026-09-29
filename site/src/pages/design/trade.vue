@@ -1,122 +1,102 @@
-d<template>
+<template>
   <div class="tdesign-document">
     <div class="tdesign-source-header">
       <div class="content">
-        <h1>行业组件</h1>
+        <h1>{{ t('trade.title') }}</h1>
         <div class="description">
-          <p>覆盖更多业务范围，更加个性化定制的行业组件</p>
+          <p>{{ t('trade.description') }}</p>
         </div>
-        <!-- <div class="add">
-          <a href="#">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill="currentColor" d="M7.34998 8.64998V12.5H8.64998V8.64998H12.5V7.34998H8.64998V3.5H7.34998V7.34998H3.5V8.64998H7.34998Z" />
-            </svg>
-            <span>新增行业组件</span>
-          </a>
-        </div> -->
       </div>
     </div>
     <div class="tdesign-source">
-      <div class="tdesign-trade-card power">
+      <div v-for="card in cards" :key="card.key" class="tdesign-trade-card" :class="card.className">
         <div class="info">
-          <h2 class="title">创作者商业组件</h2>
-          <p class="description">
-            创作者商业组件是QQ小世界团队面向创作者领域商业化特点沉淀的一套领域组件库，在QQ小店、小店运营平台、MCN机构平台、小世界运营平台等多个业务中使用。组件库以 TDesign 为原子组件，在此基础上根据业务特点，扩展了复合组件、块级组件、模板引擎三层架构，助力业务需求快速落地。其中模板引擎抽象了表单、表格、详情页等通用场景，形成运营领域特定语言，进一步解放需求生产力。
+          <h2 class="title">{{ t(`trade.cards.${card.key}.title`) }}</h2>
+          <p v-for="descriptionKey in card.descriptionKeys" :key="descriptionKey" class="description">
+            {{ t(`trade.cards.${card.key}.${descriptionKey}`) }}
           </p>
         </div>
-        <a href="https://pd.pages.woa.com" target="_blank">
-          <t-button size="large" class="action">查 看</t-button>
+        <a v-if="card.hasLink" :href="card.href" target="_blank">
+          <t-button size="large" class="action">{{ t('trade.actions.view') }}</t-button>
         </a>
-      </div>
-      <div class="tdesign-trade-card travel">
-        <div class="info">
-          <h2 class="title">文旅组件</h2>
-          <p class="description">
-            Tm Design
-            文旅组件是腾讯地图行业创新中心在文旅方向面向文博类、乐园类等沉淀的个性化组件，在故宫、延安、广东党建等KA及微信九宫格出行等产品中落地，致力于为业务提供美好的产品设计语言和用户体验。
-          </p>
-        </div>
-        <a href="http://tmdesign.pages.oa.com/" target="_blank">
-          <t-button size="large" class="action">查 看</t-button>
-        </a>
-      </div>
-      <div class="tdesign-trade-card education">
-        <div class="info">
-          <h2 class="title">教育组件</h2>
-          <p class="description">
-            EDesign
-            教育行业组件是在教育领域沉淀的具有教育行业属性的复合功能组件。期望通过简单的配置和功能集成的高阶组件，完成教育行业通用页面的搭建和开发，比如常见表单页面、列表页面、组织架构树的创建等，让教育行业 to b 项目开发更快速更便捷。
-          </p>
-        </div>
-        <a href="https://v.campus.qq.com/edu-design/guide/quickstart.html" target="_blank">
-          <t-button size="large" class="action">查 看</t-button>
-        </a>
-      </div>
-      <div class="tdesign-trade-card health">
-        <div class="info">
-          <h2 class="title">医疗健康组件</h2>
-          <p class="description">
-            CareDesign 医疗健康组件是腾讯在医疗健康领域服务行业场景，具有医疗属性、符合健康服务多角色诉求的设计组件。医疗健康组件跨终端、可适配、可扩展，并且已在医疗服务线上触达、医保电子凭证、电子健康卡、医疗保障惠民服务、医疗大数据可视化辅助决策平台、医院管理、临床辅助诊疗等产品中有效的验证和落地。
-          </p>
-        </div>
-        <a href="https://caredesign.tencent.com/design-code/vue-pc/default" target="_blank">
-          <t-button size="large" class="action">查 看</t-button>
-        </a>
-      </div>
-      <div class="tdesign-trade-card safe">
-        <div class="info">
-          <h2 class="title">安全组件</h2>
-          <p class="description">
-            安全组件是腾讯企业安全团队基于行业场景标准化沉淀的应用组件。组件具备满足“预防、检测、防御、响应”功能闭环的安全场景需求；符合安全行业标准以及运维的使用诉求，可通过简单配置来满足业务的构建和扩展，让开发更加高效。
-            组件现已在腾讯安全运营中心、零信任、主机安全、云防火墙、DDOS、WAF、数据安全、内容安全等云上多款基础安全以及业务安全产品中得到有效验证，并且落地使用。
-          </p>
-        </div>
-        <a :href="safeTeamUrl" target="_blank">
-          <t-button size="large" class="action">查 看</t-button>
-        </a>
-      </div>
-      <div class="tdesign-trade-card political">
-        <div class="info">
-          <h2 class="title">政务组件</h2>
-          <p class="description">
-            是腾讯政务领域具有政务功能模式，特性的组件。其中如行政区划，组织机构选择等专为政务场景设计的复合功能组件等；政务行业组件现已在一网统管、城市体征、营商通、数据中台、AI中台、G端办公平台等产品中有效的验证和落地。
-          </p>
-        </div>
-        <t-button size="large" class="action" theme="default" disabled>敬请期待</t-button>
-      </div>
-      <div class="tdesign-trade-card map">
-        <div class="info">
-          <h2 class="title">地图组件</h2>
-          <p class="description">地图行业组件提供基于地图的操作或展示型组件，包括地图点标记、地图操作控件等。</p>
-          <p class="description">支持在地图上标记多个或多类位置，同时支持流畅的缩放、旋转及俯仰角精准控制等操作。</p>
-        </div>
-        <t-button size="large" class="action" theme="default" disabled>敬请期待</t-button>
+        <t-button v-else size="large" class="action" theme="default" disabled>
+          {{ t('trade.actions.comingSoon') }}
+        </t-button>
       </div>
     </div>
     <td-doc-footer :style="footerStyle" />
   </div>
 </template>
 
-<script>
-const safeTeamUrl = import.meta.env.VITE_SAFE_TEAM_URL;
+<script setup lang="ts">
+import { computed, type CSSProperties } from 'vue';
+import { useI18n } from 'vue-i18n';
+import messages from '@/locales/pages/trade';
 
-export default {
-  data() {
-    return {
-      safeTeamUrl
-    };
-  },
-  computed: {
-    footerStyle () {
-      return {
-        '--content-padding-right': '0',
-        '--content-max-width': '1440px',
-        '--content-padding-left-right': '48px',
-        '--footer-logo-position': 'unset'
-      }
-    }
-  }
+interface TradeCard {
+  key: string;
+  className: string;
+  descriptionKeys: string[];
+  hasLink?: boolean;
+  href?: string;
 }
+
+const safeTeamUrl: string | undefined = import.meta.env.VITE_SAFE_TEAM_URL;
+const { t } = useI18n({ messages });
+const cards: TradeCard[] = [
+  {
+    key: 'creatorCommerce',
+    className: 'power',
+    descriptionKeys: ['description'],
+    hasLink: true,
+    href: 'https://pd.pages.woa.com',
+  },
+  {
+    key: 'travel',
+    className: 'travel',
+    descriptionKeys: ['description'],
+    hasLink: true,
+    href: 'http://tmdesign.pages.oa.com/',
+  },
+  {
+    key: 'education',
+    className: 'education',
+    descriptionKeys: ['description'],
+    hasLink: true,
+    href: 'https://v.campus.qq.com/edu-design/guide/quickstart.html',
+  },
+  {
+    key: 'healthcare',
+    className: 'health',
+    descriptionKeys: ['description'],
+    hasLink: true,
+    href: 'https://caredesign.tencent.com/design-code/vue-pc/default',
+  },
+  {
+    key: 'security',
+    className: 'safe',
+    descriptionKeys: ['description'],
+    hasLink: true,
+    href: safeTeamUrl,
+  },
+  {
+    key: 'government',
+    className: 'political',
+    descriptionKeys: ['description'],
+  },
+  {
+    key: 'map',
+    className: 'map',
+    descriptionKeys: ['descriptions[0]', 'descriptions[1]'],
+  },
+];
+
+const footerStyle = computed<CSSProperties>(() => ({
+  '--content-padding-right': '0',
+  '--content-max-width': '1440px',
+  '--content-padding-left-right': '48px',
+  '--footer-logo-position': 'unset',
+}));
 </script>
 
 <style lang="less">
@@ -207,7 +187,7 @@ export default {
   }
 
   &.education {
-    background-color: #E0ECE8;
+    background-color: #e0ece8;
     background-image: url(./assets/trade/education.png);
     background-size: auto 100%;
     background-position: right top;
@@ -222,7 +202,7 @@ export default {
   }
 
   &.health {
-    background-color: #EBF4FF;
+    background-color: #ebf4ff;
     background-image: url(./assets/trade/health.png);
     background-size: auto 100%;
     background-position: right top;
@@ -230,7 +210,7 @@ export default {
   }
 
   &.safe {
-    background-color: #EBF4FF;
+    background-color: #ebf4ff;
     background-image: url(./assets/trade/safe.png);
     background-size: auto 100%;
     background-position: right top;

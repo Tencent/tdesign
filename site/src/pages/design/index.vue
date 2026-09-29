@@ -10,59 +10,84 @@
   </td-doc-layout>
 </template>
 
-<script>
-import siteEnConfig from '../../site-en.config'
+<script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
-const { docs: designDocs } = JSON.parse(JSON.stringify(siteEnConfig.design).replace(/component:.+/g, ''))
+import siteConfig, { type SiteDoc } from '../../site.config';
+import siteEnConfig from '../../site-en.config';
+import type { AsideRoute, DocAsideElement, DocHeaderElement } from '../types';
 
-export default {
-  data () {
-    return {
-      timer: null
-    }
-  },
-
-  computed: {
-    asideList () {
-      if (this.$route.path.includes('/design-en')) return designDocs
-      return designDocs
-    }
-  },
-  watch: {
-    $route (v) {
-      this.$refs.tdDocContent.pageStatus = 'hidden'
-
-      requestAnimationFrame(() => {
-        this.initDocHeader()
-        this.$refs.tdDocContent.pageStatus = 'show'
-      })
-    }
-  },
-
-  mounted () {
-    this.$refs.tdDocAside.routerList = this.asideList
-    this.$refs.tdDocAside.onchange = ({ detail }) => {
-      if (this.$route.path === detail) return
-      this.$router.push(detail)
-      window.scrollTo(0, 0)
-    }
-
-    this.initDocHeader()
-    this.$refs.tdDocContent.pageStatus = 'show'
-  },
-  methods: {
-    initDocHeader () {
-      const { meta } = this.$route
-
-      if (this.$route.path.includes('/design/')) {
-        clearTimeout(this.timer)
-        this.$refs.tdDocHeader.docInfo = meta
-        this.$refs.tdDocHeader.spline = ''
-        this.timer = setTimeout(() => {
-          this.$refs.tdDocHeader.spline = meta.spline || ''
-        }, 500)
-      }
-    }
-  }
+interface DocContentElement extends HTMLElement {
+  pageStatus: 'hidden' | 'show';
 }
+
+const route = useRoute();
+const router = useRouter();
+const { locale } = useI18n();
+const tdDocAside = ref<DocAsideElement | null>(null);
+const tdDocContent = ref<DocContentElement | null>(null);
+const tdDocHeader = ref<DocHeaderElement | null>(null);
+const asideList = computed<AsideRoute[]>(() => {
+  const { docs } = (locale.value === 'en-US' ? siteEnConfig : siteConfig).design;
+  const toAsideRoutes = (items: SiteDoc[]): AsideRoute[] =>
+    items.map(({ name, title, path, meta, children }) => ({
+      name,
+      title,
+      path,
+      meta,
+      children: children ? toAsideRoutes(children) : undefined,
+    }));
+  return toAsideRoutes(docs);
+});
+let timer: ReturnType<typeof setTimeout> | undefined;
+
+const initDocHeader = () => {
+  const { meta } = route;
+
+  if (route.path.includes('/design/') && tdDocHeader.value) {
+    if (timer) clearTimeout(timer);
+    const header = tdDocHeader.value;
+    header.docInfo = meta;
+    header.spline = '';
+    timer = setTimeout(() => {
+      header.spline = typeof meta.spline === 'string' ? meta.spline : '';
+    }, 500);
+  }
+};
+
+watch(route, () => {
+  if (!tdDocContent.value) return;
+  tdDocContent.value.pageStatus = 'hidden';
+
+  requestAnimationFrame(() => {
+    if (!tdDocContent.value) return;
+    initDocHeader();
+    tdDocContent.value.pageStatus = 'show';
+  });
+});
+
+watch(asideList, (list) => {
+  if (tdDocAside.value) tdDocAside.value.routerList = list;
+});
+
+onMounted(() => {
+  if (!tdDocAside.value || !tdDocContent.value) return;
+
+  tdDocAside.value.routerList = asideList.value;
+  tdDocAside.value.onchange = (event: Event) => {
+    const { detail } = event as CustomEvent<string>;
+    if (route.path === detail) return;
+    router.push(detail);
+    window.scrollTo(0, 0);
+  };
+
+  initDocHeader();
+  tdDocContent.value.pageStatus = 'show';
+});
+
+onBeforeUnmount(() => {
+  if (timer) clearTimeout(timer);
+});
 </script>

@@ -7,12 +7,38 @@
         <div class="banner-info__left">
           <h2 class="name">
             <p class="primary">TDesign</p>
+            <div style="display: flex">
+              <p class="sub-title">{{ t('home.hero.subtitle') }}</p>
+              <t-popconfirm :popup-props="{ trigger: 'hover' }" placement="top-left">
+                <t-tag class="tds-intro-button" theme="primary" style="height: 24px; cursor: pointer">{{
+                  t('home.hero.alliance.title')
+                }}</t-tag>
+                <template #content>
+                  <div class="tds-intro">
+                    <h4>{{ t('home.hero.alliance.title') }}</h4>
+                    <p>{{ t('home.hero.alliance.description') }}</p>
+                  </div>
+                </template>
+                <template #icon><div /></template>
+                <template #cancelBtn><div /></template>
+                <template #confirmBtn>
+                  <t-button
+                    size="small"
+                    style="margin-left: 8px"
+                    @click="() => handleIntroClick('https://tds.qq.com/?from=tdesign')"
+                    >{{ t('home.hero.alliance.details') }}</t-button
+                  >
+                </template>
+              </t-popconfirm>
+            </div>
           </h2>
         </div>
         <t-popup trigger="click" placement="left" overlay-inner-class-name="wechat-qrcode" :z-index="100">
           <div class="banner-booking">
             <img src="./assets/tdesign-profile.png" />
-            <div class="banner-booking__info">follow TDesign wechat account</div>
+            <div class="banner-booking__info">
+              {{ windowWidth > 960 ? t('home.hero.followWechat') : t('home.hero.followWechatCompact') }}
+            </div>
           </div>
           <template #content><img width="100" src="https://tdesign.gtimg.com/site/wechat-account.png" /></template>
         </t-popup>
@@ -27,33 +53,32 @@
       <div class="module-intro">
         <div class="item web">
           <div class="steps-image" @mouseenter="stepsStart($event, 0)" @mouseleave="stepsEnd($event, 0)"></div>
-          <p class="tag">Solution</p>
-          <h3 class="title">Desktop</h3>
+          <p class="tag">{{ t('home.solution.label') }}</p>
+          <h3 class="title">{{ t('home.solution.desktop') }}</h3>
           <div class="mask"></div>
 
           <div class="module-intro__content">
             <div class="source">
-              <div class="content-name">Development Resources</div>
+              <div class="content-name">{{ t('home.solution.developmentResources') }}</div>
               <div class="content-list">
                 <div
                   class="content-item"
                   :class="{ disabled: !item.status }"
                   v-for="item in sourceList"
-                  :key="item.name"
+                  :key="item.nameKey"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
-                  <span>{{ item.name }}</span>
+                  <span>{{ t(item.nameKey) }}</span>
                   <span
                     :class="{
                       'content-tag': true,
                       disabled: !item.status,
-                      stable: item.status === 1,
                       alpha: item.status === 2,
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -61,28 +86,27 @@
             <div class="divider"></div>
 
             <div class="design">
-              <div class="content-name">Design Resources</div>
+              <div class="content-name">{{ t('home.solution.designResources') }}</div>
               <div class="content-list">
                 <div
                   class="content-item"
                   :class="{ disabled: !item.status }"
                   v-for="item in designList"
-                  :key="item.name"
+                  :key="item.nameKey"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
-                  <span>{{ item.name }}</span>
+                  <span>{{ t(item.nameKey) }}</span>
                   <span
                     v-if="item.status !== 1"
                     :class="{
                       'content-tag': true,
                       disabled: !item.status,
-                      stable: item.status === 1,
                       alpha: item.status === 2,
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -92,34 +116,33 @@
 
         <div class="item mobile">
           <div class="steps-image" @mouseenter="stepsStart($event, 1)" @mouseleave="stepsEnd($event, 1)"></div>
-          <p class="tag">Solution</p>
-          <h3 class="title">Mobile</h3>
+          <p class="tag">{{ t('home.solution.label') }}</p>
+          <h3 class="title">{{ t('home.solution.mobile') }}</h3>
           <div class="mask"></div>
 
           <div class="module-intro__content">
             <div class="source">
-              <div class="content-name">Development Resources</div>
+              <div class="content-name">{{ t('home.solution.developmentResources') }}</div>
               <div class="content-list">
                 <div
                   class="content-item"
                   :class="{ disabled: !item.status }"
                   v-for="item in mobileSourceList"
-                  :key="item.name"
+                  :key="item.nameKey"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
-                  <span>{{ item.name }}</span>
+                  <span>{{ t(item.nameKey) }}</span>
                   <span
                     v-if="item.status !== 1"
                     :class="{
                       'content-tag': true,
                       disabled: !item.status,
-                      stable: item.status === 1,
                       alpha: item.status === 2,
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -127,28 +150,27 @@
             <div class="divider"></div>
 
             <div class="design">
-              <div class="content-name">Design Resources</div>
+              <div class="content-name">{{ t('home.solution.designResources') }}</div>
               <div class="content-list">
                 <div
                   class="content-item"
                   :class="{ disabled: !item.status }"
                   v-for="item in mobileDesignList"
-                  :key="item.name"
+                  :key="item.nameKey"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
-                  <span>{{ item.name }}</span>
+                  <span>{{ t(item.nameKey) }}</span>
                   <span
                     v-if="item.status !== 1"
                     :class="{
                       'content-tag': true,
                       disabled: !item.status,
-                      stable: item.status === 1,
                       alpha: item.status === 2,
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -157,33 +179,32 @@
         </div>
         <div class="item miniapp">
           <div class="steps-image" @mouseenter="stepsStart($event, 2)" @mouseleave="stepsEnd($event, 2)"></div>
-          <p class="tag">Solution</p>
-          <h3 class="title">MiniProgram</h3>
+          <p class="tag">{{ t('home.solution.label') }}</p>
+          <h3 class="title">{{ t('home.solution.miniprogram') }}</h3>
           <div class="mask"></div>
 
           <div class="module-intro__content">
             <div class="source">
-              <div class="content-name">Development Resources</div>
+              <div class="content-name">{{ t('home.solution.developmentResources') }}</div>
               <div class="content-list">
                 <div
                   class="content-item"
                   :class="{ disabled: !item.status }"
                   v-for="item in miniSourceList"
-                  :key="item.name"
+                  :key="item.nameKey"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
-                  <span>{{ item.name }}</span>
+                  <span>{{ t(item.nameKey) }}</span>
                   <span
                     :class="{
                       'content-tag': true,
                       disabled: !item.status,
-                      stable: item.status === 1,
                       alpha: item.status === 2,
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -191,28 +212,27 @@
             <div class="divider"></div>
 
             <div class="design">
-              <div class="content-name">Design Resources</div>
+              <div class="content-name">{{ t('home.solution.designResources') }}</div>
               <div class="content-list">
                 <div
                   class="content-item"
                   :class="{ disabled: !item.status }"
                   v-for="item in mobileDesignList"
-                  :key="item.name"
+                  :key="item.nameKey"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
-                  <span>{{ item.name }}</span>
+                  <span>{{ t(item.nameKey) }}</span>
                   <span
                     v-if="item.status !== 1"
                     :class="{
                       'content-tag': true,
                       disabled: !item.status,
-                      stable: item.status === 1,
                       alpha: item.status === 2,
                       beta: item.status === 3,
                       rc: item.status === 4,
                     }"
-                    >{{ item.status | statusText }}</span
+                    >{{ statusText(item.status) }}</span
                   >
                 </div>
               </div>
@@ -225,15 +245,21 @@
     <!-- swiper tabs -->
     <div class="module-board module-board__tabs">
       <div class="module-board__content" @click="currentTab = 0">
-        <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 0 }]">Open</h3>
+        <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 0 }]">
+          {{ t('home.tabs.open') }}
+        </h3>
         <div class="line" v-if="currentTab === 0"></div>
       </div>
       <div class="module-board__content" @click="currentTab = 1">
-        <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 1 }]">Creation</h3>
+        <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 1 }]">
+          {{ t('home.tabs.creation') }}
+        </h3>
         <div class="line" v-if="currentTab === 1"></div>
       </div>
       <div class="module-board__content" @click="currentTab = 2">
-        <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 2 }]">Corporation</h3>
+        <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 2 }]">
+          {{ t('home.tabs.corporation') }}
+        </h3>
         <div class="line" v-if="currentTab === 2"></div>
       </div>
     </div>
@@ -250,7 +276,7 @@
         >
           <div class="module-board__detail">
             <div class="code-board">
-              <t-radio-group class="code-tab" variant="default-filled" v-model="codeFramework">
+              <t-radio-group v-model="codeFramework" class="code-tab" variant="default-filled" size="large">
                 <t-radio-button value="vue">vue</t-radio-button>
                 <t-radio-button value="vue-next">vue-next</t-radio-button>
                 <t-radio-button value="react">react</t-radio-button>
@@ -262,7 +288,7 @@
 
               <ul class="code-list">
                 <li class="code-item" v-for="item in codeList[codeFramework]" :key="item.code">
-                  <pre><code :class="[`language-${item.type}`]">{{ item.code }}</code></pre>
+                  <pre><code :class="[`language-${item.type}`]">{{ displayCode(item) }}</code></pre>
                 </li>
               </ul>
             </div>
@@ -272,24 +298,24 @@
             <ul class="desc-list">
               <li class="desc-item">
                 <icon class="desc-icon" name="fork" />
-                <h3 class="desc-title">Multiple-framework versions</h3>
-                <p class="desc-text">Support popular tech stacks React/Vue/MiniProgram/Flutter</p>
+                <h3 class="desc-title">{{ t('home.open.features.frameworks.title') }}</h3>
+                <p class="desc-text">{{ t('home.open.features.frameworks.description') }}</p>
               </li>
               <li class="desc-item">
                 <icon class="desc-icon" name="desktop" />
-                <h3 class="desc-title">Multi-platform compatibility</h3>
-                <p class="desc-text">Provide two sets of component resources in unified desktop and mobile styles.</p>
+                <h3 class="desc-title">{{ t('home.open.features.platforms.title') }}</h3>
+                <p class="desc-text">{{ t('home.open.features.platforms.description') }}</p>
               </li>
               <li class="desc-item">
                 <icon class="desc-icon" name="precise-monitor" />
-                <h3 class="desc-title">Industry-specific component libraries</h3>
-                <p class="desc-text">Developed by multiple Tencent business teams based on a unified design system.</p>
+                <h3 class="desc-title">{{ t('home.open.features.industries.title') }}</h3>
+                <p class="desc-text">{{ t('home.open.features.industries.description') }}</p>
               </li>
             </ul>
           </div>
           <div class="module-board__card-desc" v-if="currentTab === 0">
-            <h3 class="title">Open Resources, Continuous Iteration</h3>
-            <p class="desc">always maintain an open mindset and look forward to building an open source ecosystem</p>
+            <h3 class="title">{{ t('home.open.title') }}</h3>
+            <p class="desc">{{ t('home.open.description') }}</p>
           </div>
         </div>
 
@@ -304,18 +330,22 @@
           <div class="module-board__detail">
             <div class="component-board">
               <div class="component-board-item">
-                <t-input clearable placeholder="Please enter account">
-                  <desktop-icon slot="prefix-icon"></desktop-icon>
+                <t-input clearable :placeholder="t('home.componentDemo.accountPlaceholder')">
+                  <template #prefixIcon><desktop-icon /></template>
                 </t-input>
-                <t-select v-model="componentModel.selectValue" multiple placeholder="请选择">
+                <t-select
+                  v-model="componentModel.selectValue"
+                  multiple
+                  :placeholder="t('home.componentDemo.selectPlaceholder')"
+                >
                   <t-option
-                    v-for="item in componentModel.selectOptions"
+                    v-for="item in componentSelectOptions"
                     :value="item.value"
                     :label="item.label"
                     :key="item.value"
                   ></t-option>
                 </t-select>
-                <t-tree :data="componentModel.treeData" hover checkable expand-all />
+                <t-tree :data="componentTreeData" hover checkable expand-all />
               </div>
               <div class="component-board-item">
                 <t-menu
@@ -340,48 +370,52 @@
                       alt="logo"
                     />
                   </template>
-                  <t-submenu title="Dashboard" value="dashboard">
+                  <t-submenu :title="t('home.componentDemo.menu.dashboard')" value="dashboard">
                     <template #icon>
                       <icon name="dashboard" />
                     </template>
-                    <t-menu-item value="dashboard/base">Dashboard</t-menu-item>
-                    <t-menu-item value="dashboard/detail">Report</t-menu-item>
+                    <t-menu-item value="dashboard/base">{{
+                      t('home.componentDemo.menu.dashboardOverview')
+                    }}</t-menu-item>
+                    <t-menu-item value="dashboard/detail">{{ t('home.componentDemo.menu.report') }}</t-menu-item>
                   </t-submenu>
-                  <t-submenu title="List" value="list">
+                  <t-submenu :title="t('home.componentDemo.menu.list')" value="list">
                     <template #icon>
                       <icon name="server" />
                     </template>
-                    <t-menu-item value="list/base">List Page</t-menu-item>
-                    <t-menu-item value="list/card">Card List</t-menu-item>
-                    <t-menu-item value="list/select">Filter List</t-menu-item>
-                    <t-menu-item value="list/tree">Tree List</t-menu-item>
+                    <t-menu-item value="list/base">{{ t('home.componentDemo.menu.baseList') }}</t-menu-item>
+                    <t-menu-item value="list/card">{{ t('home.componentDemo.menu.cardList') }}</t-menu-item>
+                    <t-menu-item value="list/select">{{ t('home.componentDemo.menu.filterList') }}</t-menu-item>
+                    <t-menu-item value="list/tree">{{ t('home.componentDemo.menu.treeList') }}</t-menu-item>
                   </t-submenu>
-                  <t-submenu title="Form" value="form">
+                  <t-submenu :title="t('home.componentDemo.menu.form')" value="form">
                     <template #icon>
                       <icon name="root-list" />
                     </template>
-                    <t-menu-item value="form/base">Base Form</t-menu-item>
-                    <t-menu-item value="form/step">Step Form</t-menu-item>
+                    <t-menu-item value="form/base">{{ t('home.componentDemo.menu.baseForm') }}</t-menu-item>
+                    <t-menu-item value="form/step">{{ t('home.componentDemo.menu.stepForm') }}</t-menu-item>
                   </t-submenu>
-                  <t-submenu title="Detail" value="detail">
+                  <t-submenu :title="t('home.componentDemo.menu.detail')" value="detail">
                     <template #icon>
                       <icon name="control-platform" />
                     </template>
-                    <t-menu-item value="detail/base">Detail</t-menu-item>
-                    <t-menu-item value="detail/advanced">Advanced</t-menu-item>
-                    <t-menu-item value="detail/deploy">Deploy Page</t-menu-item>
-                    <t-menu-item value="detail/secondary">Secondary</t-menu-item>
+                    <t-menu-item value="detail/base">{{ t('home.componentDemo.menu.baseDetail') }}</t-menu-item>
+                    <t-menu-item value="detail/advanced">{{ t('home.componentDemo.menu.advancedDetail') }}</t-menu-item>
+                    <t-menu-item value="detail/deploy">{{ t('home.componentDemo.menu.deployDetail') }}</t-menu-item>
+                    <t-menu-item value="detail/secondary">{{
+                      t('home.componentDemo.menu.secondaryDetail')
+                    }}</t-menu-item>
                   </t-submenu>
                 </t-menu>
               </div>
               <div class="component-board-item">
                 <div class="component-board-item-row">
                   <t-button>
-                    <icon name="file" slot="icon" />
-                    Primary Button
+                    <template #icon><icon name="file" /></template>
+                    {{ t('home.componentDemo.primaryButton') }}
                   </t-button>
-                  <t-button theme="default">Button</t-button>
-                  <t-button theme="default">Button</t-button>
+                  <t-button theme="default">{{ t('home.componentDemo.button') }}</t-button>
+                  <t-button theme="default">{{ t('home.componentDemo.button') }}</t-button>
                 </div>
                 <div class="component-board-item-row">
                   <t-slider v-model="componentModel.sliderValue" :inputNumberProps="false" />
@@ -389,14 +423,14 @@
                 <div class="component-board-item-row">
                   <t-switch size="large" :defaultValue="true" />
                   <t-switch size="large" />
-                  <t-check-tag>Checkable Tag</t-check-tag>
-                  <t-tag>Default Tag</t-tag>
+                  <t-check-tag>{{ t('home.componentDemo.checkableTag') }}</t-check-tag>
+                  <t-tag>{{ t('home.componentDemo.defaultTag') }}</t-tag>
                 </div>
                 <div>
                   <t-radio-group defaultValue="1" variant="default-filled">
-                    <t-radio-button value="1">Light</t-radio-button>
-                    <t-radio-button value="2">Dark</t-radio-button>
-                    <t-radio-button value="3">Neutral</t-radio-button>
+                    <t-radio-button value="1">{{ t('home.componentDemo.light') }}</t-radio-button>
+                    <t-radio-button value="2">{{ t('home.componentDemo.dark') }}</t-radio-button>
+                    <t-radio-button value="3">{{ t('home.componentDemo.neutral') }}</t-radio-button>
                   </t-radio-group>
                 </div>
                 <div class="color-block-wrapper">
@@ -404,7 +438,7 @@
                     class="color-block"
                     v-for="color in componentModel.colorList1"
                     :key="color"
-                    :style="{ background: [color] }"
+                    :style="{ background: color }"
                   ></span>
                 </div>
                 <div class="color-block-wrapper">
@@ -412,7 +446,7 @@
                     class="color-block"
                     v-for="color in componentModel.colorList2"
                     :key="color"
-                    :style="{ background: [color] }"
+                    :style="{ background: color }"
                   ></span>
                 </div>
               </div>
@@ -423,31 +457,24 @@
             <ul class="desc-list">
               <li class="desc-item">
                 <icon class="desc-icon" name="tips" />
-                <h3 class="desc-title">Scalable Design Style</h3>
-                <p class="desc-text">
-                  Abstracted design styles into Design Tokens to meet the brand customization needs of different
-                  products.
-                </p>
+                <h3 class="desc-title">{{ t('home.creation.features.scalable.title') }}</h3>
+                <p class="desc-text">{{ t('home.creation.features.scalable.description') }}</p>
               </li>
               <li class="desc-item">
                 <icon class="desc-icon" name="chart-bubble" />
-                <h3 class="desc-title">Variety of Design Resources</h3>
-                <p class="desc-text">
-                  Provide variety of design resources for desktop and mobile application such as Sketch/Figma
-                </p>
+                <h3 class="desc-title">{{ t('home.creation.features.resources.title') }}</h3>
+                <p class="desc-text">{{ t('home.creation.features.resources.description') }}</p>
               </li>
               <li class="desc-item">
                 <icon class="desc-icon" name="file-image" />
-                <h3 class="desc-title">Professional Design Guidelines</h3>
-                <p class="desc-text">
-                  Summarize design experience into guidelines to assist users in properly using components.
-                </p>
+                <h3 class="desc-title">{{ t('home.creation.features.guidelines.title') }}</h3>
+                <p class="desc-text">{{ t('home.creation.features.guidelines.description') }}</p>
               </li>
             </ul>
           </div>
           <div class="module-board__card-desc" v-if="currentTab === 1">
-            <h3 class="title">Inclusive, flexible, and easy-to-use</h3>
-            <p class="desc">Maintain a keen sense of design, seeking commonalities in complex business scenarios</p>
+            <h3 class="title">{{ t('home.creation.title') }}</h3>
+            <p class="desc">{{ t('home.creation.description') }}</p>
           </div>
         </div>
         <div
@@ -466,8 +493,8 @@
                 ref="topAvatars"
                 v-for="(item, index) in topContributors"
                 :key="index + 'top'"
-                :href="item | githubUrl"
-                :src="item | githubAvatar"
+                :href="githubUrl(item)"
+                :src="githubAvatar(item)"
               />
             </div>
           </div>
@@ -482,21 +509,14 @@
                 ref="bottomAvatars"
                 v-for="(item, index) in bottomContributors"
                 :key="index + 'bottom'"
-                :href="item | githubUrl"
-                :src="item | githubAvatar"
+                :href="githubUrl(item)"
+                :src="githubAvatar(item)"
               />
             </div>
           </div>
           <div class="module-board__card-desc">
-            <h3 class="title">TDesign is a collective effort, with 400+ contributors from 60+ teams</h3>
-            <p class="desc">
-              TDesign owes its birth and growth to open source. From the outset, TDesign has adhered to the principles
-              of equality, transparency, and openness in accordance with open-source collaboration. Through internal
-              open-source practices, we have brought together Tencent's best and mature component libraries for
-              co-creation and sharing.TDesign owes its birth and growth to open source. From the outset, TDesign has
-              adhered to the principles of equality, transparency, and openness in accordance with open-source
-              collaboration.
-            </p>
+            <h3 class="title">{{ t('home.contributors.title') }}</h3>
+            <p class="desc">{{ t('home.contributors.description') }}</p>
           </div>
         </div>
       </div>
@@ -507,7 +527,7 @@
         <div class="image-rope"></div>
 
         <div class="content">
-          <h3 class="module-top-title">Versatile and the top choice for businesses</h3>
+          <h3 class="module-top-title">{{ t('home.service.title') }}</h3>
           <h3 class="module-title">
             <p class="tag">
               1580
@@ -528,13 +548,8 @@
               </svg>
             </p>
           </h3>
-          <p class="module-sub-title">different industry products in use</p>
-          <p class="module-description">
-            From consumer products to financial services, from B2B to B2C products, from major brands to individual
-            developers, TDesign fully meets the needs of low-cost, efficient, and high-quality front-end design and
-            development work, helping to enhance product experience and effectively improve design and development
-            efficiency
-          </p>
+          <p class="module-sub-title">{{ t('home.service.usage') }}</p>
+          <p class="module-description">{{ t('home.service.description') }}</p>
           <div class="module-brand-wall">
             <div class="mask left" />
             <div class="mask middle" />
@@ -559,13 +574,9 @@
     <div class="module-setup">
       <img class="__light__ tdesign-flow" src="./assets/tdesign-flow-light.gif" alt="logo" />
       <img class="__dark__ tdesign-flow" src="./assets/tdesign-flow-dark.gif" alt="logo" />
-      <p class="module-title">Grow together with TDesign</p>
-      <p class="module-description">
-        Not only limited to the Tencent ecosystem, TDesign provides a more textured, stable, and sustainable experience
-        to help a wider range of industries and developers enhance product experience, improve design and development
-        efficiency, and explore more possibilities at a lower cost with TDesign
-      </p>
-      <t-button href="https://github.com/Tencent/tdesign">Get started</t-button>
+      <p class="module-title">{{ t('home.setup.title') }}</p>
+      <p class="module-description">{{ t('home.setup.description') }}</p>
+      <t-button href="https://github.com/Tencent/tdesign">{{ t('home.setup.action') }}</t-button>
     </div>
 
     <td-backtop />
@@ -573,11 +584,15 @@
   </section>
 </template>
 
-<script>
-import { DesktopIcon, Icon } from 'tdesign-icons-vue';
+<script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, reactive, ref, toRefs, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import { DesktopIcon, Icon } from 'tdesign-icons-vue-next';
 import Banner from './banner.vue';
 import Avatar from './avatar.vue';
 import ComponentList from './component-list.vue';
+// @ts-expect-error prismjs does not publish TypeScript declarations.
 import Prismjs from 'prismjs';
 
 import vueLogo from '@/assets/vue-logo.svg';
@@ -586,8 +601,11 @@ import figmaLogo from '@/assets/figma-logo.svg';
 import axLogo from '@/assets/ax-logo.svg';
 import xdLogo from '@/assets/xd-logo.svg';
 import flutterLogo from '@/assets/flutter-logo.svg';
+import uniappLogo from '@/assets/uniapp-logo.png';
 import sketchLogo from '@/assets/sketch-logo.svg';
 import miniprogramLogo from '@/assets/miniprogram-logo.svg';
+import homeMessages from '@/locales/pages/home';
+import type { ThemeMode } from '@/pages/types';
 
 import { figmaWebUrl, figmaMobileUrl, sketchWebUrl, sketchMobileUrl, axWebUrl, xdWebUrl } from '@constants';
 
@@ -595,454 +613,598 @@ const brandUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/brand/list'
 const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
 const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
 
+type ResourceStatus = 0 | 1 | 2 | 3 | 4;
+type CodeFramework = 'vue' | 'vue-next' | 'react' | 'miniprogram' | 'mobile-vue' | 'mobile-react' | 'flutter';
+
+interface ResourceItem {
+  logo: string;
+  nameKey: string;
+  href: string;
+  status: ResourceStatus;
+}
+
+interface CodeItem {
+  type: string;
+  code?: string;
+  codeKey?: string;
+}
+
+interface NewsItem {
+  title: string;
+  desc: string;
+  date: string;
+  url?: string;
+  isIntranet?: boolean;
+}
+
+interface BrandItem {
+  title: string;
+  logo: string;
+  width: string | number;
+}
+
+interface HomeState {
+  contributorCount: number;
+  currentTab: number;
+  brandList: BrandItem[];
+  newsList: NewsItem[];
+  tabTransformWidth: number;
+  contributors: string[];
+  topContributors: string[];
+  bottomContributors: string[];
+  windowWidth: number;
+  themeMode: ThemeMode;
+  stepsTimers: Array<number | undefined>;
+  stepsCounts: number[];
+  tabTimer: number | null;
+  sourceList: ResourceItem[];
+  designList: ResourceItem[];
+  mobileSourceList: ResourceItem[];
+  mobileDesignList: ResourceItem[];
+  miniSourceList: ResourceItem[];
+  codeFramework: CodeFramework;
+  codeList: Record<CodeFramework, CodeItem[]>;
+  componentModel: {
+    selectValue: string[];
+    menuExpanded: string[];
+    sliderValue: number;
+    colorList1: string[];
+    colorList2: string[];
+  };
+}
+
+interface AvatarInstance {
+  $el: HTMLElement;
+}
+
 const isIntranet = location.host.includes('woa.com'); // 部分动态或内容只能通过内网访问
 let ticking = false;
 
-export default {
-  name: 'site-home',
-  components: {
-    DesktopIcon,
-    Icon,
-    Banner,
-    Avatar,
-    ComponentList,
-  },
+const { t } = useI18n({ messages: homeMessages });
 
-  filters: {
-    githubAvatar(v) {
-      return `https://avatars.githubusercontent.com/${v}`;
+const state = reactive<HomeState>({
+  contributorCount: 8,
+  currentTab: 0,
+  brandList: [],
+  newsList: [],
+  tabTransformWidth: 0,
+  contributors: [],
+  topContributors: [],
+  bottomContributors: [],
+  windowWidth: window.innerWidth,
+  themeMode: 'light',
+  stepsTimers: [],
+  stepsCounts: [0, 0, 0],
+  tabTimer: null,
+  // status 1 上线、2 alpha、3 beta、0 待上线
+  sourceList: [
+    { logo: vueLogo, nameKey: 'home.resourceNames.vue', href: '/vue/', status: 1 },
+    { logo: vueLogo, nameKey: 'home.resourceNames.vueNext', href: '/vue-next/', status: 1 },
+    { logo: reactLogo, nameKey: 'home.resourceNames.react', href: '/react/', status: 1 },
+  ],
+  designList: [
+    {
+      logo: figmaLogo,
+      nameKey: 'home.resourceNames.figma',
+      href: figmaWebUrl,
+      status: 1,
     },
-    githubUrl(v) {
-      return `https://github.com/${v}`;
+    {
+      logo: sketchLogo,
+      nameKey: 'home.resourceNames.sketch',
+      href: sketchWebUrl,
+      status: 1,
     },
-    statusText(v) {
-      if (v === 0) return 'In Progress';
-      if (v === 1) return 'Stable';
-      if (v === 2) return 'Alpha';
-      if (v === 3) return 'Beta';
-      if (v === 4) return 'Rc';
-      return '';
+    {
+      logo: axLogo,
+      nameKey: 'home.resourceNames.axure',
+      href: axWebUrl,
+      status: 1,
     },
-  },
-
-  data() {
-    return {
-      contributorCount: 8,
-      currentTab: 0,
-      brandList: [],
-      newsList: [],
-      tabTransformWidth: 0,
-      contributors: [],
-      topContributors: [],
-      bottomContributors: [],
-      windowWidth: window.innerWidth,
-      themeMode: 'light',
-      stepsTimers: [],
-      stepsCounts: [0, 0, 0],
-      tabTimer: null,
-      // status 1 上线、2 alpha、3 beta、0 待上线
-      sourceList: [
-        { logo: vueLogo, name: 'Vue', href: '/vue/', status: 1 },
-        { logo: vueLogo, name: 'Vue Next', href: '/vue-next/', status: 1 },
-        { logo: reactLogo, name: 'React', href: '/react/', status: 1 },
-      ],
-      designList: [
-        {
-          logo: figmaLogo,
-          name: 'Figma',
-          href: figmaWebUrl,
-          status: 1,
-        },
-        {
-          logo: sketchLogo,
-          name: 'Sketch',
-          href: sketchWebUrl,
-          status: 1,
-        },
-        {
-          logo: axLogo,
-          name: 'Axure',
-          href: axWebUrl,
-          status: 1,
-        },
-        {
-          logo: xdLogo,
-          name: 'AdobeXD',
-          href: xdWebUrl,
-          status: 1,
-        },
-      ],
-      mobileSourceList: [
-        { logo: vueLogo, name: 'Vue Next', href: '/mobile-vue/', status: 1 },
-        { logo: reactLogo, name: 'React', href: '/mobile-react/', status: 2 },
-        { logo: flutterLogo, name: 'Flutter', href: '/flutter/', status: 2 },
-      ],
-      mobileDesignList: [
-        { logo: figmaLogo, name: 'Figma', href: figmaMobileUrl, status: 1 },
-        {
-          logo: sketchLogo,
-          name: 'Sketch',
-          href: sketchMobileUrl,
-          status: 1,
-        },
-      ],
-      miniSourceList: [{ logo: miniprogramLogo, name: 'Wechat MiniProgram', href: '/miniprogram/', status: 1 }],
-      codeFramework: 'vue',
-      codeList: {
-        vue: [
-          { type: 'bash', code: 'npm i tdesign-vue' },
-          { type: 'javascript', code: "import Vue from 'vue';" },
-          { type: 'javascript', code: "import TDesign from 'tdesign-vue';" },
-          { type: 'javascript', code: "import 'tdesign-vue/es/style/index.css';" },
-          { type: 'javascript', code: 'Vue.use(TDesign);' },
-        ],
-        'vue-next': [
-          { type: 'bash', code: 'npm i tdesign-vue-next' },
-          { type: 'javascript', code: "import { createApp } from 'vue';" },
-          { type: 'javascript', code: "import TDesign from 'tdesign-vue-next';" },
-          { type: 'javascript', code: "import 'tdesign-vue-next/es/style/index.css';" },
-          { type: 'javascript', code: 'createApp(App).use(TDesign);' },
-        ],
-        react: [
-          { type: 'bash', code: 'npm i tdesign-react' },
-          { type: 'javascript', code: "import { Button } from 'tdesign-react';" },
-          { type: 'javascript', code: "import 'tdesign-react/es/style/index.css';" },
-          { type: 'javascript', code: '' },
-        ],
-        miniprogram: [
-          { type: 'bash', code: 'npm i tdesign-miniprogram' },
-          { type: 'javascript', code: '{ "usingComponents": { "t-tag": "tdesign-miniprogram/tag/tag" } }' },
-          { type: 'javascript', code: '<t-tag theme="primary">重要</t-tag>' },
-          { type: 'javascript', code: '' },
-        ],
-        'mobile-vue': [
-          { type: 'bash', code: 'npm i tdesign-mobile-vue' },
-          { type: 'javascript', code: "import { createApp } from 'vue';" },
-          { type: 'javascript', code: "import TDesign from 'tdesign-mobile-vue';" },
-          { type: 'javascript', code: "import 'tdesign-mobile-vue/es/style/index.css';" },
-          { type: 'javascript', code: 'createApp(App).use(TDesign);' },
-        ],
-        'mobile-react': [
-          { type: 'bash', code: 'npm i tdesign-mobile-react' },
-          { type: 'javascript', code: "import { Button } from 'tdesign-mobile-react';" },
-          { type: 'javascript', code: "import 'tdesign-mobile-react/es/style/index.css';" },
-          { type: 'javascript', code: '' },
-        ],
-        flutter: [
-          { type: 'bash', code: 'flutter pub add tdesign_flutter' },
-          { type: 'javascript', code: "import 'package:tdesign_flutter/tdesign_flutter.dart';" },
-          {
-            type: 'javascript',
-            code: "TDTag _buildTag(BuildContext context) { return const TDTag('TDesign'); }",
-          },
-          { type: 'javascript', code: '' },
-        ],
+    {
+      logo: xdLogo,
+      nameKey: 'home.resourceNames.adobeXd',
+      href: xdWebUrl,
+      status: 1,
+    },
+  ],
+  mobileSourceList: [
+    { logo: vueLogo, nameKey: 'home.resourceNames.vueNext', href: '/mobile-vue/', status: 1 },
+    { logo: reactLogo, nameKey: 'home.resourceNames.react', href: '/mobile-react/', status: 2 },
+    { logo: uniappLogo, nameKey: 'home.resourceNames.uniapp', href: '/uniapp/', status: 2 },
+    { logo: flutterLogo, nameKey: 'home.resourceNames.flutter', href: '/flutter/', status: 2 },
+  ],
+  mobileDesignList: [
+    { logo: figmaLogo, nameKey: 'home.resourceNames.figma', href: figmaMobileUrl, status: 1 },
+    {
+      logo: sketchLogo,
+      nameKey: 'home.resourceNames.sketch',
+      href: sketchMobileUrl,
+      status: 1,
+    },
+  ],
+  miniSourceList: [
+    {
+      logo: miniprogramLogo,
+      nameKey: 'home.resourceNames.miniprogram',
+      href: '/miniprogram/',
+      status: 1,
+    },
+  ],
+  codeFramework: 'vue',
+  codeList: {
+    vue: [
+      { type: 'bash', code: 'npm i tdesign-vue' },
+      { type: 'javascript', code: "import Vue from 'vue';" },
+      { type: 'javascript', code: "import TDesign from 'tdesign-vue';" },
+      { type: 'javascript', code: "import 'tdesign-vue/es/style/index.css';" },
+      { type: 'javascript', code: 'Vue.use(TDesign);' },
+    ],
+    'vue-next': [
+      { type: 'bash', code: 'npm i tdesign-vue-next' },
+      { type: 'javascript', code: "import { createApp } from 'vue';" },
+      { type: 'javascript', code: "import TDesign from 'tdesign-vue-next';" },
+      { type: 'javascript', code: "import 'tdesign-vue-next/es/style/index.css';" },
+      { type: 'javascript', code: 'createApp(App).use(TDesign);' },
+    ],
+    react: [
+      { type: 'bash', code: 'npm i tdesign-react' },
+      { type: 'javascript', code: "import { Button } from 'tdesign-react';" },
+      { type: 'javascript', code: "import 'tdesign-react/es/style/index.css';" },
+      { type: 'javascript', code: '' },
+    ],
+    miniprogram: [
+      { type: 'bash', code: 'npm i tdesign-miniprogram' },
+      { type: 'javascript', code: '{ "usingComponents": { "t-tag": "tdesign-miniprogram/tag/tag" } }' },
+      { type: 'javascript', codeKey: 'home.code.importantTag' },
+      { type: 'javascript', code: '' },
+    ],
+    'mobile-vue': [
+      { type: 'bash', code: 'npm i tdesign-mobile-vue' },
+      { type: 'javascript', code: "import { createApp } from 'vue';" },
+      { type: 'javascript', code: "import TDesign from 'tdesign-mobile-vue';" },
+      { type: 'javascript', code: "import 'tdesign-mobile-vue/es/style/index.css';" },
+      { type: 'javascript', code: 'createApp(App).use(TDesign);' },
+    ],
+    'mobile-react': [
+      { type: 'bash', code: 'npm i tdesign-mobile-react' },
+      { type: 'javascript', code: "import { Button } from 'tdesign-mobile-react';" },
+      { type: 'javascript', code: "import 'tdesign-mobile-react/es/style/index.css';" },
+      { type: 'javascript', code: '' },
+    ],
+    flutter: [
+      { type: 'bash', code: 'flutter pub add tdesign_flutter' },
+      { type: 'javascript', code: "import 'package:tdesign_flutter/tdesign_flutter.dart';" },
+      {
+        type: 'javascript',
+        code: "TDTag _buildTag(BuildContext context) { return const TDTag('TDesign'); }",
       },
-      componentModel: {
-        selectValue: ['1'],
-        selectOptions: [
-          { label: 'Marketing Department', value: '1' },
-          { label: 'Finance Department', value: '2' },
-          { label: 'Development Department', value: '3' },
-        ],
-        menuExpanded: ['dashboard'],
-        treeData: [
-          {
-            value: '1',
-            label: 'Headquarters',
-          },
-          {
-            value: '2',
-            label: 'Huadong Region',
-            children: [
-              {
-                value: '2.1',
-                label: 'Marketing Department',
-              },
-              {
-                value: '2.2',
-                label: 'Finance Department',
-              },
-            ],
-          },
-          {
-            value: '3',
-            label: 'Huanan Region',
-            children: [
-              {
-                value: '3.1',
-                label: 'Marketing Departmen',
-              },
-              {
-                value: '3.2',
-                label: 'Finance Department',
-              },
-            ],
-          },
-        ],
-        sliderValue: 60,
-        colorList1: [
-          '#ecf2fe',
-          '#d4e3fc',
-          '#bbd3fb',
-          '#96bbf8',
-          '#699ef5',
-          '#4787f0',
-          '#266fe8',
-          '#0052d9',
-          '#0034b5',
-          '#001f97',
-        ],
-        colorList2: [
-          '#ebedf1',
-          '#e3e6eB',
-          '#d6dbe3',
-          '#bcc4d0',
-          '#97a3b7',
-          '#7787a2',
-          '#5f7292',
-          '#4b5b76',
-          '#3c485c',
-          '#2c3645',
-        ],
+      { type: 'javascript', code: '' },
+    ],
+  },
+  componentModel: {
+    selectValue: ['1'],
+    menuExpanded: ['dashboard'],
+    sliderValue: 60,
+    colorList1: [
+      '#ecf2fe',
+      '#d4e3fc',
+      '#bbd3fb',
+      '#96bbf8',
+      '#699ef5',
+      '#4787f0',
+      '#266fe8',
+      '#0052d9',
+      '#0034b5',
+      '#001f97',
+    ],
+    colorList2: [
+      '#ebedf1',
+      '#e3e6eB',
+      '#d6dbe3',
+      '#bcc4d0',
+      '#97a3b7',
+      '#7787a2',
+      '#5f7292',
+      '#4b5b76',
+      '#3c485c',
+      '#2c3645',
+    ],
+  },
+});
+
+const {
+  contributorCount,
+  currentTab,
+  brandList,
+  newsList,
+  tabTransformWidth,
+  topContributors,
+  bottomContributors,
+  windowWidth,
+  themeMode,
+  sourceList,
+  designList,
+  mobileSourceList,
+  mobileDesignList,
+  miniSourceList,
+  codeFramework,
+  codeList,
+  componentModel,
+} = toRefs(state);
+const topAvatars = ref<AvatarInstance[]>([]);
+const bottomAvatars = ref<AvatarInstance[]>([]);
+const componentSelectOptions = computed(() => [
+  { label: t('home.componentDemo.departments.marketing'), value: '1' },
+  { label: t('home.componentDemo.departments.finance'), value: '2' },
+  { label: t('home.componentDemo.departments.development'), value: '3' },
+]);
+const componentTreeData = computed(() => [
+  {
+    value: '1',
+    label: t('home.componentDemo.regions.headquarters'),
+  },
+  {
+    value: '2',
+    label: t('home.componentDemo.regions.eastChina'),
+    children: [
+      {
+        value: '2.1',
+        label: t('home.componentDemo.departments.marketing'),
       },
-    };
-  },
-
-  computed: {
-    footerStyle() {
-      return {
-        '--content-padding-right': '0',
-        '--content-max-width': '1440px',
-        '--content-padding-left-right': '48px',
-        '--footer-inner-position': 'relative',
-        '--footer-logo-position': 'unset',
-      };
-    },
-  },
-
-  watch: {
-    currentTab: {
-      handler(tab) {
-        if (this.windowWidth >= 888) {
-          if (tab === 0) this.tabTransformWidth = 0;
-          else if (tab === 1) this.tabTransformWidth = 1048;
-          else this.tabTransformWidth = 1048 + 480 + this.windowWidth * 0.5;
-        } else {
-          if (tab === 0) this.tabTransformWidth = 0;
-          else if (tab === 1) this.tabTransformWidth = this.windowWidth - 20;
-          else this.tabTransformWidth = this.windowWidth * 2;
-        }
+      {
+        value: '2.2',
+        label: t('home.componentDemo.departments.finance'),
       },
-    },
-    codeFramework: {
-      immediate: true,
-      handler() {
-        requestAnimationFrame(() => {
-          Prismjs.highlightAll();
-        });
+    ],
+  },
+  {
+    value: '3',
+    label: t('home.componentDemo.regions.southChina'),
+    children: [
+      {
+        value: '3.1',
+        label: t('home.componentDemo.departments.marketing'),
       },
-    },
-    windowWidth: {
-      immediate: true,
-      handler(v) {
-        if (v > 750 && v < 960) {
-          this.contributorCount = 6;
-        } else if (v < 750) {
-          this.contributorCount = 3;
-        } else {
-          this.contributorCount = 8;
-        }
+      {
+        value: '3.2',
+        label: t('home.componentDemo.departments.finance'),
       },
-    },
-    contributorCount() {
-      clearInterval(this.randomTimer);
-      clearInterval(this.avatarTimer);
-      this.changeContributors();
-    },
+    ],
   },
+]);
+const footerStyle = computed(() => ({
+  '--content-padding-right': '0',
+  '--content-max-width': '1440px',
+  '--content-padding-left-right': '48px',
+  '--footer-inner-position': 'relative',
+  '--footer-logo-position': 'unset',
+}));
+let randomTimer: number | undefined;
+let avatarTimer: number | undefined;
+let observer: MutationObserver | null = null;
 
-  mounted() {
-    this.watchHtmlMode();
-    this.fetchContributors();
-    this.getBrandList();
-    this.getNews();
-    window.addEventListener('resize', this.handleResize);
-    window.addEventListener('mousemove', this.handleMousemove);
-    this.initTabTimer();
-  },
+function githubAvatar(value: string): string {
+  return `https://avatars.githubusercontent.com/${value}`;
+}
 
-  beforeDestroy() {
-    clearInterval(this.randomTimer);
-    clearInterval(this.avatarTimer);
-    clearInterval(this.tabTimer);
-    this.observer.disconnect();
-    window.removeEventListener('resize', this.handleResize);
-    window.removeEventListener('mousemove', this.handleMousemove);
-  },
+function githubUrl(value: string): string {
+  return `https://github.com/${value}`;
+}
 
-  methods: {
-    handleMousemove(event) {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(() => {
-        this.checkMousePosition(event);
-        ticking = false;
+function statusText(value: ResourceStatus): string {
+  if (value === 0) return t('home.status.pending');
+  if (value === 1) return t('home.status.stable');
+  if (value === 2) return t('home.status.alpha');
+  if (value === 3) return t('home.status.beta');
+  if (value === 4) return t('home.status.rc');
+  return '';
+}
+
+function displayCode(item: CodeItem): string {
+  return item.codeKey ? String(t(item.codeKey)) : item.code ?? '';
+}
+
+function handleMousemove(event: MouseEvent): void {
+  if (ticking) return;
+  ticking = true;
+  window.requestAnimationFrame(() => {
+    checkMousePosition(event);
+    ticking = false;
+  });
+}
+
+function checkMousePosition(event: MouseEvent): void {
+  const element = document.querySelector<HTMLElement>('#moduleBoard');
+  if (!element) return;
+  const isOver = event.target instanceof Node && element.contains(event.target);
+  if (isOver) {
+    if (state.tabTimer !== null) clearInterval(state.tabTimer);
+    state.tabTimer = null;
+    return;
+  }
+  if (state.tabTimer) return;
+  initTabTimer();
+}
+
+function initTabTimer(): void {
+  if (state.tabTimer !== null) clearInterval(state.tabTimer);
+  state.tabTimer = window.setInterval(() => {
+    state.currentTab = state.currentTab === 2 ? 0 : state.currentTab + 1;
+  }, 4000);
+}
+
+function handleClickNews(url?: string): void {
+  if (url) window.open(url, '_blank');
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function parseNews(value: unknown): NewsItem[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
+    if (
+      !isRecord(item) ||
+      typeof item.title !== 'string' ||
+      typeof item.desc !== 'string' ||
+      typeof item.date !== 'string'
+    ) {
+      return [];
+    }
+    return [
+      {
+        title: item.title,
+        desc: item.desc,
+        date: item.date,
+        url: typeof item.url === 'string' ? item.url : undefined,
+        isIntranet: item.isIntranet === true,
+      },
+    ];
+  });
+}
+
+function parseBrands(value: unknown): BrandItem[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
+    if (
+      !isRecord(item) ||
+      typeof item.title !== 'string' ||
+      typeof item.logo !== 'string' ||
+      (typeof item.width !== 'string' && typeof item.width !== 'number')
+    ) {
+      return [];
+    }
+    return [{ title: item.title, logo: item.logo, width: item.width }];
+  });
+}
+
+function getNews(): void {
+  fetch(newsUrl).then((data) => {
+    data.json().then((value: unknown) => {
+      const list = parseNews(value);
+      state.newsList = isIntranet ? list : list.filter((value) => !value.isIntranet);
+    });
+  });
+}
+
+function getBrandList(): void {
+  fetch(brandUrl).then((data) => {
+    data.json().then((value: unknown) => {
+      state.brandList = parseBrands(value);
+    });
+  });
+}
+
+function fetchContributors(): void {
+  fetch(contributorsUrl)
+    .then((res) => res.json())
+    .then((data: unknown) => {
+      const design = isRecord(data) && isRecord(data.design) ? data.design : {};
+      const raw: unknown[] = [
+        ...(Array.isArray(design.web) ? design.web : []),
+        ...(Array.isArray(design.mobile) ? design.mobile : []),
+        ...(Array.isArray(design.chart) ? design.chart : []),
+      ];
+      const seen = new Set<string>();
+      const list: string[] = [];
+      raw.forEach((name) => {
+        const trimmed = String(name).trim();
+        if (!trimmed) return;
+        const key = trimmed.toLowerCase();
+        if (seen.has(key)) return;
+        seen.add(key);
+        list.push(trimmed);
       });
-    },
-    checkMousePosition(event) {
-      const element = document.querySelector('#moduleBoard');
-      if (!element) return;
-      const isOver = element.contains(event.target);
-      if (isOver) {
-        clearInterval(this.tabTimer);
-        this.tabTimer = null;
-        return;
+      state.contributors = list;
+      changeContributors();
+    })
+    .catch((err) => console.error(err));
+}
+
+function handleIntroClick(item: ResourceItem | string): void {
+  if (typeof item === 'string') {
+    window.open(item, '_blank');
+    return;
+  }
+  if (!item.status) return;
+  window.open(item.href, '_blank');
+}
+
+function changeContributors(): void {
+  const { contributorCount, contributors } = state;
+  if (!contributors.length) return;
+  state.topContributors = contributors.slice(0, contributorCount);
+  state.bottomContributors = contributors.slice(-contributorCount);
+
+  let unshowContributors = contributors.slice(contributorCount, -contributorCount);
+
+  avatarTimer = window.setInterval(() => {
+    const r1 = Math.floor(Math.random() * contributorCount);
+    const r2 = Math.floor(Math.random() * contributorCount);
+    const topAvatar = topAvatars.value[r1];
+    const bottomAvatar = bottomAvatars.value[r2];
+    if (topAvatar?.$el && bottomAvatar?.$el) {
+      topAvatar.$el.classList.toggle('active');
+      bottomAvatar.$el.classList.toggle('active');
+    }
+
+    setTimeout(() => {
+      if (topAvatar?.$el && bottomAvatar?.$el) {
+        topAvatar.$el.classList.remove('active');
+        bottomAvatar.$el.classList.remove('active');
       }
-      if (this.tabTimer) return;
-      this.initTabTimer();
-    },
-    initTabTimer() {
-      clearInterval(this.tabTimer);
-      this.tabTimer = setInterval(() => {
-        this.currentTab = this.currentTab === 2 ? 0 : this.currentTab + 1;
-      }, 4000);
-    },
-    handleClickNews(url) {
-      if (url) window.open(url, '_blank');
-    },
-    getNews() {
-      fetch(newsUrl).then((data) => {
-        data.json().then((list) => {
-          this.newsList = isIntranet ? list : list.filter((v) => !v.isIntranet);
-        });
+    }, 5000);
+  }, 2500);
+
+  randomTimer = window.setInterval(() => {
+    const r1 = Math.floor(Math.random() * contributorCount);
+    const r2 = Math.floor(Math.random() * contributorCount);
+
+    let nextShows = unshowContributors.splice(0, 2);
+    if (nextShows.length !== 2) {
+      unshowContributors = contributors.filter((contributor) => {
+        return !state.topContributors.includes(contributor) && !state.bottomContributors.includes(contributor);
       });
-    },
-    getBrandList() {
-      fetch(brandUrl).then((data) => {
-        data.json().then((list) => {
-          this.brandList = list;
-        });
-      });
-    },
-    fetchContributors() {
-      fetch(contributorsUrl)
-        .then((res) => res.json())
-        .then((data) => {
-          const design = (data && data.design) || {};
-          const raw = [].concat(design.web || [], design.mobile || [], design.chart || []);
-          const seen = new Set();
-          const list = [];
-          raw.forEach((name) => {
-            const trimmed = String(name).trim();
-            if (!trimmed) return;
-            const key = trimmed.toLowerCase();
-            if (seen.has(key)) return;
-            seen.add(key);
-            list.push(trimmed);
-          });
-          this.contributors = list;
-          this.changeContributors();
-        })
-        .catch((err) => console.error(err));
-    },
-    handleIntroClick(item) {
-      if (!item.status) return;
-      window.open(item.href, '_blank');
-    },
-    changeContributors() {
-      const { contributorCount, contributors } = this;
-      if (!contributors.length) return;
-      this.topContributors = contributors.slice(0, contributorCount);
-      this.bottomContributors = contributors.slice(-contributorCount);
+      nextShows = unshowContributors.splice(0, 2);
+    }
 
-      let unshowContributors = contributors.slice(contributorCount, -contributorCount);
+    const topAvatar = topAvatars.value[r1];
+    const bottomAvatar = bottomAvatars.value[r2];
+    if (topAvatar?.$el && bottomAvatar?.$el) {
+      topAvatar.$el.classList.add('change');
+      bottomAvatar.$el.classList.add('change');
+    }
+    setTimeout(() => {
+      state.topContributors.splice(r1, 1, nextShows[0]);
+      state.bottomContributors.splice(r2, 1, nextShows[1]);
+    }, 500);
+    setTimeout(() => {
+      if (topAvatar?.$el && bottomAvatar?.$el) {
+        topAvatar.$el.classList.remove('change');
+        bottomAvatar.$el.classList.remove('change');
+      }
+    }, 1500);
+  }, 2500);
+}
 
-      this.avatarTimer = setInterval(() => {
-        const r1 = Math.floor(Math.random() * contributorCount);
-        const r2 = Math.floor(Math.random() * contributorCount);
-        if (this.$refs.topAvatars[r1].$el) {
-          this.$refs.topAvatars[r1].$el.classList.toggle('active');
-          this.$refs.bottomAvatars[r2].$el.classList.toggle('active');
-        }
+function handleResize(): void {
+  state.windowWidth = window.innerWidth;
+  state.currentTab = 0;
+}
 
-        setTimeout(() => {
-          if (this.$refs.topAvatars[r1].$el) {
-            this.$refs.topAvatars[r1].$el.classList.remove('active');
-            this.$refs.bottomAvatars[r2].$el.classList.remove('active');
-          }
-        }, 5000);
-      }, 2500);
+function watchHtmlMode(): void {
+  state.themeMode = document.documentElement.getAttribute('theme-mode') === 'dark' ? 'dark' : 'light';
+  const targetNode = document.documentElement;
+  const callback = (mutationsList: MutationRecord[]): void => {
+    for (const mutation of mutationsList) {
+      if (mutation.attributeName === 'theme-mode') {
+        state.themeMode = (mutation.target as Element).getAttribute('theme-mode') === 'dark' ? 'dark' : 'light';
+      }
+    }
+  };
 
-      this.randomTimer = setInterval(() => {
-        const r1 = Math.floor(Math.random() * contributorCount);
-        const r2 = Math.floor(Math.random() * contributorCount);
+  observer = new MutationObserver(callback);
+  observer.observe(targetNode, { attributes: true });
+}
 
-        let nextShows = unshowContributors.splice(0, 2);
-        if (nextShows.length !== 2) {
-          unshowContributors = contributors.filter((c) => {
-            return !this.topContributors.includes(c) && !this.bottomContributors.includes(c);
-          });
-          nextShows = unshowContributors.splice(0, 2);
-        }
+function stepsStart(_event: MouseEvent, index: number): void {
+  clearInterval(state.stepsTimers[index]);
+  const el = document.querySelectorAll<HTMLElement>('.steps-image')[index];
+  if (!el) return;
+  const { height } = el.getBoundingClientRect();
+  state.stepsTimers[index] = window.setInterval(() => {
+    if (state.stepsCounts[index] >= 24) return;
+    state.stepsCounts[index] += 1;
+    Object.assign(el.style, { backgroundPositionY: `-${height * state.stepsCounts[index]}px` });
+  }, 40);
+}
 
-        if (this.$refs.topAvatars[r1].$el) {
-          this.$refs.topAvatars[r1].$el.classList.add('change');
-          this.$refs.bottomAvatars[r2].$el.classList.add('change');
-        }
-        setTimeout(() => {
-          this.topContributors.splice(r1, 1, nextShows[0]);
-          this.bottomContributors.splice(r2, 1, nextShows[1]);
-        }, 500);
-        setTimeout(() => {
-          if (this.$refs.topAvatars[r1].$el) {
-            this.$refs.topAvatars[r1].$el.classList.remove('change');
-            this.$refs.bottomAvatars[r2].$el.classList.remove('change');
-          }
-        }, 1500);
-      }, 2500);
-    },
-    handleResize() {
-      this.windowWidth = window.innerWidth;
-    },
-    watchHtmlMode() {
-      this.themeMode = document.documentElement.getAttribute('theme-mode') || 'light';
+function stepsEnd(_event: MouseEvent, index: number): void {
+  clearInterval(state.stepsTimers[index]);
+  const el = document.querySelectorAll<HTMLElement>('.steps-image')[index];
+  if (!el) return;
+  const { height } = el.getBoundingClientRect();
+  state.stepsTimers[index] = window.setInterval(() => {
+    if (state.stepsCounts[index] <= 0) return;
+    state.stepsCounts[index] -= 1;
+    Object.assign(el.style, { backgroundPositionY: `-${height * state.stepsCounts[index]}px` });
+  }, 40);
+}
 
-      const targetNode = document.documentElement;
-      const config = { attributes: true };
+watch(currentTab, (tab) => {
+  if (state.windowWidth >= 888) {
+    if (tab === 0) state.tabTransformWidth = 0;
+    else if (tab === 1) state.tabTransformWidth = 1048;
+    else state.tabTransformWidth = 1048 + 480 + state.windowWidth * 0.5;
+  } else {
+    if (tab === 0) state.tabTransformWidth = 0;
+    else if (tab === 1) state.tabTransformWidth = state.windowWidth - 20;
+    else state.tabTransformWidth = state.windowWidth * 2;
+  }
+});
 
-      const callback = (mutationsList) => {
-        for (const mutation of mutationsList) {
-          if (mutation.attributeName === 'theme-mode') {
-            const themeMode = mutation.target.getAttribute('theme-mode') || 'light';
-            if (themeMode) this.themeMode = themeMode;
-          }
-        }
-      };
-
-      this.observer = new MutationObserver(callback);
-      this.observer.observe(targetNode, config);
-    },
-    stepsStart(e, index) {
-      clearInterval(this.stepsTimers[index]);
-      const el = document.querySelectorAll('.steps-image')[index];
-      const { height } = el.getBoundingClientRect();
-      this.stepsTimers[index] = setInterval(() => {
-        if (this.stepsCounts[index] >= 24) return;
-        this.stepsCounts[index] += 1;
-        Object.assign(el.style, { backgroundPositionY: `-${height * this.stepsCounts[index]}px` });
-      }, 40);
-    },
-    stepsEnd(e, index) {
-      clearInterval(this.stepsTimers[index]);
-      const el = document.querySelectorAll('.steps-image')[index];
-      const { height } = el.getBoundingClientRect();
-      this.stepsTimers[index] = setInterval(() => {
-        if (this.stepsCounts[index] <= 0) return;
-        this.stepsCounts[index] -= 1;
-        Object.assign(el.style, { backgroundPositionY: `-${height * this.stepsCounts[index]}px` });
-      }, 40);
-    },
+watch(
+  codeFramework,
+  () => {
+    requestAnimationFrame(() => Prismjs.highlightAll());
   },
-};
+  { immediate: true },
+);
+
+watch(
+  windowWidth,
+  (value) => {
+    if (value > 750 && value < 960) state.contributorCount = 6;
+    else if (value < 750) state.contributorCount = 3;
+    else state.contributorCount = 8;
+  },
+  { immediate: true },
+);
+
+watch(contributorCount, () => {
+  clearInterval(randomTimer);
+  clearInterval(avatarTimer);
+  changeContributors();
+});
+
+onMounted(() => {
+  watchHtmlMode();
+  fetchContributors();
+  getBrandList();
+  getNews();
+  window.addEventListener('resize', handleResize);
+  window.addEventListener('mousemove', handleMousemove);
+  initTabTimer();
+});
+
+onBeforeUnmount(() => {
+  clearInterval(randomTimer);
+  clearInterval(avatarTimer);
+  if (state.tabTimer !== null) clearInterval(state.tabTimer);
+  observer?.disconnect();
+  window.removeEventListener('resize', handleResize);
+  window.removeEventListener('mousemove', handleMousemove);
+});
 </script>

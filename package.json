@@ -23,7 +23,6 @@
     "cz-conventional-changelog": "^3.0.2",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-config-recommended": "^4.1.0",
     "eslint-plugin-html": "^7.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.0",
@@ -43,8 +42,17 @@
     }
   },
   "lint-staged": {
-    "*.{vue,js,html}": [
+    "*.{vue,js}": [
       "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "site/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.html": [
       "prettier --write",
       "git add"
     ],

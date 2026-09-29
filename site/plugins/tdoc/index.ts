@@ -1,14 +1,21 @@
+// @ts-ignore vite-plugin-tdoc has no type declarations
 import vitePluginTdoc from 'vite-plugin-tdoc';
 
-import transforms from './transforms.js';
+import transforms from './transforms';
+
+interface AnchorPlugin {
+  permalink: {
+    linkInsideHeader: (options: { symbol: string }) => unknown;
+  };
+}
 
 export default () =>
   vitePluginTdoc({
-    transforms, // 解析markdown 数据
+    transforms,
     markdown: {
       anchor: {
         tabIndex: false,
-        config: (anchor) => ({
+        config: (anchor: AnchorPlugin) => ({
           permalink: anchor.permalink.linkInsideHeader({ symbol: '' }),
         }),
       },

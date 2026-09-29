@@ -1,80 +1,56 @@
 <template>
   <span :class="_class" :style="_style">
-    <img
-      :src="imgSrc"
-      alt="user avatar"
-      @error="onError"
-      v-if="!error && imgSrc"
-    >
-    <div class="tdesign-avatar-name">{{username}}</div>
+    <img :src="imgSrc" alt="user avatar" @error="onError" v-if="!error && imgSrc" />
+    <div class="tdesign-avatar-name">{{ username }}</div>
   </span>
 </template>
-<script>
-function getSrc (username, src) {
-  if (username) {
-    // return `http://dcloud.oa.com/Public/Avatar/${username}.png`;
-    // return `http://r.hrc.oa.com/photo/500/${username}.png`;
-    return `https://dayu.oa.com/avatars/${username}/profile.jpg`
-  }
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import type { CSSProperties } from 'vue';
 
-  return src || ''
+interface AvatarProps {
+  type?: 'square' | 'round';
+  size?: 'large' | 'default' | 'small';
+  username?: string;
+  src?: string;
+  width?: string | number;
+  height?: string | number;
 }
 
-export default {
-  props: {
-    /**
-     * 头像类型
-     * @member square | round
-     */
-    type: {
-      type: String,
-      default: 'round'
-    },
-    /**
-     * 头像大小
-     * @member large | default | small
-     */
-    size: {
-      type: String,
-      default: 'default'
-    },
-    username: String,
-    src: String,
-    width: [String, Number],
-    height: [String, Number]
-  },
-  data () {
-    return {
-      prefixCls: 'tdesign-avatar',
-      error: false
-    }
-  },
-  computed: {
-    _class () {
-      return [this.prefixCls, {
-        [`${this.prefixCls}__lg`]: this.size === 'large',
-        [`${this.prefixCls}__square`]: this.type === 'square',
-        [`${this.prefixCls}__default`]: this.error || !this.imgSrc
-      }]
-    },
-    _style () {
-      if (this.width) {
-        return {
-          width: `${this.width}px`,
-          height: `${this.width}px`
-        }
-      }
-      return {}
-    },
-    imgSrc () {
-      return getSrc(this.username, this.src)
-    }
-  },
-  methods: {
-    onError () {
-      this.error = true
-    }
+function getSrc(username?: string, src?: string): string {
+  if (username) {
+    return `https://dayu.woa.com/avatars/${username}/profile.jpg`;
   }
+
+  return src || '';
+}
+
+const props = withDefaults(defineProps<AvatarProps>(), {
+  type: 'round',
+  size: 'default',
+});
+
+const prefixCls = 'tdesign-avatar';
+const error = ref(false);
+const imgSrc = computed(() => getSrc(props.username, props.src));
+const _class = computed(() => [
+  prefixCls,
+  {
+    [`${prefixCls}__lg`]: props.size === 'large',
+    [`${prefixCls}__square`]: props.type === 'square',
+    [`${prefixCls}__default`]: error.value || !imgSrc.value,
+  },
+]);
+const _style = computed<CSSProperties>(() => {
+  if (!props.width) return {};
+  return {
+    width: `${props.width}px`,
+    height: `${props.width}px`,
+  };
+});
+
+function onError(_event: Event): void {
+  error.value = true;
 }
 </script>
 
