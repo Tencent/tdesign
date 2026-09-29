@@ -41,8 +41,6 @@ router.afterEach(() => {
 
 const app = createApp(App);
 
-app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('td-');
-
 app.use(TDesign);
 app.use(i18n);
 app.use(router);
