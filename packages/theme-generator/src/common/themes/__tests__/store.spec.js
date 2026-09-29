@@ -36,17 +36,17 @@ describe('themeStore', () => {
     expect(themeStore.sizeRefreshType).toBeNull();
   });
 
-  it('updateBrandColor 同步更新 brandColor 与 Shadow Host 上的 --brand-main CSS 变量', () => {
-    // updateBrandColor 把 --brand-main 设置在 td-theme-generator host 上（Shadow DOM 可继承），
-    // 而非 document.documentElement，避免污染宿主页。
+  it('updateBrandColor 同步更新 brandColor、Shadow Host 与 documentElement 上的 --brand-main', () => {
+    // td-theme-generator host 上设置具体色值（Shadow DOM 可继承，供生成器 UI 使用）。
     const host = document.createElement('td-theme-generator');
     document.body.appendChild(host);
     themeStore.updateBrandColor('#123456');
     expect(themeStore.brandColor).toBe('#123456');
     expect(host.style.getPropertyValue('--brand-main')).toBe('#123456');
-    // document.documentElement 不应被设置
-    expect(document.documentElement.style.getPropertyValue('--brand-main')).toBe('');
+    // documentElement 上保持 mode-aware 的品牌色别名，供 site components 消费。
+    expect(document.documentElement.style.getPropertyValue('--brand-main')).toBe('var(--td-brand-color)');
     host.remove();
+    document.documentElement.style.removeProperty('--brand-main');
   });
 
   it('incrementRefreshId 递增 refreshId', () => {
