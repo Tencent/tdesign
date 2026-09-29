@@ -37,8 +37,7 @@ export default define({
   value: '',
   visible: false,
   options: {
-    get: (host, lastValue) => lastValue || [],
-    set: (host, value) => value,
+    value: (host, v) => v || [],
   },
   render: (host) => {
     const { options, value, visible, borderless } = host;

@@ -29,17 +29,20 @@ export default define({
   placement: 'bottom-end',
   triggerType: 'hover',
   equalWidth: {
-    get: (_host, lastValue) => parseBoolean(lastValue, false),
-    set: (_host, value) => parseBoolean(value, false),
+    value: (_host, v) => parseBoolean(v, false),
   },
   visible: {
-    get: (host, lastValue) => lastValue || false,
-    set: (host, value) => value,
+    value: (host, v) => v || false,
     connect: (host) => {
       const { reference, placement } = host;
       let resizeObserver;
+      let portalFrameId;
+      let popperFrameId;
+      let isConnected = true;
 
-      requestAnimationFrame(() => {
+      portalFrameId = requestAnimationFrame(() => {
+        if (!isConnected) return;
+
         host.portals = document.getElementById('__td_portals__');
         if (!host.portals) {
           host.portals = document.createElement('div');
@@ -62,7 +65,9 @@ export default define({
         host.portal.addEventListener('mouseleave', () => handleMouseEvent(host, 'leave'));
         host.portals.appendChild(host.portal);
 
-        requestAnimationFrame(() => {
+        popperFrameId = requestAnimationFrame(() => {
+          if (!isConnected) return;
+
           const isVertical = ['top', 'bottom'].some((p) => placement.includes(p));
           host.popper = createPopper(reference, host.portal, {
             placement,
@@ -103,7 +108,11 @@ export default define({
       document.addEventListener('click', clickOutside);
 
       return () => {
-        host.portals?.removeChild?.(host.portal);
+        isConnected = false;
+        if (portalFrameId != null) cancelAnimationFrame(portalFrameId);
+        if (popperFrameId != null) cancelAnimationFrame(popperFrameId);
+        host.popper?.destroy?.();
+        host.portal?.remove?.();
         document.removeEventListener('click', clickOutside);
         resizeObserver?.disconnect?.();
       };

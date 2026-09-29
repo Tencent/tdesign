@@ -2,15 +2,12 @@
   <div class="tdesign-document tdesign-source-page">
     <div class="tdesign-source-header">
       <div class="content">
-        <h1>Design Resources</h1>
+        <h1>{{ t('source.title') }}</h1>
         <div class="description">
+          <p>{{ t('source.introduction') }}</p>
           <p>
-            Here are the download links for TDesign-related design resources and design tools. More design resources are
-            being sorted out and perfected.
-          </p>
-          <p>
-            If you have any suggestions or feedback, please send an email to tdesign@tencent.com or submit an
-            <a href="https://github.com/Tencent/tdesign/issues" target="_blank">issue</a>
+            {{ t('source.feedback') }}
+            <a href="https://github.com/Tencent/tdesign/issues" target="_blank">{{ t('source.issue') }}</a>
           </p>
         </div>
 
@@ -20,7 +17,7 @@
 
     <div class="tdesign-source-content">
       <div class="tdesign-source-content-box">
-        <h2 class="tdesign-source-content__title">Resource Preview</h2>
+        <h2 class="tdesign-source-content__title">{{ t('source.preview') }}</h2>
       </div>
       <div class="tdesign-source-content__iframe-wrap">
         <iframe
@@ -43,18 +40,18 @@
           >
             <div class="tdesign-source-content__list-item-inner">
               <div :class="['mask', [item.icon]]"></div>
-              <span class="source-tag new" v-if="item.status === 1">Latest</span>
-              <span class="source-tag doing" v-else-if="item.status === 2">Updating</span>
-              <span class="source-tag todo" v-else-if="item.status === -1">In Progress</span>
+              <span class="source-tag new" v-if="item.status === 1">{{ t('source.status.latest') }}</span>
+              <span class="source-tag doing" v-else-if="item.status === 2">{{ t('source.status.updating') }}</span>
+              <span class="source-tag todo" v-else-if="item.status === -1">{{ t('source.status.upcoming') }}</span>
               <img :src="iconMap[item.icon]" class="source-icon" width="32" />
-              <h3 class="source-title">{{ item.title }}</h3>
+              <h3 class="source-title">{{ getSourceTitle(item) }}</h3>
               <div class="source-detail">
                 <span class="source-detail-watch" v-if="item.watch">
                   <t-icon name="browse" size="16px" />
                   {{ item.watch }}
                 </span>
                 <span class="source-detail-time">
-                  {{ item.descriptionEn }}
+                  {{ getSourceDescription(item) }}
                 </span>
                 <t-icon
                   class="source-detail-action"
@@ -70,8 +67,7 @@
       </div>
 
       <div class="tdesign-source-content-box">
-        <h2 class="tdesign-source-content__title">Contributors</h2>
-        <!-- <a class="contributor-link" href="" target="_blank">怎样参与 TDesign 设计资源开源共建？</a> -->
+        <h2 class="tdesign-source-content__title">{{ t('source.contributors') }}</h2>
         <div class="contributor-list">
           <a
             class="contributor-avatar"
@@ -91,7 +87,11 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, onMounted, ref, watch, type CSSProperties } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+
 import figmaIcon from '@/assets/figma-logo.svg';
 import sketchIcon from '@/assets/sketch-logo.svg';
 import xdIcon from '@/assets/xd-logo.svg';
@@ -104,109 +104,190 @@ import mastergoIcon from '@/assets/mastergo-logo.svg';
 import ryIcon from '@/assets/ry-logo.svg';
 
 import { webSourceList, mobileSourceList, sourceDownloadUrl, webChartSourceList } from '@/constants';
-import { webDesignContributor, mobileDesignContributor, webChartDesignContributor } from '@/contributor';
+import messages from '@/locales/pages/design-shell';
 
-export default {
-  data() {
-    return {
-      webSourceList,
-      mobileSourceList,
-      webChartSourceList,
-      webDesignContributor,
-      mobileDesignContributor,
-      webChartDesignContributor,
-      iconMap: {
-        figma: figmaIcon,
-        sketch: sketchIcon,
-        xd: xdIcon,
-        axure: axureIcon,
-        codesign: codesignIcon,
-        jssj: jssjIcon,
-        pixso: pixsoIcon,
-        md: mdIcon,
-        mastergo: mastergoIcon,
-        ry: ryIcon,
-      },
-      previewUrl: {
-        web: 'https://codesign.qq.com/s/dqN2925D7qjaBXe?active-screen=xDP39qAvLNl9wlK&menu_aside=null&minimap=close',
-        mobile: 'https://codesign.qq.com/s/YDgGjYv28y9wEVQ?active-screen=GD5OjERAdXO93eA&menu_aside=null&minimap=close',
-        'web-chart':
-          'https://codesign.qq.com/s/kv8398d7m59nKeg?active-screen=6ym7ZRGAEOYjAYE&menu_aside=null&minimap=close',
-      },
-    };
-  },
-  computed: {
-    designContributor() {
-      const map = {
-        web: this.webDesignContributor,
-        mobile: this.mobileDesignContributor,
-        'web-chart': this.webChartDesignContributor,
-      };
-      return map[this.tab];
-    },
-    sourceList() {
-      const map = {
-        web: this.webSourceList,
-        mobile: this.mobileSourceList,
-        'web-chart': this.webChartSourceList,
-      };
-      return map[this.tab];
-    },
-    tab: {
-      get() {
-        return this.$route.query.tab || 'web';
-      },
-      set(v) {
-        if (this.$route.query.tab !== v) this.$router.push({ query: { tab: v } });
-      },
-    },
-    footerStyle() {
-      return {
-        '--content-padding-right': '0',
-        '--content-max-width': '1440px',
-        '--content-padding-left-right': '48px',
-        '--footer-inner-position': 'relative',
-        '--footer-logo-position': 'unset',
-      };
-    },
-  },
+const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
 
-  mounted() {
-    this.$refs.tabs.tabs = [
-      { tab: 'web', name: 'Desktop' },
-      { tab: 'mobile', name: 'Mobile' },
-      { tab: 'web-chart', name: 'Desktop Chart' },
-      { tab: 'icons', name: 'Icons' },
-    ];
-    this.$refs.tabs.onchange = ({ detail: currentTab }) => {
-      if (currentTab !== 'icons') this.tab = currentTab;
-      else window.open('/icons-en', '_blank');
-    };
-    fetch(sourceDownloadUrl)
-      .then((res) => res.json())
-      .then((res) => {
-        this.webSourceList = this.webSourceList.map((item) => {
-          item.watch = res[item.id];
-          return item;
-        });
-        this.mobileSourceList = this.mobileSourceList.map((item) => {
-          item.watch = res[item.id];
-          return item;
-        });
-      });
-  },
+type ResourceTab = 'web' | 'mobile' | 'web-chart';
+type SourceIcon = 'figma' | 'sketch' | 'xd' | 'axure' | 'codesign' | 'jssj' | 'pixso' | 'md' | 'mastergo' | 'ry';
+type SourceActionType = 'download' | 'jump';
 
-  methods: {
-    handleSourceClick(item) {
-      if (item.status === -1 || !item.actionUrl) return;
+interface SourceItem {
+  title: string;
+  eventLabel: string;
+  actionUrl?: string;
+  description: string;
+  descriptionEn: string;
+  status: number;
+  icon: SourceIcon;
+  actionType: SourceActionType;
+  id: string;
+  watch?: string | number;
+}
 
-      if (window._horizon) {
-        window._horizon.send('资源下载', 'click', item.eventLabel, item.actionUrl);
-      }
-      window.open(item.actionUrl, '_blank');
-    },
-  },
+interface TabOption {
+  tab: ResourceTab | 'icons';
+  name: string;
+}
+
+type DocTabsElement = HTMLElement & {
+  tabs: TabOption[];
 };
+
+interface HorizonReporter {
+  send(category: string, action: string, label: string, url: string): void;
+}
+
+const route = useRoute();
+const router = useRouter();
+const { locale, t } = useI18n({ messages });
+const tabs = ref<DocTabsElement | null>(null);
+const toSourceItem = (item: (typeof webSourceList)[number] | (typeof mobileSourceList)[number]): SourceItem => ({
+  ...item,
+  icon: item.icon as SourceIcon,
+  actionType: item.actionType as SourceActionType,
+});
+const currentWebSourceList = ref<SourceItem[]>(webSourceList.map(toSourceItem));
+const currentMobileSourceList = ref<SourceItem[]>(mobileSourceList.map(toSourceItem));
+const webDesignContributor = ref<string[]>([]);
+const mobileDesignContributor = ref<string[]>([]);
+const webChartDesignContributor = ref<string[]>([]);
+const iconMap = {
+  figma: figmaIcon,
+  sketch: sketchIcon,
+  xd: xdIcon,
+  axure: axureIcon,
+  codesign: codesignIcon,
+  jssj: jssjIcon,
+  pixso: pixsoIcon,
+  md: mdIcon,
+  mastergo: mastergoIcon,
+  ry: ryIcon,
+};
+const previewUrl = {
+  web: 'https://codesign.qq.com/s/705849079455594?menu_aside=null',
+  mobile: 'https://codesign.qq.com/s/705854516818782?menu_aside=null',
+  'web-chart': 'https://codesign.qq.com/s/705850116517658?menu_aside=null',
+};
+const tabList = computed<TabOption[]>(() => [
+  { tab: 'web', name: t('source.tabs.web') },
+  { tab: 'mobile', name: t('source.tabs.mobile') },
+  { tab: 'web-chart', name: t('source.tabs.webChart') },
+  { tab: 'icons', name: t('source.tabs.icons') },
+]);
+const resourceTabs: ResourceTab[] = ['web', 'mobile', 'web-chart'];
+const isResourceTab = (value: unknown): value is ResourceTab =>
+  typeof value === 'string' && resourceTabs.includes(value as ResourceTab);
+const tab = computed<ResourceTab>({
+  get: () => (isResourceTab(route.query.tab) ? route.query.tab : 'web'),
+  set: (value: ResourceTab) => {
+    if (route.query.tab !== value) router.push({ query: { tab: value } });
+  },
+});
+const designContributor = computed<string[]>(() => {
+  const map: Record<ResourceTab, string[]> = {
+    web: webDesignContributor.value,
+    mobile: mobileDesignContributor.value,
+    'web-chart': webChartDesignContributor.value,
+  };
+  return map[tab.value];
+});
+const sourceList = computed<SourceItem[]>(() => {
+  const map: Record<ResourceTab, SourceItem[]> = {
+    web: currentWebSourceList.value,
+    mobile: currentMobileSourceList.value,
+    'web-chart': webChartSourceList.map((item) => ({
+      ...item,
+      icon: item.icon as SourceIcon,
+      actionType: item.actionType as SourceActionType,
+    })),
+  };
+  return map[tab.value];
+});
+const footerStyle = computed<CSSProperties>(() => ({
+  '--content-padding-right': '0',
+  '--content-max-width': '1440px',
+  '--content-padding-left-right': '48px',
+  '--footer-inner-position': 'relative',
+  '--footer-logo-position': 'unset',
+}));
+const getSourceDescription = (item: SourceItem) => (locale.value === 'en-US' ? item.descriptionEn : item.description);
+const getSourceTitle = (item: SourceItem) => t(`source.resourceTitles.${item.id}`);
+
+const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null;
+const normalizeContributors = (value: unknown): string[] => {
+  if (!Array.isArray(value)) return [];
+
+  const seen = new Set<string>();
+  return value.reduce<string[]>((result, name) => {
+    if (typeof name !== 'string') return result;
+    const trimmed = name.trim();
+    const key = trimmed.toLowerCase();
+    if (trimmed && !seen.has(key)) {
+      seen.add(key);
+      result.push(trimmed);
+    }
+    return result;
+  }, []);
+};
+
+const fetchDesignContributors = async () => {
+  try {
+    const response = await fetch(contributorsUrl);
+    const data: unknown = await response.json();
+    const design = isRecord(data) && isRecord(data.design) ? data.design : {};
+
+    webDesignContributor.value = normalizeContributors(design.web);
+    mobileDesignContributor.value = normalizeContributors(design.mobile);
+    webChartDesignContributor.value = normalizeContributors(design.chart);
+  } catch (error: unknown) {
+    console.error(error);
+  }
+};
+
+const handleSourceClick = (item: SourceItem) => {
+  if (item.status === -1 || !item.actionUrl) return;
+
+  const horizon = (window as Window & { _horizon?: HorizonReporter })._horizon;
+  if (horizon) {
+    horizon.send('资源下载', 'click', item.eventLabel, item.actionUrl);
+  }
+  window.open(item.actionUrl, '_blank');
+};
+
+const fetchDownloadCounts = async () => {
+  try {
+    const response = await fetch(sourceDownloadUrl);
+    const data: unknown = await response.json();
+    if (!isRecord(data)) return;
+
+    const withWatchCount = (item: SourceItem): SourceItem => {
+      const watch = data[item.id];
+      return typeof watch === 'string' || typeof watch === 'number' ? { ...item, watch } : item;
+    };
+    currentWebSourceList.value = currentWebSourceList.value.map(withWatchCount);
+    currentMobileSourceList.value = currentMobileSourceList.value.map(withWatchCount);
+  } catch (error: unknown) {
+    console.error(error);
+  }
+};
+
+watch(tabList, (list: TabOption[]) => {
+  if (tabs.value) tabs.value.tabs = list;
+});
+
+onMounted(() => {
+  if (tabs.value) {
+    tabs.value.tabs = tabList.value;
+    tabs.value.onchange = (event: Event) => {
+      const { detail: currentTab } = event as CustomEvent<string>;
+      if (isResourceTab(currentTab)) tab.value = currentTab;
+      else if (currentTab === 'icons') window.open(locale.value === 'en-US' ? '/icons-en' : '/icons', '_blank');
+    };
+  }
+  fetchDesignContributors();
+  fetchDownloadCounts();
+});
 </script>
 
 <style lang="less" scoped>

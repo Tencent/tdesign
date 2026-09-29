@@ -20,15 +20,14 @@ export default define({
   tag: 'td-stats',
   dataAccount: 'tdesign',
   track: {
-    get() {
+    value() {
       return () => {
         window._horizon && window._horizon.track();
       };
     },
   },
   stats: {
-    get: (_host, lastValue) => lastValue || undefined,
-    set: (_host, value) => value,
+    value: (_host, v) => v || undefined,
     connect: (host) => {
       function registerStats() {
         // horizon

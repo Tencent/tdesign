@@ -764,7 +764,7 @@ ul.t-select-option-group__header,
     margin-left: 0;
 }
 
-.t-transfer__list-item {
+.t-transfer__list .t-transfer__list-item {
     padding: var(--td-comp-paddingTB-m) var(--td-comp-paddingLR-m);
     margin: 0;
 }

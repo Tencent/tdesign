@@ -1,5 +1,5 @@
 import { getThemeMode, parseRootCss, setUpModeObserver } from '../utils';
-import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile, isUniApp } from './core';
+import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile, isUniapp } from './core';
 
 // 标记小程序外层 iframe 的 contentDocument 是否已建立嵌套 iframe 观察，
 // 避免 handleNested 立即调用 + onload 时重复创建 MutationObserver。
@@ -129,8 +129,8 @@ function watchThemeModeChange(iframe) {
 
   const device = iframe.getAttribute('device');
   const handleModeChange = (mode) => {
-    if (isMiniProgram(device) || isUniApp(device)) {
-      handleMiniProgramModeChange(iframe, mode, isUniApp(device));
+    if (isMiniProgram(device) || isUniapp(device)) {
+      handleMiniProgramModeChange(iframe, mode, isUniapp(device));
     } else {
       handleMobileModeChange(iframe, mode);
     }
@@ -157,8 +157,8 @@ function watchThemeTokenChange(iframe) {
 
   const device = iframe.getAttribute('device');
   const handleTokenChange = (styleElement) => {
-    if (isMiniProgram(device) || isUniApp(device)) {
-      handleMiniProgramTokenChange(iframe, styleElement, isUniApp(device));
+    if (isMiniProgram(device) || isUniapp(device)) {
+      handleMiniProgramTokenChange(iframe, styleElement, isUniapp(device));
     } else {
       handleMobileTokenChange(iframe, styleElement);
     }

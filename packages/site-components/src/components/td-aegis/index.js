@@ -1,11 +1,11 @@
+/* global Aegis */
 import { html, define } from 'hybrids';
 
 export default define({
   tag: 'td-aegis',
   aegisId: 'rDISNMyXgKnpdSRvul',
   stats: {
-    get: (_host, lastValue) => lastValue || undefined,
-    set: (_host, value) => value,
+    value: (_host, v) => v || undefined,
     connect: (host) => {
       function registerStats() {
         if (document.getElementById('__td_aegis__')) return;
@@ -22,15 +22,20 @@ export default define({
             reportApiSpeed: true, // 接口测速
             spa: true, // spa 页面需要开启，页面切换的时候上报pv
           });
-        }
+        };
         document.body.appendChild(script);
       }
-      window.addEventListener('DOMContentLoaded', registerStats)
+      window.addEventListener('DOMContentLoaded', registerStats);
 
       return () => {
-        window.removeEventListener('DOMContentLoaded', registerStats)
+        window.removeEventListener('DOMContentLoaded', registerStats);
       };
     },
   },
-  render: () => html`<style>:host { display: none; }</style>`,
+  render: () =>
+    html`<style>
+      :host {
+        display: none;
+      }
+    </style>`,
 });

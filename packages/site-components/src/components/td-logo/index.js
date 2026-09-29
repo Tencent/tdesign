@@ -44,12 +44,10 @@ function renderMenu(list) {
 export default define({
   tag: 'td-logo',
   menuList: {
-    get: (host, lastValue) => lastValue || [],
-    set: (host, value) => value,
+    value: (host, v) => v || [],
   },
   isIntranet: {
-    get: () => isIntranet(),
-    set: (value) => value,
+    value: () => isIntranet(),
     connect: (host) => {
       const menuCdn = isIntranet() ? logoMenuConfigWoaCdn : logoMenuConfigCdn;
       fetch(menuCdn)

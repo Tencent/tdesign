@@ -8,6 +8,6 @@ script/test/cypress
 _site
 temp*
 tdesign
-plugin-tdoc
+plugins/tdoc
 public
 spline

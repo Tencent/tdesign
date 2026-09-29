@@ -9,8 +9,7 @@ function handleBacktop() {
 export default define({
   tag: 'td-backtop',
   backtopShow: {
-    get: (_host, lastValue) => lastValue || false,
-    set: (_host, value) => value,
+    value: (_host, v) => v || false,
     connect: (host, key, invalidate) => {
       function toggleVisible() {
         const { scrollTop } = document.documentElement;

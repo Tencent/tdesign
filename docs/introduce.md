@@ -16,7 +16,7 @@ In 2019, Tencent established the [Open Source Collaboration Committee](<(https:/
 
 TDesign is the collaborative outcome of frontend and design under Tencent's open-source collaboration, with the aim to jointly build a comprehensive and versatile design system and component library.
 
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-oteam.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
+<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/images/introduce-oteam.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
 ## Development of TDesign
 
@@ -24,7 +24,7 @@ TDesign was founded with the principles of open-source collaboration from the be
 
 Many participants started by trying out the component library in their personal projects, advancing to submit their first Issue, then their first Feature MR, and gradually becoming involved in Code Review and solution-formulating tasks, eventually turning into core contributors. In the past year, TDesign has closed 1k+ issues and conducted 5k+ Code Reviews to maintained a [weekly iterative release](<(https://tdesign.tencent.com/vue/components/changelog)>) of new versions.
 
-TDesign currently supports [multiple platforms and mainstream front-end UI framework](#Repositories). Desktop versions for Vue2, Vue3, and React, as well as mobile versions for Vue3 and WeChat Mini Programs, have all released their 1.x versions. Mobile versions for React, Flutter, and UniApp have released Alpha test versions.
+TDesign currently supports [multiple platforms and mainstream front-end UI framework](#Repositories). Desktop versions for Vue2, Vue3, and React, as well as mobile versions for Vue3 and WeChat Mini Programs, have all released their 1.x versions. Mobile versions for React, Flutter, and Uniapp have released Alpha test versions.
 
 ## Repositories
 
@@ -32,9 +32,9 @@ TDesign currently supports [multiple platforms and mainstream front-end UI frame
 
 | Repository                                                      | Description                          | Status    |
 | --------------------------------------------------------------- | ------------------------------------ | --------- |
-| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue.js UI components lib for TDesign | `1.0 LTS` |
 | [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) | Vue3.x UI components lib for TDesign | `1.0 LTS` |
 | [tdesign-react](https://github.com/Tencent/tdesign-react)       | React UI components lib for TDesign  | `1.0 LTS` |
+| [tdesign-vue](https://github.com/Tencent/tdesign-vue)           | Vue.js UI components lib for TDesign | `1.0 LTS` |
 
 ### Repositories for Mobile Components
 
@@ -44,6 +44,7 @@ TDesign currently supports [multiple platforms and mainstream front-end UI frame
 | [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue3.x Mobile UI components lib for TDesign      | `1.0 LTS` |
 | [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React Mobile UI components lib for TDesign       | `Alpha`   |
 | [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | Flutter UI components lib for TDesign            | `Alpha`   |
+| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)   | Uniapp UI components lib for TDesign | `Alpha` |
 
 ### Repositories for Common
 
@@ -75,7 +76,7 @@ To improve collaboration efficiency between developers and designers, TDesign pr
 
 In addition to regular design resources, TDesign also provides auxiliary design tools such as [Sketch plugins](https://tdesign.tencent.com/source) and supports the use of TDesign design materials in other design tools like [即时设计、Pixso、墨刀 ](https://tdesign.tencent.com/source).
 
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-resources.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
+<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/images/introduce-resources.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
 ### Consistency
 
@@ -83,13 +84,13 @@ TDesign distills Tencent's years of design experience into professional design g
 
 Based on TDesign's design system standards, TDesign has launched both desktop and mobile versions of the component library, offering multiple tech stack implementations. A series of collaborative workflows and auxiliary tools ensure consistency among the [component APIs](https://tdesign.tencent.com/apis) and implementation outcomes of components across various tech stacks. With these capabilities, even if a project uses different technology architectures or tech stacks, developers can leverage TDesign's universal design component library for development, significantly reduce learning costs, and gain a competitive edge when building unified, cross-platform, and cross-tech stack applications.
 
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-components.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
+<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/images/introduce-components.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
 ### Usability
 
 TDesign has distilled design experiences from various businesses and scenarios during the formation of the TDesign design system, providing universal [design guidelines](https://tdesign.tencent.com/design/offices) to lower the barriers to entry. For the brand customization needs of different enterprise products, TDesign allows users to extend design styles. Currently, design styles have been organized and summarized as [Design Tokens](https://tdesign.tencent.com/design/color#header-21), forming a set of semantically-based design standards within the enterprise, facilitating unified management and upcoming expansion.
 
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/introduce-easy.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
+<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/images/introduce-easy.png" alt="components" style="border: 1px solid var(--component-border); border-radius: 6px;">
 
 In terms of component theme configuration, TDesign offers bright mode and [dark mode](https://tdesign.tencent.com/design/dark), supporting one-click switching to enhance the user experience. In the future, TDesign will also introduce industry-specific components for various vertical domains, covering a broader range of business areas. Product teams can configure corresponding requirements and start business development using the built-in industry themes.
 

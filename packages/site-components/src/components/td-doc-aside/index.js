@@ -98,18 +98,15 @@ function toggleCollapseAside(host) {
 export default define({
   tag: 'td-doc-aside',
   routerList: {
-    get: (_host, lastValue) => lastValue || [],
-    set: (_host, value) => value,
+    value: (_host, v) => v || [],
   },
   title: '',
   patchDom: {
-    get: (_host, lastValue) => lastValue || false,
-    set: (_host, value) => value,
+    value: (_host, v) => v || false,
     connect: patchShadowDomIntoDom,
   },
   updateNotice: {
-    get: (_host, lastValue) => lastValue || {},
-    set: (_host, value) => value,
+    value: (_host, v) => v || {},
     connect: (host) => {
       fetch(import.meta.env.VITE_SLIDER_NOTICE_URL)
         .then((res) => res.json())
@@ -120,8 +117,7 @@ export default define({
     },
   },
   asideStyle: {
-    get: (_host, lastValue) => lastValue || undefined,
-    set: (_host, value) => value,
+    value: (_host, v) => v || undefined,
     connect: (host) => {
       function setFixed() {
         if (!host.shadowRoot) return;

@@ -178,8 +178,7 @@ const HANDLERS = {
  * @param {string} defaultValue 未显式设置 attribute 时返回的默认值
  */
 const stringProp = (defaultValue) => ({
-  get: (_h, v) => v || defaultValue,
-  set: (_h, v) => v,
+  value: (_h, v) => v || defaultValue,
 });
 
 /* ------------------------------------------------------------------ *
@@ -199,10 +198,9 @@ export default define({
   apiKey: stringProp(DEFAULT_API_KEY),
   indexName: stringProp(DEFAULT_INDEX_NAME),
   // urlFilter 特殊：显式传空串 "" 应被视为"关闭过滤"，所以用 == null 判空而非 || 短路
-  urlFilter: { get: (_h, v) => (v == null ? getDefaultUrlFilter() : v), set: (_h, v) => v },
+  urlFilter: { value: (_h, v) => (v == null ? getDefaultUrlFilter() : v) },
   hitsPerPage: {
-    get: (_h, v) => (v != null && v !== '' ? Number(v) : DEFAULT_HITS_PER_PAGE),
-    set: (_h, v) => v,
+    value: (_h, v) => (v != null && v !== '' ? Number(v) : DEFAULT_HITS_PER_PAGE),
   },
 
   // ---------- 2) 文案 ----------
@@ -220,19 +218,18 @@ export default define({
   resultLabel: stringProp('结果'),
 
   // ---------- 3) 内部状态 ----------
-  _query: { get: (_h, v) => v || '', set: (_h, v) => v },
-  _loading: { get: (_h, v) => Boolean(v), set: (_h, v) => Boolean(v) },
-  _groups: { get: (_h, v) => v || [], set: (_h, v) => v || [] },
-  _activeKey: { get: (_h, v) => (v == null ? null : v), set: (_h, v) => v },
-  _flatHits: { get: (_h, v) => v || [], set: (_h, v) => v || [] },
+  _query: { value: (_h, v) => v || '' },
+  _loading: { value: (_h, v) => Boolean(v) },
+  _groups: { value: (_h, v) => v || [] },
+  _activeKey: { value: (_h, v) => (v == null ? null : v) },
+  _flatHits: { value: (_h, v) => v || [] },
   _currentIndex: {
-    get: (_h, v) => (Number.isFinite(v) ? v : 0),
-    set: (_h, v) => {
+    value: (_h, v) => {
       const n = Number(v);
       return Number.isFinite(n) ? n : 0;
     },
   },
-  _recent: { get: (_h, v) => v || [], set: (_h, v) => v || [] },
+  _recent: { value: (_h, v) => v || [] },
 
   // ---------- open 属性 + 生命周期 ----------
   /**
@@ -240,8 +237,7 @@ export default define({
    * observe 里还兼做"每次打开时刷新最近搜索"。
    */
   open: {
-    get: (_host, lastValue) => Boolean(lastValue),
-    set: (_host, value) => Boolean(value),
+    value: (_host, v) => Boolean(v),
     connect: (host) => {
       // 初始最近搜索填充
       host._recent = listRecent();

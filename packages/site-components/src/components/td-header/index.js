@@ -209,8 +209,7 @@ export default define({
   disabledTheme: false,
   disabledLocale: false,
   notice: {
-    get: (_host, lastValue) => lastValue || {},
-    set: (_host, value) => value,
+    value: (_host, v) => v || {},
     connect: (host) => {
       fetch(import.meta.env.VITE_SITE_NOTICE_URL)
         .then((res) => res.json())
@@ -221,10 +220,9 @@ export default define({
     },
   },
   npmVersions: {
-    get: (_host, lastValue) => lastValue || {},
-    set: (_host, value) => value,
+    value: (_host, v) => v || {},
     connect: (host) => {
-      fetch(`https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/npm/latest-versions`)
+      fetch(import.meta.env.VITE_NPM_VERSIONS_API_URL)
         .then((res) => res.json())
         .then((res) => {
           host.npmVersions = {
@@ -235,8 +233,7 @@ export default define({
     },
   },
   collapseMenu: {
-    get: (_host, lastValue) => lastValue || false,
-    set: (_host, value) => value,
+    value: (_host, v) => v || false,
     connect: (host, key) => {
       const mediaQuery = window.matchMedia('(max-width: 960px)');
 

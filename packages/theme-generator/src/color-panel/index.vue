@@ -156,7 +156,7 @@
                 :style="{
                   width: '100%',
                   'border-radius': '6px',
-                  'background-color': 'var(--brand-main)',
+                  'background-color': brandDisplayedColor,
                 }"
               >
                 <p>hsv: {{ convertFromHex(brandDisplayedColor, 'hsv') }}</p>
