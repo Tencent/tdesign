@@ -15,8 +15,8 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter, type RouteMeta } from 'vue-router';
 
-import { createSiteConfig, type SiteDoc } from '../../site.config';
-import type { Locale } from '../../i18n';
+import siteConfig, { type SiteDoc } from '../../site.config';
+import siteEnConfig from '../../site-en.config';
 
 interface AsideRoute {
   name?: string;
@@ -46,7 +46,7 @@ const tdDocAside = ref<DocAsideElement | null>(null);
 const tdDocContent = ref<DocContentElement | null>(null);
 const tdDocHeader = ref<DocHeaderElement | null>(null);
 const asideList = computed<AsideRoute[]>(() => {
-  const { docs } = createSiteConfig(locale.value as Locale).design;
+  const { docs } = (locale.value === 'en-US' ? siteEnConfig : siteConfig).design;
   const toAsideRoutes = (items: SiteDoc[]): AsideRoute[] =>
     items.map(({ name, title, path, meta, children }) => ({
       name,

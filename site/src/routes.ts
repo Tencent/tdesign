@@ -1,13 +1,29 @@
 import type { RouteRecordRaw } from 'vue-router';
 import type { Locale } from './i18n';
-import { createSiteConfig, type SiteDoc, siteMessages } from './site.config';
+import siteConfig, { type SiteDoc } from './site.config';
+import siteEnConfig from './site-en.config';
 
-function getDocsRoutes(docs: SiteDoc[]): RouteRecordRaw[] {
+const routeTitles: Record<Locale, { home: string; source: string; trade: string; icons: string }> = {
+  'zh-CN': {
+    home: 'TDesign - 开源的企业级设计体系，为设计师 & 开发者，打造工作美学',
+    source: '资源 - TDesign',
+    trade: '行业组件 - TDesign',
+    icons: '图标资源 - TDesign',
+  },
+  'en-US': {
+    home: 'TDesign - Enterprise Design System',
+    source: 'Resources - TDesign',
+    trade: 'Trade Components - TDesign',
+    icons: 'Icons - TDesign',
+  },
+};
+
+function getDocsRoutes(docs: SiteDoc[], locale: Locale): RouteRecordRaw[] {
   let docsRoutes: RouteRecordRaw[] = [];
 
   docs.forEach((item) => {
     if (item.children) {
-      docsRoutes = docsRoutes.concat(getDocsRoutes(item.children));
+      docsRoutes = docsRoutes.concat(getDocsRoutes(item.children, locale));
     } else {
       if (!item.name || !item.path || !item.component) {
         throw new Error(`Incomplete documentation route: ${item.name}`);
@@ -15,7 +31,7 @@ function getDocsRoutes(docs: SiteDoc[]): RouteRecordRaw[] {
       const docRoute: RouteRecordRaw = {
         name: item.name,
         path: item.path,
-        meta: item.meta || {},
+        meta: { locale, ...(item.meta || {}) },
         component: item.component,
       };
       docsRoutes.push(docRoute);
@@ -27,8 +43,8 @@ function getDocsRoutes(docs: SiteDoc[]): RouteRecordRaw[] {
 function createLocalizedRoutes(locale: Locale): RouteRecordRaw[] {
   const isEnglish = locale === 'en-US';
   const suffix = isEnglish ? '-en' : '';
-  const config = createSiteConfig(locale);
-  const titles = siteMessages[locale].routeTitles;
+  const config = isEnglish ? siteEnConfig : siteConfig;
+  const titles = routeTitles[locale];
 
   return [
     {
@@ -43,7 +59,7 @@ function createLocalizedRoutes(locale: Locale): RouteRecordRaw[] {
       redirect: `/design/values${suffix}`,
       meta: { locale },
       component: () => import('./pages/design/index.vue'),
-      children: getDocsRoutes(config.design.docs),
+      children: getDocsRoutes(config.design.docs, locale),
     },
     {
       path: `/source${suffix}`,
@@ -57,7 +73,7 @@ function createLocalizedRoutes(locale: Locale): RouteRecordRaw[] {
       redirect: `/about/introduce${suffix}`,
       meta: { locale },
       component: () => import('./pages/about/index.vue'),
-      children: getDocsRoutes(config.about.docs),
+      children: getDocsRoutes(config.about.docs, locale),
     },
     {
       path: `/trade${suffix}`,

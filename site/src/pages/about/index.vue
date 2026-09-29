@@ -14,8 +14,8 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import type { RouteMeta } from 'vue-router';
 
-import { createSiteConfig } from '../../site.config';
-import type { Locale } from '../../i18n';
+import siteConfig from '../../site.config';
+import siteEnConfig from '../../site-en.config';
 
 interface AsidePage {
   name?: string;
@@ -39,8 +39,8 @@ const { locale } = useI18n({ useScope: 'global' });
 const tdDocAside = ref<DocAsideElement | null>(null);
 const loaded = ref(false);
 const asideList = computed<AsideRoute[]>(() => {
-  const { docs } = createSiteConfig(locale.value as Locale).about;
-  return docs.map(({ title, children }) => ({
+  const { docs } = (locale.value === 'en-US' ? siteEnConfig : siteConfig).about;
+  return docs.map(({ title, children = [] }) => ({
     title,
     children: children.map(({ name, title, path, meta }) => ({ name, title, path, meta })),
   }));
