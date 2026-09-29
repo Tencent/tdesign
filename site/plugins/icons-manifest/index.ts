@@ -2,7 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import type { Plugin } from 'vite';
+import type { Plugin, ResolvedConfig } from 'vite';
 
 // @ts-ignore tdesign-icons-view/manifest has no type declarations
 import { manifest } from 'tdesign-icons-view/manifest';
@@ -12,7 +12,7 @@ export default function iconsManifestPlugin(): Plugin {
   return {
     name: 'tdesign-icons-manifest',
     enforce: 'pre',
-    configResolved(config: any) {
+    configResolved(config: ResolvedConfig) {
       outDir = path.resolve(config.root, config.build.outDir || 'dist');
     },
     async closeBundle() {
