@@ -1,6 +1,25 @@
 import matter from 'gray-matter';
 
-export default function mdToVue(options) {
+export interface MarkdownRenderer {
+  render(this: unknown, src: string): { html: string };
+}
+
+export interface MdToVueOptions {
+  source: string;
+  file: string;
+  md: MarkdownRenderer;
+}
+
+interface PageData {
+  spline: string;
+  toc: boolean;
+  title: string;
+  description: string;
+  tdDocHeader: boolean;
+  isDesign?: boolean;
+}
+
+export default function mdToVue(options: MdToVueOptions): string {
   const mdSegment = customRender(options);
 
   if (mdSegment.isDesign) {
@@ -68,9 +87,9 @@ export default function mdToVue(options) {
   `;
 }
 
-function customRender({ source, md }) {
+function customRender({ source, md }: MdToVueOptions): PageData & { docMd: string } {
   const { content, data } = matter(source);
-  const pageData = {
+  const pageData: PageData = {
     spline: '',
     toc: true,
     title: '',
@@ -86,9 +105,7 @@ function customRender({ source, md }) {
   };
 }
 
-function normalizePageData(data) {
-  if (!data || typeof data !== 'object') return {};
-
+function normalizePageData(data: Record<string, unknown>): Partial<PageData> {
   return {
     ...(typeof data.spline === 'string' ? { spline: data.spline } : {}),
     ...(typeof data.toc === 'boolean' ? { toc: data.toc } : {}),

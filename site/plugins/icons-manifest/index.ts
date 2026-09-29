@@ -1,13 +1,18 @@
+/// <reference types="node" />
+
 import fs from 'fs';
 import path from 'path';
+import type { Plugin } from 'vite';
+
+// @ts-ignore tdesign-icons-view/manifest has no type declarations
 import { manifest } from 'tdesign-icons-view/manifest';
 
-export default function iconsManifestPlugin() {
-  let outDir;
+export default function iconsManifestPlugin(): Plugin {
+  let outDir: string | undefined;
   return {
     name: 'tdesign-icons-manifest',
     enforce: 'pre',
-    configResolved(config) {
+    configResolved(config: any) {
       outDir = path.resolve(config.root, config.build.outDir || 'dist');
     },
     async closeBundle() {
