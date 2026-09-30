@@ -225,13 +225,14 @@ export async function runSearch(host, query) {
   }
 
   if (host._abort) host._abort.abort();
-  host._abort = new AbortController();
+  const requestController = new AbortController();
+  host._abort = requestController;
   host._loading = true;
 
   try {
     const hits = await searchAlgolia({
       query: q,
-      signal: host._abort.signal,
+      signal: requestController.signal,
       appId: host.appId,
       apiKey: host.apiKey,
       indexName: host.indexName,
@@ -239,11 +240,11 @@ export async function runSearch(host, query) {
       hitsPerPage: host.hitsPerPage,
     });
     // 请求返回前可能已被新的查询打断，此时不应再落盘
-    if (host._abort.signal.aborted) return;
+    if (requestController.signal.aborted || host._abort !== requestController) return;
     host._loading = false;
     applyGroups(host, groupHits(hits));
   } catch (err) {
-    if (err?.name === 'AbortError') return;
+    if (err?.name === 'AbortError' || requestController.signal.aborted || host._abort !== requestController) return;
     host._loading = false;
     applyGroups(host, []);
   }
