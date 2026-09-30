@@ -15,9 +15,8 @@
     "noEmit": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "types": ["vite/client", "vitest/globals", "node"],
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.vue", "src/env.d.ts", "vite.config.ts", "vitest.config.ts"]
