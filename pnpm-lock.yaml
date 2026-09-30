@@ -132,8 +132,8 @@ importers:
         specifier: ^0.4.4
         version: 0.4.11(vue@3.5.42(typescript@5.9.3))
       tdesign-vue-next:
-        specifier: https://pkg.pr.new/tdesign-vue-next@6980
-        version: https://pkg.pr.new/tdesign-vue-next@6980(vue@3.5.42(typescript@5.9.3))
+        specifier: ^1.20.9
+        version: 1.20.9(vue@3.5.42(typescript@5.9.3))
       tvision-color:
         specifier: ^1.6.0
         version: 1.6.0
@@ -5966,9 +5966,8 @@ packages:
     peerDependencies:
       vue: '>=3.1.0'
 
-  tdesign-vue-next@https://pkg.pr.new/tdesign-vue-next@6980:
-    resolution: {tarball: https://pkg.pr.new/tdesign-vue-next@6980}
-    version: 1.20.8
+  tdesign-vue-next@1.20.9:
+    resolution: {integrity: sha512-Yj0RFp1k/MioFvNrWdsWEubbXwunqBvG2ItNU+stenH9loaCZFt58UeOnhwZBkobGwjzgsE3Zl9SczfFUCf4mg==}
     engines: {node: '>= 18'}
     peerDependencies:
       vue: '>=3.1.0'
@@ -13240,7 +13239,7 @@ snapshots:
       '@popperjs/core': 2.11.8
       lodash: 4.18.1
       tdesign-icons-vue-next: 0.4.11(vue@3.5.42(typescript@5.9.3))
-      tdesign-vue-next: 1.20.8(vue@3.5.42(typescript@5.9.3))
+      tdesign-vue-next: 1.20.9(vue@3.5.42(typescript@5.9.3))
       vue: 3.5.42(typescript@5.9.3)
     transitivePeerDependencies:
       - typescript
@@ -13267,7 +13266,7 @@ snapshots:
       validator: 13.15.35
       vue: 3.5.42(typescript@5.9.3)
 
-  tdesign-vue-next@https://pkg.pr.new/tdesign-vue-next@6980(vue@3.5.42(typescript@5.9.3)):
+  tdesign-vue-next@1.20.9(vue@3.5.42(typescript@5.9.3)):
     dependencies:
       '@babel/runtime': 7.29.7
       '@popperjs/core': 2.11.8
