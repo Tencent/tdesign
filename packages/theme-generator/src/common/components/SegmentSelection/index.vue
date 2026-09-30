@@ -33,41 +33,43 @@
       :options="innerSelectOptions"
       @change="handleSelectChange"
       :onPopupVisibleChange="handleVisibleChange"
-      :keys="isEn ? { label: 'enLabel' } : null"
+      :keys="isEn ? { label: 'enLabel' } : undefined"
       v-model="step"
       :popup-props="{ attach: handleAttach }"
     ></t-select>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { Select as TSelect, Slider as TSlider } from 'tdesign-vue-next/lib';
 
 import { useLang } from '@/common/i18n';
 import { handleAttach } from '@/common/utils';
 
+import type { OptionItem } from '@/common/types';
+
+type SliderValue = number | number[];
+
 defineOptions({ name: 'SegmentSelection' });
 
-const props = defineProps({
-  selectOptions: {
-    type: Array,
-    required: true,
-    default: () => [],
+const props = withDefaults(
+  defineProps<{
+    selectOptions: OptionItem[];
+    suspendedLabels?: Record<string | number, string>;
+    modelValue?: string | number;
+    disabled?: boolean;
+  }>(),
+  {
+    suspendedLabels: () => ({}),
+    disabled: false,
   },
-  suspendedLabels: {
-    type: Object,
-    required: false,
-    default: () => ({}),
-  },
-  modelValue: [String, Number],
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-});
+);
 
-const emit = defineEmits(['update:modelValue', 'enable']);
+const emit = defineEmits<{
+  'update:modelValue': [value: string | number | undefined];
+  enable: [];
+}>();
 
 const { isEn } = useLang();
 
@@ -77,18 +79,18 @@ const innerSelectOptions = ref(props.selectOptions);
 // 获取倒数第二个选项的 value 作为 Slider 的最大值（忽略自定义）
 const maxSliderValue = computed(() => {
   if (props.selectOptions.length < 2) return 1;
-  return props.selectOptions[props.selectOptions.length - 2].value;
+  return Number(props.selectOptions[props.selectOptions.length - 2].value);
 });
 
 // 获取第一个选项的 value 作为 Slider 的最小值
 const minSliderValue = computed(() => {
   if (props.selectOptions.length < 1) return 0;
-  return props.selectOptions[0].value;
+  return Number(props.selectOptions[0].value);
 });
 
-const sliderValue = computed(() => {
+const sliderValue = computed<number>(() => {
   // 如果 step 超过 max（自定义选项），依旧显示 max 值
-  return step.value > maxSliderValue.value ? maxSliderValue.value : step.value;
+  return Number(step.value) > maxSliderValue.value ? maxSliderValue.value : Number(step.value);
 });
 
 watch(
@@ -106,7 +108,7 @@ watch(
   () => props.disabled,
   (val) => {
     if (val) {
-      step.value = Number(props.selectOptions.find((v) => v.disabled).value);
+      step.value = Number(props.selectOptions.find((v) => v.disabled)?.value);
     }
   },
 );
@@ -115,20 +117,20 @@ function handleSelectChange() {
   emit('enable');
 }
 
-function handleVisibleChange(val) {
+function handleVisibleChange(val: boolean) {
   if (val && props.disabled) {
     innerSelectOptions.value = props.selectOptions;
     return;
   }
 }
 
-function handleSliderChange(v) {
+function handleSliderChange(v: SliderValue) {
   if (props.disabled) return;
-  step.value = v;
+  step.value = Array.isArray(v) ? v[0] : v;
 }
 
-function renderLabel() {
-  return props.suspendedLabels[step.value];
+function renderLabel(): string {
+  return (props.suspendedLabels[step.value as string | number] ?? '') as string;
 }
 </script>
 

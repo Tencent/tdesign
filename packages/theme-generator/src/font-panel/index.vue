@@ -65,8 +65,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch, onMounted, nextTick } from 'vue';
+import type { CSSProperties } from 'vue';
 
 import { CommonCollapse } from '@/common/components';
 import { useLang } from '@/common/i18n';
@@ -74,6 +75,7 @@ import { isMobile, modifyToken, themeStore } from '@/common/themes';
 import { getTokenValue } from '@/common/utils';
 
 import { FONT_COLOR_TOKEN_MAP } from './built-in/font-map';
+import type { FontColorToken } from './built-in/font-map';
 
 import FontColorAdjust from './components/FontColorAdjust.vue';
 import FontColorSvg from './components/FontColorSvg.vue';
@@ -83,18 +85,22 @@ import LineHeightSvg from './components/LineHeightSvg.vue';
 
 defineOptions({ name: 'FontPanel' });
 
-const props = defineProps({
-  top: Number,
-});
+const props = defineProps<{
+  top?: number;
+}>();
 
 const { lang } = useLang();
 
-const textColorPalette = ref(['']);
-const initTextColorPalette = ref(['']);
+interface PaletteToken extends FontColorToken {
+  value?: string;
+}
+
+const textColorPalette = ref<PaletteToken[]>([{ name: '', value: '' }]);
+const initTextColorPalette = ref<PaletteToken[]>([{ name: '', value: '' }]);
 
 const $device = computed(() => themeStore.device);
 
-const contentStyle = computed(() => {
+const contentStyle = computed<CSSProperties>(() => {
   const clientHeight = window.innerHeight;
   return {
     overflowY: 'scroll',
@@ -102,19 +108,19 @@ const contentStyle = computed(() => {
   };
 });
 
-function changeGradation(hex, idx) {
+function changeGradation(hex: string, idx: number) {
   const tokenIdxName = textColorPalette.value[idx].name;
   textColorPalette.value[idx].value = hex;
   modifyToken(tokenIdxName, hex);
 }
 
-function getCurrentPalette() {
-  let colorMap = FONT_COLOR_TOKEN_MAP;
+function getCurrentPalette(): PaletteToken[] {
+  const colorMap = FONT_COLOR_TOKEN_MAP;
 
-  let currentPalette = [...new Array(7).keys()].map((v, i) => {
+  const currentPalette = [...new Array(7).keys()].map((v, i) => {
     return {
       ...colorMap[i],
-      value: colorMap[i].value ?? getTokenValue(colorMap[i].from),
+      value: colorMap[i].value ?? getTokenValue(colorMap[i].from as string),
     };
   });
 

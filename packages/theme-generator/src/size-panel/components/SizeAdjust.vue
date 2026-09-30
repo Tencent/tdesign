@@ -59,7 +59,7 @@
     </div>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue-next/lib';
 
@@ -73,26 +73,28 @@ import PopupPaddingAdjustSvg from '../svg/PopupPaddingAdjustSvg.vue';
 import SizeAdjustSvg from '../svg/SizeAdjustSvg.vue';
 import VerticalPaddingAdjustSvg from '../svg/VerticalPaddingAdjustSvg.vue';
 
+import type { SizeMapItem } from '../built-in/size-map';
+
 defineOptions({ name: 'SizeAdjust' });
 
-const props = defineProps({
-  tokenList: Array,
-  type: String,
-});
+const props = defineProps<{
+  tokenList?: SizeMapItem[];
+  type?: string;
+}>();
 
-const hoverIdx = ref(null);
+const hoverIdx = ref<number | null>(null);
 
-function handleVisibleChange(v, ctx, idx) {
+function handleVisibleChange(v: boolean, ctx: { trigger?: string }, idx: number) {
   if (v) hoverIdx.value = idx;
   if (!v && ctx.trigger === 'document' && hoverIdx.value === idx) hoverIdx.value = null;
 }
 
-function handleChangeSize(token, v) {
+function handleChangeSize(token: string, v: number | string) {
   modifyToken(token, `${v}px`);
-  themeStore.incrementSizeRefresh(props.type);
+  themeStore.incrementSizeRefresh(props.type ?? null);
 }
 
-function parseSize(val) {
+function parseSize(val: string | number): number {
   if (typeof val === 'string') {
     const num = parseFloat(val);
     return isNaN(num) ? 0 : num;

@@ -80,7 +80,7 @@
     </div>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { Edit1Icon, ErrorCircleIcon, LinkUnlinkIcon } from 'tdesign-icons-vue-next';
 import { Popup as TPopup } from 'tdesign-vue-next/lib';
@@ -90,20 +90,30 @@ import { useLang } from '@/common/i18n';
 import { getTokenFromLocal, themeStore } from '@/common/themes';
 import { getTokenValue, handleAttach } from '@/common/utils';
 
+import type { TokenIndex } from '@/common/types';
+
 defineOptions({ name: 'ColorColumn' });
 
-const props = defineProps({
-  type: String,
-  gradientStep: Number,
-  tokenMap: Array,
-});
+const props = withDefaults(
+  defineProps<{
+    type?: string;
+    gradientStep?: number;
+    tokenMap?: (TokenIndex & { isModified?: boolean })[];
+  }>(),
+  {
+    tokenMap: () => [],
+  },
+);
 
-const emit = defineEmits(['recoverGradation', 'changeGradation']);
+const emit = defineEmits<{
+  recoverGradation: [type: string];
+  changeGradation: [hex: string, idx: number, type: string];
+}>();
 
 const { lang } = useLang();
 
 const activeIdx = ref(0);
-const hoverIdx = ref(null);
+const hoverIdx = ref<number | null>(null);
 const paletteChanged = ref(hasModifiedColors());
 
 // refresh-color-tokens 事件触发后，重新读取 DOM 中的 token 值
@@ -118,7 +128,7 @@ watch(
 // 将 tokenMap 与最新的 token 值合并；引用 refreshKey 以便在刷新时重新计算
 const colorList = computed(() => {
   refreshKey.value;
-  return props.tokenMap.map((color) => ({ ...color, value: getTokenValue(color.name) }));
+  return (props.tokenMap ?? []).map((color) => ({ ...color, value: getTokenValue(color.name) }));
 });
 
 watch(
@@ -129,26 +139,26 @@ watch(
 );
 
 // eslint-disable-next-line no-unused-vars
-function handleClickIdx(idx) {
+function handleClickIdx(idx: number) {
   activeIdx.value = idx;
 }
 
 // eslint-disable-next-line no-unused-vars
 function handleRecover() {
   paletteChanged.value = false;
-  emit('recoverGradation', props.type);
+  emit('recoverGradation', props.type ?? '');
 }
 
-function changeGradation(hex, idx) {
+function changeGradation(hex: string, idx: number) {
   paletteChanged.value = true;
-  emit('changeGradation', hex, idx, props.type);
+  emit('changeGradation', hex, idx, props.type ?? '');
 }
 
 function hasModifiedColors() {
   const localTokens = getTokenFromLocal();
   if (!localTokens) return false;
   const tokenKeys = Object.keys(localTokens);
-  return tokenKeys.some((key) => key.includes(props.type));
+  return tokenKeys.some((key) => key.includes(props.type ?? ''));
 }
 </script>
 <style scoped lang="less">

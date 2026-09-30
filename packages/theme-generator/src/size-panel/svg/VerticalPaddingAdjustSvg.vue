@@ -25,18 +25,20 @@
   </svg>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
 
-const props = defineProps({
-  size: {
-    type: Number,
-    default: 2,
+const props = withDefaults(
+  defineProps<{
+    size?: number;
+  }>(),
+  {
+    size: 2,
   },
-});
+);
 
 const height = computed(() => {
-  return Math.min(parseInt(props.size, 10) + 2, 12);
+  return Math.min(parseInt(String(props.size), 10) + 2, 12);
 });
 
 const viewHeight = computed(() => {

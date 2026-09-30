@@ -78,9 +78,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch, onMounted, nextTick } from 'vue';
-import isNumber from 'lodash/isNumber';
+import type { CSSProperties } from 'vue';
+import isNumber from 'lodash-es/isNumber';
 import { List as TList, ListItem as TListItem, Popup as TPopup } from 'tdesign-vue-next/lib';
 
 import { SegmentSelection, SizeSlider } from '@/common/components';
@@ -89,21 +90,23 @@ import { CUSTOM_EXTRA_ID, getOptionFromLocal, modifyToken, updateLocalOption } f
 import { handleAttach } from '@/common/utils';
 
 import { RADIUS_LABELS, RADIUS_OPTIONS, RADIUS_STEP_ARRAY, RADIUS_TOKEN_LIST } from './built-in/radius-map';
+import type { RadiusTokenItem } from './built-in/radius-map';
 
 defineOptions({ name: 'RadiusPanel' });
 
-const props = defineProps({
-  isRefresh: Boolean,
-});
+const props = defineProps<{
+  isRefresh?: boolean;
+  top?: number;
+}>();
 
 const { lang, isEn } = useLang();
 
-const step = ref(getOptionFromLocal('radius') || 3);
-const hoverIdx = ref(null);
+const step = ref<string | number>(getOptionFromLocal('radius') || 3);
+const hoverIdx = ref<number | null>(null);
 const segmentSelectionDisabled = ref(false);
-const radiusTypeList = ref(RADIUS_TOKEN_LIST);
+const radiusTypeList = ref<RadiusTokenItem[]>(RADIUS_TOKEN_LIST.map((item) => ({ ...item })));
 
-const contentStyle = computed(() => {
+const contentStyle = computed<CSSProperties>(() => {
   const clientHeight = window.innerHeight;
   return {
     overflowY: 'scroll',
@@ -130,27 +133,27 @@ watch(step, (val) => {
   updateLocalOption('radius', val !== 3 ? val : null);
   const isCustom = val === 6;
   segmentSelectionDisabled.value = isCustom;
-  if (!RADIUS_STEP_ARRAY[val - 1]) return;
+  if (!RADIUS_STEP_ARRAY[Number(val) - 1]) return;
 
   // 批量修改 radius
   radiusTypeList.value = radiusTypeList.value.map((item, index) => {
-    const preVal = RADIUS_STEP_ARRAY?.[val - 1]?.[index];
-    const formattedVal = typeof preVal === 'number' ? `${preVal}px` : preVal;
+    const preVal = RADIUS_STEP_ARRAY?.[Number(val) - 1]?.[index];
+    const formattedVal = typeof preVal === 'number' ? `${preVal}px` : String(preVal);
     modifyToken(item.token, formattedVal, isCustom);
 
     return {
       ...item,
-      value: RADIUS_STEP_ARRAY[val - 1][index],
+      value: RADIUS_STEP_ARRAY[Number(val) - 1][index],
     };
   });
 });
 
-function handleVisibleChange(v, ctx, idx) {
+function handleVisibleChange(v: boolean, ctx: { trigger?: string }, idx: number) {
   if (v) hoverIdx.value = idx;
   if (!v && ctx.trigger === 'document' && hoverIdx.value === idx) hoverIdx.value = null;
 }
 
-function handleChangeRadius(val, idx) {
+function handleChangeRadius(val: number | string, idx: number) {
   // 修改单独的 radius
   radiusTypeList.value.splice(idx, 1, {
     ...radiusTypeList.value[idx],
@@ -158,15 +161,15 @@ function handleChangeRadius(val, idx) {
   });
   modifyToken(radiusTypeList.value[idx]['token'], `${val}px`);
 
-  if (val !== RADIUS_STEP_ARRAY[step.value - 1]?.[idx]) {
+  if (val !== RADIUS_STEP_ARRAY[Number(step.value) - 1]?.[idx]) {
     segmentSelectionDisabled.value = true;
   }
 }
 
-function formattedRadius(radius) {
+function formattedRadius(radius: string | number | undefined): string {
   if (radius === '50%') return '50%';
   if (isNumber(radius)) return `${radius}px`;
-  return radius;
+  return String(radius ?? '');
 }
 
 function initRadiusToken() {
@@ -176,7 +179,7 @@ function initRadiusToken() {
   radiusTypeList.value = radiusTypeList.value
     .map((v) => {
       const regex = new RegExp(`${v.token}\\s*:\\s*([^;]+);`);
-      const match = regex.exec(radiusStyle.innerText);
+      const match = regex.exec(radiusStyle?.innerText ?? '');
       // 获取 token 对应的实际值
       if (match) v.value = match[1].trim();
       return v;

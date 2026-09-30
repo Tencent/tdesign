@@ -8,13 +8,19 @@ describe('useLang', () => {
 
   afterEach(() => {
     // 还原 window.location
-    delete window.location;
-    window.location = originalLocation;
+    Object.defineProperty(window, 'location', {
+      value: originalLocation,
+      configurable: true,
+      writable: true,
+    });
   });
 
-  function setPathname(pathname) {
-    delete window.location;
-    window.location = { ...originalLocation, pathname };
+  function setPathname(pathname: string) {
+    Object.defineProperty(window, 'location', {
+      value: { ...originalLocation, pathname },
+      configurable: true,
+      writable: true,
+    });
   }
 
   it('路径不以 -en 结尾时返回中文文案', () => {

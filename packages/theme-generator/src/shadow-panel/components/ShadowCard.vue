@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Divider as TDivider, Popup as TPopup } from 'tdesign-vue-next/lib';
 
 import { useLang } from '@/common/i18n';
@@ -36,17 +36,17 @@ import ShadowLayer from './ShadowLayer.vue';
 
 defineOptions({ name: 'ShadowCard' });
 
-defineProps({
-  shadow: Array,
-  detail: Object,
-  index: Number,
-});
+defineProps<{
+  shadow: string[];
+  detail: { label: string; tips: string; enTips: string };
+  index?: number;
+}>();
 
-const emit = defineEmits(['change']);
+const emit = defineEmits<{ change: [value: string[]] }>();
 
 const { isEn } = useLang();
 
-function change(value) {
+function change(value: string[]) {
   emit('change', value);
 }
 </script>

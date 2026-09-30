@@ -3,8 +3,8 @@
     v-model="color"
     :format="format"
     :color-modes="['monochrome']"
-    :recent-colors="null"
-    :swatch-colors="null"
+    :recent-colors="undefined"
+    :swatch-colors="undefined"
     :show-primary-color-preview="false"
     :select-input-props="{ popupProps: { attach: handleAttach } }"
     @change="handleChange"
@@ -12,22 +12,24 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from 'vue';
 import { ColorPickerPanel as TColorPickerPanel } from 'tdesign-vue-next/lib';
 import { handleAttach } from '../../utils';
 
 defineOptions({ name: 'ColorPicker', inheritAttrs: false });
 
-const props = defineProps({
-  value: String,
-  format: {
-    type: String,
-    default: 'HEX',
+const props = withDefaults(
+  defineProps<{
+    value?: string;
+    format?: 'HEX' | 'HEX8' | 'RGB' | 'RGBA' | 'HSL' | 'HSLA' | 'HSV' | 'HSVA' | 'CMYK' | 'CSS';
+  }>(),
+  {
+    format: 'HEX',
   },
-});
+);
 
-const emit = defineEmits(['change']);
+const emit = defineEmits<{ change: [value: string] }>();
 
 const color = ref(props.value);
 
@@ -38,7 +40,7 @@ watch(
   },
 );
 
-function handleChange(value) {
+function handleChange(value: string) {
   emit('change', value);
 }
 </script>

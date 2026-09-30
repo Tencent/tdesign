@@ -34,12 +34,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
 
 import { useLang } from '@/common/i18n';
 import { getRecommendThemes, themeStore } from '@/common/themes';
 
+import type { Theme } from '@/common/types';
 import PickedSvg from './PickedSvg.vue';
 
 defineOptions({ name: 'RecommendThemes' });
@@ -49,7 +50,7 @@ const { isEn } = useLang();
 const recommendedThemes = computed(() => getRecommendThemes(themeStore.device));
 const $theme = computed(() => themeStore.theme);
 
-function handleChangeTheme(theme) {
+function handleChangeTheme(theme: Theme) {
   themeStore.updateTheme(theme);
 }
 </script>

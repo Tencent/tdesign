@@ -30,18 +30,18 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import ArrowIcon from 'tdesign-vue-next/lib/common-components/fake-arrow';
 import { collapseAnimation } from '../../utils';
 
 defineOptions({ name: 'CommonCollapse' });
 
-defineProps({
-  title: String,
-  colorPalette: Array,
-  type: String,
-});
+defineProps<{
+  title?: string;
+  colorPalette?: unknown[];
+  type?: string;
+}>();
 
 const { beforeEnter, enter, afterEnter, beforeLeave, leave, afterLeave } = collapseAnimation();
 const isActive = ref(false);

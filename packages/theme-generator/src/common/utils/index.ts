@@ -1,3 +1,5 @@
+import type { ThemeMode } from '@/common/types';
+
 export * from './animation';
 
 /**
@@ -8,7 +10,7 @@ export * from './animation';
  * 不论亮暗模式都从 document.documentElement 读取，避免命中 td-theme-generator
  * host 元素（它继承的是浅色值，暗色下读值会错误）。
  */
-export function getTokenValue(name) {
+export function getTokenValue(name: string): string {
   const rootElement = document.documentElement;
   return window.getComputedStyle(rootElement).getPropertyValue(name).toLowerCase().trim();
 }
@@ -18,7 +20,7 @@ export function getTokenValue(name) {
  * 优先识别 `theme-mode` 属性，其次识别 `.dark` class（与 dark.css / tdesign.min.css
  * 的 `:root.dark` 选择器对齐），均无则视为 light。
  */
-export function getThemeMode() {
+export function getThemeMode(): ThemeMode {
   const el = document.documentElement;
   if (el.getAttribute('theme-mode') === 'dark') return 'dark';
   if (el.classList.contains('dark')) return 'dark';
@@ -28,7 +30,7 @@ export function getThemeMode() {
 /**
  * 创建亮暗变化监听器
  */
-export function setUpModeObserver(handler) {
+export function setUpModeObserver(handler: (mode: ThemeMode) => void): MutationObserver {
   let mode = getThemeMode();
 
   const observer = new MutationObserver((mutationsList) => {
@@ -56,8 +58,8 @@ export function setUpModeObserver(handler) {
  * - 如果存在，则返回已存在的样式表
  * - 如果不存在，则创建一个新的样式表
  */
-export function appendStyleSheet(styleId) {
-  let styleSheet;
+export function appendStyleSheet(styleId: string): HTMLStyleElement {
+  let styleSheet: HTMLStyleElement;
   const existSheet = document.getElementById(styleId);
 
   if (!existSheet) {
@@ -66,7 +68,7 @@ export function appendStyleSheet(styleId) {
     styleSheet.type = 'text/css';
     document.head.appendChild(styleSheet);
   } else {
-    styleSheet = existSheet;
+    styleSheet = existSheet as HTMLStyleElement;
   }
   return styleSheet;
 }
@@ -78,15 +80,19 @@ export function appendStyleSheet(styleId) {
  * 生成器按单例设计（每页一个实例），多实例场景下挂载点可能错误，
  * 若未来需要支持多实例，需改为从当前组件实例的根节点向上查找 host。
  */
-export function handleAttach() {
-  return document.querySelector('td-theme-generator')?.shadowRoot?.querySelector?.('.theme-generator') || document.body;
+export function handleAttach(): HTMLElement {
+  return (
+    (document
+      .querySelector('td-theme-generator')
+      ?.shadowRoot?.querySelector('.theme-generator') as HTMLElement | null) || document.body
+  );
 }
 
 /**
  * 将指定内容导出为文件
  * - e.g. `new Blob(['Hello, world!'], { type: 'text/plain' })`
  */
-export function downloadFile(blob, fileName) {
+export function downloadFile(blob: Blob, fileName: string): void {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.download = fileName;
@@ -95,18 +101,23 @@ export function downloadFile(blob, fileName) {
   a.click();
 }
 
+export interface ParsedRootCss {
+  rootContent: string;
+  restContent: string;
+}
+
 /**
  * 解析 CSS 文本，拆分出 `:root` 中的变量内容与其余的选择器规则
  */
-export function parseRootCss(cssText) {
+export function parseRootCss(cssText?: string | null): ParsedRootCss {
   if (!cssText) return { rootContent: '', restContent: '' };
 
   // 匹配以 :root 开头的选择器组（允许逗号分隔的多个选择器，且包含 :root），后接 { ... } 块
   const rootBlockReg = /(?:^|[\s;}])((?:[^{};]*?:root[^{};]*)\s*\{([^}]*)\})/g;
 
-  const rootContents = [];
+  const rootContents: string[] = [];
   let restContent = cssText;
-  let match;
+  let match: RegExpExecArray | null;
   while ((match = rootBlockReg.exec(cssText)) !== null) {
     rootContents.push(match[2].trim());
     restContent = restContent.replace(match[1], '');
@@ -125,11 +136,11 @@ export function parseRootCss(cssText) {
 /**
  * 删除 localStorage 中指定对象的指定属性
  */
-export function clearLocalItem(storageKey, itemKey) {
+export function clearLocalItem(storageKey: string, itemKey: string): void {
   const storedData = localStorage.getItem(storageKey);
   if (!storedData) return;
 
-  const dataObj = JSON.parse(storedData);
+  const dataObj = JSON.parse(storedData) as Record<string, unknown>;
   delete dataObj[itemKey];
 
   if (Object.keys(dataObj).length === 0) {

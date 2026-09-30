@@ -1,7 +1,12 @@
-export const SIZE_TOKENS = Array.from({ length: 16 }, (_, i) => `--td-size-${i + 1}`);
+export const SIZE_TOKENS: string[] = Array.from({ length: 16 }, (_, i) => `--td-size-${i + 1}`);
+
+export interface SizeMapItem {
+  name: string;
+  from: string;
+}
 
 // 组件大小列表
-export const COMP_SIZE_MAP = [
+export const COMP_SIZE_MAP: SizeMapItem[] = [
   {
     name: 'comp-size-xxxs',
     from: 'size-6',
@@ -49,7 +54,7 @@ export const COMP_SIZE_MAP = [
 ];
 
 // 组件左右边距列表
-export const COMP_PADDING_LR_MAP = [
+export const COMP_PADDING_LR_MAP: SizeMapItem[] = [
   {
     name: 'comp-paddingLR-xxs',
     from: 'size-1',
@@ -81,7 +86,7 @@ export const COMP_PADDING_LR_MAP = [
 ];
 
 // 组件上下边距列表
-export const COMP_PADDING_TB_MAP = [
+export const COMP_PADDING_TB_MAP: SizeMapItem[] = [
   {
     name: 'comp-paddingTB-xxs',
     from: 'size-1',
@@ -113,7 +118,7 @@ export const COMP_PADDING_TB_MAP = [
 ];
 
 // 组件弹出层边距列表
-export const COMP_POPUP_PADDING_MAP = [
+export const COMP_POPUP_PADDING_MAP: SizeMapItem[] = [
   {
     name: 'pop-padding-s',
     from: 'size-2',
@@ -137,7 +142,7 @@ export const COMP_POPUP_PADDING_MAP = [
 ];
 
 // 组件间距列表
-export const COMP_MARGIN_MAP = [
+export const COMP_MARGIN_MAP: SizeMapItem[] = [
   {
     name: 'comp-margin-xxs',
     from: 'size-1',

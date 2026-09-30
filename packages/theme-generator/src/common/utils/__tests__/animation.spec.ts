@@ -17,7 +17,7 @@ describe('colorAnimation', () => {
 
     // happy-dom 的 canvas.getContext 原生返回 null，这里 stub 出 2d 上下文
     const ctxStub = { fillStyle: '', fillRect: vi.fn() };
-    canvas.getContext = vi.fn(() => ctxStub);
+    canvas.getContext = vi.fn(() => ctxStub) as unknown as typeof canvas.getContext;
 
     // requestAnimationFrame 不真正调度回调，避免递归；返回固定 id 供 cancel 校验
     const rafSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation(() => 42);
@@ -42,7 +42,7 @@ describe('colorAnimation', () => {
     document.body.appendChild(canvas);
 
     const ctxStub = { fillStyle: '', fillRect: vi.fn() };
-    canvas.getContext = vi.fn(() => ctxStub);
+    canvas.getContext = vi.fn(() => ctxStub) as unknown as typeof canvas.getContext;
 
     const rafSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation(() => 7);
     const cancelSpy = vi.spyOn(window, 'cancelAnimationFrame');

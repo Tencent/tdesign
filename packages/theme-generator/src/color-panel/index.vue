@@ -255,7 +255,7 @@
       >
         <template #subTitle>
           {{ lang.color.fromThemeColor }}
-          <t-switch style="margin-left: 8px" v-model="isGrayRelatedToTheme" @change="changeNeutralColor"></t-switch>
+          <t-switch style="margin-left: 8px" v-model="isGrayRelatedToTheme" @change="handleNeutralChange"></t-switch>
         </template>
         <color-column
           type="gray"
@@ -314,8 +314,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
+import type { CSSProperties, Ref } from 'vue';
 import { Edit1Icon, FileCopyIcon, HelpCircleIcon } from 'tdesign-icons-vue-next';
 import {
   Col as TCol,
@@ -346,32 +347,35 @@ import {
 import { colorAnimation, getThemeMode, getTokenValue, handleAttach, setUpModeObserver } from '@/common/utils';
 
 import { FUNCTION_TOKENS } from './built-in/color-map';
+import type { FunctionColorType } from './built-in/color-map';
 import { ALL_PRESET_COLORS, DEFAULT_COLORS, RECOMMEND_COLORS, SCENE_COLORS } from './built-in/color-preset';
 
-import ColorCollapse from './components/ColorCollapse';
-import ColorColumn from './components/ColorColumn';
+import ColorCollapse from './components/ColorCollapse/index.vue';
+import ColorColumn from './components/ColorColumn/index.vue';
+
+import type { TokenIndex } from '@/common/types';
 
 defineOptions({ name: 'ColorPanel' });
 
-const props = defineProps({
-  top: Number,
-});
+const props = defineProps<{
+  top?: number;
+}>();
 
 const { lang, isEn } = useLang();
 
-const functionTokenMap = ref({
+const functionTokenMap = ref<Record<FunctionColorType, TokenIndex[]>>({
   gray: [],
   success: [],
   error: [],
   warning: [],
 });
 const brandInputColor = ref(themeStore.brandColor);
-const brandIndexes = ref({
+const brandIndexes = ref<{ light: number; dark: number }>({
   light: 7,
   dark: 8,
 });
 const currentBrandIdx = ref(7);
-const brandTokenMap = ref([]); // `-td-brand-x` 系列的 token 映射需要根据 brandIdx 动态计算；其它功能色都是固定的
+const brandTokenMap = ref<TokenIndex[]>([]); // `-td-brand-x` 系列的 token 映射需要根据 brandIdx 动态计算；其它功能色都是固定的
 const grayMainColor = ref(getOptionFromLocal('gray') || getTokenValue('--td-gray-color-4'));
 const successMainColor = ref(getOptionFromLocal('success') || getTokenValue('--td-success-color'));
 const errorMainColor = ref(getOptionFromLocal('error') || getTokenValue('--td-error-color'));
@@ -381,7 +385,7 @@ const isGrayRelatedToTheme = ref(getOptionFromLocal('neutral') == 'true');
 const isMoreVisible = ref(false);
 
 // 用于动态访问 `this[\`${type}MainColor\`]`
-const mainColorMap = {
+const mainColorMap: Record<FunctionColorType, Ref<string>> = {
   gray: grayMainColor,
   success: successMainColor,
   error: errorMainColor,
@@ -393,7 +397,7 @@ const $device = computed(() => themeStore.device);
 const isRemainMode = computed(() => generationMode.value === 'remain');
 const $brandColor = computed(() => themeStore.brandColor);
 const brandDisplayedColor = computed(() => (isRemainMode.value ? brandInputColor.value : $brandColor.value));
-const contentStyle = computed(() => {
+const contentStyle = computed<CSSProperties>(() => {
   const clientHeight = window.innerHeight;
   return {
     overflowY: 'scroll',
@@ -401,7 +405,7 @@ const contentStyle = computed(() => {
   };
 });
 
-function generateBrandTokenMap(brandIdx) {
+function generateBrandTokenMap(brandIdx: number): TokenIndex[] {
   const hoverIdx = brandIdx - 1;
   const activeIdx = brandIdx > 8 ? brandIdx : brandIdx + 1;
   return [
@@ -421,13 +425,13 @@ function updateBrandTokenMap() {
 }
 
 function updateFunctionTokenMap() {
-  Object.keys(FUNCTION_TOKENS).forEach((type) => {
+  (Object.keys(FUNCTION_TOKENS) as FunctionColorType[]).forEach((type) => {
     const tokens = FUNCTION_TOKENS[type];
     functionTokenMap.value[type] = collectTokenIndexes(tokens);
   });
 }
 
-function changeBrandColor(hex, trigger = 'update') {
+function changeBrandColor(hex: string, trigger: 'update' | 'init' = 'update') {
   // 备份用户实际输入的颜色
   // 在智能推荐模式下，它与实际更新的颜色不同
   brandInputColor.value = hex.toUpperCase();
@@ -461,7 +465,7 @@ function changeBrandColor(hex, trigger = 'update') {
   updateBrandTokenMap();
 }
 
-function changeNeutralColor(related, trigger = 'update') {
+function changeNeutralColor(related: boolean, trigger: 'update' | 'init' = 'update') {
   updateLocalOption('neutral', related ? 'true' : null);
   // grayMainColor 始终保持用户自定义的中性色，不随关联状态改变
   // 关联时只是借用品牌色作为生成算法的输入
@@ -471,11 +475,11 @@ function changeNeutralColor(related, trigger = 'update') {
   nextTick(refreshColorTokens);
 }
 
-function changeFunctionColor(hex, type, trigger = 'update') {
+function changeFunctionColor(hex: string, type: string, trigger: 'update' | 'init' = 'update') {
   if (trigger !== 'init') {
     updateLocalOption(type, hex);
   }
-  mainColorMap[type].value = hex;
+  mainColorMap[type as FunctionColorType].value = hex;
   if (type === 'gray') {
     changeNeutralColor(isGrayRelatedToTheme.value, trigger);
     return;
@@ -485,13 +489,13 @@ function changeFunctionColor(hex, type, trigger = 'update') {
   nextTick(refreshColorTokens);
 }
 
-function changeGradation(hex, idx, type, saveToLocal = true) {
+function changeGradation(hex: string, idx: number, type: string, saveToLocal = true) {
   const tokenName = `--td-${type}-color-${idx}`;
   modifyToken(tokenName, hex, saveToLocal);
   nextTick(refreshColorTokens);
 }
 
-function recoverGradation(type) {
+function recoverGradation(type: string) {
   Array(14) // 最长的情况为 gray 的 14 个色阶（虽然理论上有些 token 用户无法直接在 UI 中修改）
     .fill(0)
     .forEach((_, idx) => {
@@ -502,11 +506,15 @@ function recoverGradation(type) {
     changeBrandColor(brandInputColor.value);
     return;
   }
-  changeFunctionColor(mainColorMap[type].value, type);
+  changeFunctionColor(mainColorMap[type as FunctionColorType].value, type as FunctionColorType);
 }
 
 function refreshColorTokens() {
   themeStore.incrementColorRefresh();
+}
+
+function handleNeutralChange(value: string | number | boolean) {
+  changeNeutralColor(Boolean(value));
 }
 
 watch(generationMode, () => {
@@ -514,8 +522,8 @@ watch(generationMode, () => {
 });
 
 // 保存动画取消函数与模式观察者，组件卸载时清理，避免泄漏
-let cancelColorAnimation = null;
-let modeObserver = null;
+let cancelColorAnimation: (() => void) | null = null;
+let modeObserver: MutationObserver | null = null;
 // 标记组件是否已卸载：onMounted 的初始化在 nextTick 内异步执行，
 // 若组件在 tick 前卸载，回调里应跳过启动动画 / observer，避免泄漏。
 let disposed = false;
@@ -527,7 +535,7 @@ onMounted(() => {
     changeBrandColor($brandColor.value, 'init');
     updateFunctionTokenMap();
     // 恢复用户上次选择的功能色
-    const functionColors = ['gray', 'success', 'error', 'warning'];
+    const functionColors: FunctionColorType[] = ['gray', 'success', 'error', 'warning'];
     functionColors.forEach((type) => {
       const color = getOptionFromLocal(type);
       if (color) {

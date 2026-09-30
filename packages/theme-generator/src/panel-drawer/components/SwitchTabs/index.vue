@@ -22,8 +22,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, markRaw } from 'vue';
+import type { Component } from 'vue';
 import { useLang } from '@/common/i18n';
 import { isMobile, themeStore } from '@/common/themes';
 
@@ -35,15 +36,25 @@ import SizeSvg from './SizeSvg.vue';
 
 defineOptions({ name: 'SwitchTabs' });
 
-defineProps({
-  activeTabIdx: Number,
-});
+withDefaults(
+  defineProps<{
+    activeTabIdx?: number;
+  }>(),
+  {
+    activeTabIdx: 0,
+  },
+);
 
-const emit = defineEmits(['changeActiveTab']);
+const emit = defineEmits<{ changeActiveTab: [idx: number] }>();
 
 const { lang } = useLang();
 
-const tabs = ref([]);
+interface TabItem {
+  title: string;
+  image: Component;
+}
+
+const tabs = ref<TabItem[]>([]);
 
 const $device = computed(() => themeStore.device);
 
@@ -78,7 +89,7 @@ onMounted(() => {
   ];
 });
 
-function handleClickPanel(idx) {
+function handleClickPanel(idx: number) {
   emit('changeActiveTab', idx);
 }
 </script>

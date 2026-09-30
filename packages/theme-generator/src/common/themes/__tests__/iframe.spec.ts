@@ -52,7 +52,7 @@ function setupParentStyles() {
 }
 
 // 构造一个带 mock contentDocument 的 iframe（happy-dom 原生 iframe.contentDocument 不可写）。
-function createMockIframe(id) {
+function createMockIframe(id: string) {
   const iframe = document.createElement('iframe');
   iframe.id = id;
   const iframeDoc = document.implementation.createHTMLDocument();
@@ -61,6 +61,16 @@ function createMockIframe(id) {
     writable: false,
   });
   return iframe;
+}
+
+// 测试内断言取 document，简化 null 处理
+function docOf(iframe: HTMLIFrameElement): Document {
+  return iframe.contentDocument as Document;
+}
+
+// getElementById 的测试快捷方式，返回非空 HTMLStyleElement（断言失败由 expect 处理）
+function byId(doc: Document, id: string): HTMLElement {
+  return doc.getElementById(id) as HTMLElement;
 }
 
 function flushObservers(ms = 200) {
@@ -85,10 +95,10 @@ describe('iframe 同步: 小程序 / uniapp', () => {
 
     await flushObservers();
 
-    // 关键回归点：custom-theme 必须能被 iframe.contentDocument.getElementById 命中
+    // 关键回归点：custom-theme 必须能被 docOf(iframe).getElementById 命中
     // 之前用 document.createElement 创建再 append 到 iframe，ownerDocument 不一致，
     // getElementById 找不到，后续 modifyToken 更新会落到 else 早返回分支，主题修改无效。
-    const light = iframe.contentDocument.getElementById(CUSTOM_THEME_ID);
+    const light = byId(docOf(iframe), CUSTOM_THEME_ID);
     expect(light).toBeTruthy();
     // 预览 iframe 的选择器与导出逻辑不同：导出用 `page, .page`（真实小程序环境），
     // 预览 iframe 是 H5 渲染，uni-app 的页面根节点是 `uni-page-body`。
@@ -96,12 +106,12 @@ describe('iframe 同步: 小程序 / uniapp', () => {
     expect(light.textContent).toContain('uni-page-body');
     expect(light.textContent).toContain('--td-brand-color-7');
 
-    const extra = iframe.contentDocument.getElementById(CUSTOM_EXTRA_ID);
+    const extra = byId(docOf(iframe), CUSTOM_EXTRA_ID);
     expect(extra).toBeTruthy();
     expect(extra.textContent).toContain('--td-font-size');
 
     // dark 在 light 模式下不应被创建（小程序/uniapp 靠切换 style 而非 root 属性）
-    expect(iframe.contentDocument.getElementById(CUSTOM_DARK_ID)).toBeNull();
+    expect(byId(docOf(iframe), CUSTOM_DARK_ID)).toBeNull();
   });
 
   it('uniapp: 修改 token 后 iframe 内 custom-theme 同步更新', async () => {
@@ -117,7 +127,7 @@ describe('iframe 同步: 小程序 / uniapp', () => {
     modifyToken('--td-brand-color-7', '#ff0000');
     await flushObservers();
 
-    const updated = iframe.contentDocument.getElementById(CUSTOM_THEME_ID);
+    const updated = byId(docOf(iframe), CUSTOM_THEME_ID);
     expect(updated).toBeTruthy();
     expect(updated.textContent).toContain('#ff0000');
     // 旧值应被替换掉
@@ -135,7 +145,7 @@ describe('iframe 同步: 小程序 / uniapp', () => {
     // 外层 iframe 模拟"已加载完成"：直接往 contentDocument 里塞 webview iframe，
     // 不依赖 onload 触发（onload 在 iframe 已加载时不会再 fire）。
     const webviewIframe = createMockIframe('webview-1');
-    outerIframe.contentDocument.body.appendChild(webviewIframe);
+    docOf(outerIframe).body.appendChild(webviewIframe);
 
     await flushObservers();
 
@@ -144,13 +154,13 @@ describe('iframe 同步: 小程序 / uniapp', () => {
     expect(webviewIframe.dataset.observed).toBe('true');
     expect(webviewIframe.getAttribute('device')).toBe('mini-program');
 
-    const webviewLight = webviewIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
+    const webviewLight = byId(docOf(webviewIframe), CUSTOM_THEME_ID);
     expect(webviewLight).toBeTruthy();
     expect(webviewLight.textContent).toContain('body');
     expect(webviewLight.textContent).toContain('--td-brand-color-7');
 
     // m2w web 预览（无嵌套 webview）路径：previewIframe 本身也应被注入主题
-    const outerLight = outerIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
+    const outerLight = byId(docOf(outerIframe), CUSTOM_THEME_ID);
     expect(outerLight).toBeTruthy();
     expect(outerLight.textContent).toContain('--td-brand-color-7');
   });
@@ -173,7 +183,7 @@ describe('iframe 同步: 小程序 / uniapp', () => {
     expect(previewIframe.dataset.observed).toBe('true');
     expect(previewIframe.getAttribute('device')).toBe('mini-program');
 
-    const light = previewIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
+    const light = byId(docOf(previewIframe), CUSTOM_THEME_ID);
     expect(light).toBeTruthy();
     expect(light.textContent).toContain('body');
     expect(light.textContent).toContain('--td-brand-color-7');
@@ -192,7 +202,7 @@ describe('iframe 同步: 小程序 / uniapp', () => {
     modifyToken('--td-brand-color-7', '#ff00ff');
     await flushObservers();
 
-    const updated = previewIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
+    const updated = byId(docOf(previewIframe), CUSTOM_THEME_ID);
     expect(updated).toBeTruthy();
     expect(updated.textContent).toContain('#ff00ff');
     expect(updated.textContent).not.toContain('#0052d9');
@@ -207,14 +217,14 @@ describe('iframe 同步: 小程序 / uniapp', () => {
     document.body.appendChild(docPhone);
 
     const webviewIframe = createMockIframe('webview-2');
-    outerIframe.contentDocument.body.appendChild(webviewIframe);
+    docOf(outerIframe).body.appendChild(webviewIframe);
 
     await flushObservers();
 
     modifyToken('--td-brand-color-7', '#00ff00');
     await flushObservers();
 
-    const updated = webviewIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
+    const updated = byId(docOf(webviewIframe), CUSTOM_THEME_ID);
     expect(updated).toBeTruthy();
     expect(updated.textContent).toContain('#00ff00');
     expect(updated.textContent).not.toContain('#0052d9');
@@ -235,7 +245,7 @@ describe('iframe 同步: 小程序 / uniapp', () => {
     // 关键回归点：iframe 已在 DOM 中时，初始扫描应直接处理它（不依赖 MutationObserver）
     expect(previewIframe.dataset.observed).toBe('true');
 
-    const light = previewIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
+    const light = byId(docOf(previewIframe), CUSTOM_THEME_ID);
     expect(light).toBeTruthy();
     expect(light.textContent).toContain('--td-brand-color-7');
   });
@@ -252,7 +262,7 @@ describe('iframe 同步: 小程序 / uniapp', () => {
 
     expect(previewIframe.dataset.observed).toBe('true');
 
-    const light = previewIframe.contentDocument.getElementById(CUSTOM_THEME_ID);
+    const light = byId(docOf(previewIframe), CUSTOM_THEME_ID);
     expect(light).toBeTruthy();
     expect(light.textContent).toContain('uni-page-body');
   });

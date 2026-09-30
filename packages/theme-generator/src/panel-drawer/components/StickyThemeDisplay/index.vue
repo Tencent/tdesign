@@ -9,19 +9,17 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { useLang } from '@/common/i18n';
 import { themeStore } from '@/common/themes';
 
 defineOptions({ name: 'StickyThemeDisplay' });
 
-const props = defineProps({
-  top: Number,
-  theme: {
-    type: Object,
-  },
-});
+const props = defineProps<{
+  top?: number;
+  theme?: Record<string, unknown>;
+}>();
 
 const { isEn } = useLang();
 

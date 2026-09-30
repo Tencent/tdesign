@@ -22,33 +22,31 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { Drawer as TDrawer } from 'tdesign-vue-next/lib';
 
 import { themeStore } from '@/common/themes';
 import { handleAttach } from '@/common/utils';
 
-import ColorPanel from '../color-panel';
-import FontPanel from '../font-panel';
-import RadiusPanel from '../radius-panel';
-import ShadowPanel from '../shadow-panel';
-import SizePanel from '../size-panel';
+import ColorPanel from '../color-panel/index.vue';
+import FontPanel from '../font-panel/index.vue';
+import RadiusPanel from '../radius-panel/index.vue';
+import ShadowPanel from '../shadow-panel/index.vue';
+import SizePanel from '../size-panel/index.vue';
 
-import StickyThemeDisplay from './components/StickyThemeDisplay';
-import SwitchTabs from './components/SwitchTabs';
+import StickyThemeDisplay from './components/StickyThemeDisplay/index.vue';
+import SwitchTabs from './components/SwitchTabs/index.vue';
 
 defineOptions({ name: 'PanelDrawer' });
 
-const props = defineProps({
-  drawerVisible: {
-    type: [String, Number, Boolean],
-  },
-});
+const props = defineProps<{
+  drawerVisible?: string | number | boolean;
+}>();
 
-const emit = defineEmits(['panel-drawer-visible']);
+const emit = defineEmits<{ 'panel-drawer-visible': [v: boolean] }>();
 
-const ACTIVE_TAB_MAP = {
+const ACTIVE_TAB_MAP: Record<string, number> = {
   color: 0,
   font: 1,
   radius: 2,
@@ -76,7 +74,7 @@ watch(visible, (v) => {
   emit('panel-drawer-visible', v);
 });
 
-function changeActiveTab(tab) {
+function changeActiveTab(tab: number) {
   activeTabIdx.value = tab;
 }
 </script>

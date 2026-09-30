@@ -76,7 +76,7 @@
     </transition>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { Edit1Icon, FileCopyIcon } from 'tdesign-icons-vue-next';
 import { Popup as TPopup } from 'tdesign-vue-next/lib';
@@ -88,14 +88,14 @@ import { collapseAnimation, handleAttach } from '@/common/utils';
 
 defineOptions({ name: 'ColorCollapse' });
 
-const props = defineProps({
-  type: String,
-  title: String,
-  mainColor: String,
-  disabled: Boolean,
-});
+const props = defineProps<{
+  type?: string;
+  title?: string;
+  mainColor?: string;
+  disabled?: boolean;
+}>();
 
-const emit = defineEmits(['changeMainColor']);
+const emit = defineEmits<{ changeMainColor: [hex: string, type: string] }>();
 
 const { lang } = useLang();
 
@@ -103,11 +103,12 @@ const { beforeEnter, enter, afterEnter, beforeLeave, leave, afterLeave } = colla
 const isActive = ref(false);
 const isHover = ref(false);
 
-function changeColor(hex) {
-  emit('changeMainColor', hex, props.type);
+function changeColor(hex: string) {
+  emit('changeMainColor', hex, props.type ?? '');
 }
 
-async function copyHex(hex) {
+async function copyHex(hex?: string) {
+  if (!hex) return;
   try {
     if (navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(hex);

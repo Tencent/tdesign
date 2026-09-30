@@ -88,7 +88,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch, onMounted, nextTick } from 'vue';
 import {
   List as TList,
@@ -109,14 +109,16 @@ defineOptions({ name: 'LineHeightAdjust' });
 
 const { lang } = useLang();
 
-const isHover = ref(null);
+const isHover = ref<boolean | null>(null);
 /* 存入 local 的 line-height 结构为 ${tokenType}_${lineHeightValue}
    例如：plus_8 和 time_1.5  */
-const tokenType = ref('plus'); // 固定（plus） or 递增（time）
+const tokenType = ref<'plus' | 'time'>('plus'); // 固定（plus） or 递增（time）
 const step = ref(3); // 默认
-const lineHeightValue = ref(LINE_HEIGHT_STEPS[3]);
+const lineHeightValue = ref<string | number>(LINE_HEIGHT_STEPS[3]);
 const lineHeightOptions = LINE_HEIGHT_OPTIONS;
-const lineHeightLabels = Object.fromEntries(LINE_HEIGHT_OPTIONS.map((item, index) => [index + 1, item.label]));
+const lineHeightLabels: Record<number, string> = Object.fromEntries(
+  LINE_HEIGHT_OPTIONS.map((item, index) => [index + 1, item.label]),
+);
 const segmentSelectionDisabled = ref(false);
 
 watch(step, (v) => {
@@ -155,17 +157,19 @@ function initStep() {
   }
 
   const suffixVal = lineHeightParts[1];
-  const stepKey = Number(Object.keys(LINE_HEIGHT_STEPS).find((key) => LINE_HEIGHT_STEPS[key] == suffixVal));
+  const stepKey = Number(
+    Object.keys(LINE_HEIGHT_STEPS).find((key) => LINE_HEIGHT_STEPS[Number(key)] == Number(suffixVal)),
+  );
 
   if (stepKey >= 0) step.value = stepKey;
   lineHeightValue.value = suffixVal;
 }
 
-function handleVisibleChange(v) {
+function handleVisibleChange(v: boolean) {
   isHover.value = v;
 }
 
-function handleChangeFontSize(v) {
+function handleChangeFontSize(v: string | number) {
   lineHeightValue.value = v;
 
   const isTimeCalc = tokenType.value === 'time';
@@ -173,7 +177,7 @@ function handleChangeFontSize(v) {
   updateLineHeightTokens(v, tokenType.value);
   updateLocalOption('line-height', `${isTimeCalc ? 'time' : 'plus'}_${v}`);
 
-  if (!isTimeCalc && !Object.values(LINE_HEIGHT_STEPS).includes(v)) {
+  if (!isTimeCalc && !(Object.values(LINE_HEIGHT_STEPS) as (string | number)[]).includes(v)) {
     segmentSelectionDisabled.value = true;
   }
 }

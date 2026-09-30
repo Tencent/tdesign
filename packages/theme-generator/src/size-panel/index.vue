@@ -141,8 +141,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive, computed, watch } from 'vue';
+import type { CSSProperties } from 'vue';
 import { CommonCollapse } from '@/common/components';
 import { useLang } from '@/common/i18n';
 import { themeStore } from '@/common/themes';
@@ -166,13 +167,13 @@ import {
 
 defineOptions({ name: 'SizePanel' });
 
-const props = defineProps({
-  top: Number,
-});
+const props = defineProps<{
+  top?: number;
+}>();
 
 const { lang } = useLang();
 
-const refreshIdMap = reactive({
+const refreshIdMap = reactive<Record<string, number>>({
   'comp-size': 0,
   'comp-padding-tb': 0,
   'comp-padding-lr': 0,
@@ -180,7 +181,7 @@ const refreshIdMap = reactive({
   'comp-margin': 0,
 });
 
-const contentStyle = computed(() => {
+const contentStyle = computed<CSSProperties>(() => {
   const clientHeight = window.innerHeight;
   return {
     overflowY: 'scroll',

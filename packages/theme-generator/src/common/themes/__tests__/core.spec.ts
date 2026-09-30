@@ -99,8 +99,8 @@ describe('parseRootCss', () => {
 });
 
 describe('modifyToken', () => {
-  let styleSheet;
-  let darkStyleSheet;
+  let styleSheet: HTMLStyleElement;
+  let darkStyleSheet: HTMLStyleElement;
 
   beforeEach(() => {
     styleSheet = document.createElement('style');
@@ -117,7 +117,7 @@ describe('modifyToken', () => {
     modifyToken('--td-brand-color-1', '#bbb');
     expect(styleSheet.textContent).toContain('--td-brand-color-1:#bbb;');
     expect(styleSheet.textContent).not.toContain('#aaa');
-    const stored = JSON.parse(window.localStorage.getItem(CUSTOM_TOKEN_ID));
+    const stored = JSON.parse(window.localStorage.getItem(CUSTOM_TOKEN_ID) as string);
     expect(stored['--td-brand-color-1']).toBe('#bbb');
   });
 

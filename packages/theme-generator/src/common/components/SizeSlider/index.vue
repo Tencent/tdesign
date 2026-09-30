@@ -12,7 +12,7 @@
       />
       <t-slider
         :disabled="disabled"
-        :value="size"
+        :value="sliderValue"
         :min="min"
         :max="max"
         :step="step"
@@ -25,39 +25,48 @@
   </div>
 </template>
 
-<script setup>
-import { ref, watch, onMounted } from 'vue';
+<script setup lang="ts">
+import { ref, computed, watch, onMounted } from 'vue';
 import { handleAttach } from '@/common/utils';
 import { InputNumber as TInputNumber, Slider as TSlider } from 'tdesign-vue-next/lib';
 
+type SliderValue = number | number[];
+type InputNumberValue = number | string;
+
 defineOptions({ name: 'SizeSlider' });
 
-const props = defineProps({
-  sizeValue: [String, Number],
-  title: String,
-  step: Number,
-  min: Number,
-  max: Number,
-  disabled: Boolean,
-  needInteger: {
-    type: Boolean,
-    default: true,
+const props = withDefaults(
+  defineProps<{
+    sizeValue?: string | number;
+    title?: string;
+    step?: number;
+    min?: number;
+    max?: number;
+    disabled?: boolean;
+    needInteger?: boolean;
+  }>(),
+  {
+    needInteger: true,
   },
-});
+);
 
-const emit = defineEmits(['changeSize']);
+const emit = defineEmits<{ changeSize: [v: number | string] }>();
 
-const size = ref(null);
+const size = ref<number | string | undefined>(undefined);
 
-function format(val) {
+// TSlider 的类型只接受 number，但运行时与 InputNumber 共用 size（可能是字符串）
+const sliderValue = computed(() => size.value as number | undefined);
+
+function format(val: number | string | null | undefined) {
   return val == null ? '' : `${val}px`;
 }
 
-function handleInputChange(v) {
+function handleInputChange(rawValue: InputNumberValue | SliderValue) {
+  const v = (Array.isArray(rawValue) ? rawValue[0] : rawValue) as number | string;
   if (
     v === size.value ||
-    v < props.min ||
-    v > props.max ||
+    Number(v) < (props.min ?? 0) ||
+    Number(v) > (props.max ?? 0) ||
     props.disabled ||
     (props.needInteger && !Number.isInteger(Number(v)))
   )
@@ -70,12 +79,12 @@ function handleInputChange(v) {
 watch(
   () => props.sizeValue,
   (val) => {
-    size.value = props.needInteger ? parseInt(val, 10) : val;
+    size.value = props.needInteger ? parseInt(String(val), 10) : (val as number);
   },
 );
 
 onMounted(() => {
-  size.value = props.needInteger ? parseInt(props.sizeValue, 10) : props.sizeValue;
+  size.value = props.needInteger ? parseInt(String(props.sizeValue), 10) : (props.sizeValue as number);
 });
 </script>
 

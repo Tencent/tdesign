@@ -100,15 +100,16 @@
   </t-popup>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { MessagePlugin, Button as TButton, Popconfirm as TPopconfirm, Popup as TPopup } from 'tdesign-vue-next/lib';
+import type { PopupVisibleChangeContext } from 'tdesign-vue-next/lib/popup/type';
 
 import { useLang } from '@/common/i18n';
 import { exportCustomStyleSheet, themeStore } from '@/common/themes';
 import { handleAttach } from '@/common/utils';
 
-import RecommendThemes from './components/RecommendThemes';
+import RecommendThemes from './components/RecommendThemes/index.vue';
 
 import AdjustSvg from './svg/AdjustSvg.vue';
 import DownloadSvg from './svg/DownloadSvg.vue';
@@ -118,24 +119,24 @@ import SettingSvg from './svg/SettingSvg.vue';
 
 defineOptions({ name: 'FloatDock' });
 
-const props = defineProps({
-  drawerVisible: { type: [Boolean, Number] },
-  showSetting: { type: [Boolean, String] },
-});
+const props = defineProps<{
+  drawerVisible?: boolean | number;
+  showSetting?: boolean | string;
+}>();
 
-const emit = defineEmits(['click-setting', 'trigger-visible']);
+const emit = defineEmits<{ 'click-setting': []; 'trigger-visible': [] }>();
 
 const { lang, isEn } = useLang();
 
 const isThemeTabVisible = ref(false);
 const isCustomizeDrawerVisible = ref(false);
 const isThemeTabContentDisplay = ref(false);
-const dockY = ref(null);
+const dockY = ref<number | null>(null);
 const dockX = ref(0);
-const startY = ref(null);
-const startX = ref(null);
+const startY = ref<number | null>(null);
+const startX = ref<number | null>(null);
 const isDragging = ref(false);
-const btn = ref(null);
+const btn = ref<HTMLElement | null>(null);
 
 const $theme = computed(() => themeStore.theme);
 const $device = computed(() => themeStore.device);
@@ -161,7 +162,7 @@ watch(
   },
 );
 
-let themeTabTimer = null;
+let themeTabTimer: ReturnType<typeof setTimeout> | null = null;
 
 watch(isThemeTabVisible, (v) => {
   if (themeTabTimer) clearTimeout(themeTabTimer);
@@ -179,7 +180,7 @@ onUnmounted(() => {
   if (themeTabTimer) clearTimeout(themeTabTimer);
 });
 
-function dragStart(e) {
+function dragStart(e: MouseEvent) {
   startY.value = e.clientY;
   startX.value = e.clientX;
   isDragging.value = true;
@@ -188,15 +189,15 @@ function dragStart(e) {
   document.addEventListener('mousemove', handleMousemove, true);
 }
 
-function handleMousemove(e) {
+function handleMousemove(e: MouseEvent) {
   if (!isDragging.value) return false;
   // 获取拖拽移动的距离
-  const movedY = startY.value - e.clientY;
-  const movedX = startX.value - e.clientX;
+  const movedY = (startY.value ?? 0) - e.clientY;
+  const movedX = (startX.value ?? 0) - e.clientX;
   startY.value = e.clientY;
   startX.value = e.clientX;
 
-  const newY = dockY.value + movedY;
+  const newY = (dockY.value ?? 0) + movedY;
   const newX = dockX.value - movedX;
   if (newY > 0) dockY.value = newY;
   dockX.value = newX;
@@ -218,9 +219,9 @@ function triggerSettingDrawer() {
 }
 
 function handleLeaveTheme() {
-  btn.value.classList.add('is-mouseleave');
+  btn.value?.classList.add('is-mouseleave');
   setTimeout(() => {
-    btn.value.classList.remove('is-mouseleave');
+    btn.value?.classList.remove('is-mouseleave');
   }, 500);
 }
 
@@ -241,8 +242,12 @@ function handleClickTheme() {
   }
 }
 
-function handleVisibleChange(visible, ctx) {
-  if (!visible && ctx.trigger === 'document' && ctx.e.target?.localName !== 'td-theme-generator') {
+function handleVisibleChange(visible: boolean, ctx: PopupVisibleChangeContext) {
+  if (
+    !visible &&
+    ctx.trigger === 'document' &&
+    (ctx.e?.target as HTMLElement | undefined)?.localName !== 'td-theme-generator'
+  ) {
     isThemeTabVisible.value = visible;
   }
 }

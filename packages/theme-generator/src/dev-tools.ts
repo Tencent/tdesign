@@ -1,4 +1,4 @@
-// dev-only 调试面板逻辑（不进入构建产物：build 走 lib 模式，入口为 wc-entry.js）。
+// dev-only 调试面板逻辑（不进入构建产物：build 走 lib 模式，入口为 wc-entry.ts）。
 // 作为独立 module 引入，让 `cssbeautify` 这类裸导入走 Vite 常规 JS 转译管线。
 import cssbeautify from 'cssbeautify';
 
@@ -9,8 +9,8 @@ const CUSTOM_DARK_ID = 'custom-theme-dark';
 const CUSTOM_EXTRA_ID = 'custom-theme-extra';
 
 const root = document.documentElement;
-const deviceSelect = document.getElementById('dev-device');
-const showSetting = document.getElementById('dev-show-setting');
+const deviceSelect = document.getElementById('dev-device') as HTMLSelectElement;
+const showSetting = document.getElementById('dev-show-setting') as HTMLInputElement;
 
 /* 重新挂载生成器：device / showSetting 仅在 onMounted 读取，
    运行时改属性不重跑初始化，故需移除并重新创建元素。 */
@@ -44,14 +44,14 @@ showSetting.addEventListener('change', async () => {
 });
 
 /* ---------- 重置主题 ---------- */
-document.getElementById('dev-reset').addEventListener('click', async () => {
+document.getElementById('dev-reset')?.addEventListener('click', async () => {
   localStorage.removeItem('custom-theme-options');
   localStorage.removeItem('custom-theme-tokens');
   await mountGenerator();
 });
 
 /* ---------- 导出 / 复制 CSS ---------- */
-function collectCss() {
+function collectCss(): string {
   const ids = [CUSTOM_THEME_ID, CUSTOM_DARK_ID, CUSTOM_EXTRA_ID];
   const raw = ids
     .map((id) => document.getElementById(id)?.textContent || '')
@@ -59,7 +59,7 @@ function collectCss() {
     .trim();
   return raw ? cssbeautify(raw) : '/* 暂无生成的主题样式 */';
 }
-document.getElementById('dev-export').addEventListener('click', () => {
+document.getElementById('dev-export')?.addEventListener('click', () => {
   const blob = new Blob([collectCss()], { type: 'text/css' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -67,25 +67,31 @@ document.getElementById('dev-export').addEventListener('click', () => {
   a.click();
   URL.revokeObjectURL(a.href);
 });
-document.getElementById('dev-copy').addEventListener('click', async () => {
+document.getElementById('dev-copy')?.addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(collectCss());
     // eslint-disable-next-line no-alert
     alert('已复制生成的 CSS 到剪贴板');
   } catch (e) {
     // eslint-disable-next-line no-alert
-    alert('复制失败：' + e.message);
+    alert('复制失败：' + (e as Error).message);
   }
 });
 
 /* ---------- Token 检视面板 ---------- */
-const inspector = document.getElementById('dev-inspector');
-const inspLight = document.getElementById('dev-insp-light');
-const inspDark = document.getElementById('dev-insp-dark');
-let inspObserver = null;
+const inspector = document.getElementById('dev-inspector') as HTMLElement;
+const inspLight = document.getElementById('dev-insp-light') as HTMLTextAreaElement;
+const inspDark = document.getElementById('dev-insp-dark') as HTMLTextAreaElement;
+let inspObserver: MutationObserver | null = null;
+
+interface RgbColor {
+  r: number;
+  g: number;
+  b: number;
+}
 
 // 解析 hex / rgb() / rgba() 颜色为 {r,g,b}，失败返回 null
-function parseColor(value) {
+function parseColor(value: string): RgbColor | null {
   const v = value.trim();
   if (v.startsWith('#')) {
     let hex = v.slice(1);
@@ -112,7 +118,7 @@ function parseColor(value) {
   return null;
 }
 // 把 rgb()/hex 统一转成 #RRGGBB，便于展示
-function rgbToHex(value) {
+function rgbToHex(value: string): string {
   const c = parseColor(value);
   if (!c) return value.trim();
   return (
@@ -124,10 +130,10 @@ function rgbToHex(value) {
   );
 }
 // 相对亮度，决定色块上标注文字用黑还是白
-function luminance(value) {
+function luminance(value: string): number {
   const c = parseColor(value);
   if (!c) return 1;
-  const f = (x) => {
+  const f = (x: number) => {
     x /= 255;
     return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
   };
@@ -135,8 +141,10 @@ function luminance(value) {
 }
 // 品牌色阶实时标注当前计算值（调色时同步刷新）
 function updateSwatchLabels() {
-  document.querySelectorAll('#dev-preview .dev-swatch[data-var]').forEach((el) => {
-    const raw = getComputedStyle(document.documentElement).getPropertyValue(el.dataset.var).trim();
+  document.querySelectorAll<HTMLElement>('#dev-preview .dev-swatch[data-var]').forEach((el) => {
+    const raw = getComputedStyle(document.documentElement)
+      .getPropertyValue(el.dataset.var ?? '')
+      .trim();
     if (!raw) return;
     el.textContent = rgbToHex(raw);
     const light = luminance(raw) > 0.5;
@@ -147,21 +155,23 @@ function updateSwatchLabels() {
 
 // 间距/尺寸等非颜色 token 的实时数值标注
 function updateVarLabels() {
-  document.querySelectorAll('#dev-preview [data-var-value]').forEach((el) => {
-    const raw = getComputedStyle(document.documentElement).getPropertyValue(el.dataset.varValue).trim();
+  document.querySelectorAll<HTMLElement>('#dev-preview [data-var-value]').forEach((el) => {
+    const raw = getComputedStyle(document.documentElement)
+      .getPropertyValue(el.dataset.varValue ?? '')
+      .trim();
     el.textContent = raw || '—';
   });
 }
 
 // 顶部状态栏：设备 / 模式 / 当前品牌色
 function updateStatus() {
-  document.getElementById('dev-status-device').textContent = deviceSelect.value;
+  (document.getElementById('dev-status-device') as HTMLElement).textContent = deviceSelect.value;
   const mode = root.getAttribute('theme-mode') || 'light';
-  document.getElementById('dev-status-mode').textContent = mode;
+  (document.getElementById('dev-status-mode') as HTMLElement).textContent = mode;
   const brand = getComputedStyle(document.documentElement).getPropertyValue('--td-brand-color-7').trim();
   const hex = rgbToHex(brand);
-  document.getElementById('dev-status-brand').textContent = hex || '—';
-  document.getElementById('dev-status-dot').style.background = hex || 'transparent';
+  (document.getElementById('dev-status-brand') as HTMLElement).textContent = hex || '—';
+  (document.getElementById('dev-status-dot') as HTMLElement).style.background = hex || 'transparent';
 }
 
 // 集中刷新预览区与状态栏（色值/数值/状态）
@@ -185,20 +195,20 @@ function refreshInspector() {
   // 三个样式表都要观察：颜色 token 在 custom-theme/dark，size/radius/font 在 extra
   [CUSTOM_THEME_ID, CUSTOM_DARK_ID, CUSTOM_EXTRA_ID].forEach((id) => {
     const node = document.getElementById(id);
-    if (node) inspObserver.observe(node, { childList: true });
+    if (node) inspObserver?.observe(node, { childList: true });
   });
 }
 
-document.getElementById('dev-insp-toggle').addEventListener('click', () => {
+document.getElementById('dev-insp-toggle')?.addEventListener('click', () => {
   inspector.classList.toggle('dev-open');
   if (inspector.classList.contains('dev-open')) refreshInspector();
 });
-document.getElementById('dev-insp-close').addEventListener('click', () => {
+document.getElementById('dev-insp-close')?.addEventListener('click', () => {
   inspector.classList.remove('dev-open');
 });
 
 /* ---------- 深浅色切换 ---------- */
-const toggle = document.getElementById('dev-mode-toggle');
+const toggle = document.getElementById('dev-mode-toggle') as HTMLElement;
 const renderToggle = () => {
   const isDark = root.getAttribute('theme-mode') === 'dark';
   toggle.textContent = isDark ? '☀️' : '🌙';
@@ -239,12 +249,12 @@ function waitForStylesheetsThenInit() {
 }
 /* ---------- 多框架组件预览 Tab（纯 HTML，框架无关） ---------- */
 const fwTabs = document.getElementById('dev-fw-tabs');
-const fwPanels = document.querySelectorAll('#dev-preview .dev-code[data-fw]');
+const fwPanels = document.querySelectorAll<HTMLElement>('#dev-preview .dev-code[data-fw]');
 fwTabs?.addEventListener('click', (e) => {
-  const btn = e.target.closest('.dev-fw-tab');
+  const btn = (e.target as HTMLElement).closest<HTMLElement>('.dev-fw-tab');
   if (!btn) return;
   const fw = btn.dataset.fw;
-  fwTabs.querySelectorAll('.dev-fw-tab').forEach((t) => t.classList.toggle('is-active', t === btn));
+  fwTabs.querySelectorAll<HTMLElement>('.dev-fw-tab').forEach((t) => t.classList.toggle('is-active', t === btn));
   fwPanels.forEach((p) => {
     p.hidden = p.dataset.fw !== fw;
   });

@@ -36,7 +36,7 @@ describe('ShadowEditor', () => {
     const emitted = wrapper.emitted('change');
     // deep watch 生效时，shadow 索引变化会触发 change 事件
     expect(emitted).toBeTruthy();
-    const lastEmit = emitted[emitted.length - 1][0];
+    const lastEmit = emitted![emitted!.length - 1][0];
     expect(lastEmit).toContain('10px');
   });
 });

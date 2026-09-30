@@ -10,31 +10,31 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 import { applyTokenFromLocal, syncModeToGenerator, syncThemeToIframe, themeStore } from '@/common/themes';
 import { setUpModeObserver } from '@/common/utils';
 
-import FloatDock from './float-dock';
-import PanelDrawer from './panel-drawer';
+import FloatDock from './float-dock/index.vue';
+import PanelDrawer from './panel-drawer/index.vue';
 
 defineOptions({ name: 'ThemeGenerator' });
 
-const props = defineProps({
-  showSetting: {
-    type: [Boolean, String],
+const props = withDefaults(
+  defineProps<{
+    showSetting?: boolean | string;
+    device?: string;
+  }>(),
+  {
+    device: 'web',
   },
-  device: {
-    type: String,
-    default: 'web',
-  },
-});
+);
 
 const visible = ref(false);
 // 保存 observer 与清理函数，组件卸载时断开，避免泄漏
-let modeSyncObserver = null;
-let refreshObserver = null;
-let iframeCleanup = null;
+let modeSyncObserver: MutationObserver | null = null;
+let refreshObserver: MutationObserver | null = null;
+let iframeCleanup: (() => void) | null = null;
 
 onMounted(() => {
   themeStore.updateDevice(props.device);
@@ -63,7 +63,7 @@ function handleTriggerVisible() {
   visible.value = true;
 }
 
-function handleDrawerVisible(v) {
+function handleDrawerVisible(v: boolean) {
   visible.value = v;
 }
 

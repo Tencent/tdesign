@@ -36,8 +36,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch, onMounted, nextTick } from 'vue';
+import type { CSSProperties } from 'vue';
 import { SegmentSelection } from '@/common/components';
 import { useLang } from '@/common/i18n';
 import { getOptionFromLocal, modifyToken, updateLocalOption } from '@/common/themes';
@@ -50,29 +51,29 @@ import {
   ShadowTypeDetail,
   ShadowTypeMap,
 } from './built-in/shadow-map';
-import ShadowCard from './components/ShadowCard';
+import ShadowCard from './components/ShadowCard.vue';
 
 defineOptions({ name: 'ShadowPanel' });
 
-const props = defineProps({
-  top: Number,
-});
+const props = defineProps<{
+  top?: number;
+}>();
 
 const { lang, isEn } = useLang();
 
 const selectOptions = ShadowSelect;
 const shadowTypeDetail = ShadowTypeDetail;
-const step = ref(getOptionFromLocal('shadow') || ShadowSelectType.Default);
-const shadowPalette = ref([]);
-const suspendedLabels = ref({});
+const step = ref<string | number>(getOptionFromLocal('shadow') || ShadowSelectType.Default);
+const shadowPalette = ref<string[][]>([]);
+const suspendedLabels = ref<Record<number, string>>({});
 
 // created
-suspendedLabels.value = selectOptions.reduce((acc, option) => {
+suspendedLabels.value = selectOptions.reduce<Record<number, string>>((acc, option) => {
   acc[option.value] = isEn ? option.enLabel : option.label;
   return acc;
 }, {});
 
-const contentStyle = computed(() => {
+const contentStyle = computed<CSSProperties>(() => {
   const clientHeight = window.innerHeight;
   return {
     overflowY: 'scroll',
@@ -81,14 +82,14 @@ const contentStyle = computed(() => {
 });
 
 const leftShadow = computed(() => {
-  const selectKeys = Object.keys(ShadowSelectDetail);
+  const selectKeys = Object.keys(ShadowSelectDetail).map(Number);
   if (selectKeys.length < 1) return '';
   const shadowArray = ShadowSelectDetail[selectKeys[0]][0];
   return shadowArray;
 });
 
 const rightShadow = computed(() => {
-  const selectKeys = Object.keys(ShadowSelectDetail);
+  const selectKeys = Object.keys(ShadowSelectDetail).map(Number);
   if (selectKeys.length < 1) return '';
   // 倒数第二个的，最后一个为自定义
   const shadowArray = ShadowSelectDetail[selectKeys[selectKeys.length - 2]][0];
@@ -98,7 +99,7 @@ const rightShadow = computed(() => {
 const forbidden = computed(() => step.value === ShadowSelectType.Self_Defined);
 
 // 拆分 box-shadow 的值 0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%)
-function splitShadowValue(data) {
+function splitShadowValue(data: string): string[] {
   const tempData = `${data},`;
   const shadows = tempData.split('),');
   return shadows
@@ -109,7 +110,7 @@ function splitShadowValue(data) {
     });
 }
 
-function getCurrentPalette() {
+function getCurrentPalette(): (string | string[])[] {
   const currentPalette = [...new Array(ShadowTypeMap.length).keys()].map((_, i) => {
     const { value, from } = ShadowTypeMap[i];
     if (value) return value;
@@ -119,7 +120,7 @@ function getCurrentPalette() {
   return currentPalette;
 }
 
-function change(value, index) {
+function change(value: string[], index: number) {
   step.value = ShadowSelectType.Self_Defined;
   const val = [...shadowPalette.value];
   val[index] = value;
@@ -128,7 +129,7 @@ function change(value, index) {
 
 function setCurrentPalette() {
   const currentTokenArr = getCurrentPalette();
-  shadowPalette.value = currentTokenArr.map((token) => splitShadowValue(token));
+  shadowPalette.value = currentTokenArr.map((token) => splitShadowValue(String(token)));
 }
 
 watch(step, (nVal) => {
@@ -138,7 +139,7 @@ watch(step, (nVal) => {
     // this.shadowPalette = this.getCurrentPalette();
     return;
   }
-  const shadows = ShadowSelectDetail[nVal];
+  const shadows = ShadowSelectDetail[Number(nVal)];
   if (!shadows) return;
   shadowPalette.value = shadows.map((shadow) => splitShadowValue(shadow));
 });
@@ -148,7 +149,7 @@ watch(shadowPalette, (nVal) => {
   const currentPalette = getCurrentPalette();
   for (let index = 0; index < nVal.length; index++) {
     const shadow = nVal[index];
-    const current = currentPalette[index];
+    const current = currentPalette[index] as string[];
     const newShadow = shadow.join(',');
     if (newShadow === current.join(',')) continue;
     const { name } = ShadowTypeMap[index];

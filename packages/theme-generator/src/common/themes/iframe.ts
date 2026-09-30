@@ -1,12 +1,18 @@
 import { getThemeMode, parseRootCss, setUpModeObserver } from '../utils';
 import { CUSTOM_DARK_ID, CUSTOM_THEME_ID, isMiniProgram, isMobile, isUniapp } from './core';
 
+import type { Device, ThemeMode } from '@/common/types';
+
 // 标记小程序外层 iframe 的 contentDocument 是否已建立嵌套 iframe 观察，
 // 避免 handleNested 立即调用 + onload 时重复创建 MutationObserver。
 const NESTED_OBSERVED_FLAG = '__tdThemeGeneratorNestedObserved';
 
+interface ObservedIframeDocument extends Document {
+  [NESTED_OBSERVED_FLAG]?: boolean;
+}
+
 /* ----- 同步亮暗模式 -----  */
-function handleMobileModeChange(iframe, mode) {
+function handleMobileModeChange(iframe: HTMLIFrameElement, mode: ThemeMode): void {
   const iframeDom = getIframeDoc(iframe, 'handleMobileModeChange');
   if (!iframeDom) return;
   iframeDom.documentElement.setAttribute('theme-mode', mode);
@@ -15,7 +21,7 @@ function handleMobileModeChange(iframe, mode) {
 // 跨域 iframe 的 contentDocument 为 null，无法注入样式。
 // 仅当同源时（生产环境 tdesign.tencent.com 页面 + iframe 同域）才能同步主题；
 // surge.sh 等预览环境页面与 iframe 跨域，主题同步不可用，console 给出警告而非崩溃。
-function getIframeDoc(iframe, action) {
+function getIframeDoc(iframe: HTMLIFrameElement, action: string): Document | null {
   const doc = iframe.contentDocument;
   if (!doc) {
     if (!iframe.dataset.crossOriginWarned) {
@@ -36,11 +42,11 @@ function getIframeDoc(iframe, action) {
 //   - 小程序 m2w 预览：内容渲染在 `body` 内，无 `page` 元素
 //   - uni-app H5 预览：页面根节点是 `uni-page-body`，不是 `page`
 // 若用 `page, .page`，预览 iframe 内匹配不到任何元素，CSS 变量无处定义，主题不生效。
-function getMobileSelector(uniapp) {
+function getMobileSelector(uniapp: boolean): string {
   return uniapp ? 'uni-page-body' : 'body';
 }
 
-function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
+function handleMiniProgramModeChange(iframe: HTMLIFrameElement, mode: ThemeMode, uniapp = false): void {
   const isDark = mode === 'dark';
 
   const prevModeId = isDark ? CUSTOM_THEME_ID : CUSTOM_DARK_ID;
@@ -61,7 +67,7 @@ function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
     const style = iframeDom.createElement('style');
     style.id = currentModeId;
 
-    const { rootContent: cssString } = parseRootCss(themeStyle.textContent);
+    const { rootContent: cssString } = parseRootCss(themeStyle?.textContent);
     const selector = getMobileSelector(uniapp);
     style.textContent = `${selector} {\n${cssString}\n}`;
 
@@ -77,7 +83,7 @@ function handleMiniProgramModeChange(iframe, mode, uniapp = false) {
 /* ------------------- */
 
 /* ----- 同步 Token -----  */
-function handleMobileTokenChange(iframe, styleElement) {
+function handleMobileTokenChange(iframe: HTMLIFrameElement, styleElement: HTMLStyleElement): void {
   const iframeDom = getIframeDoc(iframe, 'handleMobileTokenChange');
   if (!iframeDom) return;
 
@@ -95,7 +101,7 @@ function handleMobileTokenChange(iframe, styleElement) {
   }
 }
 
-function handleMiniProgramTokenChange(iframe, styleElement, uniapp = false) {
+function handleMiniProgramTokenChange(iframe: HTMLIFrameElement, styleElement: HTMLStyleElement, uniapp = false): void {
   const iframeDom = getIframeDoc(iframe, 'handleMiniProgramTokenChange');
   if (!iframeDom) return;
 
@@ -124,11 +130,11 @@ function handleMiniProgramTokenChange(iframe, styleElement, uniapp = false) {
  * 监听亮暗模式变化
  * - e.g. `<html theme-mode="dark">`
  */
-function watchThemeModeChange(iframe) {
+function watchThemeModeChange(iframe: HTMLIFrameElement): MutationObserver | null {
   if (!iframe?.contentDocument) return null;
 
-  const device = iframe.getAttribute('device');
-  const handleModeChange = (mode) => {
+  const device = iframe.getAttribute('device') ?? '';
+  const handleModeChange = (mode: ThemeMode) => {
     if (isMiniProgram(device) || isUniapp(device)) {
       handleMiniProgramModeChange(iframe, mode, isUniapp(device));
     } else {
@@ -149,14 +155,14 @@ function watchThemeModeChange(iframe) {
  * 监听样式 Token 变化，即相关样式表的更新
  * - e.g. `<style id="custom-theme" type="text/css">`
  */
-function watchThemeTokenChange(iframe) {
+function watchThemeTokenChange(iframe: HTMLIFrameElement): MutationObserver[] | null {
   if (!iframe?.contentDocument) return null;
 
-  const allCustomStyles = document.querySelectorAll(`[id^="${CUSTOM_THEME_ID}"]`);
+  const allCustomStyles = document.querySelectorAll<HTMLStyleElement>(`[id^="${CUSTOM_THEME_ID}"]`);
   if (!allCustomStyles.length) return null;
 
-  const device = iframe.getAttribute('device');
-  const handleTokenChange = (styleElement) => {
+  const device = iframe.getAttribute('device') ?? '';
+  const handleTokenChange = (styleElement: HTMLStyleElement) => {
     if (isMiniProgram(device) || isUniapp(device)) {
       handleMiniProgramTokenChange(iframe, styleElement, isUniapp(device));
     } else {
@@ -169,7 +175,7 @@ function watchThemeTokenChange(iframe) {
     handleTokenChange(styleElement);
   });
 
-  const observers = [];
+  const observers: MutationObserver[] = [];
   allCustomStyles.forEach((styleElement) => {
     const observer = new MutationObserver((mutationsList) => {
       for (const mutation of mutationsList) {
@@ -189,22 +195,30 @@ function watchThemeTokenChange(iframe) {
   return observers;
 }
 
+interface ThemeObservers {
+  themeMode: MutationObserver | null;
+  themeToken: MutationObserver[] | null;
+}
+
 /**
  * 集中处理主题变化（亮暗模式与样式 Token）
  */
-function watchThemeChange(iframe) {
+function watchThemeChange(iframe: HTMLIFrameElement): void {
   // 同一个 iframe 只监听一次
   if (iframe.dataset.observed === 'true') return;
   iframe.dataset.observed = 'true';
 
-  const observers = {};
+  const observers: ThemeObservers = {
+    themeMode: null,
+    themeToken: null,
+  };
 
   observers.themeMode = watchThemeModeChange(iframe);
   observers.themeToken = watchThemeTokenChange(iframe);
 
   iframe.onload = () => {
     // 先断开旧的 observers 再重新创建，避免泄漏
-    [observers.themeMode, observers.themeToken].flat().forEach((o) => o?.disconnect());
+    [observers.themeMode, observers.themeToken].flat().forEach((o) => (o as MutationObserver | null)?.disconnect());
     observers.themeMode = watchThemeModeChange(iframe);
     observers.themeToken = watchThemeTokenChange(iframe);
   };
@@ -217,7 +231,7 @@ function watchThemeChange(iframe) {
 /**
  * 监听前统一设置标识符
  */
-function beforeWatchThemeChange(iframe, device) {
+function beforeWatchThemeChange(iframe: HTMLIFrameElement, device: Device | string): void {
   iframe.setAttribute('device', device);
   watchThemeChange(iframe);
 }
@@ -225,16 +239,15 @@ function beforeWatchThemeChange(iframe, device) {
 /**
  * 同步站点的主题到移动端的 iframe
  *
- * @param {string} device
- * @returns {Function} cleanup 函数，断开内部创建的 document 级 MutationObserver，
+ * @returns cleanup 函数，断开内部创建的 document 级 MutationObserver，
  *   供调用方在 Web Component 卸载时调用以避免泄漏
  */
-export function syncThemeToIframe(device) {
+export function syncThemeToIframe(device: Device | string): () => void {
   if (!isMobile(device)) return () => {};
 
   const handleDocPhoneIframe = () => {
     const docPhone = document.querySelector('td-doc-phone');
-    const previewIframe = docPhone?.querySelector('iframe');
+    const previewIframe = docPhone?.querySelector('iframe') as HTMLIFrameElement | null;
     if (!previewIframe) return;
 
     if (isMiniProgram(device)) {
@@ -251,7 +264,7 @@ export function syncThemeToIframe(device) {
       // 这里链式包装，在原有 onload 之后再处理嵌套 iframe，避免覆盖。
       const prevOnload = previewIframe.onload;
       const handleNested = () => {
-        if (typeof prevOnload === 'function') prevOnload();
+        if (typeof prevOnload === 'function') prevOnload.call(previewIframe, new Event('load'));
         watchNestedIframes(getIframeDoc(previewIframe, 'watchNestedIframes'), device);
       };
       previewIframe.onload = handleNested;
@@ -283,18 +296,19 @@ export function syncThemeToIframe(device) {
 /**
  * 处理微信小程序预览 iframe 不止一个的情况
  */
-function watchNestedIframes(iframeDocument, device) {
+function watchNestedIframes(iframeDocument: Document | null, device: Device | string): void {
   if (!iframeDocument) return;
+  const observedDoc = iframeDocument as ObservedIframeDocument;
   // 同一个 iframe document 只观察一次：handleNested 会立即调用 + onload 时再调用，
   // 不加守卫会重复创建 MutationObserver。iframe 重新加载后 contentDocument 是新对象，标记自然失效。
-  if (iframeDocument[NESTED_OBSERVED_FLAG]) return;
-  iframeDocument[NESTED_OBSERVED_FLAG] = true;
+  if (observedDoc[NESTED_OBSERVED_FLAG]) return;
+  observedDoc[NESTED_OBSERVED_FLAG] = true;
 
   const handleWatch = () => {
     const nestedIframes = iframeDocument.querySelectorAll('iframe');
     nestedIframes.forEach((iframe) => {
       if (!iframe.id?.startsWith('webview')) return;
-      beforeWatchThemeChange(iframe, device);
+      beforeWatchThemeChange(iframe as HTMLIFrameElement, device);
     });
   };
 

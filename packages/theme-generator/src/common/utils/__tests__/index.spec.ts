@@ -73,7 +73,7 @@ describe('setUpModeObserver', () => {
 });
 
 describe('getTokenValue', () => {
-  // setup.js 的 beforeEach 会清空 documentElement 的 inline style 与属性，
+  // setup.ts 的 beforeEach 会清空 documentElement 的 inline style 与属性，
   // 用例间互不干扰。
 
   it('从 documentElement 读取 CSS 变量，返回 toLowerCase + trim 后的值', () => {

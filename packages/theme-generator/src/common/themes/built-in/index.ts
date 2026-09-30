@@ -13,9 +13,11 @@ import WebTCloudDark from './css/web/TCloud/dark.css?raw';
 import WebTCloudExtra from './css/web/TCloud/extra.css?raw';
 import WebTCloudLight from './css/web/TCloud/light.css?raw';
 
+import type { Theme, ThemeCategory, ThemeMeta } from '@/common/types';
+
 export const TENCENT_BLUE = '#0052D9';
 
-export const DEFAULT_THEME_META = {
+export const DEFAULT_THEME_META: ThemeMeta = {
   name: '默认主题',
   enName: 'TDesign',
   subtitle: TDesignOriginal,
@@ -28,7 +30,7 @@ const OFFICIAL_THEMES_META = {
   enTitle: 'Official recommendation',
 };
 
-export const TDESIGN_WEB_THEME = {
+export const TDESIGN_WEB_THEME: Theme = {
   ...DEFAULT_THEME_META,
   css: {
     light: WebTDesignLight,
@@ -37,7 +39,7 @@ export const TDESIGN_WEB_THEME = {
   },
 };
 
-export const TDESIGN_MOBILE_THEME = {
+export const TDESIGN_MOBILE_THEME: Theme = {
   ...DEFAULT_THEME_META,
   css: {
     light: MobileTDesignLight,
@@ -46,7 +48,7 @@ export const TDESIGN_MOBILE_THEME = {
   },
 };
 
-const TCLOUD_THEME = {
+const TCLOUD_THEME: Theme = {
   name: '腾讯云',
   enName: 'TCloud',
   subtitle: TencentCloud,
@@ -59,14 +61,14 @@ const TCLOUD_THEME = {
   },
 };
 
-export const WEB_RECOMMEND_THEMES = [
+export const WEB_RECOMMEND_THEMES: ThemeCategory[] = [
   {
     ...OFFICIAL_THEMES_META,
     options: [TDESIGN_WEB_THEME, TCLOUD_THEME],
   },
 ];
 
-export const MOBILE_RECOMMEND_THEMES = [
+export const MOBILE_RECOMMEND_THEMES: ThemeCategory[] = [
   {
     ...OFFICIAL_THEMES_META,
     options: [TDESIGN_MOBILE_THEME],

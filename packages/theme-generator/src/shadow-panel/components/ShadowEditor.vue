@@ -31,7 +31,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch, onMounted, nextTick } from 'vue';
 import { RemoveIcon } from 'tdesign-icons-vue-next';
 import { Input as TInput, InputNumber as TInputNumber, Popup as TPopup } from 'tdesign-vue-next/lib';
@@ -41,14 +41,14 @@ import { handleAttach } from '@/common/utils';
 
 defineOptions({ name: 'ShadowEditor' });
 
-const props = defineProps({
-  name: String,
-  value: String,
-});
+const props = defineProps<{
+  name?: string;
+  value?: string;
+}>();
 
-const emit = defineEmits(['change', 'move']);
+const emit = defineEmits<{ change: [value: string]; move: [] }>();
 
-const shadow = ref([0, 0, 0, 0]);
+const shadow = ref<number[]>([0, 0, 0, 0]);
 const color = ref('');
 const hasInit = ref(false);
 
@@ -58,13 +58,13 @@ onMounted(() => {
   });
 });
 
-function splitShadowValue(value) {
+function splitShadowValue(value: string): number[] {
   const data = value.match(/(-)?[0-9]+(px)?/g);
   if (!data || data.length < 2) {
     return [0, 0, 0, 0];
   }
   return data
-    .concat([0, 0])
+    .concat(['0', '0'])
     .splice(0, 4)
     .map((val) => {
       const num = val.match(/(-)?[0-9]+/g);
@@ -73,7 +73,7 @@ function splitShadowValue(value) {
     });
 }
 
-function getShadowColor(value) {
+function getShadowColor(value: string): string {
   const data = value.match(/rgb(a)?(.*)/g);
   if (!data || data.length < 1) {
     return 'rgba(0, 0, 0, 0)';
@@ -81,7 +81,7 @@ function getShadowColor(value) {
   return data[0].trim();
 }
 
-function changeColor(hex) {
+function changeColor(hex: string) {
   color.value = hex;
 }
 
@@ -90,8 +90,8 @@ function handleMove() {
 }
 
 // created
-shadow.value = splitShadowValue(props.value);
-color.value = getShadowColor(props.value);
+shadow.value = splitShadowValue(props.value ?? '');
+color.value = getShadowColor(props.value ?? '');
 
 // deep: true —— shadow 是数组 ref，template 用 v-model="shadow[i]" 按索引 mutate，
 // 不加 deep 则 watch 不触发（Vue 2 的 v-model 数组索引编译为 $set 会触发，Vue 3 需 deep）

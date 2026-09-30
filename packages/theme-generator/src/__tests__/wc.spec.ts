@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { nextTick } from 'vue';
 
-// Generator.vue 经 core.js 间接依赖 tvision-color → @material/material-color-utilities，
+// Generator.vue 经 core.ts 间接依赖 tvision-color → @material/material-color-utilities，
 // 后者存在无扩展名 ESM 互导入，Node 原生 loader 无法解析。WC smoke 测试不需要真实 color 工具。
 vi.mock('tvision-color', () => ({
   Color: {
@@ -15,7 +15,7 @@ vi.mock('tvision-color', () => ({
 // color-panel 挂载时调用 colorAnimation()，依赖 canvas 2d context + requestAnimationFrame，
 // happy-dom 不支持。该动画是装饰性的，测试中置空。
 vi.mock('../common/utils/animation', async (importOriginal) => {
-  const mod = await importOriginal();
+  const mod = await importOriginal<typeof import('../common/utils/animation')>();
   return { ...mod, colorAnimation: () => {} };
 });
 
@@ -23,7 +23,7 @@ vi.mock('../common/utils/animation', async (importOriginal) => {
 import '../wc-entry';
 import { themeStore } from '../common/themes';
 
-async function mountWC(attrs = {}) {
+async function mountWC(attrs: Record<string, unknown> = {}) {
   const el = document.createElement('td-theme-generator');
   for (const [k, v] of Object.entries(attrs)) {
     if (v === true) el.setAttribute(k, '');
@@ -54,7 +54,7 @@ describe('Web Component: <td-theme-generator>', () => {
     // shadowRoot: true —— 样式注入 shadowRoot，与宿主页隔离。
     // .theme-generator 根节点在 shadowRoot 内。
     expect(el.shadowRoot).not.toBeNull();
-    const root = el.shadowRoot.querySelector('.theme-generator');
+    const root = el.shadowRoot?.querySelector('.theme-generator');
     expect(root).toBeTruthy();
   });
 
@@ -73,8 +73,8 @@ describe('Web Component: <td-theme-generator>', () => {
   it('同一页面可多次创建/销毁实例', async () => {
     const a = await mountWC();
     const b = await mountWC();
-    expect(a.shadowRoot.querySelector('.theme-generator')).toBeTruthy();
-    expect(b.shadowRoot.querySelector('.theme-generator')).toBeTruthy();
+    expect(a.shadowRoot?.querySelector('.theme-generator')).toBeTruthy();
+    expect(b.shadowRoot?.querySelector('.theme-generator')).toBeTruthy();
     a.remove();
     b.remove();
   });

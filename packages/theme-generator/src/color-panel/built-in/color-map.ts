@@ -40,7 +40,9 @@ export const WARNING_TOKENS = [
   '--td-warning-color-active',
 ];
 
-export const FUNCTION_TOKENS = {
+export type FunctionColorType = 'gray' | 'success' | 'error' | 'warning';
+
+export const FUNCTION_TOKENS: Record<FunctionColorType, string[]> = {
   gray: GRAY_TOKENS,
   success: SUCCESS_TOKENS,
   error: ERROR_TOKENS,

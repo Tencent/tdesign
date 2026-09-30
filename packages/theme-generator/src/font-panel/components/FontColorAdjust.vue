@@ -67,9 +67,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue';
-import flatten from 'lodash/flatten';
+import flatten from 'lodash-es/flatten';
 import { Edit1Icon } from 'tdesign-icons-vue-next';
 import { Popup as TPopup, RadioButton as TRadioButton, RadioGroup as TRadioGroup } from 'tdesign-vue-next/lib';
 
@@ -79,24 +79,34 @@ import { handleAttach } from '@/common/utils';
 
 defineOptions({ name: 'FontColorAdjust' });
 
-const props = defineProps({
-  type: String,
-  colorPalette: Array,
-  paletteChange: Boolean,
-  originColorPalette: Array,
-});
+interface FontColorToken {
+  name: string;
+  idx?: number;
+  value?: string;
+  isModified?: boolean;
+}
 
-const emit = defineEmits(['recoverGradation', 'changeGradation']);
+const props = defineProps<{
+  type?: string;
+  colorPalette?: FontColorToken[];
+  paletteChange?: boolean;
+  originColorPalette?: FontColorToken[];
+}>();
+
+const emit = defineEmits<{
+  recoverGradation: [type: string | undefined];
+  changeGradation: [hex: string, idx: number, type: string | undefined];
+}>();
 
 const { lang } = useLang();
 
 const activeIdx = ref(0);
-const hoverIdx = ref(null);
+const hoverIdx = ref<number | null>(null);
 const colorType = ref(1);
 
-const flattenPalette = computed(() => flatten(props.colorPalette));
+const flattenPalette = computed(() => flatten(props.colorPalette ?? []));
 
-function changeColor(hex, idx) {
+function changeColor(hex: string, idx: number) {
   emit('changeGradation', hex, idx, props.type);
 }
 </script>

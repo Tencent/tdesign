@@ -102,7 +102,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch, onMounted, nextTick } from 'vue';
 import {
   List as TList,
@@ -118,22 +118,29 @@ import { getOptionFromLocal, modifyToken, updateLocalOption } from '@/common/the
 import { getTokenValue, handleAttach } from '@/common/utils';
 
 import { FONT_SIZE_LABELS, FONT_SIZE_OPTIONS, FONT_SIZE_STEPS, FONT_SIZE_TOKEN_LIST } from '../built-in/font-map';
+import type { FontSizeToken } from '../built-in/font-map';
 
 defineOptions({ name: 'FontSizeAdjust' });
 
 const { lang } = useLang();
 
-const step = ref(getOptionFromLocal('font') || 3);
-const hoverIdx = ref(null);
+const step = ref<string | number>(getOptionFromLocal('font') || 3);
+const hoverIdx = ref<number | null>(null);
 const tokenType = ref('list'); // list or token
 const segmentSelectionDisabled = ref(false);
-const tokenTypeList = ref(FONT_SIZE_TOKEN_LIST);
-const initTokenList = ref([]);
-const ladderTypeList = ref([]);
-const initLadderList = ref([]);
+const tokenTypeList = ref<FontSizeToken[]>(FONT_SIZE_TOKEN_LIST.map((item) => ({ ...item })));
+const initTokenList = ref<FontSizeToken[]>([]);
+interface LadderItem {
+  value: string | undefined;
+  tokens: string[];
+  label?: string;
+  isBold?: boolean;
+}
+const ladderTypeList = ref<LadderItem[]>([]);
+const initLadderList = ref<LadderItem[]>([]);
 
 watch(tokenTypeList, (list) => {
-  const fontSizeStepArray = Object.keys(FONT_SIZE_STEPS).map((v) => FONT_SIZE_STEPS[v]);
+  const fontSizeStepArray = (Object.keys(FONT_SIZE_STEPS) as unknown as number[]).map((v) => FONT_SIZE_STEPS[v]);
 
   if (
     !fontSizeStepArray.find(
@@ -150,11 +157,11 @@ watch(step, (v) => {
   // 默认值（v=3) 的时候不存到本地
   updateLocalOption('font', v !== 3 ? v : null);
 
-  if (!FONT_SIZE_STEPS[v]) return;
-  const newSteps = FONT_SIZE_STEPS[v];
+  if (!FONT_SIZE_STEPS[Number(v)]) return;
+  const newSteps = FONT_SIZE_STEPS[Number(v)];
   newSteps.map(({ name, value }) => {
     modifyToken(name, value, isCustom);
-    const i = tokenTypeList.value.findIndex((v) => v.label === name);
+    const i = tokenTypeList.value.findIndex((token) => token.label === name);
     if (i !== -1) tokenTypeList.value[i].value = value;
   });
 
@@ -162,7 +169,7 @@ watch(step, (v) => {
   // 阶梯模式列表
   ladderTypeList.value = [];
   tokenTypeList.value.forEach((token) => {
-    const listIdx = ladderTypeList.value.map((v) => v.value).indexOf(token.value);
+    const listIdx = ladderTypeList.value.map((item) => item.value).indexOf(token.value);
     if (listIdx !== -1) {
       ladderTypeList.value[listIdx].tokens.push(token.label);
     } else {
@@ -175,7 +182,7 @@ watch(step, (v) => {
   initLadderList.value = JSON.parse(JSON.stringify(ladderTypeList.value));
 });
 
-function handleVisibleChange(v, ctx, idx) {
+function handleVisibleChange(v: boolean, ctx: { trigger?: string }, idx: number) {
   if (v) hoverIdx.value = idx;
   if (!v && ctx.trigger === 'document' && hoverIdx.value === idx) hoverIdx.value = null;
 }
@@ -190,7 +197,7 @@ function handleInitFontSize() {
   initTokenList.value = JSON.parse(JSON.stringify(tokenTypeList.value));
   // 阶梯模式列表
   tokenTypeList.value.forEach((token) => {
-    const listIdx = ladderTypeList.value.map((v) => v.value).indexOf(token.value);
+    const listIdx = ladderTypeList.value.map((item) => item.value).indexOf(token.value);
     if (listIdx !== -1) {
       ladderTypeList.value[listIdx].tokens.push(token.label);
     } else {
@@ -203,7 +210,7 @@ function handleInitFontSize() {
   initLadderList.value = JSON.parse(JSON.stringify(ladderTypeList.value));
 }
 
-function handleChangeFontSize(v, type, tokenName, idx) {
+function handleChangeFontSize(v: string | number, type: 'list' | 'token', tokenName: string | string[], idx: number) {
   const res = `${v}px`;
   if (Array.isArray(tokenName)) {
     // 阶梯模式传进来的是数组
@@ -220,24 +227,26 @@ function handleChangeFontSize(v, type, tokenName, idx) {
     const fontSizeList = ladderTypeList.value[idx].tokens;
     // 修改 state
     ladderTypeList.value[idx].value = res;
-    if (parseInt(initLadderList.value[idx].value, 10) !== parseInt(res, 10)) segmentSelectionDisabled.value = true;
+    if (parseInt(initLadderList.value[idx].value as string, 10) !== parseInt(res, 10))
+      segmentSelectionDisabled.value = true;
 
-    fontSizeList.map((tokenName) => {
-      const i = tokenTypeList.value.findIndex((v) => v.label === tokenName);
+    fontSizeList.map((name) => {
+      const i = tokenTypeList.value.findIndex((token) => token.label === name);
       if (i !== -1) tokenTypeList.value[i].value = res;
     });
   }
 
   if (type === 'token') {
     // token 需要修改所有对应该 token 的值
-    if (parseInt(initTokenList.value[idx].value, 10) !== parseInt(res, 10)) segmentSelectionDisabled.value = true;
+    if (parseInt(initTokenList.value[idx].value as string, 10) !== parseInt(res, 10))
+      segmentSelectionDisabled.value = true;
     // 修改 state
     tokenTypeList.value[idx].value = res;
     const preVal = initTokenList.value[idx].value;
     if (res !== preVal) {
-      const preListIdx = ladderTypeList.value.findIndex((v) => v.tokens.includes(tokenName));
+      const preListIdx = ladderTypeList.value.findIndex((item) => item.tokens.includes(tokenName as string));
       if (preListIdx !== -1) {
-        const resIdx = ladderTypeList.value?.[preListIdx].tokens?.indexOf(tokenName);
+        const resIdx = ladderTypeList.value?.[preListIdx].tokens?.indexOf(tokenName as string);
         ladderTypeList.value[preListIdx].tokens?.splice(resIdx, 1);
       }
     }

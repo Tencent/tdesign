@@ -16,33 +16,39 @@
     </shadow-editor>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { AddIcon } from 'tdesign-icons-vue-next';
 import ShadowEditor from './ShadowEditor.vue';
 
 defineOptions({ name: 'ShadowLayer' });
 
-const props = defineProps({
-  shadow: Array,
-  detail: Object,
-});
+const props = withDefaults(
+  defineProps<{
+    shadow?: string[];
+    detail?: { label: string; key?: string; tips: string; enTips: string };
+  }>(),
+  {
+    shadow: () => [],
+    detail: () => ({ label: '', key: '', tips: '', enTips: '' }),
+  },
+);
 
-const emit = defineEmits(['change']);
+const emit = defineEmits<{ change: [value: string[]] }>();
 
-function change(value, index) {
-  const val = [...props.shadow];
+function change(value: string, index: number) {
+  const val = [...(props.shadow ?? [])];
   val[index] = value;
   emit('change', val);
 }
 
 function handleAdd() {
-  const val = [...props.shadow];
+  const val = [...(props.shadow ?? [])];
   val.push('0, 0, 0, 0, rgba(0, 0, 0, 0)');
   emit('change', val);
 }
 
-function handleMove(index) {
-  const val = [...props.shadow];
+function handleMove(index: number) {
+  const val = [...(props.shadow ?? [])];
   val.splice(index, 1);
   emit('change', val);
 }

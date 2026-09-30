@@ -5,7 +5,7 @@ beforeEach(() => {
   window.localStorage.clear();
   document.documentElement.removeAttribute('theme-mode');
   document.documentElement.style.cssText = '';
-  // 清理可能由 core.js / store 创建的 <style> 节点
+  // 清理可能由 core.ts / store 创建的 <style> 节点
   document.querySelectorAll('style').forEach((el) => el.remove());
 });
 
