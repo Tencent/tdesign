@@ -1,19 +1,6 @@
 /// <reference types="vite/client" />
 
-declare module '*.css?raw' {
-  const content: string;
-  export default content;
-}
-
-declare module '*.css?inline' {
-  const content: string;
-  export default content;
-}
-
-declare module '*?raw' {
-  const content: string;
-  export default content;
-}
+// 以下三方包未提供类型声明，这里按实际用到的 API 做最小声明。
 
 declare module 'tvision-color' {
   export interface ColorGradation {
@@ -32,18 +19,7 @@ declare module 'cssbeautify' {
   export default cssbeautify;
 }
 
-declare module 'tdesign-icons-vue-next' {
-  import type { DefineComponent } from 'vue';
-  const Icon: DefineComponent<Record<string, unknown>>;
-  export const Edit1Icon: typeof Icon;
-  export const FileCopyIcon: typeof Icon;
-  export const HelpCircleIcon: typeof Icon;
-  export const ErrorCircleIcon: typeof Icon;
-  export const LinkUnlinkIcon: typeof Icon;
-  export const RemoveIcon: typeof Icon;
-  export const AddIcon: typeof Icon;
-}
-
+// 宿主站点注入的埋点 API
 interface Window {
   _horizon?: {
     send(event: string, action: string): void;
