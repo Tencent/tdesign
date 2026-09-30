@@ -55,7 +55,7 @@
     "vite": "^6.3.1",
     "vitest": "^2.1.8",
     "vue-eslint-parser": "^9.4.2",
-    "vue-tsc": "^2.2.10"
+    "vue-tsc": "^3.3.11"
   },
   "browserslist": [
     "> 1%",
