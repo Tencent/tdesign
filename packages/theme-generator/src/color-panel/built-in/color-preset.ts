@@ -1,4 +1,10 @@
-export const DEFAULT_COLORS = [
+export interface PresetColor {
+  name: string;
+  enName: string;
+  value: string;
+}
+
+export const DEFAULT_COLORS: PresetColor[] = [
   {
     name: '腾讯蓝',
     enName: 'Tencent Blue',
@@ -16,7 +22,7 @@ export const DEFAULT_COLORS = [
   },
 ];
 
-export const RECOMMEND_COLORS = [
+export const RECOMMEND_COLORS: PresetColor[] = [
   {
     name: '珙桐绿',
     enName: 'Davidia Green',
@@ -59,7 +65,7 @@ export const RECOMMEND_COLORS = [
   },
 ];
 
-export const SCENE_COLORS = [
+export const SCENE_COLORS: PresetColor[] = [
   {
     name: '微信绿',
     enName: 'WeChat Green',
@@ -82,4 +88,4 @@ export const SCENE_COLORS = [
   },
 ];
 
-export const ALL_PRESET_COLORS = [...DEFAULT_COLORS, ...RECOMMEND_COLORS, ...SCENE_COLORS];
+export const ALL_PRESET_COLORS: PresetColor[] = [...DEFAULT_COLORS, ...RECOMMEND_COLORS, ...SCENE_COLORS];

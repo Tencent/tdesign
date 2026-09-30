@@ -1,4 +1,15 @@
-export const FONT_SIZE_TOKEN_LIST = [
+export interface FontSizeToken {
+  label: string;
+  isBold?: boolean;
+  value?: string;
+}
+
+export interface FontSizeStep {
+  name: string;
+  value: string;
+}
+
+export const FONT_SIZE_TOKEN_LIST: FontSizeToken[] = [
   { label: '--td-font-size-link-small' },
   { label: '--td-font-size-link-medium' },
   { label: '--td-font-size-link-large' },
@@ -17,7 +28,7 @@ export const FONT_SIZE_TOKEN_LIST = [
   { label: '--td-font-size-display-large', isBold: true },
 ];
 
-export const FONT_SIZE_STEPS = {
+export const FONT_SIZE_STEPS: Record<number, FontSizeStep[]> = {
   1: [
     { name: '--td-font-size-link-small', value: '12px' },
     { name: '--td-font-size-link-medium', value: '13px' },
@@ -110,7 +121,14 @@ export const FONT_SIZE_STEPS = {
   ], // 特大号
 };
 
-export const FONT_SIZE_OPTIONS = [
+export interface FontSizeOption {
+  label: string;
+  enLabel: string;
+  value: number;
+  disabled?: boolean;
+}
+
+export const FONT_SIZE_OPTIONS: FontSizeOption[] = [
   { label: '超小号', enLabel: 'mini', value: 1 },
   { label: '小号', enLabel: 'small', value: 2 },
   { label: '默认', enLabel: 'default', value: 3 },
@@ -119,9 +137,17 @@ export const FONT_SIZE_OPTIONS = [
   { label: '自定义', enLabel: 'customized', value: 6, disabled: true },
 ];
 
-export const FONT_SIZE_LABELS = Object.fromEntries(FONT_SIZE_OPTIONS.map((item, index) => [index + 1, item.label]));
+export const FONT_SIZE_LABELS: Record<number, string> = Object.fromEntries(
+  FONT_SIZE_OPTIONS.map((item, index) => [index + 1, item.label]),
+);
 
-export const FONT_COLOR_TOKEN_MAP = [
+export interface FontColorToken {
+  name: string;
+  from?: string;
+  value?: string;
+}
+
+export const FONT_COLOR_TOKEN_MAP: FontColorToken[] = [
   { name: '--td-text-color-primary', from: '--td-font-gray-1' },
   { name: '--td-text-color-secondary', from: '--td-font-gray-2' },
   { name: '--td-text-color-placeholder', from: '--td-font-gray-3' },

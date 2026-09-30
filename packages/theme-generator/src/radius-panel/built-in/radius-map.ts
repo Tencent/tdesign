@@ -1,4 +1,11 @@
-export const RADIUS_TOKEN_LIST = [
+export interface RadiusTokenItem {
+  token: string;
+  enDesc: string;
+  desc: string;
+  value?: string | number;
+}
+
+export const RADIUS_TOKEN_LIST: RadiusTokenItem[] = [
   {
     token: '--td-radius-small',
     enDesc: 'internal scenes of basic components.',
@@ -31,7 +38,14 @@ export const RADIUS_TOKEN_LIST = [
   },
 ];
 
-export const RADIUS_OPTIONS = [
+export interface RadiusOption {
+  label: string;
+  enLabel: string;
+  value: number;
+  disabled?: boolean;
+}
+
+export const RADIUS_OPTIONS: RadiusOption[] = [
   { label: '全直角', enLabel: 'mini', value: 1 },
   { label: '小圆角', enLabel: 'small', value: 2 },
   { label: '默认', enLabel: 'default', value: 3 },
@@ -40,9 +54,11 @@ export const RADIUS_OPTIONS = [
   { label: '自定义', enLabel: 'customized', value: 6, disabled: true },
 ];
 
-export const RADIUS_LABELS = Object.fromEntries(RADIUS_OPTIONS.map((item, index) => [index + 1, item.label]));
+export const RADIUS_LABELS: Record<number, string> = Object.fromEntries(
+  RADIUS_OPTIONS.map((item, index) => [index + 1, item.label]),
+);
 
-export const RADIUS_STEP_ARRAY = [
+export const RADIUS_STEP_ARRAY: (number | string)[][] = [
   [0, 0, 0, 0, 0, '50%'],
   [1, 2, 4, 6, 8, '50%'],
   [2, 3, 6, 9, 12, '50%'],

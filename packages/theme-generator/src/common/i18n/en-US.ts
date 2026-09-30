@@ -1,4 +1,6 @@
-export default {
+import type zhCN from './zh-CN';
+
+const enUS = {
   copied: 'copied',
   dock: {
     recommendTitle: 'Official recommendation',
@@ -15,6 +17,7 @@ export default {
     remainText: 'remain',
     remainTip: 'Keep the selected color unchanged',
     officialRecommendation: 'Official Recommendation',
+    sceneRecommendation: 'Scene Recommendation',
     successColor: 'Success color',
     warningColor: 'Warning color',
     errorColor: 'Error color',
@@ -46,11 +49,15 @@ export default {
     popupPadding: 'popup Padding',
     margin: 'margin',
   },
-  borerRadius: {
+  borderRadius: {
     title: 'Border',
     radiusSize: 'Border Radius',
   },
   shadow: {
     title: 'Shadow',
   },
-};
+} satisfies typeof zhCN;
+
+export type Lang = typeof zhCN;
+
+export default enUS;

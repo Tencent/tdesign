@@ -13,6 +13,7 @@ export default {
     aiTip: '选中的颜色若无法做主题色，会做调整',
     customizeTitle: '自定义颜色',
     officialRecommendation: '官方推荐',
+    sceneRecommendation: '场景推荐',
     remainText: '保留输入',
     remainTip: '保留选中的主题色，不做改动',
     successColor: '成功色',
@@ -46,7 +47,7 @@ export default {
     popupPadding: '弹出层边距',
     margin: '组件间距',
   },
-  borerRadius: {
+  borderRadius: {
     title: '圆角',
     radiusSize: '圆角大小',
   },

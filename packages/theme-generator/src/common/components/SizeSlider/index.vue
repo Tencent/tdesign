@@ -12,7 +12,7 @@
       />
       <t-slider
         :disabled="disabled"
-        :value="size"
+        :value="sliderValue"
         :min="min"
         :max="max"
         :step="step"
@@ -24,57 +24,70 @@
     </div>
   </div>
 </template>
-<script>
-import { handleAttach } from '@/common/utils';
-import { InputNumber as TInputNumber, Slider as TSlider } from 'tdesign-vue';
 
-export default {
-  name: 'SizeSlider',
-  props: {
-    sizeValue: [String, Number],
-    title: String,
-    step: Number,
-    min: Number,
-    max: Number,
-    disabled: Boolean,
-    needInteger: {
-      type: Boolean,
-      default: true,
-    },
+<script setup lang="ts">
+import { ref, computed, watch, onMounted } from 'vue';
+import { handleAttach } from '@/common/utils';
+import { InputNumber as TInputNumber, Slider as TSlider } from 'tdesign-vue-next/lib';
+
+type SliderValue = number | number[];
+type InputNumberValue = number | string;
+
+defineOptions({ name: 'SizeSlider' });
+
+const props = withDefaults(
+  defineProps<{
+    sizeValue?: string | number;
+    title?: string;
+    step?: number;
+    min?: number;
+    max?: number;
+    disabled?: boolean;
+    needInteger?: boolean;
+  }>(),
+  {
+    needInteger: true,
   },
-  components: {
-    TSlider,
-    TInputNumber,
+);
+
+const emit = defineEmits<{ changeSize: [v: number | string] }>();
+
+const size = ref<number | string | undefined>(undefined);
+
+// TSlider 的类型只接受 number，但运行时与 InputNumber 共用 size（可能是字符串）
+const sliderValue = computed(() => size.value as number | undefined);
+
+function format(val: number | string | null | undefined) {
+  return val == null ? '' : `${val}px`;
+}
+
+function handleInputChange(rawValue: InputNumberValue | SliderValue) {
+  const v = (Array.isArray(rawValue) ? rawValue[0] : rawValue) as number | string;
+  if (
+    v === size.value ||
+    Number(v) < (props.min ?? 0) ||
+    Number(v) > (props.max ?? 0) ||
+    props.disabled ||
+    (props.needInteger && !Number.isInteger(Number(v)))
+  )
+    return;
+  size.value = v;
+  emit('changeSize', v);
+}
+
+// 外部 sizeValue 变化时同步（父组件 refreshId 变更后重读 token 值）
+watch(
+  () => props.sizeValue,
+  (val) => {
+    size.value = props.needInteger ? parseInt(String(val), 10) : (val as number);
   },
-  emit: ['changeSize'],
-  data() {
-    return {
-      size: null,
-    };
-  },
-  methods: {
-    format(val) {
-      return `${val}px`;
-    },
-    handleAttach,
-    handleInputChange(v) {
-      if (
-        v === this.size ||
-        v < this.min ||
-        v > this.max ||
-        this.disabled ||
-        (this.needInteger && !Number.isInteger(Number(v)))
-      )
-        return;
-      this.size = v;
-      this.$emit('changeSize', v);
-    },
-  },
-  mounted() {
-    this.size = this.needInteger ? parseInt(this.sizeValue, 10) : this.sizeValue;
-  },
-};
+);
+
+onMounted(() => {
+  size.value = props.needInteger ? parseInt(String(props.sizeValue), 10) : (props.sizeValue as number);
+});
 </script>
+
 <style lang="less" scoped>
 .panel {
   &__size-slider {
@@ -89,7 +102,7 @@ export default {
       background-color: var(--bg-color-code);
     }
   }
-  /deep/ .t-input-number {
+  :deep(.t-input-number) {
     font-size: 14px !important;
   }
 }

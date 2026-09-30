@@ -16,37 +16,42 @@
     </shadow-editor>
   </div>
 </template>
-<script lang="jsx">
-import { AddIcon } from "tdesign-icons-vue";
-import ShadowEditor from "./ShadowEditor.vue";
-export default {
-  name: "ShadowLayer",
-  props: {
-    shadow: Array,
-    detail: Object,
+<script setup lang="ts">
+import { AddIcon } from 'tdesign-icons-vue-next';
+import ShadowEditor from './ShadowEditor.vue';
+
+defineOptions({ name: 'ShadowLayer' });
+
+const props = withDefaults(
+  defineProps<{
+    shadow?: string[];
+    detail?: { label: string; key?: string; tips: string; enTips: string };
+  }>(),
+  {
+    shadow: () => [],
+    detail: () => ({ label: '', key: '', tips: '', enTips: '' }),
   },
-  components: {
-    AddIcon,
-    ShadowEditor,
-  },
-  methods: {
-    change(value, index) {
-      const val = [...this.shadow];
-      val[index] = value;
-      this.$emit("change", val);
-    },
-    handleAdd() {
-      const val = [...this.shadow];
-      val.push("0, 0, 0, 0, rgba(0, 0, 0, 0)");
-      this.$emit("change", val);
-    },
-    handleMove(index) {
-      const val = [...this.shadow];
-      val.splice(index, 1);
-      this.$emit("change", val);
-    },
-  },
-};
+);
+
+const emit = defineEmits<{ change: [value: string[]] }>();
+
+function change(value: string, index: number) {
+  const val = [...(props.shadow ?? [])];
+  val[index] = value;
+  emit('change', val);
+}
+
+function handleAdd() {
+  const val = [...(props.shadow ?? [])];
+  val.push('0, 0, 0, 0, rgba(0, 0, 0, 0)');
+  emit('change', val);
+}
+
+function handleMove(index: number) {
+  const val = [...(props.shadow ?? [])];
+  val.splice(index, 1);
+  emit('change', val);
+}
 </script>
 <style scoped lang="less">
 .shadow-layer {
@@ -75,8 +80,7 @@ export default {
     &--name {
       font-size: 14px;
       color: var(--text-primary);
-      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-        "Liberation Mono", monospace;
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
   }
   &__add {
@@ -125,8 +129,7 @@ export default {
   &__name {
     font-size: 12px;
     color: var(--text-primary);
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-      "Liberation Mono", monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
   &__suffix {
     font-size: 14px;

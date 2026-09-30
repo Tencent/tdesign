@@ -67,60 +67,48 @@
   </div>
 </template>
 
-<script>
-import flatten from 'lodash/flatten';
-import { Edit1Icon } from 'tdesign-icons-vue';
-import { Popup as TPopup, RadioButton as TRadioButton, RadioGroup as TRadioGroup } from 'tdesign-vue';
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+import flatten from 'lodash-es/flatten';
+import { Edit1Icon } from 'tdesign-icons-vue-next';
+import { Popup as TPopup, RadioButton as TRadioButton, RadioGroup as TRadioGroup } from 'tdesign-vue-next/lib';
 
 import { ColorPicker } from '@/common/components';
-import { langMixin } from '@/common/i18n';
+import { useLang } from '@/common/i18n';
 import { handleAttach } from '@/common/utils';
 
-export default {
-  name: 'FontColorAdjust',
-  props: {
-    type: String,
-    colorPalette: Array,
-    paletteChange: Boolean,
-    originColorPalette: Array,
-  },
-  emit: ['recoverGradation', 'changeGradation'],
-  mixins: [langMixin],
-  components: {
-    TPopup,
-    TRadioGroup,
-    TRadioButton,
-    ColorPicker,
-    Edit1Icon,
-  },
-  data() {
-    return {
-      activeIdx: 0,
-      hoverIdx: null,
-      colorType: 1,
-    };
-  },
-  computed: {
-    flattenPalette() {
-      return flatten(this.colorPalette);
-    },
-    originFlattenPalette() {
-      return flatten(this.originColorPalette);
-    },
-  },
-  methods: {
-    handleAttach,
-    handleClickIdx(idx) {
-      this.activeIdx = idx;
-    },
-    handleRecover() {
-      this.$emit('recoverGradation', this.type);
-    },
-    changeColor(hex, idx) {
-      this.$emit('changeGradation', hex, idx, this.type);
-    },
-  },
-};
+defineOptions({ name: 'FontColorAdjust' });
+
+interface FontColorToken {
+  name: string;
+  idx?: number;
+  value?: string;
+  isModified?: boolean;
+}
+
+const props = defineProps<{
+  type?: string;
+  colorPalette?: FontColorToken[];
+  paletteChange?: boolean;
+  originColorPalette?: FontColorToken[];
+}>();
+
+const emit = defineEmits<{
+  recoverGradation: [type: string | undefined];
+  changeGradation: [hex: string, idx: number, type: string | undefined];
+}>();
+
+const { lang } = useLang();
+
+const activeIdx = ref(0);
+const hoverIdx = ref<number | null>(null);
+const colorType = ref(1);
+
+const flattenPalette = computed(() => flatten(props.colorPalette ?? []));
+
+function changeColor(hex: string, idx: number) {
+  emit('changeGradation', hex, idx, props.type);
+}
 </script>
 
 <style scoped lang="less">
@@ -128,7 +116,7 @@ export default {
 .fade-leave-active {
   transition: opacity 0.1s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter-from, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
 
@@ -140,7 +128,7 @@ export default {
     border-radius: 6px;
     background-color: var(--bg-color-theme-secondary);
 
-    /deep/ .t-radio-button {
+    :deep(.t-radio-button) {
       flex: 1;
       text-align: center;
       width: 100%;

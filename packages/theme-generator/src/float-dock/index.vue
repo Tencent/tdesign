@@ -83,7 +83,6 @@
         >
           <t-popconfirm
             :content="lang.dock.recoverConfirm"
-            :theme="null"
             :popup-props="{
               attach: handleAttach,
             }"
@@ -101,14 +100,16 @@
   </t-popup>
 </template>
 
-<script>
-import { MessagePlugin, Button as TButton, Popconfirm as TPopconfirm, Popup as TPopup } from 'tdesign-vue';
+<script setup lang="ts">
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { MessagePlugin, Button as TButton, Popconfirm as TPopconfirm, Popup as TPopup } from 'tdesign-vue-next/lib';
+import type { PopupVisibleChangeContext } from 'tdesign-vue-next/lib/popup/type';
 
-import { langMixin } from '@/common/i18n';
+import { useLang } from '@/common/i18n';
 import { exportCustomStyleSheet, themeStore } from '@/common/themes';
 import { handleAttach } from '@/common/utils';
 
-import RecommendThemes from './components/RecommendThemes';
+import RecommendThemes from './components/RecommendThemes/index.vue';
 
 import AdjustSvg from './svg/AdjustSvg.vue';
 import DownloadSvg from './svg/DownloadSvg.vue';
@@ -116,138 +117,144 @@ import PaletteSvg from './svg/PaletteSvg.vue';
 import RecoverSvg from './svg/RecoverSvg.vue';
 import SettingSvg from './svg/SettingSvg.vue';
 
-export default {
-  name: 'FloatDock',
-  components: {
-    TButton,
-    TPopup,
-    TPopconfirm,
-    RecommendThemes,
-    DownloadSvg,
-    RecoverSvg,
-    PaletteSvg,
-    AdjustSvg,
-    SettingSvg,
-  },
-  props: {
-    drawerVisible: { type: [Boolean, Number] },
-    showSetting: { type: [Boolean, String] },
-  },
-  mixins: [langMixin],
-  data() {
-    return {
-      isThemeTabVisible: false,
-      isCustomizeDrawerVisible: false,
-      isThemeTabContentDisplay: false,
-      dockY: null,
-      dockX: 0,
-      startY: null,
-      startX: null,
-      isDragging: false,
-    };
-  },
-  computed: {
-    $theme() {
-      return themeStore.theme;
-    },
-    $device() {
-      return themeStore.device;
-    },
-    operationWidth() {
-      if (!this.showSetting) {
-        if (this.isThemeTabVisible || this.isCustomizeDrawerVisible) return '400px';
-        return '256px';
-      } else {
-        if (this.isThemeTabVisible || this.isCustomizeDrawerVisible) return '456px';
-        return '312px';
-      }
-    },
-    generateBtnWidth() {
-      if (this.isThemeTabVisible) return '216px';
-      if (this.isCustomizeDrawerVisible) return '48px';
-      return '184px';
-    },
-  },
-  watch: {
-    drawerVisible(v) {
-      if (!v) this.isCustomizeDrawerVisible = false;
-    },
-    isThemeTabVisible(v) {
-      setTimeout(() => {
-        this.isThemeTabContentDisplay = v;
-      }, 300);
-    },
-  },
-  mounted() {
-    this.dockY = 24;
-    this.dockX = innerWidth / 2;
-  },
-  methods: {
-    handleAttach,
-    dragStart(e) {
-      this.startY = e.clientY;
-      this.startX = e.clientX;
-      this.isDragging = true;
+defineOptions({ name: 'FloatDock' });
 
-      document.addEventListener('mouseup', this.handleMouseup, true);
-      document.addEventListener('mousemove', this.handleMousemove, true);
-    },
-    handleMousemove(e) {
-      if (!this.isDragging) return false;
-      // 获取拖拽移动的距离
-      const movedY = this.startY - e.clientY;
-      const movedX = this.startX - e.clientX;
-      this.startY = e.clientY;
-      this.startX = e.clientX;
+const props = defineProps<{
+  drawerVisible?: boolean | number;
+  showSetting?: boolean | string;
+}>();
 
-      const newY = this.dockY + movedY;
-      const newX = this.dockX - movedX;
-      if (newY > 0) this.dockY = newY;
-      this.dockX = newX;
-    },
-    handleMouseup() {
-      this.isDragging = false;
-      document.removeEventListener('mouseup', this.handleMouseup, true);
-      document.removeEventListener('mousemove', this.handleMousemove, true);
-    },
-    handleDownload() {
-      exportCustomStyleSheet(this.$device);
-      MessagePlugin.success(this.lang.dock.downloadTips);
-    },
-    triggerSettingDrawer() {
-      this.$emit('click-setting');
-    },
-    handleLeaveTheme() {
-      this.$refs.btn.classList.add('is-mouseleave');
-      setTimeout(() => {
-        this.$refs.btn.classList.remove('is-mouseleave');
-      }, 500);
-    },
-    handleClickCustomize() {
-      this.$emit('trigger-visible');
-      this.isCustomizeDrawerVisible = true;
-      this.isThemeTabVisible = false;
-      if (window._horizon) {
-        window._horizon.send('主题生成器自定义按钮', 'click');
-      }
-    },
-    handleClickTheme() {
-      this.isThemeTabVisible = true;
-      this.isCustomizeDrawerVisible = false;
-      if (window._horizon) {
-        window._horizon.send('主题生成器主题按钮', 'click');
-      }
-    },
-    handleVisibleChange(visible, ctx) {
-      if (!visible && ctx.trigger === 'document' && ctx.e.target?.localName !== 'td-theme-generator') {
-        this.isThemeTabVisible = visible;
-      }
-    },
-    resetTheme() {
-      themeStore.resetTheme();
-    },
+const emit = defineEmits<{ 'click-setting': []; 'trigger-visible': [] }>();
+
+const { lang, isEn } = useLang();
+
+const isThemeTabVisible = ref(false);
+const isCustomizeDrawerVisible = ref(false);
+const isThemeTabContentDisplay = ref(false);
+const dockY = ref<number | null>(null);
+const dockX = ref(0);
+const startY = ref<number | null>(null);
+const startX = ref<number | null>(null);
+const isDragging = ref(false);
+const btn = ref<HTMLElement | null>(null);
+
+const $theme = computed(() => themeStore.theme);
+const $device = computed(() => themeStore.device);
+const operationWidth = computed(() => {
+  if (!props.showSetting) {
+    if (isThemeTabVisible.value || isCustomizeDrawerVisible.value) return '400px';
+    return '256px';
+  } else {
+    if (isThemeTabVisible.value || isCustomizeDrawerVisible.value) return '456px';
+    return '312px';
+  }
+});
+const generateBtnWidth = computed(() => {
+  if (isThemeTabVisible.value) return '216px';
+  if (isCustomizeDrawerVisible.value) return '48px';
+  return '184px';
+});
+
+watch(
+  () => props.drawerVisible,
+  (v) => {
+    if (!v) isCustomizeDrawerVisible.value = false;
   },
-};
+);
+
+let themeTabTimer: ReturnType<typeof setTimeout> | null = null;
+
+watch(isThemeTabVisible, (v) => {
+  if (themeTabTimer) clearTimeout(themeTabTimer);
+  themeTabTimer = setTimeout(() => {
+    isThemeTabContentDisplay.value = v;
+  }, 300);
+});
+
+onMounted(() => {
+  dockY.value = 24;
+  dockX.value = innerWidth / 2;
+});
+
+onUnmounted(() => {
+  if (themeTabTimer) clearTimeout(themeTabTimer);
+});
+
+function dragStart(e: MouseEvent) {
+  startY.value = e.clientY;
+  startX.value = e.clientX;
+  isDragging.value = true;
+
+  document.addEventListener('mouseup', handleMouseup, true);
+  document.addEventListener('mousemove', handleMousemove, true);
+}
+
+function handleMousemove(e: MouseEvent) {
+  if (!isDragging.value) return false;
+  // 获取拖拽移动的距离
+  const movedY = (startY.value ?? 0) - e.clientY;
+  const movedX = (startX.value ?? 0) - e.clientX;
+  startY.value = e.clientY;
+  startX.value = e.clientX;
+
+  const newY = (dockY.value ?? 0) + movedY;
+  const newX = dockX.value - movedX;
+  if (newY > 0) dockY.value = newY;
+  dockX.value = newX;
+}
+
+function handleMouseup() {
+  isDragging.value = false;
+  document.removeEventListener('mouseup', handleMouseup, true);
+  document.removeEventListener('mousemove', handleMousemove, true);
+}
+
+function handleDownload() {
+  exportCustomStyleSheet($device.value);
+  MessagePlugin.success(lang.dock.downloadTips);
+}
+
+function triggerSettingDrawer() {
+  emit('click-setting');
+}
+
+function handleLeaveTheme() {
+  btn.value?.classList.add('is-mouseleave');
+  setTimeout(() => {
+    btn.value?.classList.remove('is-mouseleave');
+  }, 500);
+}
+
+function handleClickCustomize() {
+  emit('trigger-visible');
+  isCustomizeDrawerVisible.value = true;
+  isThemeTabVisible.value = false;
+  if (window._horizon) {
+    window._horizon.send('主题生成器自定义按钮', 'click');
+  }
+}
+
+function handleClickTheme() {
+  isThemeTabVisible.value = true;
+  isCustomizeDrawerVisible.value = false;
+  if (window._horizon) {
+    window._horizon.send('主题生成器主题按钮', 'click');
+  }
+}
+
+function handleVisibleChange(visible: boolean, ctx: PopupVisibleChangeContext) {
+  if (
+    !visible &&
+    ctx.trigger === 'document' &&
+    (ctx.e?.target as HTMLElement | undefined)?.localName !== 'td-theme-generator'
+  ) {
+    isThemeTabVisible.value = visible;
+  }
+}
+
+function resetTheme() {
+  themeStore.resetTheme();
+}
 </script>
 
 <style lang="less" scoped>
@@ -272,7 +279,7 @@ export default {
 .fad-leave-active {
   transition: opacity 0.3s;
 }
-.fade-enter,
+.fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
@@ -311,10 +318,10 @@ export default {
   &.is-mouseleave {
     animation: toPure 0.5s cubic-bezier(0.38, 0, 0.24, 1);
   }
-  /deep/ .t-button--variant-text:hover {
+  :deep(.t-button--variant-text:hover) {
     background: var(--bg-color-container-hover);
   }
-  /deep/ .t-button {
+  :deep(.t-button) {
     height: 46px;
     width: 100%;
     border-radius: 24px;
@@ -328,7 +335,7 @@ export default {
 
   &:hover {
     animation: toConic 0.5s cubic-bezier(0.38, 0, 0.24, 1) forwards;
-    /deep/ .t-button {
+    :deep(.t-button) {
       background-color: var(--bg-color-card);
       color: var(--text-primary);
     }

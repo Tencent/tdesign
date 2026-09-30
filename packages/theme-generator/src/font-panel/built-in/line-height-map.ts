@@ -1,7 +1,7 @@
 import { modifyToken } from '@/common/themes';
 import { getTokenValue } from '@/common/utils';
 
-export const LINE_HEIGHT_STEPS = {
+export const LINE_HEIGHT_STEPS: Record<number, number> = {
   1: 2,
   2: 4,
   3: 8,
@@ -9,7 +9,14 @@ export const LINE_HEIGHT_STEPS = {
   5: 16,
 };
 
-export const LINE_HEIGHT_OPTIONS = [
+export interface LineHeightOption {
+  label: string;
+  enLabel: string;
+  value: number;
+  disabled?: boolean;
+}
+
+export const LINE_HEIGHT_OPTIONS: LineHeightOption[] = [
   { label: '超小', enLabel: 'mini', value: 1 },
   { label: '小', enLabel: 'small', value: 2 },
   { label: '默认', enLabel: 'default', value: 3 },
@@ -37,17 +44,17 @@ const LINE_HEIGHT_TOKENS = [
   'display-large',
 ];
 
-export function updateLineHeightTokens(commonVal, type = 'plus') {
+export function updateLineHeightTokens(commonVal: string | number, type: 'plus' | 'time' = 'plus'): void {
   LINE_HEIGHT_TOKENS.forEach((size) => {
     const fontSizeToken = `--td-font-size-${size}`;
     const lineHeightToken = `--td-line-height-${size}`;
     const fontSize = getTokenValue(fontSizeToken);
     const fontSizeNum = parseFloat(fontSize);
-    const commonValNum = parseFloat(commonVal);
+    const commonValNum = parseFloat(String(commonVal));
 
     if (!fontSize || isNaN(commonValNum)) return;
 
-    let result;
+    let result = fontSizeNum;
     if (type === 'plus') {
       result = fontSizeNum + commonValNum;
     } else if (type === 'time') {

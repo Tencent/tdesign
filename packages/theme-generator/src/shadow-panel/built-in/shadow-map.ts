@@ -5,9 +5,11 @@ export const ShadowSelectType = {
   Deep: 3,
   Super_Deep: 4,
   Self_Defined: 5,
-};
+} as const;
 
-export const ShadowSelectDetail = {
+export type ShadowSelectTypeValue = (typeof ShadowSelectType)[keyof typeof ShadowSelectType];
+
+export const ShadowSelectDetail: Record<number, string[]> = {
   [ShadowSelectType.Super_Light]: [
     '0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 2px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05)',
     '0 2px 6px rgba(0, 0, 0, 0.02), 0 4px 6px rgba(0, 0, 0, 0.05), 0 3px 3px rgba(0, 0, 0, 0.06)',
@@ -36,7 +38,14 @@ export const ShadowSelectDetail = {
   [ShadowSelectType.Self_Defined]: ['', '', ''],
 };
 
-export const ShadowSelect = [
+export interface ShadowSelectOption {
+  label: string;
+  enLabel: string;
+  value: ShadowSelectTypeValue;
+  disabled?: boolean;
+}
+
+export const ShadowSelect: ShadowSelectOption[] = [
   { label: '超轻', enLabel: 'lighter', value: ShadowSelectType.Super_Light },
   { label: '轻', enLabel: 'light', value: ShadowSelectType.Light },
   { label: '默认', enLabel: 'default', value: ShadowSelectType.Default },
@@ -45,7 +54,14 @@ export const ShadowSelect = [
   { label: '自定义', enLabel: 'customized', value: ShadowSelectType.Self_Defined, disabled: true },
 ];
 
-export const ShadowTypeDetail = [
+export interface ShadowTypeDetailItem {
+  label: string;
+  key: string;
+  tips: string;
+  enTips: string;
+}
+
+export const ShadowTypeDetail: ShadowTypeDetailItem[] = [
   {
     label: 'shadow-1',
     key: 'td-shadow-1',
@@ -66,7 +82,13 @@ export const ShadowTypeDetail = [
   },
 ];
 
-export const ShadowTypeMap = [
+export interface ShadowTypeMapItem {
+  name: string;
+  from: string;
+  value?: string;
+}
+
+export const ShadowTypeMap: ShadowTypeMapItem[] = [
   {
     name: '--td-shadow-1',
     from: '--td-shadow-1',
