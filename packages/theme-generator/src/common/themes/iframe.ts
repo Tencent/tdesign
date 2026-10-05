@@ -7,6 +7,11 @@ import type { Device, ThemeMode } from '@/common/types';
 // 避免 handleNested 立即调用 + onload 时重复创建 MutationObserver。
 const NESTED_OBSERVED_FLAG = '__tdThemeGeneratorNestedObserved';
 
+type Cleanup = () => void;
+
+const iframeWatchers = new WeakMap<HTMLIFrameElement, Cleanup>();
+const nestedDocumentWatchers = new WeakMap<Document, Cleanup>();
+
 interface ObservedIframeDocument extends Document {
   [NESTED_OBSERVED_FLAG]?: boolean;
 }
@@ -203,9 +208,11 @@ interface ThemeObservers {
 /**
  * 集中处理主题变化（亮暗模式与样式 Token）
  */
-function watchThemeChange(iframe: HTMLIFrameElement): void {
+function watchThemeChange(iframe: HTMLIFrameElement): Cleanup {
   // 同一个 iframe 只监听一次
-  if (iframe.dataset.observed === 'true') return;
+  const existingCleanup = iframeWatchers.get(iframe);
+  if (existingCleanup) return existingCleanup;
+
   iframe.dataset.observed = 'true';
 
   const observers: ThemeObservers = {
@@ -213,27 +220,35 @@ function watchThemeChange(iframe: HTMLIFrameElement): void {
     themeToken: null,
   };
 
-  observers.themeMode = watchThemeModeChange(iframe);
-  observers.themeToken = watchThemeTokenChange(iframe);
-
-  iframe.onload = () => {
+  const resetObservers = () => {
     // 先断开旧的 observers 再重新创建，避免泄漏
     [observers.themeMode, observers.themeToken].flat().forEach((o) => (o as MutationObserver | null)?.disconnect());
     observers.themeMode = watchThemeModeChange(iframe);
     observers.themeToken = watchThemeTokenChange(iframe);
   };
 
-  // 注：iframe 级 observer 在 iframe 重新加载时由 onload 重建；
-  // iframe 被移除时其 contentDocument 一并销毁，observer 不会继续触发回调。
-  // 顶层 document 级 observer 由 syncThemeToIframe 返回的 cleanup 负责。
+  resetObservers();
+
+  // 使用 addEventListener，避免覆盖调用方的 onload；同时只注册一次，
+  // 防止宿主文档的 MutationObserver 重复包装 onload 回调。
+  iframe.addEventListener('load', resetObservers);
+
+  const cleanup = () => {
+    [observers.themeMode, observers.themeToken].flat().forEach((o) => (o as MutationObserver | null)?.disconnect());
+    iframe.removeEventListener('load', resetObservers);
+    delete iframe.dataset.observed;
+    iframeWatchers.delete(iframe);
+  };
+  iframeWatchers.set(iframe, cleanup);
+  return cleanup;
 }
 
 /**
  * 监听前统一设置标识符
  */
-function beforeWatchThemeChange(iframe: HTMLIFrameElement, device: Device | string): void {
+function beforeWatchThemeChange(iframe: HTMLIFrameElement, device: Device | string): Cleanup {
   iframe.setAttribute('device', device);
-  watchThemeChange(iframe);
+  return watchThemeChange(iframe);
 }
 
 /**
@@ -244,6 +259,9 @@ function beforeWatchThemeChange(iframe: HTMLIFrameElement, device: Device | stri
  */
 export function syncThemeToIframe(device: Device | string): () => void {
   if (!isMobile(device)) return () => {};
+
+  const cleanups = new Set<Cleanup>();
+  const nestedLoadHandlers = new WeakMap<HTMLIFrameElement, () => void>();
 
   const handleDocPhoneIframe = () => {
     const docPhone = document.querySelector('td-doc-phone');
@@ -258,21 +276,35 @@ export function syncThemeToIframe(device: Device | string): () => void {
       //    需要同步到嵌套 iframe。
       // 两种情况都覆盖：先给 previewIframe 设置主题同步，
       // 再查找嵌套 webview iframe。
-      beforeWatchThemeChange(previewIframe, device);
+      cleanups.add(beforeWatchThemeChange(previewIframe, device));
 
-      // watchThemeChange 已设置 previewIframe.onload 用于 iframe 加载后重新初始化观察者；
-      // 这里链式包装，在原有 onload 之后再处理嵌套 iframe，避免覆盖。
-      const prevOnload = previewIframe.onload;
-      const handleNested = () => {
-        if (typeof prevOnload === 'function') prevOnload.call(previewIframe, new Event('load'));
-        watchNestedIframes(getIframeDoc(previewIframe, 'watchNestedIframes'), device);
-      };
-      previewIframe.onload = handleNested;
+      // 仅注册一次嵌套 iframe 的 load 处理器，避免宿主文档变化导致回调链增长。
+      if (!nestedLoadHandlers.has(previewIframe)) {
+        const handleNested = () => {
+          const nestedCleanup = watchNestedIframes(
+            getIframeDoc(previewIframe, 'watchNestedIframes'),
+            device,
+            cleanups,
+          );
+          if (nestedCleanup) cleanups.add(nestedCleanup);
+        };
+        nestedLoadHandlers.set(previewIframe, handleNested);
+        previewIframe.addEventListener('load', handleNested);
+        cleanups.add(() => {
+          previewIframe.removeEventListener('load', handleNested);
+          nestedLoadHandlers.delete(previewIframe);
+        });
+      }
+
       // iframe 可能已加载完成（onload 不会再触发），立即检查一次嵌套 iframe。
-      // 只检查嵌套 iframe，不重复执行 prevOnload（watchThemeChange 已初始化过）。
-      watchNestedIframes(getIframeDoc(previewIframe, 'watchNestedIframes'), device);
+      const nestedCleanup = watchNestedIframes(
+        getIframeDoc(previewIframe, 'watchNestedIframes'),
+        device,
+        cleanups,
+      );
+      if (nestedCleanup) cleanups.add(nestedCleanup);
     } else {
-      beforeWatchThemeChange(previewIframe, device);
+      cleanups.add(beforeWatchThemeChange(previewIframe, device));
     }
   };
 
@@ -290,25 +322,35 @@ export function syncThemeToIframe(device: Device | string): () => void {
     subtree: true,
   });
 
-  return () => observer.disconnect();
+  return () => {
+    observer.disconnect();
+    cleanups.forEach((cleanup) => cleanup());
+    cleanups.clear();
+  };
 }
 
 /**
  * 处理微信小程序预览 iframe 不止一个的情况
  */
-function watchNestedIframes(iframeDocument: Document | null, device: Device | string): void {
-  if (!iframeDocument) return;
+function watchNestedIframes(
+  iframeDocument: Document | null,
+  device: Device | string,
+  cleanups: Set<Cleanup>,
+): Cleanup | null {
+  if (!iframeDocument) return null;
   const observedDoc = iframeDocument as ObservedIframeDocument;
   // 同一个 iframe document 只观察一次：handleNested 会立即调用 + onload 时再调用，
   // 不加守卫会重复创建 MutationObserver。iframe 重新加载后 contentDocument 是新对象，标记自然失效。
-  if (observedDoc[NESTED_OBSERVED_FLAG]) return;
+  const existingCleanup = nestedDocumentWatchers.get(iframeDocument);
+  if (existingCleanup) return existingCleanup;
+
   observedDoc[NESTED_OBSERVED_FLAG] = true;
 
   const handleWatch = () => {
     const nestedIframes = iframeDocument.querySelectorAll('iframe');
     nestedIframes.forEach((iframe) => {
       if (!iframe.id?.startsWith('webview')) return;
-      beforeWatchThemeChange(iframe as HTMLIFrameElement, device);
+      cleanups.add(beforeWatchThemeChange(iframe as HTMLIFrameElement, device));
     });
   };
 
@@ -322,4 +364,12 @@ function watchNestedIframes(iframeDocument: Document | null, device: Device | st
     childList: true,
     subtree: true,
   });
+
+  const cleanup = () => {
+    observer.disconnect();
+    delete observedDoc[NESTED_OBSERVED_FLAG];
+    nestedDocumentWatchers.delete(iframeDocument);
+  };
+  nestedDocumentWatchers.set(iframeDocument, cleanup);
+  return cleanup;
 }
