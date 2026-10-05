@@ -8,9 +8,17 @@ import type { Device, ThemeMode } from '@/common/types';
 const NESTED_OBSERVED_FLAG = '__tdThemeGeneratorNestedObserved';
 
 type Cleanup = () => void;
+type WatchOwner = object;
 
-const iframeWatchers = new WeakMap<HTMLIFrameElement, Cleanup>();
-const nestedDocumentWatchers = new WeakMap<Document, Cleanup>();
+interface SharedWatcher {
+  cleanup: Cleanup;
+  owners: Set<WatchOwner>;
+  releases: WeakMap<WatchOwner, Cleanup>;
+  refreshes?: Map<WatchOwner, Cleanup>;
+}
+
+const iframeWatchers = new WeakMap<HTMLIFrameElement, SharedWatcher>();
+const nestedDocumentWatchers = new WeakMap<Document, SharedWatcher>();
 
 interface ObservedIframeDocument extends Document {
   [NESTED_OBSERVED_FLAG]?: boolean;
@@ -208,10 +216,26 @@ interface ThemeObservers {
 /**
  * 集中处理主题变化（亮暗模式与样式 Token）
  */
-function watchThemeChange(iframe: HTMLIFrameElement): Cleanup {
+function watchThemeChange(iframe: HTMLIFrameElement, owner: WatchOwner): Cleanup {
   // 同一个 iframe 只监听一次
-  const existingCleanup = iframeWatchers.get(iframe);
-  if (existingCleanup) return existingCleanup;
+  const existingWatcher = iframeWatchers.get(iframe);
+  if (existingWatcher) {
+    const existingRelease = existingWatcher.releases.get(owner);
+    if (existingRelease) return existingRelease;
+
+    const release = () => {
+      if (!existingWatcher.owners.delete(owner)) return;
+      existingWatcher.releases.delete(owner);
+      existingWatcher.refreshes?.delete(owner);
+      if (!existingWatcher.owners.size) {
+        existingWatcher.cleanup();
+        iframeWatchers.delete(iframe);
+      }
+    };
+    existingWatcher.owners.add(owner);
+    existingWatcher.releases.set(owner, release);
+    return release;
+  }
 
   iframe.dataset.observed = 'true';
 
@@ -237,18 +261,31 @@ function watchThemeChange(iframe: HTMLIFrameElement): Cleanup {
     [observers.themeMode, observers.themeToken].flat().forEach((o) => (o as MutationObserver | null)?.disconnect());
     iframe.removeEventListener('load', resetObservers);
     delete iframe.dataset.observed;
-    iframeWatchers.delete(iframe);
   };
-  iframeWatchers.set(iframe, cleanup);
-  return cleanup;
+  const watcher: SharedWatcher = {
+    cleanup,
+    owners: new Set([owner]),
+    releases: new WeakMap(),
+  };
+  const release = () => {
+    if (!watcher.owners.delete(owner)) return;
+    watcher.releases.delete(owner);
+    if (!watcher.owners.size) {
+      watcher.cleanup();
+      iframeWatchers.delete(iframe);
+    }
+  };
+  watcher.releases.set(owner, release);
+  iframeWatchers.set(iframe, watcher);
+  return release;
 }
 
 /**
  * 监听前统一设置标识符
  */
-function beforeWatchThemeChange(iframe: HTMLIFrameElement, device: Device | string): Cleanup {
+function beforeWatchThemeChange(iframe: HTMLIFrameElement, device: Device | string, owner: WatchOwner): Cleanup {
   iframe.setAttribute('device', device);
-  return watchThemeChange(iframe);
+  return watchThemeChange(iframe, owner);
 }
 
 /**
@@ -262,6 +299,7 @@ export function syncThemeToIframe(device: Device | string): () => void {
 
   const cleanups = new Set<Cleanup>();
   const nestedLoadHandlers = new WeakMap<HTMLIFrameElement, () => void>();
+  const owner = {};
 
   const handleDocPhoneIframe = () => {
     const docPhone = document.querySelector('td-doc-phone');
@@ -276,7 +314,7 @@ export function syncThemeToIframe(device: Device | string): () => void {
       //    需要同步到嵌套 iframe。
       // 两种情况都覆盖：先给 previewIframe 设置主题同步，
       // 再查找嵌套 webview iframe。
-      cleanups.add(beforeWatchThemeChange(previewIframe, device));
+      cleanups.add(beforeWatchThemeChange(previewIframe, device, owner));
 
       // 仅注册一次嵌套 iframe 的 load 处理器，避免宿主文档变化导致回调链增长。
       if (!nestedLoadHandlers.has(previewIframe)) {
@@ -285,6 +323,7 @@ export function syncThemeToIframe(device: Device | string): () => void {
             getIframeDoc(previewIframe, 'watchNestedIframes'),
             device,
             cleanups,
+            owner,
           );
           if (nestedCleanup) cleanups.add(nestedCleanup);
         };
@@ -301,10 +340,11 @@ export function syncThemeToIframe(device: Device | string): () => void {
         getIframeDoc(previewIframe, 'watchNestedIframes'),
         device,
         cleanups,
+        owner,
       );
       if (nestedCleanup) cleanups.add(nestedCleanup);
     } else {
-      cleanups.add(beforeWatchThemeChange(previewIframe, device));
+      cleanups.add(beforeWatchThemeChange(previewIframe, device, owner));
     }
   };
 
@@ -336,28 +376,55 @@ function watchNestedIframes(
   iframeDocument: Document | null,
   device: Device | string,
   cleanups: Set<Cleanup>,
+  owner: WatchOwner,
 ): Cleanup | null {
   if (!iframeDocument) return null;
   const observedDoc = iframeDocument as ObservedIframeDocument;
   // 同一个 iframe document 只观察一次：handleNested 会立即调用 + onload 时再调用，
   // 不加守卫会重复创建 MutationObserver。iframe 重新加载后 contentDocument 是新对象，标记自然失效。
-  const existingCleanup = nestedDocumentWatchers.get(iframeDocument);
-  if (existingCleanup) return existingCleanup;
+  const existingWatcher = nestedDocumentWatchers.get(iframeDocument);
+  if (existingWatcher) {
+    const existingRelease = existingWatcher.releases.get(owner);
+    if (existingRelease) return existingRelease;
+
+    const release = () => {
+      if (!existingWatcher.owners.delete(owner)) return;
+      existingWatcher.releases.delete(owner);
+      existingWatcher.refreshes?.delete(owner);
+      if (!existingWatcher.owners.size) {
+        existingWatcher.cleanup();
+        nestedDocumentWatchers.delete(iframeDocument);
+      }
+    };
+    existingWatcher.owners.add(owner);
+    existingWatcher.releases.set(owner, release);
+    const refresh = () => {
+      iframeDocument.querySelectorAll('iframe').forEach((iframe) => {
+        if (iframe.id?.startsWith('webview')) {
+          cleanups.add(beforeWatchThemeChange(iframe as HTMLIFrameElement, device, owner));
+        }
+      });
+    };
+    existingWatcher.refreshes?.set(owner, refresh);
+    refresh();
+    return release;
+  }
 
   observedDoc[NESTED_OBSERVED_FLAG] = true;
 
-  const handleWatch = () => {
+  const handleWatch = (watchOwner: WatchOwner) => {
     const nestedIframes = iframeDocument.querySelectorAll('iframe');
     nestedIframes.forEach((iframe) => {
       if (!iframe.id?.startsWith('webview')) return;
-      cleanups.add(beforeWatchThemeChange(iframe as HTMLIFrameElement, device));
+      cleanups.add(beforeWatchThemeChange(iframe as HTMLIFrameElement, device, watchOwner));
     });
   };
 
-  handleWatch();
+  handleWatch(owner);
 
+  let watcher: SharedWatcher;
   const observer = new MutationObserver(() => {
-    handleWatch();
+    watcher.refreshes?.forEach((refresh) => refresh());
   });
 
   observer.observe(iframeDocument, {
@@ -368,8 +435,24 @@ function watchNestedIframes(
   const cleanup = () => {
     observer.disconnect();
     delete observedDoc[NESTED_OBSERVED_FLAG];
-    nestedDocumentWatchers.delete(iframeDocument);
   };
-  nestedDocumentWatchers.set(iframeDocument, cleanup);
-  return cleanup;
+  watcher = {
+    cleanup,
+    owners: new Set([owner]),
+    releases: new WeakMap(),
+    refreshes: new Map(),
+  };
+  watcher.refreshes.set(owner, () => handleWatch(owner));
+  const release = () => {
+    if (!watcher.owners.delete(owner)) return;
+    watcher.releases.delete(owner);
+    watcher.refreshes?.delete(owner);
+    if (!watcher.owners.size) {
+      watcher.cleanup();
+      nestedDocumentWatchers.delete(iframeDocument);
+    }
+  };
+  watcher.releases.set(owner, release);
+  nestedDocumentWatchers.set(iframeDocument, watcher);
+  return release;
 }
