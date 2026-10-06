@@ -1,9 +1,8 @@
-<template>
-  <svg
+<svg
     width="1em"
     height="1em"
     viewBox="0 0 64 64"
-    :style="{ backgroundColor: `var(--bg-color-card)` }"
+    style="background-color: var(--bg-color-card)"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
@@ -109,8 +108,3 @@
       </linearGradient>
     </defs>
   </svg>
-</template>
-
-<script lang="ts">
-export default {};
-</script>

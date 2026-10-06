@@ -28,7 +28,7 @@
               backgroundColor: 'var(--bg-color-theme-secondary)',
             }"
           >
-            <size-svg />
+            <span v-html="SizeSvg"></span>
           </div>
         </template>
         <template #title>{{ lang.size.componentSize }}</template>
@@ -53,7 +53,7 @@
               backgroundColor: 'var(--bg-color-theme-secondary)',
             }"
           >
-            <vertical-padding-svg />
+            <span v-html="VerticalPaddingSvg"></span>
           </div>
         </template>
         <template #title>{{ lang.size.yPadding }}</template>
@@ -78,7 +78,7 @@
               backgroundColor: 'var(--bg-color-theme-secondary)',
             }"
           >
-            <horizontal-padding-svg />
+            <span v-html="HorizontalPaddingSvg"></span>
           </div>
         </template>
         <template #title>{{ lang.size.xPadding }}</template>
@@ -103,7 +103,7 @@
               alignItems: 'center',
             }"
           >
-            <popup-padding-svg />
+            <span v-html="PopupPaddingSvg"></span>
           </div>
         </template>
         <template #title>{{ lang.size.popupPadding }}</template>
@@ -128,7 +128,7 @@
               backgroundColor: 'var(--bg-color-theme-secondary)',
             }"
           >
-            <margin-svg />
+            <span v-html="MarginSvg"></span>
           </div>
         </template>
         <template #title>{{ lang.size.margin }}</template>
@@ -151,11 +151,11 @@ import { themeStore } from '@/common/themes';
 import SizeAdjust from './components/size-adjust.vue';
 import SizeDisplay from './components/size-display.vue';
 
-import HorizontalPaddingSvg from './svg/horizontal-padding-svg.vue';
-import MarginSvg from './svg/margin-svg.vue';
-import PopupPaddingSvg from './svg/popup-padding-svg.vue';
-import SizeSvg from './svg/size-svg.vue';
-import VerticalPaddingSvg from './svg/vertical-padding-svg.vue';
+import HorizontalPaddingSvg from './svg/horizontal-padding.svg?raw';
+import MarginSvg from './svg/margin.svg?raw';
+import PopupPaddingSvg from './svg/popup-padding.svg?raw';
+import SizeSvg from './svg/size.svg?raw';
+import VerticalPaddingSvg from './svg/vertical-padding.svg?raw';
 
 import {
   COMP_MARGIN_MAP,

@@ -26,7 +26,7 @@
               'align-items': 'center',
             }"
           >
-            <line-height-svg />
+            <span v-html="LineHeightSvg"></span>
           </div>
         </template>
         <template #title>{{ lang.font.lineHeight }}</template>
@@ -49,7 +49,7 @@
               'align-items': 'center',
             }"
           >
-            <font-color-svg />
+            <span v-html="FontColorSvg"></span>
           </div>
         </template>
         <template #title>{{ lang.font.fontColor }}</template>
@@ -78,10 +78,10 @@ import { FONT_COLOR_TOKEN_MAP } from './built-in/font-map';
 import type { FontColorToken } from './built-in/font-map';
 
 import FontColorAdjust from './components/font-color-adjust.vue';
-import FontColorSvg from './components/font-color-svg.vue';
+import FontColorSvg from './components/font-color.svg?raw';
 import FontSizeAdjust from './components/font-size-adjust.vue';
 import LineHeightAdjust from './components/line-height-adjust.vue';
-import LineHeightSvg from './components/line-height-svg.vue';
+import LineHeightSvg from './components/line-height.svg?raw';
 
 defineOptions({ name: 'FontPanel' });
 

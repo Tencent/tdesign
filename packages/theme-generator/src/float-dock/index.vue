@@ -32,7 +32,7 @@
         >
           <t-button variant="outline" shape="square" size="large">
             <template #icon>
-              <palette-svg />
+              <span class="dock-icon" v-html="PaletteSvg"></span>
             </template>
             <div v-if="!isCustomizeDrawerVisible" style="margin-left: 8px">
               {{ isEn ? $theme.enName : $theme.name }}
@@ -50,7 +50,7 @@
         >
           <t-button variant="outline" shape="square" size="large">
             <template #icon>
-              <adjust-svg />
+              <span class="dock-icon" v-html="AdjustSvg"></span>
             </template>
             <div v-if="isCustomizeDrawerVisible" style="margin-left: 8px">
               {{ lang.dock.adjustText }}
@@ -60,7 +60,7 @@
         <div v-if="showSetting" class="setting-btn" :style="{ width: '48px', marginLeft: '4px' }">
           <t-button variant="outline" shape="square" size="large" @click="triggerSettingDrawer">
             <template #icon>
-              <setting-svg />
+              <span class="dock-icon" v-html="SettingSvg"></span>
             </template>
           </t-button>
         </div>
@@ -72,7 +72,7 @@
         >
           <t-button variant="outline" shape="square" size="large">
             <template #icon>
-              <download-svg />
+              <span class="dock-icon" v-html="DownloadSvg"></span>
             </template>
           </t-button>
         </div>
@@ -90,7 +90,7 @@
           >
             <t-button variant="outline" shape="square" size="large">
               <template #icon>
-                <recover-svg />
+                <span class="dock-icon" v-html="RecoverSvg"></span>
               </template>
             </t-button>
           </t-popconfirm>
@@ -111,11 +111,11 @@ import { handleAttach } from '@/common/utils';
 
 import RecommendThemes from './components/recommend-themes/index.vue';
 
-import AdjustSvg from './svg/adjust-svg.vue';
-import DownloadSvg from './svg/download-svg.vue';
-import PaletteSvg from './svg/palette-svg.vue';
-import RecoverSvg from './svg/recover-svg.vue';
-import SettingSvg from './svg/setting-svg.vue';
+import AdjustSvg from './svg/adjust.svg?raw';
+import DownloadSvg from './svg/download.svg?raw';
+import PaletteSvg from './svg/palette.svg?raw';
+import RecoverSvg from './svg/recover.svg?raw';
+import SettingSvg from './svg/setting.svg?raw';
 
 defineOptions({ name: 'FloatDock' });
 

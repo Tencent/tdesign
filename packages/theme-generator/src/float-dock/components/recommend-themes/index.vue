@@ -15,7 +15,7 @@
           >
             <div v-html="theme.subtitle"></div>
             <div v-if="theme.enName === $theme.enName" class="recommend-theme__flex-theme--active">
-              <picked-svg />
+              <span v-html="PickedSvg"></span>
             </div>
           </div>
           <p
@@ -41,7 +41,7 @@ import { useLang } from '@/common/i18n';
 import { getRecommendThemes, themeStore } from '@/common/themes';
 
 import type { Theme } from '@/common/types';
-import PickedSvg from './picked-svg.vue';
+import PickedSvg from './picked.svg?raw';
 
 defineOptions({ name: 'RecommendThemes' });
 

@@ -13,9 +13,7 @@
         ]"
         @click="() => handleClickPanel(index)"
       >
-        <div>
-          <component :is="tab.image" />
-        </div>
+        <div v-html="tab.image"></div>
         <p>{{ tab.title }}</p>
       </div>
     </div>
@@ -23,16 +21,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, markRaw } from 'vue';
-import type { Component } from 'vue';
+import { computed } from 'vue';
 import { useLang } from '@/common/i18n';
 import { isMobile, themeStore } from '@/common/themes';
 
-import BoxshadowSvg from './boxshadow-svg.vue';
-import ColorSvg from './color-svg.vue';
-import FontSvg from './font-svg.vue';
-import RadiusSvg from './radius-svg.vue';
-import SizeSvg from './size-svg.vue';
+import BoxshadowSvg from './boxshadow.svg?raw';
+import ColorSvg from './color.svg?raw';
+import FontSvg from './font.svg?raw';
+import RadiusSvg from './radius.svg?raw';
+import SizeSvg from './size.svg?raw';
 
 defineOptions({ name: 'SwitchTabs' });
 
@@ -51,42 +48,37 @@ const { lang } = useLang();
 
 interface TabItem {
   title: string;
-  image: Component;
+  image: string;
 }
 
-const tabs = ref<TabItem[]>([]);
+const tabs: TabItem[] = [
+  {
+    title: lang.color.title,
+    image: ColorSvg,
+  },
+  {
+    title: lang.font.title,
+    image: FontSvg,
+  },
+  {
+    title: lang.borderRadius.title,
+    image: RadiusSvg,
+  },
+  {
+    title: lang.shadow.title,
+    image: BoxshadowSvg,
+  },
+  {
+    title: lang.size.title,
+    image: SizeSvg,
+  },
+];
 
 const $device = computed(() => themeStore.device);
 
 const filteredTabs = computed(() => {
   // 移动端不显示尺寸配置
-  return isMobile($device.value) ? tabs.value.filter((tab) => tab.title !== lang.size.title) : tabs.value;
-});
-
-onMounted(() => {
-  const text = lang;
-  tabs.value = [
-    {
-      title: text.color.title,
-      image: markRaw(ColorSvg),
-    },
-    {
-      title: text.font.title,
-      image: markRaw(FontSvg),
-    },
-    {
-      title: text.borderRadius.title,
-      image: markRaw(RadiusSvg),
-    },
-    {
-      title: text.shadow.title,
-      image: markRaw(BoxshadowSvg),
-    },
-    {
-      title: text.size.title,
-      image: markRaw(SizeSvg),
-    },
-  ];
+  return isMobile($device.value) ? tabs.filter((tab) => tab.title !== lang.size.title) : tabs;
 });
 
 function handleClickPanel(idx: number) {
@@ -142,7 +134,7 @@ function handleClickPanel(idx: number) {
         color: var(--text-primary);
       }
 
-      svg {
+      :deep(svg) {
         border-radius: 9px;
         font-size: 48px;
       }

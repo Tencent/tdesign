@@ -1,5 +1,4 @@
-<template>
-  <svg width="1em" height="1em" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="1em" height="1em" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect width="8" height="8" fill="#DBE1FC" />
     <rect y="8" width="8" height="8" fill="#B6C5FA" />
     <rect y="16" width="8" height="8" fill="#90A9F9" />
@@ -65,8 +64,3 @@
     <rect x="16" y="48" width="8" height="8" fill="#72215B" />
     <rect x="16" y="56" width="8" height="8" fill="#571042" />
   </svg>
-</template>
-
-<script lang="ts">
-export default {};
-</script>
