@@ -189,11 +189,13 @@ export function exportCustomStyleSheet(device: Device | string): void {
   downloadFile(blob, `theme.${fileSuffix}`);
 }
 
-export function modifyToken(tokenName: string, newVal: string, saveToLocal = true): void {
+// Apply CSS without changing persisted options or individual token overrides.
+export function applyTokenToStyle(tokenName: string, newVal: string): boolean {
   // 获取所有可能包含 token 的样式表
   const styleSheets = document.querySelectorAll(`#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, #${CUSTOM_EXTRA_ID}`);
 
   let tokenFound = false;
+  let changed = false;
   styleSheets.forEach((styleSheet) => {
     // 匹配 `tokenName: <value>;`，容忍冒号后任意空白
     const reg = new RegExp(`${tokenName}:\\s*([^;]*);`);
@@ -211,11 +213,18 @@ export function modifyToken(tokenName: string, newVal: string, saveToLocal = tru
     styleSheet.textContent = styleSheet.textContent?.replace(replaceReg, `$1${newVal};`) ?? '';
     tokenFound = true;
 
-    updateLocalToken(tokenName, saveToLocal ? newVal : null);
+    changed = true;
   });
 
   if (!tokenFound) {
     console.warn(`CSS variable: ${tokenName} is not exist`);
+  }
+  return changed;
+}
+
+export function modifyToken(tokenName: string, newVal: string, saveToLocal = true): void {
+  if (applyTokenToStyle(tokenName, newVal)) {
+    updateLocalToken(tokenName, saveToLocal ? newVal : null);
   }
 }
 
@@ -243,7 +252,7 @@ export function getTokenFromLocal(tokenName?: string): Record<string, string> | 
  * @param value 传入 `null` 或 `undefined`，则表示清除掉之前的存储
  */
 export function updateLocalOption(optionName: string, value: string | number | null | undefined): void {
-  if (value) {
+  if (value !== null && value !== undefined && value !== '') {
     const options = localStorage.getItem(CUSTOM_OPTIONS_ID) || '{}';
     const optionObj = JSON.parse(options) as Record<string, string | number>;
     optionObj[optionName] = value;

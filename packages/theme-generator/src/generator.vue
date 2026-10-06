@@ -11,8 +11,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
-import { applyTokenFromLocal, syncModeToGenerator, syncThemeToIframe, themeStore } from '@/common/themes';
+import { ref, onBeforeMount, onMounted, onUnmounted } from 'vue';
+import { restoreThemeOptions, syncModeToGenerator, syncThemeToIframe, themeStore } from '@/common/themes';
 import { setUpModeObserver } from '@/common/utils';
 
 import FloatDock from './float-dock/index.vue';
@@ -35,10 +35,14 @@ let modeSyncObserver: MutationObserver | null = null;
 let refreshObserver: MutationObserver | null = null;
 let iframeCleanup: (() => void) | null = null;
 
-onMounted(() => {
+// Panels read CSS during setup, so restore the theme before mounting children.
+onBeforeMount(() => {
   themeStore.updateDevice(props.device);
+  restoreThemeOptions();
+});
+
+onMounted(() => {
   modeSyncObserver = syncModeToGenerator();
-  applyTokenFromLocal();
   iframeCleanup = syncThemeToIframe(props.device);
   refreshObserver = setUpModeObserver(() => {
     themeStore.incrementRefreshId();

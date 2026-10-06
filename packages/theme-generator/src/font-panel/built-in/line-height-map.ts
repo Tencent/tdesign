@@ -44,7 +44,22 @@ const LINE_HEIGHT_TOKENS = [
   'display-large',
 ];
 
-export function updateLineHeightTokens(commonVal: string | number, type: 'plus' | 'time' = 'plus'): void {
+export function parseLineHeightOption(
+  option: string | undefined,
+): { type: 'plus' | 'time'; value: number } | undefined {
+  if (typeof option !== 'string') return undefined;
+  const match = /^(plus|time)_(\d+(?:\.\d+)?)$/.exec(option);
+  if (!match) return undefined;
+  const value = Number(match[2]);
+  if (!Number.isFinite(value) || value <= 0) return undefined;
+  return { type: match[1] as 'plus' | 'time', value };
+}
+
+export function updateLineHeightTokens(
+  commonVal: string | number,
+  type: 'plus' | 'time' = 'plus',
+  writeToken: typeof modifyToken = modifyToken,
+): void {
   LINE_HEIGHT_TOKENS.forEach((size) => {
     const fontSizeToken = `--td-font-size-${size}`;
     const lineHeightToken = `--td-line-height-${size}`;
@@ -61,6 +76,6 @@ export function updateLineHeightTokens(commonVal: string | number, type: 'plus' 
       result = fontSizeNum * commonValNum;
     }
 
-    modifyToken(lineHeightToken, result + 'px', false);
+    writeToken(lineHeightToken, result + 'px', false);
   });
 }
