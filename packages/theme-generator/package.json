@@ -5,8 +5,7 @@
   "description": "TDesign 主题配置生成器挂件",
   "scripts": {
     "dev": "vite",
-    "build:css": "node scripts/build-tdesign-css.mjs",
-    "build": "npm run build:css && vite build",
+    "build": "vite build",
     "build:watch": "vite build --watch",
     "test": "vitest run",
     "test:watch": "vitest",
