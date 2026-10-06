@@ -142,20 +142,20 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed, watch } from 'vue';
+import { reactive, computed, watch, onMounted, nextTick } from 'vue';
 import type { CSSProperties } from 'vue';
 import { CommonCollapse } from '@/common/components';
 import { useLang } from '@/common/i18n';
 import { themeStore } from '@/common/themes';
 
-import SizeAdjust from './components/SizeAdjust.vue';
-import SizeDisplay from './components/SizeDisplay.vue';
+import SizeAdjust from './components/size-adjust.vue';
+import SizeDisplay from './components/size-display.vue';
 
-import HorizontalPaddingSvg from './svg/HorizontalPaddingSvg.vue';
-import MarginSvg from './svg/MarginSvg.vue';
-import PopupPaddingSvg from './svg/PopupPaddingSvg.vue';
-import SizeSvg from './svg/SizeSvg.vue';
-import VerticalPaddingSvg from './svg/VerticalPaddingSvg.vue';
+import HorizontalPaddingSvg from './svg/horizontal-padding-svg.vue';
+import MarginSvg from './svg/margin-svg.vue';
+import PopupPaddingSvg from './svg/popup-padding-svg.vue';
+import SizeSvg from './svg/size-svg.vue';
+import VerticalPaddingSvg from './svg/vertical-padding-svg.vue';
 
 import {
   COMP_MARGIN_MAP,
@@ -200,6 +200,16 @@ watch(
     });
   },
 );
+
+onMounted(() => {
+  // 首次渲染时主题样式表可能尚未完成应用，延后一帧重新挂载各尺寸分组，
+  // 确保 getTokenValue 能读取到所有类型的初始 Token。
+  nextTick(() => {
+    Object.keys(refreshIdMap).forEach((key) => {
+      refreshIdMap[key]++;
+    });
+  });
+});
 </script>
 
 <style scoped lang="less">

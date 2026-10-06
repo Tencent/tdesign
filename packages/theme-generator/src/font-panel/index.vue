@@ -77,11 +77,11 @@ import { getTokenValue } from '@/common/utils';
 import { FONT_COLOR_TOKEN_MAP } from './built-in/font-map';
 import type { FontColorToken } from './built-in/font-map';
 
-import FontColorAdjust from './components/FontColorAdjust.vue';
-import FontColorSvg from './components/FontColorSvg.vue';
-import FontSizeAdjust from './components/FontSizeAdjust.vue';
-import LineHeightAdjust from './components/LineHeightAdjust.vue';
-import LineHeightSvg from './components/LineHeightSvg.vue';
+import FontColorAdjust from './components/font-color-adjust.vue';
+import FontColorSvg from './components/font-color-svg.vue';
+import FontSizeAdjust from './components/font-size-adjust.vue';
+import LineHeightAdjust from './components/line-height-adjust.vue';
+import LineHeightSvg from './components/line-height-svg.vue';
 
 defineOptions({ name: 'FontPanel' });
 

@@ -35,8 +35,8 @@ import RadiusPanel from '../radius-panel/index.vue';
 import ShadowPanel from '../shadow-panel/index.vue';
 import SizePanel from '../size-panel/index.vue';
 
-import StickyThemeDisplay from './components/StickyThemeDisplay/index.vue';
-import SwitchTabs from './components/SwitchTabs/index.vue';
+import StickyThemeDisplay from './components/sticky-theme-display/index.vue';
+import SwitchTabs from './components/switch-tabs/index.vue';
 
 defineOptions({ name: 'PanelDrawer' });
 

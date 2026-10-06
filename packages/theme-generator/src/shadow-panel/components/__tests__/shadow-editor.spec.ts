@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 
-import ShadowEditor from '../ShadowEditor.vue';
+import ShadowEditor from '../shadow-editor.vue';
 
 describe('ShadowEditor', () => {
   it('挂载不报错（smoke）', () => {

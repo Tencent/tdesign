@@ -51,7 +51,7 @@ import {
   ShadowTypeDetail,
   ShadowTypeMap,
 } from './built-in/shadow-map';
-import ShadowCard from './components/ShadowCard.vue';
+import ShadowCard from './components/shadow-card.vue';
 
 defineOptions({ name: 'ShadowPanel' });
 

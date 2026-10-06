@@ -31,7 +31,6 @@ const props = withDefaults(
 );
 
 const visible = ref(false);
-// 保存 observer 与清理函数，组件卸载时断开，避免泄漏
 let modeSyncObserver: MutationObserver | null = null;
 let refreshObserver: MutationObserver | null = null;
 let iframeCleanup: (() => void) | null = null;
@@ -39,12 +38,8 @@ let iframeCleanup: (() => void) | null = null;
 onMounted(() => {
   themeStore.updateDevice(props.device);
   modeSyncObserver = syncModeToGenerator();
-  // initGeneratorVars 不再调用：generator-vars.css 已注入 Shadow Root，
-  // 生成器 UI 专用变量（--brand-main 等）在 Shadow DOM 内直接可用。
   applyTokenFromLocal();
   iframeCleanup = syncThemeToIframe(props.device);
-  // 宿主页亮暗模式切换时，font/shadow/size 面板以 $refreshId 为 key，
-  // bump 后强制重新挂载并重读 token 值（getTokenValue 非响应式，需靠 key 变更触发重渲染）。
   refreshObserver = setUpModeObserver(() => {
     themeStore.incrementRefreshId();
   });

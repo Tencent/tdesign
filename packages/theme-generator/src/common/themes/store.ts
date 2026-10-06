@@ -51,6 +51,8 @@ export const themeStore = reactive<ThemeStore>({
   },
   updateBrandColor(color: string) {
     this.brandColor = color;
+    // 生成器样式位于 Shadow DOM，品牌色别名需要设置在 host 上才能被内部 UI 继承。
+    document.querySelector<HTMLElement>('td-theme-generator')?.style.setProperty('--brand-main', color);
     // Site components consume this alias, so keep it linked to the mode-aware brand token.
     document.documentElement.style.setProperty('--brand-main', 'var(--td-brand-color)');
   },

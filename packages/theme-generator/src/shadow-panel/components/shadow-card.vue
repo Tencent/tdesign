@@ -32,7 +32,7 @@ import { Divider as TDivider, Popup as TPopup } from 'tdesign-vue-next/lib';
 import { useLang } from '@/common/i18n';
 import { handleAttach } from '@/common/utils';
 
-import ShadowLayer from './ShadowLayer.vue';
+import ShadowLayer from './shadow-layer.vue';
 
 defineOptions({ name: 'ShadowCard' });
 

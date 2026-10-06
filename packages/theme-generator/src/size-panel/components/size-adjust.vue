@@ -24,26 +24,29 @@
               <div>
                 <div>{{ token.name }}</div>
                 <div :style="{ color: 'var(--text-secondary)' }">
-                  {{ token.from }} : {{ getTokenValue(`--td-${token.from}`) }}
+                  {{ token.from }} : {{ getCurrentTokenValue(`--td-${token.from}`) }}
                 </div>
               </div>
               <div :style="{ display: 'flex', alignItems: 'center' }">
-                <size-adjust-svg v-if="type === 'comp-size'" :size="parseSize(getTokenValue(`--td-${token.name}`))" />
+                <size-adjust-svg
+                  v-if="type === 'comp-size'"
+                  :size="parseSize(getCurrentTokenValue(`--td-${token.name}`))"
+                />
                 <horizontal-padding-adjust-svg
                   v-else-if="type === 'comp-padding-lr'"
-                  :size="parseSize(getTokenValue(`--td-${token.from}`))"
+                  :size="parseSize(getCurrentTokenValue(`--td-${token.from}`))"
                 />
                 <vertical-padding-adjust-svg
                   v-else-if="type === 'comp-padding-tb'"
-                  :size="parseSize(getTokenValue(`--td-${token.from}`))"
+                  :size="parseSize(getCurrentTokenValue(`--td-${token.from}`))"
                 />
                 <margin-adjust-svg
                   v-else-if="type === 'comp-margin'"
-                  :size="parseSize(getTokenValue(`--td-${token.from}`))"
+                  :size="parseSize(getCurrentTokenValue(`--td-${token.from}`))"
                 />
                 <popup-padding-adjust-svg
                   v-else-if="type === 'popup-padding'"
-                  :size="parseSize(getTokenValue(`--td-${token.from}`))"
+                  :size="parseSize(getCurrentTokenValue(`--td-${token.from}`))"
                 />
               </div>
             </div>
@@ -51,7 +54,7 @@
           <template #content
             ><size-slider
               title="size"
-              :sizeValue="getTokenValue(`--td-${token.from}`)"
+              :sizeValue="getCurrentTokenValue(`--td-${token.from}`)"
               @changeSize="(v) => handleChangeSize(`--td-${token.from}`, v)"
           /></template>
         </t-popup>
@@ -67,11 +70,11 @@ import { SizeSlider } from './../../common/components';
 import { modifyToken, themeStore } from './../../common/themes';
 import { getTokenValue, handleAttach } from './../../common/utils';
 
-import HorizontalPaddingAdjustSvg from '../svg/HorizontalPaddingAdjustSvg.vue';
-import MarginAdjustSvg from '../svg/MarginAdjustSvg.vue';
-import PopupPaddingAdjustSvg from '../svg/PopupPaddingAdjustSvg.vue';
-import SizeAdjustSvg from '../svg/SizeAdjustSvg.vue';
-import VerticalPaddingAdjustSvg from '../svg/VerticalPaddingAdjustSvg.vue';
+import HorizontalPaddingAdjustSvg from '../svg/horizontal-padding-adjust-svg.vue';
+import MarginAdjustSvg from '../svg/margin-adjust-svg.vue';
+import PopupPaddingAdjustSvg from '../svg/popup-padding-adjust-svg.vue';
+import SizeAdjustSvg from '../svg/size-adjust-svg.vue';
+import VerticalPaddingAdjustSvg from '../svg/vertical-padding-adjust-svg.vue';
 
 import type { SizeMapItem } from '../built-in/size-map';
 
@@ -92,6 +95,13 @@ function handleVisibleChange(v: boolean, ctx: { trigger?: string }, idx: number)
 function handleChangeSize(token: string, v: number | string) {
   modifyToken(token, `${v}px`);
   themeStore.incrementSizeRefresh(props.type ?? null);
+}
+
+function getCurrentTokenValue(token: string): string {
+  // getTokenValue 本身不是响应式读取；订阅刷新计数可让当前分组在拖动后重读 Token，
+  // 同时避免通过 key 重挂载当前分组而关闭正在操作的弹层。
+  void themeStore.sizeRefreshId;
+  return getTokenValue(token);
 }
 
 function parseSize(val: string | number): number {

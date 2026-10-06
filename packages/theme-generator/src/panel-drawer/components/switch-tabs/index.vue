@@ -28,11 +28,11 @@ import type { Component } from 'vue';
 import { useLang } from '@/common/i18n';
 import { isMobile, themeStore } from '@/common/themes';
 
-import BoxshadowSvg from './BoxshadowSvg.vue';
-import ColorSvg from './ColorSvg.vue';
-import FontSvg from './FontSvg.vue';
-import RadiusSvg from './RadiusSvg.vue';
-import SizeSvg from './SizeSvg.vue';
+import BoxshadowSvg from './boxshadow-svg.vue';
+import ColorSvg from './color-svg.vue';
+import FontSvg from './font-svg.vue';
+import RadiusSvg from './radius-svg.vue';
+import SizeSvg from './size-svg.vue';
 
 defineOptions({ name: 'SwitchTabs' });
 

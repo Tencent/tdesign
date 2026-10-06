@@ -109,13 +109,13 @@ import { useLang } from '@/common/i18n';
 import { exportCustomStyleSheet, themeStore } from '@/common/themes';
 import { handleAttach } from '@/common/utils';
 
-import RecommendThemes from './components/RecommendThemes/index.vue';
+import RecommendThemes from './components/recommend-themes/index.vue';
 
-import AdjustSvg from './svg/AdjustSvg.vue';
-import DownloadSvg from './svg/DownloadSvg.vue';
-import PaletteSvg from './svg/PaletteSvg.vue';
-import RecoverSvg from './svg/RecoverSvg.vue';
-import SettingSvg from './svg/SettingSvg.vue';
+import AdjustSvg from './svg/adjust-svg.vue';
+import DownloadSvg from './svg/download-svg.vue';
+import PaletteSvg from './svg/palette-svg.vue';
+import RecoverSvg from './svg/recover-svg.vue';
+import SettingSvg from './svg/setting-svg.vue';
 
 defineOptions({ name: 'FloatDock' });
 

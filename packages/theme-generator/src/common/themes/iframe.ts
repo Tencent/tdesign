@@ -442,7 +442,7 @@ function watchNestedIframes(
     releases: new WeakMap(),
     refreshes: new Map(),
   };
-  watcher.refreshes.set(owner, () => handleWatch(owner));
+  watcher.refreshes?.set(owner, () => handleWatch(owner));
   const release = () => {
     if (!watcher.owners.delete(owner)) return;
     watcher.releases.delete(owner);

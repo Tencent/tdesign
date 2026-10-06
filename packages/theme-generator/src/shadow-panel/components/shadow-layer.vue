@@ -18,7 +18,7 @@
 </template>
 <script setup lang="ts">
 import { AddIcon } from 'tdesign-icons-vue-next';
-import ShadowEditor from './ShadowEditor.vue';
+import ShadowEditor from './shadow-editor.vue';
 
 defineOptions({ name: 'ShadowLayer' });
 

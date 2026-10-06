@@ -350,8 +350,8 @@ import { FUNCTION_TOKENS } from './built-in/color-map';
 import type { FunctionColorType } from './built-in/color-map';
 import { ALL_PRESET_COLORS, DEFAULT_COLORS, RECOMMEND_COLORS, SCENE_COLORS } from './built-in/color-preset';
 
-import ColorCollapse from './components/ColorCollapse/index.vue';
-import ColorColumn from './components/ColorColumn/index.vue';
+import ColorCollapse from './components/color-collapse/index.vue';
+import ColorColumn from './components/color-column/index.vue';
 
 import type { TokenIndex } from '@/common/types';
 

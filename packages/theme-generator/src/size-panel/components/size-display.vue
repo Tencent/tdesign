@@ -21,7 +21,7 @@ import { ref, computed, onMounted, watch, nextTick } from 'vue';
 import { getTokenValue } from '@/common/utils';
 import { themeStore } from '@/common/themes';
 import { SIZE_TOKENS } from '../built-in/size-map';
-import SectionDynamicSvg from '../svg/SectionDynamicSvg.vue';
+import SectionDynamicSvg from '../svg/section-dynamic-svg.vue';
 
 defineOptions({ name: 'SizeDisplay' });
 

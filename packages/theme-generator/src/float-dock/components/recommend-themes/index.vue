@@ -41,7 +41,7 @@ import { useLang } from '@/common/i18n';
 import { getRecommendThemes, themeStore } from '@/common/themes';
 
 import type { Theme } from '@/common/types';
-import PickedSvg from './PickedSvg.vue';
+import PickedSvg from './picked-svg.vue';
 
 defineOptions({ name: 'RecommendThemes' });
 
