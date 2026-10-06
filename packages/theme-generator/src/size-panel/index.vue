@@ -28,7 +28,7 @@
               backgroundColor: 'var(--bg-color-theme-secondary)',
             }"
           >
-            <size-svg />
+            <span v-html="SizeSvg"></span>
           </div>
         </template>
         <template #title>{{ lang.size.componentSize }}</template>
@@ -53,7 +53,7 @@
               backgroundColor: 'var(--bg-color-theme-secondary)',
             }"
           >
-            <vertical-padding-svg />
+            <span v-html="VerticalPaddingSvg"></span>
           </div>
         </template>
         <template #title>{{ lang.size.yPadding }}</template>
@@ -78,7 +78,7 @@
               backgroundColor: 'var(--bg-color-theme-secondary)',
             }"
           >
-            <horizontal-padding-svg />
+            <span v-html="HorizontalPaddingSvg"></span>
           </div>
         </template>
         <template #title>{{ lang.size.xPadding }}</template>
@@ -103,7 +103,7 @@
               alignItems: 'center',
             }"
           >
-            <popup-padding-svg />
+            <span v-html="PopupPaddingSvg"></span>
           </div>
         </template>
         <template #title>{{ lang.size.popupPadding }}</template>
@@ -128,7 +128,7 @@
               backgroundColor: 'var(--bg-color-theme-secondary)',
             }"
           >
-            <margin-svg />
+            <span v-html="MarginSvg"></span>
           </div>
         </template>
         <template #title>{{ lang.size.margin }}</template>
@@ -141,18 +141,21 @@
   </div>
 </template>
 
-<script lang="jsx">
+<script setup lang="ts">
+import { reactive, computed, watch, onMounted, nextTick } from 'vue';
+import type { CSSProperties } from 'vue';
 import { CommonCollapse } from '@/common/components';
-import { langMixin } from '@/common/i18n';
+import { useLang } from '@/common/i18n';
+import { themeStore } from '@/common/themes';
 
-import SizeAdjust from './components/SizeAdjust.vue';
-import SizeDisplay from './components/SizeDisplay.vue';
+import SizeAdjust from './components/size-adjust.vue';
+import SizeDisplay from './components/size-display.vue';
 
-import HorizontalPaddingSvg from './svg/HorizontalPaddingSvg.vue';
-import MarginSvg from './svg/MarginSvg.vue';
-import PopupPaddingSvg from './svg/PopupPaddingSvg.vue';
-import SizeSvg from './svg/SizeSvg.vue';
-import VerticalPaddingSvg from './svg/VerticalPaddingSvg.vue';
+import HorizontalPaddingSvg from './svg/horizontal-padding.svg?raw';
+import MarginSvg from './svg/margin.svg?raw';
+import PopupPaddingSvg from './svg/popup-padding.svg?raw';
+import SizeSvg from './svg/size.svg?raw';
+import VerticalPaddingSvg from './svg/vertical-padding.svg?raw';
 
 import {
   COMP_MARGIN_MAP,
@@ -162,62 +165,55 @@ import {
   COMP_SIZE_MAP,
 } from './built-in/size-map';
 
-export default {
-  name: 'SizePanel',
-  props: {
-    top: Number,
-  },
-  components: {
-    CommonCollapse,
-    SizeDisplay,
-    SizeAdjust,
-    // svg
-    SizeSvg,
-    HorizontalPaddingSvg,
-    VerticalPaddingSvg,
-    PopupPaddingSvg,
-    MarginSvg,
-  },
-  mixins: [langMixin],
-  data() {
-    return {
-      COMP_SIZE_MAP,
-      COMP_PADDING_LR_MAP,
-      COMP_PADDING_TB_MAP,
-      COMP_POPUP_PADDING_MAP,
-      COMP_MARGIN_MAP,
-      refreshIdMap: {
-        'comp-size': 0,
-        'comp-padding-tb': 0,
-        'comp-padding-lr': 0,
-        'popup-padding': 0,
-        'comp-margin': 0,
-      },
-    };
-  },
-  computed: {
-    contentStyle() {
-      const clientHeight = window.innerHeight;
-      return {
-        overflowY: 'scroll',
-        height: `${clientHeight - (this.top || 0) - 96}px`,
-      };
-    },
-  },
-  mounted() {
-    this.$root.$on('refresh-size-tokens', (type) => {
-      Object.keys(this.refreshIdMap).forEach((key) => {
-        if (key !== type) {
-          this.refreshIdMap[key]++;
-        }
-      });
+defineOptions({ name: 'SizePanel' });
+
+const props = defineProps<{
+  top?: number;
+}>();
+
+const { lang } = useLang();
+
+const refreshIdMap = reactive<Record<string, number>>({
+  'comp-size': 0,
+  'comp-padding-tb': 0,
+  'comp-padding-lr': 0,
+  'popup-padding': 0,
+  'comp-margin': 0,
+});
+
+const contentStyle = computed<CSSProperties>(() => {
+  const clientHeight = window.innerHeight;
+  return {
+    overflowY: 'scroll',
+    height: `${clientHeight - (props.top || 0) - 96}px`,
+  };
+});
+
+watch(
+  () => themeStore.sizeRefreshId,
+  () => {
+    const type = themeStore.sizeRefreshType;
+    Object.keys(refreshIdMap).forEach((key) => {
+      if (key !== type) {
+        refreshIdMap[key]++;
+      }
     });
   },
-};
+);
+
+onMounted(() => {
+  // 首次渲染时主题样式表可能尚未完成应用，延后一帧重新挂载各尺寸分组，
+  // 确保 getTokenValue 能读取到所有类型的初始 Token。
+  nextTick(() => {
+    Object.keys(refreshIdMap).forEach((key) => {
+      refreshIdMap[key]++;
+    });
+  });
+});
 </script>
 
 <style scoped lang="less">
-/deep/ .t-popup[data-popper-placement='bottom-end'] .t-popup__arrow {
+:deep(.t-popup[data-popper-placement='bottom-end'] .t-popup__arrow) {
   left: calc(100% - 16px * 2) !important;
 }
 

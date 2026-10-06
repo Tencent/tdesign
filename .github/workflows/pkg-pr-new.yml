@@ -276,6 +276,10 @@ jobs:
 
       - run: pnpm -C packages/tdesign-uniapp/site site:preview
 
+      - run: pnpm uniapp build:npm
+
+      - run: pnpm -C packages/tdesign-uniapp/example build:h5 --mode preview 
+
       - uses: actions/upload-artifact@v7
         with:
           name: tdesign-uniapp-site

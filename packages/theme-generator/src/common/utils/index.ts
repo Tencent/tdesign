@@ -1,0 +1,152 @@
+import type { ThemeMode } from '@/common/types';
+
+export * from './animation';
+
+/**
+ * 获取指定 CSS Token 对应的数值
+ *
+ * 主题变量（--td-brand-color 等）始终定义在 Light DOM 的 :root 样式表上
+ * （custom-theme / custom-theme-dark 等 style 标签）。
+ * 不论亮暗模式都从 document.documentElement 读取，避免命中 td-theme-generator
+ * host 元素（它继承的是浅色值，暗色下读值会错误）。
+ */
+export function getTokenValue(name: string): string {
+  const rootElement = document.documentElement;
+  return window.getComputedStyle(rootElement).getPropertyValue(name).toLowerCase().trim();
+}
+
+/**
+ * 获取当前亮暗模式 (light / dark)
+ * 优先识别 `theme-mode` 属性，其次识别 `.dark` class（与 dark.css / tdesign.min.css
+ * 的 `:root.dark` 选择器对齐），均无则视为 light。
+ */
+export function getThemeMode(): ThemeMode {
+  const el = document.documentElement;
+  if (el.getAttribute('theme-mode') === 'dark') return 'dark';
+  if (el.classList.contains('dark')) return 'dark';
+  return 'light';
+}
+
+/**
+ * 创建亮暗变化监听器
+ */
+export function setUpModeObserver(handler: (mode: ThemeMode) => void): MutationObserver {
+  let mode = getThemeMode();
+
+  const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'attributes') {
+        const newMode = getThemeMode();
+        if (newMode !== mode) {
+          mode = newMode;
+          handler(mode);
+        }
+      }
+    }
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['theme-mode', 'class'],
+  });
+
+  return observer;
+}
+
+/**
+ * 按照指定的 Id 生成样式表
+ * - 如果存在，则返回已存在的样式表
+ * - 如果不存在，则创建一个新的样式表
+ */
+export function appendStyleSheet(styleId: string): HTMLStyleElement {
+  let styleSheet: HTMLStyleElement;
+  const existSheet = document.getElementById(styleId);
+
+  if (!existSheet) {
+    styleSheet = document.createElement('style');
+    styleSheet.id = styleId;
+    styleSheet.type = 'text/css';
+    document.head.appendChild(styleSheet);
+  } else {
+    styleSheet = existSheet as HTMLStyleElement;
+  }
+  return styleSheet;
+}
+
+/**
+ * 解决 `Popup` 组件脱离 Shadow DOM 的问题
+ *
+ * 注：当前返回页面首个 td-theme-generator 实例的 shadowRoot 内挂载点。
+ * 生成器按单例设计（每页一个实例），多实例场景下挂载点可能错误，
+ * 若未来需要支持多实例，需改为从当前组件实例的根节点向上查找 host。
+ */
+export function handleAttach(): HTMLElement {
+  return (
+    (document
+      .querySelector('td-theme-generator')
+      ?.shadowRoot?.querySelector('.theme-generator') as HTMLElement | null) || document.body
+  );
+}
+
+/**
+ * 将指定内容导出为文件
+ * - e.g. `new Blob(['Hello, world!'], { type: 'text/plain' })`
+ */
+export function downloadFile(blob: Blob, fileName: string): void {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.download = fileName;
+  a.target = '_blank';
+  a.href = url;
+  a.click();
+}
+
+export interface ParsedRootCss {
+  rootContent: string;
+  restContent: string;
+}
+
+/**
+ * 解析 CSS 文本，拆分出 `:root` 中的变量内容与其余的选择器规则
+ */
+export function parseRootCss(cssText?: string | null): ParsedRootCss {
+  if (!cssText) return { rootContent: '', restContent: '' };
+
+  // 匹配以 :root 开头的选择器组（允许逗号分隔的多个选择器，且包含 :root），后接 { ... } 块
+  const rootBlockReg = /(?:^|[\s;}])((?:[^{};]*?:root[^{};]*)\s*\{([^}]*)\})/g;
+
+  const rootContents: string[] = [];
+  let restContent = cssText;
+  let match: RegExpExecArray | null;
+  while ((match = rootBlockReg.exec(cssText)) !== null) {
+    rootContents.push(match[2].trim());
+    restContent = restContent.replace(match[1], '');
+  }
+
+  if (rootContents.length === 0) {
+    return { rootContent: '', restContent: cssText.trim() };
+  }
+
+  return {
+    rootContent: rootContents.join('\n').trim(),
+    restContent: restContent.trim(),
+  };
+}
+
+/**
+ * 删除 localStorage 中指定对象的指定属性
+ */
+export function clearLocalItem(storageKey: string, itemKey: string): void {
+  const storedData = localStorage.getItem(storageKey);
+  if (!storedData) return;
+
+  const dataObj = JSON.parse(storedData) as Record<string, unknown>;
+  delete dataObj[itemKey];
+
+  if (Object.keys(dataObj).length === 0) {
+    // 如果删除后对象为空，则移除整个项
+    localStorage.removeItem(storageKey);
+  } else {
+    localStorage.setItem(storageKey, JSON.stringify(dataObj));
+  }
+}

@@ -1,0 +1,399 @@
+import cssbeautify from 'cssbeautify';
+import { Color } from 'tvision-color';
+
+import GENERATOR_VARIABLES from './built-in/css/vars.css?raw';
+
+import {
+  appendStyleSheet,
+  clearLocalItem,
+  downloadFile,
+  getThemeMode,
+  parseRootCss,
+  setUpModeObserver,
+} from '../utils';
+
+import {
+  MOBILE_RECOMMEND_THEMES,
+  TDESIGN_MOBILE_THEME,
+  TDESIGN_WEB_THEME,
+  TENCENT_BLUE,
+  TENCENT_BLUE_DARK_PALETTE,
+  WEB_RECOMMEND_THEMES,
+} from './built-in';
+
+import type {
+  BrandPalette,
+  Device,
+  Palette,
+  Theme,
+  ThemeCategory,
+  ThemeMode,
+  TokenIndex,
+  Trigger,
+} from '@/common/types';
+
+const GENERATOR_ID = 'TDESIGN_GENERATOR_SYMBOL';
+
+/* stylesheet 的 ID */
+export const CUSTOM_THEME_ID = 'custom-theme';
+export const CUSTOM_DARK_ID = `${CUSTOM_THEME_ID}-dark`;
+export const CUSTOM_EXTRA_ID = `${CUSTOM_THEME_ID}-extra`;
+
+/* localStorage 的 key */
+export const CUSTOM_OPTIONS_ID = `${CUSTOM_THEME_ID}-options`;
+export const CUSTOM_TOKEN_ID = `${CUSTOM_THEME_ID}-tokens`;
+
+export const isMiniProgram = (device: Device | string): boolean => device === 'mini-program';
+export const isUniapp = (device: Device | string): boolean => device === 'uni-app';
+export const isMobile = (device: Device | string): boolean =>
+  device === 'mobile' || isMiniProgram(device) || isUniapp(device);
+
+export function normalizeDevice(device: Device | string): 'web' | 'mobile' {
+  return isMobile(device) ? 'mobile' : 'web';
+}
+
+/**
+ * 初始化给生成器本身使用的变量，避免部分样式在用户调整主题时产生冲突
+ */
+export function initGeneratorVars(): void {
+  const siteStylesheet = appendStyleSheet(GENERATOR_ID);
+  siteStylesheet.textContent = GENERATOR_VARIABLES;
+}
+
+export function getDefaultTheme(device: Device | string): Theme {
+  return isMobile(device) ? TDESIGN_MOBILE_THEME : TDESIGN_WEB_THEME;
+}
+
+export function getRecommendThemes(device: Device | string): ThemeCategory[] {
+  return isMobile(device) ? MOBILE_RECOMMEND_THEMES : WEB_RECOMMEND_THEMES;
+}
+
+/**
+ * 同步 site 的 亮暗模式给主题生成器 Web Component
+ * shadow DOM 内的 tdesign.min.css 中 `:root[theme-mode]` 因作用域隔离无法命中 `<html>`，
+ * 只有 `:host[theme-mode]` 生效，因此需要把解析后的 mode 同步到 `<td-theme-generator>` 上。
+ * 这里在注册 observer 前先做一次初始同步，覆盖宿主页加载时已处于 dark 的情况。
+ *
+ * @returns 返回创建的 observer，供调用方在卸载时 disconnect()
+ */
+export function syncModeToGenerator(): MutationObserver {
+  const sync = (theme: ThemeMode) => {
+    const generator = document.querySelector('td-theme-generator');
+    if (!generator) return;
+    generator.setAttribute('theme-mode', theme);
+  };
+  sync(getThemeMode());
+  return setUpModeObserver(sync);
+}
+
+export function findThemeByEnName(device: Device | string, enName: string): Theme {
+  const themes = getRecommendThemes(device);
+  for (const category of themes) {
+    const theme = category.options.find((t) => t.enName === enName);
+    if (theme) return theme;
+  }
+  return getDefaultTheme(device);
+}
+
+/**
+ * 初始化当前主题对应的样式表
+ */
+export function initThemeStyleSheet(themeName: string, device: Device | string): Theme {
+  const deviceType = normalizeDevice(device);
+  const theme = findThemeByEnName(deviceType, themeName);
+
+  const styleSheet = appendStyleSheet(CUSTOM_THEME_ID);
+  const darkStyleSheet = appendStyleSheet(CUSTOM_DARK_ID);
+  const extraStyleSheet = appendStyleSheet(CUSTOM_EXTRA_ID);
+
+  const { light, dark, extra } = theme.css;
+
+  styleSheet.textContent = light;
+  darkStyleSheet.textContent = dark;
+  extraStyleSheet.textContent = extra;
+
+  return theme;
+}
+
+export function exportCustomStyleSheet(device: Device | string): void {
+  const styleSheet = document.getElementById(CUSTOM_THEME_ID);
+  const darkStyleSheet = document.getElementById(CUSTOM_DARK_ID);
+  const extraStyleSheet = document.getElementById(CUSTOM_EXTRA_ID);
+
+  const { rootContent: cssString } = parseRootCss(styleSheet?.textContent);
+  const { rootContent: darkCssString } = parseRootCss(darkStyleSheet?.textContent);
+  const { rootContent: extraCssString, restContent: extraRestCssString } = parseRootCss(extraStyleSheet?.textContent);
+
+  let finalCssString: string;
+  if (isUniapp(device)) {
+    finalCssString = `
+      @media (prefers-color-scheme: light) {
+        /* #ifdef H5 */
+        :root,
+        /* #endif */
+        page, .page {
+          ${cssString}
+        }
+      }
+      @media (prefers-color-scheme: dark) {
+        /* #ifdef H5 */
+        :root,
+        /* #endif */
+        page, .page {
+          ${darkCssString}
+        }
+      }
+      /* #ifdef H5 */
+      :root,
+      /* #endif */
+      page, .page {
+        ${extraCssString}
+      }
+      ${extraRestCssString}
+    `;
+  } else if (isMiniProgram(device)) {
+    finalCssString = `
+      @media (prefers-color-scheme: light) {
+        page, .page {
+          ${cssString}
+        }
+      }
+      @media (prefers-color-scheme: dark) {
+        page, .page {
+          ${darkCssString}
+        }
+      }
+      page, .page {
+        ${extraCssString}
+      }
+      ${extraRestCssString}
+    `;
+  } else {
+    finalCssString = `
+      :root, :root[theme-mode="light"] {
+        ${cssString}
+      }
+      :root.dark, :root[theme-mode="dark"] {
+        ${darkCssString}
+      }
+      :root {
+        ${extraCssString}
+      }
+      ${extraRestCssString}
+    `;
+  }
+
+  const beautifyCssString = cssbeautify(finalCssString.trim());
+  const blob = new Blob([beautifyCssString], { type: 'text' });
+  const fileSuffix = isMiniProgram(device) ? 'wxss' : 'css';
+  downloadFile(blob, `theme.${fileSuffix}`);
+}
+
+export function modifyToken(tokenName: string, newVal: string, saveToLocal = true): void {
+  // 获取所有可能包含 token 的样式表
+  const styleSheets = document.querySelectorAll(`#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, #${CUSTOM_EXTRA_ID}`);
+
+  let tokenFound = false;
+  styleSheets.forEach((styleSheet) => {
+    // 匹配 `tokenName: <value>;`，容忍冒号后任意空白
+    const reg = new RegExp(`${tokenName}:\\s*([^;]*);`);
+    const match = styleSheet.textContent?.match(reg);
+
+    if (!match) return;
+    const currentVal = match[1].trim();
+    if (currentVal === newVal) {
+      tokenFound = true;
+      return;
+    }
+
+    // 用正则全局替换，不依赖固定空格写法；$1 保留冒号后原始空白
+    const replaceReg = new RegExp(`(${tokenName}:\\s*)[^;]*;`, 'g');
+    styleSheet.textContent = styleSheet.textContent?.replace(replaceReg, `$1${newVal};`) ?? '';
+    tokenFound = true;
+
+    updateLocalToken(tokenName, saveToLocal ? newVal : null);
+  });
+
+  if (!tokenFound) {
+    console.warn(`CSS variable: ${tokenName} is not exist`);
+  }
+}
+
+export function getOptionFromLocal(optionName: string): string | undefined {
+  const options = localStorage.getItem(CUSTOM_OPTIONS_ID);
+  if (!options) return undefined;
+  const optionObj = JSON.parse(options) as Record<string, string>;
+  return optionObj[optionName];
+}
+
+/**
+ * 如果不传入 `tokenName`，则返回所有的 `token` 对象
+ */
+export function getTokenFromLocal(): Record<string, string> | undefined;
+export function getTokenFromLocal(tokenName: string): string | undefined;
+export function getTokenFromLocal(tokenName?: string): Record<string, string> | string | undefined {
+  const tokens = localStorage.getItem(CUSTOM_TOKEN_ID);
+  if (!tokens) return undefined;
+  const tokenObj = JSON.parse(tokens) as Record<string, string>;
+  if (!tokenName) return tokenObj;
+  return tokenObj[tokenName];
+}
+
+/**
+ * @param value 传入 `null` 或 `undefined`，则表示清除掉之前的存储
+ */
+export function updateLocalOption(optionName: string, value: string | number | null | undefined): void {
+  if (value) {
+    const options = localStorage.getItem(CUSTOM_OPTIONS_ID) || '{}';
+    const optionObj = JSON.parse(options) as Record<string, string | number>;
+    optionObj[optionName] = value;
+    localStorage.setItem(CUSTOM_OPTIONS_ID, JSON.stringify(optionObj));
+  } else {
+    clearLocalItem(CUSTOM_OPTIONS_ID, optionName);
+  }
+}
+
+/**
+ * @param value 传入 `null` 或 `undefined`，则表示清除掉之前的存储
+ */
+export function updateLocalToken(tokenName: string, value: string | null | undefined): void {
+  if (value) {
+    const tokens = localStorage.getItem(CUSTOM_TOKEN_ID) || '{}';
+    const tokenObj = JSON.parse(tokens) as Record<string, string>;
+    tokenObj[tokenName] = value;
+    localStorage.setItem(CUSTOM_TOKEN_ID, JSON.stringify(tokenObj));
+  } else {
+    clearLocalItem(CUSTOM_TOKEN_ID, tokenName);
+  }
+}
+
+export function applyTokenFromLocal(): void {
+  const token = localStorage.getItem(CUSTOM_TOKEN_ID);
+  if (!token) return;
+
+  const tokenObj = JSON.parse(token) as Record<string, string>;
+  Object.entries(tokenObj).forEach(([key, value]) => {
+    modifyToken(key, value);
+  });
+}
+
+export function clearLocalTheme(): void {
+  localStorage.removeItem(CUSTOM_OPTIONS_ID);
+  localStorage.removeItem(CUSTOM_TOKEN_ID);
+}
+
+export function convertFromHex(color: string, format: string): string {
+  return `(${Color.colorTransform(color, 'hex', format).join(',')})`;
+}
+
+export function generateBrandPalette(hex: string, remainInput = false): BrandPalette {
+  const lowCaseHex = hex.toLowerCase();
+
+  const [{ colors, primary }] = Color.getColorGradations({
+    colors: [lowCaseHex],
+    step: 10,
+    remainInput,
+  });
+
+  const isTencentBlue = lowCaseHex === TENCENT_BLUE.toLowerCase();
+  const validPrimary = typeof primary === 'number' && !isNaN(primary) ? primary : 6;
+
+  const lightBrandIdx = isTencentBlue ? 7 : validPrimary + 1;
+  const lightPalette = [...colors];
+
+  const darkPalette = isTencentBlue ? TENCENT_BLUE_DARK_PALETTE : [...colors].reverse();
+  const darkBrandIdx = isTencentBlue ? 8 : 6;
+
+  return { lightPalette, lightBrandIdx, darkPalette, darkBrandIdx };
+}
+
+export function generateFunctionalPalette(hex: string, step = 10): Palette {
+  const lowCaseHex = hex.toLowerCase();
+  const [{ colors }] = Color.getColorGradations({
+    colors: [lowCaseHex],
+    step,
+  });
+
+  const lightPalette = [...colors];
+  const darkPalette = [...colors].reverse();
+
+  return { lightPalette, darkPalette };
+}
+
+export function generateNeutralPalette(hex: string, isRelatedTheme: boolean): string[] {
+  if (isRelatedTheme) {
+    return Color.getNeutralColor(hex);
+  } else {
+    return generateFunctionalPalette(hex, 14).lightPalette;
+  }
+}
+
+/**
+ * @param trigger - 触发类型
+ */
+export function updateStyleSheetColor(
+  type: string,
+  lightPalette: string[],
+  darkPalette: string[],
+  trigger: Trigger,
+): void {
+  const styleSheet = appendStyleSheet(CUSTOM_THEME_ID);
+  const darkStyleSheet = appendStyleSheet(CUSTOM_DARK_ID);
+  const updateColorTokens = (targetStyleSheet: HTMLStyleElement, palette: string[]) => {
+    palette.forEach((color, index) => {
+      const tokenName = `--td-${type}-color-${index + 1}`;
+      const regExp = new RegExp(`${tokenName}:.*?;`, 'g');
+      let replacement = `${tokenName}: ${color};`;
+      if (trigger === 'init') {
+        // 确保不覆盖用户本地自定义的值
+        replacement = `${tokenName}: ${getTokenFromLocal(tokenName) || color};`;
+      }
+      if (trigger === 'update') {
+        updateLocalToken(tokenName, null); // 清除本地存储的颜色 Token
+      }
+      targetStyleSheet.textContent = targetStyleSheet.textContent?.replace(regExp, replacement) ?? '';
+    });
+  };
+
+  updateColorTokens(styleSheet, lightPalette);
+  updateColorTokens(darkStyleSheet, darkPalette);
+}
+
+export function syncColorTokensToStyle(lightTokenMap: TokenIndex[], darkTokenMap: TokenIndex[]): void {
+  const styleSheet = appendStyleSheet(CUSTOM_THEME_ID);
+  const darkStyleSheet = appendStyleSheet(CUSTOM_DARK_ID);
+  const updateColorTokens = (targetStyleSheet: HTMLStyleElement, tokenMap: TokenIndex[]) => {
+    tokenMap.forEach(({ name, idx }) => {
+      const regExp = new RegExp(`${name}:.*?;`, 'g');
+      const replacement = `${name}: var(--td-brand-color-${idx});`;
+      targetStyleSheet.textContent = targetStyleSheet.textContent?.replace(regExp, replacement) ?? '';
+    });
+  };
+
+  updateColorTokens(styleSheet, lightTokenMap);
+  updateColorTokens(darkStyleSheet, darkTokenMap);
+}
+
+/**
+ * 根据 token 名称获取对应的索引
+ * 例如 `--td-brand-focus` ->  2
+ */
+export function collectTokenIndexes(tokenArr: string[]): TokenIndex[] {
+  const isDarkMode = document.documentElement.getAttribute('theme-mode') === 'dark';
+  const targetCss = document.querySelector(isDarkMode ? `#${CUSTOM_DARK_ID}` : `#${CUSTOM_THEME_ID}`);
+
+  return tokenArr
+    .map((token) => {
+      const reg = new RegExp(`${token}:\\s*var\\((--td-[\\w-]+)\\)`, 'i');
+      const match = targetCss?.textContent?.match(reg);
+      if (match) {
+        return {
+          name: token,
+          idx: parseInt(match[1].match(/(\d+)$/)?.[1] as string, 10),
+        };
+      }
+      return null;
+    })
+    .filter((item): item is TokenIndex => item !== null)
+    .sort((a: TokenIndex, b: TokenIndex) => a.idx - b.idx);
+}
