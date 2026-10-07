@@ -1,15 +1,18 @@
-const path = require('path');
-
 module.exports = {
   root: true,
   extends: ['./../../.eslintrc.js'],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    sourceType: 'module',
-    parser: '@babel/eslint-parser',
-    babelOptions: {
-      configFile: path.resolve(__dirname, './babelrc'),
-    },
     ecmaVersion: 2020,
+    sourceType: 'module',
   },
+  overrides: [
+    {
+      files: ['test/**/*.ts'],
+      env: {
+        jest: true,
+      },
+    },
+  ],
   rules: {},
 };

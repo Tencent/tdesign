@@ -2,6 +2,7 @@
 
 const mockDefine = jest.fn((definition) => definition);
 const mockHtml = jest.fn();
+const testGlobal = global as any;
 
 jest.mock('hybrids', () => ({
   define: mockDefine,
@@ -18,8 +19,8 @@ describe('td-doc-content anchor scroll', () => {
 
   beforeEach(() => {
     loadHandler = null;
-    global.location = { href: 'https://tdesign.tencent.com/vue-next/components/button#api' };
-    global.window = {
+    testGlobal.location = { href: 'https://tdesign.tencent.com/vue-next/components/button#api' };
+    testGlobal.window = {
       addEventListener: jest.fn((type, listener) => {
         if (type === 'load') loadHandler = listener;
       }),
@@ -27,7 +28,7 @@ describe('td-doc-content anchor scroll', () => {
       scrollY: 0,
       scrollTo: jest.fn(),
     };
-    global.document = {
+    testGlobal.document = {
       readyState: 'loading',
       documentElement: { scrollTop: 0 },
       querySelector: jest.fn((selector) => (selector === 'div[name="DEMO"]' ? {} : null)),
@@ -37,14 +38,14 @@ describe('td-doc-content anchor scroll', () => {
       removeEventListener: jest.fn(),
       body: {},
     };
-    global.MutationObserver = jest.fn(() => ({ observe: jest.fn(), disconnect: jest.fn() }));
+    testGlobal.MutationObserver = jest.fn(() => ({ observe: jest.fn(), disconnect: jest.fn() }));
   });
 
   afterEach(() => {
-    delete global.location;
-    delete global.window;
-    delete global.document;
-    delete global.MutationObserver;
+    delete testGlobal.location;
+    delete testGlobal.window;
+    delete testGlobal.document;
+    delete testGlobal.MutationObserver;
   });
 
   it('offsets a hash target that already exists when the page loads', () => {
@@ -52,16 +53,16 @@ describe('td-doc-content anchor scroll', () => {
 
     loadHandler();
 
-    expect(window.scrollTo).toHaveBeenCalledWith({ top: 120, left: 0 });
+    expect(testGlobal.window.scrollTo).toHaveBeenCalledWith({ top: 120, left: 0 });
     cleanup();
   });
 
   it('offsets a hash target when connected after the load event', () => {
-    document.readyState = 'complete';
+    testGlobal.document.readyState = 'complete';
 
     const cleanup = docContent.fixedAnchor.connect();
 
-    expect(window.scrollTo).toHaveBeenCalledWith({ top: 120, left: 0 });
+    expect(testGlobal.window.scrollTo).toHaveBeenCalledWith({ top: 120, left: 0 });
     cleanup();
   });
 });

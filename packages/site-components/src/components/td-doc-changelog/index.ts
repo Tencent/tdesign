@@ -1,5 +1,5 @@
 import { define, html } from 'hybrids';
-import { getLocale } from '@config/locale.js';
+import { getLocale } from '@config/locale';
 import closeIcon from '@images/close.svg?raw';
 import { convert2PascalCase, isComponentPage, isEn, isGlobalConfigPage, parseBoolean } from '@utils';
 import style from './style.less?inline';

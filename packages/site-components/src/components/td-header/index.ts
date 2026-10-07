@@ -1,5 +1,5 @@
 import { define, html } from 'hybrids';
-import { getHeaderConfig } from '@config/header.js';
+import { getHeaderConfig } from '@config/header';
 import closeIcon from '@images/close.svg?raw';
 import fakeArrowIcon from '@images/fake-arrow.svg?raw';
 import githubIcon from '@images/github.svg?raw';

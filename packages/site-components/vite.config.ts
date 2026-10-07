@@ -1,7 +1,8 @@
-import path from 'path';
-import { exec } from 'child_process';
+import { exec } from 'node:child_process';
+import path from 'node:path';
+import { defineConfig, type Plugin } from 'vite';
 
-export default {
+export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './'),
@@ -16,7 +17,6 @@ export default {
     host: '0.0.0.0',
     port: 3000,
     open: '/',
-    https: false,
     allowedHosts: true,
   },
 
@@ -31,14 +31,14 @@ export default {
   },
 
   plugins: [lessCompilePlugin()],
-};
+});
 
-function lessCompilePlugin() {
+function lessCompilePlugin(): Plugin {
   return {
     name: 'less-compile-plugin',
     closeBundle() {
-      console.log('Running compile-less.js...');
-      exec('node ./script/compile-less.js', (err, stdout, stderr) => {
+      console.log('Running compile-less.ts...');
+      exec('node --experimental-strip-types ./script/compile-less.ts', (err, stdout, stderr) => {
         if (err) {
           console.error('Compiled failed:\n', stderr);
         } else {

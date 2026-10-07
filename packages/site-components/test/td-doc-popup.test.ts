@@ -4,6 +4,7 @@ const mockDefine = jest.fn((definition) => definition);
 const mockHtml = jest.fn();
 const mockDispatch = jest.fn();
 const mockCreatePopper = jest.fn();
+const testGlobal = global as any;
 
 jest.mock('hybrids', () => ({
   define: mockDefine,
@@ -18,7 +19,7 @@ jest.mock('../src/components/td-doc-popup/style.less?inline', () => '', { virtua
 const docPopup = require('../src/components/td-doc-popup').default;
 
 describe('td-doc-popup lifecycle', () => {
-  let frames;
+  let frames: Map<number, (...args: any[]) => void>;
   let portalContainer;
 
   beforeEach(() => {
@@ -29,16 +30,16 @@ describe('td-doc-popup lifecycle', () => {
       removeChild: jest.fn(),
     };
 
-    global.requestAnimationFrame = jest.fn((callback) => {
+    testGlobal.requestAnimationFrame = jest.fn((callback) => {
       const id = ++frameId;
       frames.set(id, callback);
       return id;
     });
-    global.cancelAnimationFrame = jest.fn((id) => frames.delete(id));
-    global.window = {
+    testGlobal.cancelAnimationFrame = jest.fn((id) => frames.delete(id));
+    testGlobal.window = {
       ResizeObserver: jest.fn(() => ({ observe: jest.fn(), disconnect: jest.fn() })),
     };
-    global.document = {
+    testGlobal.document = {
       getElementById: jest.fn(() => portalContainer),
       createElement: jest.fn(() => ({ appendChild: jest.fn(), addEventListener: jest.fn() })),
       body: { appendChild: jest.fn() },
@@ -49,10 +50,10 @@ describe('td-doc-popup lifecycle', () => {
   });
 
   afterEach(() => {
-    delete global.requestAnimationFrame;
-    delete global.cancelAnimationFrame;
-    delete global.window;
-    delete global.document;
+    delete testGlobal.requestAnimationFrame;
+    delete testGlobal.cancelAnimationFrame;
+    delete testGlobal.window;
+    delete testGlobal.document;
   });
 
   function createHost() {
@@ -74,11 +75,11 @@ describe('td-doc-popup lifecycle', () => {
   it('cancels deferred portal setup when disconnected before the first frame', () => {
     const cleanup = docPopup.visible.connect(createHost());
 
-    document.getElementById.mockReturnValue(null);
+    testGlobal.document.getElementById.mockReturnValue(null);
     cleanup();
     Array.from(frames.values()).forEach((callback) => callback());
 
-    expect(document.body.appendChild).not.toHaveBeenCalled();
+    expect(testGlobal.document.body.appendChild).not.toHaveBeenCalled();
   });
 
   it('destroys the Popper instance during cleanup', () => {

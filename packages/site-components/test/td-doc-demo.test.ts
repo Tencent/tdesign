@@ -3,6 +3,7 @@
 const mockDefine = jest.fn((definition) => definition);
 const mockHtml = jest.fn();
 const mockDispatch = jest.fn();
+const testGlobal = global as any;
 
 jest.mock('hybrids', () => ({
   define: mockDefine,
@@ -26,24 +27,24 @@ describe('td-doc-demo theme synchronization', () => {
 
   beforeEach(() => {
     listeners = new Map();
-    global.window = {
+    testGlobal.window = {
       addEventListener: jest.fn((type, listener) => listeners.set(type, listener)),
       removeEventListener: jest.fn((type, listener) => {
         if (listeners.get(type) === listener) listeners.delete(type);
       }),
     };
-    global.localStorage = {
+    testGlobal.localStorage = {
       getItem: jest.fn(() => 'dark'),
     };
   });
 
   afterEach(() => {
-    delete global.window;
-    delete global.localStorage;
+    delete testGlobal.window;
+    delete testGlobal.localStorage;
   });
 
   it('updates the code block theme when td-theme-tabs changes the site theme', () => {
-    const host = {};
+    const host: { theme?: string } = {};
     const invalidate = jest.fn();
     const cleanup = docDemo.theme.connect(host, 'theme', invalidate);
     const listener = listeners.get('storageChange');
@@ -57,6 +58,6 @@ describe('td-doc-demo theme synchronization', () => {
 
     cleanup();
 
-    expect(window.removeEventListener).toHaveBeenCalledWith('storageChange', listener);
+    expect(testGlobal.window.removeEventListener).toHaveBeenCalledWith('storageChange', listener);
   });
 });

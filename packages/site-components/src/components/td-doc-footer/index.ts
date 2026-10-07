@@ -1,6 +1,6 @@
 import { html, define } from 'hybrids';
-import { getFooterConfig } from '@config/footer.js';
-import { getLocale } from '@config/locale.js';
+import { getFooterConfig } from '@config/footer';
+import { getLocale } from '@config/locale';
 import { patchShadowDomIntoDom, mobileBodyStyle } from '@utils';
 import tencentCloudIcon from '@images/tencentcloud-logo.svg?raw';
 import committeeIcon from '@images/committee-logo.svg?raw';

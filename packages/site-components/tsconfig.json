@@ -6,17 +6,19 @@
     "strict": false,
     "noImplicitAny": false,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
+    "moduleDetection": "force",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "types": ["vite/client"],
+    "types": ["vite/client", "node", "jest"],
     "baseUrl": ".",
     "paths": {
       "hybrids": ["src/types/hybrids.d.ts"],
       "@/*": ["./*"],
-      "@config": ["config/index.js"],
+      "@config": ["config/index.ts"],
       "@config/*": ["config/*"],
       "@utils": ["src/utils/index.ts"],
       "@utils/*": ["src/utils/*"],
@@ -24,5 +26,11 @@
       "@components/*": ["src/components/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/env.d.ts"]
+  "include": [
+    "src/**/*.ts",
+    "config/**/*.ts",
+    "script/**/*.ts",
+    "test/**/*.ts",
+    "*.config.ts"
+  ]
 }

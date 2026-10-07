@@ -1,4 +1,4 @@
-import { getLocale } from '@config/locale.js';
+import { getLocale } from '@config/locale';
 import splineConfig from '@config/spline';
 import historyIcon from '@images/history.svg?raw';
 import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, parseBoolean, watchHtmlMode } from '@utils';
