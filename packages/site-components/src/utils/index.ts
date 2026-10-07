@@ -60,7 +60,7 @@ export const mobileBodyStyle = {
   connect: (host) => {
     // 响应手机定位
     const handleResize = () => {
-      const mobileBodyStyle = {};
+      const mobileBodyStyle: { paddingRight?: string } = {};
       if (host.platform === 'mobile') {
         const isMobileResponse = window.innerWidth < 960;
         if (isMobileResponse) {
@@ -88,7 +88,7 @@ export function isIntranet() {
 }
 
 // 监听暗黑模式
-export function watchHtmlMode(callback = () => {}) {
+export function watchHtmlMode(callback: (themeMode: string) => void = () => {}) {
   const targetNode = document.documentElement;
   const config = { attributes: true };
 

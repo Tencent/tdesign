@@ -25,8 +25,8 @@ import { html } from 'hybrids';
 import SearchIcon from 'tdesign-icons-svg/src/search.svg?raw';
 import CloseIcon from 'tdesign-icons-svg/src/close.svg?raw';
 
-import { VIEW } from './constants.js';
-import { computeView, interp } from './state.js';
+import { VIEW } from './constants';
+import { computeView, interp } from './state';
 
 /* ------------------------------------------------------------------ *
  * 触发区（始终可见的顶部输入框）
@@ -101,7 +101,13 @@ function renderEmpty(title, desc) {
  * @param {Object} handlers
  * @param {{ showRemove?: boolean, highlight?: boolean }} [options]
  */
-function renderHitItem(host, item, idx, handlers, options = {}) {
+function renderHitItem(
+  host,
+  item,
+  idx,
+  handlers,
+  options: { showRemove?: boolean; highlight?: boolean } = {},
+) {
   const { showRemove = false, highlight = true } = options;
   const active = idx === host._currentIndex;
 

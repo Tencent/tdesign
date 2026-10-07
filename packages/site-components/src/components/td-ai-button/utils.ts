@@ -76,8 +76,12 @@ const createAISearchSDK = (framework, demoRequestBody) => {
     createSDKContainer(framework, demoRequestBody);
   };
   // for IE
-  sdkScript.onreadystatechange = function () {
-    if (this.readyState === 'loaded' || this.readyState === 'complete') {
+  const legacyScript = sdkScript as HTMLScriptElement & {
+    onreadystatechange?: () => void;
+    readyState?: string;
+  };
+  legacyScript.onreadystatechange = function () {
+    if (legacyScript.readyState === 'loaded' || legacyScript.readyState === 'complete') {
       createSDKContainer(framework, demoRequestBody);
     }
   };
@@ -176,9 +180,10 @@ const webChatInteraction = (framework, demoRequestBody) => {
   document.addEventListener('mouseup', function (event) {
     const urlParams = new URLSearchParams(location.search);
     const contentDom = document.querySelector('td-doc-content');
+    const target = event.target as HTMLElement;
     // 获取选中的文本
     const selectedText = window.getSelection().toString().trim();
-    if (!contentDom.contains(event.target) || !selectedText) {
+    if (!contentDom.contains(target) || !selectedText) {
       unmountTooltips();
       return;
     }
@@ -188,13 +193,12 @@ const webChatInteraction = (framework, demoRequestBody) => {
     if (preSelectedText && preSelectedText === selectedText) return;
 
     preSelectedText = selectedText;
-    const target = event.target;
     const isGenerateDemo =
       ['api'].includes(urlParams.get('tab')) &&
       target.tagName === 'TD' &&
-      Array.from(target.parentNode.childNodes).filter((node) => node.nodeType === 1)[0] === target;
+      Array.from(target.parentNode.childNodes).filter((node: Node) => node.nodeType === 1)[0] === target;
     const popper = createTooltips(framework, isGenerateDemo, selectedText);
-    createPopper(event.target, popper, {
+    createPopper(target, popper, {
       placement: 'top',
       modifiers: [
         {

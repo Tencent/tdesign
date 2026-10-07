@@ -14,8 +14,8 @@ function handleCopy(host) {
 
   const textarea = document.createElement('textarea');
   textarea.textContent = host.code;
-  textarea.style.width = 0;
-  textarea.style.height = 0;
+  textarea.style.width = '0';
+  textarea.style.height = '0';
   document.body.appendChild(textarea);
 
   const selection = document.getSelection();

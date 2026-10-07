@@ -1,6 +1,6 @@
 import { html, define } from 'hybrids';
 
-function initStats(statsId, scriptAttrs, statsCallback) {
+function initStats(statsId, scriptAttrs, statsCallback?) {
   if (document.getElementById(statsId)) return;
 
   const script = document.createElement('script');

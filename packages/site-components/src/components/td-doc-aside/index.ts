@@ -169,8 +169,12 @@ export default define({
             currentRoute = location.hash.slice(1);
           }
 
-          const linkNodes = Array.from(shadowRoot.querySelectorAll('.TDesign-doc-sidenav-link'));
-          const prevActiveNodes = Array.from(shadowRoot.querySelectorAll('.TDesign-doc-sidenav-link.active'));
+          const linkNodes = Array.from(
+            shadowRoot.querySelectorAll('.TDesign-doc-sidenav-link'),
+          ) as HTMLAnchorElement[];
+          const prevActiveNodes = Array.from(
+            shadowRoot.querySelectorAll('.TDesign-doc-sidenav-link.active'),
+          ) as HTMLAnchorElement[];
           const nextActiveNode = linkNodes.find((node) => {
             const urlObj = new URL(node.href);
             // host & pathname isSame

@@ -6,7 +6,7 @@
  * 避免跨会话在列表里残留当时搜索关键词的高亮。
  */
 
-import { stripHtml } from './utils.js';
+import { stripHtml } from './utils';
 
 const STORAGE_KEY = 'td-docsearch:recent';
 const MAX_ITEMS = 5;

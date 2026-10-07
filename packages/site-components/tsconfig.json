@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": false,
+    "noImplicitAny": false,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "hybrids": ["src/types/hybrids.d.ts"],
+      "@/*": ["./*"],
+      "@config": ["config/index.js"],
+      "@config/*": ["config/*"],
+      "@utils": ["src/utils/index.ts"],
+      "@utils/*": ["src/utils/*"],
+      "@images/*": ["src/images/*"],
+      "@components/*": ["src/components/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/env.d.ts"]
+}

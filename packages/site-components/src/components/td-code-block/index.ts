@@ -15,7 +15,7 @@ function getLineStyle(host) {
 }
 
 function extractSlots(host) {
-  const slotsEl = Array.from(host.querySelectorAll('td-code-block > [slot]'));
+  const slotsEl = Array.from(host.querySelectorAll('td-code-block > [slot]')) as HTMLElement[];
   const slotsName = [];
   const slotsContentMap = {};
 

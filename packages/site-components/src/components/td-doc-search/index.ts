@@ -25,11 +25,11 @@ import {
   DEFAULT_INDEX_NAME,
   getDefaultUrlFilter,
   DEFAULT_HITS_PER_PAGE,
-} from './algolia.js';
-import { listRecent, addRecent, removeRecent } from './recent.js';
-import { registerHotkeys } from './hotkeys.js';
-import { debouncedSearch, moveSelection, moveCategory, resetToRecent, setActiveCategory } from './state.js';
-import { renderTrigger, renderPopover } from './views.js';
+} from './algolia';
+import { listRecent, addRecent, removeRecent } from './recent';
+import { registerHotkeys } from './hotkeys';
+import { debouncedSearch, moveSelection, moveCategory, resetToRecent, setActiveCategory } from './state';
+import { renderTrigger, renderPopover } from './views';
 
 /* ------------------------------------------------------------------ *
  * 事件 handler —— 把"用户动作"翻译为"状态变更"

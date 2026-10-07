@@ -60,7 +60,7 @@ export default define({
         host.portal.innerHTML = portalStyleStr;
         host.portal.appendChild(contentSlot);
 
-        host.portal.addEventListener('click', (e) => handleClick(host, e));
+        host.portal.addEventListener('click', () => handleClick(host));
         host.portal.addEventListener('mouseenter', () => handleMouseEvent(host, 'enter'));
         host.portal.addEventListener('mouseleave', () => handleMouseEvent(host, 'leave'));
         host.portals.appendChild(host.portal);

@@ -6,7 +6,7 @@
  * 均通过参数传入；此处仅给出默认后备值，方便脱离 WebComponent 单独调用。
  */
 
-import { stripHtml } from './utils.js';
+import { stripHtml } from './utils';
 
 // 默认后备值（供独立调用 / 未配置时使用）
 export const DEFAULT_APP_ID = 'ALGOLIA_APP_ID';
@@ -31,6 +31,16 @@ export function getDefaultUrlFilter() {
 const HIGHLIGHT_PRE_TAG = '<mark class="TDesign-docsearch-mark">';
 const HIGHLIGHT_POST_TAG = '</mark>';
 
+interface SearchOptions {
+  query?: string;
+  signal?: AbortSignal;
+  appId?: string;
+  apiKey?: string;
+  indexName?: string;
+  urlFilter?: string;
+  hitsPerPage?: number;
+}
+
 /**
  * 调用 Algolia REST Search API
  * @param {Object}      options
@@ -51,7 +61,7 @@ export async function searchAlgolia({
   indexName = DEFAULT_INDEX_NAME,
   urlFilter = getDefaultUrlFilter(),
   hitsPerPage = DEFAULT_HITS_PER_PAGE,
-} = {}) {
+}: SearchOptions = {}) {
   const q = (query || '').trim();
   if (!q) return [];
 

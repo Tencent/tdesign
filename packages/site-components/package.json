@@ -8,6 +8,7 @@
     "dev": "vite",
     "watch": "vite build --watch",
     "build": "vite build --debug",
+    "typecheck": "tsc --noEmit",
     "test": "jest --coverage"
   },
   "publishConfig": {
@@ -30,10 +31,12 @@
   "devDependencies": {
     "@babel/core": "^7.16.7",
     "@babel/preset-env": "^7.16.7",
+    "@babel/preset-typescript": "^7.27.1",
     "babel-jest": "^27.4.5",
     "fs-extra": "^10.0.0",
     "jest": "^27.4.3",
     "less": "^4.1.1",
+    "typescript": "^5.9.3",
     "vite": "^6.3.1"
   },
   "dependencies": {

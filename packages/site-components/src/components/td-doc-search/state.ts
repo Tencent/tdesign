@@ -12,9 +12,9 @@
  * 因为它天然就是"修改 DOM scroll 位置"的副作用）。
  */
 
-import { searchAlgolia, groupHits, formatHit } from './algolia.js';
-import { listRecent } from './recent.js';
-import { DEBOUNCE_MS, VIEW } from './constants.js';
+import { searchAlgolia, groupHits, formatHit } from './algolia';
+import { listRecent } from './recent';
+import { DEBOUNCE_MS, VIEW } from './constants';
 
 /* ------------------------------------------------------------------ *
  * 工具
