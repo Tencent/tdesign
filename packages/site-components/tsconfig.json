@@ -13,15 +13,14 @@
     "moduleDetection": "force",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "types": ["vite/client", "node", "jest"],
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@config": ["config/index.ts"],
-      "@config/*": ["config/*"],
-      "@utils": ["src/utils/index.ts"],
-      "@utils/*": ["src/utils/*"],
-      "@images/*": ["src/images/*"],
-      "@components/*": ["src/components/*"]
+      "@config": ["./config/index.ts"],
+      "@config/*": ["./config/*"],
+      "@utils": ["./src/utils/index.ts"],
+      "@utils/*": ["./src/utils/*"],
+      "@images/*": ["./src/images/*"],
+      "@components/*": ["./src/components/*"]
     }
   },
   "include": [
