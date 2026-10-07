@@ -1,3 +1,7 @@
+import { RADIUS_TOKENS } from '@/common/themes/presets';
+
+export { RADIUS_STEP_ARRAY } from '@/common/themes/presets';
+
 export interface RadiusTokenItem {
   token: string;
   enDesc: string;
@@ -7,32 +11,32 @@ export interface RadiusTokenItem {
 
 export const RADIUS_TOKEN_LIST: RadiusTokenItem[] = [
   {
-    token: '--td-radius-small',
+    token: RADIUS_TOKENS[0],
     enDesc: 'internal scenes of basic components.',
     desc: '适用于基础组件内部场景',
   },
   {
-    token: '--td-radius-default',
+    token: RADIUS_TOKENS[1],
     enDesc: 'basic components',
     desc: '适用于所有基础组件',
   },
   {
-    token: '--td-radius-medium',
+    token: RADIUS_TOKENS[2],
     enDesc: 'popup and card-type components',
     desc: '适用于弹出类型和卡片类型组件',
   },
   {
-    token: '--td-radius-large',
+    token: RADIUS_TOKENS[3],
     enDesc: 'dialog-type components',
     desc: '适用于对话框类型组件',
   },
   {
-    token: '--td-radius-extraLarge',
+    token: RADIUS_TOKENS[4],
     enDesc: 'extra-large display-type components',
     desc: '适用于超大型展示型组件',
   },
   {
-    token: '--td-radius-circle',
+    token: RADIUS_TOKENS[5],
     enDesc: 'circular components',
     desc: '适用于圆形组件',
   },
@@ -57,11 +61,3 @@ export const RADIUS_OPTIONS: RadiusOption[] = [
 export const RADIUS_LABELS: Record<number, string> = Object.fromEntries(
   RADIUS_OPTIONS.map((item, index) => [index + 1, item.label]),
 );
-
-export const RADIUS_STEP_ARRAY: (number | string)[][] = [
-  [0, 0, 0, 0, 0, '50%'],
-  [1, 2, 4, 6, 8, '50%'],
-  [2, 3, 6, 9, 12, '50%'],
-  [3, 4, 8, 12, 16, '50%'],
-  [4, 6, 12, 18, 24, '50%'],
-];

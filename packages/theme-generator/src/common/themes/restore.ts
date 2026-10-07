@@ -1,11 +1,15 @@
-import { FONT_SIZE_STEPS } from '../../font-panel/built-in/font-map';
-import { parseLineHeightOption, updateLineHeightTokens } from '../../font-panel/built-in/line-height-map';
-import { RADIUS_STEP_ARRAY, RADIUS_TOKEN_LIST } from '../../radius-panel/built-in/radius-map';
-import { ShadowSelectDetail, ShadowSelectType, ShadowTypeMap } from '../../shadow-panel/built-in/shadow-map';
-
 import { getTokenValue } from '../utils';
 
-import { applyTokenToStyle, getOptionFromLocal, getTokenFromLocal } from './core';
+import { applyTokenToStyle, getOptionFromLocal, getTokenFromLocal, updateLineHeightTokens } from './core';
+import { parseLineHeightOption } from './line-height';
+import {
+  FONT_SIZE_STEPS,
+  RADIUS_STEP_ARRAY,
+  RADIUS_TOKENS,
+  ShadowSelectDetail,
+  ShadowSelectType,
+  SHADOW_TOKENS,
+} from './presets';
 
 function restoreToken(name: string, value: string): void {
   // Different devices expose different token sets; never add unsupported tokens.
@@ -37,14 +41,14 @@ export function restoreThemeOptions(): void {
   const radius = Number(getOptionFromLocal('radius'));
   if (Number.isInteger(radius) && radius >= 1 && radius <= RADIUS_STEP_ARRAY.length) {
     RADIUS_STEP_ARRAY[radius - 1].forEach((value, index) => {
-      restoreToken(RADIUS_TOKEN_LIST[index].token, typeof value === 'number' ? `${value}px` : value);
+      restoreToken(RADIUS_TOKENS[index], typeof value === 'number' ? `${value}px` : value);
     });
   }
 
   const savedShadow = getOptionFromLocal('shadow');
   const shadow = Number(savedShadow);
   if (savedShadow !== undefined && Number.isInteger(shadow) && shadow >= 0 && shadow < ShadowSelectType.Self_Defined) {
-    ShadowSelectDetail[shadow].forEach((value, index) => restoreToken(ShadowTypeMap[index].name, value));
+    ShadowSelectDetail[shadow].forEach((value, index) => restoreToken(SHADOW_TOKENS[index], value));
   }
 
   restoreLineHeightOption();

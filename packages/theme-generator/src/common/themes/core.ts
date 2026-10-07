@@ -8,6 +8,7 @@ import {
   clearLocalItem,
   downloadFile,
   getThemeMode,
+  getTokenValue,
   parseRootCss,
   setUpModeObserver,
 } from '../utils';
@@ -20,6 +21,9 @@ import {
   TENCENT_BLUE_DARK_PALETTE,
   WEB_RECOMMEND_THEMES,
 } from './built-in';
+
+import { calculateLineHeightTokens } from './line-height';
+import { FONT_SIZE_STEPS } from './presets';
 
 import type {
   BrandPalette,
@@ -226,6 +230,20 @@ export function modifyToken(tokenName: string, newVal: string, saveToLocal = tru
   if (applyTokenToStyle(tokenName, newVal)) {
     updateLocalToken(tokenName, saveToLocal ? newVal : null);
   }
+}
+
+/** Apply calculated line heights; custom writers can avoid persistence during restoration. */
+export function updateLineHeightTokens(
+  commonVal: string | number,
+  type: 'plus' | 'time' = 'plus',
+  writeToken?: (name: string, value: string) => void,
+): void {
+  const fontSizes = Object.fromEntries(FONT_SIZE_STEPS[3].map(({ name }) => [name, getTokenValue(name)]));
+  const tokens = calculateLineHeightTokens(fontSizes, commonVal, type);
+  Object.entries(tokens).forEach(([name, value]) => {
+    if (writeToken) writeToken(name, value);
+    else modifyToken(name, value, false);
+  });
 }
 
 export function getOptionFromLocal(optionName: string): string | undefined {
