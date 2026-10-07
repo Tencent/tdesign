@@ -1,0 +1,165 @@
+import { html, define } from 'hybrids';
+import { mobileBodyStyle } from '@utils';
+import style from './style.less?inline';
+
+const FIXED_HEADER_TOP = 228;
+const CONTENT_SELECTORS = ['div[name="DEMO"]', 'div[name="API"]', 'div[name="DESIGN"]', 'div[name="DOC"]'];
+
+interface ContentHost {
+  platform: string;
+  pageStatus: string;
+  mobileBodyStyle: { paddingRight?: string };
+  fixedAnchor: boolean | undefined;
+}
+
+function anchorHighlight(): void {
+  function getLinkTopList(anchorList: HTMLAnchorElement[]): number[] {
+    const linkList = anchorList.map((anchor) => {
+      const [, id] = decodeURIComponent(anchor.href).split('#');
+      return document.getElementById(id);
+    });
+    return linkList.map((link) => {
+      if (!link) return 0;
+      const { top } = link.getBoundingClientRect();
+      return top + document.documentElement.scrollTop;
+    });
+  }
+
+  function highlightAnchor(anchorList: HTMLAnchorElement[], linkTopList: number[]): void {
+    const { scrollTop } = document.documentElement;
+
+    for (let i = 0; i < linkTopList.length; i++) {
+      if (scrollTop <= linkTopList[i]) {
+        if (anchorList[i].classList.contains('active')) break;
+        anchorList.forEach((anchor) => anchor.classList.remove('active'));
+        anchorList[i].classList.add('active');
+        break;
+      }
+    }
+  }
+
+  CONTENT_SELECTORS.forEach((item) => {
+    const wrapper = document.querySelector(item);
+    if (!wrapper) return;
+
+    const anchorList = Array.from(wrapper.querySelectorAll<HTMLAnchorElement>('.tdesign-toc_list_item_a'));
+    const linkTopList = getLinkTopList(anchorList);
+    highlightAnchor(anchorList, linkTopList);
+  });
+}
+
+export default define<ContentHost>({
+  tag: 'td-doc-content',
+  platform: 'web',
+  pageStatus: 'show',
+  mobileBodyStyle,
+  fixedAnchor: {
+    value: (_host, v) => v || undefined,
+    connect: () => {
+      let demoLoadObserver: MutationObserver | undefined;
+
+      function changeTocHeight() {
+        const { scrollTop } = document.documentElement;
+        // 固定右侧目录
+        const containers = document.querySelectorAll<HTMLElement>('.tdesign-toc_container');
+
+        if (scrollTop > FIXED_HEADER_TOP) {
+          containers.forEach((container) => {
+            Object.assign(container.style, { position: 'fixed', top: '152px' });
+          });
+        } else {
+          containers.forEach((container) => {
+            Object.assign(container.style, { position: 'absolute', top: '316px' });
+          });
+        }
+
+        anchorHighlight();
+      }
+
+      // 优化锚点滚动体验
+      function proxyTitleAnchor(e: MouseEvent) {
+        const target = e.target;
+        if (!(target instanceof HTMLAnchorElement)) return;
+        const href = decodeURIComponent(target.href);
+        if (!href.includes('#')) return;
+
+        const [, id = ''] = href.split('#');
+        // header-anchor 是插件自动添加的类名，所以没带 tdesign 前缀
+        if (target.classList.contains('header-anchor') || target.classList.contains('tdesign-toc_list_item_a')) {
+          const idTarget = document.getElementById(id);
+          if (!idTarget) return;
+          const { top } = idTarget.getBoundingClientRect();
+          const offsetTop = top + document.documentElement.scrollTop;
+
+          requestAnimationFrame(() => window.scrollTo({ top: offsetTop - 120, left: 0 }));
+        }
+      }
+
+      function waitForDemoLoad() {
+        if (handleDemoLoad()) return;
+
+        const observer = new MutationObserver(() => {
+          if (handleDemoLoad()) observer.disconnect();
+        });
+        demoLoadObserver = observer;
+        demoLoadObserver.observe(document.body, { childList: true, subtree: true });
+      }
+
+      // 加载后跳转到锚点定位处
+      function handleAnchorScroll() {
+        const href = decodeURIComponent(location.href);
+        if (!href.includes('#')) return;
+
+        const [, id = ''] = href.split('#');
+        const idTarget = document.getElementById(id);
+        if (!idTarget) return;
+        const { top } = idTarget.getBoundingClientRect();
+        const offsetTop = top + window.scrollY;
+
+        window.scrollTo({ top: offsetTop - 120, left: 0 });
+      }
+
+      function handleDemoLoad() {
+        const hasDemoContent = CONTENT_SELECTORS.some((selector) => document.querySelector(selector));
+        if (!hasDemoContent) return false;
+        handleAnchorScroll();
+        return true;
+      }
+
+      document.addEventListener('scroll', changeTocHeight);
+      document.addEventListener('click', proxyTitleAnchor);
+      if (document.readyState === 'complete') {
+        waitForDemoLoad();
+      } else {
+        window.addEventListener('load', waitForDemoLoad);
+      }
+
+      return () => {
+        document.removeEventListener('scroll', changeTocHeight);
+        document.removeEventListener('click', proxyTitleAnchor);
+        window.removeEventListener('load', waitForDemoLoad);
+        demoLoadObserver?.disconnect();
+      };
+    },
+  },
+  render: (host) => {
+    return html`
+      <style>
+        ${style}
+      </style>
+      <div class="TDesign-doc-content ${host.pageStatus}">
+        <slot name="doc-header"></slot>
+
+        <div class="TDesign-doc-body" style=${host.mobileBodyStyle}>
+          <div class="TDesign-doc-body__inner">
+            <slot></slot>
+          </div>
+        </div>
+
+        <slot name="doc-footer"></slot>
+
+        <td-backtop></td-backtop>
+      </div>
+    `;
+  },
+});

@@ -1,0 +1,37 @@
+import './styles/main.less';
+
+import './components/td-header/index';
+import './components/td-header/td-collapse-menu/index';
+import './components/td-logo/index';
+import './components/td-backtop/index';
+import './components/td-avatar/index';
+import './components/td-ai-button/index';
+import './components/td-contributors/index';
+import './components/td-tooltip/index';
+import './components/td-theme-tabs/index';
+import './components/td-doc-layout/index';
+import './components/td-doc-aside/index';
+import './components/td-doc-search/index';
+import './components/td-doc-changelog/index';
+import './components/td-doc-content/index';
+import './components/td-doc-header/index';
+import './components/td-doc-header/td-doc-issue/index';
+import './components/td-doc-footer/index';
+import './components/td-doc-popup/index';
+import './components/td-doc-badge/index';
+import './components/td-doc-phone/index';
+import './components/td-doc-tabs/index';
+import './components/td-doc-demo/index';
+import './components/td-doc-copy/index';
+import './components/td-doc-empty/index';
+import './components/td-doc-history/index';
+import './components/td-doc-usage/index';
+import './components/td-code/index';
+import './components/td-code-block/index';
+import './components/td-stats/index';
+import './components/td-message/index';
+import './components/td-portal/index';
+import './components/td-select/index';
+import './components/td-switch/index';
+
+export { getLang, registerLocaleChange } from './utils/locale';
