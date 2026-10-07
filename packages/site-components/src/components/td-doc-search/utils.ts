@@ -8,7 +8,7 @@
  *  - recent 存储（防止 <mark> 高亮随关键词跨会话残留）
  *  - formatHit 构建面包屑时比较层级文本
  */
-export function stripHtml(str) {
+export function stripHtml(str: string | null | undefined): string {
   if (str == null) return '';
   const s = String(str);
   if (s.indexOf('<') === -1 && s.indexOf('&') === -1) return s;

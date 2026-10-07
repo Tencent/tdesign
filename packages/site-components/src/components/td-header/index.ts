@@ -1,4 +1,4 @@
-import { define, html } from 'hybrids';
+import { define, html, type UpdateFunctionWithMethods } from 'hybrids';
 import { getHeaderConfig } from '@config/header';
 import closeIcon from '@images/close.svg?raw';
 import fakeArrowIcon from '@images/fake-arrow.svg?raw';
@@ -11,13 +11,64 @@ import style from './style.less?inline';
 const headerConfig = getHeaderConfig();
 const { headerList, baseComponentsLinks, baseComponentPrefix } = headerConfig;
 
-export function handleLinkClick(host, e, item) {
-  e.preventDefault();
+export interface HeaderNavItem {
+  name: string;
+  path?: string;
+  type: string;
+  target: string;
+}
+
+export interface HeaderLinkItem {
+  name: string;
+  icon: string;
+  path: string;
+  npm: string;
+  status: number;
+}
+
+export interface BaseComponentGroup {
+  name: string;
+  links: HeaderLinkItem[];
+}
+
+export interface BaseComponentsLinks {
+  web: BaseComponentGroup;
+  mobile: BaseComponentGroup;
+}
+
+interface NoticeOption {
+  title?: string;
+  type?: string;
+  closeable?: boolean;
+  actionUrl?: string;
+}
+
+type NoticeMap = Record<string, NoticeOption>;
+type NpmVersions = Record<string, string>;
+
+interface HeaderProps {
+  platform: string;
+  framework: string;
+  disabledTheme: boolean;
+  disabledLocale: boolean;
+  notice: NoticeMap;
+  npmVersions: NpmVersions;
+  collapseMenu: boolean;
+}
+
+type HeaderHost = HTMLElement & HeaderProps;
+
+interface DocAsideElement extends HTMLElement {
+  shadowRoot: ShadowRoot | null;
+}
+
+export function handleLinkClick(_host: HTMLElement, event: Event, item: HeaderLinkItem): void {
+  event.preventDefault();
   if (!item.status) return;
   location.href = item.path;
 }
 
-export function renderTag(status) {
+export function renderTag(status: number) {
   if (status === 0) return html`<span class="disable-tag">待上线</span>`;
   if (status === 1) return html`<span class="stable-tag">Stable</span>`;
   if (status === 2) return html`<span class="alpha-tag">Alpha</span>`;
@@ -25,13 +76,13 @@ export function renderTag(status) {
   if (status === 4) return html`<span class="rc-tag">Rc</span>`;
 }
 
-function isActive(path) {
+function isActive(path: string): boolean {
   if (/^https?:/.test(path)) return location.href.includes(path);
   return location.pathname.includes(path);
 }
 
 // 渲染公告
-function renderNotice(host) {
+function renderNotice(host: HeaderHost) {
   if (location.host !== 'tdesign.tencent.com' && !localStorage.getItem('TDesign_notice')) return html``;
   const { notice } = host;
 
@@ -48,18 +99,20 @@ function renderNotice(host) {
 
   const changeAsideElTop = (top = '96px') => {
     // 左侧栏适配
-    const asideEl = document.querySelector('td-doc-aside');
+    const asideEl = document.querySelector<DocAsideElement>('td-doc-aside');
     if (asideEl) {
       asideEl.style.setProperty('--aside-top', top);
-      asideEl.shadowRoot.querySelector('.TDesign-doc-aside').style.top = top;
+      const asideBody = asideEl.shadowRoot?.querySelector<HTMLElement>('.TDesign-doc-aside');
+      if (asideBody) asideBody.style.top = top;
     }
   };
 
   const closeNotice = () => {
     if (!host.shadowRoot) return;
-    host.shadowRoot.querySelector('.TDesign-header-notice').style.display = 'none';
+    const noticeElement = host.shadowRoot.querySelector<HTMLElement>('.TDesign-header-notice');
+    if (noticeElement) noticeElement.style.display = 'none';
     changeAsideElTop('64px');
-    localStorage.setItem('TDesign_notice_closed', noticeOption?.title);
+    localStorage.setItem('TDesign_notice_closed', noticeOption.title ?? '');
   };
 
   const handleNoticeAction = () => {
@@ -78,7 +131,7 @@ function renderNotice(host) {
   `;
 }
 
-function renderLinksPopup(host, trigger) {
+function renderLinksPopup(host: HeaderHost, trigger: UpdateFunctionWithMethods<unknown>) {
   return html`
     <td-doc-popup placement="bottom" portalStyle="${portalStyle}">
       ${trigger}
@@ -91,7 +144,7 @@ function renderLinksPopup(host, trigger) {
                 <a
                   href="${item.path}"
                   class="link ${isActive(item.path) ? 'active' : ''} ${!item.status ? 'disabled' : ''}"
-                  onclick=${(host, e) => handleLinkClick(host, e, item)}
+                  onclick=${(host: HeaderHost, event?: Event) => event && handleLinkClick(host, event, item)}
                 >
                   <img class="icon" src="${item.icon}" />
                   <div class="details">
@@ -114,7 +167,7 @@ function renderLinksPopup(host, trigger) {
                 <a
                   href="${item.path}"
                   class="link ${isActive(item.path) ? 'active' : ''} ${!item.status ? 'disabled' : ''}"
-                  onclick=${(host, e) => handleLinkClick(host, e, item)}
+                  onclick=${(host: HeaderHost, event?: Event) => event && handleLinkClick(host, event, item)}
                 >
                   <img class="icon" src="${item.icon}" />
                   <div class="details">
@@ -133,7 +186,7 @@ function renderLinksPopup(host, trigger) {
   `;
 }
 
-export function gitPath(platform, framework) {
+export function gitPath(platform: string, framework: string): string {
   const isStarter = /starter/.test(location.pathname);
   // 页面模板跳转
   if (isStarter) {
@@ -154,7 +207,7 @@ export function gitPath(platform, framework) {
   }
 }
 
-function renderLinks(host, headerList, platform, framework) {
+function renderLinks(host: HeaderHost, items: HeaderNavItem[], platform: string, framework: string) {
   const gitLink = html`
     <a class="TDesign-header-nav__git" href="${gitPath(platform, framework)}" id="${platform}" target="_blank">
       <span class="TDesign-header-nav__git-icon" innerHTML="${githubIcon}"></span>
@@ -179,7 +232,7 @@ function renderLinks(host, headerList, platform, framework) {
     return baseComponentPrefix.includes(basePath);
   };
 
-  return headerList
+  return items
     .map((item) => {
       if (item.type === 'base') {
         const trigger = html`
@@ -189,11 +242,9 @@ function renderLinks(host, headerList, platform, framework) {
         `;
         return renderLinksPopup(host, trigger);
       }
+      const path = item.path ?? '';
       return html`
-        <a
-          class="TDesign-header-nav__link ${isActive(item.path) ? 'active' : ''}"
-          href="${item.path}"
-          target="${item.target}"
+        <a class="TDesign-header-nav__link ${isActive(path) ? 'active' : ''}" href="${path}" target="${item.target}"
           >${item.name}</a
         >
       `;
@@ -202,7 +253,7 @@ function renderLinks(host, headerList, platform, framework) {
     .concat(gitLink);
 }
 
-export default define({
+export default define<HeaderProps>({
   tag: 'td-header',
   platform: 'web',
   framework: 'vue',
@@ -213,7 +264,7 @@ export default define({
     connect: (host) => {
       fetch(import.meta.env.VITE_SITE_NOTICE_URL)
         .then((res) => res.json())
-        .then((res) => {
+        .then((res: NoticeMap) => {
           host.notice = res;
         })
         .catch(console.error);
@@ -224,7 +275,7 @@ export default define({
     connect: (host) => {
       fetch(import.meta.env.VITE_NPM_VERSIONS_API_URL)
         .then((res) => res.json())
-        .then((res) => {
+        .then((res: NpmVersions) => {
           host.npmVersions = {
             ...res,
           };

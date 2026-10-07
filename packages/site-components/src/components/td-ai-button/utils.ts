@@ -1,16 +1,16 @@
 import { createPopper } from '@popperjs/core';
 
 let preSelectedText = '';
-let sdkInstance;
+let sdkInstance: WebChatSdkInstance | undefined;
 let isGeneratingDemo = false;
-let regExp = {
+const regExp = {
   vue: /```vue(?:\w+)?\s*([\s\S]*?)```/g,
   react: /```jsx(?:\w+)?\s*([\s\S]*?)```/g,
   'mobile-vue': /```vue(?:\w+)?\s*([\s\S]*?)```/g,
   'mobile-react': /```jsx(?:\w+)?\s*([\s\S]*?)```/g,
 };
 
-let frameworkKeys = {
+const frameworkKeys = {
   react: 'tdesign-react',
   vue: 'tdesign-vue-next,vue3',
   miniprogram: 'tdesign-miniprogram',
@@ -18,7 +18,17 @@ let frameworkKeys = {
   'mobile-react': 'tdesign-mobile-react',
 };
 
-let promptForGenerateDemo = {
+type Framework = keyof typeof frameworkKeys;
+
+interface DemoFile {
+  content: string;
+}
+
+interface DemoRequestBody {
+  files?: Record<string, DemoFile>;
+}
+
+const promptForGenerateDemo: Record<Framework, string> = {
   react: '请为我生成 ${component} 组件 ${selectedText} 属性的使用示例',
   vue: '请为我生成 ${component} 组件的 ${selectedText} 属性的使用示例，采用 script setup 语法糖',
   miniprogram:
@@ -27,19 +37,23 @@ let promptForGenerateDemo = {
   'mobile-react': '请为我生成 ${component} 组件的 ${selectedText} 属性的使用示例',
 };
 
-const generatePrompt = (framework, component, selectedText) => {
+function isFramework(value: string): value is Framework {
+  return value in frameworkKeys;
+}
+
+const generatePrompt = (framework: string, component: string, selectedText: string) => {
+  if (!isFramework(framework)) return '';
   const template = promptForGenerateDemo[framework];
-  if (!template) return '';
 
   const REGEXP = /\$\{(\w+)\}/g;
 
-  return template.replace(REGEXP, (match, key) => {
+  return template.replace(REGEXP, (match: string, key: string) => {
     const replacements = { component, selectedText };
-    return replacements[key] || match;
+    return key === 'component' || key === 'selectedText' ? replacements[key] : match;
   });
 };
 
-const createSDKContainer = (framework, demoRequestBody) => {
+const createSDKContainer = (framework: string, demoRequestBody: string) => {
   if (window.WebChatSdk) {
     sdkInstance = new window.WebChatSdk({
       logo: 'https://cdc.cdn-go.cn/tdc/latest/images/tdesign.svg',
@@ -48,7 +62,7 @@ const createSDKContainer = (framework, demoRequestBody) => {
         background: 'linear-gradient(117deg, #E4FFEE 0%, #B3EAFF 17.08%, #EAE7FF 45.83%, #FFF2F9 83.33%)',
       },
       knowledgeBase: '#TDesign',
-      keywords: frameworkKeys[framework],
+      keywords: isFramework(framework) ? frameworkKeys[framework] : '',
     });
     sdkInstance.sendMessage({
       prompt: '',
@@ -57,7 +71,7 @@ const createSDKContainer = (framework, demoRequestBody) => {
   }
 };
 // create AI search SDK
-const createAISearchSDK = (framework, demoRequestBody) => {
+const createAISearchSDK = (framework: string, demoRequestBody: string) => {
   const searchSDK = document.getElementById('ai-search-sdk');
   const sdkContainer = document.getElementsByClassName('webchat-sdk-iframe-container');
 
@@ -96,14 +110,14 @@ const unmountTooltips = () => {
 };
 
 // send message to AI search SDK
-const sendMessage = (prompt) => {
-  sdkInstance.sendMessage({
+const sendMessage = (prompt: string) => {
+  sdkInstance?.sendMessage({
     prompt,
   });
 };
 
 // create tooltips when double click
-const createTooltips = (framework, generateDemo, selectedText) => {
+const createTooltips = (framework: string, generateDemo: boolean, selectedText: string) => {
   const tooltip = document.createElement('div');
   const svg = document.createElement('img');
   const content = document.createElement('div');
@@ -141,11 +155,11 @@ const createTooltips = (framework, generateDemo, selectedText) => {
   return tooltip;
 };
 
-const webChatInteraction = (framework, demoRequestBody) => {
-  const codeRegex = regExp[framework];
-  let body = JSON.parse(demoRequestBody);
-  if (window.webChatSdk) {
-    sdkInstance.onChatEnd((payload) => {
+const webChatInteraction = (framework: string, demoRequestBody: string) => {
+  const codeRegex = isFramework(framework) && framework in regExp ? regExp[framework as keyof typeof regExp] : undefined;
+  let body = JSON.parse(demoRequestBody) as DemoRequestBody;
+  if (window.webChatSdk && sdkInstance && codeRegex) {
+    sdkInstance.onChatEnd((payload: { content: string }) => {
       let match;
       while ((match = codeRegex.exec(payload.content)) !== null) {
         const code = match[1];
@@ -180,10 +194,10 @@ const webChatInteraction = (framework, demoRequestBody) => {
   document.addEventListener('mouseup', function (event) {
     const urlParams = new URLSearchParams(location.search);
     const contentDom = document.querySelector('td-doc-content');
-    const target = event.target as HTMLElement;
+    const target = event.target;
     // 获取选中的文本
-    const selectedText = window.getSelection().toString().trim();
-    if (!contentDom.contains(target) || !selectedText) {
+    const selectedText = window.getSelection()?.toString().trim() || '';
+    if (!contentDom || !(target instanceof HTMLElement) || !contentDom.contains(target) || !selectedText) {
       unmountTooltips();
       return;
     }
@@ -194,8 +208,9 @@ const webChatInteraction = (framework, demoRequestBody) => {
 
     preSelectedText = selectedText;
     const isGenerateDemo =
-      ['api'].includes(urlParams.get('tab')) &&
+      urlParams.get('tab') === 'api' &&
       target.tagName === 'TD' &&
+      target.parentNode !== null &&
       Array.from(target.parentNode.childNodes).filter((node: Node) => node.nodeType === 1)[0] === target;
     const popper = createTooltips(framework, isGenerateDemo, selectedText);
     createPopper(target, popper, {

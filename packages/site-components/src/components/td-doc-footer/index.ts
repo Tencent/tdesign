@@ -24,15 +24,27 @@ const footerLinks = getFooterConfig();
 const locale = getLocale();
 const currentYear = new Date().getFullYear();
 
+type GroupType = 'vue' | 'react' | 'wx' | 'flutter' | 'design';
+interface BodyStyle {
+  paddingRight?: string;
+}
+
 const groupCodeMap = {
   vue: vueGroup,
   react: reactGroup,
   wx: wxGroup,
   flutter: flutterGroup,
   design: designGroup,
-};
+} satisfies Record<GroupType, string>;
 
-export default define({
+interface FooterHost {
+  mobileBodyStyle: BodyStyle;
+  platform: string;
+  displayQrCode: string;
+  patchDom: boolean;
+}
+
+export default define<FooterHost>({
   tag: 'td-doc-footer',
   mobileBodyStyle,
   platform: 'web',
@@ -45,7 +57,7 @@ export default define({
     const mobileBodyStyle = { ...host.mobileBodyStyle };
     const { displayQrCode } = host;
 
-    const handleHoverLogo = (type) => {
+    const handleHoverLogo = (type: GroupType) => {
       host.displayQrCode = groupCodeMap[type];
     };
 
@@ -100,11 +112,13 @@ export default define({
                 <div class="TDesign-doc-footer__content-block">
                   <p class="title">${item.title}</p>
                   ${item.links.map(
-                    (link) => html`
-                      <a class="link" href="${link.url}" target="${link.target}">
-                        <span>${link.name}</span>
-                      </a>
-                    `,
+                    (link) =>
+                      link &&
+                      html`
+                        <a class="link" href="${link.url}" target="${link.target}">
+                          <span>${link.name}</span>
+                        </a>
+                      `,
                   )}
                 </div>
               `,

@@ -1,9 +1,33 @@
 import { html, define, dispatch } from 'hybrids';
-import { createPopper } from '@popperjs/core';
+import { createPopper, type Instance, type Placement } from '@popperjs/core';
 import { parseBoolean } from '@utils';
 import style from './style.less?inline';
 
-function handleMouseEvent(host, type) {
+interface PortalElement extends HTMLElement {
+  visible: boolean;
+}
+
+interface LegacyPathEvent extends Event {
+  path?: EventTarget[];
+}
+
+interface DocPopupProps {
+  reference: HTMLElement;
+  portalClass: string;
+  portalStyle: string;
+  placement: Placement;
+  triggerType: 'hover' | 'click';
+  equalWidth: boolean;
+  visible: boolean;
+  portals: HTMLElement | null;
+  portal: PortalElement | null;
+  popper: Instance | null;
+}
+
+type DocPopupHost = HTMLElement & DocPopupProps;
+type HoverEventType = 'enter' | 'leave';
+
+function handleMouseEvent(host: DocPopupHost, type: HoverEventType): void {
   if (host.triggerType !== 'hover') return;
   if (type === 'enter') {
     host.visible = true;
@@ -14,20 +38,23 @@ function handleMouseEvent(host, type) {
   dispatch(host, 'visible-change', { detail: { visible: host.visible } });
 }
 
-function handleClick(host) {
+function handleClick(host: DocPopupHost): void {
   if (host.triggerType !== 'click') return;
   host.visible = !host.visible;
 
   dispatch(host, 'visible-change', { detail: { visible: host.visible } });
 }
 
-export default define({
+export default define<DocPopupProps>({
   tag: 'td-doc-popup',
-  reference: ({ render }) => render().querySelector('.TDesign-doc-popup'),
+  reference: (host) => host.shadowRoot?.querySelector<HTMLElement>('.TDesign-doc-popup') as HTMLElement,
   portalClass: '',
   portalStyle: '',
   placement: 'bottom-end',
   triggerType: 'hover',
+  portals: null,
+  portal: null,
+  popper: null,
   equalWidth: {
     value: (_host, v) => parseBoolean(v, false),
   },
@@ -35,9 +62,9 @@ export default define({
     value: (host, v) => v || false,
     connect: (host) => {
       const { reference, placement } = host;
-      let resizeObserver;
-      let portalFrameId;
-      let popperFrameId;
+      let resizeObserver: ResizeObserver | undefined;
+      let portalFrameId: number | undefined;
+      let popperFrameId: number | undefined;
       let isConnected = true;
 
       portalFrameId = requestAnimationFrame(() => {
@@ -55,7 +82,7 @@ export default define({
 
         const portalStyleStr = `<style>${host.portalStyle}</style>`;
 
-        host.portal = document.createElement('td-portal');
+        host.portal = document.createElement('td-portal') as PortalElement;
         host.portal.className = host.portalClass;
         host.portal.innerHTML = portalStyleStr;
         host.portal.appendChild(contentSlot);
@@ -67,9 +94,11 @@ export default define({
 
         popperFrameId = requestAnimationFrame(() => {
           if (!isConnected) return;
+          const portal = host.portal;
+          if (!portal) return;
 
           const isVertical = ['top', 'bottom'].some((p) => placement.includes(p));
-          host.popper = createPopper(reference, host.portal, {
+          host.popper = createPopper(reference, portal, {
             placement,
             modifiers: [{ name: 'offset', options: { offset: isVertical ? [0, 8] : [0, 16] } }],
           });
@@ -98,9 +127,11 @@ export default define({
         });
       });
 
-      function clickOutside(e) {
-        const eventPath = e.composedPath?.() || e.path || [];
-        if (!reference || host.contains(eventPath[0])) return;
+      function clickOutside(event: Event): void {
+        const legacyEvent = event as LegacyPathEvent;
+        const eventPath = event.composedPath?.() || legacyEvent.path || [];
+        const eventTarget = eventPath[0];
+        if (!reference || (eventTarget instanceof Node && host.contains(eventTarget))) return;
         host.visible = false;
         dispatch(host, 'visible-change', { detail: { visible: host.visible } });
       }
@@ -131,8 +162,8 @@ export default define({
         class="TDesign-doc-popup"
         data-placement="${placement}"
         onclick="${handleClick}"
-        onmouseenter="${(host) => handleMouseEvent(host, 'enter')}"
-        onmouseleave="${(host) => handleMouseEvent(host, 'leave')}"
+        onmouseenter="${(host: DocPopupHost) => handleMouseEvent(host, 'enter')}"
+        onmouseleave="${(host: DocPopupHost) => handleMouseEvent(host, 'leave')}"
       >
         <slot></slot>
       </div>

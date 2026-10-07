@@ -8,7 +8,30 @@ import 'prismjs/components/prism-jsx.js';
 import 'prismjs/components/prism-javascript.js';
 import 'prismjs/components/prism-typescript';
 
-export default define({
+interface TabStyle {
+  width: string;
+  transform: string;
+}
+
+interface DemoHost {
+  code: string;
+  language: string;
+  showCode: boolean;
+  mode: string;
+  currentLangIndex: number;
+  languages: string | undefined;
+  theme: string;
+  activeStyleMap: object | null | undefined;
+}
+
+function getTabStyle(styleMap: object | null | undefined, tab: string): TabStyle | undefined {
+  const value = Object.entries(styleMap ?? {}).find(([key]) => key === tab)?.[1];
+  if (typeof value !== 'object' || value === null) return undefined;
+  const { width, transform } = value as Partial<TabStyle>;
+  return typeof width === 'string' && typeof transform === 'string' ? { width, transform } : undefined;
+}
+
+export default define<DemoHost>({
   tag: 'td-doc-demo',
   code: '',
   language: 'jsx',
@@ -17,10 +40,10 @@ export default define({
   currentLangIndex: 0,
   languages: undefined, // multiple languages display
   theme: {
-    value: (host, v) => v || localStorage.getItem('--tdesign-theme') || 'light',
+    value: (_host, v) => v || localStorage.getItem('--tdesign-theme') || 'light',
     connect(host, key, invalidate) {
       function themeChange() {
-        const theme = localStorage.getItem('--tdesign-theme');
+        const theme = localStorage.getItem('--tdesign-theme') || 'light';
         Object.assign(host, { [key]: theme });
         invalidate();
       }
@@ -39,17 +62,24 @@ export default define({
           return;
         }
 
-        const items = host.shadowRoot.querySelectorAll('.TDesign-doc-demo-tabs__item');
-        let styleMap = {};
+        const items = host.shadowRoot.querySelectorAll<HTMLElement>('.TDesign-doc-demo-tabs__item');
+        let styleMap: object | null = {};
         items.forEach((item) => {
           if (!item.offsetWidth) {
             styleMap = null;
           } else {
             const { tab } = item.dataset;
-            styleMap[tab] = {
-              width: `${item.offsetWidth}px`,
-              transform: `translate3d(${item.offsetLeft}px, 0, 0)`,
-            };
+            if (tab && styleMap) {
+              Object.defineProperty(styleMap, tab, {
+                value: {
+                  width: `${item.offsetWidth}px`,
+                  transform: `translate3d(${item.offsetLeft}px, 0, 0)`,
+                },
+                enumerable: true,
+                configurable: true,
+                writable: true,
+              });
+            }
           }
         });
         Object.assign(host, { [key]: styleMap });
@@ -76,14 +106,15 @@ export default define({
     const currentLang = languageArr[currentLangIndex] || '';
     const currentCode = host.dataset?.[currentLang] || host.dataset?.[currentLang.toLocaleLowerCase()] || code;
     const highlightCode = Prism.highlight(currentCode, Prism.languages[language], language);
-    const activeStyle = activeStyleMap && languageArr.length ? activeStyleMap[languageArr[currentLangIndex]] : {};
+    const activeStyle =
+      activeStyleMap && languageArr.length ? getTabStyle(activeStyleMap, languageArr[currentLangIndex]) : {};
     const showCodeStyle = {
       transitionDuration: '.2s',
       maxHeight: showCode ? '560px' : 0,
       transitionTimingFunction: showCode ? 'cubic-bezier(.82, 0, 1, .9)' : 'ease',
     };
 
-    const handleClick = (index) => {
+    const handleClick = (index: number) => {
       host.currentLangIndex = index;
       dispatch(host, 'click', { detail: { index, lang: languageArr[index] } });
     };

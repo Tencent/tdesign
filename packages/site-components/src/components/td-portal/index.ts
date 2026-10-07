@@ -1,7 +1,12 @@
 import { html, define } from 'hybrids';
 import style from './style.less?inline';
 
-export default define({
+interface PortalProps {
+  visible: boolean;
+  portalStyle: string;
+}
+
+export default define<PortalProps>({
   tag: 'td-portal',
   visible: { value: false, reflect: true },
   portalStyle: '',

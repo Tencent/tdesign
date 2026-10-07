@@ -14,7 +14,8 @@
 
 import { searchAlgolia, groupHits, formatHit } from './algolia';
 import { listRecent } from './recent';
-import { DEBOUNCE_MS, VIEW } from './constants';
+import { DEBOUNCE_MS, VIEW, type View } from './constants';
+import type { DisplayHit, DocSearchHost, HitGroup, ViewState } from './types';
 
 /* ------------------------------------------------------------------ *
  * 工具
@@ -30,7 +31,7 @@ import { DEBOUNCE_MS, VIEW } from './constants';
  * @param {Record<string,string|number>} vars 替换字典
  * @returns {string}
  */
-export function interp(tmpl, vars) {
+export function interp(tmpl: string, vars: Record<string, string | number>): string {
   return String(tmpl).replace(/\{(\w+)\}/g, (_, k) => (vars && k in vars ? String(vars[k]) : ''));
 }
 
@@ -45,9 +46,9 @@ export function interp(tmpl, vars) {
  * @param {string|null} activeKey  当前激活的分类 key；为空则拍平所有分组
  * @returns {Array<{url:string,title:string,subtitle:string,breadcrumb:string}>}
  */
-export function flattenGroups(groups, activeKey) {
+export function flattenGroups(groups: HitGroup[], activeKey: string | null): DisplayHit[] {
   const visible = activeKey ? groups.filter((g) => g.key === activeKey) : groups;
-  const out = [];
+  const out: DisplayHit[] = [];
   for (const g of visible) {
     for (const h of g.items) {
       const f = h.__formatted || formatHit(h);
@@ -73,7 +74,7 @@ export function flattenGroups(groups, activeKey) {
  * @param {{query:string, loading:boolean, groups:Array, recent:Array}} s
  * @returns {typeof VIEW[keyof typeof VIEW]}
  */
-export function computeView({ query, loading, groups, recent }) {
+export function computeView({ query, loading, groups, recent }: ViewState): View {
   if (loading && query) {
     return groups && groups.length ? VIEW.LOADING_RESULTS : VIEW.LOADING_PLACEHOLDER;
   }
@@ -94,7 +95,7 @@ export function computeView({ query, loading, groups, recent }) {
  * @param {HTMLElement} host
  * @param {Array<{key:string,title:string,items:Array}>} groups
  */
-export function applyGroups(host, groups) {
+export function applyGroups(host: DocSearchHost, groups: HitGroup[]): void {
   host._groups = groups || [];
   if (!host._activeKey || !host._groups.some((g) => g.key === host._activeKey)) {
     host._activeKey = host._groups[0]?.key || null;
@@ -111,7 +112,7 @@ export function applyGroups(host, groups) {
  * @param {HTMLElement} host
  * @param {string} key 目标分类 key
  */
-export function setActiveCategory(host, key) {
+export function setActiveCategory(host: DocSearchHost, key: string): void {
   if (!key || key === host._activeKey) return;
   host._activeKey = key;
   host._flatHits = flattenGroups(host._groups, host._activeKey);
@@ -126,7 +127,7 @@ export function setActiveCategory(host, key) {
  *
  * @param {HTMLElement} host
  */
-export function resetToRecent(host) {
+export function resetToRecent(host: DocSearchHost): void {
   host._groups = [];
   host._activeKey = null;
   const allRecent = listRecent();
@@ -149,7 +150,7 @@ export function resetToRecent(host) {
  * @param {HTMLElement} host
  * @param {1|-1} delta  +1 下移 / -1 上移
  */
-export function moveSelection(host, delta) {
+export function moveSelection(host: DocSearchHost, delta: 1 | -1): void {
   const total = host._flatHits.length;
   if (!total) return;
   host._currentIndex = (host._currentIndex + delta + total) % total;
@@ -163,7 +164,7 @@ export function moveSelection(host, delta) {
  * @param {HTMLElement} host
  * @param {1|-1} delta
  */
-export function moveCategory(host, delta) {
+export function moveCategory(host: DocSearchHost, delta: 1 | -1): void {
   const groups = host._groups || [];
   if (groups.length < 2) return;
   const idx = groups.findIndex((g) => g.key === host._activeKey);
@@ -178,7 +179,7 @@ export function moveCategory(host, delta) {
  *
  * @param {HTMLElement} host
  */
-export function scrollActiveIntoView(host) {
+export function scrollActiveIntoView(host: DocSearchHost): void {
   requestAnimationFrame(() => {
     const root = host.shadowRoot;
     if (!root) return;
@@ -198,7 +199,7 @@ export function scrollActiveIntoView(host) {
  * @param {HTMLElement} host
  * @param {string} query
  */
-export function debouncedSearch(host, query) {
+export function debouncedSearch(host: DocSearchHost, query: string): void {
   if (host._debounceTimer) clearTimeout(host._debounceTimer);
   host._debounceTimer = setTimeout(() => runSearch(host, query), DEBOUNCE_MS);
 }
@@ -216,7 +217,7 @@ export function debouncedSearch(host, query) {
  * @param {HTMLElement} host
  * @param {string} query
  */
-export async function runSearch(host, query) {
+export async function runSearch(host: DocSearchHost, query: string): Promise<void> {
   const q = (query || '').trim();
   if (!q) {
     host._loading = false;
@@ -239,11 +240,11 @@ export async function runSearch(host, query) {
       hitsPerPage: host.hitsPerPage,
     });
     // 请求返回前可能已被新的查询打断，此时不应再落盘
-    if (host._abort.signal.aborted) return;
+    if (!host._abort || host._abort.signal.aborted) return;
     host._loading = false;
     applyGroups(host, groupHits(hits));
   } catch (err) {
-    if (err?.name === 'AbortError') return;
+    if (err instanceof Error && err.name === 'AbortError') return;
     host._loading = false;
     applyGroups(host, []);
   }

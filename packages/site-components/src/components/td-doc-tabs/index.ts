@@ -2,10 +2,34 @@ import { html, dispatch, define } from 'hybrids';
 import { isEn } from '@utils';
 import style from './style.less?inline';
 
-function handleTabClick(host, e) {
+interface TabItem {
+  tab: string;
+  name: string;
+}
+
+interface TabBlockStyle {
+  width: string;
+  transform: string;
+}
+
+type TabScrollMap = Record<string, number>;
+type TabBlockStyleMap = Record<string, TabBlockStyle>;
+
+interface DocTabsProps {
+  tab: string;
+  autoScroll: boolean;
+  tabScrollMap: TabScrollMap;
+  tabs: TabItem[];
+  blockStyleMap: TabBlockStyleMap | null;
+}
+
+type DocTabsHost = HTMLElement & DocTabsProps;
+
+function handleTabClick(host: DocTabsHost, event?: Event): void {
   host.tabScrollMap[host.tab] = document.documentElement.scrollTop;
 
-  const { tab: currentTab } = e.target.dataset;
+  const currentTab = (event?.target as HTMLElement | null)?.dataset.tab;
+  if (!currentTab) return;
   Object.assign(host, { tab: currentTab });
   dispatch(host, 'change', { detail: currentTab });
 
@@ -27,7 +51,7 @@ const defaultTabs = [
   { tab: 'design', name: !isEn() ? '指南' : 'Guide' },
 ];
 
-export default define({
+export default define<DocTabsProps>({
   tag: 'td-doc-tabs',
   tab: 'demo',
   // 记录每个 tab 滚动条并自动滚动
@@ -35,7 +59,7 @@ export default define({
   // 记录每个 tab 的滚动距离
   tabScrollMap: {
     value: (host, v) => {
-      const tabMap = {};
+      const tabMap: TabScrollMap = {};
       host.tabs.forEach(({ tab }) => {
         tabMap[tab] = 0;
       });
@@ -54,13 +78,15 @@ export default define({
           return;
         }
 
-        const items = host.shadowRoot.querySelectorAll('.item');
-        let styleMap = {};
+        const items = host.shadowRoot.querySelectorAll<HTMLElement>('.item');
+        let styleMap: TabBlockStyleMap | null = {};
         items.forEach((item) => {
           if (!item.offsetWidth) {
             styleMap = null;
           } else {
             const { tab } = item.dataset;
+            if (!tab) return;
+            if (!styleMap) return;
             styleMap[tab] = {
               width: `${item.offsetWidth}px`,
               transform: `translate3d(${item.offsetLeft - 4}px, 0, 0)`,

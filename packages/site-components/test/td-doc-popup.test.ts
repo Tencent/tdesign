@@ -1,10 +1,9 @@
 /* eslint-env jest */
 
-const mockDefine = jest.fn((definition) => definition);
+const mockDefine = jest.fn((definition: unknown) => definition);
 const mockHtml = jest.fn();
 const mockDispatch = jest.fn();
 const mockCreatePopper = jest.fn();
-const testGlobal = global as any;
 
 jest.mock('hybrids', () => ({
   define: mockDefine,
@@ -13,14 +12,36 @@ jest.mock('hybrids', () => ({
 }));
 
 jest.mock('@popperjs/core', () => ({ createPopper: mockCreatePopper }));
-jest.mock('@utils', () => ({ parseBoolean: jest.fn((value) => Boolean(value)) }), { virtual: true });
+jest.mock('@utils', () => ({ parseBoolean: jest.fn((value: unknown) => Boolean(value)) }), { virtual: true });
 jest.mock('../src/components/td-doc-popup/style.less?inline', () => '', { virtual: true });
 
 const docPopup = require('../src/components/td-doc-popup').default;
 
+interface PortalContainerMock {
+  appendChild: jest.Mock<unknown, [unknown]>;
+  removeChild: jest.Mock<unknown, [unknown]>;
+}
+
+interface PopupTestGlobals {
+  requestAnimationFrame: jest.Mock<number, [FrameRequestCallback]>;
+  cancelAnimationFrame: jest.Mock<boolean, [number]>;
+  window: {
+    ResizeObserver: jest.Mock;
+  };
+  document: {
+    getElementById: jest.Mock<PortalContainerMock | null, [string]>;
+    createElement: jest.Mock;
+    body: { appendChild: jest.Mock };
+    addEventListener: jest.Mock;
+    removeEventListener: jest.Mock;
+  };
+}
+
+const testGlobal = globalThis as unknown as PopupTestGlobals;
+
 describe('td-doc-popup lifecycle', () => {
-  let frames: Map<number, (...args: any[]) => void>;
-  let portalContainer;
+  let frames: Map<number, FrameRequestCallback>;
+  let portalContainer: PortalContainerMock;
 
   beforeEach(() => {
     frames = new Map();
@@ -30,17 +51,17 @@ describe('td-doc-popup lifecycle', () => {
       removeChild: jest.fn(),
     };
 
-    testGlobal.requestAnimationFrame = jest.fn((callback) => {
+    testGlobal.requestAnimationFrame = jest.fn<number, [FrameRequestCallback]>((callback) => {
       const id = ++frameId;
       frames.set(id, callback);
       return id;
     });
-    testGlobal.cancelAnimationFrame = jest.fn((id) => frames.delete(id));
+    testGlobal.cancelAnimationFrame = jest.fn<boolean, [number]>((id) => frames.delete(id));
     testGlobal.window = {
       ResizeObserver: jest.fn(() => ({ observe: jest.fn(), disconnect: jest.fn() })),
     };
     testGlobal.document = {
-      getElementById: jest.fn(() => portalContainer),
+      getElementById: jest.fn<PortalContainerMock | null, [string]>(() => portalContainer),
       createElement: jest.fn(() => ({ appendChild: jest.fn(), addEventListener: jest.fn() })),
       body: { appendChild: jest.fn() },
       addEventListener: jest.fn(),
@@ -50,10 +71,10 @@ describe('td-doc-popup lifecycle', () => {
   });
 
   afterEach(() => {
-    delete testGlobal.requestAnimationFrame;
-    delete testGlobal.cancelAnimationFrame;
-    delete testGlobal.window;
-    delete testGlobal.document;
+    Reflect.deleteProperty(testGlobal, 'requestAnimationFrame');
+    Reflect.deleteProperty(testGlobal, 'cancelAnimationFrame');
+    Reflect.deleteProperty(testGlobal, 'window');
+    Reflect.deleteProperty(testGlobal, 'document');
   });
 
   function createHost() {
@@ -67,9 +88,11 @@ describe('td-doc-popup lifecycle', () => {
   }
 
   function flushNextFrame() {
-    const [id, callback] = frames.entries().next().value;
+    const frame = frames.entries().next().value;
+    if (!frame) throw new Error('Expected a queued animation frame');
+    const [id, callback] = frame;
     frames.delete(id);
-    callback();
+    callback(performance.now());
   }
 
   it('cancels deferred portal setup when disconnected before the first frame', () => {
@@ -77,7 +100,7 @@ describe('td-doc-popup lifecycle', () => {
 
     testGlobal.document.getElementById.mockReturnValue(null);
     cleanup();
-    Array.from(frames.values()).forEach((callback) => callback());
+    Array.from(frames.values()).forEach((callback) => callback(performance.now()));
 
     expect(testGlobal.document.body.appendChild).not.toHaveBeenCalled();
   });

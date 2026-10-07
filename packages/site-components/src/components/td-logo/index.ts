@@ -10,7 +10,29 @@ import { isEn } from '@utils';
 import style from './style.less?inline';
 import portalStyle from './portal.less?inline';
 
-function renderList(list = []) {
+type LinkTarget = '_blank' | '_self';
+
+interface MenuChild {
+  url: string;
+  key: string;
+  title: string;
+  desc: string;
+  target: LinkTarget;
+}
+
+interface MenuCategory {
+  category_url?: string;
+  category_title: string;
+  target: LinkTarget;
+  children: MenuChild[];
+}
+
+interface LogoProps {
+  menuList: MenuCategory[];
+  isIntranet: boolean;
+}
+
+function renderList(list: MenuChild[] = []) {
   return html` <div class="list">
     ${list.map(
       (item) =>
@@ -25,7 +47,7 @@ function renderList(list = []) {
   </div>`;
 }
 
-function renderMenu(list) {
+function renderMenu(list: MenuCategory[]) {
   const len = list.length;
   return list.map(
     (item, index) => html`
@@ -41,7 +63,7 @@ function renderMenu(list) {
   );
 }
 
-export default define({
+export default define<LogoProps>({
   tag: 'td-logo',
   menuList: {
     value: (host, v) => v || [],
@@ -52,7 +74,7 @@ export default define({
       const menuCdn = isIntranet() ? logoMenuConfigWoaCdn : logoMenuConfigCdn;
       fetch(menuCdn)
         .then((res) => res.json())
-        .then((menuList) => {
+        .then((menuList: MenuCategory[]) => {
           // 整理 menu 字段
           menuList.forEach((menu) => {
             menu.target = '_blank';

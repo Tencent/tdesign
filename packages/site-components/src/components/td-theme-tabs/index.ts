@@ -7,13 +7,31 @@ import { watchHtmlMode } from '@utils';
 // const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 const storageChangeEvent = new CustomEvent('storageChange');
 
-function toggleTheme(host, currentTheme) {
+type Theme = 'light' | 'dark';
+
+interface BlockStyle {
+  width: string;
+  left: string;
+}
+
+interface ThemeTabsProps {
+  theme: Theme;
+  blockStyleMap: Partial<Record<Theme, BlockStyle>> | undefined;
+}
+
+type ThemeTabsHost = ThemeTabsProps & HTMLElement;
+
+function isTheme(value: string | null): value is Theme {
+  return value === 'light' || value === 'dark';
+}
+
+function toggleTheme(host: ThemeTabsHost, currentTheme: Theme) {
   document.documentElement.removeAttribute('theme-mode');
   Object.assign(host, { theme: currentTheme });
   document.documentElement.setAttribute('theme-mode', currentTheme);
 }
 
-function handleTabClick(host, event, currentTheme) {
+function handleTabClick(host: ThemeTabsHost, currentTheme: Theme) {
   const root = document.documentElement;
   const prevTheme = root.getAttribute('theme-mode');
   if (prevTheme === currentTheme) return;
@@ -22,17 +40,20 @@ function handleTabClick(host, event, currentTheme) {
   document.startViewTransition(() => toggleTheme(host, currentTheme));
 }
 
-function initBlockStyleMap(host) {
+function initBlockStyleMap(host: ThemeTabsHost) {
   requestAnimationFrame(() => {
     const { shadowRoot } = host;
-    const items = shadowRoot.querySelectorAll('.item');
-    let styleMap = {};
+    if (!shadowRoot) return;
+    const items = shadowRoot.querySelectorAll<HTMLElement>('.item');
+    let styleMap: Partial<Record<Theme, BlockStyle>> | undefined = {};
     items.forEach((item) => {
       if (!item.offsetWidth) {
-        styleMap = null;
+        styleMap = undefined;
       } else {
         const { theme } = item.dataset;
-        styleMap[theme] = {
+        const itemTheme = theme || null;
+        if (!styleMap || !isTheme(itemTheme)) return;
+        styleMap[itemTheme] = {
           width: `${item.offsetWidth}px`,
           left: `${item.offsetLeft}px`,
         };
@@ -42,7 +63,7 @@ function initBlockStyleMap(host) {
   });
 }
 
-export default define({
+export default define<ThemeTabsProps>({
   tag: 'td-theme-tabs',
   theme: {
     value: (_host, v) => {
@@ -54,7 +75,8 @@ export default define({
       return v || 'light';
     },
     connect: (host, key, invalidate) => {
-      const lastTheme = localStorage.getItem('--tdesign-theme');
+      const storedTheme = localStorage.getItem('--tdesign-theme');
+      const lastTheme = isTheme(storedTheme) ? storedTheme : undefined;
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       const themeToApply = lastTheme || systemTheme;
 
@@ -62,7 +84,9 @@ export default define({
       Object.assign(host, { [key]: themeToApply });
       invalidate();
 
-      const observer = watchHtmlMode((themeMode) => Object.assign(host, { [key]: themeMode }));
+      const observer = watchHtmlMode((themeMode) => {
+        if (isTheme(themeMode)) Object.assign(host, { [key]: themeMode });
+      });
 
       return () => observer.disconnect();
     },
@@ -74,19 +98,19 @@ export default define({
     const { theme, blockStyleMap } = host;
 
     if (!blockStyleMap) initBlockStyleMap(host);
-    const blockStyle = blockStyleMap ? blockStyleMap[theme] : {};
+    const blockStyle = blockStyleMap?.[theme] || {};
 
     return html`
       <div class="TDesign-theme-tabs">
         <div class="TDesign-theme-tabs__block" style=${blockStyle || {}}></div>
         <div
-          onclick=${(host, e) => handleTabClick(host, e, 'light')}
+          onclick=${(host: ThemeTabsHost) => handleTabClick(host, 'light')}
           data-theme="light"
           class="item sun ${theme === 'light' ? 'active' : ''}"
           innerHTML=${sunIcon}
         ></div>
         <div
-          onclick=${(host, e) => handleTabClick(host, e, 'dark')}
+          onclick=${(host: ThemeTabsHost) => handleTabClick(host, 'dark')}
           data-theme="dark"
           class="item moon ${theme === 'dark' ? 'active' : ''}"
           innerHTML=${moonIcon}

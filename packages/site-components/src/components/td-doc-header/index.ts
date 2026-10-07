@@ -5,16 +5,43 @@ import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, parseBoolean, wat
 import { define, html } from 'hybrids';
 import style from './style.less?inline';
 
-let timer = null;
-let observeTimer = null;
-let popupCheckTimer = null;
+interface DocInfo {
+  title: string;
+  desc: string | string[];
+}
+
+interface HeaderHost {
+  spline: string;
+  platform: string;
+  changelog: boolean;
+  changelogEn: boolean;
+  mobileBodyStyle: { paddingRight?: string };
+  shouldShowPopup: boolean;
+  docInfo: DocInfo | undefined;
+  fixedTitle: boolean | undefined;
+  showIssue: boolean;
+}
+
+interface ChangelogElement extends HTMLElement {
+  changelogEn: boolean;
+  visible: boolean;
+}
+
+let timer: ReturnType<typeof setTimeout> | undefined;
+let observeTimer: ReturnType<typeof setTimeout> | undefined;
+let popupCheckTimer: ReturnType<typeof setTimeout> | undefined;
 const locale = getLocale();
 
-function checkDescribeLineOverflow(host) {
+function getSplineUrl(name: string): string | undefined {
+  const entry = Object.entries(splineConfig).find(([key]) => key === name);
+  return entry?.[1];
+}
+
+function checkDescribeLineOverflow(host: HeaderHost & HTMLElement): void {
   if (popupCheckTimer) clearTimeout(popupCheckTimer);
   popupCheckTimer = setTimeout(() => {
     requestAnimationFrame(() => {
-      const describeLine = host.shadowRoot?.querySelector('.TDesign-doc-header__info-describe-line');
+      const describeLine = host.shadowRoot?.querySelector<HTMLElement>('.TDesign-doc-header__info-describe-line');
       if (describeLine) {
         const computedStyle = getComputedStyle(describeLine);
         const lineHeight = parseFloat(computedStyle.lineHeight);
@@ -25,37 +52,40 @@ function checkDescribeLineOverflow(host) {
   }, 100);
 }
 
-function handleModeChange(themeMode, host) {
+function handleModeChange(themeMode: string, host: HeaderHost & HTMLElement): void {
   if (!host.shadowRoot) return;
-  const splineEl = host.shadowRoot.getElementById('__iframe__');
+  const splineEl = host.shadowRoot.querySelector<HTMLIFrameElement>('#__iframe__');
   let splineUrl = '';
   if (themeMode === 'dark') {
-    splineUrl = splineConfig[`${host.spline}-dark`];
+    splineUrl = getSplineUrl(`${host.spline}-dark`) || '';
   } else {
-    splineUrl = splineConfig[host.spline];
+    splineUrl = getSplineUrl(host.spline) || '';
   }
   if (splineEl && splineUrl && splineUrl !== splineEl.src) {
     clearTimeout(timer);
-    splineEl.style = 'max-height: 0;';
+    splineEl.setAttribute('style', 'max-height: 0;');
     splineEl.src = splineUrl;
   }
 }
 
-function iframeOnload(host) {
+function iframeOnload(host: HeaderHost & HTMLElement): void {
   if (!host.shadowRoot) return;
-  const iframeEl = host.shadowRoot.getElementById('__iframe__');
+  const iframeEl = host.shadowRoot.querySelector<HTMLIFrameElement>('#__iframe__');
   clearTimeout(timer);
   timer = setTimeout(() => {
     iframeEl &&
-      (iframeEl.style = `
+      iframeEl.setAttribute(
+        'style',
+        `
       max-height: 280px;
       transition: max-height .25s .2s var(--anim-time-fn-easing);
       -webkit-transition: max-height .25s .2s var(--anim-time-fn-easing);
-    `);
+    `,
+      );
   }, 600);
 }
 
-export default define({
+export default define<HeaderHost>({
   tag: 'td-doc-header',
   spline: {
     value: (_host, v) => v || '',
@@ -109,13 +139,18 @@ export default define({
         const { shadowRoot } = host;
         const { scrollTop } = document.documentElement;
         // 吸顶效果
-        const background = shadowRoot.querySelector('.TDesign-doc-header__background') || { style: {} };
-        const changelogEntry = shadowRoot.querySelector('#TDesign-doc-changelog__entry') || { style: {} };
-        const title = shadowRoot.querySelector('.TDesign-doc-header__info-title') || { style: {} };
-        const describe = shadowRoot.querySelector('.TDesign-doc-header__info-describe') || { style: {} };
-        const thumb = shadowRoot.querySelector('.TDesign-doc-header__thumb') || { style: {} };
-        const issue = shadowRoot.querySelector('td-doc-issue') || { style: {} };
-        const tabs = document.querySelector('td-doc-tabs');
+        const background =
+          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__background') ?? document.createElement('div');
+        const changelogEntry =
+          shadowRoot.querySelector<HTMLElement>('#TDesign-doc-changelog__entry') ?? document.createElement('div');
+        const title =
+          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__info-title') ?? document.createElement('div');
+        const describe =
+          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__info-describe') ?? document.createElement('div');
+        const thumb =
+          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__thumb') ?? document.createElement('div');
+        const issue = shadowRoot.querySelector<HTMLElement>('td-doc-issue') ?? document.createElement('div');
+        const tabs = document.querySelector<HTMLElement>('td-doc-tabs');
 
         // 适配移动端
         const isMobileResponse = mediaQuery.matches;
@@ -204,12 +239,12 @@ export default define({
   render: (host) => {
     const { changelog, changelogEn, docInfo, spline, showIssue } = host;
     const mobileBodyStyle = { ...host.mobileBodyStyle };
-    const splineUrl = splineConfig[spline];
+    const splineUrl = getSplineUrl(spline);
     const isChangelogComponentRegistered = customElements.get('td-doc-changelog'); // 检查td-doc-changelog组件是否已注册
     const openChangelogDrawer = () => {
-      let changelogEl = document.querySelector('td-doc-changelog');
+      let changelogEl = document.querySelector<ChangelogElement>('td-doc-changelog');
       if (!changelogEl) {
-        changelogEl = document.createElement('td-doc-changelog');
+        changelogEl = document.createElement('td-doc-changelog') as ChangelogElement;
         changelogEl.changelogEn = changelogEn;
         document.body.appendChild(changelogEl);
       }

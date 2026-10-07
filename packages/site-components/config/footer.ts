@@ -1,10 +1,11 @@
 import { isEn, isIntranet } from '@utils';
 import { jumpLocation } from '@utils/locale';
+import type { FooterGroup, FooterLink } from './types';
 
-export const getFooterConfig = () => {
+export const getFooterConfig = (): FooterGroup[] => {
   const en = isEn();
 
-  const footerLinks = [
+  const footerLinks: FooterGroup[] = [
     {
       title: en ? 'Resource' : '资源',
       links: [
@@ -19,7 +20,7 @@ export const getFooterConfig = () => {
         { name: 'TDesign', url: `https://tdesign.${isIntranet() ? 'woa' : 'tencent'}.com`, target: '_self' },
         isIntranet() ? { name: 'TVision', url: 'https://tvision.woa.com/', target: '_blank' } : null,
         isIntranet() ? { name: 'TEditor', url: 'https://teditor.woa.com/', target: '_blank' } : null,
-      ].filter((item) => item),
+      ].filter((item): item is FooterLink => item !== null),
     },
     {
       title: en ? 'About' : '关于',

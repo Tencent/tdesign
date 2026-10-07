@@ -1,7 +1,12 @@
 /* global Aegis */
 import { html, define } from 'hybrids';
 
-export default define({
+interface AegisProps {
+  aegisId: string;
+  stats: undefined;
+}
+
+export default define<AegisProps>({
   tag: 'td-aegis',
   aegisId: 'rDISNMyXgKnpdSRvul',
   stats: {

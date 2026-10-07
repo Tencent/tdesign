@@ -1,12 +1,17 @@
 import { html, define, dispatch } from 'hybrids';
 import style from './style.less?inline';
 
-function handleChange(host) {
+interface SwitchProps {
+  value: boolean;
+  size: string;
+}
+
+function handleChange(host: SwitchProps & HTMLElement) {
   host.value = !host.value;
   dispatch(host, 'change', { detail: { value: host.value } });
 }
 
-export default define({
+export default define<SwitchProps>({
   tag: 'td-switch',
   value: false,
   size: 'medium',

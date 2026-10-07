@@ -1,8 +1,9 @@
 import { getLang } from '@utils';
+import type { Language, SiteLocale } from './types';
 
-export const getLocale = () => {
+export const getLocale = (): SiteLocale => {
   const lang = getLang();
-  const locale = {
+  const locale: Record<Language, SiteLocale> = {
     zh: {
       changelog: {
         title: '更新日志',

@@ -21,12 +21,13 @@
  * }
  */
 
-import { html } from 'hybrids';
+import { html, type UpdateFunctionWithMethods } from 'hybrids';
 import SearchIcon from 'tdesign-icons-svg/src/search.svg?raw';
 import CloseIcon from 'tdesign-icons-svg/src/close.svg?raw';
 
 import { VIEW } from './constants';
 import { computeView, interp } from './state';
+import type { DisplayHit, DocSearchHost, HitRenderOptions, Props, ViewHandlers } from './types';
 
 /* ------------------------------------------------------------------ *
  * 触发区（始终可见的顶部输入框）
@@ -39,8 +40,8 @@ import { computeView, interp } from './state';
  * @param {HTMLElement} host
  * @param {Object} handlers
  */
-export function renderTrigger(host, handlers) {
-  return html`
+export function renderTrigger(host: DocSearchHost, handlers: ViewHandlers): UpdateFunctionWithMethods<Props> {
+  return html<Props>`
     <div class="TDesign-docsearch-trigger">
       <span class="TDesign-docsearch-trigger__icon" innerHTML=${SearchIcon}></span>
       <input
@@ -78,8 +79,8 @@ export function renderTrigger(host, handlers) {
  * @param {string} title
  * @param {string} desc
  */
-function renderEmpty(title, desc) {
-  return html`
+function renderEmpty(title: string, desc: string): UpdateFunctionWithMethods<Props> {
+  return html<Props>`
     <div class="TDesign-docsearch-empty">
       <div class="TDesign-docsearch-empty__title">${title}</div>
       <div class="TDesign-docsearch-empty__desc">${desc}</div>
@@ -102,12 +103,12 @@ function renderEmpty(title, desc) {
  * @param {{ showRemove?: boolean, highlight?: boolean }} [options]
  */
 function renderHitItem(
-  host,
-  item,
-  idx,
-  handlers,
-  options: { showRemove?: boolean; highlight?: boolean } = {},
-) {
+  host: DocSearchHost,
+  item: DisplayHit,
+  idx: number,
+  handlers: ViewHandlers,
+  options: HitRenderOptions = {},
+): UpdateFunctionWithMethods<Props> {
   const { showRemove = false, highlight = true } = options;
   const active = idx === host._currentIndex;
 
@@ -127,7 +128,8 @@ function renderHitItem(
         class="TDesign-docsearch-hit__remove"
         aria-label=${host.removeLabel}
         innerHTML=${CloseIcon}
-        onclick=${(h, e) => handlers.onRemoveRecent(h, item.url, e)}
+        onclick=${(currentHost: DocSearchHost, event: MouseEvent) =>
+          handlers.onRemoveRecent(currentHost, item.url, event)}
       ></button>`
     : html``;
 
@@ -138,7 +140,12 @@ function renderHitItem(
       role="option"
       aria-selected=${active ? 'true' : 'false'}
     >
-      <a class="TDesign-docsearch-hit__link" href=${item.url} onclick=${(h, e) => handlers.onHitClick(h, item, e)}>
+      <a
+        class="TDesign-docsearch-hit__link"
+        href=${item.url}
+        onclick=${(currentHost: DocSearchHost, event: MouseEvent) =>
+          handlers.onHitClick(currentHost, item, event)}
+      >
         ${titleNode}${subtitleNode}${removeBtn}
       </a>
     </li>
@@ -153,7 +160,7 @@ function renderHitItem(
  * @param {HTMLElement} host
  * @param {Object} handlers
  */
-function renderRecentView(host, handlers) {
+function renderRecentView(host: DocSearchHost, handlers: ViewHandlers): UpdateFunctionWithMethods<Props> {
   const recent = host._recent || [];
   return html`
     <div class="TDesign-docsearch-section">
@@ -186,7 +193,7 @@ function renderRecentView(host, handlers) {
  * @param {HTMLElement} host
  * @param {Object} handlers
  */
-function renderGroupsView(host, handlers) {
+function renderGroupsView(host: DocSearchHost, handlers: ViewHandlers): UpdateFunctionWithMethods<Props> {
   const { _groups: groups, _activeKey: activeKey, _flatHits: flatHits } = host;
 
   return html`
@@ -199,7 +206,8 @@ function renderGroupsView(host, handlers) {
                 class="TDesign-docsearch-cat ${g.key === activeKey ? 'is-active' : ''}"
                 role="option"
                 aria-selected=${g.key === activeKey ? 'true' : 'false'}
-                onclick=${(h, e) => handlers.onCategoryClick(h, g.key, e)}
+                onclick=${(currentHost: DocSearchHost, event: MouseEvent) =>
+                  handlers.onCategoryClick(currentHost, g.key, event)}
               >
                 <span class="TDesign-docsearch-cat__title" innerHTML=${g.title}></span>
                 <span class="TDesign-docsearch-cat__badge" aria-label=${`${g.items.length} ${host.resultLabel}`}
@@ -228,7 +236,7 @@ function renderGroupsView(host, handlers) {
  * @param {HTMLElement} host
  * @param {Object} handlers
  */
-function renderPopoverBody(host, handlers) {
+function renderPopoverBody(host: DocSearchHost, handlers: ViewHandlers): UpdateFunctionWithMethods<Props> {
   const view = computeView({
     query: host._query,
     loading: host._loading,
@@ -263,8 +271,8 @@ function renderPopoverBody(host, handlers) {
  * @param {HTMLElement} host
  * @param {Object} handlers
  */
-export function renderPopover(host, handlers) {
-  return html`
+export function renderPopover(host: DocSearchHost, handlers: ViewHandlers): UpdateFunctionWithMethods<Props> {
+  return html<Props>`
     <div
       class="TDesign-docsearch-popover ${host.open ? 'is-open' : ''}"
       id="TDesign-docsearch-popover"

@@ -4,29 +4,58 @@ import tipsIcon from '@images/tips.svg?raw';
 import codeIcon from '@images/code.svg?raw';
 import Prism from 'prismjs';
 
-function getLineStyle(host) {
+interface PanelItem {
+  label: string;
+  value: string;
+}
+
+interface ConfigItem {
+  name: string;
+  type: string;
+  defaultValue: string | boolean;
+  options?: readonly unknown[];
+}
+
+interface ConfigChangeEvent extends Event {
+  detail: { value: unknown };
+}
+
+interface DocUsageProps {
+  code: string;
+  showCode: boolean;
+  language: string;
+  panel: string | undefined;
+  panelList: PanelItem[];
+  configList: ConfigItem[];
+}
+
+type DocUsageHost = HTMLElement & DocUsageProps;
+
+function getLineStyle(host: DocUsageHost): string {
   const { panelList, panel } = host;
   const index = panelList.findIndex((p) => p.value === panel);
 
   if (index === -1 || !host.shadowRoot) return '';
 
-  const panelEls = host.shadowRoot.querySelectorAll('.header-panel');
+  const panelEls = host.shadowRoot.querySelectorAll<HTMLElement>('.header-panel');
 
-  const { offsetLeft, offsetWidth } = panelEls[index];
+  const panelEl = panelEls[index];
+  if (!panelEl) return '';
+  const { offsetLeft, offsetWidth } = panelEl;
   return `width: ${offsetWidth}px; left: ${offsetLeft}px`;
 }
 
-function handleConfigChange(host, e, item) {
-  const { detail } = e;
+function handleConfigChange(host: DocUsageHost, event: ConfigChangeEvent, item: ConfigItem): void {
+  const { detail } = event;
 
   dispatch(host, 'ConfigChange', {
     detail: { value: detail.value, name: item.name, type: item.type },
   });
 }
 
-function renderConfig(configList = []) {
-  const booleanList = [];
-  const enumList = [];
+function renderConfig(configList: ConfigItem[] = []) {
+  const booleanList: ConfigItem[] = [];
+  const enumList: ConfigItem[] = [];
 
   configList.forEach((item) => {
     if (/boolean/i.test(item.type)) booleanList.push(item);
@@ -44,7 +73,8 @@ function renderConfig(configList = []) {
                   <td-switch
                     size="small"
                     value="${item.defaultValue}"
-                    onchange="${(host, e) => handleConfigChange(host, e, item)}"
+                    onchange="${(host: DocUsageHost, event?: Event) =>
+                      event && handleConfigChange(host, event as ConfigChangeEvent, item)}"
                   ></td-switch>
                 </li>
               `,
@@ -64,7 +94,8 @@ function renderConfig(configList = []) {
                     borderless
                     value="${item.defaultValue}"
                     options="${item.options}"
-                    onchange="${(host, e) => handleConfigChange(host, e, item)}"
+                    onchange="${(host: DocUsageHost, event?: Event) =>
+                      event && handleConfigChange(host, event as ConfigChangeEvent, item)}"
                   ></td-select>
                 </li>
               `,
@@ -75,7 +106,7 @@ function renderConfig(configList = []) {
   `;
 }
 
-export default define({
+export default define<DocUsageProps>({
   tag: 'td-doc-usage',
   code: '',
   showCode: false,
@@ -88,8 +119,8 @@ export default define({
       }
       if (!host.shadowRoot) return;
 
-      const lineEl = host.shadowRoot.querySelector('.active-line');
-      lineEl.style = getLineStyle(host);
+      const lineEl = host.shadowRoot.querySelector<HTMLElement>('.active-line');
+      if (lineEl) lineEl.style.cssText = getLineStyle(host);
     },
   },
   panelList: {

@@ -3,8 +3,7 @@
     "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "strict": false,
-    "noImplicitAny": false,
+    "strict": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "skipLibCheck": true,
@@ -16,7 +15,6 @@
     "types": ["vite/client", "node", "jest"],
     "baseUrl": ".",
     "paths": {
-      "hybrids": ["src/types/hybrids.d.ts"],
       "@/*": ["./*"],
       "@config": ["config/index.ts"],
       "@config/*": ["config/*"],

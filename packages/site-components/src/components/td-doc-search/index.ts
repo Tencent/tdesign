@@ -16,7 +16,7 @@
  *                  → views.js 根据最新 host 输出 html``
  */
 
-import { define, html } from 'hybrids';
+import { define, html, type Descriptor } from 'hybrids';
 
 import style from './style.less?inline';
 import {
@@ -30,6 +30,15 @@ import { listRecent, addRecent, removeRecent } from './recent';
 import { registerHotkeys } from './hotkeys';
 import { debouncedSearch, moveSelection, moveCategory, resetToRecent, setActiveCategory } from './state';
 import { renderTrigger, renderPopover } from './views';
+import type {
+  DisplayHit,
+  DocSearchHost,
+  HitGroup,
+  Props,
+  RecentItem,
+  SearchInputEvent,
+  ViewHandlers,
+} from './types';
 
 /* ------------------------------------------------------------------ *
  * 事件 handler —— 把"用户动作"翻译为"状态变更"
@@ -39,17 +48,17 @@ import { renderTrigger, renderPopover } from './views';
  * ------------------------------------------------------------------ */
 
 /** 获取 Shadow DOM 内的输入框元素（用于聚焦）。 */
-function getInput(host) {
-  return host.shadowRoot?.querySelector('.TDesign-docsearch-trigger__input') || null;
+function getInput(host: DocSearchHost): HTMLInputElement | null {
+  return host.shadowRoot?.querySelector<HTMLInputElement>('.TDesign-docsearch-trigger__input') || null;
 }
 
 /** 打开 popover（幂等）。 */
-function openPopover(host) {
+function openPopover(host: DocSearchHost): void {
   if (!host.open) host.open = true;
 }
 
 /** 关闭 popover（幂等）。 */
-function closePopover(host) {
+function closePopover(host: DocSearchHost): void {
   if (host.open) host.open = false;
 }
 
@@ -57,7 +66,7 @@ function closePopover(host) {
  * 选中某条 hit 后执行跳转：先落入"最近搜索"，再关闭 popover，最后导航。
  * 注意写入最近搜索必须发生在跳转**之前**——跳转会卸载页面，异步写入会丢失。
  */
-function navigateTo(host, hit) {
+function navigateTo(host: DocSearchHost, hit: DisplayHit): void {
   if (!hit?.url) return;
   addRecent({
     query: host._query,
@@ -70,7 +79,7 @@ function navigateTo(host, hit) {
 }
 
 /** input 的 focus 事件：打开 popover。 */
-function onTriggerFocus(host) {
+function onTriggerFocus(host: DocSearchHost): void {
   openPopover(host);
 }
 
@@ -82,7 +91,7 @@ function onTriggerFocus(host) {
  *     空 query 走 resetToRecent 回到最近搜索视图
  *   - 触发防抖搜索
  */
-function onTriggerInput(host, e) {
+function onTriggerInput(host: DocSearchHost, e: SearchInputEvent): void {
   openPopover(host);
   const value = e.target.value;
   host._query = value;
@@ -104,7 +113,7 @@ function onTriggerInput(host, e) {
  *   - Alt + ←/→(开)   切换分类
  *   - Enter(开)        对当前选中项执行 navigateTo
  */
-function onTriggerKeyDown(host, e) {
+function onTriggerKeyDown(host: DocSearchHost, e: KeyboardEvent): void {
   if (e.key === 'Escape') {
     e.preventDefault();
     closePopover(host);
@@ -143,20 +152,20 @@ function onTriggerKeyDown(host, e) {
 }
 
 /** 点击某条 hit 链接：阻止默认，走统一的 navigateTo。 */
-function onHitClick(host, hit, e) {
+function onHitClick(host: DocSearchHost, hit: DisplayHit, e: MouseEvent): void {
   e.preventDefault();
   navigateTo(host, hit);
 }
 
 /** 点击左栏某个分类：切换激活分类，并把焦点保留在输入框上（继续键盘操作）。 */
-function onCategoryClick(host, key, e) {
+function onCategoryClick(host: DocSearchHost, key: string, e: MouseEvent): void {
   e.preventDefault();
   setActiveCategory(host, key);
   getInput(host)?.focus();
 }
 
 /** 点击最近搜索项的"移除"按钮：删除该条后刷新最近搜索列表。 */
-function onRemoveRecent(host, url, e) {
+function onRemoveRecent(host: DocSearchHost, url: string, e: MouseEvent): void {
   e.preventDefault();
   e.stopPropagation();
   removeRecent(url);
@@ -164,7 +173,7 @@ function onRemoveRecent(host, url, e) {
 }
 
 /** 传给 views.js 的 handlers 包。独立出来避免 render 每次重建对象。 */
-const HANDLERS = {
+const HANDLERS: ViewHandlers = {
   onTriggerFocus,
   onTriggerInput,
   onTriggerKeyDown,
@@ -177,8 +186,8 @@ const HANDLERS = {
  * 生成一个"attribute 可覆盖、未设置时走默认文案"的 hybrids property 描述符。
  * @param {string} defaultValue 未显式设置 attribute 时返回的默认值
  */
-const stringProp = (defaultValue) => ({
-  value: (_h, v) => v || defaultValue,
+const stringProp = (defaultValue: string): Descriptor<Props, string> => ({
+  value: (_host, value?: string) => value || defaultValue,
 });
 
 /* ------------------------------------------------------------------ *
@@ -190,7 +199,7 @@ const stringProp = (defaultValue) => ({
  *   3) 内部状态（_xxx）—— 组件自用，hybrids property 化以获得自动 re-render
  * ------------------------------------------------------------------ */
 
-export default define({
+export default define<Props>({
   tag: 'td-doc-search',
 
   // ---------- 1) Algolia 配置 ----------
@@ -198,9 +207,10 @@ export default define({
   apiKey: stringProp(DEFAULT_API_KEY),
   indexName: stringProp(DEFAULT_INDEX_NAME),
   // urlFilter 特殊：显式传空串 "" 应被视为"关闭过滤"，所以用 == null 判空而非 || 短路
-  urlFilter: { value: (_h, v) => (v == null ? getDefaultUrlFilter() : v) },
+  urlFilter: { value: (_host, value?: string) => (value == null ? getDefaultUrlFilter() : value) },
   hitsPerPage: {
-    value: (_h, v) => (v != null && v !== '' ? Number(v) : DEFAULT_HITS_PER_PAGE),
+    value: (_host, value?: number | string) =>
+      value != null && value !== '' ? Number(value) : DEFAULT_HITS_PER_PAGE,
   },
 
   // ---------- 2) 文案 ----------
@@ -218,18 +228,20 @@ export default define({
   resultLabel: stringProp('结果'),
 
   // ---------- 3) 内部状态 ----------
-  _query: { value: (_h, v) => v || '' },
-  _loading: { value: (_h, v) => Boolean(v) },
-  _groups: { value: (_h, v) => v || [] },
-  _activeKey: { value: (_h, v) => (v == null ? null : v) },
-  _flatHits: { value: (_h, v) => v || [] },
+  _query: { value: (_host, value?: string) => value || '' },
+  _loading: { value: (_host, value?: boolean) => Boolean(value) },
+  _groups: { value: (_host, value?: HitGroup[]) => value || [] },
+  _activeKey: { value: (_host, value?: string | null) => (value == null ? null : value) },
+  _flatHits: { value: (_host, value?: DisplayHit[]) => value || [] },
   _currentIndex: {
-    value: (_h, v) => {
-      const n = Number(v);
+    value: (_host, value?: number) => {
+      const n = Number(value);
       return Number.isFinite(n) ? n : 0;
     },
   },
-  _recent: { value: (_h, v) => v || [] },
+  _recent: { value: (_host, value?: RecentItem[]) => value || [] },
+  _debounceTimer: { value: (_host, value?: ReturnType<typeof setTimeout> | null) => value || null },
+  _abort: { value: (_host, value?: AbortController | null) => value || null },
 
   // ---------- open 属性 + 生命周期 ----------
   /**
@@ -237,7 +249,7 @@ export default define({
    * observe 里还兼做"每次打开时刷新最近搜索"。
    */
   open: {
-    value: (_host, v) => Boolean(v),
+    value: (_host, value?: boolean) => Boolean(value),
     connect: (host) => {
       // 初始最近搜索填充
       host._recent = listRecent();
@@ -253,7 +265,7 @@ export default define({
 
       // 点击 host 之外的任意位置：关闭 popover
       // 使用 composedPath 以穿透 Shadow DOM 边界
-      const onDocMouseDown = (e) => {
+      const onDocMouseDown = (e: MouseEvent): void => {
         const path = e.composedPath ? e.composedPath() : [];
         if (!path.includes(host)) closePopover(host);
       };
@@ -280,5 +292,5 @@ export default define({
   },
 
   // 最终渲染：trigger 始终在；popover 作为模板一部分，由 host.open 控制显隐
-  render: (host) => html`${renderTrigger(host, HANDLERS)}${renderPopover(host, HANDLERS)}`.css`${style}`,
+  render: (host) => html<Props>`${renderTrigger(host, HANDLERS)}${renderPopover(host, HANDLERS)}`.css`${style}`,
 });

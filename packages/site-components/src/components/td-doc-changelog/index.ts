@@ -4,7 +4,19 @@ import closeIcon from '@images/close.svg?raw';
 import { convert2PascalCase, isComponentPage, isEn, isGlobalConfigPage, parseBoolean } from '@utils';
 import style from './style.less?inline';
 
-const changelogCache = new Map();
+interface ChangelogVersion {
+  version: string;
+  date: string;
+}
+
+type ChangelogData = object;
+
+interface ChangelogHost {
+  changelogEn: boolean;
+  visible: boolean;
+}
+
+const changelogCache = new Map<string, ChangelogData>();
 
 const classPrefix = 'TDesign-doc-changelog';
 const logsPrefix = `${classPrefix}__logs`;
@@ -50,7 +62,7 @@ function getCompName() {
     if (rawName.endsWith('-en')) {
       rawName = rawName.slice(0, -3);
     }
-    return SPECIAL_NAME_MAP[rawName] || convert2PascalCase(rawName);
+    return rawName === 'qrcode' ? SPECIAL_NAME_MAP.qrcode : convert2PascalCase(rawName);
   }
 
   if (isGlobalConfigPage()) {
@@ -58,7 +70,27 @@ function getCompName() {
   }
 }
 
-async function fetchChangelog(host) {
+function isChangelogData(value: unknown): value is ChangelogData {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return false;
+  return Object.values(value).every(
+    (versions) =>
+      Array.isArray(versions) &&
+      versions.every((version: unknown) => {
+        if (typeof version !== 'object' || version === null) return false;
+        const entries = Object.entries(version);
+        const versionName = entries.find(([key]) => key === 'version')?.[1];
+        const versionDate = entries.find(([key]) => key === 'date')?.[1];
+        return typeof versionName === 'string' && typeof versionDate === 'string';
+      }),
+  );
+}
+
+function getComponentChangelog(data: ChangelogData | undefined, componentName: string): ChangelogVersion[] | undefined {
+  const value = Object.entries(data ?? {}).find(([key]) => key === componentName)?.[1];
+  return Array.isArray(value) ? value : undefined;
+}
+
+async function fetchChangelog(host: ChangelogHost & HTMLElement): Promise<void> {
   const compName = getCompName();
   const jsonName = isEn() && host.changelogEn ? 'changelog.en-US.json' : 'changelog.json';
   const url = `${getLogUrlPrefix()}/${jsonName}`;
@@ -66,7 +98,8 @@ async function fetchChangelog(host) {
   try {
     if (!changelogCache.has(jsonName)) {
       const response = await fetch(url);
-      const json = await response.json();
+      const json: unknown = await response.json();
+      if (!isChangelogData(json)) throw new TypeError('Invalid changelog response');
       changelogCache.set(jsonName, json);
     }
 
@@ -76,11 +109,11 @@ async function fetchChangelog(host) {
     host.shadowRoot?.querySelector(`.${logsPrefix}__loading`)?.remove();
 
     // 滚动重置
-    const drawerBody = host.shadowRoot?.querySelector(`.${classPrefix}__drawer-body`);
+    const drawerBody = host.shadowRoot?.querySelector<HTMLElement>(`.${classPrefix}__drawer-body`);
     if (drawerBody) drawerBody.scrollTop = 0;
 
-    const compChangelog = data?.[compName];
-    const logsContainer = host.shadowRoot?.querySelector(`.${logsPrefix}`);
+    const compChangelog = compName ? getComponentChangelog(data, compName) : undefined;
+    const logsContainer = host.shadowRoot?.querySelector<HTMLElement>(`.${logsPrefix}`);
 
     if (logsContainer) {
       logsContainer.innerHTML = renderLog(compChangelog);
@@ -90,16 +123,16 @@ async function fetchChangelog(host) {
   }
 }
 
-function renderLog(list) {
+function renderLog(list: ChangelogVersion[] | undefined): string {
   if (!Array.isArray(list)) {
     return `<div class="${logsPrefix}-empty">${locale.changelog.emptyInfo}</div>`;
   }
 
   return list
     .map((item) => {
-      const sections = Object.keys(item)
-        .filter((key) => Array.isArray(item[key]))
-        .map((key) => renderLogSection(key, item[key]))
+      const sections = Object.entries(item)
+        .filter((entry): entry is [string, string[]] => Array.isArray(entry[1]))
+        .map(([key, value]) => renderLogSection(key, value))
         .join('');
 
       // 一个版本
@@ -117,7 +150,7 @@ function renderLog(list) {
 }
 
 // 一种变更类型
-function renderLogSection(title, items) {
+function renderLogSection(title: string, items: string[] | undefined): string {
   if (!items) return '';
   return `
     <div class="${logsPrefix}-version-section">
@@ -130,7 +163,7 @@ function renderLogSection(title, items) {
 }
 
 // 日志详情
-function renderLogDetails(text) {
+function renderLogDetails(text: string): string {
   const lines = text
     .split('\n')
     .map((line) => line.trim())
@@ -149,7 +182,7 @@ function renderLogDetails(text) {
   return replaceSpecialTags(html);
 }
 
-function replaceSpecialTags(html) {
+function replaceSpecialTags(html: string): string {
   return (
     html
       // 链接
@@ -159,12 +192,13 @@ function replaceSpecialTags(html) {
       // 行内 code
       .replace(
         /`([^`]+)`/g,
-        (_, param) => `<td-code text="${param.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"></td-code>`,
+        (_match: string, param: string) =>
+          `<td-code text="${param.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"></td-code>`,
       )
   );
 }
 
-export default define({
+export default define<ChangelogHost>({
   tag: 'td-doc-changelog',
   changelogEn: {
     value: (_host, v) => parseBoolean(v, false),

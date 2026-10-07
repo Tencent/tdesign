@@ -1,7 +1,14 @@
 import { html, define } from 'hybrids';
 import style from './style.less?inline';
 
-export default define({
+interface AvatarProps {
+  content: string;
+  username: string;
+  src: string;
+  href: string;
+}
+
+export default define<AvatarProps>({
   tag: 'td-avatar',
   content: '',
   username: '',

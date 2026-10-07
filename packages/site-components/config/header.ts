@@ -5,8 +5,9 @@ import uniappIcon from '../src/images/uniapp-logo.png?url';
 import reactIcon from '../src/images/react-logo.svg?url';
 import vueIcon from '../src/images/vue-logo.svg?url';
 import wxIcon from '../src/images/wx-logo.svg?url';
+import type { ComponentLinkGroup, HeaderConfig, HeaderItem } from './types';
 
-const headerList = [
+const headerList: HeaderItem[] = [
   {
     name: '设计',
     path: jumpLocation('/design'),
@@ -15,11 +16,11 @@ const headerList = [
   },
   {
     name: '基础组件',
-    // path: '/vue/',
     type: 'base',
     target: '_self',
   },
   {
+    // 内网展示
     name: '行业组件',
     path: '/trade',
     type: 'main',
@@ -45,7 +46,7 @@ const headerList = [
   },
 ];
 
-const baseComponentsLinks = {
+const baseComponentsLinks: HeaderConfig['baseComponentsLinks'] = {
   web: {
     name: 'Web 桌面端',
     links: [
@@ -131,11 +132,11 @@ export default {
   baseComponentPrefix,
 };
 
-export const getHeaderConfig = () => {
+export const getHeaderConfig = (): HeaderConfig => {
   const intranet = isIntranet();
   const en = isEn();
 
-  const headerList = [
+  const headerItems: Array<HeaderItem | null> = [
     { name: en ? 'Design' : '设计', path: jumpLocation('/design'), type: 'main', target: '_self' },
     { name: en ? 'Components' : '基础组件', path: jumpLocation('/vue/overview'), type: 'base', target: '_self' },
     intranet ? { name: en ? 'Industry component' : '行业组件', path: '/trade', type: 'main', target: '_self' } : null,
@@ -147,9 +148,10 @@ export const getHeaderConfig = () => {
     },
     { name: en ? 'Resources' : '资源', path: jumpLocation('/source'), type: 'main', target: '_self' },
     { name: en ? 'About' : '关于', path: jumpLocation('/about/introduce'), type: 'main', target: '_self' },
-  ].filter((item) => item);
+  ];
+  const headerList = headerItems.filter((item): item is HeaderItem => item !== null);
 
-  const baseComponentsLinks = {
+  const baseComponentsLinks: { web: ComponentLinkGroup; mobile: ComponentLinkGroup } = {
     web: {
       name: en ? 'Web PC' : 'Web 桌面端',
       links: [

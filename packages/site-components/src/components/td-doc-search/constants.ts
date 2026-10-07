@@ -31,4 +31,6 @@ export const VIEW = {
   LOADING_PLACEHOLDER: 'loading_placeholder',
   RESULTS: 'results',
   EMPTY: 'empty',
-};
+} as const;
+
+export type View = (typeof VIEW)[keyof typeof VIEW];

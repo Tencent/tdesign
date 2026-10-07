@@ -2,7 +2,12 @@ import { html, define } from 'hybrids';
 import { createAISearchSDK } from './utils';
 import style from './style.less?inline';
 
-export default define({
+interface AIButtonProps {
+  framework: string;
+  demoRequestBody: string;
+}
+
+export default define<AIButtonProps>({
   tag: 'td-ai-button',
   framework: '',
   demoRequestBody: '',

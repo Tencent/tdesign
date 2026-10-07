@@ -2,30 +2,45 @@ import { html, define } from 'hybrids';
 import style from './style.less?inline';
 import Prism from 'prismjs';
 
-function getLineStyle(host) {
+interface SlotContent {
+  name: string;
+  lang: string;
+  content: string;
+}
+
+interface CodeBlockProps {
+  panel: string;
+  slotsName: string[];
+}
+
+type CodeBlockHost = CodeBlockProps & HTMLElement;
+
+function getLineStyle(host: CodeBlockHost) {
   const { slotsName, panel } = host;
   const index = slotsName?.findIndex((s) => s === panel) || 0;
 
   if (index === -1 || !host.shadowRoot) return '';
 
-  const panelEls = host.shadowRoot.querySelectorAll('.header-panel');
+  const panelEls = host.shadowRoot.querySelectorAll<HTMLElement>('.header-panel');
 
-  const { offsetLeft, offsetWidth } = panelEls[index];
+  const panelEl = panelEls[index];
+  if (!panelEl) return '';
+  const { offsetLeft, offsetWidth } = panelEl;
   return `width: ${offsetWidth}px; left: ${offsetLeft}px`;
 }
 
-function extractSlots(host) {
+function extractSlots(host: CodeBlockHost) {
   const slotsEl = Array.from(host.querySelectorAll('td-code-block > [slot]')) as HTMLElement[];
-  const slotsName = [];
-  const slotsContentMap = {};
+  const slotsName: string[] = [];
+  const slotsContentMap = new Map<string, SlotContent>();
 
   slotsEl.forEach((s) => {
     slotsName.push(s.slot);
-    slotsContentMap[s.slot] = {
+    slotsContentMap.set(s.slot, {
       name: s.slot,
       lang: s.lang,
       content: decodeURIComponent(s.innerHTML),
-    };
+    });
   });
 
   // 保存 slots
@@ -38,22 +53,26 @@ function extractSlots(host) {
   };
 }
 
-export default define({
+export default define<CodeBlockProps>({
   tag: 'td-code-block',
+  slotsName: {
+    value: (_host, value) => value || [],
+  },
   panel: {
     value: (host, v) => v || '',
     observe: (host) => {
       if (!host.shadowRoot) return;
 
-      const lineEl = host.shadowRoot.querySelector('.active-line');
-      lineEl.style = getLineStyle(host);
+      const lineEl = host.shadowRoot.querySelector<HTMLElement>('.active-line');
+      if (lineEl) lineEl.style.cssText = getLineStyle(host);
     },
   },
   render: (host) => {
     const { panel } = host;
     const { slotsName, slotsContentMap } = extractSlots(host);
 
-    const slotObj = slotsContentMap[panel];
+    const slotObj = slotsContentMap.get(panel);
+    if (!slotObj) return html``;
 
     const highlightCode = Prism.highlight(slotObj.content, Prism.languages[slotObj.lang], slotObj.lang);
 

@@ -2,7 +2,11 @@ import { html, dispatch, define } from 'hybrids';
 import style from './style.less?inline';
 import copyIcon from '@images/copy.svg?raw';
 
-function handleCopy(host) {
+interface CopyHost {
+  code: string;
+}
+
+function handleCopy(host: CopyHost & HTMLElement): void {
   if ('clipboard' in navigator) {
     navigator.clipboard.writeText(host.code).then(() => {
       Object.assign(host, { showTip: true });
@@ -19,6 +23,10 @@ function handleCopy(host) {
   document.body.appendChild(textarea);
 
   const selection = document.getSelection();
+  if (!selection) {
+    document.body.removeChild(textarea);
+    return;
+  }
   const range = document.createRange();
   range.selectNode(textarea);
   selection.removeAllRanges();
@@ -31,7 +39,7 @@ function handleCopy(host) {
   dispatch(host, 'copy', { detail: host.code });
 }
 
-export default define({
+export default define<CopyHost>({
   tag: 'td-doc-copy',
   code: '',
   render: () =>

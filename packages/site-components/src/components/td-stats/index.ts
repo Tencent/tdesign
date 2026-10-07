@@ -1,6 +1,17 @@
 import { html, define } from 'hybrids';
 
-function initStats(statsId, scriptAttrs, statsCallback?) {
+interface ScriptAttributes {
+  src: string;
+  'data-account'?: string;
+}
+
+interface StatsProps {
+  dataAccount: string;
+  track: () => void;
+  stats: undefined;
+}
+
+function initStats(statsId: string, scriptAttrs: ScriptAttributes, statsCallback?: () => void) {
   if (document.getElementById(statsId)) return;
 
   const script = document.createElement('script');
@@ -8,7 +19,8 @@ function initStats(statsId, scriptAttrs, statsCallback?) {
   script.id = statsId;
   script.type = 'text/javascript';
   Object.keys(scriptAttrs).forEach((key) => {
-    script.setAttribute(key, scriptAttrs[key]);
+    const value = scriptAttrs[key as keyof ScriptAttributes];
+    if (value !== undefined) script.setAttribute(key, value);
   });
   script.onload = () => {
     statsCallback && statsCallback();
@@ -16,7 +28,7 @@ function initStats(statsId, scriptAttrs, statsCallback?) {
   document.head.appendChild(script);
 }
 
-export default define({
+export default define<StatsProps>({
   tag: 'td-stats',
   dataAccount: 'tdesign',
   track: {

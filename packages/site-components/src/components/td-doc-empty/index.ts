@@ -1,7 +1,11 @@
 import { html, define } from 'hybrids';
 import style from './style.less?inline';
 
-function renderEmpty(type) {
+interface EmptyHost {
+  type: string;
+}
+
+function renderEmpty(type: string) {
   if (type === 'design') {
     return html`
       <div class="TDesign-doc-empty__design">
@@ -12,7 +16,7 @@ function renderEmpty(type) {
   }
 }
 
-export default define({
+export default define<EmptyHost>({
   tag: 'td-doc-empty',
   type: 'design',
   render: (host) => {

@@ -16,21 +16,39 @@ interface WebChatSdkConstructor {
 }
 
 interface Window {
-  [key: string]: any;
   WebChatSdk?: WebChatSdkConstructor;
   webChatSdk?: WebChatSdkInstance;
+  NProgress?: typeof import('nprogress');
+  _horizon?: { track(): void };
+  aegis?: unknown;
+  pgvMain?: () => void;
+  showTdMessage?: (options: { content: string; duration?: number; theme?: string }) => void;
+  platforms?: Array<{ name: string; url: string }>;
+  routerList?: unknown[];
+  docInfo?: { title: string; desc: string[] };
+  contributors?: Array<{ username: string }>;
+  code?: string;
+  tsCode?: string;
+  compositionCode?: string;
+  usageConfig?: unknown[];
+  usagePanelList?: Array<{ label: string; value: string }>;
 }
 
-interface Element {
-  [key: string]: any;
+interface WindowEventMap {
+  pushState: Event;
+  replaceState: Event;
+  storageChange: Event;
 }
 
-interface HTMLElement {
-  [key: string]: any;
+interface AegisConstructor {
+  new (options: {
+    id: string;
+    uin?: string;
+    reportApiSpeed: boolean;
+    reportAssetSpeed: boolean;
+    spa: boolean;
+    hostUrl?: string;
+  }): unknown;
 }
 
-interface EventTarget {
-  [key: string]: any;
-}
-
-declare const Aegis: any;
+declare const Aegis: AegisConstructor;

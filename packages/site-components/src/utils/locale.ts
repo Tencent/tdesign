@@ -1,6 +1,6 @@
 import { getLang, isEn } from '../utils';
 
-const callbacks = [];
+const callbacks: EventListener[] = [];
 
 function defaultChangeCallBack() {
   if (isEn()) {
@@ -15,13 +15,13 @@ function defaultChangeCallBack() {
   }
 }
 
-function registerLocaleChange(cb = defaultChangeCallBack) {
+function registerLocaleChange(cb: EventListener = defaultChangeCallBack) {
   if (callbacks.includes(cb)) return;
   callbacks.push(cb);
   document.addEventListener('tdesign_site_lang', cb);
 }
 
-function jumpLocation(url) {
+function jumpLocation(url: string) {
   return isEn() ? `${url}-en` : url;
 }
 

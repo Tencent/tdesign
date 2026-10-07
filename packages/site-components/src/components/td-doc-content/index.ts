@@ -5,8 +5,15 @@ import style from './style.less?inline';
 const FIXED_HEADER_TOP = 228;
 const CONTENT_SELECTORS = ['div[name="DEMO"]', 'div[name="API"]', 'div[name="DESIGN"]', 'div[name="DOC"]'];
 
-function anchorHighlight() {
-  function getLinkTopList(anchorList) {
+interface ContentHost {
+  platform: string;
+  pageStatus: string;
+  mobileBodyStyle: { paddingRight?: string };
+  fixedAnchor: boolean | undefined;
+}
+
+function anchorHighlight(): void {
+  function getLinkTopList(anchorList: HTMLAnchorElement[]): number[] {
     const linkList = anchorList.map((anchor) => {
       const [, id] = decodeURIComponent(anchor.href).split('#');
       return document.getElementById(id);
@@ -18,7 +25,7 @@ function anchorHighlight() {
     });
   }
 
-  function highlightAnchor(anchorList, linkTopList) {
+  function highlightAnchor(anchorList: HTMLAnchorElement[], linkTopList: number[]): void {
     const { scrollTop } = document.documentElement;
 
     for (let i = 0; i < linkTopList.length; i++) {
@@ -35,13 +42,13 @@ function anchorHighlight() {
     const wrapper = document.querySelector(item);
     if (!wrapper) return;
 
-    const anchorList = Array.from(wrapper.querySelectorAll('.tdesign-toc_list_item_a')) || [];
+    const anchorList = Array.from(wrapper.querySelectorAll<HTMLAnchorElement>('.tdesign-toc_list_item_a'));
     const linkTopList = getLinkTopList(anchorList);
     highlightAnchor(anchorList, linkTopList);
   });
 }
 
-export default define({
+export default define<ContentHost>({
   tag: 'td-doc-content',
   platform: 'web',
   pageStatus: 'show',
@@ -49,12 +56,12 @@ export default define({
   fixedAnchor: {
     value: (_host, v) => v || undefined,
     connect: () => {
-      let demoLoadObserver;
+      let demoLoadObserver: MutationObserver | undefined;
 
       function changeTocHeight() {
         const { scrollTop } = document.documentElement;
         // 固定右侧目录
-        const containers = document.querySelectorAll('.tdesign-toc_container');
+        const containers = document.querySelectorAll<HTMLElement>('.tdesign-toc_container');
 
         if (scrollTop > FIXED_HEADER_TOP) {
           containers.forEach((container) => {
@@ -70,9 +77,9 @@ export default define({
       }
 
       // 优化锚点滚动体验
-      function proxyTitleAnchor(e) {
-        if (e.target.tagName !== 'A') return;
-        const { target } = e;
+      function proxyTitleAnchor(e: MouseEvent) {
+        const target = e.target;
+        if (!(target instanceof HTMLAnchorElement)) return;
         const href = decodeURIComponent(target.href);
         if (!href.includes('#')) return;
 
@@ -91,9 +98,10 @@ export default define({
       function waitForDemoLoad() {
         if (handleDemoLoad()) return;
 
-        demoLoadObserver = new MutationObserver(() => {
-          if (handleDemoLoad()) demoLoadObserver.disconnect();
+        const observer = new MutationObserver(() => {
+          if (handleDemoLoad()) observer.disconnect();
         });
+        demoLoadObserver = observer;
         demoLoadObserver.observe(document.body, { childList: true, subtree: true });
       }
 

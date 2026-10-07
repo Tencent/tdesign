@@ -6,10 +6,14 @@ function handleBacktop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-export default define({
+interface BacktopProps {
+  backtopShow: boolean;
+}
+
+export default define<BacktopProps>({
   tag: 'td-backtop',
   backtopShow: {
-    value: (_host, v) => v || false,
+    value: (_host, value) => value || false,
     connect: (host, key, invalidate) => {
       function toggleVisible() {
         const { scrollTop } = document.documentElement;

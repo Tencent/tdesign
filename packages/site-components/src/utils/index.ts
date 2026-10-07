@@ -3,10 +3,13 @@
  * @function debounce 防抖
  * @param func, delay
  */
-export function debounce(func, delay = 300) {
-  let timer;
-  return function (...args) {
-    func.apply(this, arguments);
+export function debounce<TThis, TArgs extends unknown[]>(
+  func: (this: TThis, ...args: TArgs) => void,
+  delay = 300,
+) {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  return function (this: TThis, ...args: TArgs) {
+    func.apply(this, args);
     clearTimeout(timer);
     timer = setTimeout(() => func.apply(this, args), delay);
   };
@@ -16,19 +19,25 @@ export function debounce(func, delay = 300) {
  * @function throttle 节流
  * @param func, delay
  */
-export function throttle(func, delay = 300) {
+export function throttle(this: unknown, func: (...args: unknown[]) => void, delay = 300) {
   let last = 0;
+  const context = this;
+  const invocationArgs = Array.from(arguments);
   return () => {
     const curr = +new Date();
     if (curr - last > delay) {
-      func.apply(this, arguments);
+      func.apply(context, invocationArgs);
       last = curr;
     }
   };
 }
 
+interface SearchableHost extends HTMLElement {
+  patchDom?: boolean;
+}
+
 // render shadow dom into light dom
-export function patchShadowDomIntoDom(host) {
+export function patchShadowDomIntoDom(host?: SearchableHost) {
   if (!host) return;
   // 将shadow dom patch 到组件中方便搜索, 前提是组件不能有 default slot
   function patchNode() {
@@ -56,8 +65,8 @@ export function isGlobalConfigPage() {
 
 // 手机定位特殊处理
 export const mobileBodyStyle = {
-  value: (host, v) => v || {},
-  connect: (host) => {
+  value: (_host: MobileBodyStyleHost, value?: MobileBodyStyle) => value || {},
+  connect: (host: MobileBodyStyleHost) => {
     // 响应手机定位
     const handleResize = () => {
       const mobileBodyStyle: { paddingRight?: string } = {};
@@ -92,9 +101,9 @@ export function watchHtmlMode(callback: (themeMode: string) => void = () => {}) 
   const targetNode = document.documentElement;
   const config = { attributes: true };
 
-  const observerCallback = (mutationsList) => {
+  const observerCallback: MutationCallback = (mutationsList) => {
     for (const mutation of mutationsList) {
-      if (mutation.attributeName === 'theme-mode') {
+      if (mutation.attributeName === 'theme-mode' && mutation.target instanceof Element) {
         const themeMode = mutation.target.getAttribute('theme-mode') || 'light';
         if (themeMode) callback(themeMode);
       }
@@ -116,7 +125,7 @@ export function isEn() {
   return getLang() === 'en';
 }
 
-export function parseBoolean(value, defaultValue = true) {
+export function parseBoolean(value: unknown, defaultValue = true) {
   if (value === undefined) {
     return defaultValue;
   }
@@ -126,8 +135,17 @@ export function parseBoolean(value, defaultValue = true) {
   return Boolean(value);
 }
 
-export const convert2PascalCase = (name) =>
+export const convert2PascalCase = (name: string) =>
   name
     .split('-')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join('');
+
+interface MobileBodyStyle {
+  paddingRight?: string;
+}
+
+interface MobileBodyStyleHost extends HTMLElement {
+  platform?: string;
+  mobileBodyStyle: MobileBodyStyle;
+}

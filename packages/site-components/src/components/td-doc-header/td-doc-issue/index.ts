@@ -20,7 +20,25 @@ const issueUrlMap = {
   'react-chat': `https://github.com/Tencent/tdesign-react/issues`,
 };
 
-function parseUrl() {
+type Framework = keyof typeof issueUrlMap;
+type IssueState = 'open' | 'closed';
+
+interface IssueHost {
+  openNum: number | '';
+  closedNum: number | '';
+}
+
+interface IssueUrls {
+  newUrl: string;
+  openUrl: string;
+  closedUrl: string;
+}
+
+interface GithubSearchResponse {
+  total_count: number;
+}
+
+function parseUrl(): RegExpMatchArray | [] {
   let urlPath = location.pathname;
   // 预览站点为hash模式
   if (location.pathname === '/' && location.hash) {
@@ -31,23 +49,28 @@ function parseUrl() {
   return matches;
 }
 
-function getCurrentIssueUrl() {
+function isFramework(value: string | undefined): value is Framework {
+  return Boolean(value && Object.prototype.hasOwnProperty.call(issueUrlMap, value));
+}
+
+function getCurrentIssueUrl(): IssueUrls {
   const [, framework, componentName] = parseUrl();
+  const issueBaseUrl = isFramework(framework) ? issueUrlMap[framework] : '';
 
   return {
-    newUrl: `${issueUrlMap[framework]}/new/choose`,
-    openUrl: `${issueUrlMap[framework]}?q=is:issue+is:open+${componentName}`,
-    closedUrl: `${issueUrlMap[framework]}?q=is:issue+is:closed+${componentName}`,
+    newUrl: `${issueBaseUrl}/new/choose`,
+    openUrl: `${issueBaseUrl}?q=is:issue+is:open+${componentName}`,
+    closedUrl: `${issueBaseUrl}?q=is:issue+is:closed+${componentName}`,
   };
 }
 
-function handleIssueClick(e, issueInfo, type) {
+function handleIssueClick(e: Event, issueInfo: IssueUrls, type: 'new' | IssueState): void {
   e.preventDefault();
-  const url = issueInfo[`${type}Url`];
+  const url = type === 'new' ? issueInfo.newUrl : type === 'open' ? issueInfo.openUrl : issueInfo.closedUrl;
   window.open(url, '_blank');
 }
 
-function renderIssue(host) {
+function renderIssue(host: IssueHost & HTMLElement) {
   const { openNum, closedNum } = host;
   const [, , componentName] = parseUrl();
 
@@ -62,15 +85,24 @@ function renderIssue(host) {
 
   return html`
     <section id="issue" class="TDesign-component-issue">
-      <a onclick="${(host, e) => handleIssueClick(e, issueInfo, 'new')}" class="item">
+      <a
+        onclick="${(_host: IssueHost & HTMLElement, e?: Event) => e && handleIssueClick(e, issueInfo, 'new')}"
+        class="item"
+      >
         <i innerHTML=${addIcon}></i>
         <span>Issue</span>
       </a>
-      <a onclick="${(host, e) => handleIssueClick(e, issueInfo, 'open')}" class="item">
+      <a
+        onclick="${(_host: IssueHost & HTMLElement, e?: Event) => e && handleIssueClick(e, issueInfo, 'open')}"
+        class="item"
+      >
         <i innerHTML=${infoIcon}></i>
         <span>${issueInfo?.openNum || ''} Open</span>
       </a>
-      <a onclick="${(host, e) => handleIssueClick(e, issueInfo, 'closed')}" class="item">
+      <a
+        onclick="${(_host: IssueHost & HTMLElement, e?: Event) => e && handleIssueClick(e, issueInfo, 'closed')}"
+        class="item"
+      >
         <i innerHTML=${checkIcon}></i>
         <span>${issueInfo?.closedNum || ''} Closed</span>
       </a>
@@ -79,20 +111,26 @@ function renderIssue(host) {
 }
 
 // 获取 github issue 数量
-const getGithubIssueUrl = (name, state = 'open', repo) =>
+const getGithubIssueUrl = (name: string, state: IssueState, repo: string): string =>
   `https://api.github.com/search/issues?q=is:issue+is:${state}+${name}+repo:Tencent/${repo}`;
-function fetchGithubIssueNum(host, name, state = 'open', framework) {
+function isGithubSearchResponse(value: unknown): value is GithubSearchResponse {
+  if (typeof value !== 'object' || value === null) return false;
+  return Object.entries(value).some(([key, field]) => key === 'total_count' && typeof field === 'number');
+}
+
+function fetchGithubIssueNum(host: IssueHost & HTMLElement, name: string, state: IssueState, framework: string): void {
   const issueUrl = getGithubIssueUrl(name, state, `tdesign-${framework}`);
   const cacheKey = `__tdesign_${framework}_${name}_${state}__`;
   const cache = sessionStorage.getItem(cacheKey);
 
   if (cache) {
-    const data = JSON.parse(cache);
-    Object.assign(host, { [`${state}Num`]: data.total_count });
+    const data: unknown = JSON.parse(cache);
+    if (isGithubSearchResponse(data)) Object.assign(host, { [`${state}Num`]: data.total_count });
   } else {
     fetch(issueUrl)
-      .then((res) => res.json())
+      .then((res) => res.json() as Promise<unknown>)
       .then((data) => {
+        if (!isGithubSearchResponse(data)) throw new TypeError('Invalid GitHub issue response');
         Object.assign(host, { [`${state}Num`]: data.total_count });
         sessionStorage.setItem(cacheKey, JSON.stringify(data));
       })
@@ -102,13 +140,13 @@ function fetchGithubIssueNum(host, name, state = 'open', framework) {
   }
 }
 
-export default define({
+export default define<IssueHost>({
   tag: 'td-doc-issue',
   openNum: {
     value: (_host, v) => v || '',
     connect: (host) => {
       const [, framework, componentName] = parseUrl();
-      if (!componentName) return;
+      if (!componentName || !framework) return;
       fetchGithubIssueNum(host, componentName, 'open', framework);
     },
   },
@@ -116,7 +154,7 @@ export default define({
     value: (_host, v) => v || '',
     connect: (host) => {
       const [, framework, componentName] = parseUrl();
-      if (!componentName) return;
+      if (!componentName || !framework) return;
       fetchGithubIssueNum(host, componentName, 'closed', framework);
     },
   },

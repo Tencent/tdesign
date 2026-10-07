@@ -6,9 +6,25 @@ import mobileIcon from '@images/mobile.svg?raw';
 import closeIcon from '@images/close.svg?raw';
 import jumpIcon from '@images/jump.svg?raw';
 
-function toggleCollapsePhone(host) {
-  if (!host.shadowRoot) return;
-  const tdDocPhoneMask = host.shadowRoot.querySelector('.TDesign-doc-phone-mask').classList;
+interface PhoneFixedStyle {
+  position?: 'absolute' | 'fixed';
+  top?: string;
+}
+
+interface DocPhoneProps {
+  headless: boolean;
+  href: string;
+  QRCode: typeof QRCode;
+  qrCanvas: HTMLCanvasElement | null;
+  qrcodeUrl: string;
+  fixedStyle: PhoneFixedStyle;
+}
+
+type DocPhoneHost = HTMLElement & DocPhoneProps;
+
+function toggleCollapsePhone(host: DocPhoneHost): void {
+  const tdDocPhoneMask = host.shadowRoot?.querySelector<HTMLElement>('.TDesign-doc-phone-mask')?.classList;
+  if (!tdDocPhoneMask) return;
   if (tdDocPhoneMask.contains('hide')) {
     tdDocPhoneMask.remove('hide');
     tdDocPhoneMask.add('show');
@@ -18,18 +34,18 @@ function toggleCollapsePhone(host) {
   }
 }
 
-export default define({
+export default define<DocPhoneProps>({
   tag: 'td-doc-phone',
   headless: false,
   href: '',
   QRCode: () => QRCode,
-  qrCanvas: ({ render }) => render().querySelector('#qrcode'),
+  qrCanvas: (host) => host.shadowRoot?.querySelector<HTMLCanvasElement>('#qrcode') ?? null,
   qrcodeUrl: {
     value: (host, v) => v,
     connect: (host) => {
       requestAnimationFrame(() => {
         const qrcodeSlot = host.querySelector('[slot="qrcode"]');
-        const contentSlot = host.shadowRoot.querySelector('[slot="content"]');
+        const contentSlot = host.shadowRoot?.querySelector<HTMLElement>('[slot="content"]');
 
         if (!qrcodeSlot || !contentSlot) return;
         contentSlot.innerHTML = qrcodeSlot.outerHTML;
@@ -37,7 +53,8 @@ export default define({
     },
     observe: (host, value) => {
       if (!host.qrCanvas) return;
-      QRCode.toCanvas(host.qrCanvas, value, { width: 96, height: 96 });
+      const options = { width: 96, height: 96 };
+      QRCode.toCanvas(host.qrCanvas, value, options);
     },
   },
   fixedStyle: {
@@ -92,7 +109,8 @@ export default define({
         if (!host.shadowRoot) return;
         const isMobileResponse = window.innerWidth < 960;
 
-        const tdDocPhoneMask = host.shadowRoot.querySelector('.TDesign-doc-phone-mask');
+        const tdDocPhoneMask = host.shadowRoot.querySelector<HTMLElement>('.TDesign-doc-phone-mask');
+        if (!tdDocPhoneMask) return;
         if (isMobileResponse) {
           tdDocPhoneMask.classList.remove('show');
           tdDocPhoneMask.classList.add('hide');

@@ -6,14 +6,37 @@ import HelpCircleFilled from 'tdesign-icons-svg/src/help-circle-filled.svg?raw';
 
 import style from './style.less?inline';
 
-function renderIcon(theme) {
+type MessageTheme = 'info' | 'success' | 'warning' | 'error' | 'question';
+
+interface MessageOptions {
+  content: string;
+  duration?: number;
+  theme?: MessageTheme;
+}
+
+interface MessageProps {
+  theme: MessageTheme;
+  duration: number;
+  zIndex: number;
+  content: string;
+  showMessage: boolean;
+  show: (options: MessageOptions) => void;
+}
+
+type MessageElement = HTMLElement & MessageProps;
+
+function isMessageTheme(value: string | undefined): value is MessageTheme {
+  return value === 'info' || value === 'success' || value === 'warning' || value === 'error' || value === 'question';
+}
+
+function renderIcon(theme: MessageTheme): string | undefined {
   if (theme === 'info') return InfoCircleFilled;
   if (theme === 'success') return CheckCircleFilled;
   if (['warning', 'error'].includes(theme)) return ErrorCircleFilled;
   if (theme === 'question') return HelpCircleFilled;
 }
 
-export default define({
+export default define<MessageProps>({
   tag: 'td-message',
   theme: 'info',
   duration: 3000,
@@ -59,6 +82,7 @@ window.showTdMessage = function ({ content, duration, theme }) {
     document.body.appendChild(messageInstance);
   }
   setTimeout(() => {
-    document.getElementById(instanceId).show({ content, duration, theme });
+    const instance = document.getElementById(instanceId) as MessageElement | null;
+    instance?.show({ content, duration, theme: isMessageTheme(theme) ? theme : undefined });
   });
 };

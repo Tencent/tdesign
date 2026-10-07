@@ -7,27 +7,28 @@
  */
 
 import { stripHtml } from './utils';
+import type { RecentInput, RecentItem } from './types';
 
 const STORAGE_KEY = 'td-docsearch:recent';
 const MAX_ITEMS = 5;
 
-function safeRead() {
+function safeRead(): RecentItem[] {
   try {
     if (typeof localStorage === 'undefined') return [];
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
-    const arr = JSON.parse(raw);
+    const arr: RecentItem[] = JSON.parse(raw);
     return Array.isArray(arr) ? arr : [];
-  } catch (_) {
+  } catch {
     return [];
   }
 }
 
-function safeWrite(list) {
+function safeWrite(list: RecentItem[]): void {
   try {
     if (typeof localStorage === 'undefined') return;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(0, MAX_ITEMS)));
-  } catch (_) {
+  } catch {
     /* noop */
   }
 }
@@ -36,7 +37,7 @@ function safeWrite(list) {
  * 读取最近搜索。对历史数据做一次性兼容：若某条记录的 title/breadcrumb 还含有 HTML，
  * 就地 strip 一次再返回（不重写存储，交由下一次 addRecent 自然覆盖）。
  */
-export function listRecent() {
+export function listRecent(): RecentItem[] {
   const list = safeRead();
   let mutated = false;
   const cleaned = list.map((item) => {
@@ -50,7 +51,7 @@ export function listRecent() {
   return cleaned;
 }
 
-export function addRecent(record) {
+export function addRecent(record: RecentInput): RecentItem[] | undefined {
   if (!record || !record.url) return;
   const list = safeRead();
   const normalized = {
@@ -65,7 +66,7 @@ export function addRecent(record) {
   return next;
 }
 
-export function removeRecent(url) {
+export function removeRecent(url: string): RecentItem[] {
   const list = safeRead();
   const next = list.filter((x) => x.url !== url);
   safeWrite(next);

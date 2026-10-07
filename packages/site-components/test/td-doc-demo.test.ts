@@ -1,9 +1,20 @@
 /* eslint-env jest */
 
-const mockDefine = jest.fn((definition) => definition);
+const mockDefine = jest.fn((definition: unknown) => definition);
 const mockHtml = jest.fn();
 const mockDispatch = jest.fn();
-const testGlobal = global as any;
+
+interface DemoTestGlobals {
+  window: {
+    addEventListener: jest.Mock<void, [string, EventListener]>;
+    removeEventListener: jest.Mock<void, [string, EventListener]>;
+  };
+  localStorage: {
+    getItem: jest.Mock<string, [string]>;
+  };
+}
+
+const testGlobal = globalThis as unknown as DemoTestGlobals;
 
 jest.mock('hybrids', () => ({
   define: mockDefine,
@@ -23,24 +34,26 @@ jest.mock('prismjs/components/prism-typescript', () => ({}));
 const docDemo = require('../src/components/td-doc-demo').default;
 
 describe('td-doc-demo theme synchronization', () => {
-  let listeners;
+  let listeners: Map<string, EventListener>;
 
   beforeEach(() => {
     listeners = new Map();
     testGlobal.window = {
-      addEventListener: jest.fn((type, listener) => listeners.set(type, listener)),
-      removeEventListener: jest.fn((type, listener) => {
+      addEventListener: jest.fn<void, [string, EventListener]>((type, listener) => {
+        listeners.set(type, listener);
+      }),
+      removeEventListener: jest.fn<void, [string, EventListener]>((type, listener) => {
         if (listeners.get(type) === listener) listeners.delete(type);
       }),
     };
     testGlobal.localStorage = {
-      getItem: jest.fn(() => 'dark'),
+      getItem: jest.fn<string, [string]>(() => 'dark'),
     };
   });
 
   afterEach(() => {
-    delete testGlobal.window;
-    delete testGlobal.localStorage;
+    Reflect.deleteProperty(testGlobal, 'window');
+    Reflect.deleteProperty(testGlobal, 'localStorage');
   });
 
   it('updates the code block theme when td-theme-tabs changes the site theme', () => {
@@ -50,8 +63,9 @@ describe('td-doc-demo theme synchronization', () => {
     const listener = listeners.get('storageChange');
 
     expect(listener).toEqual(expect.any(Function));
+    if (!listener) throw new Error('Expected the storageChange listener to be registered');
 
-    listener();
+    listener(new Event('storageChange'));
 
     expect(host.theme).toBe('dark');
     expect(invalidate).toHaveBeenCalledTimes(1);

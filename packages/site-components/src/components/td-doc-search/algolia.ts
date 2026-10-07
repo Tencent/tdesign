@@ -7,6 +7,15 @@
  */
 
 import { stripHtml } from './utils';
+import {
+  HIERARCHY_LEVELS,
+  type AlgoliaHit,
+  type AlgoliaSearchResponse,
+  type FormattedHit,
+  type HierarchyLevel,
+  type HitGroup,
+  type SearchOptions,
+} from './types';
 
 // 默认后备值（供独立调用 / 未配置时使用）
 export const DEFAULT_APP_ID = 'ALGOLIA_APP_ID';
@@ -31,16 +40,6 @@ export function getDefaultUrlFilter() {
 const HIGHLIGHT_PRE_TAG = '<mark class="TDesign-docsearch-mark">';
 const HIGHLIGHT_POST_TAG = '</mark>';
 
-interface SearchOptions {
-  query?: string;
-  signal?: AbortSignal;
-  appId?: string;
-  apiKey?: string;
-  indexName?: string;
-  urlFilter?: string;
-  hitsPerPage?: number;
-}
-
 /**
  * 调用 Algolia REST Search API
  * @param {Object}      options
@@ -61,7 +60,7 @@ export async function searchAlgolia({
   indexName = DEFAULT_INDEX_NAME,
   urlFilter = getDefaultUrlFilter(),
   hitsPerPage = DEFAULT_HITS_PER_PAGE,
-}: SearchOptions = {}) {
+}: SearchOptions = {}): Promise<AlgoliaHit[]> {
   const q = (query || '').trim();
   if (!q) return [];
 
@@ -101,7 +100,7 @@ export async function searchAlgolia({
 
     if (!res.ok) throw new Error(`Algolia ${res.status}`);
 
-    const data = await res.json();
+    const data: AlgoliaSearchResponse = await res.json();
     const hits = Array.isArray(data?.hits) ? data.hits : [];
 
     if (!urlFilter) return hits;
@@ -110,9 +109,9 @@ export async function searchAlgolia({
       return url.includes(urlFilter);
     });
   } catch (err) {
-    if (err && err.name === 'AbortError') throw err;
+    if (err instanceof Error && err.name === 'AbortError') throw err;
     // eslint-disable-next-line no-console
-    console.warn('[td-doc-search] search failed:', err && err.message);
+    console.warn('[td-doc-search] search failed:', err instanceof Error ? err.message : String(err));
     return [];
   }
 }
@@ -130,10 +129,10 @@ export async function searchAlgolia({
  * @param {Array} hits
  * @returns {Array<{ key: string, title: string, items: Array }>}
  */
-export function groupHits(hits = []) {
-  const map = new Map();
+export function groupHits(hits: AlgoliaHit[] = []): HitGroup[] {
+  const map = new Map<string, HitGroup>();
   // 外部记录：key -> 是否已锁定到带 <mark> 的高亮 title
-  const locked = new Map();
+  const locked = new Map<string, boolean>();
 
   for (const item of hits) {
     const h = item?.hierarchy || {};
@@ -143,6 +142,7 @@ export function groupHits(hits = []) {
 
     if (!map.has(key)) map.set(key, { key, title: key, items: [] });
     const g = map.get(key);
+    if (!g) continue;
     // 顺便缓存 formatHit 结果，后续 flattenGroups 直接读
     item.__formatted = formatHit(item);
     g.items.push(item);
@@ -168,17 +168,18 @@ export function groupHits(hits = []) {
  * - breadcrumb 祖先路径（给"最近搜索"等场景使用，纯文本）
  * - snippet    content 命中时的正文片段
  */
-export function formatHit(hit) {
+export function formatHit(hit?: AlgoliaHit | null): FormattedHit {
   if (!hit) return { title: '', subtitle: '', breadcrumb: '', snippet: '', url: '' };
   const h = hit.hierarchy || {};
   const hlHierarchy = hit._highlightResult?.hierarchy || {};
   const snippetHierarchy = hit._snippetResult?.hierarchy || {};
   const contentHl = hit._snippetResult?.content?.value || hit._highlightResult?.content?.value || hit.content || '';
 
-  const levels = ['lvl0', 'lvl1', 'lvl2', 'lvl3', 'lvl4', 'lvl5', 'lvl6'];
+  const levels = HIERARCHY_LEVELS;
 
   // 拿到某一 level 的展示值，优先高亮版
-  const pickLevel = (lv) => hlHierarchy[lv]?.value || snippetHierarchy[lv]?.value || h[lv] || '';
+  const pickLevel = (lv: HierarchyLevel): string =>
+    hlHierarchy[lv]?.value || snippetHierarchy[lv]?.value || h[lv] || '';
 
   // 找出实际存在的层级数组（从深到浅）
   const existing = levels.filter((lv) => !!h[lv]);

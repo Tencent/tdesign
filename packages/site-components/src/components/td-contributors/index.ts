@@ -3,16 +3,42 @@ import style from './style.less?inline';
 
 const apiUrl = import.meta.env.VITE_CONTRIBUTORS_API_URL;
 
-function renderContributors(list) {
-  if (!list.length) return html``;
+interface Contributor {
+  username: string;
+  roleNames: string;
+  role: string[];
+  roleName: string[];
+}
 
-  const contributors = list.filter((item) => typeof item === 'object' && item !== null);
+interface ContributorTask {
+  name: string;
+  fullName: string;
+  contributors: string[];
+  pmcs: string[];
+}
+
+interface ComponentContributors {
+  name: string;
+  tasks: ContributorTask[];
+}
+
+type ContributorsData = Record<string, ComponentContributors[]>;
+
+interface ContributorsProps {
+  platform: string;
+  framework: string;
+  componentName: string;
+  contributorsData: ContributorsData;
+}
+
+function renderContributors(list: Contributor[]) {
+  if (!list.length) return html``;
 
   return html`
     <section class="TDesign-contributors">
       <h3 class="title">Contributors</h3>
       <div class="TDesign-contributors__content">
-        ${contributors.map(
+        ${list.map(
           (item) => html`
             <td-avatar username="${item?.username}" content="${item?.roleNames} ${item?.username}"></td-avatar>
           `,
@@ -22,7 +48,12 @@ function renderContributors(list) {
   `;
 }
 
-function getContributors(platform, framework, componentName, contributorsData) {
+function getContributors(
+  platform: string,
+  framework: string,
+  componentName: string,
+  contributorsData: ContributorsData,
+): Contributor[] {
   const taskReg = new RegExp(`api|interaction|design|ui|^${framework}$|${framework}-test`);
 
   if (!platform || !framework || !componentName || !contributorsData[platform]) return [];
@@ -33,30 +64,31 @@ function getContributors(platform, framework, componentName, contributorsData) {
   let { tasks } = componentInfo;
   tasks = tasks.filter((item) => item.name.search(taskReg) !== -1 && item.contributors.length > 0);
 
-  const members = {};
+  const members = new Map<string, { role: string[]; roleName: string[] }>();
   tasks.forEach((c) => {
-    ['contributors', 'pmcs'].forEach((key) => {
+    (['contributors', 'pmcs'] as const).forEach((key) => {
       c[key].forEach((m) => {
-        if (members[m]) {
-          members[m].role.push(c.name);
-          members[m].roleName.push(c.fullName);
+        const member = members.get(m);
+        if (member) {
+          member.role.push(c.name);
+          member.roleName.push(c.fullName);
         } else {
-          members[m] = { role: [c.name], roleName: [c.fullName] };
+          members.set(m, { role: [c.name], roleName: [c.fullName] });
         }
       });
     });
   });
 
-  return Object.keys(members).map((username) => {
+  return Array.from(members, ([username, member]) => {
     return {
       username,
-      roleNames: [...new Set(members[username].roleName)].join('/'),
-      ...members[username],
+      roleNames: [...new Set(member.roleName)].join('/'),
+      ...member,
     };
   });
 }
 
-export default define({
+export default define<ContributorsProps>({
   tag: 'td-contributors',
   platform: '',
   framework: '',
@@ -67,13 +99,13 @@ export default define({
       const cache = sessionStorage.getItem('__tdesign_contributors__');
 
       if (cache) {
-        const data = JSON.parse(cache);
+        const data = JSON.parse(cache) as ContributorsData;
         Object.assign(host, { [key]: data });
         invalidate();
       } else {
         fetch(apiUrl)
           .then((res) => res.json())
-          .then((data) => {
+          .then((data: ContributorsData) => {
             Object.assign(host, { [key]: data });
             sessionStorage.setItem('__tdesign_contributors__', JSON.stringify(data));
             invalidate();

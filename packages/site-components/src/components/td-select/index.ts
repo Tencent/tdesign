@@ -3,10 +3,28 @@ import style from './style.less?inline';
 import portalStyle from './portal.less?inline';
 import fakeArrowIcon from '@images/fake-arrow.svg?raw';
 
-function renderOptions(host) {
+type SelectValue = string | number;
+
+interface SelectOption {
+  label: string;
+  value: SelectValue;
+}
+
+interface SelectProps {
+  borderless: boolean;
+  value: SelectValue;
+  visible: boolean;
+  options: SelectOption[];
+}
+
+type SelectHost = SelectProps & HTMLElement;
+
+interface VisibleChangeEvent extends CustomEvent<{ visible: boolean }> {}
+
+function renderOptions(host: SelectHost) {
   const { options = [] } = host;
 
-  function handleItemClick(host, item) {
+  function handleItemClick(host: SelectHost, item: SelectOption) {
     host.value = item.value;
     requestAnimationFrame(() => {
       host.visible = false;
@@ -20,7 +38,7 @@ function renderOptions(host) {
         const isActive = item.value == host.value;
         return html`
           <li
-            onclick="${(host) => handleItemClick(host, item)}"
+            onclick="${(host: SelectHost) => handleItemClick(host, item)}"
             class="TDesign-select-list__item ${isActive ? 'is-active' : ''}"
           >
             ${item.label}
@@ -31,7 +49,7 @@ function renderOptions(host) {
   `;
 }
 
-export default define({
+export default define<SelectProps>({
   tag: 'td-select',
   borderless: false,
   value: '',
@@ -42,8 +60,8 @@ export default define({
   render: (host) => {
     const { options, value, visible, borderless } = host;
 
-    const activeItem = options.find((item) => item.value == value) || {};
-    const inputValue = activeItem.label || '';
+    const activeItem = options.find((item) => item.value == value);
+    const inputValue = activeItem?.label || '';
 
     const selectInputClass = {
       focus: visible,
@@ -58,7 +76,7 @@ export default define({
         trigger-type="click"
         portal-class="td-select-portal"
         portalStyle="${portalStyle}"
-        onvisible-change="${(host, e) => (host.visible = e.detail.visible)}"
+        onvisible-change="${(host: SelectHost, event: VisibleChangeEvent) => (host.visible = event.detail.visible)}"
       >
         <div class="${selectInputClass}">
           <input class="TDesign-select-input__inner" readonly value="${inputValue}" />

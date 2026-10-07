@@ -2,10 +2,15 @@ import { html, define } from 'hybrids';
 import NProgress from 'nprogress';
 import style from './style.less?inline';
 
-export default define({
+interface DocLayoutProps {
+  loaded: boolean;
+  direction: string;
+}
+
+export default define<DocLayoutProps>({
   tag: 'td-doc-layout',
   loaded: {
-    value: (_host, v) => v || false,
+    value: (_host, value) => value || false,
     connect: (host, key) => {
       function onLoad() {
         Object.assign(host, { [key]: true });

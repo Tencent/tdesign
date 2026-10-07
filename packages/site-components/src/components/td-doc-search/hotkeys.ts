@@ -5,11 +5,16 @@
  *  - Esc -> close
  */
 
-function isEditable(el) {
+interface HotkeyHandlers {
+  onOpen: () => void;
+  onClose: () => void;
+}
+
+function isEditable(el: Element | null): boolean {
   if (!el) return false;
   const tag = (el.tagName || '').toLowerCase();
   if (tag === 'input' || tag === 'textarea' || tag === 'select') return true;
-  if (el.isContentEditable) return true;
+  if (el instanceof HTMLElement && el.isContentEditable) return true;
   return false;
 }
 
@@ -18,10 +23,10 @@ function isEditable(el) {
  * @param {{ onOpen: () => void, onClose: () => void }} handlers
  * @returns {() => void} 注销函数
  */
-export function registerHotkeys({ onOpen, onClose }) {
+export function registerHotkeys({ onOpen, onClose }: HotkeyHandlers): () => void {
   if (typeof window === 'undefined') return () => {};
 
-  const handler = (e) => {
+  const handler = (e: KeyboardEvent): void => {
     // Cmd/Ctrl + K
     if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
       e.preventDefault();

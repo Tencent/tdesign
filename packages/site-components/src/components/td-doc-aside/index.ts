@@ -1,10 +1,26 @@
-import { html, dispatch, define } from 'hybrids';
+import { html, dispatch, define, type Component } from 'hybrids';
 import menuFoldIcon from '@images/menu-fold.svg?raw';
 import menuUnfoldIcon from '@images/menu-unfold.svg?raw';
 import { patchShadowDomIntoDom } from '@utils';
 import style from './style.less?inline';
 
 const replaceStateEvent = new CustomEvent('replaceState');
+
+interface NavItem {
+  title: string;
+  path?: string;
+  customTag?: string;
+  children?: NavItem[];
+}
+
+interface AsideHost {
+  routerList: NavItem[];
+  title: string;
+  patchDom: boolean;
+  updateNotice: Record<string, string[]>;
+  asideStyle: string | undefined;
+  collapse: boolean;
+}
 
 // proxy replaceState event
 const originHistoryEvent = window.history.replaceState;
@@ -13,21 +29,25 @@ window.history.replaceState = (...args) => {
   window.dispatchEvent(replaceStateEvent);
 };
 
-function handleLinkClick(host, e, path) {
+function handleLinkClick(host: AsideHost & HTMLElement, e: Event, path: string | undefined): void {
   e.preventDefault();
-  const shadowRoot = e.target.getRootNode();
-  const target = e.target.classList?.contains('TDesign-doc-sidenav-link') ? e.target : e.target.parentNode;
+  const eventTarget = e.target;
+  if (!(eventTarget instanceof HTMLElement)) return;
+  const shadowRoot = eventTarget.getRootNode();
+  if (!(shadowRoot instanceof ShadowRoot || shadowRoot instanceof Document)) return;
+  const target = eventTarget.classList.contains('TDesign-doc-sidenav-link') ? eventTarget : eventTarget.parentElement;
+  if (!target) return;
   const prevActiveNodes = shadowRoot.querySelectorAll('.active');
   prevActiveNodes.forEach((node) => node.classList.remove('active'));
   target.classList.toggle('active');
   requestAnimationFrame(() => dispatch(host, 'change', { detail: path }));
 }
 
-function scrollToActiveLink(host) {
+function scrollToActiveLink(host: AsideHost & HTMLElement): void {
   if (!host.shadowRoot) return;
 
-  const sidenav = host.shadowRoot.querySelector('.TDesign-doc-sidenav');
-  const activeLink = host.shadowRoot.querySelector('.TDesign-doc-sidenav-link.active');
+  const sidenav = host.shadowRoot.querySelector<HTMLElement>('.TDesign-doc-sidenav');
+  const activeLink = host.shadowRoot.querySelector<HTMLElement>('.TDesign-doc-sidenav-link.active');
 
   if (sidenav && activeLink) {
     const sidenavRect = sidenav.getBoundingClientRect();
@@ -43,7 +63,13 @@ function scrollToActiveLink(host) {
   }
 }
 
-function renderNav(host, nav, deep = 0) {
+type RenderedNav = ReturnType<typeof html> | RenderedNav[];
+
+function hasUpdateNotice(updateNotice: Record<string, string[]>, site: string, title: string): boolean {
+  return updateNotice[site]?.some((item) => title.includes(item)) ?? false;
+}
+
+function renderNav(host: AsideHost & HTMLElement, nav: NavItem | NavItem[], deep = 0): RenderedNav {
   if (Array.isArray(nav)) return nav.map((item) => renderNav(host, item, deep));
 
   const isActive = location.pathname === nav.path || location.hash.slice(1) === nav.path;
@@ -53,10 +79,7 @@ function renderNav(host, nav, deep = 0) {
     const currentSite = location.pathname.split('/')[1];
     if (!currentSite) return false;
 
-    const { updateNotice } = host;
-    const { [currentSite]: siteUpdateNotice } = updateNotice;
-    if (!siteUpdateNotice) return false;
-    return siteUpdateNotice.some((item) => nav.title.includes(item));
+    return hasUpdateNotice(host.updateNotice, currentSite, nav.title);
   };
 
   if (nav.children) {
@@ -73,7 +96,7 @@ function renderNav(host, nav, deep = 0) {
       <a
         href="${nav.path}"
         class="TDesign-doc-sidenav-link ${isActive ? 'active' : ''}"
-        onclick=${(host, e) => handleLinkClick(host, e, nav.path)}
+        onclick=${(eventHost: AsideHost & HTMLElement, e?: Event) => e && handleLinkClick(eventHost, e, nav.path)}
       >
         ${nav.title} ${hasUpdate() ? html`<span class="TDesign-doc-sidenav-link__tag">Update</span>` : null}
         ${nav.customTag ? html`<span class="TDesign-doc-sidenav-link__tag">${nav.customTag}</span>` : null}
@@ -82,9 +105,11 @@ function renderNav(host, nav, deep = 0) {
   `;
 }
 
-function toggleCollapseAside(host) {
+function toggleCollapseAside(host: AsideHost & HTMLElement): void {
   if (!host.shadowRoot) return;
-  const asideClassList = host.shadowRoot.querySelector('.TDesign-doc-aside').classList;
+  const aside = host.shadowRoot.querySelector<HTMLElement>('.TDesign-doc-aside');
+  if (!aside) return;
+  const asideClassList = aside.classList;
   if (asideClassList.contains('hide')) {
     asideClassList.remove('hide');
     asideClassList.add('show');
@@ -95,36 +120,42 @@ function toggleCollapseAside(host) {
   Object.assign(host, { collapse: !host.collapse });
 }
 
-export default define({
+function isUpdateNotice(value: unknown): value is Record<string, string[]> {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return false;
+  return Object.values(value).every((entry) => Array.isArray(entry) && entry.every((item) => typeof item === 'string'));
+}
+
+const asideComponent = {
   tag: 'td-doc-aside',
   routerList: {
-    value: (_host, v) => v || [],
+    value: (_host: AsideHost & HTMLElement, v?: NavItem[]) => v || [],
   },
   title: '',
   patchDom: {
-    value: (_host, v) => v || false,
+    value: (_host: AsideHost & HTMLElement, v?: boolean) => v || false,
     connect: patchShadowDomIntoDom,
   },
   updateNotice: {
-    value: (_host, v) => v || {},
-    connect: (host) => {
+    value: (_host: AsideHost & HTMLElement, value?: unknown) => (isUpdateNotice(value) ? value : {}),
+    connect: (host: AsideHost & HTMLElement) => {
       fetch(import.meta.env.VITE_SLIDER_NOTICE_URL)
-        .then((res) => res.json())
+        .then((res) => res.json() as Promise<unknown>)
         .then((res) => {
-          host.updateNotice = res;
+          if (isUpdateNotice(res)) host.updateNotice = res;
         })
         .catch(console.error);
     },
   },
   asideStyle: {
-    value: (_host, v) => v || undefined,
-    connect: (host) => {
+    value: (_host: AsideHost & HTMLElement, v?: string) => v || undefined,
+    connect: (host: AsideHost & HTMLElement) => {
       function setFixed() {
         if (!host.shadowRoot) return;
         const { shadowRoot } = host;
         const { scrollTop } = document.documentElement;
         // 吸顶效果
-        const aside = shadowRoot.querySelector('.TDesign-doc-aside') || { style: {} };
+        const aside = shadowRoot.querySelector<HTMLElement>('.TDesign-doc-aside');
+        if (!aside) return;
 
         const top = getComputedStyle(host).getPropertyValue('--aside-top') || '64px';
 
@@ -138,7 +169,9 @@ export default define({
       function handleResize() {
         if (!host.shadowRoot) return;
         const isMobileResponse = window.innerWidth < 1200;
-        const asideClassList = host.shadowRoot.querySelector('.TDesign-doc-aside').classList;
+        const aside = host.shadowRoot.querySelector<HTMLElement>('.TDesign-doc-aside');
+        if (!aside) return;
+        const asideClassList = aside.classList;
         if (isMobileResponse) {
           // safari 上下滑动也会触发 resize
           if (asideClassList.contains('show')) return;
@@ -169,12 +202,10 @@ export default define({
             currentRoute = location.hash.slice(1);
           }
 
-          const linkNodes = Array.from(
-            shadowRoot.querySelectorAll('.TDesign-doc-sidenav-link'),
-          ) as HTMLAnchorElement[];
+          const linkNodes = Array.from(shadowRoot.querySelectorAll<HTMLAnchorElement>('.TDesign-doc-sidenav-link'));
           const prevActiveNodes = Array.from(
-            shadowRoot.querySelectorAll('.TDesign-doc-sidenav-link.active'),
-          ) as HTMLAnchorElement[];
+            shadowRoot.querySelectorAll<HTMLAnchorElement>('.TDesign-doc-sidenav-link.active'),
+          );
           const nextActiveNode = linkNodes.find((node) => {
             const urlObj = new URL(node.href);
             // host & pathname isSame
@@ -213,7 +244,7 @@ export default define({
     },
   },
   collapse: false,
-  render: (host) => {
+  render: (host: AsideHost & HTMLElement) => {
     const { routerList, title, collapse } = host;
 
     return html`
@@ -230,4 +261,6 @@ export default define({
       <div class="TDesign-doc-aside-mask" onclick="${toggleCollapseAside}"></div>
     `.css`${style}`;
   },
-});
+};
+
+export default define<AsideHost>(asideComponent as Component<AsideHost>);

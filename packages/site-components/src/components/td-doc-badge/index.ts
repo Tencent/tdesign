@@ -1,8 +1,14 @@
 import { html, define } from 'hybrids';
 import style from './style.less?inline';
 
-function getColor(message) {
-  const percentage = message && parseFloat(message);
+interface BadgeHost {
+  label: string;
+  message: string;
+  color: string;
+}
+
+function getColor(message: string): string {
+  const percentage = parseFloat(message);
   if (percentage >= 90) {
     return 'brightgreen';
   }
@@ -12,7 +18,7 @@ function getColor(message) {
   return 'red';
 }
 
-export default define({
+export default define<BadgeHost>({
   tag: 'td-doc-badge',
   label: 'coverage',
   message: '0%',

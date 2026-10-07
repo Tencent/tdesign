@@ -1,8 +1,7 @@
 /* eslint-env jest */
 
-const mockDefine = jest.fn((definition) => definition);
+const mockDefine = jest.fn((definition: unknown) => definition);
 const mockHtml = jest.fn();
-const testGlobal = global as any;
 
 jest.mock('hybrids', () => ({
   define: mockDefine,
@@ -27,8 +26,31 @@ jest.mock('../src/components/td-doc-header/style.less?inline', () => '', { virtu
 
 const docHeader = require('../src/components/td-doc-header').default;
 
+interface MediaQueryMock {
+  matches: boolean;
+  addEventListener: jest.Mock<void, [string, (event: MediaQueryListEvent) => void]>;
+  removeEventListener: jest.Mock<void, [string, (event: MediaQueryListEvent) => void]>;
+}
+
+interface HeaderTestGlobals {
+  window: {
+    innerWidth: number;
+    matchMedia: jest.Mock<MediaQueryMock, [string]>;
+    addEventListener: jest.Mock<void, [string, EventListenerOrEventListenerObject]>;
+    removeEventListener: jest.Mock<void, [string, EventListenerOrEventListenerObject]>;
+  };
+  document: {
+    documentElement: { scrollTop: number };
+    addEventListener: jest.Mock;
+    removeEventListener: jest.Mock;
+    querySelector: jest.Mock;
+  };
+}
+
+const testGlobal = globalThis as unknown as HeaderTestGlobals;
+
 describe('td-doc-header fixed title lifecycle', () => {
-  let mediaQuery;
+  let mediaQuery: MediaQueryMock;
 
   beforeEach(() => {
     mediaQuery = {
@@ -38,7 +60,7 @@ describe('td-doc-header fixed title lifecycle', () => {
     };
     testGlobal.window = {
       innerWidth: 1440,
-      matchMedia: jest.fn(() => mediaQuery),
+      matchMedia: jest.fn<MediaQueryMock, [string]>(() => mediaQuery),
       addEventListener: jest.fn(),
       removeEventListener: jest.fn(),
     };
@@ -51,8 +73,8 @@ describe('td-doc-header fixed title lifecycle', () => {
   });
 
   afterEach(() => {
-    delete testGlobal.window;
-    delete testGlobal.document;
+    Reflect.deleteProperty(testGlobal, 'window');
+    Reflect.deleteProperty(testGlobal, 'document');
   });
 
   it('removes the same media and resize listeners that it registers', () => {

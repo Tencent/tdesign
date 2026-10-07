@@ -2,7 +2,12 @@ import { html, define } from 'hybrids';
 import style from './style.less?inline';
 import historyIcon from '@images/history.svg?raw';
 
-function transformTime(time) {
+interface HistoryHost {
+  time: string;
+  content: string;
+}
+
+function transformTime(time: string): string {
   let text = time;
   if (/^\d+$/.test(time)) {
     text = new Date(parseFloat(time)).toLocaleString('en-US');
@@ -11,7 +16,7 @@ function transformTime(time) {
   return text;
 }
 
-export default define({
+export default define<HistoryHost>({
   tag: 'td-doc-history',
   time: '',
   content: '',

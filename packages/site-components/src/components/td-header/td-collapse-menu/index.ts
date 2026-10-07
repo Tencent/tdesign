@@ -3,27 +3,38 @@ import style from './style.less?inline';
 import portalStyle from './portal.less?inline';
 import bulletpointIcon from '@images/bulletpoint.svg?raw';
 import { isIntranet } from '@utils/index';
-import { gitPath, renderTag, handleLinkClick } from '../index';
+import { gitPath, renderTag, handleLinkClick, type BaseComponentsLinks, type HeaderNavItem } from '../index';
 
-function renderLinks({ headerList, baseComponentsLinks, platform, framework }) {
+interface CollapseMenuProps {
+  headerList: HeaderNavItem[];
+  baseComponentsLinks: BaseComponentsLinks | [];
+  platform: string;
+  framework: string;
+  disabledTheme: boolean;
+}
+
+type CollapseMenuHost = HTMLElement & CollapseMenuProps;
+
+function renderLinks({ headerList, baseComponentsLinks, platform, framework }: CollapseMenuHost) {
+  const componentLinks = baseComponentsLinks as BaseComponentsLinks;
   const gitLink = html`
     <a class="link" href="${gitPath(platform, framework)}" id="${platform}" target="_blank">
       <span>${isIntranet() ? '工蜂' : 'Github'}</span>
     </a>
   `;
-  const isActive = (path) => location.pathname.includes(path);
+  const isActive = (path: string): boolean => location.pathname.includes(path);
 
   let baseLinks = [html`<div class="divider"></div>`];
 
   const renderNavs = headerList
     .map((item) => {
       if (item.type === 'base') {
-        const webLinks = baseComponentsLinks.web.links.map(
+        const webLinks = componentLinks.web.links.map(
           (item) => html`
             <a
               href="${item.path}"
               class="link ${isActive(item.path) ? 'active' : ''}"
-              onclick=${(host, e) => handleLinkClick(host, e, item)}
+              onclick=${(host: CollapseMenuHost, event?: Event) => event && handleLinkClick(host, event, item)}
             >
               <img class="icon" src="${item.icon}" />
               ${item.name} ${renderTag(item.status)}
@@ -33,12 +44,12 @@ function renderLinks({ headerList, baseComponentsLinks, platform, framework }) {
         baseLinks.push(html`<div class="title">Web 桌面端组件</div>`);
         baseLinks.push(...webLinks);
 
-        const mobileLinks = baseComponentsLinks.mobile.links.map(
+        const mobileLinks = componentLinks.mobile.links.map(
           (item) => html`
             <a
               href="${item.path}"
               class="link ${isActive(item.path) ? 'active' : ''}"
-              onclick=${(host, e) => handleLinkClick(host, e, item)}
+              onclick=${(host: CollapseMenuHost, event?: Event) => event && handleLinkClick(host, event, item)}
             >
               <img class="icon" src="${item.icon}" />
               ${item.name} ${renderTag(item.status)}
@@ -51,7 +62,8 @@ function renderLinks({ headerList, baseComponentsLinks, platform, framework }) {
 
         return html``;
       }
-      return html`<a class="link ${isActive(item.path) ? 'active' : ''}" href="${item.path}">${item.name}</a>`;
+      const path = item.path ?? '';
+      return html`<a class="link ${isActive(path) ? 'active' : ''}" href="${path}">${item.name}</a>`;
     })
     .concat(gitLink);
 
@@ -59,13 +71,13 @@ function renderLinks({ headerList, baseComponentsLinks, platform, framework }) {
   return renderNavs;
 }
 
-export default define({
+export default define<CollapseMenuProps>({
   tag: 'td-collapse-menu',
   headerList: {
     value: (_host, v) => v || [],
   },
   baseComponentsLinks: {
-    value: (_host, v) => v || [],
+    value: (_host, value) => value || [],
   },
   platform: 'web',
   framework: 'vue',
