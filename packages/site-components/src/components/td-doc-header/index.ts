@@ -1,0 +1,303 @@
+import { getLocale } from '@config/locale';
+import splineConfig from '@config/spline';
+import historyIcon from '@images/history.svg?raw';
+import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, parseBoolean, watchHtmlMode } from '@utils';
+import { define, html } from 'hybrids';
+import style from './style.less?inline';
+
+interface DocInfo {
+  title: string;
+  desc: string | string[];
+}
+
+interface HeaderHost {
+  spline: string;
+  platform: string;
+  changelog: boolean;
+  changelogEn: boolean;
+  mobileBodyStyle: { paddingRight?: string };
+  shouldShowPopup: boolean;
+  docInfo: DocInfo | undefined;
+  fixedTitle: boolean | undefined;
+  showIssue: boolean;
+}
+
+interface ChangelogElement extends HTMLElement {
+  changelogEn: boolean;
+  visible: boolean;
+}
+
+let timer: ReturnType<typeof setTimeout> | undefined;
+let observeTimer: ReturnType<typeof setTimeout> | undefined;
+let popupCheckTimer: ReturnType<typeof setTimeout> | undefined;
+const locale = getLocale();
+
+function getSplineUrl(name: string): string | undefined {
+  const entry = Object.entries(splineConfig).find(([key]) => key === name);
+  return entry?.[1];
+}
+
+function checkDescribeLineOverflow(host: HeaderHost & HTMLElement): void {
+  if (popupCheckTimer) clearTimeout(popupCheckTimer);
+  popupCheckTimer = setTimeout(() => {
+    requestAnimationFrame(() => {
+      const describeLine = host.shadowRoot?.querySelector<HTMLElement>('.TDesign-doc-header__info-describe-line');
+      if (describeLine) {
+        const computedStyle = getComputedStyle(describeLine);
+        const lineHeight = parseFloat(computedStyle.lineHeight);
+        const maxHeight = lineHeight * 2;
+        host.shouldShowPopup = describeLine.scrollHeight > maxHeight;
+      }
+    });
+  }, 100);
+}
+
+function handleModeChange(themeMode: string, host: HeaderHost & HTMLElement): void {
+  if (!host.shadowRoot) return;
+  const splineEl = host.shadowRoot.querySelector<HTMLIFrameElement>('#__iframe__');
+  let splineUrl = '';
+  if (themeMode === 'dark') {
+    splineUrl = getSplineUrl(`${host.spline}-dark`) || '';
+  } else {
+    splineUrl = getSplineUrl(host.spline) || '';
+  }
+  if (splineEl && splineUrl && splineUrl !== splineEl.src) {
+    clearTimeout(timer);
+    splineEl.setAttribute('style', 'max-height: 0;');
+    splineEl.src = splineUrl;
+  }
+}
+
+function iframeOnload(host: HeaderHost & HTMLElement): void {
+  if (!host.shadowRoot) return;
+  const iframeEl = host.shadowRoot.querySelector<HTMLIFrameElement>('#__iframe__');
+  clearTimeout(timer);
+  timer = setTimeout(() => {
+    iframeEl &&
+      iframeEl.setAttribute(
+        'style',
+        `
+      max-height: 280px;
+      transition: max-height .25s .2s var(--anim-time-fn-easing);
+      -webkit-transition: max-height .25s .2s var(--anim-time-fn-easing);
+    `,
+      );
+  }, 600);
+}
+
+export default define<HeaderHost>({
+  tag: 'td-doc-header',
+  spline: {
+    value: (_host, v) => v || '',
+    connect: (host) => {
+      const observer = watchHtmlMode((themeMode) => handleModeChange(themeMode, host));
+
+      return () => observer.disconnect();
+    },
+    observe: (host) => {
+      clearTimeout(observeTimer);
+      const themeMode = localStorage.getItem('--tdesign-theme') || 'light';
+      observeTimer = setTimeout(() => {
+        handleModeChange(themeMode, host);
+      }, 600);
+    },
+  },
+  platform: 'web',
+  changelog: {
+    value: (_host, v) => parseBoolean(v, true),
+  },
+  changelogEn: {
+    value: (_host, v) => parseBoolean(v, true),
+  },
+  mobileBodyStyle,
+  shouldShowPopup: {
+    value: (_host, v) => v || false,
+  },
+  docInfo: {
+    value: (_host, v) => v || undefined,
+    observe: (host, value) => {
+      if (document.getElementById('__td_doc_title__') || !value) return;
+
+      const titleElement = document.createElement('h1');
+      titleElement.id = '__td_doc_title__';
+      titleElement.innerText = value.title;
+      host.appendChild(titleElement);
+
+      // 检查描述是否被省略
+      checkDescribeLineOverflow(host);
+    },
+  },
+  fixedTitle: {
+    value: (_host, v) => v || undefined,
+    connect: (host) => {
+      const mediaQuery = window.matchMedia('(max-width: 1200px)');
+      let lastWidth = window.innerWidth;
+
+      function changeTitlePos() {
+        if (!host.shadowRoot) return;
+
+        const { shadowRoot } = host;
+        const { scrollTop } = document.documentElement;
+        // 吸顶效果
+        const background =
+          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__background') ?? document.createElement('div');
+        const changelogEntry =
+          shadowRoot.querySelector<HTMLElement>('#TDesign-doc-changelog__entry') ?? document.createElement('div');
+        const title =
+          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__info-title') ?? document.createElement('div');
+        const describe =
+          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__info-describe') ?? document.createElement('div');
+        const thumb =
+          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__thumb') ?? document.createElement('div');
+        const issue = shadowRoot.querySelector<HTMLElement>('td-doc-issue') ?? document.createElement('div');
+        const tabs = document.querySelector<HTMLElement>('td-doc-tabs');
+
+        // 适配移动端
+        const isMobileResponse = mediaQuery.matches;
+        const asideWidth = isMobileResponse ? 0 : '260px';
+        const titleFontSize = isMobileResponse ? '32px' : '48px';
+
+        if (scrollTop >= 228) {
+          if (title.style.position !== 'fixed') {
+            Object.assign(title.style, {
+              position: 'fixed',
+              top: tabs ? '16px' : '28px',
+              fontSize: '24px',
+              opacity: 1,
+              visibility: 'visible',
+            });
+            Object.assign(changelogEntry.style, { opacity: 1, visibility: 'visible' });
+            Object.assign(background.style, { position: 'fixed', top: '0', left: asideWidth });
+            tabs &&
+              Object.assign(tabs.style, {
+                position: 'fixed',
+                top: '64px',
+                zIndex: 500,
+              });
+            Object.assign(issue.style, { position: 'fixed', top: '24px', right: '24px' });
+          }
+        } else if (scrollTop > 192 && scrollTop < 228) {
+          if (title.style.visibility !== 'hidden') {
+            Object.assign(title.style, { opacity: 0, visibility: 'hidden' });
+            Object.assign(changelogEntry.style, { opacity: 0, visibility: 'hidden' });
+            Object.assign(thumb.style, { opacity: 0, visibility: 'hidden' });
+            Object.assign(describe.style, { opacity: 0, visibility: 'hidden' });
+
+            Object.assign(background.style, { position: 'absolute', top: 'unset', left: '0' });
+            tabs && Object.assign(tabs.style, { position: 'absolute', top: '228px' });
+            Object.assign(issue.style, { position: 'absolute', top: 'calc(100% - 48px - 12px)' });
+          }
+        } else {
+          if (title.style.position === 'fixed' || title.style.visibility === 'hidden') {
+            Object.assign(title.style, {
+              position: 'unset',
+              fontSize: titleFontSize,
+              opacity: 1,
+              visibility: 'visible',
+            });
+            Object.assign(changelogEntry.style, { opacity: 1, visibility: 'visible' });
+            Object.assign(describe.style, { opacity: 1, visibility: 'visible' });
+            Object.assign(background.style, { position: 'absolute', top: 'unset', left: '0' });
+            tabs && Object.assign(tabs.style, { position: 'absolute', top: '228px' });
+            Object.assign(issue.style, { position: 'absolute', top: 'calc(100% - 48px - 12px)' });
+            Object.assign(thumb.style, { opacity: 1, visibility: 'visible' });
+          }
+        }
+      }
+
+      function handleMediaChange() {
+        changeTitlePos();
+        checkDescribeLineOverflow(host);
+      }
+
+      function handleResize() {
+        changeTitlePos();
+        const currentWidth = window.innerWidth;
+        if (currentWidth !== lastWidth) {
+          lastWidth = currentWidth;
+          checkDescribeLineOverflow(host);
+        }
+      }
+
+      changeTitlePos();
+
+      mediaQuery.addEventListener('change', handleMediaChange);
+      window.addEventListener('resize', handleResize);
+      document.addEventListener('scroll', changeTitlePos);
+
+      return () => {
+        mediaQuery.removeEventListener('change', handleMediaChange);
+        window.removeEventListener('resize', handleResize);
+        document.removeEventListener('scroll', changeTitlePos);
+      };
+    },
+  },
+  showIssue: {
+    value: (_host, v) => parseBoolean(v, true),
+  },
+
+  render: (host) => {
+    const { changelog, changelogEn, docInfo, spline, showIssue } = host;
+    const mobileBodyStyle = { ...host.mobileBodyStyle };
+    const splineUrl = getSplineUrl(spline);
+    const isChangelogComponentRegistered = customElements.get('td-doc-changelog'); // 检查td-doc-changelog组件是否已注册
+    const openChangelogDrawer = () => {
+      let changelogEl = document.querySelector<ChangelogElement>('td-doc-changelog');
+      if (!changelogEl) {
+        changelogEl = document.createElement('td-doc-changelog') as ChangelogElement;
+        changelogEl.changelogEn = changelogEn;
+        document.body.appendChild(changelogEl);
+      }
+      // 为了触发动画，下一帧再切换为显示状态
+      requestAnimationFrame(() => {
+        changelogEl.visible = true;
+      });
+    };
+
+    return html`
+      ${splineUrl
+        ? html` <iframe id="__iframe__" class="TDesign-doc-header__thumb" onload="${iframeOnload}"></iframe>`
+        : html``}
+      <div class="TDesign-doc-header" style="${mobileBodyStyle}">
+        <div class="TDesign-doc-header__inner">
+          <div class="TDesign-doc-header__badge">
+            <slot name="badge"></slot>
+          </div>
+          <div class="TDesign-doc-header__content">
+            <div class="TDesign-doc-header__info">
+              ${docInfo
+                ? html`
+                    <div>
+                      <h1 class="TDesign-doc-header__info-title">${docInfo.title}</h1>
+                      ${changelog && isChangelogComponentRegistered && (isComponentPage() || isGlobalConfigPage())
+                        ? html`
+                            <button id="TDesign-doc-changelog__entry" onclick="${openChangelogDrawer}">
+                              <i innerHTML="${historyIcon}"></i>
+                              <span>${locale.changelog.title}</span>
+                            </button>
+                          `
+                        : html``}
+                    </div>
+                    <div class="TDesign-doc-header__info-describe">
+                      ${host.shouldShowPopup
+                        ? html`
+                            <td-doc-popup placement="top-end" equal-width="true">
+                              <div class="TDesign-doc-header__info-describe-line" innerHTML="${docInfo.desc}"></div>
+                              <div slot="content" innerHTML="${docInfo.desc}"></div>
+                            </td-doc-popup>
+                          `
+                        : html`
+                            <div class="TDesign-doc-header__info-describe-line" innerHTML="${docInfo.desc}"></div>
+                          `}
+                    </div>
+                  `
+                : html``}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="TDesign-doc-header__background"></div>
+      ${showIssue ? html`<td-doc-issue />` : html``}
+    `.css`${style}`;
+  },
+});
