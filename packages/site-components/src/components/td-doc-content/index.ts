@@ -42,7 +42,7 @@ function anchorHighlight(): void {
     const wrapper = document.querySelector(item);
     if (!wrapper) return;
 
-    const anchorList = Array.from(wrapper.querySelectorAll<HTMLAnchorElement>('.td-toc-link'));
+    const anchorList = Array.from(wrapper.querySelectorAll<HTMLAnchorElement>('.tdesign-toc_list_item_a'));
     const linkTopList = getLinkTopList(anchorList);
     highlightAnchor(anchorList, linkTopList);
   });
@@ -61,7 +61,7 @@ export default define<ContentHost>({
       function changeTocHeight() {
         const { scrollTop } = document.documentElement;
         // 固定右侧目录
-        const containers = document.querySelectorAll<HTMLElement>('.td-toc-container');
+        const containers = document.querySelectorAll<HTMLElement>('.tdesign-toc_container');
 
         if (scrollTop > FIXED_HEADER_TOP) {
           containers.forEach((container) => {
@@ -85,7 +85,7 @@ export default define<ContentHost>({
 
         const [, id = ''] = href.split('#');
         // header-anchor 是插件自动添加的类名，所以没带 tdesign 前缀
-        if (target.classList.contains('header-anchor') || target.classList.contains('td-toc-link')) {
+        if (target.classList.contains('header-anchor') || target.classList.contains('tdesign-toc_list_item_a')) {
           const idTarget = document.getElementById(id);
           if (!idTarget) return;
           const { top } = idTarget.getBoundingClientRect();

@@ -3,10 +3,10 @@
     <td-doc-header slot="doc-header" ref="tdDocHeader"></td-doc-header>
 
     <div name="DESIGN">
-      <nav class="td-toc-container" style="position: absolute; top: 328px">
-        <ol class="td-toc-list">
-          <li v-for="anchor in releaseTimeList" :key="anchor.id" class="td-toc-list-item">
-            <a class="td-toc-link" :href="'#' + anchor.id">{{ anchor.title }} </a>
+      <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
+        <ol class="tdesign-toc_list">
+          <li v-for="anchor in releaseTimeList" :key="anchor.id" class="tdesign-toc_list_item">
+            <a class="tdesign-toc_list_item_a" :href="'#' + anchor.id">{{ anchor.title }} </a>
           </li>
         </ol>
       </nav>

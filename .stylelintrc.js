@@ -21,8 +21,9 @@ module.exports = {
     'color-function-notation': 'legacy',
     'alpha-value-notation': 'number',
     // TODO 后面统一改 class 小写 且 BEM，当前按警告提示
+    // 兼容 tdoc 插件（vite-plugin-tdoc）生成的固定目录类名 tdesign-toc_*
     'selector-class-pattern': [
-      '^[a-z]+([-]?[a-z0-9]+)*(__[a-z0-9]([-]?[a-z0-9]+)*)?(--[a-z0-9]([-]?[a-z0-9]+)*)?$',
+      '^[a-z]+([-]?[a-z0-9]+)*(__[a-z0-9]([-]?[a-z0-9]+)*)?(--[a-z0-9]([-]?[a-z0-9]+)*)?$|^tdesign-toc_',
       {
         resolveNestedSelectors: true,
         message: 'Expected class selector "%s" to be lowercase and BEM format',
