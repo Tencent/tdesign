@@ -80,6 +80,7 @@
 .TDesign-docsearch-trigger__input::-webkit-search-cancel-button,
 .TDesign-docsearch-trigger__input::-webkit-search-decoration {
   appearance: none;
+  -webkit-appearance: none;
 }
 
 /* 输入框右侧后缀位 —— 当前仅用于显示 loading spinner */
@@ -252,6 +253,7 @@
   min-width: 0;
   white-space: normal;
   overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 /* 分类右侧的计数徽标 —— 显示该分类下的命中数量 */
@@ -372,6 +374,7 @@
   color: var(--text-placeholder, rgba(0, 0, 0, 0.3));
   opacity: 0;
   appearance: none;
+  -webkit-appearance: none;
   transition:
     color 0.2s ease,
     opacity 0.15s ease,
