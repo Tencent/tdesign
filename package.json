@@ -12,16 +12,16 @@
     "site:preview": "pnpm run build:components && pnpm run --filter tdesign-site site:preview",
     "auto-release-collection": "pnpm run --filter auto-release-collection start",
     "test": "pnpm -r run --if-present test",
-    "lint": "pnpm run lint:css && pnpm run lint:js && pnpm run lint:eslint && pnpm run typecheck",
+    "lint": "run-p lint:css lint:js lint:eslint && run-s typecheck",
     "lint:css": "stylelint \"**/*.{css,wxss,less,vue}\" --allow-empty-input --cache",
-    "lint:js": "prettier --check \"**/*.{vue,js,ts,jsx,tsx,json,md}\" --ignore-path .prettierignore",
+    "lint:js": "prettier --check \"**/*.{vue,js,ts,jsx,tsx,json,md}\"",
     "lint:eslint": "eslint . --max-warnings 0 --cache",
     "lint:css:fix": "stylelint \"**/*.{css,wxss,less,vue}\" --fix --allow-empty-input --cache",
-    "lint:js:fix": "prettier --write \"**/*.{vue,js,ts,jsx,tsx,json,md}\" --ignore-path .prettierignore",
+    "lint:js:fix": "prettier --write \"**/*.{vue,js,ts,jsx,tsx,json,md}\"",
     "lint:eslint:fix": "eslint . --fix --max-warnings 0 --cache",
     "lint:fix": "pnpm run lint:css:fix && pnpm run lint:js:fix && pnpm run lint:eslint:fix",
     "typecheck": "pnpm -r run --if-present typecheck",
-    "format": "prettier --write .",
+    "format": "pnpm run lint:js:fix",
     "build": "pnpm -r run --if-present build",
     "prepare": "husky install"
   },
@@ -40,6 +40,7 @@
     "globals": "^17.13.0",
     "husky": "^8.0.0",
     "lint-staged": "^16.3.4",
+    "npm-run-all2": "^9.0.3",
     "postcss-html": "^2.0.0",
     "prettier": "^3.9.9",
     "rimraf": "^3.0.2",
@@ -63,14 +64,14 @@
       "eslint --fix --no-warn-ignored",
       "prettier --write"
     ],
-    "**/*.{js,ts,tsx}": [
+    "**/*.{js,ts,jsx,tsx,mts,cts}": [
       "eslint --fix --no-warn-ignored",
       "prettier --write"
     ],
     "**/*.html": [
       "prettier --write"
     ],
-    "**/*.{json,jsonc}": [
+    "**/*.{json,jsonc,md}": [
       "prettier --write"
     ],
     "**/*.{css,less,wxss}": [
