@@ -17,10 +17,10 @@ interface BlockStyle {
 interface ThemeTabsProps {
   theme: Theme;
   blockStyleMap: Partial<Record<Theme, BlockStyle>> | undefined;
-  _blockStylePending?: boolean;
 }
 
 type ThemeTabsHost = ThemeTabsProps & HTMLElement;
+const blockStylePendingHosts = new WeakSet<ThemeTabsHost>();
 
 function isTheme(value: string | null): value is Theme {
   return value === 'light' || value === 'dark';
@@ -42,10 +42,10 @@ function handleTabClick(host: ThemeTabsHost, currentTheme: Theme) {
 }
 
 function initBlockStyleMap(host: ThemeTabsHost) {
-  if (host._blockStylePending) return;
-  host._blockStylePending = true;
+  if (blockStylePendingHosts.has(host)) return;
+  blockStylePendingHosts.add(host);
   requestAnimationFrame(() => {
-    host._blockStylePending = false;
+    blockStylePendingHosts.delete(host);
     const { shadowRoot } = host;
     if (!shadowRoot) return;
     const items = shadowRoot.querySelectorAll<HTMLElement>('.item');
@@ -98,7 +98,6 @@ export default define<ThemeTabsProps>({
   blockStyleMap: {
     value: (_host, v) => v || undefined,
   },
-  _blockStylePending: false,
   render: (host) => {
     const { theme, blockStyleMap } = host;
 
