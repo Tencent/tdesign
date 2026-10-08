@@ -1,7 +1,6 @@
 import { getLocale } from '@config/locale';
-import splineConfig from '@config/spline';
 import historyIcon from '@images/history.svg?raw';
-import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, parseBoolean, watchHtmlMode } from '@utils';
+import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, parseBoolean } from '@utils';
 import { define, html } from 'hybrids';
 import style from './style.less?inline';
 
@@ -11,7 +10,6 @@ interface DocInfo {
 }
 
 interface HeaderHost {
-  spline: string;
   platform: string;
   changelog: boolean;
   changelogEn: boolean;
@@ -27,15 +25,8 @@ interface ChangelogElement extends HTMLElement {
   visible: boolean;
 }
 
-let timer: ReturnType<typeof setTimeout> | undefined;
-let observeTimer: ReturnType<typeof setTimeout> | undefined;
 let popupCheckTimer: ReturnType<typeof setTimeout> | undefined;
 const locale = getLocale();
-
-function getSplineUrl(name: string): string | undefined {
-  const entry = Object.entries(splineConfig).find(([key]) => key === name);
-  return entry?.[1];
-}
 
 function checkDescribeLineOverflow(host: HeaderHost & HTMLElement): void {
   if (popupCheckTimer) clearTimeout(popupCheckTimer);
@@ -52,51 +43,8 @@ function checkDescribeLineOverflow(host: HeaderHost & HTMLElement): void {
   }, 100);
 }
 
-function handleModeChange(themeMode: string, host: HeaderHost & HTMLElement): void {
-  if (!host.shadowRoot) return;
-  const splineEl = host.shadowRoot.querySelector<HTMLIFrameElement>('#__iframe__');
-  const splineUrl = themeMode === 'dark' ? getSplineUrl(`${host.spline}-dark`) || '' : getSplineUrl(host.spline) || '';
-  if (splineEl && splineUrl && splineUrl !== splineEl.src) {
-    clearTimeout(timer);
-    splineEl.setAttribute('style', 'max-height: 0;');
-    splineEl.src = splineUrl;
-  }
-}
-
-function iframeOnload(host: HeaderHost & HTMLElement): void {
-  if (!host.shadowRoot) return;
-  const iframeEl = host.shadowRoot.querySelector<HTMLIFrameElement>('#__iframe__');
-  clearTimeout(timer);
-  timer = setTimeout(() => {
-    if (iframeEl)
-      iframeEl.setAttribute(
-        'style',
-        `
-      max-height: 280px;
-      transition: max-height .25s .2s var(--anim-time-fn-easing);
-      -webkit-transition: max-height .25s .2s var(--anim-time-fn-easing);
-    `,
-      );
-  }, 600);
-}
-
 export default define<HeaderHost>({
   tag: 'td-doc-header',
-  spline: {
-    value: (_host, v) => v || '',
-    connect: (host) => {
-      const observer = watchHtmlMode((themeMode) => handleModeChange(themeMode, host));
-
-      return () => observer.disconnect();
-    },
-    observe: (host) => {
-      clearTimeout(observeTimer);
-      const themeMode = localStorage.getItem('--tdesign-theme') || 'light';
-      observeTimer = setTimeout(() => {
-        handleModeChange(themeMode, host);
-      }, 600);
-    },
-  },
   platform: 'web',
   changelog: {
     value: (_host, v) => parseBoolean(v, true),
@@ -142,7 +90,6 @@ export default define<HeaderHost>({
           shadowRoot.querySelector<HTMLElement>('.td-doc-header__info-title') ?? document.createElement('div');
         const describe =
           shadowRoot.querySelector<HTMLElement>('.td-doc-header__info-describe') ?? document.createElement('div');
-        const thumb = shadowRoot.querySelector<HTMLElement>('.td-doc-header__thumb') ?? document.createElement('div');
         const issue = shadowRoot.querySelector<HTMLElement>('td-doc-issue') ?? document.createElement('div');
         const tabs = document.querySelector<HTMLElement>('td-doc-tabs');
 
@@ -174,7 +121,6 @@ export default define<HeaderHost>({
           if (title.style.visibility !== 'hidden') {
             Object.assign(title.style, { opacity: 0, visibility: 'hidden' });
             Object.assign(changelogEntry.style, { opacity: 0, visibility: 'hidden' });
-            Object.assign(thumb.style, { opacity: 0, visibility: 'hidden' });
             Object.assign(describe.style, { opacity: 0, visibility: 'hidden' });
 
             Object.assign(background.style, { position: 'absolute', top: 'unset', left: '0' });
@@ -194,7 +140,6 @@ export default define<HeaderHost>({
             Object.assign(background.style, { position: 'absolute', top: 'unset', left: '0' });
             if (tabs) Object.assign(tabs.style, { position: 'absolute', top: '228px' });
             Object.assign(issue.style, { position: 'absolute', top: 'calc(100% - 48px - 12px)' });
-            Object.assign(thumb.style, { opacity: 1, visibility: 'visible' });
           }
         }
       }
@@ -231,9 +176,8 @@ export default define<HeaderHost>({
   },
 
   render: (host) => {
-    const { changelog, changelogEn, docInfo, spline, showIssue } = host;
+    const { changelog, changelogEn, docInfo, showIssue } = host;
     const mobileBodyStyle = { ...host.mobileBodyStyle };
-    const splineUrl = getSplineUrl(spline);
     const isChangelogComponentRegistered = customElements.get('td-doc-changelog'); // 检查td-doc-changelog组件是否已注册
     const openChangelogDrawer = () => {
       let changelogEl = document.querySelector<ChangelogElement>('td-doc-changelog');
@@ -249,11 +193,6 @@ export default define<HeaderHost>({
     };
 
     return html`
-      ${
-        splineUrl
-          ? html` <iframe id="__iframe__" class="td-doc-header__thumb" onload="${iframeOnload}"></iframe>`
-          : html``
-      }
       <div class="td-doc-header" style="${mobileBodyStyle}">
         <div class="td-doc-header__inner">
           <div class="td-doc-header__badge">

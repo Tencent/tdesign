@@ -11,7 +11,6 @@ export interface MdToVueOptions {
 }
 
 interface PageData {
-  spline: string;
   toc: boolean;
   title: string;
   description: string;
@@ -35,7 +34,6 @@ export default function mdToVue(options: MdToVueOptions): string {
           <td-doc-header
             slot="doc-header"
             ref="tdDocHeader"
-            spline="${mdSegment.spline}"
           >
           </td-doc-header>`
     : '';
@@ -90,7 +88,6 @@ export default function mdToVue(options: MdToVueOptions): string {
 function customRender({ source, md }: MdToVueOptions): PageData & { docMd: string } {
   const { content, data } = matter(source);
   const pageData: PageData = {
-    spline: '',
     toc: true,
     title: '',
     description: '',
@@ -107,7 +104,6 @@ function customRender({ source, md }: MdToVueOptions): PageData & { docMd: strin
 
 function normalizePageData(data: Record<string, unknown>): Partial<PageData> {
   return {
-    ...(typeof data.spline === 'string' ? { spline: data.spline } : {}),
     ...(typeof data.toc === 'boolean' ? { toc: data.toc } : {}),
     ...(typeof data.title === 'string' ? { title: data.title } : {}),
     ...(typeof data.description === 'string' ? { description: data.description } : {}),

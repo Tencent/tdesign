@@ -17,14 +17,12 @@ vi.mock('hybrids', () => ({
 }));
 
 vi.mock('@config/locale', () => ({ getLocale: vi.fn(() => ({})) }));
-vi.mock('@config/spline', () => ({}));
 vi.mock('@images/history.svg?raw', () => ({ default: '' }));
 vi.mock('@utils', () => ({
   isComponentPage: vi.fn(),
   isGlobalConfigPage: vi.fn(),
   mobileBodyStyle: {},
   parseBoolean: vi.fn(),
-  watchHtmlMode: vi.fn(),
 }));
 vi.mock('../components/td-doc-header/style.less?inline', () => ({ default: '' }));
 
