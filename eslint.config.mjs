@@ -25,7 +25,6 @@ export default tseslint.config(
       'site/tdesign/**',
       'site/plugins/tdoc/**',
       'site/public/**',
-      'site/spline/**',
       'site/src/pages/design/assets/motion/**',
     ],
   },
