@@ -64,9 +64,9 @@ export default define<DemoHost>({
         items.forEach((item) => {
           if (!item.offsetWidth) {
             styleMap = null;
-          } else {
+          } else if (styleMap) {
             const { tab } = item.dataset;
-            if (tab && styleMap) {
+            if (tab) {
               styleMap[tab] = {
                 width: `${item.offsetWidth}px`,
                 transform: `translate3d(${item.offsetLeft}px, 0, 0)`,

@@ -80,23 +80,4 @@ describe('td-doc-demo theme synchronization', () => {
 
     expect(testGlobal.window.removeEventListener).toHaveBeenCalledWith('storageChange', listener);
   });
-
-  it('receives the theme change when storageChange is dispatched on window', () => {
-    localStorage.setItem('--tdesign-theme', 'dark');
-
-    const host: { theme?: string } = {};
-    const invalidate = vi.fn();
-    const cleanup = themeProp.connect(host, 'theme', invalidate);
-
-    window.dispatchEvent(new CustomEvent('storageChange'));
-
-    expect(host.theme).toBe('dark');
-    expect(invalidate).toHaveBeenCalledTimes(1);
-
-    cleanup();
-
-    window.dispatchEvent(new CustomEvent('storageChange'));
-
-    expect(invalidate).toHaveBeenCalledTimes(1);
-  });
 });

@@ -23,11 +23,5 @@
       "@components/*": ["./src/components/*"]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "config/**/*.ts",
-    "script/**/*.ts",
-    "vitest.config.ts",
-    "vite.config.ts"
-  ]
+  "include": ["src/**/*.ts", "config/**/*.ts", "script/**/*.ts", "test/**/*.ts", "*.config.ts"]
 }

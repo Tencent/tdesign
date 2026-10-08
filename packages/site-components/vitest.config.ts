@@ -10,7 +10,7 @@ export default mergeConfig(
       coverage: {
         provider: 'v8',
         reportsDirectory: 'coverage',
-        include: ['src/components/**/*.ts'],
+        include: ['src/components/**/*.ts', 'src/utils/**/*.ts'],
       },
     },
   }),
