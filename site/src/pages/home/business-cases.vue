@@ -74,8 +74,8 @@
           <svg viewBox="0 0 308 212" preserveAspectRatio="none" aria-hidden="true">
             <defs>
               <linearGradient id="business-cases-area" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#000" stop-opacity=".12" />
-                <stop offset="1" stop-color="#000" stop-opacity="0" />
+                <stop offset="0" stop-color="var(--text-primary)" stop-opacity=".12" />
+                <stop offset="1" stop-color="var(--text-primary)" stop-opacity="0" />
               </linearGradient>
             </defs>
             <path
@@ -240,7 +240,7 @@ onBeforeUnmount(() => {
   position: relative;
   overflow: hidden;
   color: var(--text-primary);
-  background: var(--bg-color-card);
+  background: var(--td-bg-color-container);
 
   &__heading {
     width: min(888px, calc(100% - 48px));
@@ -297,24 +297,28 @@ onBeforeUnmount(() => {
     padding: 24px;
     overflow: hidden;
     box-sizing: border-box;
-    border: 1px solid #e7e7e7;
+    border: 1px solid var(--component-border);
     border-radius: 16px;
-    background: #fff;
-    color: rgba(0, 0, 0, 0.9);
+    background: var(--bg-color-card);
+    color: var(--text-primary);
     backdrop-filter: blur(2px);
   }
 
   &__noise {
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 121% 121% at 50% -21%, transparent 0%, var(--case-tint, #dcdcdc) 85%);
+    background: radial-gradient(
+      ellipse 121% 121% at 50% -21%,
+      transparent 0%,
+      var(--case-tint, var(--bg-color-card-user)) 85%
+    );
     pointer-events: none;
   }
 
   &__quote {
     z-index: 1;
     margin: 0;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--text-secondary);
     font-size: 14px;
     line-height: 22px;
   }
@@ -348,7 +352,7 @@ onBeforeUnmount(() => {
     }
 
     span {
-      color: rgba(0, 0, 0, 0.4);
+      color: var(--text-placeholder);
       font-size: 12px;
       line-height: 20px;
     }
@@ -360,10 +364,10 @@ onBeforeUnmount(() => {
     margin: 0 auto;
     padding: 6px 10px;
     box-sizing: border-box;
-    border: 1px solid #e7e7e7;
+    border: 1px solid var(--component-border);
     border-radius: 8px;
-    background: #fff;
-    color: rgba(0, 0, 0, 0.4);
+    background: var(--bg-color-card);
+    color: var(--text-placeholder);
     font-size: 12px;
     line-height: 20px;
     text-align: center;
@@ -380,21 +384,21 @@ onBeforeUnmount(() => {
     top: 342px;
     left: 59px;
     --case-rotation: -5deg;
-    --case-tint: #d9e1ff;
+    --case-tint: var(--brand-main-light-hover);
   }
 
   &--3 {
     top: 321px;
     left: 1091px;
     --case-rotation: 6deg;
-    --case-tint: #ffd9c2;
+    --case-tint: var(--warning-main-light-hover);
   }
 
   &--4 {
     top: 33px;
     left: 1072px;
     --case-rotation: 6deg;
-    --case-tint: #d9e1ff;
+    --case-tint: var(--brand-main-light-hover);
   }
 
   &--5 {
@@ -413,11 +417,11 @@ onBeforeUnmount(() => {
   left: 478px;
   display: flex;
   overflow: hidden;
-  border: 1px solid #e7e7e7;
+  border: 1px solid var(--component-border);
   border-radius: 16px;
   box-sizing: border-box;
-  background: #fff;
-  color: rgba(0, 0, 0, 0.9);
+  background: var(--bg-color-card);
+  color: var(--text-primary);
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.04);
 
   &:hover {
@@ -435,11 +439,11 @@ onBeforeUnmount(() => {
     justify-content: space-between;
     padding: 24px;
     box-sizing: border-box;
-    background: linear-gradient(317deg, #dcdcdc 29.81%, #fff 80.29%);
+    background: linear-gradient(317deg, var(--bg-color-card-user) 29.81%, var(--bg-color-card) 80.29%);
 
     p {
       margin: 0 0 20px;
-      color: rgba(0, 0, 0, 0.6);
+      color: var(--text-secondary);
       font-size: 16px;
       font-weight: 300;
       line-height: 24px;
@@ -470,7 +474,7 @@ onBeforeUnmount(() => {
     display: flex;
     gap: 36px;
     padding-top: 12px;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid var(--bg-color-data);
 
     div {
       display: flex;
@@ -479,7 +483,7 @@ onBeforeUnmount(() => {
     }
 
     span {
-      color: rgba(0, 0, 0, 0.6);
+      color: var(--text-secondary);
       font-size: 12px;
       font-weight: 300;
       line-height: 20px;
@@ -514,7 +518,7 @@ onBeforeUnmount(() => {
       top: 28px;
       left: var(--hover-x);
       transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.9);
+      background: var(--text-primary);
       content: '';
       opacity: 0;
       pointer-events: none;
@@ -545,7 +549,7 @@ onBeforeUnmount(() => {
     }
 
     span {
-      color: rgba(0, 0, 0, 0.6);
+      color: var(--text-secondary);
       font-size: 8px;
       line-height: 12px;
     }
@@ -567,8 +571,8 @@ onBeforeUnmount(() => {
       justify-content: center;
       padding-bottom: 2px;
       box-sizing: border-box;
-      border-left: 1px dashed #e7e7e7;
-      color: rgba(0, 0, 0, 0.4);
+      border-left: 1px dashed var(--component-border);
+      color: var(--text-placeholder);
       font-size: 8px;
       line-height: 11px;
       writing-mode: horizontal-tb;
@@ -581,7 +585,7 @@ onBeforeUnmount(() => {
 
   &__line {
     fill: none;
-    stroke: rgba(0, 0, 0, 0.9);
+    stroke: var(--text-primary);
     stroke-width: 1.5;
   }
 
@@ -593,10 +597,10 @@ onBeforeUnmount(() => {
     top: calc(28px + var(--hover-y));
     left: var(--hover-x);
     transform: translate(-50%, -50%);
-    border: 2px solid #fff;
+    border: 2px solid var(--text-anti);
     border-radius: 50%;
     box-sizing: border-box;
-    background: rgba(0, 0, 0, 0.9);
+    background: var(--text-primary);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;

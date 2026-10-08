@@ -134,9 +134,31 @@
 
 :root[theme-mode='dark'] {
   .tdesign-homepage {
-    --bg-component-board: #181818;
-    --bg-component-board-linear: linear-gradient(270deg, #181818 0%, rgba(24, 24, 24, 0) 100%);
     --box-shadow-detail: 0px 50px 100px -12px rgba(0, 0, 0, 0.2), 0px 30px 60px -30px rgba(0, 0, 0, 0.4);
+
+    .component-board {
+      background: var(--bg-color-secondarypage);
+    }
+
+    .business-cases {
+      background: var(--bg-color-demo);
+    }
+
+    .industry-cases__stats {
+      background: radial-gradient(
+        50% 50% at 50% 50%,
+        var(--bg-color-demo-linear, rgba(24, 24, 24, 0)) 0%,
+        var(--bg-color-demo, #181818) 100%
+      );
+    }
+
+    .logo-marquee {
+      opacity: 0.6;
+    }
+
+    .module-board__detail--open .desc-icon {
+      filter: invert(1);
+    }
 
     .module-intro {
       .item {
@@ -164,10 +186,7 @@
 
   --outer-padding-left-right: 48px;
   --inner-padding-left-right: 32px;
-  --bg-component-board: #f1f2f5;
-  --bg-component-board-linear: linear-gradient(270deg, #f1f2f5 0%, rgba(241, 242, 245, 0) 100%);
   --box-shadow-detail: 0px 50px 100px -12px rgba(0, 0, 0, 0.05), 0px 30px 60px -30px rgba(0, 0, 0, 0.1);
-  --bg-color-banner-linear: linear-gradient(180deg, rgba(245, 245, 245, 0) 0%, #f5f5f5 100%);
 
   td-header {
     position: fixed;
@@ -320,12 +339,12 @@
 
     &--left {
       left: 0;
-      background: linear-gradient(90deg, #f5f5f5 0%, rgba(245, 245, 245, 0) 100%);
+      background: linear-gradient(90deg, var(--bg-color-page) 0%, transparent 100%);
     }
 
     &--right {
       right: 0;
-      background: linear-gradient(90deg, rgba(245, 245, 245, 0) 0%, #f5f5f5 100%);
+      background: linear-gradient(90deg, transparent 0%, var(--bg-color-page) 100%);
     }
   }
 
@@ -356,7 +375,7 @@
     }
 
     path {
-      stroke: rgba(0, 0, 0, 0.6);
+      stroke: var(--text-secondary);
       stroke-width: 1.5;
       stroke-linecap: square;
     }
@@ -625,7 +644,7 @@
 
 .module-board {
   width: 100%;
-  background: var(--bg-color-card);
+  background: var(--bg-color-page);
   padding: 0 var(--outer-padding-left-right);
   box-sizing: border-box;
 
@@ -698,6 +717,10 @@
     overflow: hidden;
     width: 888px;
 
+    &--creation {
+      border-color: #dcdcdc;
+    }
+
     @media screen and (max-width: 960px) {
       max-width: calc(100vw - 48px);
     }
@@ -739,7 +762,7 @@
 
     .component-board {
       padding: var(--inner-padding-left-right) var(--inner-padding-left-right) 0;
-      background: var(--bg-component-board);
+      background: var(--td-gray-color-1);
       display: grid;
       grid-template-columns: repeat(3, 256px);
       justify-content: center;
@@ -975,18 +998,20 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 464px;
+  height: 468px;
   padding: 120px 0;
+  box-sizing: border-box;
   overflow: hidden;
-  color: rgba(0, 0, 0, 0.9);
+  color: var(--text-primary);
   background: radial-gradient(ellipse 54% 58% at 24% 100%, rgba(92, 112, 255, 0.18), transparent 72%),
-    radial-gradient(ellipse 45% 50% at 60% 100%, rgba(49, 211, 228, 0.09), transparent 75%), #fafafa;
+    radial-gradient(ellipse 45% 50% at 60% 100%, rgba(49, 211, 228, 0.09), transparent 75%),
+    var(--bg-color-summary);
   border-bottom: 4px solid transparent;
   border-image: linear-gradient(90deg, #0052d9 0%, #f94de2 38.46%, #ffbd2e 72.6%, #29eae9 100%) 1;
 
   &::before {
     position: absolute;
-    inset: 53% 0 0;
+    inset: 0 0 4px;
     background-image: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 1px, transparent 1.4px);
     background-size: 8px 8px;
     mask-image: linear-gradient(to bottom, transparent, #000);
@@ -1023,7 +1048,7 @@
     width: 100%;
     max-width: 888px;
     margin: 0;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--text-secondary);
     font-weight: 300;
     font-size: 20px;
     line-height: 28px;
@@ -1040,10 +1065,10 @@
     width: 184px;
     height: 56px;
     padding: 8px 48px;
-    color: rgba(0, 0, 0, 0.9);
+    color: var(--text-primary);
     font-size: 16px;
     line-height: 24px;
-    background: #fff;
+    background: var(--bg-color-card);
     border-color: transparent;
     border-radius: 999px;
     box-shadow: none;
@@ -1055,9 +1080,9 @@
     }
 
     &:hover {
-      color: #0052d9;
-      background: #fff;
-      border-color: rgba(0, 82, 217, 0.2);
+      color: var(--text-interactive);
+      background: var(--bg-color-card);
+      border-color: var(--brand-main-light);
     }
   }
 

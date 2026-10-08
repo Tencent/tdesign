@@ -9,7 +9,7 @@
 
 .font(@i) when(@i <= 64){
   .font-@{i} {
-    font-size: @i + 0px;
+    font-size: unit(@i, px);
     line-height: @i + 8px;
     margin: 16px 0;
   }
@@ -38,14 +38,14 @@
 
     &.tcloud {
       font {
-        font-family: TCloudNumber;
+        font-family: TCloudNumber, sans-serif;
         font-weight: normal;
         font-size: 36px;
         line-height: 48px;
       }
   
       .tag {
-        font-family: TCloudNumber;
+        font-family: TCloudNumber, sans-serif;
         position: absolute;
         right: 16px;
         bottom: 12px;
@@ -56,6 +56,7 @@
           vertical-align: middle;
           color: var(--text-secondary);
         }
+
         span {
           line-height: 22px;
           color: var(--text-secondary);
@@ -65,6 +66,7 @@
 
     &.font-steps {
       color: var(--text-primary);
+
       .title {
         font-size: 14px;
         line-height: 22px;
@@ -75,44 +77,47 @@
         width: 145px;
         display: inline-block;
       }
+
       .desc {
         float: right;
       }
     }
 
     &.font-size {
-      input[type=range] {
-        -webkit-appearance: none;
+      input[type="range"] {
+        appearance: none;
         width: 154px;
         background: transparent;
         margin-left: 16px;
       }
       
-      input[type=range]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        border: 1px solid #0052D9;
+      input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        border: 1px solid var(--brand-main);
         height: 14px;
         width: 14px;
         border-radius: 100%;
-        background: #ffffff;
+        background: var(--bg-color-container);
         cursor: pointer;
         margin-top: -5px;
       }
 
-      input[type=range]::-webkit-slider-runnable-track {
+      input[type="range"]::-webkit-slider-runnable-track {
         width: 100%;
         height: 4px;
         cursor: pointer;
         border-radius: 2px;
-        background: #0052D9;
+        background: var(--brand-main);
       }
       
-      input[type=range]:focus {
+      input[type="range"]:focus {
         outline: none;
       }      
+
       .ctrl {
         display: flex;
       }
+
       .line-height {
         font-size: 20px;
         line-height: 28px;
@@ -136,10 +141,6 @@
 
   .fonts-block-wrapper {
     display: flex;
-
-    .fonts-block + .fonts-block {
-      margin-left: 24px;
-    }
 
     .fonts-block {
       padding: 16px;
@@ -176,6 +177,10 @@
           }
         }
       }
+    }
+
+    .fonts-block + .fonts-block {
+      margin-left: 24px;
     }
   }
 }

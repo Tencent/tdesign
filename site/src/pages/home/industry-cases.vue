@@ -13,17 +13,8 @@
           :class="['logo-marquee__row', `logo-marquee__row--${rowIndex + 1}`]"
         >
           <div v-for="copyIndex in 2" :key="copyIndex" class="logo-marquee__track">
-            <div
-              v-for="logo in row"
-              :key="logo.name"
-              class="logo-marquee__item"
-              :style="{ width: `${logo.cardWidth}px` }"
-            >
-              <img
-                :src="logo.src"
-                :alt="logo.name"
-                :style="{ width: `${logo.width}px`, height: `${logo.height}px`, objectFit: logo.fit || 'contain' }"
-              />
+            <div v-for="logo in row" :key="logo.name" class="logo-marquee__item">
+              <img :src="logo.src" :alt="logo.name" :style="{ height: `${logo.height || 36}px` }" loading="lazy" />
             </div>
           </div>
         </div>
@@ -45,60 +36,50 @@
 </template>
 
 <script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-
-import argusLogo from './assets/industry-cases/argus.png';
-import codesignLogo from './assets/industry-cases/codesign.svg';
-import guojiuLogo from './assets/industry-cases/guojiu.png';
-import iwikiLogo from './assets/industry-cases/iwiki.svg';
-import kaadasLogo from './assets/industry-cases/kaadas.png';
-import qingyanLogo from './assets/industry-cases/qingyan.png';
-import taxLogo from './assets/industry-cases/tax.png';
-import tencentAdminLogo from './assets/industry-cases/tencent-admin.svg';
-import tencentMapLogo from './assets/industry-cases/tencent-map.png';
-import tencentSurveyLogo from './assets/industry-cases/tencent-survey.png';
-import tencentVideoLogo from './assets/industry-cases/tencent-video.png';
-import unimisLogo from './assets/industry-cases/unimis.png';
-import wechatPayLogo from './assets/industry-cases/wechat-pay.svg';
-import wecomLogo from './assets/industry-cases/wecom.jpg';
-import xinyueLogo from './assets/industry-cases/xinyue.png';
 
 import homeMessages from '@/locales/pages/home';
 
 interface LogoItem {
   name: string;
   src: string;
-  cardWidth: number;
-  width: number;
-  height: number;
-  fit?: 'contain' | 'cover';
+  height?: number;
 }
 
 const { t } = useI18n({ messages: homeMessages });
 
-const logoRows: LogoItem[][] = [
-  [
-    { name: '国家税务总局', src: taxLogo, cardWidth: 394, width: 312, height: 50 },
-    { name: '国久大数据', src: guojiuLogo, cardWidth: 254, width: 172, height: 44 },
-    { name: '腾讯行政', src: tencentAdminLogo, cardWidth: 217, width: 135, height: 28 },
-    { name: 'Argus Monitor', src: argusLogo, cardWidth: 258, width: 176, height: 36 },
-    { name: '腾讯游戏心悦俱乐部', src: xinyueLogo, cardWidth: 224, width: 142, height: 34 },
-  ],
-  [
-    { name: '青燕和示', src: qingyanLogo, cardWidth: 224, width: 142, height: 36, fit: 'cover' },
-    { name: '腾讯视频', src: tencentVideoLogo, cardWidth: 240, width: 158, height: 43 },
-    { name: 'CoDesign', src: codesignLogo, cardWidth: 243, width: 161, height: 33 },
-    { name: '腾讯问卷', src: tencentSurveyLogo, cardWidth: 244, width: 162, height: 44 },
-    { name: '凯迪仕', src: kaadasLogo, cardWidth: 262, width: 180, height: 22, fit: 'cover' },
-  ],
-  [
-    { name: 'UNIMIS-MOM', src: unimisLogo, cardWidth: 96, width: 40, height: 40 },
-    { name: 'iWiki', src: iwikiLogo, cardWidth: 195, width: 113, height: 40 },
-    { name: '微信支付', src: wechatPayLogo, cardWidth: 232, width: 150, height: 34 },
-    { name: '企业微信', src: wecomLogo, cardWidth: 96, width: 40, height: 40, fit: 'cover' },
-    { name: '腾讯地图', src: tencentMapLogo, cardWidth: 224, width: 142, height: 40 },
-  ],
-];
+const BRAND_LIST_URL = 'https://tdesign.gtimg.com/site/info/brand-list.json';
+const brandList = ref<LogoItem[]>([]);
+const logoRows = computed(() =>
+  brandList.value.reduce<LogoItem[][]>(
+    (rows, logo, index) => {
+      rows[index % rows.length].push(logo);
+      return rows;
+    },
+    [[], [], []],
+  ),
+);
+
+onMounted(async () => {
+  try {
+    const response = await fetch(BRAND_LIST_URL);
+    if (!response.ok) return;
+
+    const data: unknown = await response.json();
+    if (!Array.isArray(data)) return;
+
+    brandList.value = data.filter(
+      (item): item is LogoItem =>
+        typeof item === 'object' &&
+        item !== null &&
+        typeof (item as LogoItem).src === 'string' &&
+        typeof (item as LogoItem).name === 'string',
+    );
+  } catch {
+    brandList.value = [];
+  }
+});
 
 const stats = [
   { value: '8,000', unitKey: 'home.service.stats.projectsUnit', labelKey: 'home.service.stats.projects' },
@@ -127,8 +108,8 @@ const stats = [
   width: 100%;
   padding-top: 120px;
   overflow: hidden;
-  color: rgba(0, 0, 0, 0.9);
-  background: #fff;
+  color: var(--text-primary);
+  background: var(--bg-color-demo);
 
   &__content {
     display: flex;
@@ -157,7 +138,7 @@ const stats = [
     }
 
     p {
-      color: rgba(0, 0, 0, 0.6);
+      color: var(--text-secondary);
       font-size: 20px;
       font-weight: 300;
       line-height: 28px;
@@ -184,7 +165,7 @@ const stats = [
 
     > p {
       margin: 0;
-      color: rgba(0, 0, 0, 0.6);
+      color: var(--text-secondary);
       font-size: 16px;
       font-weight: 300;
       line-height: 24px;
@@ -261,6 +242,7 @@ const stats = [
   }
 
   &__item {
+    position: relative;
     display: flex;
     flex: none;
     justify-content: center;
@@ -274,6 +256,9 @@ const stats = [
     img {
       display: block;
       flex: none;
+      width: auto;
+      max-width: 312px;
+      object-fit: contain;
     }
   }
 
@@ -287,12 +272,12 @@ const stats = [
 
     &--left {
       left: 0;
-      background: linear-gradient(90deg, #fff 0%, rgba(255, 255, 255, 0) 100%);
+      background: linear-gradient(90deg, var(--bg-color-demo) 0%, var(--bg-color-demo-linear) 100%);
     }
 
     &--right {
       right: 0;
-      background: linear-gradient(270deg, #fff 0%, rgba(255, 255, 255, 0) 100%);
+      background: linear-gradient(270deg, var(--bg-color-demo) 0%, var(--bg-color-demo-linear) 100%);
     }
   }
 }

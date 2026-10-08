@@ -390,12 +390,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="less">
-:root[theme-mode='dark'] {
-  .banner-wrap {
-    --bg-color-banner-linear: linear-gradient(180deg, rgba(36, 36, 36, 0) 0%, #242424 100%);
-  }
-}
-
 @keyframes breathe {
   0% {
     opacity: 1;
@@ -421,8 +415,6 @@ onBeforeUnmount(() => {
   transform: translate3d(-50%, 0, 0);
   -webkit-transform: translate3d(-50%, 0, 0);
   z-index: 1;
-
-  --bg-color-banner-linear: linear-gradient(180deg, rgba(245, 245, 245, 0) 0%, #f5f5f5 100%);
 
   &::after {
     content: '';
