@@ -1,5 +1,5 @@
 <template>
-  <section class="business-cases">
+  <section ref="businessCasesRef" class="business-cases">
     <header class="business-cases__heading">
       <h2>{{ t('home.businessCases.title') }}</h2>
       <p>{{ t('home.businessCases.description') }}</p>
@@ -10,6 +10,7 @@
         v-for="(item, index) in cases"
         :key="item.prompt"
         :class="['business-case', `business-case--${index + 1}`]"
+        :style="getCaseStyle(item)"
       >
         <div class="business-case__card">
           <span class="business-case__noise" aria-hidden="true"></span>
@@ -58,7 +59,11 @@
             </div>
           </div>
         </div>
-        <div class="usage-card__chart">
+        <div
+          class="usage-card__chart"
+          :style="{ '--hover-x': `${chartHoverX}px`, '--hover-y': `${chartHoverY}px` }"
+          @pointermove="handleChartPointerMove"
+        >
           <div class="usage-card__tooltip">
             <strong>{{ t('home.businessCases.downloads') }}</strong>
             <span>09:14 GMT, 2026.08</span>
@@ -78,6 +83,7 @@
               d="M0 154 C18 157 20 149 32 158 C43 158 45 137 53 135 C58 136 59 153 65 153 C70 148 76 154 81 150 C86 140 93 141 96 130 L104 105 C108 98 115 119 126 131 C135 139 142 145 148 134 C154 126 163 129 169 122 L179 99 C185 89 191 115 195 113 C199 106 200 90 206 92 C211 94 207 77 221 65 C228 60 226 48 237 44 C248 46 247 36 253 33 C261 31 265 39 270 34 C278 25 282 29 287 7 C291 -8 294 8 299 10 C304 14 307 20 308 21 V212 H0Z"
             />
             <path
+              ref="usageLineRef"
               class="usage-card__line"
               d="M0 154 C18 157 20 149 32 158 C43 158 45 137 53 135 C58 136 59 153 65 153 C70 148 76 154 81 150 C86 140 93 141 96 130 L104 105 C108 98 115 119 126 131 C135 139 142 145 148 134 C154 126 163 129 169 122 L179 99 C185 89 191 115 195 113 C199 106 200 90 206 92 C211 94 207 77 221 65 C228 60 226 48 237 44 C248 46 247 36 253 33 C261 31 265 39 270 34 C278 25 282 29 287 7 C291 -8 294 8 299 10 C304 14 307 20 308 21"
             />
@@ -90,6 +96,7 @@
 </template>
 
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import type { TdTagProps } from 'tdesign-vue-next';
 import { useI18n } from 'vue-i18n';
 
@@ -101,17 +108,130 @@ interface BusinessCase {
   prompt: string;
   theme: TdTagProps['theme'];
   variant: TdTagProps['variant'];
+  spreadX: number;
+  spreadY: number;
+  rotation: number;
 }
 
 const cases: BusinessCase[] = [
-  { prompt: 'home.businessCases.prompts.activity', theme: 'default', variant: 'light-outline' },
-  { prompt: 'home.businessCases.prompts.multiplatform', theme: 'primary', variant: 'light' },
-  { prompt: 'home.businessCases.prompts.enterprise', theme: 'warning', variant: 'light' },
-  { prompt: 'home.businessCases.prompts.d2c', theme: 'primary', variant: 'light' },
-  { prompt: 'home.businessCases.prompts.theme', theme: 'default', variant: 'light-outline' },
+  {
+    prompt: 'home.businessCases.prompts.activity',
+    theme: 'default',
+    variant: 'light-outline',
+    spreadX: 488,
+    spreadY: 141,
+    rotation: -7,
+  },
+  {
+    prompt: 'home.businessCases.prompts.multiplatform',
+    theme: 'primary',
+    variant: 'light',
+    spreadX: 527,
+    spreadY: -172,
+    rotation: -5,
+  },
+  {
+    prompt: 'home.businessCases.prompts.enterprise',
+    theme: 'warning',
+    variant: 'light',
+    spreadX: -505,
+    spreadY: -151,
+    rotation: 6,
+  },
+  {
+    prompt: 'home.businessCases.prompts.d2c',
+    theme: 'primary',
+    variant: 'light',
+    spreadX: -486,
+    spreadY: 137,
+    rotation: 6,
+  },
+  {
+    prompt: 'home.businessCases.prompts.theme',
+    theme: 'default',
+    variant: 'light-outline',
+    spreadX: 21,
+    spreadY: -319,
+    rotation: -4,
+  },
 ];
 
 const months = ['2026.04', '2026.05', '2026.06', '2026.07', '2026.08', '2026.09'];
+const businessCasesRef = ref<HTMLElement | null>(null);
+const usageLineRef = ref<SVGPathElement | null>(null);
+const spreadProgress = ref(0);
+const chartHoverX = ref(226);
+const chartHoverY = ref(65);
+let animationFrame: number | null = null;
+
+function handleChartPointerMove(event: PointerEvent): void {
+  const chart = event.currentTarget as HTMLElement;
+  const path = usageLineRef.value;
+  if (!path) return;
+
+  const chartRect = chart.getBoundingClientRect();
+  const localX = ((event.clientX - chartRect.left) / chartRect.width) * chart.clientWidth;
+  const targetX = Math.min(308, Math.max(0, localX));
+  const pathLength = path.getTotalLength();
+  let start = 0;
+  let end = pathLength;
+
+  for (let index = 0; index < 16; index += 1) {
+    const middle = (start + end) / 2;
+    if (path.getPointAtLength(middle).x < targetX) start = middle;
+    else end = middle;
+  }
+
+  const point = path.getPointAtLength((start + end) / 2);
+  chartHoverX.value = targetX;
+  chartHoverY.value = point.y;
+}
+
+function getCaseStyle(item: BusinessCase): Record<string, string> {
+  const inverseProgress = 1 - spreadProgress.value;
+
+  return {
+    '--spread-translate-x': `${item.spreadX * inverseProgress}px`,
+    '--spread-translate-y': `${item.spreadY * inverseProgress}px`,
+    '--spread-rotation': `${item.rotation * spreadProgress.value}deg`,
+    '--spread-scale': `${0.9 + spreadProgress.value * 0.1}`,
+    '--spread-opacity': `${0.35 + spreadProgress.value * 0.65}`,
+  };
+}
+
+function updateSpreadProgress(): void {
+  animationFrame = null;
+
+  if (!businessCasesRef.value || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    spreadProgress.value = 1;
+    return;
+  }
+
+  const sectionTop = businessCasesRef.value.getBoundingClientRect().top;
+  const animationStart = window.innerHeight * 0.55;
+  const animationEnd = window.innerHeight * 0.08;
+  const progress = Math.min(1, Math.max(0, (animationStart - sectionTop) / (animationStart - animationEnd)));
+
+  spreadProgress.value = Number(progress.toFixed(3));
+}
+
+function scheduleSpreadUpdate(): void {
+  if (animationFrame === null) {
+    animationFrame = window.requestAnimationFrame(updateSpreadProgress);
+  }
+}
+
+onMounted(() => {
+  updateSpreadProgress();
+  window.addEventListener('scroll', scheduleSpreadUpdate, { passive: true });
+  window.addEventListener('resize', scheduleSpreadUpdate);
+});
+
+onBeforeUnmount(() => {
+  if (animationFrame !== null) window.cancelAnimationFrame(animationFrame);
+  window.removeEventListener('scroll', scheduleSpreadUpdate);
+  window.removeEventListener('resize', scheduleSpreadUpdate);
+});
 </script>
 
 <style lang="less" scoped>
@@ -160,6 +280,12 @@ const months = ['2026.04', '2026.05', '2026.06', '2026.07', '2026.08', '2026.09'
 .business-case {
   width: 340px;
   position: absolute;
+  z-index: 1;
+  opacity: var(--spread-opacity);
+  transform: translate(var(--spread-translate-x), var(--spread-translate-y)) rotate(var(--spread-rotation))
+    scale(var(--spread-scale));
+  transform-origin: center;
+  will-change: transform, opacity;
 
   &__card {
     height: 180px;
@@ -247,34 +373,34 @@ const months = ['2026.04', '2026.05', '2026.06', '2026.07', '2026.08', '2026.09'
   &--1 {
     top: 29px;
     left: 98px;
-    transform: rotate(-7deg);
+    --case-rotation: -7deg;
   }
 
   &--2 {
     top: 342px;
     left: 59px;
-    transform: rotate(-5deg);
+    --case-rotation: -5deg;
     --case-tint: #d9e1ff;
   }
 
   &--3 {
     top: 321px;
     left: 1091px;
-    transform: rotate(6deg);
+    --case-rotation: 6deg;
     --case-tint: #ffd9c2;
   }
 
   &--4 {
     top: 33px;
     left: 1072px;
-    transform: rotate(6deg);
+    --case-rotation: 6deg;
     --case-tint: #d9e1ff;
   }
 
   &--5 {
     top: 489px;
     left: 565px;
-    transform: rotate(-4deg);
+    --case-rotation: -4deg;
   }
 }
 
@@ -282,6 +408,7 @@ const months = ['2026.04', '2026.05', '2026.06', '2026.07', '2026.08', '2026.09'
   width: 548px;
   height: 260px;
   position: absolute;
+  z-index: 2;
   top: 140px;
   left: 478px;
   display: flex;
@@ -292,6 +419,13 @@ const months = ['2026.04', '2026.05', '2026.06', '2026.07', '2026.08', '2026.09'
   background: #fff;
   color: rgba(0, 0, 0, 0.9);
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.04);
+
+  &:hover {
+    .usage-card__chart::after,
+    .usage-card__marker {
+      opacity: 1;
+    }
+  }
 
   &__data {
     width: 240px;
@@ -372,6 +506,21 @@ const months = ['2026.04', '2026.05', '2026.06', '2026.07', '2026.08', '2026.09'
     position: relative;
     overflow: hidden;
 
+    &::after {
+      width: 2px;
+      height: 212px;
+      position: absolute;
+      z-index: 2;
+      top: 28px;
+      left: var(--hover-x);
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.9);
+      content: '';
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
     > svg {
       width: 308px;
       height: 212px;
@@ -441,12 +590,16 @@ const months = ['2026.04', '2026.05', '2026.06', '2026.07', '2026.08', '2026.09'
     height: 10px;
     position: absolute;
     z-index: 3;
-    top: 76px;
-    left: 221px;
+    top: calc(28px + var(--hover-y));
+    left: var(--hover-x);
+    transform: translate(-50%, -50%);
     border: 2px solid #fff;
     border-radius: 50%;
     box-sizing: border-box;
     background: rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
   }
 }
 
@@ -527,6 +680,8 @@ const months = ['2026.04', '2026.05', '2026.06', '2026.07', '2026.08', '2026.09'
     top: auto;
     left: auto;
     margin: 0 auto;
+    opacity: 1;
+    transform: none;
 
     &--1,
     &--3,
@@ -538,6 +693,14 @@ const months = ['2026.04', '2026.05', '2026.06', '2026.07', '2026.08', '2026.09'
     &--5 {
       transform: rotate(-2deg);
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .business-case {
+    opacity: 1;
+    transform: translate(0, 0) rotate(var(--case-rotation)) scale(1);
+    will-change: auto;
   }
 }
 

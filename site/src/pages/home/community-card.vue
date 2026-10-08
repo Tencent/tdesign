@@ -6,7 +6,9 @@
         <circle cx="216" cy="206.5" r="183" />
         <path v-for="point in networkPoints" :key="`${point.x}-${point.y}`" :d="`M216 206.5 L${point.x} ${point.y}`" />
       </svg>
-      <span class="community-network__logo">T</span>
+      <span class="community-network__logo">
+        <img :src="tdesignLogo" alt="TDesign" />
+      </span>
       <span
         v-for="(member, index) in communityMembers"
         :key="index"
@@ -69,6 +71,7 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 import { Icon } from 'tdesign-icons-vue-next';
+import tdesignLogo from './assets/community-tdesign-logo.png';
 
 const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
 
@@ -267,21 +270,15 @@ onBeforeUnmount(() => {
     width: 110px;
     height: 110px;
     place-items: center;
-    color: transparent;
-    font-size: 48px;
-    font-weight: 800;
     border-radius: 50%;
     background: var(--bg-color-card);
     box-shadow: 0 8px 32px rgb(0 0 0 / 8%);
     transform: translate(-50%, -50%);
-    -webkit-text-fill-color: transparent;
-    background-clip: padding-box;
 
-    &::after {
-      background: linear-gradient(135deg, #006eff 28%, #00bfa5 52%, #a8ed3a 72%);
-      background-clip: text;
-      content: 'T';
-      -webkit-background-clip: text;
+    img {
+      display: block;
+      width: 48px;
+      height: 48px;
     }
   }
 

@@ -44,17 +44,53 @@
         </t-popup>
       </div>
       <div class="module-news" v-if="newsList.length > 0">
-        <div v-for="(news, index) in newsList" :key="index" @click="() => handleClickNews(news.url)">
-          <t-card :title="news.title" :description="news.desc" :style="{ cursor: news.url ? 'pointer' : null }"
-            ><template #footer>{{ news.date }}</template>
-          </t-card>
+        <div ref="newsTrackRef" class="module-news__track" @scroll="handleNewsScroll">
+          <div
+            v-for="(news, index) in newsList"
+            :key="index"
+            class="module-news__item"
+            @click="() => handleClickNews(news.url)"
+          >
+            <t-card
+              :title="news.title"
+              :description="news.desc"
+              :bordered="false"
+              :style="{ cursor: news.url ? 'pointer' : undefined }"
+            >
+              <template #footer>{{ news.date }}</template>
+            </t-card>
+          </div>
         </div>
+        <div v-if="canScrollNewsBack" class="module-news__mask module-news__mask--left" aria-hidden="true"></div>
+        <button
+          v-if="canScrollNewsBack"
+          type="button"
+          class="module-news__previous"
+          aria-label="Previous news"
+          @click="handlePreviousNews"
+        >
+          <svg aria-hidden="true" viewBox="0 0 36 36">
+            <path d="M21.75 9.75L13.5 18L21.75 26.25" />
+          </svg>
+        </button>
+        <div v-if="canScrollNewsForward" class="module-news__mask module-news__mask--right" aria-hidden="true"></div>
+        <button
+          v-if="canScrollNewsForward"
+          type="button"
+          class="module-news__next"
+          aria-label="Next news"
+          @click="handleNextNews"
+        >
+          <svg aria-hidden="true" viewBox="0 0 36 36">
+            <path d="M14.25 26.25L22.5 18L14.25 9.75" />
+          </svg>
+        </button>
       </div>
       <resource-section />
     </section>
 
     <!-- swiper content -->
-    <div class="module-board" id="moduleBoard">
+    <div ref="moduleBoardRef" class="module-board" id="moduleBoard">
       <div class="module-board__inner" :style="`transform: translateX(-${tabTransformWidth}px);`">
         <div
           :class="[
@@ -68,16 +104,12 @@
             <h3 class="title">{{ t('home.open.title') }}</h3>
             <p class="desc">{{ t('home.open.description') }}</p>
           </div>
-          <div class="module-board__detail">
+          <div class="module-board__detail module-board__detail--open">
             <div class="code-board">
               <t-radio-group v-model="codeFramework" class="code-tab" variant="default-filled" size="large">
-                <t-radio-button value="vue">vue</t-radio-button>
-                <t-radio-button value="vue-next">vue-next</t-radio-button>
-                <t-radio-button value="react">react</t-radio-button>
-                <t-radio-button value="miniprogram">miniprogram</t-radio-button>
-                <t-radio-button value="mobile-vue">mobile-vue</t-radio-button>
-                <t-radio-button value="mobile-react">mobile-react</t-radio-button>
-                <t-radio-button value="flutter">flutter</t-radio-button>
+                <t-radio-button v-for="item in codeFrameworkOptions" :key="item.value" :value="item.value">
+                  {{ item.label }}
+                </t-radio-button>
               </t-radio-group>
 
               <ul class="code-list">
@@ -91,17 +123,17 @@
 
             <ul class="desc-list">
               <li class="desc-item">
-                <icon class="desc-icon" name="fork" />
+                <img class="desc-icon" :src="openFrameworksIcon" alt="" />
                 <h3 class="desc-title">{{ t('home.open.features.frameworks.title') }}</h3>
                 <p class="desc-text">{{ t('home.open.features.frameworks.description') }}</p>
               </li>
               <li class="desc-item">
-                <icon class="desc-icon" name="desktop" />
+                <img class="desc-icon" :src="openPlatformsIcon" alt="" />
                 <h3 class="desc-title">{{ t('home.open.features.platforms.title') }}</h3>
                 <p class="desc-text">{{ t('home.open.features.platforms.description') }}</p>
               </li>
               <li class="desc-item">
-                <icon class="desc-icon" name="precise-monitor" />
+                <img class="desc-icon" :src="openIndustriesIcon" alt="" />
                 <h3 class="desc-title">{{ t('home.open.features.industries.title') }}</h3>
                 <p class="desc-text">{{ t('home.open.features.industries.description') }}</p>
               </li>
@@ -121,7 +153,7 @@
             <h3 class="title">{{ t('home.creation.title') }}</h3>
             <p class="desc">{{ t('home.creation.description') }}</p>
           </div>
-          <div class="module-board__detail">
+          <div class="module-board__detail module-board__detail--creation">
             <div class="component-board">
               <div class="component-board-item">
                 <t-input clearable :placeholder="t('home.componentDemo.accountPlaceholder')">
@@ -327,7 +359,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, reactive, ref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { DesktopIcon, Icon } from 'tdesign-icons-vue-next';
@@ -335,6 +367,9 @@ import Banner from './banner.vue';
 import BusinessCases from './business-cases.vue';
 import CommunityCard from './community-card.vue';
 import IndustryCases from './industry-cases.vue';
+import openFrameworksIcon from './assets/open-frameworks.svg';
+import openIndustriesIcon from './assets/open-industries.svg';
+import openPlatformsIcon from './assets/open-platforms.svg';
 import ResourceSection from './resource-section.vue';
 // @ts-expect-error prismjs does not publish TypeScript declarations.
 import Prismjs from 'prismjs';
@@ -344,7 +379,7 @@ import type { ThemeMode } from '@/pages/types';
 
 const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
 
-type CodeFramework = 'vue' | 'vue-next' | 'react' | 'miniprogram' | 'mobile-vue' | 'mobile-react' | 'flutter';
+type CodeFramework = 'vue' | 'vue-next' | 'react' | 'angular' | 'miniprogram' | 'mobile-vue';
 
 interface CodeItem {
   type: string;
@@ -366,7 +401,6 @@ interface HomeState {
   tabTransformWidth: number;
   windowWidth: number;
   themeMode: ThemeMode;
-  tabTimer: number | null;
   codeFramework: CodeFramework;
   codeList: Record<CodeFramework, CodeItem[]>;
   componentModel: {
@@ -381,6 +415,19 @@ interface HomeState {
 const isIntranet = location.host.includes('woa.com'); // 部分动态或内容只能通过内网访问
 
 const { t } = useI18n({ messages: homeMessages });
+const moduleBoardRef = ref<HTMLElement | null>(null);
+const newsTrackRef = ref<HTMLElement | null>(null);
+const canScrollNewsBack = ref(false);
+const canScrollNewsForward = ref(false);
+
+const codeFrameworkOptions: Array<{ label: string; value: CodeFramework }> = [
+  { label: 'vue.js', value: 'vue' },
+  { label: 'vue-next.js', value: 'vue-next' },
+  { label: 'react.js', value: 'react' },
+  { label: 'angular.js', value: 'angular' },
+  { label: 'mini-program.js', value: 'miniprogram' },
+  { label: 'vue-mobile.js', value: 'mobile-vue' },
+];
 
 const state = reactive<HomeState>({
   currentTab: 0,
@@ -388,56 +435,43 @@ const state = reactive<HomeState>({
   tabTransformWidth: 0,
   windowWidth: window.innerWidth,
   themeMode: 'light',
-  tabTimer: null,
   codeFramework: 'vue',
   codeList: {
     vue: [
       { type: 'bash', code: 'npm i tdesign-vue' },
       { type: 'javascript', code: "import Vue from 'vue';" },
       { type: 'javascript', code: "import TDesign from 'tdesign-vue';" },
-      { type: 'javascript', code: "import 'tdesign-vue/es/style/index.css';" },
       { type: 'javascript', code: 'Vue.use(TDesign);' },
     ],
     'vue-next': [
       { type: 'bash', code: 'npm i tdesign-vue-next' },
       { type: 'javascript', code: "import { createApp } from 'vue';" },
       { type: 'javascript', code: "import TDesign from 'tdesign-vue-next';" },
-      { type: 'javascript', code: "import 'tdesign-vue-next/es/style/index.css';" },
       { type: 'javascript', code: 'createApp(App).use(TDesign);' },
     ],
     react: [
       { type: 'bash', code: 'npm i tdesign-react' },
+      { type: 'javascript', code: "import React from 'react';" },
       { type: 'javascript', code: "import { Button } from 'tdesign-react';" },
-      { type: 'javascript', code: "import 'tdesign-react/es/style/index.css';" },
-      { type: 'javascript', code: '' },
+      { type: 'javascript', code: 'export default () => <Button>TDesign</Button>;' },
+    ],
+    angular: [
+      { type: 'bash', code: 'npm i tdesign-angular' },
+      { type: 'javascript', code: "import { TDesignModule } from 'tdesign-angular';" },
+      { type: 'javascript', code: '@NgModule({ imports: [TDesignModule] })' },
+      { type: 'javascript', code: 'export class AppModule {}' },
     ],
     miniprogram: [
       { type: 'bash', code: 'npm i tdesign-miniprogram' },
       { type: 'javascript', code: '{ "usingComponents": { "t-tag": "tdesign-miniprogram/tag/tag" } }' },
       { type: 'javascript', codeKey: 'home.code.importantTag' },
-      { type: 'javascript', code: '' },
+      { type: 'javascript', code: 'Page({})' },
     ],
     'mobile-vue': [
       { type: 'bash', code: 'npm i tdesign-mobile-vue' },
       { type: 'javascript', code: "import { createApp } from 'vue';" },
       { type: 'javascript', code: "import TDesign from 'tdesign-mobile-vue';" },
-      { type: 'javascript', code: "import 'tdesign-mobile-vue/es/style/index.css';" },
       { type: 'javascript', code: 'createApp(App).use(TDesign);' },
-    ],
-    'mobile-react': [
-      { type: 'bash', code: 'npm i tdesign-mobile-react' },
-      { type: 'javascript', code: "import { Button } from 'tdesign-mobile-react';" },
-      { type: 'javascript', code: "import 'tdesign-mobile-react/es/style/index.css';" },
-      { type: 'javascript', code: '' },
-    ],
-    flutter: [
-      { type: 'bash', code: 'flutter pub add tdesign_flutter' },
-      { type: 'javascript', code: "import 'package:tdesign_flutter/tdesign_flutter.dart';" },
-      {
-        type: 'javascript',
-        code: "TDTag _buildTag(BuildContext context) { return const TDTag('TDesign'); }",
-      },
-      { type: 'javascript', code: '' },
     ],
   },
   componentModel: {
@@ -520,20 +554,70 @@ const footerStyle = computed(() => ({
   '--footer-logo-position': 'unset',
 }));
 let observer: MutationObserver | null = null;
+let wheelLocked = false;
+let wheelUnlockTimer: number | null = null;
 
 function displayCode(item: CodeItem): string {
   return item.codeKey ? String(t(item.codeKey)) : item.code ?? '';
 }
 
-function initTabTimer(): void {
-  if (state.tabTimer !== null) clearInterval(state.tabTimer);
-  state.tabTimer = window.setInterval(() => {
-    state.currentTab = state.currentTab === 2 ? 0 : state.currentTab + 1;
-  }, 4000);
+function scheduleWheelUnlock(): void {
+  if (wheelUnlockTimer !== null) clearTimeout(wheelUnlockTimer);
+  wheelUnlockTimer = window.setTimeout(() => {
+    wheelLocked = false;
+    wheelUnlockTimer = null;
+  }, 180);
+}
+
+function handleModuleWheel(event: WheelEvent): void {
+  if (event.deltaY === 0) return;
+  if (wheelLocked) {
+    event.preventDefault();
+    event.stopPropagation();
+    scheduleWheelUnlock();
+    return;
+  }
+
+  const direction = event.deltaY > 0 ? 1 : -1;
+  const nextTab = state.currentTab + direction;
+  if (nextTab < 0 || nextTab > 2) return;
+
+  event.preventDefault();
+  event.stopPropagation();
+  state.currentTab = nextTab;
+  wheelLocked = true;
+  scheduleWheelUnlock();
 }
 
 function handleClickNews(url?: string): void {
   if (url) window.open(url, '_blank');
+}
+
+function updateNewsControls(): void {
+  const track = newsTrackRef.value;
+  if (!track) return;
+  canScrollNewsBack.value = track.scrollLeft > 1;
+  canScrollNewsForward.value = track.scrollLeft + track.clientWidth < track.scrollWidth - 1;
+}
+
+function handleNewsScroll(): void {
+  updateNewsControls();
+}
+
+function handlePreviousNews(): void {
+  const track = newsTrackRef.value;
+  if (!track) return;
+  const firstCardOffset = track.querySelector<HTMLElement>('.module-news__item')?.offsetLeft ?? 0;
+  const left = track.scrollLeft <= 358 + firstCardOffset ? 0 : track.scrollLeft - 358;
+  track.scrollTo({ left, behavior: 'smooth' });
+}
+
+function handleNextNews(): void {
+  const track = newsTrackRef.value;
+  if (!track) return;
+  const firstCardOffset = track.querySelector<HTMLElement>('.module-news__item')?.offsetLeft ?? 0;
+  const distance = track.scrollLeft <= 1 ? 358 + firstCardOffset : 358;
+  track.scrollBy({ left: distance, behavior: 'smooth' });
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -568,6 +652,7 @@ function getNews(): void {
     data.json().then((value: unknown) => {
       const list = parseNews(value);
       state.newsList = isIntranet ? list : list.filter((value) => !value.isIntranet);
+      requestAnimationFrame(updateNewsControls);
     });
   });
 }
@@ -579,6 +664,7 @@ function handleIntroClick(url: string): void {
 function handleResize(): void {
   state.windowWidth = window.innerWidth;
   state.currentTab = 0;
+  requestAnimationFrame(updateNewsControls);
 }
 
 function watchHtmlMode(): void {
@@ -620,12 +706,13 @@ onMounted(() => {
   watchHtmlMode();
   getNews();
   window.addEventListener('resize', handleResize);
-  initTabTimer();
+  moduleBoardRef.value?.addEventListener('wheel', handleModuleWheel, { passive: false });
 });
 
 onBeforeUnmount(() => {
-  if (state.tabTimer !== null) clearInterval(state.tabTimer);
+  if (wheelUnlockTimer !== null) clearTimeout(wheelUnlockTimer);
   observer?.disconnect();
   window.removeEventListener('resize', handleResize);
+  moduleBoardRef.value?.removeEventListener('wheel', handleModuleWheel);
 });
 </script>

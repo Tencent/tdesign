@@ -1,243 +1,365 @@
 /* stylelint-disable */
 :host {
-  font-size: 14px;
-  color: var(--text-secondary);
-  min-height: var(--footer-height);
+  display: block;
+  min-height: 530px;
   box-sizing: border-box;
-
-  --footer-logo-position: absolute;
-  --footer-inner-position: static;
+  color: var(--text-secondary);
+  font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
 }
 
 .TDesign-doc-footer {
-  position: relative;
-  height: calc(var(--footer-height) - 56px);
-  padding-right: var(--content-padding-right);
-  background-color: var(--bg-color-footer);
-  box-shadow: var(--footer-box-shadow);
+  width: 100%;
+  background: var(--bg-color-container);
+  box-sizing: border-box;
 
   &__inner {
-    position: var(--footer-inner-position);
+    width: calc(100% - 96px);
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 40px var(--content-padding-left-right);
-    height: 100%;
     box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    max-width: var(--content-max-width);
   }
 
-  &__content {
+  &__main {
+    height: 320px;
+    padding: 96px 0 60px;
     display: flex;
-    flex-direction: row;
-    column-gap: 24px;
-    width: 100%;
+    justify-content: space-between;
+    align-items: flex-start;
+    box-sizing: border-box;
+  }
 
-    &-block {
+  &__brand {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+
+    &-logo {
+      display: block;
+      width: 140px;
+      height: 34px;
+    }
+
+    p {
+      width: 340px;
+      height: 48px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 24px;
+    }
+  }
+
+  &__links {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+
+    &-group {
+      width: 156px;
       display: flex;
       flex-direction: column;
-      min-width: 120px;
+      align-items: flex-start;
+      gap: 20px;
+
+      &:last-child {
+        width: 100px;
+      }
 
       .title {
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 22px;
-        margin-top: 0;
-        margin-bottom: 24px;
-        color: var(--text-placeholder);
+        height: 24px;
+        margin: 0;
+        color: var(--text-primary);
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 24px;
+        white-space: nowrap;
+      }
+
+      .links {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
       }
 
       .link {
+        height: 24px;
+        color: var(--text-secondary);
         cursor: pointer;
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 24px;
         text-decoration: none;
-        color: var(--text-primary);
-        font-size: 14px;
-        line-height: 22px;
-        margin-bottom: 16px;
-        transition: all var(--anim-duration-base) linear;
+        white-space: nowrap;
+        transition: color var(--anim-duration-base) linear;
 
         &:hover {
-          color: var(--text-interactive);
+          color: var(--brand-main);
         }
       }
     }
   }
 
-  &__logos {
-    display: inline-flex;
+  &__community,
+  &__legal {
+    border-top: 1px solid var(--component-stroke);
+    display: grid;
+    grid-template-columns: minmax(0, 664px) auto;
     align-items: center;
-    row-gap: 32px;
-    column-gap: 32px;
+    box-sizing: border-box;
+
+    > p {
+      margin: 0;
+      font-weight: 300;
+    }
   }
 
-  &__qrcode {
-    width: 192px;
-    padding: 16px;
-    box-sizing: border-box;
-    border-radius: 9px;
-    background: var(--bg-color-code);
-    border: 1px solid var(--component-border);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    right: 48px;
-    top: 40px;
+  &__community {
+    min-height: 108px;
+    padding: 32px 0;
 
-    &-title {
-      margin: 0 0 4px;
+    > p {
+      height: 24px;
+      color: var(--text-secondary);
       font-size: 16px;
       line-height: 24px;
-      font-weight: bold;
-      color: var(--text-primary);
     }
 
-    &-desc {
-      margin: 0;
-      font-size: 14px;
-      line-height: 22px;
-      color: var(--text-secondary);
+    &-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      strong {
+        width: 96px;
+        color: var(--text-primary);
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 24px;
+        white-space: nowrap;
+      }
     }
   }
-}
 
-.TDesign-doc-footer__qrcode-trigger {
-  background: linear-gradient(180deg, #4282ec 0%, var(--brand-main) 100%);
-  width: 160px;
-  height: 160px;
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 4px;
-  box-sizing: border-box;
-  box-shadow: 0 8px 8px 0 #0000001a;
-  margin-bottom: 12px;
-
-  > div {
-    height: 48px;
+  &__platforms {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    color: var(--text-primary);
+    align-items: center;
+    gap: 8px;
 
-    :hover {
-      color: var(--brand-main);
-      font-weight: bold;
-    }
-
-    > div {
-      background-color: var(--bg-color-container);
-      border-radius: 3px;
-      text-align: left;
-      padding: 4px;
-      display: flex;
-      font-size: 12px;
-      flex-direction: column;
-      box-sizing: border-box;
+    .platform {
+      width: 44px;
+      height: 44px;
+      padding: 10px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--bg-color-secondarycontainer);
+      color: inherit;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      transition: background-color var(--anim-duration-base) linear;
+
+      &:hover,
+      &:focus-visible {
+        background: var(--bg-color-component-hover);
+      }
 
       i {
-        font-size: 20px;
-        text-align: left;
+        width: 24px;
+        height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+          display: block;
+          width: 24px;
+          height: 24px;
+        }
       }
     }
 
-    &:nth-child(1),&:nth-child(2) {
-      div {
-        width: 74px;
-      }
+    .platform-react svg,
+    .platform-flutter svg,
+    .platform-design svg {
+      width: 20px;
+      height: 20px;
     }
 
-    &:nth-child(3) {
-      div {
-        width: 152px;
-      }
+    .platform-vue svg {
+      width: 22px;
+      height: 22px;
     }
   }
-}
 
-.TDesign-doc-footer__bottom {
-  height: 56px;
-  overflow: hidden;
-  color: var(--text-placeholder);
-  padding-right: var(--content-padding-right);
-  background: var(--bg-color-secondaryfooter);
+  &__legal {
+    min-height: 102px;
+    padding: 39px 0 40px;
 
-  .TDesign-doc-footer__inner {
-    padding: 0 var(--content-padding-left-right);
-    align-items: center;
-    column-gap: 24px;
-  }
-
-  .TDesign-doc-footer__logos {
-    position: var(--footer-logo-position);
-    right: 48px;
-    bottom: 0;
-    height: 56px;
-  }
-
-  .logo {
-    height: 34px;
-    display: inline-flex;
-    align-items: center;
-
-    svg {
-      transition: color .2s linear;
+    .copyright {
+      height: 22px;
       color: var(--text-placeholder);
-    }
-
-    &:not(i):hover svg {
-      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 22px;
+      white-space: nowrap;
     }
   }
 
-  .copyright {
-    margin: 0;
+  &__company-logos {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    .company-logo {
+      height: 24px;
+      color: var(--text-disabled);
+      display: inline-flex;
+      align-items: center;
+
+      svg {
+        display: block;
+        height: 24px;
+      }
+    }
+
+    .committee {
+      width: 120px;
+
+      svg {
+        width: 120px;
+      }
+    }
+
+    .cloud {
+      width: 68px;
+
+      svg {
+        width: 68px;
+      }
+
+      &:hover {
+        color: var(--text-placeholder);
+      }
+    }
   }
 }
 
 @media screen and (max-width: 960px) {
+  :host {
+    min-height: auto;
+  }
+
   .TDesign-doc-footer {
-    height: auto;
-  }
-
-  .TDesign-doc-footer__qrcode {
-    position: unset;
-  }
-
-  .TDesign-doc-footer__content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    row-gap: 24px;
-
-    .title {
-      color: var(--text-primary);
-      margin-bottom: 12px;
+    &__inner {
+      width: calc(100% - 48px);
     }
 
-    .link {
-      color: var(--text-placeholder);
-    }
-  }
-
-  .TDesign-doc-footer__bottom {
-    height: 112px;
-
-    .TDesign-doc-footer__inner {
-      flex-direction: column-reverse;
-      padding-top: 16px;
-      padding-bottom: 16px;
-    }
-
-    .TDesign-doc-footer__logos {
-      position: unset;
+    &__main {
       height: auto;
+      padding: 48px 0;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    &__brand {
+      align-self: auto;
+      align-items: center;
+      text-align: center;
+
+      p {
+        width: min(340px, 100%);
+        height: auto;
+      }
+    }
+
+    &__links {
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      text-align: center;
+
+      &-group,
+      &-group:last-child {
+        width: 100%;
+        align-items: center;
+        gap: 12px;
+
+        .links {
+          align-items: center;
+        }
+
+        .link {
+          color: var(--text-placeholder);
+        }
+      }
+
+      .is-desktop-only {
+        display: none;
+      }
+    }
+
+    &__community {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      padding: 32px 0;
+      text-align: center;
+
+      &-actions {
+        width: 100%;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: center;
+
+        strong {
+          width: auto;
+        }
+      }
+    }
+
+    &__platforms {
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    &__legal {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      gap: 24px;
+      padding: 32px 0;
+      text-align: center;
     }
 
     .copyright {
-      text-align: center;
+      height: auto;
+      white-space: normal;
+    }
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .TDesign-doc-footer {
+    &__inner {
+      width: calc(100% - 32px);
+    }
+
+    &__main {
+      padding: 40px 0;
+    }
+
+    &__platforms {
+      max-width: 260px;
     }
   }
 }

@@ -129,7 +129,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
 .resource-section {
   position: relative;
   left: 50%;
-  width: min(1512px, 100vw);
+  width: 1512px;
   padding: 80px 116px 60px;
   box-sizing: border-box;
   color: var(--text-primary);
@@ -157,7 +157,8 @@ const resourceCards = computed<ResourceCard[]>(() => [
 
 .resource-grid {
   display: grid;
-  grid-template-columns: 528px 1fr;
+  width: 1280px;
+  grid-template-columns: 528px 736px;
   gap: 16px;
 }
 
@@ -246,6 +247,10 @@ const resourceCards = computed<ResourceCard[]>(() => [
     height: 308px;
   }
 
+  &--mobile {
+    width: 736px;
+  }
+
   &--aigc &__illustration {
     top: -20px;
     right: auto;
@@ -260,6 +265,10 @@ const resourceCards = computed<ResourceCard[]>(() => [
     left: 0;
     width: 664px;
     height: 308px;
+  }
+
+  &--icons {
+    width: 664px;
   }
 }
 
@@ -305,13 +314,15 @@ const resourceCards = computed<ResourceCard[]>(() => [
   gap: 16px;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1279px) {
   .resource-section {
+    width: 100vw;
     padding-right: 48px;
     padding-left: 48px;
   }
 
   .resource-grid {
+    width: 100%;
     grid-template-columns: 1fr;
   }
 

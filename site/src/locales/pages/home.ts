@@ -47,15 +47,15 @@ export const zhCN = {
       features: {
         frameworks: {
           title: '多技术栈版本实现',
-          description: '支持业界主流的 React/Vue/微信小程序/Flutter 开发技术栈',
+          description: '官方支持业界目前主流的开发技术栈：React、Vue、Angular、微信小程序、Flutter',
         },
         platforms: {
           title: '多端适配',
-          description: '提供桌面端和移动端两套风格统一的组件资源',
+          description: '提供桌面端和移动端风格统一的两套组件资源',
         },
         industries: {
           title: '丰富的行业组件',
-          description: '由腾讯多个业务团队，基于统一的设计体系提供多个垂直领域的行业组件库产品',
+          description: '联合腾讯多个业务团队，基于统一的设计体系提供各垂直领域的行业组件',
         },
       },
       title: '开源开放，持续迭代',
@@ -245,15 +245,16 @@ export const enUS = {
       features: {
         frameworks: {
           title: 'Multiple-framework versions',
-          description: 'Support popular tech stacks React/Vue/MiniProgram/Flutter',
+          description:
+            'Official support for React, Vue, Angular, Mini Program, Flutter, and other popular tech stacks.',
         },
         platforms: {
           title: 'Multi-platform compatibility',
-          description: 'Provide two sets of component resources in unified desktop and mobile styles.',
+          description: 'Unified component resources for both desktop and mobile.',
         },
         industries: {
           title: 'Industry-specific component libraries',
-          description: 'Developed by multiple Tencent business teams based on a unified design system.',
+          description: 'Industry components co-created with Tencent business teams under one design system.',
         },
       },
       title: 'Open Resources, Continuous Iteration',
