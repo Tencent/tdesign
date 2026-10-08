@@ -269,7 +269,7 @@ export default define<HeaderHost>({
                         ${
                           changelog && isChangelogComponentRegistered && (isComponentPage() || isGlobalConfigPage())
                             ? html`
-                                <button id="td-doc-changelog__entry" onclick="${openChangelogDrawer}">
+                                <button class="td-doc-changelog__entry" onclick="${openChangelogDrawer}">
                                   <i innerHTML="${historyIcon}"></i>
                                   <span>${locale.changelog.title}</span>
                                 </button>
