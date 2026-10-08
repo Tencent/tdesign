@@ -52,6 +52,9 @@
     "**/*.html": [
       "prettier --write"
     ],
+    "**/*.{json,jsonc}": [
+      "prettier --write"
+    ],
     "**/*.less": [
       "stylelint --fix"
     ]
