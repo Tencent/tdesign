@@ -7,7 +7,8 @@
     "prebuild": "rimraf dist/*",
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
-    "lint": "eslint --ext .ts src"
+    "lint": "eslint --ext .ts src",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
