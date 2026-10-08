@@ -102,8 +102,9 @@ onMounted(() => {
 .panel {
   &__size-slider {
     border-radius: 9px;
-    padding: 8px 8px 12px 8px;
+    padding: 8px 8px 12px;
     font-size: 14px;
+
     &-op {
       width: 108px;
       margin-top: 4px;
@@ -112,6 +113,7 @@ onMounted(() => {
       background-color: var(--bg-color-code);
     }
   }
+
   :deep(.t-input-number) {
     font-size: 14px !important;
   }

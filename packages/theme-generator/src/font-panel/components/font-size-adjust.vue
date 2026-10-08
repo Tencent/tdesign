@@ -268,12 +268,14 @@ onMounted(() => {
     font-weight: 600;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
+
   &__round-tag-right {
     font-size: 18px;
     line-height: 32px;
     font-weight: 600;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
+
   &__token-list {
     margin-top: 8px;
     padding: 4px;
@@ -285,12 +287,14 @@ onMounted(() => {
       line-height: 12px;
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
+
     :deep(.t-radio-group) {
       width: 100%;
       border-radius: 6px;
       text-align: center;
       background-color: var(--bg-color-theme-radio);
     }
+
     :deep(.t-radio-button) {
       width: 50%;
       padding: 0;
@@ -298,6 +302,7 @@ onMounted(() => {
       justify-content: center;
       align-items: center;
     }
+
     :deep(.t-list__inner) {
       overflow: hidden;
     }
@@ -309,6 +314,7 @@ onMounted(() => {
       cursor: pointer;
       background-color: var(--bg-color-theme-surface);
     }
+
     :deep(.t-list-item__content) {
       width: 100%;
     }

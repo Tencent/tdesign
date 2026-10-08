@@ -12,8 +12,15 @@
     "site:preview": "pnpm run build:components && pnpm run --filter tdesign-site site:preview",
     "auto-release-collection": "pnpm run --filter auto-release-collection start",
     "test": "pnpm -r run --if-present test",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "pnpm run lint:css && pnpm run lint:js && pnpm run lint:eslint && pnpm run typecheck",
+    "lint:css": "stylelint \"**/*.{css,wxss,less,vue}\" --allow-empty-input --cache",
+    "lint:js": "prettier --check \"**/*.{vue,js,ts,jsx,tsx,json,md}\" --ignore-path .prettierignore",
+    "lint:eslint": "eslint . --max-warnings 0 --cache",
+    "lint:css:fix": "stylelint \"**/*.{css,wxss,less,vue}\" --fix --allow-empty-input --cache",
+    "lint:js:fix": "prettier --write \"**/*.{vue,js,ts,jsx,tsx,json,md}\" --ignore-path .prettierignore",
+    "lint:eslint:fix": "eslint . --fix --max-warnings 0 --cache",
+    "lint:fix": "pnpm run lint:css:fix && pnpm run lint:js:fix && pnpm run lint:eslint:fix",
+    "typecheck": "pnpm -r run --if-present typecheck",
     "format": "prettier --write .",
     "build": "pnpm -r run --if-present build",
     "prepare": "husky install"
@@ -33,6 +40,7 @@
     "globals": "^17.13.0",
     "husky": "^8.0.0",
     "lint-staged": "^16.3.4",
+    "postcss-html": "^2.0.0",
     "prettier": "^3.9.9",
     "rimraf": "^3.0.2",
     "stylelint": "^17.16.0",
@@ -50,7 +58,12 @@
     }
   },
   "lint-staged": {
-    "**/*.{vue,js,ts,tsx}": [
+    "**/*.vue": [
+      "stylelint --fix",
+      "eslint --fix --no-warn-ignored",
+      "prettier --write"
+    ],
+    "**/*.{js,ts,tsx}": [
       "eslint --fix --no-warn-ignored",
       "prettier --write"
     ],
@@ -60,7 +73,7 @@
     "**/*.{json,jsonc}": [
       "prettier --write"
     ],
-    "**/*.less": [
+    "**/*.{css,less,wxss}": [
       "stylelint --fix",
       "prettier --write"
     ]

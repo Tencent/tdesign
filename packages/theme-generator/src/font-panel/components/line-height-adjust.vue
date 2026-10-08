@@ -208,9 +208,11 @@ onMounted(() => {
       z-index: 0;
       left: 0;
     }
+
     &::before {
       top: 8px;
     }
+
     &::after {
       top: 21px;
     }
@@ -233,22 +235,27 @@ onMounted(() => {
       z-index: 0;
       left: 0;
     }
+
     &::before {
       top: 6px;
     }
+
     &::after {
       top: 21px;
     }
   }
+
   &__token-list {
     margin-top: 8px;
     padding: 4px;
     border-radius: 9px;
     background-color: var(--bg-color-theme-secondary);
+
     .code {
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
       margin-bottom: 8px;
     }
+
     :deep(.t-radio-group) {
       width: 100%;
       text-align: center;
@@ -256,6 +263,7 @@ onMounted(() => {
       margin-bottom: 4px;
       background-color: var(--bg-color-theme-radio);
     }
+
     :deep(.t-radio-button) {
       width: 50%;
       padding: 0;
@@ -271,6 +279,7 @@ onMounted(() => {
       cursor: pointer;
       background: var(--bg-color-theme-surface);
     }
+
     :deep(.t-list-item__content) {
       width: 100%;
     }

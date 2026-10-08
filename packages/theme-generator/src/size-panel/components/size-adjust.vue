@@ -124,6 +124,7 @@ function parseSize(val: string | number): number {
       font-size: 14px;
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
+
     :deep(.t-radio-group) {
       width: 228px;
       border-radius: 6px;
@@ -134,17 +135,19 @@ function parseSize(val: string | number): number {
     :deep(.t-list-item) {
       margin-bottom: 4px;
       border-radius: 6px;
-      cursor: pointer;
       background-color: var(--bg-color-theme-surface);
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
       padding: 4px 6px;
       font-size: 12px;
       line-height: 20px;
+
       &:last-child {
         margin-bottom: 0;
       }
+
       cursor: pointer;
     }
+
     :deep(.t-list-item__content) {
       width: 100%;
     }

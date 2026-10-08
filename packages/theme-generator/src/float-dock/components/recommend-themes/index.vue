@@ -58,7 +58,7 @@ function handleChangeTheme(theme: Theme) {
 <style lang="less" scoped>
 .recommend-theme {
   max-height: 376px;
-  border-radius: 32px 32px 0px 0px;
+  border-radius: 32px 32px 0 0;
 
   &__content {
     padding: 0;
@@ -91,7 +91,7 @@ function handleChangeTheme(theme: Theme) {
     color: var(--text-primary);
     font-weight: 600;
     font-size: 14px;
-    margin: 8px 0px 0px 12px;
+    margin: 8px 0 0 12px;
     line-height: 22px;
     display: flex;
     align-items: center;
@@ -105,7 +105,7 @@ function handleChangeTheme(theme: Theme) {
 
     > div {
       margin: 4px;
-      padding: 6px 6px 0px 6px;
+      padding: 6px 6px 0;
       color: var(--text-primary);
       background: var(--bg-color-card);
       border-radius: 18px;
@@ -123,9 +123,10 @@ function handleChangeTheme(theme: Theme) {
       border-radius: 12px;
       position: relative;
       overflow: hidden;
+
       &--active {
         position: absolute;
-        right: 0px;
+        right: 0;
         top: 30px;
       }
     }

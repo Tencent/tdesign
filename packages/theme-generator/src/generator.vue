@@ -78,40 +78,52 @@ function handleClickSetting() {
 .t-popconfirm {
   z-index: 10000;
 }
+
 .t-popconfirm .t-icon {
   font-size: 20px !important;
 }
+
 .t-popup__content {
   box-shadow: var(--shadow-2);
 }
+
 .t-popup .t-select-option {
   font-size: 14px;
 }
+
 .t-popup .t-input-number {
   font-size: 14px;
 }
+
 .t-popup .t-input {
   border-radius: 3px !important;
 }
+
 .t-popup .t-icon {
   font-size: 14px !important;
 }
+
 .t-popup .t-select__empty {
   font-size: 14px;
 }
+
 .t-radio-button__label {
   font-size: 14px;
 }
+
 .t-radio-group__bg-block {
   background: var(--bg-color-theme-radio-active) !important;
 }
+
 .t-slider__button {
   width: 16px;
   height: 16px;
 }
+
 .t-button.t-size-l {
   font-size: 16px;
 }
+
 .t-button--variant-base.t-button--theme-primary:hover,
 .t-button--variant-base.t-button--theme-primary:focus-visible {
   border-color: var(--brand-main-hover);

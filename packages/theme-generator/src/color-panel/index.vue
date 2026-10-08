@@ -600,7 +600,7 @@ onUnmounted(() => {
     font-size: 14px;
     color: var(--text-primary);
     font-weight: 600;
-    margin: 0 0 8px 0;
+    margin: 0 0 8px;
     line-height: 22px;
     display: flex;
     align-items: center;
@@ -608,7 +608,7 @@ onUnmounted(() => {
 
   &__subtitle {
     font-size: 12px;
-    margin: 4px 0 10px 0;
+    margin: 4px 0 10px;
 
     button {
       margin-right: 8px;
@@ -621,6 +621,7 @@ onUnmounted(() => {
     display: flex;
     flex-wrap: wrap;
     margin: 0 -2px;
+
     > div {
       margin: 2px;
     }
@@ -673,7 +674,7 @@ onUnmounted(() => {
   }
 
   &__custom {
-    margin: 8px 0px;
+    margin: 8px 0;
     padding: 2px;
     height: 106px;
     background: conic-gradient(
@@ -688,15 +689,18 @@ onUnmounted(() => {
     border-radius: 9px;
     cursor: pointer;
     transition: padding 0.2s;
+
     &:hover {
       padding: 4px;
     }
+
     &-inner {
       background-color: var(--bg-color-card);
-      padding: 2px 2px 4px 2px;
+      padding: 2px 2px 4px;
       border-radius: 7px;
       max-height: 100%;
     }
+
     &-top {
       padding: 4px 8px;
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
@@ -724,6 +728,7 @@ onUnmounted(() => {
           color: var(--text-primary);
           font-weight: 600;
         }
+
         &:last-child {
           font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
         }
@@ -743,6 +748,7 @@ onUnmounted(() => {
       height: 40px;
       width: 118px;
       border-radius: 8px;
+
       &.is-active {
         background: conic-gradient(
           from 180deg at 50% 50%,
@@ -754,6 +760,7 @@ onUnmounted(() => {
           #00c3ff 360deg
         );
       }
+
       &-inner {
         border-radius: 6px;
         border: 2px solid var(--bg-color-card);

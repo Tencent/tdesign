@@ -94,7 +94,7 @@ function handleClickPanel(idx: number) {
   top: 0;
 
   &__panel {
-    padding: 0px 8px;
+    padding: 0 8px;
     position: relative;
 
     .border {
@@ -104,7 +104,7 @@ function handleClickPanel(idx: number) {
       left: 0;
       top: 0;
       background: var(--td-brand-color);
-      border-radius: 0px 9px 9px 0px;
+      border-radius: 0 9px 9px 0;
       transition: top 0.2s;
     }
 

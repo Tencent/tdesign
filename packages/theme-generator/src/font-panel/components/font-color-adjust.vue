@@ -116,6 +116,7 @@ function changeColor(hex: string, idx: number) {
 .fade-leave-active {
   transition: opacity 0.1s;
 }
+
 .fade-enter-from, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
@@ -138,6 +139,7 @@ function changeColor(hex: string, idx: number) {
       align-items: center;
     }
   }
+
   &__horizontal-list {
     width: 100%;
     margin: 20px 0;
@@ -167,9 +169,9 @@ function changeColor(hex: string, idx: number) {
           transform: scale(1.2);
           border-radius: 3px;
           box-shadow:
-            0px 1px 10px rgba(0, 0, 0, 0.05),
-            0px 4px 5px rgba(0, 0, 0, 0.08),
-            0px 2px 4px -1px rgba(0, 0, 0, 0.12);
+            0 1px 10px rgba(0, 0, 0, 0.05),
+            0 4px 5px rgba(0, 0, 0, 0.08),
+            0 2px 4px -1px rgba(0, 0, 0, 0.12);
         }
       }
     }
@@ -207,6 +209,7 @@ function changeColor(hex: string, idx: number) {
         transition: background-color 0.2s;
         border-radius: 5px;
       }
+
       &:hover {
         &::after {
           background-color: rgba(0, 0, 0, 0.2);

@@ -396,7 +396,7 @@ function copyColor(color: string) {
         }
 
         &:nth-child(-n + 6) {
-          color: #ffffff;
+          color: #fff;
         }
 
         &:first-child {

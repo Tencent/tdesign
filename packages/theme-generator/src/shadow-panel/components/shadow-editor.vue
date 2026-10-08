@@ -122,50 +122,60 @@ watch(color, (nVal) => {
 .shadow-layer {
   display: flex;
   flex-direction: column;
+
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 4px;
+
     &--name {
       font-size: 14px;
       color: var(--text-primary);
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
   }
+
   &__remove {
     color: var(--text-primary);
     cursor: pointer;
   }
+
   &__card {
     padding: 8px;
     width: 208px;
     background: var(--bg-color-code);
     border-radius: 6px;
+
     &--item {
       display: flex;
       margin-bottom: 8px;
+
       &:last-child {
         margin-bottom: 0;
       }
+
       :deep(.t-input--auto-width) {
         width: auto;
       }
     }
+
     &--x {
-      width: 60px;
       margin-right: 8px;
       width: 50%;
+
       &:last-child {
         margin-right: 0;
       }
     }
+
     &--sharp {
       width: 24px;
       height: 24px;
       border: 1px solid var(--bg-color-demo-select);
       border-radius: 3px;
     }
+
     &--color {
       margin-left: 4px;
       font-size: 14px;
@@ -173,18 +183,20 @@ watch(color, (nVal) => {
       color: var(--text-primary);
     }
   }
+
   &__title {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 4px;
   }
+
   &__name {
-    font-family: 'SF Mono';
     font-size: 12px;
     color: var(--text-primary);
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
+
   &__suffix {
     font-size: 14px;
     color: var(--text-placeholder);

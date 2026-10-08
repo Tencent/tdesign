@@ -229,7 +229,7 @@ onMounted(() => {
     color: var(--text-primary);
     font-weight: 600;
     margin-bottom: 8px;
-    margin-top: 0px;
+    margin-top: 0;
     line-height: 22px;
     display: flex;
     align-items: center;
@@ -243,33 +243,42 @@ onMounted(() => {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+
     /* Brand 品牌/Brand1-Light */
     background: var(--brand-main-light);
+
     /* Brand 品牌/Brand8-Normal */
     border: 1px solid var(--brand-main);
+
     &.disabled {
       background: var(--bg-color-tag);
       border: 1px solid var(--theme-component-border);
     }
   }
+
   &__round-tag-left {
     border-radius: 3px;
   }
+
   &__round-tag-right {
     border-radius: 8px;
   }
+
   &__list {
     margin-top: 8px;
     padding: 4px;
     border-radius: 9px;
     background-color: var(--bg-color-theme-secondary);
+
     &-item {
       display: flex;
       align-items: center;
+
       &-text {
         flex: 1;
         width: 158px;
       }
+
       &-title {
         font-weight: 400;
         font-size: 12px;
@@ -279,33 +288,41 @@ onMounted(() => {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
+
         &.bottom {
           color: var(--text-placeholder);
         }
       }
+
       &-round-tag {
         width: 32px;
         height: 32px;
+
         /* Brand 品牌/Brand1-Light */
         background: var(--brand-main-light);
+
         /* Brand 品牌/Brand8-Normal */
         border: 1px solid var(--brand-main);
         margin-right: 8px;
       }
     }
+
     span {
       font-size: 14px;
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
+
     :deep(.t-radio-group) {
       width: 228px;
       border-radius: 6px;
       text-align: center;
       margin-bottom: 8px;
     }
+
     :deep(.t-radio-button) {
       width: 50%;
     }
+
     :deep(.t-list-item) {
       display: flex;
       flex-direction: row;
@@ -315,11 +332,14 @@ onMounted(() => {
       background: var(--bg-color-theme-surface);
       border-radius: 6px;
       margin-bottom: 4px;
+
       &:last-child {
         margin-bottom: 0;
       }
+
       cursor: pointer;
     }
+
     :deep(.t-list-item__content) {
       width: 100%;
     }

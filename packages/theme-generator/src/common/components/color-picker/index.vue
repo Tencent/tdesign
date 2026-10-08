@@ -48,19 +48,23 @@ function handleChange(value: string) {
 <style lang="less" scoped>
 .t-color-picker__format {
   display: flex;
-  margin: 12px 0 0 0;
+  margin: 12px 0 0;
+
   :deep(.t-select) {
     width: 72px;
     font-size: 14px;
   }
+
   :deep(.t-input) {
     font-size: 14px;
   }
+
   :deep(.t-select__wrap) {
     width: auto;
     margin-right: 8px;
   }
 }
+
 .t-color-picker__body {
   padding: 8px 4px;
 }

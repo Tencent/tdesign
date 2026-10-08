@@ -57,6 +57,7 @@ function change(value: string[]) {
   margin-top: 8px;
   background-color: var(--bg-color-theme-secondary);
   border-radius: 9px;
+
   &__item {
     display: flex;
     flex-direction: column;
@@ -67,23 +68,28 @@ function change(value: string[]) {
     overflow: hidden;
     background-color: var(--bg-color-theme-surface);
   }
+
   &__item--active {
     border: 1px solid var(--brand-main);
   }
+
   &__title {
     font-size: 12px;
     color: var(--text-primary);
     line-height: 20px;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
+
   &__tips {
     font-size: 12px;
     color: var(--text-placeholder);
     line-height: 20px;
   }
+
   &__divided {
     margin: 4px 0;
   }
+
   &__info {
     font-size: 12px;
     color: var(--text-placeholder);
@@ -91,6 +97,7 @@ function change(value: string[]) {
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
 }
+
 .text-ellipsis {
   overflow: hidden;
   white-space: nowrap;

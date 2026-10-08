@@ -359,6 +359,7 @@ onMounted(() => {
 
     &__list {
       --item-width: calc((100% - 24px * 3) / 4);
+
       display: flex;
       flex-wrap: wrap;
       gap: 24px;

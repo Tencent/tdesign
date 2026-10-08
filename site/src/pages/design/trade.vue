@@ -124,7 +124,6 @@ const footerStyle = computed<CSSProperties>(() => ({
 
     a {
       border-radius: var(--border-radius);
-      transition: all 0.2s ease 0s;
       display: flex;
       align-items: center;
       padding: 5px 8px;
@@ -158,13 +157,14 @@ const footerStyle = computed<CSSProperties>(() => ({
 
   &.political {
     background-color: #f1e6e3;
-    background-image: url(./assets/trade/political.png);
+    background-image: url('./assets/trade/political.png');
     background-size: 100% auto;
     background-position: right top;
     background-repeat: no-repeat;
 
     .info {
       background-color: #f1e6e3;
+
       &::before {
         background: linear-gradient(91.32deg, #f1e6e3 1.12%, rgba(241, 230, 227, 0) 101.08%);
       }
@@ -173,13 +173,14 @@ const footerStyle = computed<CSSProperties>(() => ({
 
   &.map {
     background-color: #eaecea;
-    background-image: url(./assets/trade/map.png);
+    background-image: url('./assets/trade/map.png');
     background-size: auto 100%;
     background-position: right top;
     background-repeat: no-repeat;
 
     .info {
       background-color: #eaecea;
+
       &::before {
         background: linear-gradient(91.32deg, #eaecea 1.12%, rgba(234, 236, 234, 0) 101.08%);
       }
@@ -188,13 +189,14 @@ const footerStyle = computed<CSSProperties>(() => ({
 
   &.education {
     background-color: #e0ece8;
-    background-image: url(./assets/trade/education.png);
+    background-image: url('./assets/trade/education.png');
     background-size: auto 100%;
     background-position: right top;
     background-repeat: no-repeat;
 
     .info {
       background-color: #eaecea;
+
       &::before {
         background: linear-gradient(91.32deg, #eaecea 1.12%, rgba(234, 236, 234, 0) 101.08%);
       }
@@ -203,7 +205,7 @@ const footerStyle = computed<CSSProperties>(() => ({
 
   &.health {
     background-color: #ebf4ff;
-    background-image: url(./assets/trade/health.png);
+    background-image: url('./assets/trade/health.png');
     background-size: auto 100%;
     background-position: right top;
     background-repeat: no-repeat;
@@ -211,7 +213,7 @@ const footerStyle = computed<CSSProperties>(() => ({
 
   &.safe {
     background-color: #ebf4ff;
-    background-image: url(./assets/trade/safe.png);
+    background-image: url('./assets/trade/safe.png');
     background-size: auto 100%;
     background-position: right top;
     background-repeat: no-repeat;
@@ -219,13 +221,14 @@ const footerStyle = computed<CSSProperties>(() => ({
 
   &.power {
     background-color: #e3e6eb;
-    background-image: url(./assets/trade/power.png);
+    background-image: url('./assets/trade/power.png');
     background-size: auto 100%;
     background-position: right top;
     background-repeat: no-repeat;
 
     .info {
       background-color: #e3e6eb;
+
       &::before {
         background: linear-gradient(91.32deg, #e3e6eb 1.12%, rgba(234, 236, 234, 0) 101.08%);
       }
@@ -234,13 +237,14 @@ const footerStyle = computed<CSSProperties>(() => ({
 
   &.travel {
     background-color: #e3e6eb;
-    background-image: url(./assets/trade/travel.png);
+    background-image: url('./assets/trade/travel.png');
     background-size: auto 100%;
     background-position: right top;
     background-repeat: no-repeat;
 
     .info {
       background-color: #e3e6eb;
+
       &::before {
         background: linear-gradient(91.32deg, #e3e6eb 1.12%, rgba(234, 236, 234, 0) 101.08%);
       }

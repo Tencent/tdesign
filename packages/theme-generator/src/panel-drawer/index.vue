@@ -92,9 +92,10 @@ function changeActiveTab(tab: number) {
 
 .t-drawer__content-wrapper {
   box-shadow: var(--shadow-2);
-  border-radius: 12px 0 0 0;
+  border-radius: 12px 0 0;
   position: fixed;
   pointer-events: auto;
+
   .t-drawer__body {
     padding: 0;
     background: var(--bg-color-theme-transparent);
@@ -121,7 +122,7 @@ function changeActiveTab(tab: number) {
   left: 20px;
 }
 
-.t-popup__content:not(.t-tooltip) .t-popup__arrow:before {
+.t-popup__content:not(.t-tooltip) .t-popup__arrow::before {
   background: var(--bg-color-container);
 }
 

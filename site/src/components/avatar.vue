@@ -78,7 +78,7 @@ function onError(_event: Event): void {
   }
 
   &__default {
-    background: url(http://tdesign.gtimg.com/docs/male.png) no-repeat center;
+    background: url('http://tdesign.gtimg.com/docs/male.png') no-repeat center;
     background-size: 100%;
   }
 

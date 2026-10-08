@@ -50,6 +50,7 @@ defineProps<{
       &::before {
         --avatar-padding: 6px;
       }
+
       &::after {
         opacity: 1;
         visibility: visible;
@@ -62,12 +63,11 @@ defineProps<{
       content: '';
       position: absolute;
       z-index: 1;
+
       --avatar-padding: 0;
+
       background: var(--bg-color-card);
-      top: var(--avatar-padding);
-      left: var(--avatar-padding);
-      right: var(--avatar-padding);
-      bottom: var(--avatar-padding);
+      inset: var(--avatar-padding) var(--avatar-padding) var(--avatar-padding) var(--avatar-padding);
       transition: all 0.2s linear;
       overflow: hidden;
       border-radius: 100%;
@@ -108,57 +108,69 @@ defineProps<{
       z-index: 3;
     }
   }
+
   @-webkit-keyframes r1 {
     0% {
       transform: rotate(0deg);
       -webkit-transform: rotate(0deg);
     }
+
     70% {
       transform: rotate(360deg);
       -webkit-transform: rotate(360deg);
     }
+
     100% {
       transform: rotate(360deg);
       -webkit-transform: rotate(360deg);
     }
   }
+
   @keyframes r1 {
     0% {
       transform: rotate(0deg);
       -webkit-transform: rotate(0deg);
     }
+
     70% {
       transform: rotate(360deg);
       -webkit-transform: rotate(360deg);
     }
+
     100% {
       transform: rotate(360deg);
       -webkit-transform: rotate(360deg);
     }
   }
+
   @-webkit-keyframes s1 {
     0% {
       transform: scale(1);
       -webkit-transform: scale(1);
     }
+
     50% {
       transform: scale(0);
       -webkit-transform: scale(0);
     }
+
     100% {
       transform: scale(1);
       -webkit-transform: scale(1);
     }
   }
+
   @keyframes s1 {
     0% {
       transform: scale(1);
       -webkit-transform: scale(1);
     }
+
     50% {
       transform: scale(0);
       -webkit-transform: scale(0);
     }
+
     100% {
       transform: scale(1);
       -webkit-transform: scale(1);

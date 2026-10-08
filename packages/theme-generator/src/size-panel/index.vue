@@ -258,7 +258,7 @@ onMounted(() => {
     color: var(--text-primary);
     font-weight: 600;
     margin-bottom: 8px;
-    margin-top: 0px;
+    margin-top: 0;
     line-height: 22px;
     display: flex;
     align-items: center;
@@ -266,7 +266,7 @@ onMounted(() => {
 
   &__subtitle {
     font-size: 12px;
-    margin: 4px 0 10px 0;
+    margin: 4px 0 10px;
 
     button {
       margin-right: 8px;
@@ -279,6 +279,7 @@ onMounted(() => {
     display: flex;
     flex-wrap: wrap;
     margin: 0 -4px;
+
     > div {
       margin: 4px;
     }
@@ -334,7 +335,7 @@ onMounted(() => {
   }
 
   &__custom {
-    margin: 16px 0 8px 0;
+    margin: 16px 0 8px;
     padding: 2px;
     height: 131px;
     background: conic-gradient(
@@ -349,15 +350,18 @@ onMounted(() => {
     border-radius: 9px;
     cursor: pointer;
     transition: padding 0.2s;
+
     &:hover {
       padding: 4px;
     }
+
     &-inner {
       background-color: var(--bg-color-card);
       padding: 4px;
       border-radius: 7px;
       max-height: 100%;
     }
+
     &-top {
       padding: 10px 12px;
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
@@ -385,6 +389,7 @@ onMounted(() => {
           color: var(--text-primary);
           font-weight: 600;
         }
+
         &:last-child {
           font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
         }
