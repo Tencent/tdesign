@@ -17,12 +17,6 @@ export default tseslint.config(
       '**/static_site/**',
       '**/coverage/**',
       // site
-      'site/snapshot*',
-      'site/common/**',
-      'site/cypress/**',
-      'site/script/test/cypress/**',
-      'site/temp*',
-      'site/tdesign/**',
       'site/plugins/tdoc/**',
       'site/public/**',
       'site/src/pages/design/assets/motion/**',
