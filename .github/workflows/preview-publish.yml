@@ -62,8 +62,6 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     needs: preview-context
-    environment:
-      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v26
         with:
@@ -78,8 +76,6 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v26
         with:
@@ -95,8 +91,6 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v26
         with:
@@ -112,8 +106,6 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v26
         with:
@@ -129,8 +121,6 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v26
         with:
@@ -146,8 +136,6 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v26
         with:
@@ -163,8 +151,6 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v26
         with:
@@ -180,8 +166,6 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v26
         with:
@@ -196,8 +180,6 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
       - uses: dawidd6/action-download-artifact@v26
         with:
@@ -223,8 +205,6 @@ jobs:
       - tdesign-vue-next-chat
       - tdesign-uniapp
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
       - name: jobs report
         id: report
