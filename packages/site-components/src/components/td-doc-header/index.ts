@@ -137,7 +137,7 @@ export default define<HeaderHost>({
         const background =
           shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__background') ?? document.createElement('div');
         const changelogEntry =
-          shadowRoot.querySelector<HTMLElement>('#TDesign-doc-changelog__entry') ?? document.createElement('div');
+          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-changelog__entry') ?? document.createElement('div');
         const title =
           shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__info-title') ?? document.createElement('div');
         const describe =
