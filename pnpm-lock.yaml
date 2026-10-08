@@ -208,8 +208,8 @@ importers:
   site:
     dependencies:
       '@tdesign/site-components':
-        specifier: ^0.19.3
-        version: 0.19.3
+        specifier: workspace:*
+        version: link:../packages/site-components
       canvas-3d:
         specifier: ^1.0.14
         version: 1.0.14
@@ -2534,11 +2534,6 @@ packages:
   husky@8.0.3:
     resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
     engines: {node: '>=14'}
-    hasBin: true
-
-  hybrids@8.2.2:
-    resolution: {integrity: sha512-xCangE3oItxeWMNKHLa0yn0MHi0MHBtGLIz0Ty7PwdcBBN2sQ0mrBvVSf4lLMyBFNO7x47/2lO13FSJB/SkPyw==}
-    engines: {node: '>=18.0.0'}
     hasBin: true
 
   hybrids@9.1.23:
@@ -7252,8 +7247,6 @@ snapshots:
     optional: true
 
   husky@8.0.3: {}
-
-  hybrids@8.2.2: {}
 
   hybrids@9.1.23: {}
 
