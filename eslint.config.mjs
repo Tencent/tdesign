@@ -25,15 +25,13 @@ export default tseslint.config(
 
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  ...tseslint.configs.stylistic,
   ...pluginVue.configs['flat/recommended'],
   prettierConfig,
 
   {
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.browser,
-      },
+    linterOptions: {
+      reportUnusedDisableDirectives: 'error',
     },
     rules: {
       'no-console': ['warn', { allow: ['warn', 'error'] }],
@@ -41,6 +39,30 @@ export default tseslint.config(
       eqeqeq: ['error', 'smart'],
       'no-var': 'error',
       'prefer-const': 'error',
+      // 允许空的箭头函数/方法：项目里大量用作默认回调、清理钩子等有意为之的空实现
+      '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions', 'methods'] }],
+    },
+  },
+
+  {
+    // 浏览器端源码：仅注入浏览器全局，避免误用 Node 专有全局
+    files: ['site/src/**'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        aegis: 'readonly',
+        NProgress: 'readonly',
+      },
+    },
+  },
+
+  {
+    // Node 端源码：仅注入 Node 全局
+    files: ['services/**', 'packages/*/script/**', 'packages/*/config/**'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
     },
   },
 
@@ -73,16 +95,21 @@ export default tseslint.config(
   },
 
   {
-    files: ['**/*.d.ts'],
-    rules: {
-      'no-undef': 'off',
-      'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
+    // Node CommonJS 配置文件（module.exports / require）
+    files: [
+      '**/*.cjs',
+      'services/**/*.js',
+      '.commitlintrc.js',
+      '.prettierrc.js',
+      '.stylelintrc.js',
+      'site/commitlint.config.js',
+      'site/postcss.config.js',
+    ],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
     },
-  },
-
-  {
-    files: ['services/**/*.js', '**/*.cjs', 'site/postcss.config.js'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
       'no-console': 'off',
@@ -104,16 +131,6 @@ export default tseslint.config(
     files: ['site/src/pages/home/banner.vue'],
     rules: {
       'no-console': ['warn', { allow: ['warn', 'error', 'time', 'timeEnd', 'log'] }],
-    },
-  },
-
-  {
-    files: ['site/src/**'],
-    languageOptions: {
-      globals: {
-        aegis: 'readonly',
-        NProgress: 'readonly',
-      },
     },
   },
 

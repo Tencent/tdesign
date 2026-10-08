@@ -44,9 +44,7 @@ const props = withDefaults(
     visible: false,
   },
 );
-const emit = defineEmits<{
-  (event: 'update:visible', value: boolean): void;
-}>();
+const emit = defineEmits<(event: 'update:visible', value: boolean) => void>();
 
 const email = ref('');
 const visibleSync = computed({

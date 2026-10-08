@@ -48,7 +48,7 @@ interface ValueSection {
 
 const { article, catalog, genAnchor } = useAnchor();
 const { locale, t } = useI18n({ messages });
-const values: ReadonlyArray<readonly [ValueSection['key'], ValueSection['video']]> = [
+const values: readonly (readonly [ValueSection['key'], ValueSection['video']])[] = [
   ['inclusiveness', '包容'],
   ['diversity', '多元'],
   ['evolution', '进化'],

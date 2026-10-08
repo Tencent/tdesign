@@ -654,7 +654,7 @@ interface HomeState {
   bottomContributors: string[];
   windowWidth: number;
   themeMode: ThemeMode;
-  stepsTimers: Array<number | undefined>;
+  stepsTimers: (number | undefined)[];
   stepsCounts: number[];
   tabTimer: number | null;
   sourceList: ResourceItem[];
