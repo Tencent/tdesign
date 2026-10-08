@@ -12,6 +12,7 @@ interface LegacyPathEvent extends Event {
 }
 
 interface DocPopupProps {
+  render: () => ShadowRoot;
   reference: HTMLElement;
   portalClass: string;
   portalStyle: string;
@@ -47,7 +48,7 @@ function handleClick(host: DocPopupHost): void {
 
 export default define<DocPopupProps>({
   tag: 'td-doc-popup',
-  reference: (host) => host.shadowRoot?.querySelector<HTMLElement>('.TDesign-doc-popup') as HTMLElement,
+  reference: ({ render }) => render().querySelector<HTMLElement>('.TDesign-doc-popup') as HTMLElement,
   portalClass: '',
   portalStyle: '',
   placement: 'bottom-end',

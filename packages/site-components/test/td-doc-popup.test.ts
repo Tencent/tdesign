@@ -95,6 +95,16 @@ describe('td-doc-popup lifecycle', () => {
     callback(performance.now());
   }
 
+  it('resolves the reference from the rendered root', () => {
+    const reference = {};
+    const querySelector = jest.fn(() => reference);
+    const render = jest.fn(() => ({ querySelector }));
+
+    expect(docPopup.reference({ render })).toBe(reference);
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(querySelector).toHaveBeenCalledWith('.TDesign-doc-popup');
+  });
+
   it('cancels deferred portal setup when disconnected before the first frame', () => {
     const cleanup = docPopup.visible.connect(createHost());
 
