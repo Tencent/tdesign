@@ -11,7 +11,8 @@
     "site": "pnpm run build:components && pnpm run --filter tdesign-site build",
     "site:preview": "pnpm run build:components && pnpm run --filter tdesign-site site:preview",
     "auto-release-collection": "pnpm run --filter auto-release-collection start",
-    "test": "pnpm -r test",
+    "test": "pnpm -r run --if-present  test",
+    "build": "pnpm -r run --if-present  build",
     "prepare": "husky install"
   },
   "license": "MIT",
