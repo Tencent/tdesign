@@ -2,10 +2,10 @@
   <div ref="article" name="DOC" class="doc-mode">
     <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
       <ol class="tdesign-toc_list">
-        <li class="tdesign-toc_list_item" v-for="anchor in catalog" :key="anchor.id">
+        <li v-for="anchor in catalog" :key="anchor.id" class="tdesign-toc_list_item">
           <a class="tdesign-toc_list_item_a" :href="'#' + anchor.id">{{ anchor.title }} </a>
-          <ol class="tdesign-toc_list" v-if="anchor.children.length">
-            <li class="tdesign-toc_list_item" v-for="subAnchor in anchor.children" :key="subAnchor.id">
+          <ol v-if="anchor.children.length" class="tdesign-toc_list">
+            <li v-for="subAnchor in anchor.children" :key="subAnchor.id" class="tdesign-toc_list_item">
               <a class="tdesign-toc_list_item_a" :href="'#' + subAnchor.id">{{ subAnchor.title }} </a>
             </li>
           </ol>
@@ -27,7 +27,7 @@
     <h2>{{ t('dark.text.title') }}</h2>
     <p>{{ t('dark.text.description') }}</p>
 
-    <t-table style="margin: 16px 0" bordered :data="dataSource" :columns="columns" rowKey="index" size="small" />
+    <t-table style="margin: 16px 0" bordered :data="dataSource" :columns="columns" row-key="index" size="small" />
 
     <h2>{{ t('dark.color.title') }}</h2>
     <p>{{ t('dark.color.description') }}</p>
@@ -36,15 +36,15 @@
     <h3>{{ t('dark.color.basicPalette') }}</h3>
 
     <div class="color-board">
-      <div class="color-board-lists" v-for="(item, index) in colorList" :key="index">
+      <div v-for="(item, index) in colorList" :key="index" class="color-board-lists">
         <div
-          class="color-board-list"
-          @click="copyColor(listLi.rightTxt)"
           v-for="(listLi, itemIndex) in item"
           :key="itemIndex"
+          class="color-board-list"
           :style="{ background: listLi.rightTxt }"
+          @click="copyColor(listLi.rightTxt)"
         >
-          <p class="color-board-bottomTxt" v-if="listLi.topTitle">{{ listLi.topTitle }}</p>
+          <p v-if="listLi.topTitle" class="color-board-bottomTxt">{{ listLi.topTitle }}</p>
           <p class="color-board-topTxt">
             <span>{{ listLi.leftTxt }}</span>
             <span>{{ listLi.rightTxt }}</span>

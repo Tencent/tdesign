@@ -2,10 +2,10 @@
   <div class="shadow-card">
     <t-popup
       placement="left"
-      showArrow
-      destroyOnClose
+      show-arrow
+      destroy-on-close
       :attach="handleAttach"
-      :overlayStyle="{ borderRadius: '9px', padding: '12px 16px 8px' }"
+      :overlay-style="{ borderRadius: '9px', padding: '12px 16px 8px' }"
     >
       <div class="shadow-card__item" :style="{ 'box-shadow': shadow.join(',') }">
         <div class="shadow-card__title">{{ detail.label }}:</div>
@@ -14,7 +14,7 @@
         </div>
         <t-divider class="shadow-card__divided"></t-divider>
         <div class="shadow-card__info">
-          <div :class="['shadow-card__info-item', 'text-ellipsis']" v-for="(value, i) in shadow" :key="i">
+          <div v-for="(value, i) in shadow" :key="i" :class="['shadow-card__info-item', 'text-ellipsis']">
             {{ value }} {{ i === shadow.length - 1 ? ';' : ',' }}
           </div>
         </div>

@@ -5,9 +5,9 @@
       <add-icon class="shadow-layer__add" @click="handleAdd" />
     </div>
     <shadow-editor
-      class="shadow-layer__edit"
       v-for="(data, i) in shadow"
       :key="i"
+      class="shadow-layer__edit"
       :name="`layer${i + 1}`"
       :value="data"
       @change="(value) => change(value, i)"

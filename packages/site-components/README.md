@@ -20,8 +20,8 @@ npm build
 
 ```javascript
 // import @tdesign/site-components es module and style
-import "@tdesign/site-components";
-import "@tdesign/site-components/lib/styles/style.css";
+import '@tdesign/site-components';
+import '@tdesign/site-components/lib/styles/style.css';
 
 // splice webcomponents into pages
 <td-doc-layout>

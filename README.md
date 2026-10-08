@@ -139,7 +139,6 @@ For more information, refer to the guide section of each component, such as [But
 
 https://tdesign.tencent.com/contributor.html
 
-
 ## Contributing Guide
 
 Any contributions to TDesign are welcome. Please read [《contributing for TDesign》](https://tdesign.tencent.com/about/contributing) for more information.

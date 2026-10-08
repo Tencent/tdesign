@@ -19,9 +19,9 @@
           :disabled="disabled"
           :max="maxSliderValue"
           :value="sliderValue"
-          @change="handleSliderChange"
           :label="renderLabel"
-          :tooltipProps="{ attach: handleAttach }"
+          :tooltip-props="{ attach: handleAttach }"
+          @change="handleSliderChange"
         ></t-slider>
       </div>
       <div class="segment-panel__round-tag">
@@ -29,13 +29,13 @@
       </div>
     </div>
     <t-select
+      v-model="step"
       class="segment-panel__select"
       :options="innerSelectOptions"
-      @change="handleSelectChange"
-      :onPopupVisibleChange="handleVisibleChange"
+      :on-popup-visible-change="handleVisibleChange"
       :keys="isEn ? { label: 'enLabel' } : undefined"
-      v-model="step"
       :popup-props="{ attach: handleAttach }"
+      @change="handleSelectChange"
     ></t-select>
   </div>
 </template>

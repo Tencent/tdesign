@@ -43,8 +43,8 @@ export function getReleaseData() {
    *  22号：生成这个月的15号 - 21号的版本
    */
 
-  let START_DATE = '';
-  let END_DATE = '';
+  let START_DATE: string;
+  let END_DATE: string;
 
   const today = new Date();
 

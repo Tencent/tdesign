@@ -17,7 +17,7 @@
 }
 
 :root,
-:root[theme-mode="light"] {
+:root[theme-mode='light'] {
   .__light__ {
     display: block;
   }
@@ -27,7 +27,7 @@
   }
 }
 
-:root[theme-mode="dark"] {
+:root[theme-mode='dark'] {
   .__light__ {
     display: none;
   }
@@ -37,10 +37,9 @@
   }
 }
 
-div[name="DOC"],
-div[name="API"],
-div[name="DESIGN"] {
-
+div[name='DOC'],
+div[name='API'],
+div[name='DESIGN'] {
   img {
     max-width: 100%;
     margin: 16px 0 8px;
@@ -53,10 +52,10 @@ div[name="DESIGN"] {
   }
 }
 
-div[name="DOC"],
-div[name="DEMO"],
-div[name="API"],
-div[name="DESIGN"] {
+div[name='DOC'],
+div[name='DEMO'],
+div[name='API'],
+div[name='DESIGN'] {
   // 引用文本
   blockquote {
     display: block;
@@ -97,7 +96,6 @@ div[name="DESIGN"] {
     position: relative;
 
     &:hover {
-
       &::-webkit-scrollbar-thumb {
         background-color: var(--bg-color-scroll);
       }
@@ -135,7 +133,12 @@ div[name="DESIGN"] {
 
   code,
   code * {
-    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+    font-family:
+      SFMono-Regular,
+      Consolas,
+      Liberation Mono,
+      Menlo,
+      monospace;
   }
 
   a:not([class]) {
@@ -167,7 +170,7 @@ div[name="DESIGN"] {
     }
 
     tr {
-      transition: all .2s;
+      transition: all 0.2s;
     }
 
     tr:hover {
@@ -269,7 +272,7 @@ div[name="DESIGN"] {
   .tdesign-header-anchor,
   .header-anchor {
     text-decoration: none;
-    transition: opacity .3s;
+    transition: opacity 0.3s;
     opacity: 0;
   }
 }
@@ -349,8 +352,7 @@ div[name="DESIGN"] {
   }
 }
 
-div[name="DESIGN"] {
-
+div[name='DESIGN'] {
   h5 + .legend {
     margin-top: -16px;
   }
@@ -381,8 +383,7 @@ div[name="DESIGN"] {
   }
 }
 
-div[name="DOC"] {
-
+div[name='DOC'] {
   image {
     margin: 0;
     border-radius: 6px;
@@ -391,7 +392,6 @@ div[name="DOC"] {
 
   // 组件概览
   h3 {
-
     .tag {
       color: var(--text-secondary);
       padding: 0 12px;
@@ -421,15 +421,15 @@ div[name="DOC"] {
     box-sizing: border-box;
 
     @media screen and (min-width: 1440px) {
-      width: ~"calc((100% - 48px) / 4)";
+      width: ~'calc((100% - 48px) / 4)';
     }
 
     @media screen and (min-width: 750px) and (max-width: 1439px) {
-      width: ~"calc((100% - 32px) / 3)";
+      width: ~'calc((100% - 32px) / 3)';
     }
 
     @media screen and (max-width: 749px) {
-      width: ~"calc((100% - 16px) / 2)";
+      width: ~'calc((100% - 16px) / 2)';
     }
 
     .item {
@@ -441,12 +441,18 @@ div[name="DOC"] {
       box-sizing: border-box;
       cursor: pointer;
       text-decoration: none;
-      transition: transform .24s cubic-bezier(.38, 0, .24, 1), box-shadow .24s linear, opacity .24s linear;
+      transition:
+        transform 0.24s cubic-bezier(0.38, 0, 0.24, 1),
+        box-shadow 0.24s linear,
+        opacity 0.24s linear;
 
       &:hover {
         color: var(--text-primary);
         transform: translateY(-2px);
-        box-shadow: 0px 6px 30px 5px rgba(0, 0, 0, .05), 0px 16px 24px 2px rgba(0, 0, 0, .04), 0px 8px 10px -5px rgba(0, 0, 0, .08);
+        box-shadow:
+          0px 6px 30px 5px rgba(0, 0, 0, 0.05),
+          0px 16px 24px 2px rgba(0, 0, 0, 0.04),
+          0px 8px 10px -5px rgba(0, 0, 0, 0.08);
 
         .name {
           color: var(--text-primary);
@@ -467,7 +473,7 @@ div[name="DOC"] {
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: pre;
-        transition: all .2s linear;
+        transition: all 0.2s linear;
       }
     }
   }

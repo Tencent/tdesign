@@ -32,21 +32,21 @@
       <div class="tdesign-source-content-box">
         <ul class="tdesign-source-content__list">
           <li
-            class="tdesign-source-content__list-item"
             v-for="item in sourceList"
             :key="item.title"
-            @click="handleSourceClick(item)"
+            class="tdesign-source-content__list-item"
             :disabled="item.status === -1"
+            @click="handleSourceClick(item)"
           >
             <div class="tdesign-source-content__list-item-inner">
               <div :class="['mask', [item.icon]]"></div>
-              <span class="source-tag new" v-if="item.status === 1">{{ t('source.status.latest') }}</span>
-              <span class="source-tag doing" v-else-if="item.status === 2">{{ t('source.status.updating') }}</span>
-              <span class="source-tag todo" v-else-if="item.status === -1">{{ t('source.status.upcoming') }}</span>
+              <span v-if="item.status === 1" class="source-tag new">{{ t('source.status.latest') }}</span>
+              <span v-else-if="item.status === 2" class="source-tag doing">{{ t('source.status.updating') }}</span>
+              <span v-else-if="item.status === -1" class="source-tag todo">{{ t('source.status.upcoming') }}</span>
               <img :src="iconMap[item.icon]" class="source-icon" width="32" />
               <h3 class="source-title">{{ getSourceTitle(item) }}</h3>
               <div class="source-detail">
-                <span class="source-detail-watch" v-if="item.watch">
+                <span v-if="item.watch" class="source-detail-watch">
                   <t-icon name="browse" size="16px" />
                   {{ item.watch }}
                 </span>
@@ -54,12 +54,12 @@
                   {{ getSourceDescription(item) }}
                 </span>
                 <t-icon
+                  v-if="item.actionType === 'download'"
                   class="source-detail-action"
                   name="download"
                   size="16px"
-                  v-if="item.actionType === 'download'"
                 />
-                <t-icon class="source-detail-action" name="jump" size="16px" v-else-if="item.actionType === 'jump'" />
+                <t-icon v-else-if="item.actionType === 'jump'" class="source-detail-action" name="jump" size="16px" />
               </div>
             </div>
           </li>
@@ -70,11 +70,11 @@
         <h2 class="tdesign-source-content__title">{{ t('source.contributors') }}</h2>
         <div class="contributor-list">
           <a
+            v-for="user in designContributor"
+            :key="user"
             class="contributor-avatar"
             :href="'https://github.com/' + user"
             target="_blank"
-            v-for="user in designContributor"
-            :key="user"
           >
             <t-tooltip :content="user">
               <img :src="'https://avatars.githubusercontent.com/' + user" width="56" />

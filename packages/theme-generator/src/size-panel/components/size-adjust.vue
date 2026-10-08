@@ -7,12 +7,12 @@
           v-for="(token, idx) in tokenList"
           :key="idx"
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
+          :overlay-style="{ borderRadius: '9px' }"
           @visible-change="(v, ctx) => handleVisibleChange(v, ctx, idx)"
-          :overlayStyle="{ borderRadius: '9px' }"
         >
           <t-list-item
             :style="{
@@ -54,8 +54,8 @@
           <template #content
             ><size-slider
               title="size"
-              :sizeValue="getCurrentTokenValue(`--td-${token.from}`)"
-              @changeSize="(v) => handleChangeSize(`--td-${token.from}`, v)"
+              :size-value="getCurrentTokenValue(`--td-${token.from}`)"
+              @change-size="(v) => handleChangeSize(`--td-${token.from}`, v)"
           /></template>
         </t-popup>
       </t-list>

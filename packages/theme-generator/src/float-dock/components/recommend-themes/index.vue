@@ -1,7 +1,7 @@
 <template>
   <!-- FIXME：这个布局是不合理的...但鉴于 type 目前只有 “官方推荐” 一种，所以暂时如此 -->
   <div class="recommend-theme">
-    <div :key="idx" v-for="(type, idx) in recommendedThemes">
+    <div v-for="(type, idx) in recommendedThemes" :key="idx">
       <div class="recommend-theme__title">
         {{ isEn ? type.enTitle : type.title }}
       </div>

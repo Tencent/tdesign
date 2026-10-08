@@ -70,10 +70,9 @@ document.getElementById('dev-export')?.addEventListener('click', () => {
 document.getElementById('dev-copy')?.addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(collectCss());
-    // eslint-disable-next-line no-alert
+
     alert('已复制生成的 CSS 到剪贴板');
   } catch (e) {
-    // eslint-disable-next-line no-alert
     alert('复制失败：' + (e as Error).message);
   }
 });

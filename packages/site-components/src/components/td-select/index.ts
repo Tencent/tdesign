@@ -19,7 +19,7 @@ interface SelectProps {
 
 type SelectHost = SelectProps & HTMLElement;
 
-interface VisibleChangeEvent extends CustomEvent<{ visible: boolean }> {}
+type VisibleChangeEvent = CustomEvent<{ visible: boolean }>;
 
 function renderOptions(host: SelectHost) {
   const { options = [] } = host;

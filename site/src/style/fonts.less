@@ -1,13 +1,12 @@
-
 @font-face {
   font-family: TCloudNumber;
-  src: url("../pages/design/assets/TCloudNumber-Regular.ttf");
+  src: url('../pages/design/assets/TCloudNumber-Regular.ttf');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
-.font(@i) when(@i <= 64){
+.font(@i) when(@i <= 64) {
   .font-@{i} {
     font-size: @i + 0px;
     line-height: @i + 8px;
@@ -43,13 +42,13 @@
         font-size: 36px;
         line-height: 48px;
       }
-  
+
       .tag {
         font-family: TCloudNumber;
         position: absolute;
         right: 16px;
         bottom: 12px;
-  
+
         svg {
           width: 14px;
           margin: 0 12px;
@@ -81,16 +80,16 @@
     }
 
     &.font-size {
-      input[type=range] {
+      input[type='range'] {
         -webkit-appearance: none;
         width: 154px;
         background: transparent;
         margin-left: 16px;
       }
-      
-      input[type=range]::-webkit-slider-thumb {
+
+      input[type='range']::-webkit-slider-thumb {
         -webkit-appearance: none;
-        border: 1px solid #0052D9;
+        border: 1px solid #0052d9;
         height: 14px;
         width: 14px;
         border-radius: 100%;
@@ -99,17 +98,17 @@
         margin-top: -5px;
       }
 
-      input[type=range]::-webkit-slider-runnable-track {
+      input[type='range']::-webkit-slider-runnable-track {
         width: 100%;
         height: 4px;
         cursor: pointer;
         border-radius: 2px;
-        background: #0052D9;
+        background: #0052d9;
       }
-      
-      input[type=range]:focus {
+
+      input[type='range']:focus {
         outline: none;
-      }      
+      }
       .ctrl {
         display: flex;
       }
@@ -131,7 +130,6 @@
         margin-bottom: 16px;
       }
     }
-
   }
 
   .fonts-block-wrapper {
@@ -159,7 +157,7 @@
           padding: 30px 8px 4px;
           display: flex;
           justify-content: space-between;
-          transition: all .2s var(--anim-time-fn-easing);
+          transition: all 0.2s var(--anim-time-fn-easing);
           cursor: pointer;
 
           &:hover {

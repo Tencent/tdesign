@@ -42,10 +42,10 @@ title: 社区资源
 
 ## 📦 插件和工具
 
-名称 | 描述
---|--
-[unplugin-auto-import](https://github.com/antfu/unplugin-auto-import) <br> [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components) | 用于自动引入 TDesign 桌面端 [Vue2](https://github.com/Tencent/tdesign-vue)、[Vue3](https://github.com/Tencent/tdesign-vue-next) 的组件，使用请参考 [自动引入章节](https://tdesign.tencent.com/vue/getting-started#%E8%87%AA%E5%8A%A8%E5%BC%95%E5%85%A5)
-[formilyjs/tdesign-react](https://github.com/formilyjs/tdesign-react) | 结合 Formily & tdesign-react 组件库能力的社区贡献产品
+| 名称                                                                                                                                                   | 描述                                                                                                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [unplugin-auto-import](https://github.com/antfu/unplugin-auto-import) <br> [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components) | 用于自动引入 TDesign 桌面端 [Vue2](https://github.com/Tencent/tdesign-vue)、[Vue3](https://github.com/Tencent/tdesign-vue-next) 的组件，使用请参考 [自动引入章节](https://tdesign.tencent.com/vue/getting-started#%E8%87%AA%E5%8A%A8%E5%BC%95%E5%85%A5) |
+| [formilyjs/tdesign-react](https://github.com/formilyjs/tdesign-react)                                                                                  | 结合 Formily & tdesign-react 组件库能力的社区贡献产品                                                                                                                                                                                                   |
 
 ## 📄 文章
 

@@ -21,7 +21,7 @@ export default define<DocLayoutProps>({
 
       window.NProgress = NProgress;
       window.addEventListener('load', onLoad);
-      !host.loaded && NProgress.start();
+      if (!host.loaded) NProgress.start();
 
       return () => window.removeEventListener('load', onLoad);
     },

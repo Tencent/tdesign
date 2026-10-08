@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-
 export interface CollapseAnimationHooks {
   beforeEnter: (el: Element) => void;
   enter: (el: Element) => void;

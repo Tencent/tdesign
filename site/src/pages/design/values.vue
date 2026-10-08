@@ -2,10 +2,10 @@
   <div ref="article" name="DOC" class="doc-values">
     <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
       <ol class="tdesign-toc_list">
-        <li class="tdesign-toc_list_item" v-for="anchor in catalog" :key="anchor.id">
+        <li v-for="anchor in catalog" :key="anchor.id" class="tdesign-toc_list_item">
           <a class="tdesign-toc_list_item_a" :href="'#' + anchor.id">{{ anchor.title }} </a>
-          <ol class="tdesign-toc_list" v-if="anchor.children.length">
-            <li class="tdesign-toc_list_item" v-for="subAnchor in anchor.children" :key="subAnchor.id">
+          <ol v-if="anchor.children.length" class="tdesign-toc_list">
+            <li v-for="subAnchor in anchor.children" :key="subAnchor.id" class="tdesign-toc_list_item">
               <a class="tdesign-toc_list_item_a" :href="'#' + subAnchor.id">{{ subAnchor.title }} </a>
             </li>
           </ol>

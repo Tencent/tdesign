@@ -35,11 +35,11 @@
       <div v-for="(color, index) in colorList" :key="index">
         <t-popup
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
-          :overlayStyle="{ borderRadius: '9px' }"
+          :overlay-style="{ borderRadius: '9px' }"
         >
           <div
             class="block"
@@ -66,7 +66,7 @@
             <color-picker :value="color.value" @change="(hex) => changeGradation(hex, color.idx)" />
           </template>
         </t-popup>
-        <div v-if="color.name" @click="handleClickIdx(color.idx)" class="color-content__vertical-list-content">
+        <div v-if="color.name" class="color-content__vertical-list-content" @click="handleClickIdx(color.idx)">
           <div class="color-content__vertical-list-title" :title="color.name">
             {{ color.name.replace('--td-', '') }}
           </div>
@@ -74,7 +74,7 @@
             <span>{{ type }}{{ color.idx }} </span>
             <span>{{ color.value }}</span>
           </div>
-          <error-circle-icon class="error-icon" v-if="color.isModified" />
+          <error-circle-icon v-if="color.isModified" class="error-icon" />
         </div>
       </div>
     </div>
@@ -127,7 +127,7 @@ watch(
 
 // 将 tokenMap 与最新的 token 值合并；引用 refreshKey 以便在刷新时重新计算
 const colorList = computed(() => {
-  refreshKey.value;
+  void refreshKey.value;
   return (props.tokenMap ?? []).map((color) => ({ ...color, value: getTokenValue(color.name) }));
 });
 
@@ -138,12 +138,10 @@ watch(
   },
 );
 
-// eslint-disable-next-line no-unused-vars
 function handleClickIdx(idx: number) {
   activeIdx.value = idx;
 }
 
-// eslint-disable-next-line no-unused-vars
 function handleRecover() {
   paletteChanged.value = false;
   emit('recoverGradation', props.type ?? '');
@@ -199,7 +197,9 @@ function hasModifiedColors() {
         &:hover {
           transform: scale(1.2);
           border-radius: 3px;
-          box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.05), 0px 4px 5px rgba(0, 0, 0, 0.08),
+          box-shadow:
+            0px 1px 10px rgba(0, 0, 0, 0.05),
+            0px 4px 5px rgba(0, 0, 0, 0.08),
             0px 2px 4px -1px rgba(0, 0, 0, 0.12);
         }
       }

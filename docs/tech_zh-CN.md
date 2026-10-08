@@ -3,6 +3,7 @@ title: 整体方案
 ---
 
 请参考 [《TDesign 组件库技术方案指北》](https://mp.weixin.qq.com/s?__biz=Mzg3MjYwODA1OA==&mid=2247515208&idx=1&sn=166d4a5313cadbb80d2a401edf46b455)
+
 ## 仓库结构说明
 
 每个仓库对应一个组件库技术栈实现，包含各自技术栈实现代码和一个 [tdesign-common](https://github.com/Tencent/tdesign-common) 子仓库，子仓库作为公共库包含：
@@ -41,7 +42,7 @@ UI 开发（HTML & CSS）是由 React/Vue 等多个实现框架共用的。各�
 // button.tsx
 
 // 先引入临时的样式文件用于开发功能，待 UI 开发完成之后需要与 UI 样式对齐并删除 less 文件
-import "./button.less";
+import './button.less';
 ```
 
 ## 规范
@@ -83,13 +84,13 @@ feat 与 fix 提交将被用于生成 changelog
 
 ## 技术选型
 
-| 类目         | 方案                                                                         | 参考链接                                                                                                                                                 |
-| ------------ | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 开发语言     | ts                                                                           | [http://www.typescriptlang.org/](http://www.typescriptlang.org/)                                                                                         |
-| 样式语言     | less                                                                         | [http://lesscss.org/](http://lesscss.org/)                                                                                                               |
+| 类目         | 方案                                       | 参考链接                                                                                             |
+| ------------ | ------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| 开发语言     | ts                                         | [http://www.typescriptlang.org/](http://www.typescriptlang.org/)                                     |
+| 样式语言     | less                                       | [http://lesscss.org/](http://lesscss.org/)                                                           |
 | 构建工具     | vite 组件库本地开发 <br> rollup 组件库打包 | [https://vitejs.dev/](https://vitejs.dev/)<br>[https://www.rollupjs.com/](https://www.rollupjs.com/) |
-| 测试工具     | jest <br> cypress e2e 测试                                                   | [https://jestjs.io/](https://jestjs.io/)<br>[https://www.cypress.io/](https://www.cypress.io/)                                                           |
-| web-vue      | vue@2.x                                                                      | [https://github.com/vuejs/vue](https://github.com/vuejs/vue)                                                                                             |
-| web-vue-next | vue@3.x                                                                      | [https://github.com/vuejs/vue-next](https://github.com/vuejs/vue-next)                                                                                   |
-| mobile-vue   | vue@3.x                                                                      | [https://github.com/vuejs/vue-next](https://github.com/vuejs/vue-next)                                                                                   |
-| react        | react@16.x                                                                   | [https://github.com/facebook/react](https://github.com/facebook/react)                                                                                   |
+| 测试工具     | jest <br> cypress e2e 测试                 | [https://jestjs.io/](https://jestjs.io/)<br>[https://www.cypress.io/](https://www.cypress.io/)       |
+| web-vue      | vue@2.x                                    | [https://github.com/vuejs/vue](https://github.com/vuejs/vue)                                         |
+| web-vue-next | vue@3.x                                    | [https://github.com/vuejs/vue-next](https://github.com/vuejs/vue-next)                               |
+| mobile-vue   | vue@3.x                                    | [https://github.com/vuejs/vue-next](https://github.com/vuejs/vue-next)                               |
+| react        | react@16.x                                 | [https://github.com/facebook/react](https://github.com/facebook/react)                               |

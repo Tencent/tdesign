@@ -87,7 +87,7 @@ export default define<DemoHost>({
     },
   },
   render: (host) => {
-    let { code, language, showCode, mode, theme, currentLangIndex, languages, activeStyleMap } = host;
+    const { code, language, showCode, mode, theme, currentLangIndex, languages, activeStyleMap } = host;
     const languageArr = typeof languages === 'string' ? languages.split(',') : [];
 
     const tabsDisplay =

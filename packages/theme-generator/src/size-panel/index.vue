@@ -34,7 +34,7 @@
         <template #title>{{ lang.size.componentSize }}</template>
         <template #subTitle>size</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['comp-size']" :tokenList="COMP_SIZE_MAP" type="comp-size" />
+          <size-adjust :key="refreshIdMap['comp-size']" :token-list="COMP_SIZE_MAP" type="comp-size" />
         </template>
       </common-collapse>
       <!-- 组件上下边距 -->
@@ -59,7 +59,11 @@
         <template #title>{{ lang.size.yPadding }}</template>
         <template #subTitle>padding top & bottom</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['comp-padding-tb']" :tokenList="COMP_PADDING_TB_MAP" type="comp-padding-tb" />
+          <size-adjust
+            :key="refreshIdMap['comp-padding-tb']"
+            :token-list="COMP_PADDING_TB_MAP"
+            type="comp-padding-tb"
+          />
         </template>
       </common-collapse>
       <!-- 组件左右边距 -->
@@ -84,7 +88,11 @@
         <template #title>{{ lang.size.xPadding }}</template>
         <template #subTitle>padding left & right</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['comp-padding-lr']" :tokenList="COMP_PADDING_LR_MAP" type="comp-padding-lr" />
+          <size-adjust
+            :key="refreshIdMap['comp-padding-lr']"
+            :token-list="COMP_PADDING_LR_MAP"
+            type="comp-padding-lr"
+          />
         </template>
       </common-collapse>
       <!-- popup 边距 -->
@@ -109,7 +117,7 @@
         <template #title>{{ lang.size.popupPadding }}</template>
         <template #subTitle>popup padding</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['popup-padding']" :tokenList="COMP_POPUP_PADDING_MAP" type="popup-padding" />
+          <size-adjust :key="refreshIdMap['popup-padding']" :token-list="COMP_POPUP_PADDING_MAP" type="popup-padding" />
         </template>
       </common-collapse>
       <!-- margin 边距 -->
@@ -134,7 +142,7 @@
         <template #title>{{ lang.size.margin }}</template>
         <template #subTitle>margin</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['comp-margin']" :tokenList="COMP_MARGIN_MAP" type="comp-margin" />
+          <size-adjust :key="refreshIdMap['comp-margin']" :token-list="COMP_MARGIN_MAP" type="comp-margin" />
         </template>
       </common-collapse>
     </div>

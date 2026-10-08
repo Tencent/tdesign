@@ -1,13 +1,13 @@
 @keyframes trans {
   0% {
     left: 48px;
-  };
+  }
   100% {
     left: calc(100% - 48px - 44px);
   }
 }
 
-:root[theme-mode="dark"] {
+:root[theme-mode='dark'] {
   .axis-motion-stage:not(.dark) {
     display: none;
   }
@@ -29,7 +29,6 @@
     display: block;
   }
 }
-
 
 .doc-motion {
   img {
@@ -70,7 +69,7 @@
 
   .sport-code {
     font-size: 20px;
-    color: var(--text-primary, rgba(0,0,0,.9));
+    color: var(--text-primary, rgba(0, 0, 0, 0.9));
   }
 
   .motion-table {
@@ -122,17 +121,17 @@
 
       &.easing {
         .ball {
-          animation: trans 2.4s infinite cubic-bezier(.38,0,.24,1);
+          animation: trans 2.4s infinite cubic-bezier(0.38, 0, 0.24, 1);
         }
       }
       &.ease-out {
         .ball {
-          animation: trans 2.4s infinite cubic-bezier(0,0,.15,1);
+          animation: trans 2.4s infinite cubic-bezier(0, 0, 0.15, 1);
         }
       }
       &.ease-in {
         .ball {
-          animation: trans 2.4s infinite cubic-bezier(0.82,0,1,.9);
+          animation: trans 2.4s infinite cubic-bezier(0.82, 0, 1, 0.9);
         }
       }
       &.linear {
@@ -162,14 +161,14 @@
         svg {
           opacity: 0;
           visibility: hidden;
-          transition: all .2s linear;
+          transition: all 0.2s linear;
           position: absolute;
           left: 24px;
           top: 50%;
           color: #00a870;
           width: 14px;
           height: 14px;
-          transform: translate(0 , -50%);
+          transform: translate(0, -50%);
         }
 
         input {
@@ -182,7 +181,7 @@
       }
 
       &.desc {
-        color: var(--text-secondary, rgba(0,0,0,.6));
+        color: var(--text-secondary, rgba(0, 0, 0, 0.6));
       }
     }
   }
@@ -210,5 +209,4 @@
       align-items: center;
     }
   }
-  
 }

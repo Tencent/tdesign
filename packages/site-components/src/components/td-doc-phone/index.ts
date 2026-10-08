@@ -135,24 +135,28 @@ export default define<DocPhoneProps>({
     html`
       <div class="TDesign-doc-phone-mask" onclick="${toggleCollapsePhone}"></div>
       <div class="TDesign-doc-phone" style=${fixedStyle}>
-        ${headless
-          ? html``
-          : html`
-              <div class="TDesign-doc-phone__header">
-                <div class="TDesign-doc-phone__header-icons">
-                  <td-doc-popup placement="left-start">
-                    <span class="icon qrcode" innerHTML=${qrcodeIcon}></span>
-                    <div slot="content" class="qrcode-wrapper">
-                      <slot name="qrcode">
-                        <canvas id="qrcode"></canvas>
-                      </slot>
-                    </div>
-                  </td-doc-popup>
-                  ${href &&
-                  html`<a href="${href}" target="_blank"><span class="icon" innerHTML="${jumpIcon}"></span></a>`}
+        ${
+          headless
+            ? html``
+            : html`
+                <div class="TDesign-doc-phone__header">
+                  <div class="TDesign-doc-phone__header-icons">
+                    <td-doc-popup placement="left-start">
+                      <span class="icon qrcode" innerHTML=${qrcodeIcon}></span>
+                      <div slot="content" class="qrcode-wrapper">
+                        <slot name="qrcode">
+                          <canvas id="qrcode"></canvas>
+                        </slot>
+                      </div>
+                    </td-doc-popup>
+                    ${
+                      href &&
+                      html`<a href="${href}" target="_blank"><span class="icon" innerHTML="${jumpIcon}"></span></a>`
+                    }
+                  </div>
                 </div>
-              </div>
-            `}
+              `
+        }
         <div class="TDesign-doc-phone__body">
           <slot></slot>
         </div>

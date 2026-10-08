@@ -12,14 +12,14 @@
         <p class="radius-content__title">{{ lang.borderRadius.radiusSize }}</p>
         <SegmentSelection
           v-model="step"
-          :selectOptions="RADIUS_OPTIONS"
-          :suspendedLabels="RADIUS_LABELS"
+          :select-options="RADIUS_OPTIONS"
+          :suspended-labels="RADIUS_LABELS"
           :disabled="segmentSelectionDisabled"
         >
-          <template v-slot:left>
+          <template #left>
             <div class="radius-content__round-tag-left" :class="{ disabled: segmentSelectionDisabled }"></div>
           </template>
-          <template v-slot:right>
+          <template #right>
             <div class="radius-content__round-tag-right" :class="{ disabled: segmentSelectionDisabled }"></div>
           </template>
         </SegmentSelection>
@@ -29,12 +29,12 @@
               v-for="(token, idx) in radiusTypeList"
               :key="idx"
               placement="left"
-              showArrow
+              show-arrow
               trigger="click"
-              :destroyOnClose="true"
+              :destroy-on-close="true"
               :attach="handleAttach"
+              :overlay-style="{ borderRadius: '9px' }"
               @visible-change="(v, ctx) => handleVisibleChange(v, ctx, idx)"
-              :overlayStyle="{ borderRadius: '9px' }"
             >
               <t-list-item
                 :style="{
@@ -66,9 +66,9 @@
               <template #content
                 ><size-slider
                   title="border-radius"
-                  :sizeValue="token.value"
+                  :size-value="token.value"
                   :disabled="token.token === '--td-radius-circle'"
-                  @changeSize="(v) => handleChangeRadius(v, idx)"
+                  @change-size="(v) => handleChangeRadius(v, idx)"
               /></template>
             </t-popup>
           </t-list>

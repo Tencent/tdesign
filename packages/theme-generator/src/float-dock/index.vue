@@ -22,13 +22,13 @@
         <div
           ref="btn"
           class="generator-btn"
-          @click="handleClickTheme"
-          @mouseleave="handleLeaveTheme"
           :style="{
             width: generateBtnWidth,
             marginRight: '4px',
             transition: 'width .3s',
           }"
+          @click="handleClickTheme"
+          @mouseleave="handleLeaveTheme"
         >
           <t-button variant="outline" shape="square" size="large">
             <template #icon>
@@ -41,12 +41,12 @@
         </div>
         <div
           class="generator-btn"
-          @click="handleClickCustomize"
           :style="{
             width: !isCustomizeDrawerVisible ? '48px' : '216px',
             margin: '0 4px',
             transition: 'width .3s',
           }"
+          @click="handleClickCustomize"
         >
           <t-button variant="outline" shape="square" size="large">
             <template #icon>
@@ -67,8 +67,8 @@
         <div
           v-if="isCustomizeDrawerVisible || isThemeTabVisible"
           class="export-btn"
-          @click="handleDownload"
           :style="{ width: '48px', margin: '0 4px' }"
+          @click="handleDownload"
         >
           <t-button variant="outline" shape="square" size="large">
             <template #icon>
@@ -327,7 +327,9 @@ function resetTheme() {
     border-radius: 24px;
     border: none;
     margin: auto;
-    transition: transform 0.2s, color 0.2s;
+    transition:
+      transform 0.2s,
+      color 0.2s;
     background-color: var(--bg-color-card);
     --ripple-color: transparent;
     color: var(--text-secondary);

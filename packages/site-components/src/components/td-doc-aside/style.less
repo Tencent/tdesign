@@ -19,7 +19,9 @@
   background-color: var(--bg-color-container);
   color: var(--text-secondary);
   box-shadow: var(--aside-box-shadow);
-  transition: transform .2s var(--anim-time-fn-easing), outline .2s var(--anim-time-fn-easing);
+  transition:
+    transform 0.2s var(--anim-time-fn-easing),
+    outline 0.2s var(--anim-time-fn-easing);
   outline: 9999px solid transparent;
 
   &.hide {
@@ -36,7 +38,7 @@
   }
 
   &::after {
-    content: "";
+    content: '';
     width: 100%;
     height: 100px;
     position: absolute;
@@ -62,7 +64,7 @@
 }
 
 .TDesign-doc-aside-mask {
-  content: "";
+  content: '';
   position: fixed;
   left: 0;
   top: 0;
@@ -77,13 +79,13 @@
   left: var(--aside-width);
   top: 160px;
   border-radius: 0 3px 3px 0;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, .26);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.26);
   width: 40px;
   height: 40px;
   align-items: center;
   justify-content: center;
   background-color: var(--bg-color-container);
-  transition: all .2s var(--anim-time-fn-easing);
+  transition: all 0.2s var(--anim-time-fn-easing);
   display: var(--collapse-display);
 
   .icon svg {
@@ -92,14 +94,13 @@
     color: var(--text-primary);
   }
 }
-  
+
 .TDesign-doc-sidenav {
   height: 100%;
   padding: 0 0 0 12px;
   overflow: auto;
 
   &:hover {
-
     &::-webkit-scrollbar-thumb {
       background-color: var(--bg-color-scroll);
     }
@@ -117,9 +118,8 @@
     background-color: transparent;
   }
 }
-  
-.TDesign-doc-sidenav-group {
 
+.TDesign-doc-sidenav-group {
   &__title {
     display: flex;
     align-items: center;
@@ -132,7 +132,7 @@
     margin-top: 8px;
     border-radius: var(--border-radius);
   }
-  
+
   &__children {
     overflow: hidden;
   }
@@ -155,7 +155,7 @@
     color: var(--text-secondary);
     text-decoration: none;
     border-radius: var(--border-radius);
-    transition: all .2s linear;
+    transition: all 0.2s linear;
     gap: 8px;
 
     &:hover {
@@ -176,9 +176,9 @@
     &__tag {
       font-size: 12px;
       padding: 2px 4px;
-      color: #F5BA18;
+      color: #f5ba18;
       border-radius: 3px;
-      transition: .2s linear;
+      transition: 0.2s linear;
       background: rgba(245, 186, 24, 0.1);
     }
   }

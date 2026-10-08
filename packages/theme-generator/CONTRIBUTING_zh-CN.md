@@ -47,15 +47,15 @@ graph TB
 
 1. `custom-theme-options`：
 
-| Key                           | 类型                       | 示例                  |
-| ----------------------------- | -------------------------- | --------------------- |
-| `theme`                       | 主题                       | `TCloud`              |
-| `color`                       | 主题色                     | `#45C58B`             |
-| `gray/success/warning/danger` | 功能色的品牌色             | `#2ba471`             |
-| `font/radius/shadow`          | 预设步骤中的位置           | `1`                   |
+| Key                           | 类型                   | 示例                  |
+| ----------------------------- | ---------------------- | --------------------- |
+| `theme`                       | 主题                   | `TCloud`              |
+| `color`                       | 主题色                 | `#45C58B`             |
+| `gray/success/warning/danger` | 功能色的品牌色         | `#2ba471`             |
+| `font/radius/shadow`          | 预设步骤中的位置       | `1`                   |
 | `line-height`                 | 固定或递增模式及其参数 | `plus_9` / `time_1.5` |
-| `recommend`                   | 智能推荐                   | `true`                |
-| `neutral`                     | 关联主题色                 | `true`                |
+| `recommend`                   | 智能推荐               | `true`                |
+| `neutral`                     | 关联主题色             | `true`                |
 
 2. `custom-theme-tokens`：各种 `--td-*` token，主要来自用户手动修改单个变量的操作
 

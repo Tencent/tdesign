@@ -5,27 +5,27 @@
       <remove-icon class="shadow-layer__remove" @click="handleMove" />
     </div>
     <div class="shadow-layer__card--item">
-      <t-input-number theme="normal" autoWidth v-model="shadow[0]" class="shadow-layer__card--x" placeholder="0px">
+      <t-input-number v-model="shadow[0]" theme="normal" auto-width class="shadow-layer__card--x" placeholder="0px">
         <template #suffix><div class="shadow-layer__suffix">X</div></template>
       </t-input-number>
-      <t-input-number theme="normal" autoWidth v-model="shadow[1]" class="shadow-layer__card--x" placeholder="0px">
+      <t-input-number v-model="shadow[1]" theme="normal" auto-width class="shadow-layer__card--x" placeholder="0px">
         <template #suffix><div class="shadow-layer__suffix">Y</div></template>
       </t-input-number>
     </div>
-    <t-input-number autoWidth theme="normal" v-model="shadow[2]" class="shadow-layer__card--item" placeholder="0px">
+    <t-input-number v-model="shadow[2]" auto-width theme="normal" class="shadow-layer__card--item" placeholder="0px">
       <template #suffix><div class="shadow-layer__suffix">Blur</div></template>
     </t-input-number>
-    <t-input-number autoWidth theme="normal" v-model="shadow[3]" class="shadow-layer__card--item" placeholder="0px">
+    <t-input-number v-model="shadow[3]" auto-width theme="normal" class="shadow-layer__card--item" placeholder="0px">
       <template #suffix><span class="shadow-layer__suffix">Spread</span></template>
     </t-input-number>
-    <t-popup class="placement top center" placement="left" showArrow destroyOnClose :attach="handleAttach">
+    <t-popup class="placement top center" placement="left" show-arrow destroy-on-close :attach="handleAttach">
       <t-input v-model="color">
         <template #prefix-icon>
           <div class="shadow-layer__card--sharp" :style="{ background: color }"></div>
         </template>
       </t-input>
       <template #content>
-        <color-picker :value="color" enableAlpha format="RGBA" @change="changeColor" />
+        <color-picker :value="color" enable-alpha format="RGBA" @change="changeColor" />
       </template>
     </t-popup>
   </div>

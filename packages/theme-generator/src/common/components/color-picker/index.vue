@@ -7,8 +7,8 @@
     :swatch-colors="undefined"
     :show-primary-color-preview="false"
     :select-input-props="{ popupProps: { attach: handleAttach } }"
-    @change="handleChange"
     v-bind="$attrs"
+    @change="handleChange"
   />
 </template>
 

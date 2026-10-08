@@ -55,9 +55,9 @@
         <template #title>{{ lang.font.fontColor }}</template>
         <template #content>
           <font-color-adjust
-            :colorPalette="textColorPalette"
-            :originColorPalette="initTextColorPalette"
-            @changeGradation="changeGradation"
+            :color-palette="textColorPalette"
+            :origin-color-palette="initTextColorPalette"
+            @change-gradation="changeGradation"
           />
         </template>
       </common-collapse>

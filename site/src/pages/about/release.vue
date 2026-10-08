@@ -5,7 +5,7 @@
     <div name="DESIGN">
       <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
         <ol class="tdesign-toc_list">
-          <li class="tdesign-toc_list_item" v-for="anchor in releaseTimeList" :key="anchor.id">
+          <li v-for="anchor in releaseTimeList" :key="anchor.id" class="tdesign-toc_list_item">
             <a class="tdesign-toc_list_item_a" :href="'#' + anchor.id">{{ anchor.title }} </a>
           </li>
         </ol>
@@ -13,7 +13,7 @@
     </div>
 
     <div v-if="release.length" class="release__timeline">
-      <section class="release__block" v-for="(item, index) in release" :key="item.id">
+      <section v-for="(item, index) in release" :key="item.id" class="release__block">
         <h2 :id="releaseTimeList[index].id">
           <code class="release__time">{{ releaseTimeList[index].title }}</code>
         </h2>

@@ -1,6 +1,6 @@
 <template>
   <span :class="_class" :style="_style">
-    <img :src="imgSrc" alt="user avatar" @error="onError" v-if="!error && imgSrc" />
+    <img v-if="!error && imgSrc" :src="imgSrc" alt="user avatar" @error="onError" />
     <div class="tdesign-avatar-name">{{ username }}</div>
   </span>
 </template>

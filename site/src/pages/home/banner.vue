@@ -15,7 +15,7 @@
             class="breathe"
             src="https://tdesign.gtimg.com/site/images/breathe-bottom.png"
           />
-          <canvas class="banner-canvas" ref="canvasLight"></canvas>
+          <canvas ref="canvasLight" class="banner-canvas"></canvas>
           <span class="banner-trigger1 light"></span>
           <span class="banner-trigger3 light"></span>
           <span class="banner-trigger4 light"></span>
@@ -33,7 +33,7 @@
             class="breathe"
             src="https://tdesign.gtimg.com/site/images/breathe-bottom-dark.png"
           />
-          <canvas class="banner-canvas" ref="canvasDark"></canvas>
+          <canvas ref="canvasDark" class="banner-canvas"></canvas>
           <span class="banner-trigger1 dark"></span>
           <!-- <span class="banner-trigger2 dark"></span> -->
           <span class="banner-trigger3 dark"></span>
@@ -147,11 +147,13 @@ function initWebgl(): void {
     return;
   }
   if (props.themeMode === 'dark' || document.documentElement.getAttribute('theme-mode') === 'dark') {
-    canvas3dLight && canvas3dLight.cancelAnimationFrame();
-    canvas3dDark ? canvas3dDark.animate() : (canvas3dDark = renderWebgl('dark'));
+    if (canvas3dLight) canvas3dLight.cancelAnimationFrame();
+    if (canvas3dDark) canvas3dDark.animate();
+    else canvas3dDark = renderWebgl('dark');
   } else {
-    canvas3dDark && canvas3dDark.cancelAnimationFrame();
-    canvas3dLight ? canvas3dLight.animate() : (canvas3dLight = renderWebgl('light'));
+    if (canvas3dDark) canvas3dDark.cancelAnimationFrame();
+    if (canvas3dLight) canvas3dLight.animate();
+    else canvas3dLight = renderWebgl('light');
   }
 }
 
@@ -384,8 +386,8 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   // 离开当前页面时，可以调用该方法取消掉requestAnimationFrame
-  canvas3dLight && canvas3dLight.cancelAnimationFrame();
-  canvas3dDark && canvas3dDark.cancelAnimationFrame();
+  if (canvas3dLight) canvas3dLight.cancelAnimationFrame();
+  if (canvas3dDark) canvas3dDark.cancelAnimationFrame();
 });
 </script>
 

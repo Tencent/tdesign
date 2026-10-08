@@ -1,12 +1,12 @@
 <template>
   <div class="theme-generator">
     <float-dock
-      :drawerVisible="visible"
-      :showSetting="showSetting"
+      :drawer-visible="visible"
+      :show-setting="showSetting"
       @click-setting="handleClickSetting"
       @trigger-visible="handleTriggerVisible"
     />
-    <panel-drawer :drawerVisible="visible" @panel-drawer-visible="handleDrawerVisible" />
+    <panel-drawer :drawer-visible="visible" @panel-drawer-visible="handleDrawerVisible" />
   </div>
 </template>
 

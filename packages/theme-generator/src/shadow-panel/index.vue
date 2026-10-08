@@ -12,8 +12,8 @@
         <p class="shadow-content__title">{{ lang.shadow.title }}</p>
         <SegmentSelection
           v-model="step"
-          :selectOptions="selectOptions"
-          :suspendedLabels="suspendedLabels"
+          :select-options="selectOptions"
+          :suspended-labels="suspendedLabels"
           :disabled="forbidden"
         >
           <template #left>

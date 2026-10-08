@@ -1,12 +1,17 @@
-@import "../../styles/prism-theme.less";
-@import "../../styles/prism-theme-dark.less";
+@import '../../styles/prism-theme.less';
+@import '../../styles/prism-theme-dark.less';
 
 :host {
   display: block;
 }
 
 .TDesign-code-block {
-  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-family:
+    SFMono-Regular,
+    Consolas,
+    Liberation Mono,
+    Menlo,
+    monospace;
   border-radius: 6px;
   border: 1px solid var(--component-border);
   position: relative;
@@ -76,12 +81,11 @@
       color: var(--text-primary);
 
       &:hover {
-
         &::-webkit-scrollbar-thumb {
           background-color: var(--bg-color-scroll);
         }
       }
-    
+
       &::-webkit-scrollbar {
         width: 12px;
         height: 12px;
@@ -91,7 +95,7 @@
       &::-webkit-scrollbar-corner {
         width: 0;
       }
-    
+
       &::-webkit-scrollbar-thumb {
         border-radius: 6px;
         border: 4px solid transparent;

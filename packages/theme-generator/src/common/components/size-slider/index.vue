@@ -7,8 +7,8 @@
         :value="size"
         :format="format"
         theme="column"
-        @change="handleInputChange"
         :style="{ marginBottom: '8px' }"
+        @change="handleInputChange"
       />
       <t-slider
         :disabled="disabled"
@@ -16,10 +16,10 @@
         :min="min"
         :max="max"
         :step="step"
-        @change="handleInputChange"
-        :tooltipProps="{
+        :tooltip-props="{
           attach: handleAttach,
         }"
+        @change="handleInputChange"
       ></t-slider>
     </div>
   </div>
