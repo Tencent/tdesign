@@ -5,6 +5,7 @@
   position: relative;
 
   @media screen and (max-width: 960px) {
+    --spline-visible: hidden;
     --inner-padding-y: 12px;
     --info-top: 14px;
     --title-font-size: 32px;
@@ -25,6 +26,26 @@
     min-width: 320px;
     max-width: var(--content-max-width);
     margin: 0 auto;
+  }
+
+  &__thumb {
+    position: absolute;
+    height: calc(100% - 1px);
+    width: 1200px;
+    max-width: 100%;
+    right: 0;
+    top: 0;
+    border: 0;
+    z-index: 450;
+    visibility: var(--spline-visible);
+
+    &.light {
+      display: var(--theme-block-light-display);
+    }
+
+    &.dark {
+      display: var(--theme-block-dark-display);
+    }
   }
 
   &__badge {

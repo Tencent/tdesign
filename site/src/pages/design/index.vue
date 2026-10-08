@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -41,12 +41,19 @@ const asideList = computed<AsideRoute[]>(() => {
     }));
   return toAsideRoutes(docs);
 });
+let timer: ReturnType<typeof setTimeout> | undefined;
 
 const initDocHeader = () => {
   const { meta } = route;
 
   if (route.path.includes('/design/') && tdDocHeader.value) {
-    tdDocHeader.value.docInfo = meta;
+    if (timer) clearTimeout(timer);
+    const header = tdDocHeader.value;
+    header.docInfo = meta;
+    header.spline = '';
+    timer = setTimeout(() => {
+      header.spline = typeof meta.spline === 'string' ? meta.spline : '';
+    }, 500);
   }
 };
 
@@ -78,5 +85,9 @@ onMounted(() => {
 
   initDocHeader();
   tdDocContent.value.pageStatus = 'show';
+});
+
+onBeforeUnmount(() => {
+  if (timer) clearTimeout(timer);
 });
 </script>

@@ -28,4 +28,5 @@ export type DocAsideElement = HTMLElement & {
 
 export interface DocHeaderElement extends HTMLElement {
   docInfo: RouteMeta;
+  spline?: string;
 }
