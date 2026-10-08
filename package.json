@@ -12,6 +12,7 @@
     "site:preview": "pnpm run build:components && pnpm run --filter tdesign-site site:preview",
     "auto-release-collection": "pnpm run --filter auto-release-collection start",
     "test": "pnpm -r run --if-present  test",
+    "lint": "pnpm -r run --if-present  lint",
     "build": "pnpm -r run --if-present  build",
     "prepare": "husky install"
   },

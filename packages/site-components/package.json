@@ -8,6 +8,7 @@
     "watch": "vite build --watch",
     "build": "vite build --debug",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint src config script --ext .ts",
     "test": "vitest run --coverage",
     "test:watch": "vitest"
   },

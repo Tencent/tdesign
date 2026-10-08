@@ -30,15 +30,7 @@ import { listRecent, addRecent, removeRecent } from './recent';
 import { registerHotkeys } from './hotkeys';
 import { debouncedSearch, moveSelection, moveCategory, resetToRecent, setActiveCategory } from './state';
 import { renderTrigger, renderPopover } from './views';
-import type {
-  DisplayHit,
-  DocSearchHost,
-  HitGroup,
-  Props,
-  RecentItem,
-  SearchInputEvent,
-  ViewHandlers,
-} from './types';
+import type { DisplayHit, DocSearchHost, HitGroup, Props, RecentItem, SearchInputEvent, ViewHandlers } from './types';
 
 /* ------------------------------------------------------------------ *
  * 事件 handler —— 把"用户动作"翻译为"状态变更"
@@ -209,8 +201,7 @@ export default define<Props>({
   // urlFilter 特殊：显式传空串 "" 应被视为"关闭过滤"，所以用 == null 判空而非 || 短路
   urlFilter: { value: (_host, value?: string) => (value == null ? getDefaultUrlFilter() : value) },
   hitsPerPage: {
-    value: (_host, value?: number | string) =>
-      value != null && value !== '' ? Number(value) : DEFAULT_HITS_PER_PAGE,
+    value: (_host, value?: number | string) => (value != null && value !== '' ? Number(value) : DEFAULT_HITS_PER_PAGE),
   },
 
   // ---------- 2) 文案 ----------
