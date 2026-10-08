@@ -12,7 +12,8 @@
     "site:preview": "pnpm run build:components && pnpm run --filter tdesign-site site:preview",
     "auto-release-collection": "pnpm run --filter auto-release-collection start",
     "test": "pnpm -r run --if-present test",
-    "lint": "pnpm -r run --if-present lint",
+    "lint": "pnpm -r run --if-present lint && prettier --check \"**/*.{json,jsonc,html}\"",
+    "lint:fix": "pnpm -r run --if-present lint:fix && prettier --write \"**/*.{json,jsonc,html}\"",
     "build": "pnpm -r run --if-present build",
     "prepare": "husky install"
   },
