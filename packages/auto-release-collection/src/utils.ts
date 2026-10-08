@@ -108,7 +108,7 @@ export function getReleaseData() {
 }
 
 export function getReleaseContent(projectOutputs: string[]) {
-  return projectOutputs.filter((output) => output.trim() != '').join('\n');
+  return projectOutputs.filter((output) => output.trim() !== '').join('\n');
 }
 
 export function createRelease(tag: string, title: string, content: string) {

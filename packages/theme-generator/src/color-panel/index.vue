@@ -381,7 +381,7 @@ const successMainColor = ref(getOptionFromLocal('success') || getTokenValue('--t
 const errorMainColor = ref(getOptionFromLocal('error') || getTokenValue('--td-error-color'));
 const warningMainColor = ref(getOptionFromLocal('warning') || getTokenValue('--td-warning-color'));
 const generationMode = ref(getOptionFromLocal('recommend') === 'true' ? 'recommend' : 'remain'); // remain: 保留输入, recommend: 智能推荐
-const isGrayRelatedToTheme = ref(getOptionFromLocal('neutral') == 'true');
+const isGrayRelatedToTheme = ref(getOptionFromLocal('neutral') === 'true');
 const isMoreVisible = ref(false);
 
 // 用于动态访问 `this[\`${type}MainColor\`]`
@@ -454,7 +454,7 @@ function changeBrandColor(hex: string, trigger: 'update' | 'init' = 'update') {
   const darkExtraTokens = generateBrandTokenMap(darkBrandIdx);
 
   currentBrandIdx.value = brandIndexes.value[getThemeMode()];
-  const shouldUpdateStyleSheet = $brandColor.value != $theme.value.value || trigger === 'update';
+  const shouldUpdateStyleSheet = $brandColor.value !== $theme.value.value || trigger === 'update';
   if (shouldUpdateStyleSheet) {
     // 只在用户手动修改主题色时同步 stylesheet，避免覆盖内置主题自身的逻辑
     updateStyleSheetColor('brand', lightPalette, darkPalette, trigger);

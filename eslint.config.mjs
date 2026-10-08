@@ -37,6 +37,10 @@ export default tseslint.config(
     },
     rules: {
       'no-console': ['warn', { allow: ['warn', 'error'] }],
+      // smart 模式允许 `== null` / `!= null` 这类惯用写法，其余松散比较强制严格相等
+      eqeqeq: ['error', 'smart'],
+      'no-var': 'error',
+      'prefer-const': 'error',
     },
   },
 
@@ -55,9 +59,6 @@ export default tseslint.config(
       parserOptions: {
         parser: tseslint.parser,
       },
-      globals: {
-        ...globals.browser,
-      },
     },
     rules: {
       'no-undef': 'off',
@@ -66,6 +67,8 @@ export default tseslint.config(
       'vue/multi-word-component-names': 'off',
       'vue/no-deprecated-slot-attribute': 'off',
       'vue/require-default-prop': 'off',
+      'vue/no-unused-refs': 'error',
+      'vue/no-useless-template-attributes': 'error',
     },
   },
 

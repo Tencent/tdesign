@@ -35,7 +35,7 @@ function renderOptions(host: SelectHost) {
   return html`
     <ul class="TDesign-select-list">
       ${options.map((item) => {
-        const isActive = item.value == host.value;
+        const isActive = String(item.value) === String(host.value);
         return html`
           <li
             onclick="${(host: SelectHost) => handleItemClick(host, item)}"
@@ -60,7 +60,7 @@ export default define<SelectProps>({
   render: (host) => {
     const { options, value, visible, borderless } = host;
 
-    const activeItem = options.find((item) => item.value == value);
+    const activeItem = options.find((item) => String(item.value) === String(value));
     const inputValue = activeItem?.label || '';
 
     const selectInputClass = {

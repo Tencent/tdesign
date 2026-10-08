@@ -141,7 +141,7 @@ watch(tokenType, (type) => {
   } else {
     lineHeightValue.value = defaultVal;
   }
-  updateLocalOption('line-height', step.value == 3 ? `${type}_${lineHeightValue.value}` : null);
+  updateLocalOption('line-height', step.value === 3 ? `${type}_${lineHeightValue.value}` : null);
   updateLineHeightTokens(lineHeightValue.value, type);
 });
 
@@ -158,7 +158,7 @@ function initStep() {
 
   const suffixVal = lineHeightParts[1];
   const stepKey = Number(
-    Object.keys(LINE_HEIGHT_STEPS).find((key) => LINE_HEIGHT_STEPS[Number(key)] == Number(suffixVal)),
+    Object.keys(LINE_HEIGHT_STEPS).find((key) => LINE_HEIGHT_STEPS[Number(key)] === Number(suffixVal)),
   );
 
   if (stepKey >= 0) step.value = stepKey;

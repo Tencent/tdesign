@@ -92,7 +92,7 @@ export default define<DemoHost>({
 
     const tabsDisplay =
       languageArr.length > 0 &&
-      languageArr.filter((lang) => host.dataset?.[lang] || host.dataset?.[lang.toLocaleLowerCase()]).length ==
+      languageArr.filter((lang) => host.dataset?.[lang] || host.dataset?.[lang.toLocaleLowerCase()]).length ===
         languageArr.length;
 
     const currentLang = languageArr[currentLangIndex] || '';
