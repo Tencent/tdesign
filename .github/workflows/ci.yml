@@ -11,3 +11,4 @@ jobs:
     with:
       node-version-file: .node-version
       package-manager: pnpm
+      skip-site: true
