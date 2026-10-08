@@ -7,7 +7,7 @@
   display: inline-block;
   position: relative;
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+  color: var(--text-primary, rgb(0, 0, 0, 0.9));
   text-align: left;
 }
 
@@ -38,7 +38,7 @@
 
 .TDesign-docsearch-trigger:focus-within {
   border-color: var(--brand-main, #0052d9);
-  box-shadow: 0 0 0 2px var(--brand-main-focus, rgba(0, 82, 217, 0.2));
+  box-shadow: 0 0 0 2px var(--brand-main-focus, rgb(0, 82, 217, 0.2));
 }
 
 .TDesign-docsearch-trigger__icon {
@@ -49,14 +49,14 @@
   display: inline-flex;
   width: 16px;
   height: 16px;
-  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
+  color: var(--text-placeholder, rgb(0, 0, 0, 0.4));
   pointer-events: none;
 }
 
 .TDesign-docsearch-trigger__icon svg {
   width: 100%;
   height: 100%;
-  fill: currentColor;
+  fill: currentcolor;
 }
 
 .TDesign-docsearch-trigger__input {
@@ -70,17 +70,16 @@
   font-family: inherit;
   font-size: 14px;
   line-height: 22px;
-  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+  color: var(--text-primary, rgb(0, 0, 0, 0.9));
 }
 
 .TDesign-docsearch-trigger__input::placeholder {
-  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
+  color: var(--text-placeholder, rgb(0, 0, 0, 0.4));
 }
 
 .TDesign-docsearch-trigger__input::-webkit-search-cancel-button,
 .TDesign-docsearch-trigger__input::-webkit-search-decoration {
   appearance: none;
-  -webkit-appearance: none;
 }
 
 /* 输入框右侧后缀位 —— 当前仅用于显示 loading spinner */
@@ -118,7 +117,7 @@
   background: var(--bg-color-container, #fff);
   border: 1px solid var(--component-stroke, #dcdcdc);
   border-radius: 6px;
-  box-shadow: var(--shadow-2, 0 4px 16px rgba(0, 0, 0, 0.08));
+  box-shadow: var(--shadow-2, 0 4px 16px rgb(0, 0, 0, 0.08));
   opacity: 0;
   transform: translateY(-4px);
   pointer-events: none;
@@ -136,8 +135,8 @@
 }
 
 :root[theme-mode='dark'] .TDesign-docsearch-popover {
-  border-color: var(--component-stroke, rgba(255, 255, 255, 0.12));
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  border-color: var(--component-stroke, rgb(255, 255, 255, 0.12));
+  box-shadow: 0 4px 16px rgb(0, 0, 0, 0.5);
 }
 
 /* loading spinner —— 置于输入框右侧后缀位 */
@@ -177,20 +176,22 @@
   overflow-y: auto;
   max-height: calc(70vh - 44px - 16px);
   scrollbar-width: thin;
-  scrollbar-color: var(--text-placeholder, rgba(0, 0, 0, 0.25)) transparent;
+  scrollbar-color: var(--text-placeholder, rgb(0, 0, 0, 0.25)) transparent;
 }
 
 .TDesign-docsearch-cols__left::-webkit-scrollbar,
 .TDesign-docsearch-cols__right::-webkit-scrollbar {
   width: 6px;
 }
+
 .TDesign-docsearch-cols__left::-webkit-scrollbar-track,
 .TDesign-docsearch-cols__right::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .TDesign-docsearch-cols__left::-webkit-scrollbar-thumb,
 .TDesign-docsearch-cols__right::-webkit-scrollbar-thumb {
-  background-color: var(--text-placeholder, rgba(0, 0, 0, 0.2));
+  background-color: var(--text-placeholder, rgb(0, 0, 0, 0.2));
   border-radius: 20px;
 }
 
@@ -225,7 +226,7 @@
   padding: 8px 10px;
   font-size: 13px;
   line-height: 20px;
-  color: var(--text-secondary, rgba(0, 0, 0, 0.6));
+  color: var(--text-secondary, rgb(0, 0, 0, 0.6));
   cursor: pointer;
   text-align: right;
   border-radius: var(--border-radius, 3px);
@@ -235,12 +236,12 @@
 }
 
 .TDesign-docsearch-cat:hover {
-  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+  color: var(--text-primary, rgb(0, 0, 0, 0.9));
   background: var(--bg-color-page, #f3f3f3);
 }
 
 .TDesign-docsearch-cat.is-active {
-  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+  color: var(--text-primary, rgb(0, 0, 0, 0.9));
   background: var(--bg-color-page, #f3f3f3);
   font-weight: 500;
 }
@@ -267,8 +268,8 @@
   font-size: 11px;
   line-height: 18px;
   text-align: center;
-  color: var(--text-secondary, rgba(0, 0, 0, 0.6));
-  background: var(--bg-color-component, rgba(0, 0, 0, 0.06));
+  color: var(--text-secondary, rgb(0, 0, 0, 0.6));
+  background: var(--bg-color-component, rgb(0, 0, 0, 0.06));
   border-radius: 999px;
   font-weight: normal;
   transition:
@@ -279,7 +280,7 @@
 .TDesign-docsearch-cat:hover .TDesign-docsearch-cat__badge,
 .TDesign-docsearch-cat.is-active .TDesign-docsearch-cat__badge {
   color: var(--brand-main, #0052d9);
-  background: var(--brand-main-light, rgba(0, 82, 217, 0.1));
+  background: var(--brand-main-light, rgb(0, 82, 217, 0.1));
 }
 
 /* --------- 右栏：命中条目 --------- */
@@ -301,7 +302,7 @@
   padding: 8px 12px;
   border-radius: var(--border-radius, 3px);
   text-decoration: none;
-  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+  color: var(--text-primary, rgb(0, 0, 0, 0.9));
   cursor: pointer;
   transition:
     background-color 0.15s ease,
@@ -318,7 +319,7 @@
   font-size: 14px;
   font-weight: 600;
   line-height: 22px;
-  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+  color: var(--text-primary, rgb(0, 0, 0, 0.9));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -330,13 +331,14 @@
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
-  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
+  color: var(--text-placeholder, rgb(0, 0, 0, 0.4));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 /* --------- 最近搜索（单列，复用 hit 样式） --------- */
+
 /* 与两栏布局的右栏 (.TDesign-docsearch-cols__right) 保持一致的内边距，
    以便 hit 的左边缘在两种场景下视觉对齐 */
 .TDesign-docsearch-section {
@@ -349,7 +351,7 @@
   font-size: 12px;
   font-weight: 500;
   line-height: 20px;
-  color: var(--text-secondary, rgba(0, 0, 0, 0.6));
+  color: var(--text-secondary, rgb(0, 0, 0, 0.6));
 }
 
 .TDesign-docsearch-hit__remove {
@@ -368,10 +370,9 @@
   background: transparent;
   font: inherit;
   cursor: pointer;
-  color: var(--text-placeholder, rgba(0, 0, 0, 0.3));
+  color: var(--text-placeholder, rgb(0, 0, 0, 0.3));
   opacity: 0;
   appearance: none;
-  -webkit-appearance: none;
   transition:
     color 0.2s ease,
     opacity 0.15s ease,
@@ -386,11 +387,11 @@
 .TDesign-docsearch-hit__remove svg {
   width: 14px;
   height: 14px;
-  fill: currentColor;
+  fill: currentcolor;
 }
 
 .TDesign-docsearch-hit__remove:hover {
-  color: var(--text-primary, rgba(0, 0, 0, 0.7));
+  color: var(--text-primary, rgb(0, 0, 0, 0.7));
 }
 
 /* 匹配高亮 —— 品牌色文字 + 品牌淡色背景（胶囊块） */
@@ -398,7 +399,7 @@
   padding: 0 2px;
   margin: 0 1px;
   color: var(--brand-main, #0052d9);
-  background: var(--brand-main-light, rgba(0, 82, 217, 0.1));
+  background: var(--brand-main-light, rgb(0, 82, 217, 0.1));
   border-radius: 3px;
   font-weight: inherit;
   text-decoration: none;
@@ -413,14 +414,14 @@
   font-size: 13px;
   font-weight: 500;
   line-height: 20px;
-  color: var(--text-primary, rgba(0, 0, 0, 0.9));
+  color: var(--text-primary, rgb(0, 0, 0, 0.9));
 }
 
 .TDesign-docsearch-empty__desc {
   margin-top: 4px;
   font-size: 12px;
   line-height: 20px;
-  color: var(--text-placeholder, rgba(0, 0, 0, 0.4));
+  color: var(--text-placeholder, rgb(0, 0, 0, 0.4));
 }
 
 /* =========================================================================
@@ -444,6 +445,7 @@
     left: 50%;
     transform: translate(-50%, -4px);
   }
+
   .TDesign-docsearch-popover.is-open {
     transform: translate(-50%, 0);
   }
@@ -453,20 +455,21 @@
     min-height: 0;
     max-height: 60vh;
   }
+
   .TDesign-docsearch-cols__left {
     flex: 0 0 auto;
     width: 100%;
     max-width: none;
     padding: 4px;
     border-bottom: 1px solid var(--component-stroke, #dcdcdc);
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: auto hidden;
   }
+
   .TDesign-docsearch-cat-list {
-    flex-direction: row;
+    flex-flow: row nowrap;
     gap: 4px;
-    flex-wrap: nowrap;
   }
+
   .TDesign-docsearch-cat {
     flex-shrink: 0;
     justify-content: flex-start;
@@ -474,10 +477,12 @@
     padding: 6px 10px;
     border-radius: 999px;
   }
+
   /* 胶囊内部 title 不再抢占剩余空间，宽度贴合内容 */
   .TDesign-docsearch-cat__title {
     flex: 0 1 auto;
   }
+
   .TDesign-docsearch-cols__right {
     padding: 4px;
   }

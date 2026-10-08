@@ -8,7 +8,7 @@
 
 .font(@i) when(@i <= 64) {
   .font-@{i} {
-    font-size: @i + 0px;
+    font-size: @i + 0;
     line-height: @i + 8px;
     margin: 16px 0;
   }
@@ -55,6 +55,7 @@
           vertical-align: middle;
           color: var(--text-secondary);
         }
+
         span {
           line-height: 22px;
           color: var(--text-secondary);
@@ -64,6 +65,7 @@
 
     &.font-steps {
       color: var(--text-primary);
+
       .title {
         font-size: 14px;
         line-height: 22px;
@@ -74,6 +76,7 @@
         width: 145px;
         display: inline-block;
       }
+
       .desc {
         float: right;
       }
@@ -81,19 +84,19 @@
 
     &.font-size {
       input[type='range'] {
-        -webkit-appearance: none;
+        appearance: none;
         width: 154px;
         background: transparent;
         margin-left: 16px;
       }
 
       input[type='range']::-webkit-slider-thumb {
-        -webkit-appearance: none;
+        appearance: none;
         border: 1px solid #0052d9;
         height: 14px;
         width: 14px;
         border-radius: 100%;
-        background: #ffffff;
+        background: #fff;
         cursor: pointer;
         margin-top: -5px;
       }
@@ -109,9 +112,11 @@
       input[type='range']:focus {
         outline: none;
       }
+
       .ctrl {
         display: flex;
       }
+
       .line-height {
         font-size: 20px;
         line-height: 28px;

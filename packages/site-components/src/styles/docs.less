@@ -3,7 +3,7 @@
   .header-anchor {
     width: @width;
     height: @height;
-    background-image: url(../images/link.svg);
+    background-image: url("../images/link.svg");
     background-repeat: no-repeat;
     background-size: 100% auto;
     margin-left: 8px;
@@ -136,7 +136,7 @@ div[name='DESIGN'] {
     font-family:
       SFMono-Regular,
       Consolas,
-      Liberation Mono,
+      "Liberation Mono",
       Menlo,
       monospace;
   }
@@ -328,7 +328,6 @@ div[name='DESIGN'] {
     }
 
     .tdesign-toc_list_item_a {
-      text-decoration: none;
       margin-left: -1px;
       padding-left: 16px;
       margin-bottom: 4px;
@@ -410,8 +409,7 @@ div[name='DOC'] {
     margin-top: 16px;
     display: flex;
     flex-wrap: wrap;
-    column-gap: 16px;
-    row-gap: 16px;
+    gap: 16px;
   }
 
   .image-wrapper {
@@ -450,9 +448,9 @@ div[name='DOC'] {
         color: var(--text-primary);
         transform: translateY(-2px);
         box-shadow:
-          0px 6px 30px 5px rgba(0, 0, 0, 0.05),
-          0px 16px 24px 2px rgba(0, 0, 0, 0.04),
-          0px 8px 10px -5px rgba(0, 0, 0, 0.08);
+          0 6px 30px 5px rgb(0, 0, 0, 0.05),
+          0 16px 24px 2px rgb(0, 0, 0, 0.04),
+          0 8px 10px -5px rgb(0, 0, 0, 0.08);
 
         .name {
           color: var(--text-primary);

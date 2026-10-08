@@ -4,14 +4,17 @@
 
 :root[theme-mode='dark'] {
   --td-bg-color-resource: #2c2c2c;
+
   .t-dialog {
     background: var(--bg-color-container);
     border-color: var(--component-border);
   }
+
   .tdesign-source-block-image {
     .light {
       display: none;
     }
+
     .dark {
       display: block;
     }
@@ -122,6 +125,7 @@
 
   @media screen and (min-width: 960px) and (max-width: 1199px) {
     width: ~'calc((100% - 24px) / 2)';
+
     &:nth-of-type(2n) {
       margin-right: 0;
     }
@@ -129,6 +133,7 @@
 
   @media screen and (min-width: 1200px) and (max-width: 1439px) {
     width: ~'calc((100% - 48px) / 3)';
+
     &:nth-of-type(3n) {
       margin-right: 0;
     }
@@ -136,6 +141,7 @@
 
   @media screen and (min-width: 1440px) {
     width: ~'calc((100% - 72px) / 4)';
+
     &:nth-of-type(4n) {
       margin-right: 0;
     }
@@ -144,9 +150,9 @@
   &:hover {
     transform: translateY(-4px);
     box-shadow:
-      0px 6px 30px 5px rgba(0, 0, 0, 0.05),
-      0px 16px 24px 2px rgba(0, 0, 0, 0.04),
-      0px 8px 10px -5px rgba(0, 0, 0, 0.08);
+      0 6px 30px 5px rgb(0, 0, 0, 0.05),
+      0 16px 24px 2px rgb(0, 0, 0, 0.04),
+      0 8px 10px -5px rgb(0, 0, 0, 0.08);
   }
 
   &-image {
@@ -203,7 +209,6 @@
 
   &-title {
     margin: 12px 0 4px;
-    display: flex;
     align-items: center;
     font-size: 16px;
     line-height: 24px;
@@ -212,6 +217,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+
     @media screen and (min-width: 1440px) {
       font-size: 18px;
       line-height: 28px;

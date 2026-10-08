@@ -1,7 +1,6 @@
 module.exports = {
   extends: ['stylelint-config-standard', 'stylelint-config-standard-less'],
   rules: {
-    'number-leading-zero': 'never',
     'color-function-notation': 'legacy',
     'alpha-value-notation': 'number',
     // TODO 后面统一改 class 小写 且 BEM，当前按警告提示
