@@ -1,9 +1,11 @@
 import { html, define, dispatch } from 'hybrids';
 import style from './style.less?inline';
 
+type SwitchSize = 'small' | 'medium' | 'large';
+
 interface SwitchProps {
   value: boolean;
-  size: string;
+  size: SwitchSize;
 }
 
 function handleChange(host: SwitchProps & HTMLElement) {

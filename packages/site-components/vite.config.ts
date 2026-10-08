@@ -36,7 +36,9 @@ export default defineConfig({
 function lessCompilePlugin(): Plugin {
   return {
     name: 'less-compile-plugin',
+    apply: 'build',
     closeBundle() {
+      if (process.env.VITEST) return;
       console.log('Running compile-less.ts...');
       exec('node --experimental-strip-types ./script/compile-less.ts', (err, stdout, stderr) => {
         if (err) {
