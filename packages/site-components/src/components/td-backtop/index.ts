@@ -32,8 +32,8 @@ export default define<BacktopProps>({
 
   render: ({ backtopShow }) =>
     html`
-      <div class="td-backtop ${backtopShow ? 'show' : ''}" onclick="${handleBacktop}">
-        <div class="td-backtop__inner" innerHTML=${backTopIcon}></div>
+      <div class="TDesign-backtop ${backtopShow ? 'show' : ''}" onclick="${handleBacktop}">
+        <div class="TDesign-backtop__inner" innerHTML=${backTopIcon}></div>
       </div>
     `.css`${style}`,
 });

@@ -13,7 +13,6 @@ module.exports = {
         'alpha-value-notation': null,
         'custom-property-empty-line-before': null,
         'no-duplicate-selectors': null,
-        'selector-class-pattern': null,
       },
     },
   ],

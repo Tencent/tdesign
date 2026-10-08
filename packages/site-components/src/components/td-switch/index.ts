@@ -21,14 +21,14 @@ export default define<SwitchProps>({
     const { value, size } = host;
 
     const switchClass = {
-      'td-switch': true,
+      'TDesign-switch': true,
       'is-checked': value,
       [`size-${size}`]: size,
     };
 
     return html`
       <button type="button" class="${switchClass}" onclick="${handleChange}">
-        <span class="td-switch__handle"></span>
+        <span class="TDesign-switch__handle"></span>
       </button>
     `.css`${style}`;
   },

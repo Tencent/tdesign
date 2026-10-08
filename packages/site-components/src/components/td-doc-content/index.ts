@@ -147,11 +147,11 @@ export default define<ContentHost>({
       <style>
         ${style}
       </style>
-      <div class="td-doc-content ${host.pageStatus}">
+      <div class="TDesign-doc-content ${host.pageStatus}">
         <slot name="doc-header"></slot>
 
-        <div class="td-doc-body" style=${host.mobileBodyStyle}>
-          <div class="td-doc-body__inner">
+        <div class="TDesign-doc-body" style=${host.mobileBodyStyle}>
+          <div class="TDesign-doc-body__inner">
             <slot></slot>
           </div>
         </div>

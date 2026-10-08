@@ -44,8 +44,8 @@
           :style="{ background: listLi.rightTxt }"
           @click="copyColor(listLi.rightTxt)"
         >
-          <p v-if="listLi.topTitle" class="color-board-bottom-txt">{{ listLi.topTitle }}</p>
-          <p class="color-board-top-txt">
+          <p v-if="listLi.topTitle" class="color-board-bottomTxt">{{ listLi.topTitle }}</p>
+          <p class="color-board-topTxt">
             <span>{{ listLi.leftTxt }}</span>
             <span>{{ listLi.rightTxt }}</span>
           </p>
@@ -383,7 +383,7 @@ function copyColor(color: string) {
           border-radius: 3px !important;
         }
 
-        .color-board-top-txt {
+        .color-board-topTxt {
           display: flex;
           justify-content: space-between;
           align-items: flex-end;
@@ -407,14 +407,14 @@ function copyColor(color: string) {
           flex-flow: column;
           justify-content: space-between;
 
-          .color-board-bottom-txt {
+          .color-board-bottomTxt {
             font-size: 12px;
             line-height: 20px;
             color: rgba(0, 0, 0, 0.9);
             font-weight: 500;
           }
 
-          .color-board-top-txt {
+          .color-board-topTxt {
             height: unset;
           }
         }

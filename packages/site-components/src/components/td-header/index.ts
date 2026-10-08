@@ -102,14 +102,14 @@ function renderNotice(host: HeaderHost) {
     const asideEl = document.querySelector<DocAsideElement>('td-doc-aside');
     if (asideEl) {
       asideEl.style.setProperty('--aside-top', top);
-      const asideBody = asideEl.shadowRoot?.querySelector<HTMLElement>('.td-doc-aside');
+      const asideBody = asideEl.shadowRoot?.querySelector<HTMLElement>('.TDesign-doc-aside');
       if (asideBody) asideBody.style.top = top;
     }
   };
 
   const closeNotice = () => {
     if (!host.shadowRoot) return;
-    const noticeElement = host.shadowRoot.querySelector<HTMLElement>('.td-header-notice');
+    const noticeElement = host.shadowRoot.querySelector<HTMLElement>('.TDesign-header-notice');
     if (noticeElement) noticeElement.style.display = 'none';
     changeAsideElTop('64px');
     localStorage.setItem('TDesign_notice_closed', noticeOption.title ?? '');
@@ -123,11 +123,11 @@ function renderNotice(host: HeaderHost) {
   changeAsideElTop();
 
   return html`
-    <div class="td-header-notice ${noticeOption.type}">
-      <div class="td-header-notice__content" onclick="${handleNoticeAction}">${noticeOption.title}</div>
+    <div class="TDesign-header-notice ${noticeOption.type}">
+      <div class="TDesign-header-notice__content" onclick="${handleNoticeAction}">${noticeOption.title}</div>
       ${
         noticeOption.closeable &&
-        html`<i class="td-header-notice__close" innerHTML="${closeIcon}" onclick="${closeNotice}"></i>`
+        html`<i class="TDesign-header-notice__close" innerHTML="${closeIcon}" onclick="${closeNotice}"></i>`
       }
     </div>
   `;
@@ -137,10 +137,10 @@ function renderLinksPopup(host: HeaderHost, trigger: UpdateFunctionWithMethods<u
   return html`
     <td-doc-popup placement="bottom" portalStyle="${portalStyle}">
       ${trigger}
-      <div slot="content" class="td-base-components-links">
-        <div class="td-base-components-links__web">
+      <div slot="content" class="TDesign-base-components-links">
+        <div class="TDesign-base-components-links__web">
           <p class="title">${baseComponentsLinks.web.name}</p>
-          <div class="td-base-components-links__list">
+          <div class="TDesign-base-components-links__list">
             ${baseComponentsLinks.web.links.map(
               (item) => html`
                 <a
@@ -161,9 +161,9 @@ function renderLinksPopup(host: HeaderHost, trigger: UpdateFunctionWithMethods<u
           </div>
         </div>
 
-        <div class="td-base-components-links__mobile">
+        <div class="TDesign-base-components-links__mobile">
           <p class="title">${baseComponentsLinks.mobile.name}</p>
-          <div class="td-base-components-links__list">
+          <div class="TDesign-base-components-links__list">
             ${baseComponentsLinks.mobile.links.map(
               (item) => html`
                 <a
@@ -211,8 +211,8 @@ export function gitPath(platform: string, framework: string): string {
 
 function renderLinks(host: HeaderHost, items: HeaderNavItem[], platform: string, framework: string) {
   const gitLink = html`
-    <a class="td-header-nav__git" href="${gitPath(platform, framework)}" id="${platform}" target="_blank">
-      <span class="td-header-nav__git-icon" innerHTML="${githubIcon}"></span>
+    <a class="TDesign-header-nav__git" href="${gitPath(platform, framework)}" id="${platform}" target="_blank">
+      <span class="TDesign-header-nav__git-icon" innerHTML="${githubIcon}"></span>
     </a>
   `;
 
@@ -223,8 +223,8 @@ function renderLinks(host: HeaderHost, items: HeaderNavItem[], platform: string,
 
   const translateLink = !host.disabledLocale
     ? html`
-        <div class="td-header-nav__translate" onclick="${handleTranslate}">
-          <span class="td-header-nav__translate-icon" innerHTML="${translateIcon}"></span>
+        <div class="TDesign-header-nav__translate" onclick="${handleTranslate}">
+          <span class="TDesign-header-nav__translate-icon" innerHTML="${translateIcon}"></span>
         </div>
       `
     : html``;
@@ -238,7 +238,7 @@ function renderLinks(host: HeaderHost, items: HeaderNavItem[], platform: string,
     .map((item) => {
       if (item.type === 'base') {
         const trigger = html`
-          <span class="td-header-nav__link ${isBaseActive() ? 'active' : ''}">
+          <span class="TDesign-header-nav__link ${isBaseActive() ? 'active' : ''}">
             ${item.name} <i class="icon" innerHTML="${fakeArrowIcon}"></i>
           </span>
         `;
@@ -246,7 +246,7 @@ function renderLinks(host: HeaderHost, items: HeaderNavItem[], platform: string,
       }
       const path = item.path ?? '';
       return html`
-        <a class="td-header-nav__link ${isActive(path) ? 'active' : ''}" href="${path}" target="${item.target}"
+        <a class="TDesign-header-nav__link ${isActive(path) ? 'active' : ''}" href="${path}" target="${item.target}"
           >${item.name}</a
         >
       `;
@@ -309,12 +309,12 @@ export default define<HeaderProps>({
     const { platform, framework, disabledTheme, collapseMenu } = host;
     return html`
       ${renderNotice(host)}
-      <header class="td-header">
-        <div class="td-header-inner">
-          <div class="td-header-left">
+      <header class="TDesign-header">
+        <div class="TDesign-header-inner">
+          <div class="TDesign-header-left">
             <td-logo></td-logo>
           </div>
-          <div class="td-header-nav">
+          <div class="TDesign-header-nav">
             ${
               collapseMenu
                 ? html`

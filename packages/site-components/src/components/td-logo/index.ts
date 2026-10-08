@@ -96,10 +96,10 @@ export default define<LogoProps>({
       ${style}
     </style>
 
-    <div class="td-header-logo">
+    <div class="TDesign-header-logo">
       <td-doc-popup portalStyle="${portalStyle}" placement="bottom-start">
-        <div class="td-header-logo__menu" innerHTML=${menuApplicationIcon}></div>
-        <div slot="content" class="td-header-logo__content">${renderMenu(menuList)}</div>
+        <div class="TDesign-header-logo__menu" innerHTML=${menuApplicationIcon}></div>
+        <div slot="content" class="TDesign-header-logo__content">${renderMenu(menuList)}</div>
       </td-doc-popup>
       <span class="divider"></span>
       <a class="home" href="${isEn() ? '/index-en' : '/'}" title="TDesign" innerHTML=${logoIcon}></a>

@@ -31,6 +31,6 @@ export default define<BadgeHost>({
 
     const badgeUrl = encodeURI(`https://img.shields.io/badge/${label}-${message}-${color}`);
 
-    return html` <img class="td-doc-badge" src="${badgeUrl}" /> `.css`${style}`;
+    return html` <img class="TDesign-doc-badge" src="${badgeUrl}" /> `.css`${style}`;
   },
 });

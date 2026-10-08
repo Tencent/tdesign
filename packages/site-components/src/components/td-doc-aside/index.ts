@@ -35,7 +35,7 @@ function handleLinkClick(host: AsideHost & HTMLElement, e: Event, path: string |
   if (!(eventTarget instanceof HTMLElement)) return;
   const shadowRoot = eventTarget.getRootNode();
   if (!(shadowRoot instanceof ShadowRoot || shadowRoot instanceof Document)) return;
-  const target = eventTarget.classList.contains('td-doc-sidenav-link') ? eventTarget : eventTarget.parentElement;
+  const target = eventTarget.classList.contains('TDesign-doc-sidenav-link') ? eventTarget : eventTarget.parentElement;
   if (!target) return;
   const prevActiveNodes = shadowRoot.querySelectorAll('.active');
   prevActiveNodes.forEach((node) => node.classList.remove('active'));
@@ -46,8 +46,8 @@ function handleLinkClick(host: AsideHost & HTMLElement, e: Event, path: string |
 function scrollToActiveLink(host: AsideHost & HTMLElement): void {
   if (!host.shadowRoot) return;
 
-  const sidenav = host.shadowRoot.querySelector<HTMLElement>('.td-doc-sidenav');
-  const activeLink = host.shadowRoot.querySelector<HTMLElement>('.td-doc-sidenav-link.active');
+  const sidenav = host.shadowRoot.querySelector<HTMLElement>('.TDesign-doc-sidenav');
+  const activeLink = host.shadowRoot.querySelector<HTMLElement>('.TDesign-doc-sidenav-link.active');
 
   if (sidenav && activeLink) {
     const sidenavRect = sidenav.getBoundingClientRect();
@@ -84,22 +84,22 @@ function renderNav(host: AsideHost & HTMLElement, nav: NavItem | NavItem[], deep
 
   if (nav.children) {
     return html`
-      <div class="td-doc-sidenav-group td-doc-sidenav-group--deep${deep}">
-        <span class="td-doc-sidenav-group__title">${nav.title}</span>
-        <div class="td-doc-sidenav-group__children">${renderNav(host, nav.children, deep + 1)}</div>
+      <div class="TDesign-doc-sidenav-group TDesign-doc-sidenav-group--deep${deep}">
+        <span class="TDesign-doc-sidenav-group__title">${nav.title}</span>
+        <div class="TDesign-doc-sidenav-group__children">${renderNav(host, nav.children, deep + 1)}</div>
       </div>
     `;
   }
 
   return html`
-    <div class="td-doc-sidenav-item">
+    <div class="TDesign-doc-sidenav-item">
       <a
         href="${nav.path}"
-        class="td-doc-sidenav-link ${isActive ? 'active' : ''}"
+        class="TDesign-doc-sidenav-link ${isActive ? 'active' : ''}"
         onclick=${(eventHost: AsideHost & HTMLElement, e?: Event) => e && handleLinkClick(eventHost, e, nav.path)}
       >
-        ${nav.title} ${hasUpdate() ? html`<span class="td-doc-sidenav-link__tag">Update</span>` : null}
-        ${nav.customTag ? html`<span class="td-doc-sidenav-link__tag">${nav.customTag}</span>` : null}
+        ${nav.title} ${hasUpdate() ? html`<span class="TDesign-doc-sidenav-link__tag">Update</span>` : null}
+        ${nav.customTag ? html`<span class="TDesign-doc-sidenav-link__tag">${nav.customTag}</span>` : null}
       </a>
     </div>
   `;
@@ -107,7 +107,7 @@ function renderNav(host: AsideHost & HTMLElement, nav: NavItem | NavItem[], deep
 
 function toggleCollapseAside(host: AsideHost & HTMLElement): void {
   if (!host.shadowRoot) return;
-  const aside = host.shadowRoot.querySelector<HTMLElement>('.td-doc-aside');
+  const aside = host.shadowRoot.querySelector<HTMLElement>('.TDesign-doc-aside');
   if (!aside) return;
   const asideClassList = aside.classList;
   if (asideClassList.contains('hide')) {
@@ -154,7 +154,7 @@ const asideComponent = {
         const { shadowRoot } = host;
         const { scrollTop } = document.documentElement;
         // 吸顶效果
-        const aside = shadowRoot.querySelector<HTMLElement>('.td-doc-aside');
+        const aside = shadowRoot.querySelector<HTMLElement>('.TDesign-doc-aside');
         if (!aside) return;
 
         const top = getComputedStyle(host).getPropertyValue('--aside-top') || '64px';
@@ -169,7 +169,7 @@ const asideComponent = {
       function handleResize() {
         if (!host.shadowRoot) return;
         const isMobileResponse = window.innerWidth < 1200;
-        const aside = host.shadowRoot.querySelector<HTMLElement>('.td-doc-aside');
+        const aside = host.shadowRoot.querySelector<HTMLElement>('.TDesign-doc-aside');
         if (!aside) return;
         const asideClassList = aside.classList;
         if (isMobileResponse) {
@@ -202,9 +202,9 @@ const asideComponent = {
             currentRoute = location.hash.slice(1);
           }
 
-          const linkNodes = Array.from(shadowRoot.querySelectorAll<HTMLAnchorElement>('.td-doc-sidenav-link'));
+          const linkNodes = Array.from(shadowRoot.querySelectorAll<HTMLAnchorElement>('.TDesign-doc-sidenav-link'));
           const prevActiveNodes = Array.from(
-            shadowRoot.querySelectorAll<HTMLAnchorElement>('.td-doc-sidenav-link.active'),
+            shadowRoot.querySelectorAll<HTMLAnchorElement>('.TDesign-doc-sidenav-link.active'),
           );
           const nextActiveNode = linkNodes.find((node) => {
             const urlObj = new URL(node.href);
@@ -248,17 +248,17 @@ const asideComponent = {
     const { routerList, title, collapse } = host;
 
     return html`
-      <aside class="td-doc-aside">
-        <div class="td-doc-aside-collapse" onclick="${toggleCollapseAside}">
+      <aside class="TDesign-doc-aside">
+        <div class="TDesign-doc-aside-collapse" onclick="${toggleCollapseAside}">
           <i class="icon" innerHTML="${collapse ? menuUnfoldIcon : menuFoldIcon}"></i>
         </div>
-        <div class="td-doc-sidenav">
-          ${title && html`<h2 class="td-doc-aside__title">${title}</h2>`}
-          <slot class="td-doc-aside__extra" name="extra"></slot>
+        <div class="TDesign-doc-sidenav">
+          ${title && html`<h2 class="TDesign-doc-aside__title">${title}</h2>`}
+          <slot class="TDesign-doc-aside__extra" name="extra"></slot>
           ${renderNav(host, routerList)}
         </div>
       </aside>
-      <div class="td-doc-aside-mask" onclick="${toggleCollapseAside}"></div>
+      <div class="TDesign-doc-aside-mask" onclick="${toggleCollapseAside}"></div>
     `.css`${style}`;
   },
 };

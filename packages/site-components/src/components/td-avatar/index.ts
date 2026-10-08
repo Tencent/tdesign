@@ -19,7 +19,7 @@ export default define<AvatarProps>({
     const defaultHref = `https://github.com/${username}`;
 
     return html`
-      <div class="td-avatar">
+      <div class="TDesign-avatar">
         <td-tooltip trigger-type="hover">
           <a class="avatar" target="_blank" href="${href || defaultHref}">
             <img src="${src || defaultSrc}" />

@@ -33,13 +33,13 @@ function renderOptions(host: SelectHost) {
   }
 
   return html`
-    <ul class="td-select-list">
+    <ul class="TDesign-select-list">
       ${options.map((item) => {
         const isActive = item.value == host.value;
         return html`
           <li
             onclick="${(host: SelectHost) => handleItemClick(host, item)}"
-            class="td-select-list__item ${isActive ? 'is-active' : ''}"
+            class="TDesign-select-list__item ${isActive ? 'is-active' : ''}"
           >
             ${item.label}
           </li>
@@ -65,8 +65,8 @@ export default define<SelectProps>({
 
     const selectInputClass = {
       focus: visible,
-      'td-select-input': true,
-      'td-select-input--borderless': borderless,
+      'TDesign-select-input': true,
+      'TDesign-select-input--borderless': borderless,
     };
 
     return html`
@@ -79,10 +79,10 @@ export default define<SelectProps>({
         onvisible-change="${(host: SelectHost, event: VisibleChangeEvent) => (host.visible = event.detail.visible)}"
       >
         <div class="${selectInputClass}">
-          <input class="td-select-input__inner" readonly value="${inputValue}" />
+          <input class="TDesign-select-input__inner" readonly value="${inputValue}" />
           <i class="suffix-icon ${visible ? 'up' : ''}" innerHTML="${fakeArrowIcon}"></i>
         </div>
-        <div slot="content" class="td-select-dropdown">${renderOptions(host)}</div>
+        <div slot="content" class="TDesign-select-dropdown">${renderOptions(host)}</div>
       </td-doc-popup>
     `.css`${style}`;
   },

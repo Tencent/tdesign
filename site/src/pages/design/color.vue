@@ -39,8 +39,8 @@
             :style="{ background: listLi.rightTxt }"
             @click="copyColor(listLi.rightTxt)"
           >
-            <p v-if="listLi.topTitle" class="tdesign-color-features-bottom-txt">{{ listLi.topTitle }}</p>
-            <p class="tdesign-color-features-top-txt">
+            <p v-if="listLi.topTitle" class="tdesign-color-features-bottomTxt">{{ listLi.topTitle }}</p>
+            <p class="tdesign-color-features-topTxt">
               <span>{{ listLi.leftTxt }}</span>
               <span>{{ listLi.rightTxt }}</span>
             </p>

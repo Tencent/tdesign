@@ -71,9 +71,9 @@ export default define<CodeBlockProps>({
     const highlightCode = Prism.highlight(slotObj.content, Prism.languages[slotObj.lang], slotObj.lang);
 
     return html`
-      <div class="td-code-block">
+      <div class="TDesign-code-block">
         <td-doc-copy code="${slotObj.content}"></td-doc-copy>
-        <div class="td-code-block__header">
+        <div class="TDesign-code-block__header">
           ${slotsName.map(
             (slotName) => html`
               <div class="header-panel" onclick="${html.set('panel', slotName)}">
@@ -85,7 +85,7 @@ export default define<CodeBlockProps>({
           <span class="active-line"></span>
         </div>
 
-        <div class="td-code-block__body">
+        <div class="TDesign-code-block__body">
           <pre class="language-${slotObj.lang}" innerHTML="${highlightCode}"></pre>
         </div>
       </div>

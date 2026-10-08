@@ -8,5 +8,5 @@ interface CodeProps {
 export default define<CodeProps>({
   tag: 'td-code',
   text: '',
-  render: ({ text }) => html`<code class="td-code">${text}</code>`.css`${style}`,
+  render: ({ text }) => html`<code class="TDesign-code">${text}</code>`.css`${style}`,
 });

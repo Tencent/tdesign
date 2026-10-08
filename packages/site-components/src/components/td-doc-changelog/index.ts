@@ -18,7 +18,7 @@ interface ChangelogHost {
 
 const changelogCache = new Map<string, ChangelogData>();
 
-const classPrefix = 'td-doc-changelog';
+const classPrefix = 'TDesign-doc-changelog';
 const logsPrefix = `${classPrefix}__logs`;
 
 const locale = getLocale();

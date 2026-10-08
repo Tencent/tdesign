@@ -45,7 +45,7 @@ export default define<CopyHost>({
   render: () =>
     html`
       <td-tooltip duration="800">
-        <div class="td-doc-copy__inner" innerHTML=${copyIcon} onclick=${handleCopy}></div>
+        <div class="TDesign-doc-copy__inner" innerHTML=${copyIcon} onclick=${handleCopy}></div>
         <span slot="content">已复制</span>
       </td-tooltip>
     `.css`${style}`,

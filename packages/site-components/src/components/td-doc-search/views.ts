@@ -42,17 +42,17 @@ import type { DisplayHit, DocSearchHost, HitRenderOptions, Props, ViewHandlers }
  */
 export function renderTrigger(host: DocSearchHost, handlers: ViewHandlers): UpdateFunctionWithMethods<Props> {
   return html<Props>`
-    <div class="td-docsearch-trigger">
-      <span class="td-docsearch-trigger__icon" innerHTML=${SearchIcon}></span>
+    <div class="TDesign-docsearch-trigger">
+      <span class="TDesign-docsearch-trigger__icon" innerHTML=${SearchIcon}></span>
       <input
         type="search"
-        class="td-docsearch-trigger__input"
+        class="TDesign-docsearch-trigger__input"
         placeholder=${host.placeholder}
         autocomplete="off"
         spellcheck="false"
         aria-label=${host.placeholder}
         aria-expanded=${host.open ? 'true' : 'false'}
-        aria-controls="td-docsearch-popover"
+        aria-controls="TDesign-docsearch-popover"
         onfocus=${handlers.onTriggerFocus}
         oninput=${handlers.onTriggerInput}
         onkeydown=${handlers.onTriggerKeyDown}
@@ -60,8 +60,8 @@ export function renderTrigger(host: DocSearchHost, handlers: ViewHandlers): Upda
       ${
         host._loading
           ? html`
-              <span class="td-docsearch-trigger__suffix" aria-hidden="true">
-                <span class="td-docsearch-spinner"></span>
+              <span class="TDesign-docsearch-trigger__suffix" aria-hidden="true">
+                <span class="TDesign-docsearch-spinner"></span>
               </span>
             `
           : html``
@@ -83,9 +83,9 @@ export function renderTrigger(host: DocSearchHost, handlers: ViewHandlers): Upda
  */
 function renderEmpty(title: string, desc: string): UpdateFunctionWithMethods<Props> {
   return html<Props>`
-    <div class="td-docsearch-empty">
-      <div class="td-docsearch-empty__title">${title}</div>
-      <div class="td-docsearch-empty__desc">${desc}</div>
+    <div class="TDesign-docsearch-empty">
+      <div class="TDesign-docsearch-empty__title">${title}</div>
+      <div class="TDesign-docsearch-empty__desc">${desc}</div>
     </div>
   `;
 }
@@ -115,19 +115,19 @@ function renderHitItem(
   const active = idx === host._currentIndex;
 
   const titleNode = highlight
-    ? html`<span class="td-docsearch-hit__title" innerHTML=${item.title}></span>`
-    : html`<span class="td-docsearch-hit__title">${item.title}</span>`;
+    ? html`<span class="TDesign-docsearch-hit__title" innerHTML=${item.title}></span>`
+    : html`<span class="TDesign-docsearch-hit__title">${item.title}</span>`;
 
   const subtitleNode = item.subtitle
     ? highlight
-      ? html`<span class="td-docsearch-hit__subtitle" innerHTML=${item.subtitle}></span>`
-      : html`<span class="td-docsearch-hit__subtitle">${item.subtitle}</span>`
+      ? html`<span class="TDesign-docsearch-hit__subtitle" innerHTML=${item.subtitle}></span>`
+      : html`<span class="TDesign-docsearch-hit__subtitle">${item.subtitle}</span>`
     : html``;
 
   const removeBtn = showRemove
     ? html`<button
         type="button"
-        class="td-docsearch-hit__remove"
+        class="TDesign-docsearch-hit__remove"
         aria-label=${host.removeLabel}
         innerHTML=${CloseIcon}
         onclick=${(currentHost: DocSearchHost, event: MouseEvent) =>
@@ -137,13 +137,13 @@ function renderHitItem(
 
   return html`
     <li
-      class="td-docsearch-hit ${active ? 'is-active' : ''}"
+      class="TDesign-docsearch-hit ${active ? 'is-active' : ''}"
       data-idx=${idx}
       role="option"
       aria-selected=${active ? 'true' : 'false'}
     >
       <a
-        class="td-docsearch-hit__link"
+        class="TDesign-docsearch-hit__link"
         href=${item.url}
         onclick=${(currentHost: DocSearchHost, event: MouseEvent) => handlers.onHitClick(currentHost, item, event)}
       >
@@ -164,9 +164,9 @@ function renderHitItem(
 function renderRecentView(host: DocSearchHost, handlers: ViewHandlers): UpdateFunctionWithMethods<Props> {
   const recent = host._recent || [];
   return html`
-    <div class="td-docsearch-section">
-      <div class="td-docsearch-section__title">${host.recentTitle}</div>
-      <ul class="td-docsearch-list" role="listbox">
+    <div class="TDesign-docsearch-section">
+      <div class="TDesign-docsearch-section__title">${host.recentTitle}</div>
+      <ul class="TDesign-docsearch-list" role="listbox">
         ${recent.map((item, idx) =>
           renderHitItem(
             host,
@@ -189,7 +189,7 @@ function renderRecentView(host: DocSearchHost, handlers: ViewHandlers): UpdateFu
 /**
  * "两栏结果"视图：左栏分类列表、右栏命中项列表。
  * 命中项的 title / subtitle 是 Algolia 返回的高亮片段（含 <mark>），
- * 通过 innerHTML={hit.title} 透传，由 style.less 对 .td-docsearch-mark 做样式。
+ * 通过 innerHTML={hit.title} 透传，由 style.less 对 .TDesign-docsearch-mark 做样式。
  *
  * @param {HTMLElement} host
  * @param {Object} handlers
@@ -198,20 +198,20 @@ function renderGroupsView(host: DocSearchHost, handlers: ViewHandlers): UpdateFu
   const { _groups: groups, _activeKey: activeKey, _flatHits: flatHits } = host;
 
   return html`
-    <div class="td-docsearch-cols">
-      <div class="td-docsearch-cols__left">
-        <ul class="td-docsearch-cat-list" role="listbox" aria-label=${host.categoryLabel}>
+    <div class="TDesign-docsearch-cols">
+      <div class="TDesign-docsearch-cols__left">
+        <ul class="TDesign-docsearch-cat-list" role="listbox" aria-label=${host.categoryLabel}>
           ${groups.map(
             (g) => html`
               <li
-                class="td-docsearch-cat ${g.key === activeKey ? 'is-active' : ''}"
+                class="TDesign-docsearch-cat ${g.key === activeKey ? 'is-active' : ''}"
                 role="option"
                 aria-selected=${g.key === activeKey ? 'true' : 'false'}
                 onclick=${(currentHost: DocSearchHost, event: MouseEvent) =>
                   handlers.onCategoryClick(currentHost, g.key, event)}
               >
-                <span class="td-docsearch-cat__title" innerHTML=${g.title}></span>
-                <span class="td-docsearch-cat__badge" aria-label=${`${g.items.length} ${host.resultLabel}`}
+                <span class="TDesign-docsearch-cat__title" innerHTML=${g.title}></span>
+                <span class="TDesign-docsearch-cat__badge" aria-label=${`${g.items.length} ${host.resultLabel}`}
                   >${g.items.length}</span
                 >
               </li>
@@ -219,8 +219,8 @@ function renderGroupsView(host: DocSearchHost, handlers: ViewHandlers): UpdateFu
           )}
         </ul>
       </div>
-      <div class="td-docsearch-cols__right">
-        <ul class="td-docsearch-list" role="listbox" aria-label=${host.resultLabel}>
+      <div class="TDesign-docsearch-cols__right">
+        <ul class="TDesign-docsearch-list" role="listbox" aria-label=${host.resultLabel}>
           ${flatHits.map((hit, idx) => renderHitItem(host, hit, idx, handlers, { showRemove: false, highlight: true }))}
         </ul>
       </div>
@@ -275,12 +275,12 @@ function renderPopoverBody(host: DocSearchHost, handlers: ViewHandlers): UpdateF
 export function renderPopover(host: DocSearchHost, handlers: ViewHandlers): UpdateFunctionWithMethods<Props> {
   return html<Props>`
     <div
-      class="td-docsearch-popover ${host.open ? 'is-open' : ''}"
-      id="td-docsearch-popover"
+      class="TDesign-docsearch-popover ${host.open ? 'is-open' : ''}"
+      id="TDesign-docsearch-popover"
       role="dialog"
       aria-label=${host.dialogLabel}
     >
-      <div class="td-docsearch-popover__body">${renderPopoverBody(host, handlers)}</div>
+      <div class="TDesign-docsearch-popover__body">${renderPopoverBody(host, handlers)}</div>
     </div>
   `;
 }

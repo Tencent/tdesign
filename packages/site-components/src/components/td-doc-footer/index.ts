@@ -62,12 +62,16 @@ export default define<FooterHost>({
     };
 
     return html`
-      <div class="td-doc-footer" style="${mobileBodyStyle}">
-        <div class="td-doc-footer__inner">
-          <div class="td-doc-footer__content">
-            <div class="td-doc-footer__qrcode">
-              <td-doc-popup placement="left-start" portal-class="td-doc__qrcode-popup" portal-style="${portalStyle}">
-                <div class="td-doc-footer__qrcode-trigger">
+      <div class="TDesign-doc-footer" style="${mobileBodyStyle}">
+        <div class="TDesign-doc-footer__inner">
+          <div class="TDesign-doc-footer__content">
+            <div class="TDesign-doc-footer__qrcode">
+              <td-doc-popup
+                placement="left-start"
+                portal-class="TDesign-doc__qrcode-popup"
+                portal-style="${portalStyle}"
+              >
+                <div class="TDesign-doc-footer__qrcode-trigger">
                   <div>
                     <div class="qrcode" onmouseenter="${() => handleHoverLogo('vue')}">
                       <i innerHTML="${vueLogo}"></i>
@@ -95,17 +99,17 @@ export default define<FooterHost>({
                     </div>
                   </div>
                 </div>
-                <div slot="content" class="td-doc__qrcode-inner">
+                <div slot="content" class="TDesign-doc__qrcode-inner">
                   <img width="120" height="120" src="${displayQrCode}" />
                 </div>
               </td-doc-popup>
-              <h4 class="td-doc-footer__qrcode-title">${locale.footer.weComGroup}</h4>
-              <p class="td-doc-footer__qrcode-desc">${locale.footer.weComGroupDesc}</p>
+              <h4 class="TDesign-doc-footer__qrcode-title">${locale.footer.weComGroup}</h4>
+              <p class="TDesign-doc-footer__qrcode-desc">${locale.footer.weComGroupDesc}</p>
             </div>
 
             ${footerLinks.map(
               (item) => html`
-                <div class="td-doc-footer__content-block">
+                <div class="TDesign-doc-footer__content-block">
                   <p class="title">${item.title}</p>
                   ${item.links.map(
                     (link) =>
@@ -122,12 +126,12 @@ export default define<FooterHost>({
           </div>
         </div>
       </div>
-      <div class="td-doc-footer__bottom" style="${mobileBodyStyle}">
-        <div class="td-doc-footer__inner">
+      <div class="TDesign-doc-footer__bottom" style="${mobileBodyStyle}">
+        <div class="TDesign-doc-footer__inner">
           <p class="copyright">
             Copyright &copy; 1998 - ${currentYear} Tencent. All Rights Reserved. ${locale.footer.copyright}
           </p>
-          <div class="td-doc-footer__logos">
+          <div class="TDesign-doc-footer__logos">
             <i class="logo" innerHTML="${committeeIcon}"></i>
             <a class="logo" href="https://cloud.tencent.com/" target="_blank" innerHTML="${tencentCloudIcon}"></a>
           </div>

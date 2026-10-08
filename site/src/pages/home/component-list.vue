@@ -1,6 +1,6 @@
 <template>
   <div ref="listWrapper" class="component-list">
-    <div class="lottie-wrapper td-light">
+    <div class="lottie-wrapper __light__">
       <video
         ref="lightVideoRef"
         width="2560"
@@ -19,7 +19,7 @@
       </video>
     </div>
 
-    <div class="lottie-wrapper td-dark">
+    <div class="lottie-wrapper __dark__">
       <video
         ref="darkVideoRef"
         width="2560"

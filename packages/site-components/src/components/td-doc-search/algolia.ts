@@ -37,7 +37,7 @@ export function getDefaultUrlFilter() {
   }
 }
 
-const HIGHLIGHT_PRE_TAG = '<mark class="td-docsearch-mark">';
+const HIGHLIGHT_PRE_TAG = '<mark class="TDesign-docsearch-mark">';
 const HIGHLIGHT_POST_TAG = '</mark>';
 
 /**
