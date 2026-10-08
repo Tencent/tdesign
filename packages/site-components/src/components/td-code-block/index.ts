@@ -10,14 +10,14 @@ interface SlotContent {
 
 interface CodeBlockProps {
   panel: string;
-  slotsName: string[];
 }
 
 type CodeBlockHost = CodeBlockProps & HTMLElement;
 
 function getLineStyle(host: CodeBlockHost) {
-  const { slotsName, panel } = host;
-  const index = slotsName?.findIndex((s) => s === panel) || 0;
+  const { panel } = host;
+  const slots = host.querySelectorAll<HTMLElement>('td-code-block > [slot]');
+  const index = Array.from(slots).findIndex((slot) => slot.slot === panel);
 
   if (index === -1 || !host.shadowRoot) return '';
 
@@ -43,9 +43,6 @@ function extractSlots(host: CodeBlockHost) {
     });
   });
 
-  // 保存 slots
-  host.slotsName = slotsName;
-
   return {
     slotsEl,
     slotsName,
@@ -55,9 +52,6 @@ function extractSlots(host: CodeBlockHost) {
 
 export default define<CodeBlockProps>({
   tag: 'td-code-block',
-  slotsName: {
-    value: (_host, value) => value || [],
-  },
   panel: {
     value: (host, v) => v || '',
     observe: (host) => {
