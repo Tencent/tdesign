@@ -123,7 +123,7 @@ const createTooltips = (framework: string, generateDemo: boolean, selectedText: 
   const content = document.createElement('div');
 
   tooltip.setAttribute('id', 'webChatInteraction');
-  tooltip.setAttribute('class', 'TDesign-ai-button__tooltip');
+  tooltip.setAttribute('class', 'td-ai-button__tooltip');
   tooltip.setAttribute(
     'style',
     'cursor: pointer;border: 1px solid #e9e9f1;padding: 6px 12px;border-radius: 8px;color: var(--text-primary);font-weight: bold;background-color: var(--bg-color-docpage);z-index: 9999;display: flex;',

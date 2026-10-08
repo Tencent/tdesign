@@ -1,13 +1,13 @@
 <template>
   <div class="doc-color-wrapper">
     <div ref="article" name="DOC" class="doc-color">
-      <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
-        <ol class="tdesign-toc_list">
-          <li v-for="anchor in catalog" :key="anchor.id" class="tdesign-toc_list_item">
-            <a class="tdesign-toc_list_item_a" :href="'#' + anchor.id">{{ anchor.title }} </a>
-            <ol v-if="anchor.children.length" class="tdesign-toc_list">
-              <li v-for="subAnchor in anchor.children" :key="subAnchor.id" class="tdesign-toc_list_item">
-                <a class="tdesign-toc_list_item_a" :href="'#' + subAnchor.id">{{ subAnchor.title }} </a>
+      <nav class="td-toc-container" style="position: absolute; top: 328px">
+        <ol class="td-toc-list">
+          <li v-for="anchor in catalog" :key="anchor.id" class="td-toc-list-item">
+            <a class="td-toc-link" :href="'#' + anchor.id">{{ anchor.title }} </a>
+            <ol v-if="anchor.children.length" class="td-toc-list">
+              <li v-for="subAnchor in anchor.children" :key="subAnchor.id" class="td-toc-list-item">
+                <a class="td-toc-link" :href="'#' + subAnchor.id">{{ subAnchor.title }} </a>
               </li>
             </ol>
           </li>
@@ -39,8 +39,8 @@
             :style="{ background: listLi.rightTxt }"
             @click="copyColor(listLi.rightTxt)"
           >
-            <p v-if="listLi.topTitle" class="tdesign-color-features-bottomTxt">{{ listLi.topTitle }}</p>
-            <p class="tdesign-color-features-topTxt">
+            <p v-if="listLi.topTitle" class="tdesign-color-features-bottom-txt">{{ listLi.topTitle }}</p>
+            <p class="tdesign-color-features-top-txt">
               <span>{{ listLi.leftTxt }}</span>
               <span>{{ listLi.rightTxt }}</span>
             </p>

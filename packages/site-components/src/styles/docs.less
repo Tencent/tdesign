@@ -18,21 +18,21 @@
 
 :root,
 :root[theme-mode='light'] {
-  .__light__ {
+  .td-light {
     display: block;
   }
 
-  .__dark__ {
+  .td-dark {
     display: none;
   }
 }
 
 :root[theme-mode='dark'] {
-  .__light__ {
+  .td-light {
     display: none;
   }
 
-  .__dark__ {
+  .td-dark {
     display: block;
   }
 }
@@ -273,7 +273,7 @@ div[name='DESIGN'] {
 }
 
 // 侧边栏目录
-.tdesign-toc_container {
+.td-toc-container {
   width: 240px;
   padding-right: 10px;
   max-height: calc(100vh - 214px);
@@ -304,25 +304,25 @@ div[name='DESIGN'] {
     background-color: var(--bg-color-scroll);
   }
 
-  .tdesign-toc_list {
+  .td-toc-list {
     padding-left: 0;
     font-size: 12px;
     line-height: 20px;
     list-style: none;
     border-left: 1px solid var(--component-stroke);
 
-    .tdesign-toc_list_item {
+    .td-toc-list-item {
       list-style: none;
       margin-left: 0;
       padding-left: 0;
 
-      .tdesign-toc_list {
+      .td-toc-list {
         border-left: 0;
         text-indent: 16px;
       }
     }
 
-    .tdesign-toc_list_item_a {
+    .td-toc-link {
       margin-left: -1px;
       padding-left: 16px;
       margin-bottom: 4px;

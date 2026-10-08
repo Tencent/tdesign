@@ -59,7 +59,7 @@ export default define<DemoHost>({
           return;
         }
 
-        const items = host.shadowRoot.querySelectorAll<HTMLElement>('.TDesign-doc-demo-tabs__item');
+        const items = host.shadowRoot.querySelectorAll<HTMLElement>('.td-doc-demo-tabs__item');
         let styleMap: Record<string, TabStyle> | null = {};
         items.forEach((item) => {
           if (!item.offsetWidth) {
@@ -112,10 +112,10 @@ export default define<DemoHost>({
     };
 
     return html`
-      <div class="TDesign-doc-demo ${mode}">
+      <div class="td-doc-demo ${mode}">
         <slot></slot>
-        <div class="TDesign-doc-demo__footer">
-          <div class="TDesign-doc-demo__btns">
+        <div class="td-doc-demo__footer">
+          <div class="td-doc-demo__btns">
             <slot name="action"></slot>
             <td-doc-copy code=${
               host.dataset?.[currentLang] || host.dataset?.[currentLang.toLocaleLowerCase()] || code
@@ -130,16 +130,16 @@ export default define<DemoHost>({
                   ></span>`
             }
           </div>
-          <div class="TDesign-doc-demo__code ${theme}" style="${showCodeStyle}">
+          <div class="td-doc-demo__code ${theme}" style="${showCodeStyle}">
           ${
             tabsDisplay
-              ? html`<div class="TDesign-doc-demo-tabs">
-                  <span class="TDesign-doc-demo-tabs__active" style="${activeStyle}"></span>
+              ? html`<div class="td-doc-demo-tabs">
+                  <span class="td-doc-demo-tabs__active" style="${activeStyle}"></span>
                   ${languageArr.map(
                     (language, index) =>
                       html`<div
                         data-tab=${language}
-                        class="TDesign-doc-demo-tabs__item ${currentLangIndex === index ? 'active' : null}"
+                        class="td-doc-demo-tabs__item ${currentLangIndex === index ? 'active' : null}"
                         onclick=${() => handleClick(index)}
                       >
                         ${language}

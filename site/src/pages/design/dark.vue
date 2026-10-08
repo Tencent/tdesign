@@ -1,12 +1,12 @@
 <template>
   <div ref="article" name="DOC" class="doc-mode">
-    <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
-      <ol class="tdesign-toc_list">
-        <li v-for="anchor in catalog" :key="anchor.id" class="tdesign-toc_list_item">
-          <a class="tdesign-toc_list_item_a" :href="'#' + anchor.id">{{ anchor.title }} </a>
-          <ol v-if="anchor.children.length" class="tdesign-toc_list">
-            <li v-for="subAnchor in anchor.children" :key="subAnchor.id" class="tdesign-toc_list_item">
-              <a class="tdesign-toc_list_item_a" :href="'#' + subAnchor.id">{{ subAnchor.title }} </a>
+    <nav class="td-toc-container" style="position: absolute; top: 328px">
+      <ol class="td-toc-list">
+        <li v-for="anchor in catalog" :key="anchor.id" class="td-toc-list-item">
+          <a class="td-toc-link" :href="'#' + anchor.id">{{ anchor.title }} </a>
+          <ol v-if="anchor.children.length" class="td-toc-list">
+            <li v-for="subAnchor in anchor.children" :key="subAnchor.id" class="td-toc-list-item">
+              <a class="td-toc-link" :href="'#' + subAnchor.id">{{ subAnchor.title }} </a>
             </li>
           </ol>
         </li>
@@ -44,8 +44,8 @@
           :style="{ background: listLi.rightTxt }"
           @click="copyColor(listLi.rightTxt)"
         >
-          <p v-if="listLi.topTitle" class="color-board-bottomTxt">{{ listLi.topTitle }}</p>
-          <p class="color-board-topTxt">
+          <p v-if="listLi.topTitle" class="color-board-bottom-txt">{{ listLi.topTitle }}</p>
+          <p class="color-board-top-txt">
             <span>{{ listLi.leftTxt }}</span>
             <span>{{ listLi.rightTxt }}</span>
           </p>
@@ -383,7 +383,7 @@ function copyColor(color: string) {
           border-radius: 3px !important;
         }
 
-        .color-board-topTxt {
+        .color-board-top-txt {
           display: flex;
           justify-content: space-between;
           align-items: flex-end;
@@ -407,14 +407,14 @@ function copyColor(color: string) {
           flex-flow: column;
           justify-content: space-between;
 
-          .color-board-bottomTxt {
+          .color-board-bottom-txt {
             font-size: 12px;
             line-height: 20px;
             color: rgba(0, 0, 0, 0.9);
             font-weight: 500;
           }
 
-          .color-board-topTxt {
+          .color-board-top-txt {
             height: unset;
           }
         }

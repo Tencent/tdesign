@@ -1,4 +1,4 @@
-.TDesign-switch {
+.td-switch {
   position: relative;
   display: inline-flex;
   vertical-align: middle;
@@ -20,7 +20,7 @@
     line-height: 16px;
     border-radius: 8px;
 
-    .TDesign-switch__handle {
+    .td-switch__handle {
       width: 12px;
       height: 12px;
     }
@@ -32,7 +32,7 @@
     line-height: 24px;
     border-radius: 12px;
 
-    .TDesign-switch__handle {
+    .td-switch__handle {
       width: 20px;
       height: 20px;
     }
@@ -41,7 +41,7 @@
   &.is-checked {
     background-color: var(--brand-main);
 
-    .TDesign-switch__handle {
+    .td-switch__handle {
       left: calc(100% - 2px);
       transform: translate(-100%, 0);
     }
@@ -70,19 +70,19 @@
   }
 
   &:active:not(.is-disabled) {
-    .TDesign-switch__handle::before {
+    .td-switch__handle::before {
       left: 0;
       right: -6px;
     }
 
     &.is-checked {
-      .TDesign-switch__handle::before {
+      .td-switch__handle::before {
         right: 0;
         left: -6px;
       }
     }
 
-    .TDesign-switch__content {
+    .td-switch__content {
       opacity: 0;
     }
   }

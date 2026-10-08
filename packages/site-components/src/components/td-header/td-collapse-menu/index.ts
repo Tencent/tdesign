@@ -84,10 +84,10 @@ export default define<CollapseMenuProps>({
   disabledTheme: false,
   render: (host) =>
     html`
-      <div class="TDesign-collapse-menu">
+      <div class="td-collapse-menu">
         <td-doc-popup portalStyle="${portalStyle}" trigger-type="click">
           <div class="collapse-icon" innerHTML="${bulletpointIcon}"></div>
-          <div slot="content" class="TDesign-collapse-menu__list">
+          <div slot="content" class="td-collapse-menu__list">
             ${renderLinks(host)} ${host.disabledTheme ? html`` : html`<td-theme-tabs></td-theme-tabs>`}
           </div>
         </td-doc-popup>

@@ -67,7 +67,7 @@ export default define<MessageProps>({
     };
     const className = ['t-message', `t-is-${theme}`].concat(showMessage ? 't-message-enter' : 't-message-leave');
     return html`
-      <div class="TDesign-message">
+      <div class="td-message">
         <div style=${styles} class="${className}" innerHTML=${finalContent}></div>
       </div>
     `.css`${style}`;

@@ -112,8 +112,8 @@ export default define<DocTabsProps>({
     if (!tabs.length) return html``;
 
     return html`
-      <div class="TDesign-doc-tabs">
-        <span class="TDesign-doc-tabs__block" style="${blockStyle}"></span>
+      <div class="td-doc-tabs">
+        <span class="td-doc-tabs__block" style="${blockStyle}"></span>
         ${tabs.map(
           (item) => html`
             <div data-tab=${item.tab} onclick="${handleTabClick}" class="item ${item.tab === tab ? 'active' : ''}">

@@ -29,9 +29,9 @@ export default define<DocLayoutProps>({
   direction: 'row', // row column
   render: ({ direction }) =>
     html`
-      <div class="TDesign-page-doc">
+      <div class="td-page-doc">
         <slot name="header"></slot>
-        <div class="TDesign-body ${direction}">
+        <div class="td-body ${direction}">
           <slot></slot>
         </div>
       </div>

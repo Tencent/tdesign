@@ -2,7 +2,7 @@
   <div class="banner-wrap">
     <div class="banner-img-wrap">
       <div v-show="showCanvas">
-        <div :class="{ filtered: !imageLoaded }" class="banner-bg-wrapper __light__">
+        <div :class="{ filtered: !imageLoaded }" class="banner-bg-wrapper td-light">
           <img style="z-index: 10" :class="{ hide: imageLoaded }" src="/home/compressed-banner.png" />
           <img
             style="z-index: 5"
@@ -20,7 +20,7 @@
           <span class="banner-trigger3 light"></span>
           <span class="banner-trigger4 light"></span>
         </div>
-        <div :class="{ filtered: !imageLoaded }" class="banner-bg-wrapper __dark__">
+        <div :class="{ filtered: !imageLoaded }" class="banner-bg-wrapper td-dark">
           <img style="z-index: 10" :class="{ hide: imageLoaded }" src="/home/compressed-banner-dark.png" />
           <img
             style="z-index: 5"
@@ -41,8 +41,8 @@
         </div>
       </div>
       <div v-show="!showCanvas">
-        <img class="banner-bg __light__" src="https://tdesign.gtimg.com/site/images/banner-thumb.jpg" />
-        <img class="banner-bg __dark__" src="https://tdesign.gtimg.com/site/images/banner-thumb-dark.jpg" />
+        <img class="banner-bg td-light" src="https://tdesign.gtimg.com/site/images/banner-thumb.jpg" />
+        <img class="banner-bg td-dark" src="https://tdesign.gtimg.com/site/images/banner-thumb-dark.jpg" />
       </div>
     </div>
   </div>

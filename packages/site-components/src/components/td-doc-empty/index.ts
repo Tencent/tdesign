@@ -8,7 +8,7 @@ interface EmptyHost {
 function renderEmpty(type: string) {
   if (type === 'design') {
     return html`
-      <div class="TDesign-doc-empty__design">
+      <div class="td-doc-empty__design">
         <img class="light" src="https://tdesign.gtimg.com/site/webcomponents/empty-light.png" />
         <img class="dark" src="https://tdesign.gtimg.com/site/webcomponents/empty-dark.png" />
       </div>
@@ -22,6 +22,6 @@ export default define<EmptyHost>({
   render: (host) => {
     const { type } = host;
 
-    return html` <div class="TDesign-doc-empty">${renderEmpty(type)}</div> `.css`${style}`;
+    return html` <div class="td-doc-empty">${renderEmpty(type)}</div> `.css`${style}`;
   },
 });

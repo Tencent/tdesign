@@ -84,7 +84,7 @@ function renderIssue(host: IssueHost & HTMLElement) {
   if (!componentName) return html``;
 
   return html`
-    <section id="issue" class="TDesign-component-issue">
+    <section id="issue" class="td-component-issue">
       <a
         onclick="${(_host: IssueHost & HTMLElement, e?: Event) => e && handleIssueClick(e, issueInfo, 'new')}"
         class="item"

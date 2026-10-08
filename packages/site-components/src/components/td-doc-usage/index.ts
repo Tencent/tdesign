@@ -66,7 +66,7 @@ function renderConfig(configList: ConfigItem[] = []) {
     ${
       booleanList.length
         ? html`
-            <ul class="TDesign-doc-usage__config-list">
+            <ul class="td-doc-usage__config-list">
               ${booleanList.map(
                 (item) => html`
                   <li class="item">
@@ -87,8 +87,8 @@ function renderConfig(configList: ConfigItem[] = []) {
     ${
       enumList.length
         ? html`
-            ${booleanList.length ? html`<div class="TDesign-doc-usage__config-divider"></div>` : ''}
-            <ul class="TDesign-doc-usage__config-list">
+            ${booleanList.length ? html`<div class="td-doc-usage__config-divider"></div>` : ''}
+            <ul class="td-doc-usage__config-list">
               ${enumList.map(
                 (item) => html`
                   <li class="item">
@@ -144,10 +144,10 @@ export default define<DocUsageProps>({
     };
 
     return html`
-      <div class="TDesign-doc-usage">
-        <div class="TDesign-doc-usage__content">
-          <div class="TDesign-doc-usage__render">
-            <div class="TDesign-doc-usage__render-header">
+      <div class="td-doc-usage">
+        <div class="td-doc-usage__content">
+          <div class="td-doc-usage__render">
+            <div class="td-doc-usage__render-header">
               ${panelList.map(
                 (item) => html`
                   <div class="header-panel" onclick="${html.set('panel', item.value)}">
@@ -159,9 +159,9 @@ export default define<DocUsageProps>({
               <span class="active-line"></span>
             </div>
 
-            <slot name="${panel}" class="TDesign-doc-usage__render-slot"></slot>
+            <slot name="${panel}" class="td-doc-usage__render-slot"></slot>
 
-            <div class="TDesign-doc-usage__render-footer">
+            <div class="td-doc-usage__render-footer">
               <slot name="action"></slot>
               <td-doc-copy code=${code}></td-doc-copy>
               <span
@@ -172,16 +172,16 @@ export default define<DocUsageProps>({
             </div>
           </div>
 
-          <div class="TDesign-doc-usage__config">
-            <div class="TDesign-doc-usage__config-title">
+          <div class="td-doc-usage__config">
+            <div class="td-doc-usage__config-title">
               <i innerHTML="${tipsIcon}"></i>
               <span>配置</span>
             </div>
 
-            <div class="TDesign-doc-usage__config-content">${renderConfig(configList)}</div>
+            <div class="td-doc-usage__config-content">${renderConfig(configList)}</div>
           </div>
         </div>
-        <div class="TDesign-doc-usage__code" style="${showCodeStyle}">
+        <div class="td-doc-usage__code" style="${showCodeStyle}">
           <pre
             class="language-${language}"
           ><code class="language-${language}" innerHTML="${highlightCode}"></code></pre>

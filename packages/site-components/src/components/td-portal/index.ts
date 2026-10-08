@@ -19,7 +19,7 @@ export default define<PortalProps>({
             </style>`
           : ''
       }
-      <slot class="TDesign-portal" name="content"></slot>
+      <slot class="td-portal" name="content"></slot>
     `.css`${style}`;
   },
 });

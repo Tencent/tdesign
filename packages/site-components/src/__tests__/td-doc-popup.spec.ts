@@ -117,7 +117,7 @@ describe('td-doc-popup lifecycle', () => {
       reference,
     );
     expect(render).toHaveBeenCalledTimes(1);
-    expect(querySelector).toHaveBeenCalledWith('.TDesign-doc-popup');
+    expect(querySelector).toHaveBeenCalledWith('.td-doc-popup');
   });
 
   it('cancels deferred portal setup when disconnected before the first frame', () => {

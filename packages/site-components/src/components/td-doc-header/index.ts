@@ -41,7 +41,7 @@ function checkDescribeLineOverflow(host: HeaderHost & HTMLElement): void {
   if (popupCheckTimer) clearTimeout(popupCheckTimer);
   popupCheckTimer = setTimeout(() => {
     requestAnimationFrame(() => {
-      const describeLine = host.shadowRoot?.querySelector<HTMLElement>('.TDesign-doc-header__info-describe-line');
+      const describeLine = host.shadowRoot?.querySelector<HTMLElement>('.td-doc-header__info-describe-line');
       if (describeLine) {
         const computedStyle = getComputedStyle(describeLine);
         const lineHeight = parseFloat(computedStyle.lineHeight);
@@ -135,15 +135,14 @@ export default define<HeaderHost>({
         const { scrollTop } = document.documentElement;
         // 吸顶效果
         const background =
-          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__background') ?? document.createElement('div');
+          shadowRoot.querySelector<HTMLElement>('.td-doc-header__background') ?? document.createElement('div');
         const changelogEntry =
-          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-changelog__entry') ?? document.createElement('div');
+          shadowRoot.querySelector<HTMLElement>('.td-doc-changelog__entry') ?? document.createElement('div');
         const title =
-          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__info-title') ?? document.createElement('div');
+          shadowRoot.querySelector<HTMLElement>('.td-doc-header__info-title') ?? document.createElement('div');
         const describe =
-          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__info-describe') ?? document.createElement('div');
-        const thumb =
-          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__thumb') ?? document.createElement('div');
+          shadowRoot.querySelector<HTMLElement>('.td-doc-header__info-describe') ?? document.createElement('div');
+        const thumb = shadowRoot.querySelector<HTMLElement>('.td-doc-header__thumb') ?? document.createElement('div');
         const issue = shadowRoot.querySelector<HTMLElement>('td-doc-issue') ?? document.createElement('div');
         const tabs = document.querySelector<HTMLElement>('td-doc-tabs');
 
@@ -252,25 +251,25 @@ export default define<HeaderHost>({
     return html`
       ${
         splineUrl
-          ? html` <iframe id="__iframe__" class="TDesign-doc-header__thumb" onload="${iframeOnload}"></iframe>`
+          ? html` <iframe id="__iframe__" class="td-doc-header__thumb" onload="${iframeOnload}"></iframe>`
           : html``
       }
-      <div class="TDesign-doc-header" style="${mobileBodyStyle}">
-        <div class="TDesign-doc-header__inner">
-          <div class="TDesign-doc-header__badge">
+      <div class="td-doc-header" style="${mobileBodyStyle}">
+        <div class="td-doc-header__inner">
+          <div class="td-doc-header__badge">
             <slot name="badge"></slot>
           </div>
-          <div class="TDesign-doc-header__content">
-            <div class="TDesign-doc-header__info">
+          <div class="td-doc-header__content">
+            <div class="td-doc-header__info">
               ${
                 docInfo
                   ? html`
                       <div>
-                        <h1 class="TDesign-doc-header__info-title">${docInfo.title}</h1>
+                        <h1 class="td-doc-header__info-title">${docInfo.title}</h1>
                         ${
                           changelog && isChangelogComponentRegistered && (isComponentPage() || isGlobalConfigPage())
                             ? html`
-                                <button id="TDesign-doc-changelog__entry" onclick="${openChangelogDrawer}">
+                                <button id="td-doc-changelog__entry" onclick="${openChangelogDrawer}">
                                   <i innerHTML="${historyIcon}"></i>
                                   <span>${locale.changelog.title}</span>
                                 </button>
@@ -278,18 +277,16 @@ export default define<HeaderHost>({
                             : html``
                         }
                       </div>
-                      <div class="TDesign-doc-header__info-describe">
+                      <div class="td-doc-header__info-describe">
                         ${
                           host.shouldShowPopup
                             ? html`
                                 <td-doc-popup placement="top-end" equal-width="true">
-                                  <div class="TDesign-doc-header__info-describe-line" innerHTML="${docInfo.desc}"></div>
+                                  <div class="td-doc-header__info-describe-line" innerHTML="${docInfo.desc}"></div>
                                   <div slot="content" innerHTML="${docInfo.desc}"></div>
                                 </td-doc-popup>
                               `
-                            : html`
-                                <div class="TDesign-doc-header__info-describe-line" innerHTML="${docInfo.desc}"></div>
-                              `
+                            : html` <div class="td-doc-header__info-describe-line" innerHTML="${docInfo.desc}"></div> `
                         }
                       </div>
                     `
@@ -299,7 +296,7 @@ export default define<HeaderHost>({
           </div>
         </div>
       </div>
-      <div class="TDesign-doc-header__background"></div>
+      <div class="td-doc-header__background"></div>
       ${showIssue ? html`<td-doc-issue />` : html``}
     `.css`${style}`;
   },

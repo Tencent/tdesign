@@ -48,7 +48,7 @@ function handleClick(host: DocPopupHost): void {
 
 export default define<DocPopupProps>({
   tag: 'td-doc-popup',
-  reference: ({ render }) => render().querySelector<HTMLElement>('.TDesign-doc-popup') as HTMLElement,
+  reference: ({ render }) => render().querySelector<HTMLElement>('.td-doc-popup') as HTMLElement,
   portalClass: '',
   portalStyle: '',
   placement: 'bottom-end',
@@ -159,7 +159,7 @@ export default define<DocPopupProps>({
 
     return html`
       <div
-        class="TDesign-doc-popup"
+        class="td-doc-popup"
         data-placement="${placement}"
         onclick="${handleClick}"
         onmouseenter="${(host: DocPopupHost) => handleMouseEvent(host, 'enter')}"

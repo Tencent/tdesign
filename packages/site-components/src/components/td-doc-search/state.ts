@@ -183,7 +183,7 @@ export function scrollActiveIntoView(host: DocSearchHost): void {
   requestAnimationFrame(() => {
     const root = host.shadowRoot;
     if (!root) return;
-    const el = root.querySelector('.TDesign-docsearch-hit.is-active');
+    const el = root.querySelector('.td-docsearch-hit.is-active');
     if (el) el.scrollIntoView({ block: 'nearest' });
   });
 }

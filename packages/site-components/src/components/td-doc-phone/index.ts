@@ -23,7 +23,7 @@ interface DocPhoneProps {
 type DocPhoneHost = HTMLElement & DocPhoneProps;
 
 function toggleCollapsePhone(host: DocPhoneHost): void {
-  const tdDocPhoneMask = host.shadowRoot?.querySelector<HTMLElement>('.TDesign-doc-phone-mask')?.classList;
+  const tdDocPhoneMask = host.shadowRoot?.querySelector<HTMLElement>('.td-doc-phone-mask')?.classList;
   if (!tdDocPhoneMask) return;
   if (tdDocPhoneMask.contains('hide')) {
     tdDocPhoneMask.remove('hide');
@@ -109,7 +109,7 @@ export default define<DocPhoneProps>({
         if (!host.shadowRoot) return;
         const isMobileResponse = window.innerWidth < 960;
 
-        const tdDocPhoneMask = host.shadowRoot.querySelector<HTMLElement>('.TDesign-doc-phone-mask');
+        const tdDocPhoneMask = host.shadowRoot.querySelector<HTMLElement>('.td-doc-phone-mask');
         if (!tdDocPhoneMask) return;
         if (isMobileResponse) {
           tdDocPhoneMask.classList.remove('show');
@@ -133,14 +133,14 @@ export default define<DocPhoneProps>({
   },
   render: ({ fixedStyle, headless, href }) =>
     html`
-      <div class="TDesign-doc-phone-mask" onclick="${toggleCollapsePhone}"></div>
-      <div class="TDesign-doc-phone" style=${fixedStyle}>
+      <div class="td-doc-phone-mask" onclick="${toggleCollapsePhone}"></div>
+      <div class="td-doc-phone" style=${fixedStyle}>
         ${
           headless
             ? html``
             : html`
-                <div class="TDesign-doc-phone__header">
-                  <div class="TDesign-doc-phone__header-icons">
+                <div class="td-doc-phone__header">
+                  <div class="td-doc-phone__header-icons">
                     <td-doc-popup placement="left-start">
                       <span class="icon qrcode" innerHTML=${qrcodeIcon}></span>
                       <div slot="content" class="qrcode-wrapper">
@@ -157,12 +157,12 @@ export default define<DocPhoneProps>({
                 </div>
               `
         }
-        <div class="TDesign-doc-phone__body">
+        <div class="td-doc-phone__body">
           <slot></slot>
         </div>
-        <div class="TDesign-doc-phone__close" innerHTML="${closeIcon}" onclick="${toggleCollapsePhone}"></div>
+        <div class="td-doc-phone__close" innerHTML="${closeIcon}" onclick="${toggleCollapsePhone}"></div>
       </div>
-      <div class="TDesign-doc-phone-collapse" onclick="${toggleCollapsePhone}">
+      <div class="td-doc-phone-collapse" onclick="${toggleCollapsePhone}">
         <i class="icon" innerHTML="${mobileIcon}"></i>
       </div>
     `.css`${style}`,

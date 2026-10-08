@@ -106,8 +106,8 @@ export default define<ThemeTabsProps>({
     const blockStyle = blockStyleMap?.[theme] || {};
 
     return html`
-      <div class="TDesign-theme-tabs">
-        <div class="TDesign-theme-tabs__block" style=${blockStyle || {}}></div>
+      <div class="td-theme-tabs">
+        <div class="td-theme-tabs__block" style=${blockStyle || {}}></div>
         <div
           onclick=${(host: ThemeTabsHost) => handleTabClick(host, 'light')}
           data-theme="light"

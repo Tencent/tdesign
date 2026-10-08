@@ -22,7 +22,7 @@ export default define<HistoryHost>({
   content: '',
   render: ({ time, content }) => {
     return html`
-      <div class="TDesign-doc-history">
+      <div class="td-doc-history">
         <i class="icon" innerHTML="${historyIcon}"></i>
         ${
           content

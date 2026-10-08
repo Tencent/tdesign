@@ -356,14 +356,14 @@
                 >
                   <template #logo>
                     <img
-                      class="__light__"
+                      class="td-light"
                       width="172"
                       style="margin-left: 24px"
                       src="./assets/tdesign-starter.svg"
                       alt="logo"
                     />
                     <img
-                      class="__dark__"
+                      class="td-dark"
                       width="172"
                       style="margin-left: 24px"
                       src="./assets/tdesign-starter-dark.svg"
@@ -572,8 +572,8 @@
       </div>
     </div>
     <div class="module-setup">
-      <img class="__light__ tdesign-flow" src="./assets/tdesign-flow-light.gif" alt="logo" />
-      <img class="__dark__ tdesign-flow" src="./assets/tdesign-flow-dark.gif" alt="logo" />
+      <img class="td-light tdesign-flow" src="./assets/tdesign-flow-light.gif" alt="logo" />
+      <img class="td-dark tdesign-flow" src="./assets/tdesign-flow-dark.gif" alt="logo" />
       <p class="module-title">{{ t('home.setup.title') }}</p>
       <p class="module-description">{{ t('home.setup.description') }}</p>
       <t-button href="https://github.com/Tencent/tdesign">{{ t('home.setup.action') }}</t-button>

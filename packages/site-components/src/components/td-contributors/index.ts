@@ -35,9 +35,9 @@ function renderContributors(list: Contributor[]) {
   if (!list.length) return html``;
 
   return html`
-    <section class="TDesign-contributors">
+    <section class="td-contributors">
       <h3 class="title">Contributors</h3>
-      <div class="TDesign-contributors__content">
+      <div class="td-contributors__content">
         ${list.map(
           (item) => html`
             <td-avatar username="${item?.username}" content="${item?.roleNames} ${item?.username}"></td-avatar>

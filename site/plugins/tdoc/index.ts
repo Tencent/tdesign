@@ -20,10 +20,10 @@ export default () =>
         }),
       },
       toc: {
-        listClass: 'tdesign-toc_list',
-        itemClass: 'tdesign-toc_list_item',
-        linkClass: 'tdesign-toc_list_item_a',
-        containerClass: 'tdesign-toc_container',
+        listClass: 'td-toc-list',
+        itemClass: 'td-toc-list-item',
+        linkClass: 'td-toc-link',
+        containerClass: 'td-toc-container',
       },
     },
   });

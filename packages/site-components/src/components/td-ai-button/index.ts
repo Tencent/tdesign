@@ -13,7 +13,7 @@ export default define<AIButtonProps>({
   demoRequestBody: '',
   render: ({ framework, demoRequestBody }) => {
     return html`
-      <button class="TDesign-ai-button" onclick="${() => createAISearchSDK(framework, demoRequestBody)}">
+      <button class="td-ai-button" onclick="${() => createAISearchSDK(framework, demoRequestBody)}">
         <span>
           <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -42,7 +42,7 @@ export default define<AIButtonProps>({
               </linearGradient>
             </defs>
           </svg>
-          <span class="TDesign-ai-button__text" data-text="AI 搜索"> AI 搜索 </span>
+          <span class="td-ai-button__text" data-text="AI 搜索"> AI 搜索 </span>
         </span>
       </button>
     `.css`${style}`;

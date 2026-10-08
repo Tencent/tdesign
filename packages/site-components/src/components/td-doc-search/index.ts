@@ -41,7 +41,7 @@ import type { DisplayHit, DocSearchHost, HitGroup, Props, RecentItem, SearchInpu
 
 /** 获取 Shadow DOM 内的输入框元素（用于聚焦）。 */
 function getInput(host: DocSearchHost): HTMLInputElement | null {
-  return host.shadowRoot?.querySelector<HTMLInputElement>('.TDesign-docsearch-trigger__input') || null;
+  return host.shadowRoot?.querySelector<HTMLInputElement>('.td-docsearch-trigger__input') || null;
 }
 
 /** 打开 popover（幂等）。 */

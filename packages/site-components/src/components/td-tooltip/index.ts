@@ -41,15 +41,11 @@ export default define<TooltipProps>({
     const { showTip, placement } = host;
 
     return html`
-      <div class="TDesign-tooltip" data-placement="${placement}">
+      <div class="td-tooltip" data-placement="${placement}">
         <div onmouseover=${handleEnter} onmouseout=${handleLeave} onclick=${handleClick}>
           <slot></slot>
         </div>
-        <div
-          class="TDesign-tooltip__popup ${showTip ? 'show' : ''}"
-          onmouseover=${handleEnter}
-          onmouseout=${handleLeave}
-        >
+        <div class="td-tooltip__popup ${showTip ? 'show' : ''}" onmouseover=${handleEnter} onmouseout=${handleLeave}>
           <slot name="content"></slot>
         </div>
       </div>

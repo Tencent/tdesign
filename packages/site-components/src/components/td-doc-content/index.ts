@@ -42,7 +42,7 @@ function anchorHighlight(): void {
     const wrapper = document.querySelector(item);
     if (!wrapper) return;
 
-    const anchorList = Array.from(wrapper.querySelectorAll<HTMLAnchorElement>('.tdesign-toc_list_item_a'));
+    const anchorList = Array.from(wrapper.querySelectorAll<HTMLAnchorElement>('.td-toc-link'));
     const linkTopList = getLinkTopList(anchorList);
     highlightAnchor(anchorList, linkTopList);
   });
@@ -61,7 +61,7 @@ export default define<ContentHost>({
       function changeTocHeight() {
         const { scrollTop } = document.documentElement;
         // 固定右侧目录
-        const containers = document.querySelectorAll<HTMLElement>('.tdesign-toc_container');
+        const containers = document.querySelectorAll<HTMLElement>('.td-toc-container');
 
         if (scrollTop > FIXED_HEADER_TOP) {
           containers.forEach((container) => {
@@ -85,7 +85,7 @@ export default define<ContentHost>({
 
         const [, id = ''] = href.split('#');
         // header-anchor 是插件自动添加的类名，所以没带 tdesign 前缀
-        if (target.classList.contains('header-anchor') || target.classList.contains('tdesign-toc_list_item_a')) {
+        if (target.classList.contains('header-anchor') || target.classList.contains('td-toc-link')) {
           const idTarget = document.getElementById(id);
           if (!idTarget) return;
           const { top } = idTarget.getBoundingClientRect();
@@ -147,11 +147,11 @@ export default define<ContentHost>({
       <style>
         ${style}
       </style>
-      <div class="TDesign-doc-content ${host.pageStatus}">
+      <div class="td-doc-content ${host.pageStatus}">
         <slot name="doc-header"></slot>
 
-        <div class="TDesign-doc-body" style=${host.mobileBodyStyle}>
-          <div class="TDesign-doc-body__inner">
+        <div class="td-doc-body" style=${host.mobileBodyStyle}>
+          <div class="td-doc-body__inner">
             <slot></slot>
           </div>
         </div>
