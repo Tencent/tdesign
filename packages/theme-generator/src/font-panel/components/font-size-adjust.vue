@@ -2,7 +2,8 @@
   <div>
     <!-- 顶部调整 -->
     <SegmentSelection
-      v-model="step"
+      :modelValue="step"
+      @update:modelValue="handleStepChange"
       :selectOptions="FONT_SIZE_OPTIONS"
       :suspendedLabels="FONT_SIZE_LABELS"
       :disabled="segmentSelectionDisabled"
@@ -114,7 +115,7 @@ import {
 
 import { SegmentSelection, SizeSlider } from '@/common/components';
 import { useLang } from '@/common/i18n';
-import { getOptionFromLocal, modifyToken, updateLocalOption } from '@/common/themes';
+import { getOptionFromLocal, modifyToken, restoreLineHeightOption, updateLocalOption } from '@/common/themes';
 import { getTokenValue, handleAttach } from '@/common/utils';
 
 import { FONT_SIZE_LABELS, FONT_SIZE_OPTIONS, FONT_SIZE_STEPS, FONT_SIZE_TOKEN_LIST } from '../built-in/font-map';
@@ -151,7 +152,9 @@ watch(tokenTypeList, (list) => {
   }
 });
 
-watch(step, (v) => {
+function handleStepChange(v: string | number | undefined) {
+  if (v === undefined) return;
+  step.value = v;
   const isCustom = v === 6;
   segmentSelectionDisabled.value = isCustom;
   // 默认值（v=3) 的时候不存到本地
@@ -165,6 +168,7 @@ watch(step, (v) => {
     if (i !== -1) tokenTypeList.value[i].value = value;
   });
 
+  restoreLineHeightOption();
   initTokenList.value = JSON.parse(JSON.stringify(tokenTypeList.value));
   // 阶梯模式列表
   ladderTypeList.value = [];
@@ -180,7 +184,7 @@ watch(step, (v) => {
     }
   });
   initLadderList.value = JSON.parse(JSON.stringify(ladderTypeList.value));
-});
+}
 
 function handleVisibleChange(v: boolean, ctx: { trigger?: string }, idx: number) {
   if (v) hoverIdx.value = idx;
@@ -221,6 +225,7 @@ function handleChangeFontSize(v: string | number, type: 'list' | 'token', tokenN
     // Token 模式传进来的是单个
     modifyToken(tokenName, res);
   }
+  restoreLineHeightOption();
 
   if (type === 'list') {
     // 阶梯模式需要修改所有对应该梯度的值
