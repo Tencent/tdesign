@@ -13,5 +13,7 @@ module.exports = {
       },
     ],
     'media-feature-range-notation': 'prefix',
+    // 大型遗留 less 代码库中，Less 嵌套展开后选择器顺序难以保证，关闭以避免样式回归
+    'no-descending-specificity': null,
   },
 };
