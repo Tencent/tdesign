@@ -1,0 +1,14 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [ main]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  call-test-build:
+    uses: TDesignOteam/workflows/.github/workflows/reusable-unit-test.yml@main
+    with:
+      node-version-file: .node-version
+      package-manager: pnpm
+      skip-site: true

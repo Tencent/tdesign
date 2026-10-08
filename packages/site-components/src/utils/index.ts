@@ -1,12 +1,8 @@
-/* eslint-disable prefer-rest-params */
 /**
  * @function debounce 防抖
  * @param func, delay
  */
-export function debounce<TThis, TArgs extends unknown[]>(
-  func: (this: TThis, ...args: TArgs) => void,
-  delay = 300,
-) {
+export function debounce<TThis, TArgs extends unknown[]>(func: (this: TThis, ...args: TArgs) => void, delay = 300) {
   let timer: ReturnType<typeof setTimeout> | undefined;
   return function (this: TThis, ...args: TArgs) {
     func.apply(this, args);
@@ -19,14 +15,12 @@ export function debounce<TThis, TArgs extends unknown[]>(
  * @function throttle 节流
  * @param func, delay
  */
-export function throttle(this: unknown, func: (...args: unknown[]) => void, delay = 300) {
+export function throttle<TThis, TArgs extends unknown[]>(func: (this: TThis, ...args: TArgs) => void, delay = 300) {
   let last = 0;
-  const context = this;
-  const invocationArgs = Array.from(arguments);
-  return () => {
+  return function (this: TThis, ...args: TArgs) {
     const curr = +new Date();
     if (curr - last > delay) {
-      func.apply(context, invocationArgs);
+      func.apply(this, args);
       last = curr;
     }
   };

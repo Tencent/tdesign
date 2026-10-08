@@ -1,0 +1,15 @@
+node_modules
+.pnpm-store
+pnpm-lock.yaml
+
+_data
+_site
+dist
+results
+static_site
+lib
+coverage
+
+site/public/component-lottie-*
+site/spline
+site/src/pages/design/assets/motion

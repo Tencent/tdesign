@@ -143,8 +143,7 @@ function renderHitItem(
       <a
         class="TDesign-docsearch-hit__link"
         href=${item.url}
-        onclick=${(currentHost: DocSearchHost, event: MouseEvent) =>
-          handlers.onHitClick(currentHost, item, event)}
+        onclick=${(currentHost: DocSearchHost, event: MouseEvent) => handlers.onHitClick(currentHost, item, event)}
       >
         ${titleNode}${subtitleNode}${removeBtn}
       </a>

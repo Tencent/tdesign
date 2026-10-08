@@ -7,6 +7,7 @@
     "preview": "vite preview",
     "site": "run-s build",
     "site:preview": "vite build --mode preview",
+    "lint": "eslint --ext .vue,.js,.ts,.tsx ./src",
     "lint:fix": "eslint --ext .vue,.js,.ts,.tsx ./src --fix",
     "typecheck": "vue-tsc --noEmit"
   },
@@ -42,9 +43,7 @@
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-vue": "^8.2.0",
     "gray-matter": "^4.0.3",
-    "husky": "^3.0.7",
     "less": "^4.9.1",
-    "lint-staged": "8.1.5",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.5",
     "rimraf": "^3.0.2",
@@ -58,19 +57,6 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "lint-staged": {
-    "*.{js,ts,vue,tsx}": [
-      "npm run lint:fix",
-      "git add"
-    ]
   },
   "author": "tdesign",
   "license": "MIT"

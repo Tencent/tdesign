@@ -1,6 +1,9 @@
 import { exec } from 'node:child_process';
+import { promisify } from 'node:util';
 import path from 'node:path';
 import { defineConfig, type Plugin } from 'vite';
+
+const execAsync = promisify(exec);
 
 export default defineConfig({
   resolve: {
@@ -36,15 +39,16 @@ export default defineConfig({
 function lessCompilePlugin(): Plugin {
   return {
     name: 'less-compile-plugin',
-    closeBundle() {
+    async closeBundle() {
+      if (process.env.VITEST) return;
+      if (this.environment?.name === 'ssr') return;
       console.log('Running compile-less.ts...');
-      exec('node --experimental-strip-types ./script/compile-less.ts', (err, stdout, stderr) => {
-        if (err) {
-          console.error('Compiled failed:\n', stderr);
-        } else {
-          console.log('Compiled successfully:\n', stdout);
-        }
-      });
+      try {
+        const { stdout } = await execAsync('node --experimental-strip-types ./script/compile-less.ts');
+        console.log('Compiled successfully:\n', stdout);
+      } catch (err) {
+        console.error('Compiled failed:\n', err);
+      }
     },
   };
 }

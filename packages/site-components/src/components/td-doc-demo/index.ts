@@ -21,14 +21,11 @@ interface DemoHost {
   currentLangIndex: number;
   languages: string | undefined;
   theme: string;
-  activeStyleMap: object | null | undefined;
+  activeStyleMap: Record<string, TabStyle> | null | undefined;
 }
 
-function getTabStyle(styleMap: object | null | undefined, tab: string): TabStyle | undefined {
-  const value = Object.entries(styleMap ?? {}).find(([key]) => key === tab)?.[1];
-  if (typeof value !== 'object' || value === null) return undefined;
-  const { width, transform } = value as Partial<TabStyle>;
-  return typeof width === 'string' && typeof transform === 'string' ? { width, transform } : undefined;
+function getTabStyle(styleMap: Record<string, TabStyle> | null | undefined, tab: string): TabStyle | undefined {
+  return styleMap?.[tab];
 }
 
 export default define<DemoHost>({
@@ -63,22 +60,17 @@ export default define<DemoHost>({
         }
 
         const items = host.shadowRoot.querySelectorAll<HTMLElement>('.TDesign-doc-demo-tabs__item');
-        let styleMap: object | null = {};
+        let styleMap: Record<string, TabStyle> | null = {};
         items.forEach((item) => {
           if (!item.offsetWidth) {
             styleMap = null;
-          } else {
+          } else if (styleMap) {
             const { tab } = item.dataset;
-            if (tab && styleMap) {
-              Object.defineProperty(styleMap, tab, {
-                value: {
-                  width: `${item.offsetWidth}px`,
-                  transform: `translate3d(${item.offsetLeft}px, 0, 0)`,
-                },
-                enumerable: true,
-                configurable: true,
-                writable: true,
-              });
+            if (tab) {
+              styleMap[tab] = {
+                width: `${item.offsetWidth}px`,
+                transform: `translate3d(${item.offsetLeft}px, 0, 0)`,
+              };
             }
           }
         });

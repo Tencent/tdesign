@@ -10,7 +10,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "vue-tsc --noEmit",
-    "lint": "eslint src --ext .vue,.ts --fix"
+    "lint": "eslint src --ext .vue,.ts",
+    "lint:fix": "eslint src --ext .vue,.ts --fix"
   },
   "main": "dist/td-theme-generator.js",
   "files": [
