@@ -77,10 +77,14 @@ const resourceCards = computed<ResourceCard[]>(() => [
     description: t('home.resources.cards.web.description'),
     illustration: resourceWeb,
     items: [
-      { name: 'React', logo: reactLogo, href: '/react/' },
       { name: 'Vue Next', logo: vueLogo, href: '/vue-next/' },
+      { name: 'React', logo: reactLogo, href: '/react/' },
       { name: 'Vue', logo: vueLogo, href: '/vue/' },
-      { name: t('home.resources.items.designResources'), logo: figmaLogo, href: 'https://www.figma.com/@tdesign' },
+      {
+        name: t('home.resources.items.designResources'),
+        logo: figmaLogo,
+        href: 'https://www.figma.com/community/file/1053279236128724321/tdesign-for-web',
+      },
     ],
   },
   {
@@ -95,7 +99,11 @@ const resourceCards = computed<ResourceCard[]>(() => [
       { name: 'React', logo: reactLogo, href: '/mobile-react/' },
       { name: 'Uniapp', logo: uniappLogo, href: '/uniapp/' },
       { name: 'Flutter', logo: flutterLogo, href: '/flutter/' },
-      { name: t('home.resources.items.designResources'), logo: figmaLogo, href: 'https://www.figma.com/@tdesign' },
+      {
+        name: t('home.resources.items.designResources'),
+        logo: figmaLogo,
+        href: 'https://www.figma.com/community/file/1053279585699097956/tdesign-for-mobile',
+      },
     ],
   },
   {
@@ -108,7 +116,11 @@ const resourceCards = computed<ResourceCard[]>(() => [
       { name: 'Vue Next', logo: vueLogo, href: '/vue-next-chat/' },
       { name: 'React', logo: reactLogo, href: '/react-chat/' },
       { name: t('home.resources.items.miniprogram'), logo: miniprogramLogo, href: '/miniprogram-chat/' },
-      { name: t('home.resources.items.designResources'), logo: figmaLogo, href: 'https://www.figma.com/@tdesign' },
+      {
+        name: t('home.resources.items.designResources'),
+        logo: figmaLogo,
+        href: 'https://www.figma.com/community/file/1053279236128724321/tdesign-for-web',
+      },
     ],
   },
   {
@@ -119,7 +131,11 @@ const resourceCards = computed<ResourceCard[]>(() => [
     illustration: resourceIcons,
     items: [
       { name: t('home.resources.items.iconLibrary'), logo: iconLibrary, href: '/icons/' },
-      { name: t('home.resources.items.designResources'), logo: figmaLogo, href: 'https://www.figma.com/@tdesign' },
+      {
+        name: t('home.resources.items.designResources'),
+        logo: figmaLogo,
+        href: 'https://www.figma.com/community/file/1543189085651776104/tdesign-icon-svg-file',
+      },
     ],
   },
 ]);

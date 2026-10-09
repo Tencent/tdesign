@@ -66,7 +66,7 @@
         >
           <div class="usage-card__tooltip">
             <strong>{{ t('home.businessCases.downloads') }}</strong>
-            <span>09:14 GMT, 2026.08</span>
+            <span>2026.09</span>
           </div>
           <div class="usage-card__grid" aria-hidden="true">
             <span v-for="month in months" :key="month">{{ month }}</span>
