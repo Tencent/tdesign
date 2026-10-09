@@ -686,7 +686,7 @@ watch(currentTab, (tab) => {
   if (state.windowWidth >= 888) {
     if (tab === 0) state.tabTransformWidth = 0;
     else if (tab === 1) state.tabTransformWidth = 1048;
-    else state.tabTransformWidth = 2016;
+    else state.tabTransformWidth = 2096;
   } else {
     if (tab === 0) state.tabTransformWidth = 0;
     else if (tab === 1) state.tabTransformWidth = state.windowWidth - 20;

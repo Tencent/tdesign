@@ -38,6 +38,7 @@ export interface FooterLink {
 export interface FooterGroup {
   title: string;
   links: FooterLink[];
+  desktopOnly?: boolean;
 }
 
 export interface SiteLocale {

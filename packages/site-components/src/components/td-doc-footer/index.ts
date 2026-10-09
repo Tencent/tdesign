@@ -4,8 +4,8 @@ import { getLocale } from '@config/locale';
 import { patchShadowDomIntoDom, mobileBodyStyle } from '@utils';
 import tencentCloudIcon from '@images/tencentcloud-logo.svg?raw';
 import committeeIcon from '@images/committee-logo.svg?raw';
+import tdesignLogo from '@images/logo.svg?raw';
 
-import tdesignLogo from './tdesign-logo.svg';
 import flutterLogo from '@images/groups/flutter-logo.svg?raw';
 import vueLogo from '@images/groups/vue-logo.svg?raw';
 import reactLogo from '@images/groups/react-logo.svg?raw';
@@ -49,38 +49,6 @@ const communityPlatforms: Array<{ type: GroupType; name: string; icon: string }>
   { type: 'design', name: 'Figma', icon: figmaLogo },
 ];
 
-const footerLinkGroups = [
-  {
-    title: '腾讯设计',
-    links: footerLinks[1]?.links ?? [],
-    desktopOnly: false,
-  },
-  {
-    title: 'web 端共建',
-    links: [
-      { name: 'React', url: 'https://tdesign.tencent.com/react/', target: '_blank' },
-      { name: 'Vue', url: 'https://tdesign.tencent.com/vue/', target: '_blank' },
-      { name: 'Vue Next', url: 'https://tdesign.tencent.com/vue-next/', target: '_blank' },
-    ],
-    desktopOnly: true,
-  },
-  {
-    title: 'mobile 端共建',
-    links: [
-      { name: 'React', url: 'https://tdesign.tencent.com/mobile-react/', target: '_blank' },
-      { name: 'Vue', url: 'https://tdesign.tencent.com/mobile-vue/', target: '_blank' },
-      { name: 'Miniprogram', url: 'https://tdesign.tencent.com/miniprogram/', target: '_blank' },
-      { name: 'Flutter', url: 'https://tdesign.tencent.com/flutter/', target: '_blank' },
-    ],
-    desktopOnly: true,
-  },
-  {
-    title: '关于 TDesign',
-    links: footerLinks[2]?.links ?? [],
-    desktopOnly: false,
-  },
-];
-
 interface FooterHost {
   mobileBodyStyle: BodyStyle;
   platform: string;
@@ -105,11 +73,11 @@ export default define<FooterHost>({
         <div class="TDesign-doc-footer__inner">
           <section class="TDesign-doc-footer__main">
             <div class="TDesign-doc-footer__brand">
-              <img class="TDesign-doc-footer__brand-logo" src="${tdesignLogo}" alt="TDesign" />
+              <span class="TDesign-doc-footer__brand-logo" aria-label="TDesign" innerHTML="${tdesignLogo}"></span>
               <p>为腾讯业务打造的一站式企业级设计体系，连接设计与开发，助力高效构建一致的产品体验。</p>
             </div>
             <nav class="TDesign-doc-footer__links" aria-label="页脚导航">
-              ${footerLinkGroups.map(
+              ${footerLinks.map(
                 (item) => html`
                   <div class="TDesign-doc-footer__links-group ${item.desktopOnly ? 'is-desktop-only' : ''}">
                     <p class="title">${item.title}</p>

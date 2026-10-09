@@ -683,7 +683,11 @@
 
       &:last-child {
         width: 888px;
-        margin-left: 80px;
+        margin-left: 160px;
+
+        @media screen and (max-width: 888px) {
+          margin-left: 40px;
+        }
       }
 
       &.module-contributor {
