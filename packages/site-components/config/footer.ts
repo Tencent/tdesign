@@ -14,13 +14,15 @@ export const getFooterConfig = (): FooterGroup[] => {
       ],
     },
     {
-      title: en ? 'Tencent Design' : '腾讯设计',
+      title: en ? 'Tencent Ecosystem' : '腾讯生态',
       links: [
-        { name: 'CoDesign', url: 'https://codesign.qq.com/', target: '_blank' },
         { name: 'TDesign', url: `https://tdesign.${isIntranet() ? 'woa' : 'tencent'}.com`, target: '_self' },
+        { name: 'TDS', url: 'https://tds.qq.com/', target: '_blank' },
+        { name: 'Miora', url: 'https://miora.qq.com/', target: '_blank' },
         isIntranet() ? { name: 'TVision', url: 'https://tvision.woa.com/', target: '_blank' } : null,
         isIntranet() ? { name: 'TEditor', url: 'https://teditor.woa.com/', target: '_blank' } : null,
       ].filter((item): item is FooterLink => item !== null),
+      desktopOnly: true,
     },
     {
       title: en ? 'About' : '关于',
