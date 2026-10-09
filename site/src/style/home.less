@@ -201,7 +201,7 @@
     z-index: 10;
     color: var(--text-primary);
     padding: 0 var(--outer-padding-left-right);
-    margin: 464px auto 120px;
+    margin: 464px auto 24px;
 
     .banner-booking {
       text-align: center;
@@ -307,7 +307,7 @@
   height: 162px;
   width: calc(100% + var(--outer-padding-left-right) + var(--outer-padding-left-right));
   max-width: none;
-  margin: 0 calc(var(--outer-padding-left-right) * -1) 48px;
+  margin: 0 calc(var(--outer-padding-left-right) * -1) 120px;
   overflow: hidden;
 
   &__track {
@@ -692,21 +692,27 @@
 
       &-desc {
         width: 100%;
-        margin-bottom: 32px;
+        margin-bottom: 64px;
         text-align: center;
+        font-size: 20px;
+        font-weight: 300;
+        line-height: 28px;
+        color: var(--text-secondary);
       }
     }
 
     .title {
       margin: 0;
       font-size: 36px;
+      line-height: 44px;
       word-break: keep-all;
+      color: var(--text-primary);
     }
 
     .desc {
       font-size: 20px;
       line-height: 28px;
-      margin: 12px 0 0;
+      margin: 20px 0 0;
     }
   }
 
@@ -1004,8 +1010,7 @@
   overflow: hidden;
   color: var(--text-primary);
   background: radial-gradient(ellipse 54% 58% at 24% 100%, rgba(92, 112, 255, 0.18), transparent 72%),
-    radial-gradient(ellipse 45% 50% at 60% 100%, rgba(49, 211, 228, 0.09), transparent 75%),
-    var(--bg-color-summary);
+    radial-gradient(ellipse 45% 50% at 60% 100%, rgba(49, 211, 228, 0.09), transparent 75%), var(--bg-color-summary);
   border-bottom: 4px solid transparent;
   border-image: linear-gradient(90deg, #0052d9 0%, #f94de2 38.46%, #ffbd2e 72.6%, #29eae9 100%) 1;
 
@@ -1133,7 +1138,6 @@
       margin-top: 24px;
     }
   }
-
 }
 
 @media screen and (min-width: 960px) and (max-width: 1200px) {
@@ -1202,7 +1206,6 @@
       grid-template-columns: 1fr;
     }
   }
-
 }
 
 .wechat-qrcode {

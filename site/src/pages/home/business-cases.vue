@@ -43,19 +43,19 @@
           <div>
             <p>{{ t('home.businessCases.downloads') }}</p>
             <div class="usage-card__total">
-              <strong>12.8</strong><span>{{ t('home.businessCases.tenThousandPlus') }}</span>
+              <strong>100</strong><span>{{ t('home.businessCases.tenThousandPlus') }}</span>
             </div>
           </div>
           <div class="usage-card__metrics">
             <div>
               <span>{{ t('home.businessCases.designReferences') }}</span>
               <strong
-                >2,456<small>{{ t('home.businessCases.tenThousand') }}</small></strong
+                >2,500<small>{{ t('home.businessCases.tenThousand') }}</small></strong
               >
             </div>
             <div>
               <span>{{ t('home.businessCases.projects') }}</span>
-              <strong>3,826</strong>
+              <strong>8,000+</strong>
             </div>
           </div>
         </div>

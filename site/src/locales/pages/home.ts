@@ -120,16 +120,16 @@ export const zhCN = {
     },
     contributors: {
       title: '协同共建，共享活跃社区',
-      description: '16 位核心贡献者、380+ 位开源伙伴，来自全球的开发者共同协同工作',
+      description: '10+ 开源仓库，800+ 位开源伙伴，来自各地的开发者共同协同工作',
     },
     businessCases: {
       title: '越来越多的业务，正在接入 TDesign',
-      description: '提供桌面端、移动端、AIGC 组件及 D2C 能力，覆盖主流框架与平台，开箱即用',
+      description: '提供桌面端、移动端、AIGC 组件及丰富图标资源能力，覆盖主流框架与平台，开箱即用',
       quote:
         '“复杂层级的精确还原——一个未经整理的设计稿，且包含有悬浮元素，D2C 的视觉还原竟然跟设计稿完全对得上，有点儿超预期。”',
       user: 'bruceren',
       role: '视觉设计师',
-      downloads: 'npm 下载量',
+      downloads: '月下载量',
       tenThousandPlus: '万次+',
       tenThousand: '万次',
       designReferences: '设计资源引用',
@@ -144,7 +144,7 @@ export const zhCN = {
     },
     resources: {
       title: '全方位资源支持，赋能每一个技术栈',
-      description: '提供桌面端、移动端、AIGC 组件及 D2C 能力，覆盖主流框架与平台，开箱即用',
+      description: '提供桌面端、移动端、AIGC 组件及丰富图标资源能力，覆盖主流框架与平台，开箱即用',
       updated: '3天前更新',
       logoAlt: '{name} 标志',
       cards: {
@@ -175,11 +175,11 @@ export const zhCN = {
       title: '全域适配，企业优选',
       description: '从消费互联网到产业互联网，从 B 端到 C 端产品，从大型品牌到独立开发者',
       stats: {
-        projectsUnit: '万',
-        projects: '产品/项目跨行业落地',
+        projectsUnit: '+',
+        projects: '产品/项目使用',
         teamsUnit: '家+',
         teams: '企业团队深度合作中',
-        downloadsUnit: '万次',
+        downloadsUnit: '万次+',
         downloads: '月下载量稳定增长',
       },
     },

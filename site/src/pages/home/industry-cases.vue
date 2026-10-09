@@ -84,7 +84,7 @@ onMounted(async () => {
 const stats = [
   { value: '8,000', unitKey: 'home.service.stats.projectsUnit', labelKey: 'home.service.stats.projects' },
   { value: '120', unitKey: 'home.service.stats.teamsUnit', labelKey: 'home.service.stats.teams' },
-  { value: '5,000', unitKey: 'home.service.stats.downloadsUnit', labelKey: 'home.service.stats.downloads' },
+  { value: '100', unitKey: 'home.service.stats.downloadsUnit', labelKey: 'home.service.stats.downloads' },
 ];
 </script>
 

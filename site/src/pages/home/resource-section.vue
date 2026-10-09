@@ -16,7 +16,7 @@
         <div class="resource-card__illustration" aria-hidden="true" v-html="card.illustration"></div>
 
         <div class="resource-card__content">
-          <t-tag theme="primary" variant="light" size="medium">{{ card.label }}</t-tag>
+          <span class="resource-card__label">{{ card.label }}</span>
           <div>
             <h3>{{ card.title }}</h3>
             <p>{{ card.description }}</p>
@@ -183,6 +183,19 @@ const resourceCards = computed<ResourceCard[]>(() => [
   &:nth-child(4) {
     grid-column: 2;
     margin-left: 72px;
+  }
+
+  &__label {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 0 8px;
+    border-radius: 3px;
+    background: var(--brand-main-light);
+    color: var(--brand-main);
+    font-size: 12px;
+    line-height: 20px;
+    white-space: nowrap;
   }
 
   &__content {
