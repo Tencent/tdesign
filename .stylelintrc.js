@@ -30,7 +30,9 @@ module.exports = {
       },
     ],
     'media-feature-range-notation': 'prefix',
-    // 大型遗留 less 代码库中，Less 嵌套展开后选择器顺序难以保证，关闭以避免样式回归
+    // 存量 less 中存在同优先级选择器靠书写顺序覆盖的写法，放开该规则以避免大规模重构引发样式回归；
+    // 该规则检查的是「低优先级选择器出现在高优先级之后」，与 Less 嵌套展开无关。
+    // 注意：本次不治理此项，新代码仍应避免低优先级覆盖高优先级的写法。
     'no-descending-specificity': null,
 
     // TDesign 设计 token 采用 camelCase 命名（如 --td-font-size-title-extraLarge、--td-comp-paddingLR-xs），

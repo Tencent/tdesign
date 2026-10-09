@@ -239,7 +239,9 @@
         height: 32px;
         border-radius: 50%;
         background: conic-gradient(from 90deg at 50% 50%, #fff 0deg, currentColor 360deg);
+        -webkit-mask: radial-gradient(transparent calc(50% - 0.5px), #fff 50%);
         mask: radial-gradient(transparent calc(50% - 0.5px), #fff 50%);
+        -webkit-animation: spin 1s linear infinite;
         animation: spin 1s linear infinite;
       }
 
