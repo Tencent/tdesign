@@ -34,7 +34,7 @@
         <template #title>{{ lang.size.componentSize }}</template>
         <template #subTitle>size</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['comp-size']" :tokenList="COMP_SIZE_MAP" type="comp-size" />
+          <size-adjust :key="refreshIdMap['comp-size']" :token-list="COMP_SIZE_MAP" type="comp-size" />
         </template>
       </common-collapse>
       <!-- 组件上下边距 -->
@@ -59,7 +59,11 @@
         <template #title>{{ lang.size.yPadding }}</template>
         <template #subTitle>padding top & bottom</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['comp-padding-tb']" :tokenList="COMP_PADDING_TB_MAP" type="comp-padding-tb" />
+          <size-adjust
+            :key="refreshIdMap['comp-padding-tb']"
+            :token-list="COMP_PADDING_TB_MAP"
+            type="comp-padding-tb"
+          />
         </template>
       </common-collapse>
       <!-- 组件左右边距 -->
@@ -84,7 +88,11 @@
         <template #title>{{ lang.size.xPadding }}</template>
         <template #subTitle>padding left & right</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['comp-padding-lr']" :tokenList="COMP_PADDING_LR_MAP" type="comp-padding-lr" />
+          <size-adjust
+            :key="refreshIdMap['comp-padding-lr']"
+            :token-list="COMP_PADDING_LR_MAP"
+            type="comp-padding-lr"
+          />
         </template>
       </common-collapse>
       <!-- popup 边距 -->
@@ -109,7 +117,7 @@
         <template #title>{{ lang.size.popupPadding }}</template>
         <template #subTitle>popup padding</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['popup-padding']" :tokenList="COMP_POPUP_PADDING_MAP" type="popup-padding" />
+          <size-adjust :key="refreshIdMap['popup-padding']" :token-list="COMP_POPUP_PADDING_MAP" type="popup-padding" />
         </template>
       </common-collapse>
       <!-- margin 边距 -->
@@ -134,7 +142,7 @@
         <template #title>{{ lang.size.margin }}</template>
         <template #subTitle>margin</template>
         <template #content>
-          <size-adjust :key="refreshIdMap['comp-margin']" :tokenList="COMP_MARGIN_MAP" type="comp-margin" />
+          <size-adjust :key="refreshIdMap['comp-margin']" :token-list="COMP_MARGIN_MAP" type="comp-margin" />
         </template>
       </common-collapse>
     </div>
@@ -250,7 +258,7 @@ onMounted(() => {
     color: var(--text-primary);
     font-weight: 600;
     margin-bottom: 8px;
-    margin-top: 0px;
+    margin-top: 0;
     line-height: 22px;
     display: flex;
     align-items: center;
@@ -258,7 +266,7 @@ onMounted(() => {
 
   &__subtitle {
     font-size: 12px;
-    margin: 4px 0 10px 0;
+    margin: 4px 0 10px;
 
     button {
       margin-right: 8px;
@@ -271,6 +279,7 @@ onMounted(() => {
     display: flex;
     flex-wrap: wrap;
     margin: 0 -4px;
+
     > div {
       margin: 4px;
     }
@@ -326,7 +335,7 @@ onMounted(() => {
   }
 
   &__custom {
-    margin: 16px 0 8px 0;
+    margin: 16px 0 8px;
     padding: 2px;
     height: 131px;
     background: conic-gradient(
@@ -341,15 +350,18 @@ onMounted(() => {
     border-radius: 9px;
     cursor: pointer;
     transition: padding 0.2s;
+
     &:hover {
       padding: 4px;
     }
+
     &-inner {
       background-color: var(--bg-color-card);
       padding: 4px;
       border-radius: 7px;
       max-height: 100%;
     }
+
     &-top {
       padding: 10px 12px;
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
@@ -377,6 +389,7 @@ onMounted(() => {
           color: var(--text-primary);
           font-weight: 600;
         }
+
         &:last-child {
           font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
         }

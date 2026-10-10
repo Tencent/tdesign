@@ -7,12 +7,12 @@
           v-for="(token, idx) in tokenList"
           :key="idx"
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
+          :overlay-style="{ borderRadius: '9px' }"
           @visible-change="(v, ctx) => handleVisibleChange(v, ctx, idx)"
-          :overlayStyle="{ borderRadius: '9px' }"
         >
           <t-list-item
             :style="{
@@ -54,8 +54,8 @@
           <template #content
             ><size-slider
               title="size"
-              :sizeValue="getCurrentTokenValue(`--td-${token.from}`)"
-              @changeSize="(v) => handleChangeSize(`--td-${token.from}`, v)"
+              :size-value="getCurrentTokenValue(`--td-${token.from}`)"
+              @change-size="(v) => handleChangeSize(`--td-${token.from}`, v)"
           /></template>
         </t-popup>
       </t-list>
@@ -124,6 +124,7 @@ function parseSize(val: string | number): number {
       font-size: 14px;
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
+
     :deep(.t-radio-group) {
       width: 228px;
       border-radius: 6px;
@@ -134,17 +135,19 @@ function parseSize(val: string | number): number {
     :deep(.t-list-item) {
       margin-bottom: 4px;
       border-radius: 6px;
-      cursor: pointer;
       background-color: var(--bg-color-theme-surface);
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
       padding: 4px 6px;
       font-size: 12px;
       line-height: 20px;
+
       &:last-child {
         margin-bottom: 0;
       }
+
       cursor: pointer;
     }
+
     :deep(.t-list-item__content) {
       width: 100%;
     }

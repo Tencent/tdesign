@@ -1,0 +1,149 @@
+import js from '@eslint/js';
+import prettierConfig from 'eslint-config-prettier';
+import pluginVue from 'eslint-plugin-vue';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  {
+    ignores: [
+      '**/node_modules/**',
+      '.pnpm-store/**',
+      '**/dist/**',
+      '**/lib/**',
+      '**/_data/**',
+      '**/_site/**',
+      '**/results/**',
+      '**/static_site/**',
+      '**/coverage/**',
+      // site
+      'site/plugins/tdoc/**',
+      'site/public/**',
+      'site/src/pages/design/assets/motion/**',
+    ],
+  },
+
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...tseslint.configs.stylistic,
+  ...pluginVue.configs['flat/recommended'],
+  prettierConfig,
+
+  {
+    linterOptions: {
+      reportUnusedDisableDirectives: 'error',
+    },
+    rules: {
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      // smart 模式允许 `== null` / `!= null` 这类惯用写法，其余松散比较强制严格相等
+      eqeqeq: ['error', 'smart'],
+      'no-var': 'error',
+      'prefer-const': 'error',
+      // 允许空的箭头函数/方法：项目里大量用作默认回调、清理钩子等有意为之的空实现
+      '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions', 'methods'] }],
+    },
+  },
+
+  {
+    // 浏览器端源码：仅注入浏览器全局，避免误用 Node 专有全局
+    files: ['site/src/**'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        aegis: 'readonly',
+        NProgress: 'readonly',
+      },
+    },
+  },
+
+  {
+    // Node 端源码：仅注入 Node 全局
+    files: ['services/**', 'packages/*/script/**', 'packages/*/config/**'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+
+  {
+    files: ['**/*.{ts,tsx,mts,cts}'],
+    rules: {
+      'no-undef': 'off',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+    },
+  },
+
+  {
+    files: ['**/*.vue'],
+    languageOptions: {
+      parserOptions: {
+        parser: tseslint.parser,
+      },
+    },
+    rules: {
+      'no-undef': 'off',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      'vue/multi-word-component-names': 'off',
+      'vue/no-deprecated-slot-attribute': 'off',
+      'vue/require-default-prop': 'off',
+      'vue/no-unused-refs': 'error',
+      'vue/no-useless-template-attributes': 'error',
+    },
+  },
+
+  {
+    // Node CommonJS 配置文件（module.exports / require）
+    files: [
+      '**/*.cjs',
+      'services/**/*.js',
+      '.commitlintrc.js',
+      '.prettierrc.js',
+      '.stylelintrc.js',
+      'site/commitlint.config.js',
+      'site/postcss.config.js',
+    ],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+      'no-console': 'off',
+    },
+  },
+
+  {
+    files: [
+      'packages/auto-release-collection/**',
+      'packages/site-components/script/**',
+      'packages/site-components/vite.config.ts',
+    ],
+    rules: {
+      'no-console': 'off',
+    },
+  },
+
+  {
+    files: ['site/src/pages/home/banner.vue'],
+    rules: {
+      'no-console': ['warn', { allow: ['warn', 'error', 'time', 'timeEnd', 'log'] }],
+    },
+  },
+
+  {
+    // 这些文件仅渲染受信任的内容：本地导入的 SVG 常量、i18n 文案、站点配置或服务端渲染的文档正文
+    files: [
+      'packages/theme-generator/src/**/*.vue',
+      'site/src/components/design-source.vue',
+      'site/src/pages/about/release.vue',
+      'site/src/pages/design/motion.vue',
+    ],
+    rules: {
+      'vue/no-v-html': 'off',
+    },
+  },
+);

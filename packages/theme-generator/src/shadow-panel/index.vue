@@ -12,8 +12,8 @@
         <p class="shadow-content__title">{{ lang.shadow.title }}</p>
         <SegmentSelection
           v-model="step"
-          :selectOptions="selectOptions"
-          :suspendedLabels="suspendedLabels"
+          :select-options="selectOptions"
+          :suspended-labels="suspendedLabels"
           :disabled="forbidden"
         >
           <template #left>
@@ -204,13 +204,14 @@ onMounted(() => {
     color: var(--text-primary);
     font-weight: 600;
     margin-bottom: 8px;
-    margin-top: 0px;
+    margin-top: 0;
     line-height: 22px;
     display: flex;
     align-items: center;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
 }
+
 .shadow-panel {
   &__round-box {
     width: 20px;

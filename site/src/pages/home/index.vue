@@ -1,6 +1,6 @@
 <template>
   <section class="tdesign-homepage">
-    <banner :themeMode="themeMode" />
+    <banner :theme-mode="themeMode" />
 
     <section class="main-page">
       <div class="banner-info">
@@ -43,7 +43,7 @@
           <template #content><img width="100" src="https://tdesign.gtimg.com/site/wechat-account.png" /></template>
         </t-popup>
       </div>
-      <div class="module-news" v-if="newsList.length > 0">
+      <div v-if="newsList.length > 0" class="module-news">
         <div v-for="(news, index) in newsList" :key="index" @click="() => handleClickNews(news.url)">
           <t-card :title="news.title" :description="news.desc" :style="{ cursor: news.url ? 'pointer' : null }"
             ><template #footer>{{ news.date }}</template>
@@ -62,10 +62,10 @@
               <div class="content-name">{{ t('home.solution.developmentResources') }}</div>
               <div class="content-list">
                 <div
-                  class="content-item"
-                  :class="{ disabled: !item.status }"
                   v-for="item in sourceList"
                   :key="item.nameKey"
+                  class="content-item"
+                  :class="{ disabled: !item.status }"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
@@ -89,10 +89,10 @@
               <div class="content-name">{{ t('home.solution.designResources') }}</div>
               <div class="content-list">
                 <div
-                  class="content-item"
-                  :class="{ disabled: !item.status }"
                   v-for="item in designList"
                   :key="item.nameKey"
+                  class="content-item"
+                  :class="{ disabled: !item.status }"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
@@ -125,10 +125,10 @@
               <div class="content-name">{{ t('home.solution.developmentResources') }}</div>
               <div class="content-list">
                 <div
-                  class="content-item"
-                  :class="{ disabled: !item.status }"
                   v-for="item in mobileSourceList"
                   :key="item.nameKey"
+                  class="content-item"
+                  :class="{ disabled: !item.status }"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
@@ -153,10 +153,10 @@
               <div class="content-name">{{ t('home.solution.designResources') }}</div>
               <div class="content-list">
                 <div
-                  class="content-item"
-                  :class="{ disabled: !item.status }"
                   v-for="item in mobileDesignList"
                   :key="item.nameKey"
+                  class="content-item"
+                  :class="{ disabled: !item.status }"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
@@ -188,10 +188,10 @@
               <div class="content-name">{{ t('home.solution.developmentResources') }}</div>
               <div class="content-list">
                 <div
-                  class="content-item"
-                  :class="{ disabled: !item.status }"
                   v-for="item in miniSourceList"
                   :key="item.nameKey"
+                  class="content-item"
+                  :class="{ disabled: !item.status }"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
@@ -215,10 +215,10 @@
               <div class="content-name">{{ t('home.solution.designResources') }}</div>
               <div class="content-list">
                 <div
-                  class="content-item"
-                  :class="{ disabled: !item.status }"
                   v-for="item in mobileDesignList"
                   :key="item.nameKey"
+                  class="content-item"
+                  :class="{ disabled: !item.status }"
                   @click="handleIntroClick(item)"
                 >
                   <img width="20" :src="item.logo" />
@@ -248,23 +248,23 @@
         <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 0 }]">
           {{ t('home.tabs.open') }}
         </h3>
-        <div class="line" v-if="currentTab === 0"></div>
+        <div v-if="currentTab === 0" class="line"></div>
       </div>
       <div class="module-board__content" @click="currentTab = 1">
         <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 1 }]">
           {{ t('home.tabs.creation') }}
         </h3>
-        <div class="line" v-if="currentTab === 1"></div>
+        <div v-if="currentTab === 1" class="line"></div>
       </div>
       <div class="module-board__content" @click="currentTab = 2">
         <h3 :class="['tencent-title', { 'tencent-title--active': currentTab === 2 }]">
           {{ t('home.tabs.corporation') }}
         </h3>
-        <div class="line" v-if="currentTab === 2"></div>
+        <div v-if="currentTab === 2" class="line"></div>
       </div>
     </div>
     <!-- swiper content -->
-    <div class="module-board" id="moduleBoard">
+    <div id="moduleBoard" class="module-board">
       <div class="module-board__inner" :style="`transform: translateX(-${tabTransformWidth}px);`">
         <div
           :class="[
@@ -287,7 +287,7 @@
               </t-radio-group>
 
               <ul class="code-list">
-                <li class="code-item" v-for="item in codeList[codeFramework]" :key="item.code">
+                <li v-for="item in codeList[codeFramework]" :key="item.code" class="code-item">
                   <pre><code :class="[`language-${item.type}`]">{{ displayCode(item) }}</code></pre>
                 </li>
               </ul>
@@ -313,7 +313,7 @@
               </li>
             </ul>
           </div>
-          <div class="module-board__card-desc" v-if="currentTab === 0">
+          <div v-if="currentTab === 0" class="module-board__card-desc">
             <h3 class="title">{{ t('home.open.title') }}</h3>
             <p class="desc">{{ t('home.open.description') }}</p>
           </div>
@@ -340,9 +340,9 @@
                 >
                   <t-option
                     v-for="item in componentSelectOptions"
+                    :key="item.value"
                     :value="item.value"
                     :label="item.label"
-                    :key="item.value"
                   ></t-option>
                 </t-select>
                 <t-tree :data="componentTreeData" hover checkable expand-all />
@@ -350,8 +350,8 @@
               <div class="component-board-item">
                 <t-menu
                   :theme="themeMode"
-                  defaultValue="dashboard/base"
-                  :defaultExpanded="componentModel.menuExpanded"
+                  default-value="dashboard/base"
+                  :default-expanded="componentModel.menuExpanded"
                   width="256px"
                 >
                   <template #logo>
@@ -418,16 +418,16 @@
                   <t-button theme="default">{{ t('home.componentDemo.button') }}</t-button>
                 </div>
                 <div class="component-board-item-row">
-                  <t-slider v-model="componentModel.sliderValue" :inputNumberProps="false" />
+                  <t-slider v-model="componentModel.sliderValue" :input-number-props="false" />
                 </div>
                 <div class="component-board-item-row">
-                  <t-switch size="large" :defaultValue="true" />
+                  <t-switch size="large" :default-value="true" />
                   <t-switch size="large" />
                   <t-check-tag>{{ t('home.componentDemo.checkableTag') }}</t-check-tag>
                   <t-tag>{{ t('home.componentDemo.defaultTag') }}</t-tag>
                 </div>
                 <div>
-                  <t-radio-group defaultValue="1" variant="default-filled">
+                  <t-radio-group default-value="1" variant="default-filled">
                     <t-radio-button value="1">{{ t('home.componentDemo.light') }}</t-radio-button>
                     <t-radio-button value="2">{{ t('home.componentDemo.dark') }}</t-radio-button>
                     <t-radio-button value="3">{{ t('home.componentDemo.neutral') }}</t-radio-button>
@@ -435,17 +435,17 @@
                 </div>
                 <div class="color-block-wrapper">
                   <span
-                    class="color-block"
                     v-for="color in componentModel.colorList1"
                     :key="color"
+                    class="color-block"
                     :style="{ background: color }"
                   ></span>
                 </div>
                 <div class="color-block-wrapper">
                   <span
-                    class="color-block"
                     v-for="color in componentModel.colorList2"
                     :key="color"
+                    class="color-block"
                     :style="{ background: color }"
                   ></span>
                 </div>
@@ -472,7 +472,7 @@
               </li>
             </ul>
           </div>
-          <div class="module-board__card-desc" v-if="currentTab === 1">
+          <div v-if="currentTab === 1" class="module-board__card-desc">
             <h3 class="title">{{ t('home.creation.title') }}</h3>
             <p class="desc">{{ t('home.creation.description') }}</p>
           </div>
@@ -490,8 +490,8 @@
           <div class="module-contributor__top">
             <div class="module-contributor__avatars">
               <avatar
-                ref="topAvatars"
                 v-for="(item, index) in topContributors"
+                ref="topAvatars"
                 :key="index + 'top'"
                 :href="githubUrl(item)"
                 :src="githubAvatar(item)"
@@ -500,14 +500,14 @@
           </div>
 
           <div class="module-contributor__center">
-            <component-list :themeMode="themeMode" />
+            <component-list :theme-mode="themeMode" />
           </div>
 
           <div class="module-contributor__bottom">
             <div class="module-contributor__avatars">
               <avatar
-                ref="bottomAvatars"
                 v-for="(item, index) in bottomContributors"
+                ref="bottomAvatars"
                 :key="index + 'bottom'"
                 :href="githubUrl(item)"
                 :src="githubAvatar(item)"
@@ -557,9 +557,9 @@
 
             <t-space break-line :size="14">
               <div
-                class="brand-content"
                 v-for="({ title, logo, width }, index) in brandList"
                 :key="index"
+                class="brand-content"
                 :style="`width:${width}`"
               >
                 <t-popup show-arrow :content="title">
@@ -654,7 +654,7 @@ interface HomeState {
   bottomContributors: string[];
   windowWidth: number;
   themeMode: ThemeMode;
-  stepsTimers: Array<number | undefined>;
+  stepsTimers: (number | undefined)[];
   stepsCounts: number[];
   tabTimer: number | null;
   sourceList: ResourceItem[];
@@ -922,7 +922,7 @@ function statusText(value: ResourceStatus): string {
 }
 
 function displayCode(item: CodeItem): string {
-  return item.codeKey ? String(t(item.codeKey)) : item.code ?? '';
+  return item.codeKey ? String(t(item.codeKey)) : (item.code ?? '');
 }
 
 function handleMousemove(event: MouseEvent): void {

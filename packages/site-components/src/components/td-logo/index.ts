@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { html, define } from 'hybrids';
 import logoIcon from '@images/logo.svg?raw';
 import menuApplicationIcon from '@images/menu-application.svg?raw';
@@ -51,13 +50,15 @@ function renderMenu(list: MenuCategory[]) {
   const len = list.length;
   return list.map(
     (item, index) => html`
-      ${item.category_url
-        ? html`
-            <a href="${item.category_url}" class="title" target="${item.target}">
-              ${item.category_title} <i innerHTML="${chevronRightIcon}"></i>
-            </a>
-          `
-        : html` <span class="title"> ${item.category_title} </span> `}
+      ${
+        item.category_url
+          ? html`
+              <a href="${item.category_url}" class="title" target="${item.target}">
+                ${item.category_title} <i innerHTML="${chevronRightIcon}"></i>
+              </a>
+            `
+          : html` <span class="title"> ${item.category_title} </span> `
+      }
       ${renderList(item.children)} ${index < len - 1 ? html`<div class="line"></div>` : html``}
     `,
   );

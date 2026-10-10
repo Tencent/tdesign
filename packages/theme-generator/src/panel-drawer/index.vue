@@ -1,22 +1,22 @@
 <template>
   <div>
     <t-drawer
-      size="348px"
       v-model:visible="visible"
+      size="348px"
       :header="false"
-      :closeBtn="false"
-      :preventScrollThrough="false"
+      :close-btn="false"
+      :prevent-scroll-through="false"
       :footer="false"
       :attach="handleAttach"
     >
       <sticky-theme-display />
       <div style="display: flex">
-        <switch-tabs :activeTabIdx="activeTabIdx" @changeActiveTab="changeActiveTab" />
-        <color-panel :key="`${$refreshId}-color`" v-show="activeTabIdx === ACTIVE_TAB_MAP.color" />
-        <font-panel :key="`${$refreshId}-font`" v-show="activeTabIdx === ACTIVE_TAB_MAP.font" />
-        <radius-panel :key="`${$refreshId}-radius`" v-show="activeTabIdx === ACTIVE_TAB_MAP.radius" />
-        <shadow-panel :key="`${$refreshId}-shadow`" v-show="activeTabIdx === ACTIVE_TAB_MAP.shadow" />
-        <size-panel :key="`${$refreshId}-size`" v-show="activeTabIdx === ACTIVE_TAB_MAP.size" />
+        <switch-tabs :active-tab-idx="activeTabIdx" @change-active-tab="changeActiveTab" />
+        <color-panel v-show="activeTabIdx === ACTIVE_TAB_MAP.color" :key="`${$refreshId}-color`" />
+        <font-panel v-show="activeTabIdx === ACTIVE_TAB_MAP.font" :key="`${$refreshId}-font`" />
+        <radius-panel v-show="activeTabIdx === ACTIVE_TAB_MAP.radius" :key="`${$refreshId}-radius`" />
+        <shadow-panel v-show="activeTabIdx === ACTIVE_TAB_MAP.shadow" :key="`${$refreshId}-shadow`" />
+        <size-panel v-show="activeTabIdx === ACTIVE_TAB_MAP.size" :key="`${$refreshId}-size`" />
       </div>
     </t-drawer>
   </div>
@@ -92,9 +92,10 @@ function changeActiveTab(tab: number) {
 
 .t-drawer__content-wrapper {
   box-shadow: var(--shadow-2);
-  border-radius: 12px 0 0 0;
+  border-radius: 12px 0 0;
   position: fixed;
   pointer-events: auto;
+
   .t-drawer__body {
     padding: 0;
     background: var(--bg-color-theme-transparent);
@@ -104,7 +105,8 @@ function changeActiveTab(tab: number) {
 
 .t-popup__content {
   font-size: 14px;
-  box-shadow: var(--shadow-2), var(--shadow-inset-top), var(--shadow-inset-right), var(--shadow-inset-bottom),
+  box-shadow:
+    var(--shadow-2), var(--shadow-inset-top), var(--shadow-inset-right), var(--shadow-inset-bottom),
     var(--shadow-inset-left);
 }
 
@@ -120,7 +122,7 @@ function changeActiveTab(tab: number) {
   left: 20px;
 }
 
-.t-popup__content:not(.t-tooltip) .t-popup__arrow:before {
+.t-popup__content:not(.t-tooltip) .t-popup__arrow::before {
   background: var(--bg-color-container);
 }
 

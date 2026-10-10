@@ -5,9 +5,9 @@
       <add-icon class="shadow-layer__add" @click="handleAdd" />
     </div>
     <shadow-editor
-      class="shadow-layer__edit"
       v-for="(data, i) in shadow"
       :key="i"
+      class="shadow-layer__edit"
       :name="`layer${i + 1}`"
       :value="data"
       @change="(value) => change(value, i)"
@@ -77,42 +77,51 @@ function handleMove(index: number) {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 4px;
+
     &--name {
       font-size: 14px;
       color: var(--text-primary);
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
   }
+
   &__add {
     margin-right: 8px;
     color: var(--text-primary);
     cursor: pointer;
   }
+
   &__card {
     padding: 8px;
     width: 208px;
     background: var(--bg-color-theme-secondary);
     border-radius: 6px;
+
     &--item {
       display: flex;
       margin-bottom: 8px;
+
       &:last-child {
         margin-bottom: 0;
       }
     }
+
     &--x {
       width: 60px;
       margin-right: 8px;
+
       &:last-child {
         margin-right: 0;
       }
     }
+
     &--sharp {
       width: 24px;
       height: 24px;
       border: 1px solid var(--bg-color-demo-select);
       border-radius: 3px;
     }
+
     &--color {
       margin-left: 4px;
       font-size: 14px;
@@ -120,21 +129,25 @@ function handleMove(index: number) {
       color: var(--text-primary);
     }
   }
+
   &__title {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 4px;
   }
+
   &__name {
     font-size: 12px;
     color: var(--text-primary);
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
+
   &__suffix {
     font-size: 14px;
     color: var(--text-placeholder);
   }
+
   &__edit {
     margin-bottom: 8px;
   }

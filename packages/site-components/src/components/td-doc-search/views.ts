@@ -57,13 +57,15 @@ export function renderTrigger(host: DocSearchHost, handlers: ViewHandlers): Upda
         oninput=${handlers.onTriggerInput}
         onkeydown=${handlers.onTriggerKeyDown}
       />
-      ${host._loading
-        ? html`
-            <span class="TDesign-docsearch-trigger__suffix" aria-hidden="true">
-              <span class="TDesign-docsearch-spinner"></span>
-            </span>
-          `
-        : html``}
+      ${
+        host._loading
+          ? html`
+              <span class="TDesign-docsearch-trigger__suffix" aria-hidden="true">
+                <span class="TDesign-docsearch-spinner"></span>
+              </span>
+            `
+          : html``
+      }
     </div>
   `;
 }

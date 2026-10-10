@@ -23,5 +23,4 @@ $:
         - docker
       stages:
         - name: install dependencies
-          script: pnpm install 
-  
+          script: pnpm install

@@ -1,15 +1,14 @@
-
 @font-face {
   font-family: TCloudNumber;
-  src: url("../pages/design/assets/TCloudNumber-Regular.ttf");
+  src: url('../pages/design/assets/TCloudNumber-Regular.ttf');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
-.font(@i) when(@i <= 64){
+.font(@i) when(@i <= 64) {
   .font-@{i} {
-    font-size: @i + 0px;
+    font-size: @i + 0;
     line-height: @i + 8px;
     margin: 16px 0;
   }
@@ -38,24 +37,25 @@
 
     &.tcloud {
       font {
-        font-family: TCloudNumber;
+        font-family: TCloudNumber, sans-serif;
         font-weight: normal;
         font-size: 36px;
         line-height: 48px;
       }
-  
+
       .tag {
-        font-family: TCloudNumber;
+        font-family: TCloudNumber, sans-serif;
         position: absolute;
         right: 16px;
         bottom: 12px;
-  
+
         svg {
           width: 14px;
           margin: 0 12px;
           vertical-align: middle;
           color: var(--text-secondary);
         }
+
         span {
           line-height: 22px;
           color: var(--text-secondary);
@@ -65,6 +65,7 @@
 
     &.font-steps {
       color: var(--text-primary);
+
       .title {
         font-size: 14px;
         line-height: 22px;
@@ -75,44 +76,57 @@
         width: 145px;
         display: inline-block;
       }
+
       .desc {
         float: right;
       }
     }
 
     &.font-size {
-      input[type=range] {
+      input[type='range'] {
+        appearance: none;
         -webkit-appearance: none;
         width: 154px;
         background: transparent;
         margin-left: 16px;
       }
-      
-      input[type=range]::-webkit-slider-thumb {
+
+      input[type='range']::-webkit-slider-thumb {
+        appearance: none;
         -webkit-appearance: none;
-        border: 1px solid #0052D9;
+        border: 1px solid #0052d9;
         height: 14px;
         width: 14px;
         border-radius: 100%;
-        background: #ffffff;
+        background: #fff;
         cursor: pointer;
         margin-top: -5px;
       }
 
-      input[type=range]::-webkit-slider-runnable-track {
+      input[type='range']::-webkit-slider-runnable-track {
         width: 100%;
         height: 4px;
         cursor: pointer;
         border-radius: 2px;
-        background: #0052D9;
+        background: #0052d9;
       }
-      
-      input[type=range]:focus {
+
+      input[type='range']::-moz-range-track {
+        width: 100%;
+        height: 4px;
+        cursor: pointer;
+        border-radius: 2px;
+        background: #0052d9;
+      }
+
+      input[type='range']:focus {
         outline: none;
-      }      
+      }
+
       .ctrl {
         display: flex;
       }
+
       .line-height {
         font-size: 20px;
         line-height: 28px;
@@ -131,7 +145,6 @@
         margin-bottom: 16px;
       }
     }
-
   }
 
   .fonts-block-wrapper {
@@ -159,7 +172,7 @@
           padding: 30px 8px 4px;
           display: flex;
           justify-content: space-between;
-          transition: all .2s var(--anim-time-fn-easing);
+          transition: all 0.2s var(--anim-time-fn-easing);
           cursor: pointer;
 
           &:hover {

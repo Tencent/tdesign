@@ -11,7 +11,7 @@
         </div>
       </div>
       <div @click="isActive = !isActive">
-        <arrow-icon :isActive="isActive" overlayClassName="common-collapse__arrow" />
+        <arrow-icon :is-active="isActive" overlay-class-name="common-collapse__arrow" />
       </div>
     </div>
     <transition
@@ -21,7 +21,7 @@
       @after-enter="afterEnter"
       @before-leave="beforeLeave"
       @leave="leave"
-      @afterLeave="afterLeave"
+      @after-leave="afterLeave"
     >
       <div v-show="isActive">
         <slot name="content" />
@@ -52,6 +52,7 @@ const isActive = ref(false);
 .fade-leave-active {
   transition: opacity 0.1s;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
@@ -107,6 +108,7 @@ const isActive = ref(false);
     font-size: 12px;
     line-height: 20px;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
     :deep(.t-icon) {
       margin-left: 4px;
       cursor: pointer;

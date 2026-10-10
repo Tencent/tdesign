@@ -44,7 +44,7 @@ TDesign currently supports [multiple platforms and mainstream front-end UI frame
 | [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue3.x Mobile UI components lib for TDesign      | `1.0 LTS` |
 | [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React Mobile UI components lib for TDesign       | `Alpha`   |
 | [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | Flutter UI components lib for TDesign            | `Alpha`   |
-| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)   | Uniapp UI components lib for TDesign | `Alpha` |
+| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | Uniapp UI components lib for TDesign             | `Alpha`   |
 
 ### Repositories for Common
 

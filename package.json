@@ -12,8 +12,17 @@
     "site:preview": "pnpm run build:components && pnpm run --filter tdesign-site site:preview",
     "auto-release-collection": "pnpm run --filter auto-release-collection start",
     "test": "pnpm -r run --if-present test",
-    "lint": "pnpm -r run --if-present lint",
-    "lint:fix": "pnpm -r run --if-present lint:fix",
+    "lint": "run-s lint:parallel typecheck",
+    "lint:parallel": "run-p lint:css lint:js lint:eslint",
+    "lint:css": "stylelint \"**/*.{css,wxss,less,vue}\" --allow-empty-input --cache",
+    "lint:js": "prettier --check \"**/*.{vue,js,ts,jsx,tsx,json,md}\"",
+    "lint:eslint": "eslint . --max-warnings 0 --cache",
+    "lint:css:fix": "stylelint \"**/*.{css,wxss,less,vue}\" --fix --allow-empty-input --cache",
+    "lint:js:fix": "prettier --write \"**/*.{vue,js,ts,jsx,tsx,json,md}\"",
+    "lint:eslint:fix": "eslint . --fix --max-warnings 0 --cache",
+    "lint:fix": "pnpm run lint:css:fix && pnpm run lint:js:fix && pnpm run lint:eslint:fix",
+    "typecheck": "pnpm -r run --if-present typecheck",
+    "format": "pnpm run lint:js:fix",
     "build": "pnpm -r run --if-present build",
     "prepare": "husky install"
   },
@@ -24,18 +33,23 @@
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
+    "@eslint/js": "^10.0.1",
     "cz-conventional-changelog": "^3.0.2",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-html": "^7.1.0",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.11.1",
+    "globals": "^17.13.0",
     "husky": "^8.0.0",
     "lint-staged": "^16.3.4",
-    "prettier": "^2.8.8",
+    "npm-run-all2": "^9.0.3",
+    "postcss-html": "^2.0.0",
+    "prettier": "^3.9.9",
     "rimraf": "^3.0.2",
-    "stylelint": "^15.10.3",
-    "stylelint-config-standard": "^34.0.0",
-    "stylelint-config-standard-less": "^2.0.0"
+    "stylelint": "^17.16.0",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-config-standard-less": "^4.1.0",
+    "typescript-eslint": "^8.71.1",
+    "vue-eslint-parser": "^10.3.0"
   },
   "engines": {
     "pnpm": ">=9.0.0"
@@ -46,18 +60,24 @@
     }
   },
   "lint-staged": {
-    "**/*.{vue,js,ts,tsx}": [
-      "eslint --fix",
+    "**/*.vue": [
+      "stylelint --fix",
+      "eslint --fix --no-warn-ignored",
+      "prettier --write"
+    ],
+    "**/*.{js,ts,jsx,tsx,mts,cts}": [
+      "eslint --fix --no-warn-ignored",
       "prettier --write"
     ],
     "**/*.html": [
       "prettier --write"
     ],
-    "**/*.{json,jsonc}": [
+    "**/*.{json,jsonc,md}": [
       "prettier --write"
     ],
-    "**/*.less": [
-      "stylelint --fix"
+    "**/*.{css,less,wxss}": [
+      "stylelint --fix",
+      "prettier --write"
     ]
   }
 }
