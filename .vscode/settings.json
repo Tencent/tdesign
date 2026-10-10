@@ -20,6 +20,7 @@
   "[markdown]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[css]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[less]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[yaml]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
 
   "prettier.requireConfig": true,
   "files.eol": "\n",
