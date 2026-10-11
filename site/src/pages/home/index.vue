@@ -661,10 +661,29 @@ function handleIntroClick(url: string): void {
   window.open(url, '_blank');
 }
 
+function updateModuleBoardTransform(tab: number): void {
+  requestAnimationFrame(() => {
+    const board = moduleBoardRef.value;
+    const inner = board?.querySelector<HTMLElement>('.module-board__inner');
+    const card = inner?.querySelectorAll<HTMLElement>('.module-board__card')[tab];
+    if (!board || !inner || !card) return;
+
+    const boardRect = board.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    const currentTranslateX = new DOMMatrixReadOnly(getComputedStyle(inner).transform).m41;
+    const cardCenterWithoutTransform = cardRect.left + cardRect.width / 2 - currentTranslateX;
+    const boardCenter = boardRect.left + boardRect.width / 2;
+
+    state.tabTransformWidth = Math.max(0, cardCenterWithoutTransform - boardCenter);
+  });
+}
+
 function handleResize(): void {
   state.windowWidth = window.innerWidth;
+  const isFirstTab = state.currentTab === 0;
   state.currentTab = 0;
   requestAnimationFrame(updateNewsControls);
+  if (isFirstTab) updateModuleBoardTransform(0);
 }
 
 function watchHtmlMode(): void {
@@ -683,15 +702,7 @@ function watchHtmlMode(): void {
 }
 
 watch(currentTab, (tab) => {
-  if (state.windowWidth >= 888) {
-    if (tab === 0) state.tabTransformWidth = 0;
-    else if (tab === 1) state.tabTransformWidth = 1048;
-    else state.tabTransformWidth = 2096;
-  } else {
-    if (tab === 0) state.tabTransformWidth = 0;
-    else if (tab === 1) state.tabTransformWidth = state.windowWidth - 20;
-    else state.tabTransformWidth = state.windowWidth * 2;
-  }
+  updateModuleBoardTransform(tab);
 });
 
 watch(

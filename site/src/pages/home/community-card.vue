@@ -462,38 +462,55 @@ onBeforeUnmount(() => {
 
 @media screen and (max-width: 960px) {
   .community-card {
-    height: auto;
-    min-height: 520px;
-    padding: 24px;
-    gap: 24px;
-  }
-
-  .community-network {
-    width: calc(100% - 328px);
-    min-width: 280px;
-    transform: scale(0.85);
-    transform-origin: center;
-  }
-
-  .community-activity {
-    width: 304px;
-  }
-}
-
-@media screen and (max-width: 750px) {
-  .community-card {
+    width: min(888px, calc(100vw - 48px));
+    height: 795px;
+    min-height: 795px;
+    padding: 32px 24px;
     flex-direction: column;
+    gap: 16px;
   }
 
   .community-network {
     width: 432px;
-    max-width: 100%;
-    height: 330px;
-    transform: scale(0.76);
+    max-width: none;
+    height: 413px;
+    margin-bottom: -159px;
+    transform: scale(0.6156);
+    transform-origin: top center;
   }
 
   .community-activity {
     width: 100%;
+    height: 445px;
+    gap: 16px;
+  }
+
+  .activity-feed {
+    height: 324px;
+    box-sizing: border-box;
+  }
+
+  .community-stats {
+    height: 105px;
+  }
+
+  .community-stat {
+    height: 105px;
+    align-items: center;
+
+    &__value {
+      height: 20px;
+
+      strong {
+        font-size: 28px;
+        line-height: 20px;
+      }
+    }
+
+    p {
+      font-size: 10px;
+      line-height: 20px;
+    }
   }
 }
 </style>

@@ -1,96 +1,110 @@
 <template>
-  <section ref="businessCasesRef" class="business-cases">
-    <header class="business-cases__heading">
-      <h2>{{ t('home.businessCases.title') }}</h2>
-      <p>{{ t('home.businessCases.description') }}</p>
-    </header>
+  <section
+    ref="businessCasesRef"
+    class="business-cases"
+    :style="{
+      '--canvas-scale': canvasScale,
+      '--compact-canvas-scale': compactCanvasScale,
+      '--compact-canvas-top': compactCanvasTop,
+      '--compact-canvas-height': compactCanvasHeight,
+      '--compact-section-height': compactSectionHeight,
+      '--mobile-layout-scale': mobileLayoutScale,
+      '--mobile-section-height': mobileSectionHeight,
+    }"
+  >
+    <div class="business-cases__layout">
+      <header class="business-cases__heading">
+        <h2>{{ t('home.businessCases.title') }}</h2>
+        <p>{{ t('home.businessCases.description') }}</p>
+      </header>
 
-    <div class="business-cases__canvas">
-      <article
-        v-for="(item, index) in cases"
-        :key="item.prompt"
-        :class="['business-case', `business-case--${index + 1}`]"
-        :style="getCaseStyle(item)"
-      >
-        <div class="business-case__card">
-          <span class="business-case__noise" aria-hidden="true"></span>
-          <p class="business-case__quote">{{ t('home.businessCases.quote') }}</p>
-          <footer class="business-case__user">
-            <div class="business-case__profile">
-              <t-avatar size="40px" :alt="t('home.businessCases.user')">
-                <svg viewBox="0 0 40 40" aria-hidden="true">
-                  <rect width="40" height="40" fill="#d9e1ff" />
-                  <path fill="#fff" d="M11 7h18v3h3v20h-3v3H11v-3H8V10h3z" />
-                  <path fill="#292929" d="M13 8h14v3h3v8H10v-8h3zm-3 8h4v8h-4zm16 0h4v9h-4z" />
-                  <path fill="#f1b18b" d="M14 16h12v13H14zm-2 4h4v7h-4zm14 1h3v6h-3z" />
-                  <path fill="#292929" d="M15 20h3v3h-3zm8 0h3v3h-3z" />
-                  <path fill="#de806b" d="M18 26h6v2h-6z" />
-                </svg>
-              </t-avatar>
-              <div>
-                <strong>{{ t('home.businessCases.user') }}</strong>
-                <span>{{ t('home.businessCases.role') }}</span>
+      <div class="business-cases__canvas">
+        <article
+          v-for="(item, index) in cases"
+          :key="item.prompt"
+          :class="['business-case', `business-case--${index + 1}`]"
+          :style="getCaseStyle(item)"
+        >
+          <div class="business-case__card">
+            <span class="business-case__noise" aria-hidden="true"></span>
+            <p class="business-case__quote">{{ t('home.businessCases.quote') }}</p>
+            <footer class="business-case__user">
+              <div class="business-case__profile">
+                <t-avatar size="40px" :alt="t('home.businessCases.user')">
+                  <svg viewBox="0 0 40 40" aria-hidden="true">
+                    <rect width="40" height="40" fill="#d9e1ff" />
+                    <path fill="#fff" d="M11 7h18v3h3v20h-3v3H11v-3H8V10h3z" />
+                    <path fill="#292929" d="M13 8h14v3h3v8H10v-8h3zm-3 8h4v8h-4zm16 0h4v9h-4z" />
+                    <path fill="#f1b18b" d="M14 16h12v13H14zm-2 4h4v7h-4zm14 1h3v6h-3z" />
+                    <path fill="#292929" d="M15 20h3v3h-3zm8 0h3v3h-3z" />
+                    <path fill="#de806b" d="M18 26h6v2h-6z" />
+                  </svg>
+                </t-avatar>
+                <div>
+                  <strong>{{ t('home.businessCases.user') }}</strong>
+                  <span>{{ t('home.businessCases.role') }}</span>
+                </div>
+              </div>
+              <t-tag size="medium" shape="round" :theme="item.theme" :variant="item.variant"> TEG </t-tag>
+            </footer>
+          </div>
+          <p class="business-case__prompt">› {{ t(item.prompt) }}</p>
+        </article>
+
+        <article class="usage-card">
+          <div class="usage-card__data">
+            <div>
+              <p>{{ t('home.businessCases.downloads') }}</p>
+              <div class="usage-card__total">
+                <strong>12.8</strong><span>{{ t('home.businessCases.tenThousandPlus') }}</span>
               </div>
             </div>
-            <t-tag size="medium" shape="round" :theme="item.theme" :variant="item.variant"> TEG </t-tag>
-          </footer>
-        </div>
-        <p class="business-case__prompt">› {{ t(item.prompt) }}</p>
-      </article>
-
-      <article class="usage-card">
-        <div class="usage-card__data">
-          <div>
-            <p>{{ t('home.businessCases.downloads') }}</p>
-            <div class="usage-card__total">
-              <strong>100</strong><span>{{ t('home.businessCases.tenThousandPlus') }}</span>
+            <div class="usage-card__metrics">
+              <div>
+                <span>{{ t('home.businessCases.designReferences') }}</span>
+                <strong
+                  >2,456<small>{{ t('home.businessCases.tenThousand') }}</small></strong
+                >
+              </div>
+              <div>
+                <span>{{ t('home.businessCases.projects') }}</span>
+                <strong>3,826</strong>
+              </div>
             </div>
           </div>
-          <div class="usage-card__metrics">
-            <div>
-              <span>{{ t('home.businessCases.designReferences') }}</span>
-              <strong
-                >2,500<small>{{ t('home.businessCases.tenThousand') }}</small></strong
-              >
+          <div
+            class="usage-card__chart"
+            :style="{ '--hover-x': `${chartHoverX}px`, '--hover-y': `${chartHoverY}px` }"
+            @pointermove="handleChartPointerMove"
+          >
+            <div class="usage-card__tooltip">
+              <strong>{{ t('home.businessCases.downloads') }}</strong>
+              <span>09:14 GMT，2026.08</span>
             </div>
-            <div>
-              <span>{{ t('home.businessCases.projects') }}</span>
-              <strong>8,000+</strong>
+            <div class="usage-card__grid" aria-hidden="true">
+              <span v-for="month in months" :key="month">{{ month }}</span>
             </div>
+            <svg viewBox="0 0 308 212" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="business-cases-area" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="var(--text-primary)" stop-opacity=".12" />
+                  <stop offset="1" stop-color="var(--text-primary)" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <path
+                class="usage-card__area"
+                d="M0 154 C18 157 20 149 32 158 C43 158 45 137 53 135 C58 136 59 153 65 153 C70 148 76 154 81 150 C86 140 93 141 96 130 L104 105 C108 98 115 119 126 131 C135 139 142 145 148 134 C154 126 163 129 169 122 L179 99 C185 89 191 115 195 113 C199 106 200 90 206 92 C211 94 207 77 221 65 C228 60 226 48 237 44 C248 46 247 36 253 33 C261 31 265 39 270 34 C278 25 282 29 287 7 C291 -8 294 8 299 10 C304 14 307 20 308 21 V212 H0Z"
+              />
+              <path
+                ref="usageLineRef"
+                class="usage-card__line"
+                d="M0 154 C18 157 20 149 32 158 C43 158 45 137 53 135 C58 136 59 153 65 153 C70 148 76 154 81 150 C86 140 93 141 96 130 L104 105 C108 98 115 119 126 131 C135 139 142 145 148 134 C154 126 163 129 169 122 L179 99 C185 89 191 115 195 113 C199 106 200 90 206 92 C211 94 207 77 221 65 C228 60 226 48 237 44 C248 46 247 36 253 33 C261 31 265 39 270 34 C278 25 282 29 287 7 C291 -8 294 8 299 10 C304 14 307 20 308 21"
+              />
+            </svg>
+            <span class="usage-card__marker" aria-hidden="true"></span>
           </div>
-        </div>
-        <div
-          class="usage-card__chart"
-          :style="{ '--hover-x': `${chartHoverX}px`, '--hover-y': `${chartHoverY}px` }"
-          @pointermove="handleChartPointerMove"
-        >
-          <div class="usage-card__tooltip">
-            <strong>{{ t('home.businessCases.downloads') }}</strong>
-            <span>2026.09</span>
-          </div>
-          <div class="usage-card__grid" aria-hidden="true">
-            <span v-for="month in months" :key="month">{{ month }}</span>
-          </div>
-          <svg viewBox="0 0 308 212" preserveAspectRatio="none" aria-hidden="true">
-            <defs>
-              <linearGradient id="business-cases-area" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="var(--text-primary)" stop-opacity=".12" />
-                <stop offset="1" stop-color="var(--text-primary)" stop-opacity="0" />
-              </linearGradient>
-            </defs>
-            <path
-              class="usage-card__area"
-              d="M0 154 C18 157 20 149 32 158 C43 158 45 137 53 135 C58 136 59 153 65 153 C70 148 76 154 81 150 C86 140 93 141 96 130 L104 105 C108 98 115 119 126 131 C135 139 142 145 148 134 C154 126 163 129 169 122 L179 99 C185 89 191 115 195 113 C199 106 200 90 206 92 C211 94 207 77 221 65 C228 60 226 48 237 44 C248 46 247 36 253 33 C261 31 265 39 270 34 C278 25 282 29 287 7 C291 -8 294 8 299 10 C304 14 307 20 308 21 V212 H0Z"
-            />
-            <path
-              ref="usageLineRef"
-              class="usage-card__line"
-              d="M0 154 C18 157 20 149 32 158 C43 158 45 137 53 135 C58 136 59 153 65 153 C70 148 76 154 81 150 C86 140 93 141 96 130 L104 105 C108 98 115 119 126 131 C135 139 142 145 148 134 C154 126 163 129 169 122 L179 99 C185 89 191 115 195 113 C199 106 200 90 206 92 C211 94 207 77 221 65 C228 60 226 48 237 44 C248 46 247 36 253 33 C261 31 265 39 270 34 C278 25 282 29 287 7 C291 -8 294 8 299 10 C304 14 307 20 308 21"
-            />
-          </svg>
-          <span class="usage-card__marker" aria-hidden="true"></span>
-        </div>
-      </article>
+        </article>
+      </div>
     </div>
   </section>
 </template>
@@ -160,6 +174,13 @@ const months = ['2026.04', '2026.05', '2026.06', '2026.07', '2026.08', '2026.09'
 const businessCasesRef = ref<HTMLElement | null>(null);
 const usageLineRef = ref<SVGPathElement | null>(null);
 const spreadProgress = ref(0);
+const canvasScale = ref('1');
+const compactCanvasScale = ref('1');
+const compactCanvasTop = ref('276px');
+const compactCanvasHeight = ref('623px');
+const compactSectionHeight = ref('959px');
+const mobileLayoutScale = ref('1');
+const mobileSectionHeight = ref('0px');
 const chartHoverX = ref(226);
 const chartHoverY = ref(65);
 let animationFrame: number | null = null;
@@ -202,6 +223,26 @@ function getCaseStyle(item: BusinessCase): Record<string, string> {
 function updateSpreadProgress(): void {
   animationFrame = null;
 
+  if (businessCasesRef.value) {
+    const sectionWidth = businessCasesRef.value.clientWidth;
+    const scale = Math.min(1, Math.max(1200 / 1440, sectionWidth / 1440));
+    const compactScale = Math.min(1200 / 1060, Math.max(1, window.innerWidth / 1060));
+    const canvasHeight = window.innerWidth >= 882 ? 623 : 801;
+    const heading = businessCasesRef.value.querySelector<HTMLElement>('.business-cases__heading');
+    const canvasTop = heading ? heading.offsetTop + heading.offsetHeight + 64 : 276;
+
+    canvasScale.value = scale.toFixed(4);
+    compactCanvasScale.value = compactScale.toFixed(4);
+    compactCanvasTop.value = `${canvasTop}px`;
+    compactCanvasHeight.value = `${canvasHeight}px`;
+    compactSectionHeight.value = `${canvasTop + canvasHeight * compactScale + 60}px`;
+
+    const mobileScale = Math.min(1, window.innerWidth / 596);
+    const mobileLayout = businessCasesRef.value.querySelector<HTMLElement>('.business-cases__layout');
+    mobileLayoutScale.value = mobileScale.toFixed(4);
+    mobileSectionHeight.value = `${(mobileLayout?.offsetHeight ?? 0) * mobileScale}px`;
+  }
+
   if (!businessCasesRef.value || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     spreadProgress.value = 1;
     return;
@@ -242,6 +283,10 @@ onBeforeUnmount(() => {
   color: var(--text-primary);
   background: var(--td-bg-color-container);
 
+  &__layout {
+    display: contents;
+  }
+
   &__heading {
     width: min(888px, calc(100% - 48px));
     position: absolute;
@@ -273,7 +318,8 @@ onBeforeUnmount(() => {
     position: absolute;
     top: 240px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scale(var(--canvas-scale));
+    transform-origin: top center;
   }
 }
 
@@ -725,6 +771,431 @@ onBeforeUnmount(() => {
     &__chart {
       height: 240px;
     }
+  }
+}
+
+@media screen and (min-width: 596px) and (max-width: 1200px) {
+  .business-cases {
+    height: var(--compact-section-height);
+    padding: 0;
+
+    &__heading {
+      width: min(960px, 100%);
+      position: absolute;
+      top: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      h2 {
+        font-size: 36px;
+        line-height: 44px;
+      }
+
+      p {
+        font-size: 20px;
+        line-height: 28px;
+      }
+    }
+
+    &__canvas {
+      width: min(834px, calc(100vw - 48px));
+      height: var(--compact-canvas-height);
+      position: absolute;
+      top: var(--compact-canvas-top);
+      left: 50%;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      align-content: start;
+      justify-content: center;
+      gap: 24px;
+      padding-top: 284px;
+      box-sizing: border-box;
+      margin: 0;
+      transform: translateX(-50%) scale(var(--compact-canvas-scale));
+      transform-origin: top center;
+    }
+  }
+
+  .usage-card {
+    width: 548px;
+    height: 260px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+
+    &__data {
+      width: 240px;
+      padding: 24px;
+    }
+
+    &__chart {
+      width: 308px;
+      height: 260px;
+    }
+  }
+
+  .business-case {
+    width: 262px;
+    position: relative;
+    display: block;
+    margin: 0;
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+
+    &__card {
+      height: 139.4px;
+      gap: 16.79px;
+      padding: 16.6px;
+      border-radius: 10.08px;
+    }
+
+    &__quote {
+      font-size: 11px;
+      line-height: 16.79px;
+    }
+
+    &__profile {
+      gap: 9.3px;
+
+      :deep(.t-avatar),
+      svg {
+        width: 36.92px;
+        height: 36.92px;
+      }
+
+      strong {
+        font-size: 12px;
+        line-height: 20px;
+      }
+
+      span {
+        font-size: 10px;
+        line-height: 18px;
+      }
+    }
+
+    :deep(.t-tag) {
+      height: 22.15px;
+      padding: 0 7.38px;
+      font-size: 11.07px;
+      line-height: 18.45px;
+    }
+
+    &__prompt {
+      width: 246.44px;
+      min-width: 0;
+      margin-top: -6.72px;
+      padding: 3.36px 8px;
+      border-radius: 6.72px;
+      font-size: 9.8px;
+      line-height: 16px;
+    }
+
+    &--1,
+    &--2,
+    &--3,
+    &--4,
+    &--5 {
+      top: auto;
+      left: auto;
+    }
+
+    &--1 {
+      order: 2;
+    }
+
+    &--2 {
+      order: 1;
+    }
+
+    &--3 {
+      order: 3;
+    }
+
+    &--4 {
+      order: 5;
+    }
+
+    &--5 {
+      order: 4;
+    }
+  }
+}
+
+@media screen and (min-width: 596px) and (max-width: 959px) {
+  .business-cases__heading {
+    width: calc(100% - 48px);
+  }
+}
+
+@media screen and (max-width: 596px) {
+  .business-cases {
+    height: var(--mobile-section-height);
+    padding: 0;
+
+    &__layout {
+      width: 596px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 64px;
+      padding: 120px 24px 60px;
+      box-sizing: border-box;
+      transform: translateX(-50%) scale(var(--mobile-layout-scale));
+      transform-origin: top center;
+    }
+
+    &__heading {
+      width: 540px;
+      position: relative;
+      top: auto;
+      left: auto;
+      padding: 0 24px;
+      box-sizing: border-box;
+      transform: none;
+
+      h2 {
+        font-size: 36px;
+        line-height: 44px;
+      }
+
+      p {
+        margin-top: 20px;
+        font-size: 20px;
+        line-height: 28px;
+      }
+    }
+
+    &__canvas {
+      width: 508px;
+      height: auto;
+      position: relative;
+      top: auto;
+      left: auto;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 24px;
+      padding: 0;
+      margin: 0;
+      transform: none;
+    }
+  }
+
+  .usage-card {
+    width: 508px;
+    height: 241.02px;
+    position: relative;
+    top: auto;
+    left: auto;
+    order: -1;
+    flex-direction: row;
+    border-radius: 14.83px;
+    transform: none;
+
+    &__data {
+      width: 222.48px;
+      min-height: 0;
+      padding: 22.25px;
+
+      p {
+        margin-bottom: 18.54px;
+        font-size: 14.83px;
+        line-height: 22.25px;
+      }
+    }
+
+    &__total {
+      gap: 7.42px;
+
+      strong {
+        font-size: 51.91px;
+        letter-spacing: -1.04px;
+        line-height: 44.5px;
+      }
+
+      span {
+        font-size: 14.83px;
+        line-height: 22.25px;
+      }
+    }
+
+    &__metrics {
+      gap: 33.37px;
+      padding-top: 11.12px;
+
+      div {
+        gap: 7.42px;
+      }
+
+      span {
+        font-size: 11.12px;
+        line-height: 18.54px;
+      }
+
+      strong {
+        font-size: 18.54px;
+        line-height: 18.54px;
+      }
+
+      small {
+        margin-left: 3.71px;
+        font-size: 11.12px;
+      }
+    }
+
+    &__chart {
+      width: 285.52px;
+      height: 241.02px;
+
+      &::after {
+        height: 196.53px;
+        top: 25.96px;
+      }
+
+      > svg {
+        width: 285.52px;
+        height: 196.53px;
+        top: 25.96px;
+      }
+    }
+
+    &__tooltip {
+      top: 22.25px;
+      left: 22.25px;
+
+      strong {
+        font-size: 12.98px;
+        line-height: 20.39px;
+      }
+
+      span {
+        font-size: 11.12px;
+        line-height: 18.54px;
+      }
+    }
+
+    &__grid {
+      top: 22.25px;
+      left: 22.25px;
+      gap: 25.96px;
+
+      span {
+        width: 18.54px;
+        height: 196.53px;
+        font-size: 7.42px;
+        line-height: 10.2px;
+      }
+    }
+
+    &__marker {
+      width: 9.27px;
+      height: 9.27px;
+      top: calc(25.96px + var(--hover-y));
+    }
+  }
+
+  .business-case {
+    width: 508px;
+    position: relative;
+    top: auto;
+    left: auto;
+    display: block;
+    flex: none;
+    margin: 0;
+    opacity: 1;
+    transform: none;
+
+    &__card {
+      height: 270.28px;
+      justify-content: flex-start;
+      gap: 32.56px;
+      padding: 32.19px;
+      border-radius: 19.54px;
+    }
+
+    &__quote {
+      font-size: 19.54px;
+      line-height: 32.56px;
+    }
+
+    &__profile {
+      gap: 18.03px;
+
+      :deep(.t-avatar),
+      svg {
+        width: 60.11px;
+        height: 60.11px;
+      }
+
+      strong {
+        font-size: 19.54px;
+        line-height: 32.56px;
+      }
+
+      span {
+        font-size: 16.28px;
+        line-height: 29.3px;
+      }
+    }
+
+    :deep(.t-tag) {
+      height: 36.06px;
+      padding: 0 12.02px;
+      font-size: 18.03px;
+      line-height: 30.05px;
+    }
+
+    &__prompt {
+      width: 477.84px;
+      min-width: 0;
+      margin-top: -13.03px;
+      padding: 6.51px 39.08px;
+      border-radius: 13.03px;
+      font-size: 17.91px;
+      line-height: 30px;
+    }
+
+    &--1 {
+      order: 2;
+    }
+
+    &--2 {
+      order: 1;
+    }
+
+    &--3 {
+      order: 3;
+    }
+
+    &--4 {
+      order: 5;
+    }
+
+    &--5 {
+      order: 4;
+    }
+  }
+
+  .business-cases__canvas > .usage-card {
+    flex-direction: row;
+  }
+
+  .business-cases__canvas > .business-case {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .business-cases__heading {
+    top: 60px;
   }
 }
 </style>

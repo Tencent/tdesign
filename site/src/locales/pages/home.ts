@@ -185,8 +185,7 @@ export const zhCN = {
     },
     setup: {
       title: '与 TDesign，共生长',
-      description:
-        '不止腾讯生态，更有质感，更稳定，更持续的 TDesign 助力更多行业和开发者，提升产品体验，提高设计研发效能，用 TDesign，更低成本，探索更多可能～',
+      description: 'TDesign 以更稳定、持续的设计体系，助力腾讯生态和更多行业与开发者提升产品体验与研发效能',
       developmentAction: '开发资源',
       designAction: '设计资源',
     },
@@ -390,7 +389,7 @@ export const enUS = {
     setup: {
       title: 'Grow together with TDesign',
       description:
-        'Not only limited to the Tencent ecosystem, TDesign provides a more textured, stable, and sustainable experience to help a wider range of industries and developers enhance product experience, improve design and development efficiency, and explore more possibilities at a lower cost with TDesign.',
+        'With a more stable and sustainable design system, TDesign helps the Tencent ecosystem, a broader range of industries, and developers improve product experiences and development efficiency.',
       developmentAction: 'Development resources',
       designAction: 'Design resources',
     },
