@@ -38,7 +38,10 @@
             <a v-for="item in card.items" :key="item.name" class="resource-item" :href="item.href">
               <img :src="item.logo" :alt="t('home.resources.logoAlt', { name: item.name })" />
               <span class="resource-item__name">{{ item.name }}</span>
-              <span class="resource-item__updated">{{ t('home.resources.updated') }}</span>
+              <span v-if="releaseDates[item.releaseKey]" class="resource-item__updated">
+                {{ formatUpdatedAt(releaseDates[item.releaseKey]) }}
+              </span>
+              <span v-else class="resource-item__updated" aria-hidden="true"></span>
             </a>
           </div>
         </article>
@@ -68,6 +71,7 @@ interface ResourceItem {
   name: string;
   logo: string;
   href: string;
+  releaseKey: string;
 }
 
 interface ResourceCard {
@@ -79,14 +83,78 @@ interface ResourceCard {
   items: ResourceItem[];
 }
 
-const { t } = useI18n({ messages: homeMessages });
+interface Release {
+  publishedAt: string;
+  body: string;
+}
+
+const releaseApi = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/release';
+const releaseMatchers: Record<string, string> = {
+  'vue-next': 'tdesign-vue-next@',
+  'react-web': 'tdesign-react@',
+  vue2: 'Vue2 for Web 发布',
+  miniprogram: 'tdesign-miniprogram@',
+  'vue-mobile': 'Vue3 for Mobile 发布',
+  'react-mobile': 'React for Mobile 发布',
+  'uniapp-mobile': '@tdesign/uniapp@',
+  flutter: 'Flutter for Mobile 发布',
+  'vue-chat': '@tdesign-vue-next/chat@',
+  'react-chat': '@tdesign-react/chat@',
+  'miniprogram-chat': '@tdesign-miniprogram/chat@',
+};
+
+const { t, locale } = useI18n({ messages: homeMessages });
 const resourceSectionRef = ref<HTMLElement>();
 const resourceLayoutRef = ref<HTMLElement>();
+const releaseDates = ref<Record<string, string>>({});
 const mobileLayoutScale = ref('1');
 const mobileSectionHeight = ref('auto');
 const tabletLayoutScale = ref('1');
 const tabletSectionHeight = ref('auto');
 let layoutObserver: ResizeObserver | undefined;
+
+function parseReleases(value: unknown): Release[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.flatMap((item) => {
+    if (typeof item !== 'object' || item === null) return [];
+    const release = item as Record<string, unknown>;
+    // eslint-disable-next-line camelcase
+    const publishedAt = release.published_at;
+    if (typeof publishedAt !== 'string' || typeof release.body !== 'string') return [];
+    return [{ publishedAt, body: release.body }];
+  });
+}
+
+function parseReleaseDates(value: unknown): Record<string, string> {
+  const dates: Record<string, string> = {};
+  parseReleases(value).forEach((release) => {
+    Object.entries(releaseMatchers).forEach(([key, marker]) => {
+      if (release.body.includes(marker) && (!dates[key] || Date.parse(release.publishedAt) > Date.parse(dates[key]))) {
+        dates[key] = release.publishedAt;
+      }
+    });
+  });
+  return dates;
+}
+
+function formatUpdatedAt(value: string): string {
+  const elapsedDays = Math.max(0, Math.floor((Date.now() - new Date(value).getTime()) / (24 * 60 * 60 * 1000)));
+  const relativeTime = new Intl.RelativeTimeFormat(locale.value, { numeric: 'auto' }).format(-elapsedDays, 'day');
+  return locale.value.startsWith('zh') ? `${relativeTime}更新` : `Updated ${relativeTime}`;
+}
+
+async function fetchReleaseDates(): Promise<void> {
+  try {
+    const response = await fetch(releaseApi);
+    if (!response.ok) return;
+
+    const data: unknown = await response.json();
+    releaseDates.value = parseReleaseDates(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 const updateScaledLayout = () => {
   if (!resourceLayoutRef.value) return;
@@ -109,6 +177,7 @@ const updateScaledLayout = () => {
 };
 
 onMounted(() => {
+  fetchReleaseDates();
   nextTick(updateScaledLayout);
   window.addEventListener('resize', updateScaledLayout);
   layoutObserver = new ResizeObserver(updateScaledLayout);
@@ -128,13 +197,14 @@ const resourceCards = computed<ResourceCard[]>(() => [
     description: t('home.resources.cards.web.description'),
     illustration: resourceWeb,
     items: [
-      { name: 'Vue Next', logo: vueLogo, href: '/vue-next/' },
-      { name: 'React', logo: reactLogo, href: '/react/' },
-      { name: 'Vue', logo: vueLogo, href: '/vue/' },
+      { name: 'Vue Next', logo: vueLogo, href: '/vue-next/', releaseKey: 'vue-next' },
+      { name: 'React', logo: reactLogo, href: '/react/', releaseKey: 'react-web' },
+      { name: 'Vue', logo: vueLogo, href: '/vue/', releaseKey: 'vue2' },
       {
         name: t('home.resources.items.designResources'),
         logo: figmaLogo,
         href: 'https://www.figma.com/community/file/1053279236128724321/tdesign-for-web',
+        releaseKey: 'design-web',
       },
     ],
   },
@@ -145,15 +215,21 @@ const resourceCards = computed<ResourceCard[]>(() => [
     description: t('home.resources.cards.mobile.description'),
     illustration: resourceMobile,
     items: [
-      { name: t('home.resources.items.miniprogram'), logo: miniprogramLogo, href: '/miniprogram/' },
-      { name: 'Vue Next', logo: vueLogo, href: '/mobile-vue/' },
-      { name: 'React', logo: reactLogo, href: '/mobile-react/' },
-      { name: 'Uniapp', logo: uniappLogo, href: '/uniapp/' },
-      { name: 'Flutter', logo: flutterLogo, href: '/flutter/' },
+      {
+        name: t('home.resources.items.miniprogram'),
+        logo: miniprogramLogo,
+        href: '/miniprogram/',
+        releaseKey: 'miniprogram',
+      },
+      { name: 'Vue Next', logo: vueLogo, href: '/mobile-vue/', releaseKey: 'vue-mobile' },
+      { name: 'React', logo: reactLogo, href: '/mobile-react/', releaseKey: 'react-mobile' },
+      { name: 'Uniapp', logo: uniappLogo, href: '/uniapp/', releaseKey: 'uniapp-mobile' },
+      { name: 'Flutter', logo: flutterLogo, href: '/flutter/', releaseKey: 'flutter' },
       {
         name: t('home.resources.items.designResources'),
         logo: figmaLogo,
         href: 'https://www.figma.com/community/file/1053279585699097956/tdesign-for-mobile',
+        releaseKey: 'design-mobile',
       },
     ],
   },
@@ -164,13 +240,19 @@ const resourceCards = computed<ResourceCard[]>(() => [
     description: t('home.resources.cards.aigc.description'),
     illustration: resourceAigc,
     items: [
-      { name: 'Vue Next', logo: vueLogo, href: '/vue-next-chat/' },
-      { name: 'React', logo: reactLogo, href: '/react-chat/' },
-      { name: t('home.resources.items.miniprogram'), logo: miniprogramLogo, href: '/miniprogram-chat/' },
+      { name: 'Vue Next', logo: vueLogo, href: '/vue-next-chat/', releaseKey: 'vue-chat' },
+      { name: 'React', logo: reactLogo, href: '/react-chat/', releaseKey: 'react-chat' },
+      {
+        name: t('home.resources.items.miniprogram'),
+        logo: miniprogramLogo,
+        href: '/miniprogram-chat/',
+        releaseKey: 'miniprogram-chat',
+      },
       {
         name: t('home.resources.items.designResources'),
         logo: figmaLogo,
         href: 'https://www.figma.com/community/file/1053279236128724321/tdesign-for-web',
+        releaseKey: 'design-aigc',
       },
     ],
   },
@@ -181,11 +263,12 @@ const resourceCards = computed<ResourceCard[]>(() => [
     description: t('home.resources.cards.icons.description'),
     illustration: resourceIcons,
     items: [
-      { name: t('home.resources.items.iconLibrary'), logo: iconLibrary, href: '/icons/' },
+      { name: t('home.resources.items.iconLibrary'), logo: iconLibrary, href: '/icons/', releaseKey: 'icons' },
       {
         name: t('home.resources.items.designResources'),
         logo: figmaLogo,
         href: 'https://www.figma.com/community/file/1543189085651776104/tdesign-icon-svg-file',
+        releaseKey: 'design-icons',
       },
     ],
   },
@@ -386,6 +469,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
   }
 
   &__updated {
+    min-height: 20px;
     color: var(--text-placeholder);
     font-size: 12px;
     font-weight: 300;

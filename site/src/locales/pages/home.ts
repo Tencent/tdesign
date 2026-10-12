@@ -145,7 +145,6 @@ export const zhCN = {
     resources: {
       title: '全方位资源支持，赋能每一个技术栈',
       description: '提供桌面端、移动端、AIGC 组件及丰富图标资源能力，覆盖主流框架与平台，开箱即用',
-      updated: '3天前更新',
       logoAlt: '{name} 标志',
       cards: {
         web: {
@@ -347,7 +346,6 @@ export const enUS = {
       title: 'Resources for every technology stack',
       description:
         'Desktop, mobile, AIGC components, and D2C capabilities for mainstream frameworks and platforms, ready to use.',
-      updated: 'Updated 3 days ago',
       logoAlt: '{name} logo',
       cards: {
         web: {
