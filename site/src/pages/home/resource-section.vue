@@ -35,7 +35,13 @@
           </div>
 
           <div class="resource-card__items">
-            <a v-for="item in card.items" :key="item.name" class="resource-item" :href="item.href">
+            <a
+              v-for="item in card.items"
+              :key="item.name"
+              class="resource-item"
+              :href="item.href"
+              referrerpolicy="no-referrer"
+            >
               <img :src="item.logo" :alt="t('home.resources.logoAlt', { name: item.name })" />
               <span class="resource-item__name">{{ item.name }}</span>
               <span v-if="releaseDates[item.releaseKey]" class="resource-item__updated">
@@ -198,9 +204,9 @@ const resourceCards = computed<ResourceCard[]>(() => [
     description: t('home.resources.cards.web.description'),
     illustration: resourceWeb,
     items: [
-      { name: 'Vue Next', logo: vueLogo, href: '/vue-next/', releaseKey: 'vue-next' },
-      { name: 'React', logo: reactLogo, href: '/react/', releaseKey: 'react-web' },
-      { name: 'Vue', logo: vueLogo, href: '/vue/', releaseKey: 'vue2' },
+      { name: 'Vue Next', logo: vueLogo, href: 'https://tdesign.tencent.com/vue-next/', releaseKey: 'vue-next' },
+      { name: 'React', logo: reactLogo, href: 'https://tdesign.tencent.com/react/', releaseKey: 'react-web' },
+      { name: 'Vue', logo: vueLogo, href: 'https://tdesign.tencent.com/vue/', releaseKey: 'vue2' },
       {
         name: t('home.resources.items.designResources'),
         logo: figmaLogo,
@@ -219,13 +225,23 @@ const resourceCards = computed<ResourceCard[]>(() => [
       {
         name: t('home.resources.items.miniprogram'),
         logo: miniprogramLogo,
-        href: '/miniprogram/',
+        href: 'https://tdesign.tencent.com/miniprogram/',
         releaseKey: 'miniprogram',
       },
-      { name: 'Vue Next', logo: vueLogo, href: '/mobile-vue/', releaseKey: 'vue-mobile' },
-      { name: 'React', logo: reactLogo, href: '/mobile-react/', releaseKey: 'react-mobile' },
-      { name: 'Uniapp', logo: uniappLogo, href: '/uniapp/', releaseKey: 'uniapp-mobile' },
-      { name: 'Flutter', logo: flutterLogo, href: '/flutter/', releaseKey: 'flutter' },
+      {
+        name: 'Vue Next',
+        logo: vueLogo,
+        href: 'https://tdesign.tencent.com/mobile-vue/',
+        releaseKey: 'vue-mobile',
+      },
+      {
+        name: 'React',
+        logo: reactLogo,
+        href: 'https://tdesign.tencent.com/mobile-react/',
+        releaseKey: 'react-mobile',
+      },
+      { name: 'Uniapp', logo: uniappLogo, href: 'https://tdesign.tencent.com/uniapp/', releaseKey: 'uniapp-mobile' },
+      { name: 'Flutter', logo: flutterLogo, href: 'https://tdesign.tencent.com/flutter/', releaseKey: 'flutter' },
       {
         name: t('home.resources.items.designResources'),
         logo: figmaLogo,
@@ -241,12 +257,22 @@ const resourceCards = computed<ResourceCard[]>(() => [
     description: t('home.resources.cards.aigc.description'),
     illustration: resourceAigc,
     items: [
-      { name: 'Vue Next', logo: vueLogo, href: '/vue-next-chat/', releaseKey: 'vue-chat' },
-      { name: 'React', logo: reactLogo, href: '/react-chat/', releaseKey: 'react-chat' },
+      {
+        name: 'Vue Next',
+        logo: vueLogo,
+        href: 'https://tdesign.tencent.com/vue-next-chat/',
+        releaseKey: 'vue-chat',
+      },
+      {
+        name: 'React',
+        logo: reactLogo,
+        href: 'https://tdesign.tencent.com/react-chat/',
+        releaseKey: 'react-chat',
+      },
       {
         name: t('home.resources.items.miniprogram'),
         logo: miniprogramLogo,
-        href: '/miniprogram-chat/',
+        href: 'https://tdesign.tencent.com/miniprogram-chat/',
         releaseKey: 'miniprogram-chat',
       },
       {
@@ -264,7 +290,12 @@ const resourceCards = computed<ResourceCard[]>(() => [
     description: t('home.resources.cards.icons.description'),
     illustration: resourceIcons,
     items: [
-      { name: t('home.resources.items.iconLibrary'), logo: iconLibrary, href: '/icons/', releaseKey: 'icons' },
+      {
+        name: t('home.resources.items.iconLibrary'),
+        logo: iconLibrary,
+        href: 'https://tdesign.tencent.com/icons/',
+        releaseKey: 'icons',
+      },
       {
         name: t('home.resources.items.designResources'),
         logo: figmaLogo,

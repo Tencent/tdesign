@@ -444,6 +444,7 @@ onBeforeUnmount(() => {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
+    overflow: hidden;
   }
 
   &__profile {
@@ -477,7 +478,9 @@ onBeforeUnmount(() => {
   &__prompt {
     width: fit-content;
     min-width: 84%;
-    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    margin: -8px auto 0;
     padding: 6px 10px;
     box-sizing: border-box;
     border: 1px solid var(--component-border);
@@ -947,13 +950,6 @@ onBeforeUnmount(() => {
       }
     }
 
-    :deep(.t-tag) {
-      height: 22.15px;
-      padding: 0 7.38px;
-      font-size: 11.07px;
-      line-height: 18.45px;
-    }
-
     &__prompt {
       width: 246.44px;
       min-width: 0;
@@ -1214,13 +1210,6 @@ onBeforeUnmount(() => {
         font-size: 16.28px;
         line-height: 29.3px;
       }
-    }
-
-    :deep(.t-tag) {
-      height: 36.06px;
-      padding: 0 12.02px;
-      font-size: 18.03px;
-      line-height: 30.05px;
     }
 
     &__prompt {

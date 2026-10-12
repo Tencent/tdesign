@@ -175,6 +175,53 @@
         }
       }
     }
+
+    .module-setup {
+      height: 436px;
+      color: rgba(255, 255, 255, 0.9);
+      background: #1e1e1e;
+
+      &::before {
+        inset: 0 0 4px;
+        opacity: 0.9;
+        background-image: radial-gradient(circle, rgba(255, 255, 255, 0.16) 0 1px, transparent 1.4px),
+          radial-gradient(
+            ellipse 88% 112% at 50% 122%,
+            rgba(220, 236, 255, 0.72) 0%,
+            rgba(101, 159, 255, 0.46) 34%,
+            rgba(75, 101, 255, 0.2) 68%,
+            transparent 100%
+          );
+        background-size:
+          8px 8px,
+          100% 100%;
+        mask-image: linear-gradient(to bottom, transparent 8%, rgba(0, 0, 0, 0.16) 44%, #000 100%);
+        mix-blend-mode: hard-light;
+      }
+
+      .module-title {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .module-description {
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      &__button.t-button {
+        width: 196px;
+        color: rgba(255, 255, 255, 0.9);
+        background: #242424;
+
+        &:hover {
+          background: #242424;
+        }
+      }
+
+      &__button:not(.module-setup__button--design) .module-setup__icon {
+        filter: invert(1);
+        opacity: 0.9;
+      }
+    }
   }
 }
 
