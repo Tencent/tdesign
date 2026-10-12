@@ -71,7 +71,7 @@
           >
             <div class="usage-card__tooltip">
               <strong>{{ t('home.businessCases.downloads') }}</strong>
-              <span>09:14 GMT，2026.08</span>
+              <span>{{ hoveredDownloadMonth }}</span>
             </div>
             <div class="usage-card__grid" aria-hidden="true">
               <span v-for="month in months" :key="month">{{ month }}</span>
@@ -83,17 +83,10 @@
                   <stop offset="1" stop-color="var(--text-primary)" stop-opacity="0" />
                 </linearGradient>
               </defs>
-              <path
-                class="usage-card__area"
-                d="M0 154 C18 157 20 149 32 158 C43 158 45 137 53 135 C58 136 59 153 65 153 C70 148 76 154 81 150 C86 140 93 141 96 130 L104 105 C108 98 115 119 126 131 C135 139 142 145 148 134 C154 126 163 129 169 122 L179 99 C185 89 191 115 195 113 C199 106 200 90 206 92 C211 94 207 77 221 65 C228 60 226 48 237 44 C248 46 247 36 253 33 C261 31 265 39 270 34 C278 25 282 29 287 7 C291 -8 294 8 299 10 C304 14 307 20 308 21 V212 H0Z"
-              />
-              <path
-                ref="usageLineRef"
-                class="usage-card__line"
-                d="M0 154 C18 157 20 149 32 158 C43 158 45 137 53 135 C58 136 59 153 65 153 C70 148 76 154 81 150 C86 140 93 141 96 130 L104 105 C108 98 115 119 126 131 C135 139 142 145 148 134 C154 126 163 129 169 122 L179 99 C185 89 191 115 195 113 C199 106 200 90 206 92 C211 94 207 77 221 65 C228 60 226 48 237 44 C248 46 247 36 253 33 C261 31 265 39 270 34 C278 25 282 29 287 7 C291 -8 294 8 299 10 C304 14 307 20 308 21"
-              />
+              <path v-if="chartAreaPath" class="usage-card__area" :d="chartAreaPath" />
+              <path v-if="chartLinePath" ref="usageLineRef" class="usage-card__line" :d="chartLinePath" />
             </svg>
-            <span class="usage-card__marker" aria-hidden="true"></span>
+            <span v-if="chartLinePath" class="usage-card__marker" aria-hidden="true"></span>
           </div>
         </article>
       </div>
@@ -102,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import homeMessages from '@/locales/pages/home';
@@ -157,7 +150,6 @@ const caseLayouts: BusinessCaseLayout[] = [
 ];
 
 const cases = ref<BusinessCase[]>([]);
-const months = ['2026.04', '2026.05', '2026.06', '2026.07', '2026.08', '2026.09'];
 const businessCasesRef = ref<HTMLElement | null>(null);
 const usageLineRef = ref<SVGPathElement | null>(null);
 const spreadProgress = ref(0);
@@ -172,6 +164,59 @@ const chartHoverX = ref(226);
 const chartHoverY = ref(65);
 const usageData = ref(fallbackUsageData);
 let animationFrame: number | null = null;
+
+interface ChartPoint {
+  x: number;
+  y: number;
+}
+
+const chartDownloads = computed(() => usageData.value.downloadsPerMonth.slice(-24));
+const months = computed(() => {
+  const downloads = chartDownloads.value;
+  if (downloads.length <= 6) return downloads.map((item) => item.month.replace('-', '.'));
+
+  return Array.from({ length: 6 }, (_, index) => {
+    const downloadIndex = Math.round((index / 5) * (downloads.length - 1));
+    return downloads[downloadIndex].month.replace('-', '.');
+  });
+});
+const chartPoints = computed<ChartPoint[]>(() => {
+  const downloads = chartDownloads.value;
+  if (downloads.length < 2) return [];
+
+  const values = downloads.map((item) => item.totalDownloads);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min || 1;
+
+  return values.map((value, index) => ({
+    x: (index / (values.length - 1)) * 308,
+    y: 160 - ((value - min) / range) * 140,
+  }));
+});
+
+function createSmoothPath(points: ChartPoint[]): string {
+  if (points.length < 2) return '';
+
+  return points.slice(0, -1).reduce((path, point, index) => {
+    const previous = points[index - 1] ?? point;
+    const next = points[index + 1];
+    if (!next) return path;
+    const following = points[index + 2] ?? next;
+    const control1X = point.x + (next.x - previous.x) / 6;
+    const control1Y = point.y + (next.y - previous.y) / 6;
+    const control2X = next.x - (following.x - point.x) / 6;
+    const control2Y = next.y - (following.y - point.y) / 6;
+    return `${path} C${control1X} ${control1Y} ${control2X} ${control2Y} ${next.x} ${next.y}`;
+  }, `M${points[0].x} ${points[0].y}`);
+}
+
+const chartLinePath = computed(() => createSmoothPath(chartPoints.value));
+const chartAreaPath = computed(() => (chartLinePath.value ? `${chartLinePath.value} L308 212 L0 212 Z` : ''));
+const hoveredDownloadIndex = ref(0);
+const hoveredDownloadMonth = computed(
+  () => chartDownloads.value[hoveredDownloadIndex.value]?.month.replace('-', '.') ?? '',
+);
 
 function isDeveloperStory(value: unknown): value is DeveloperStory {
   if (!value || typeof value !== 'object') return false;
@@ -202,8 +247,12 @@ function handleChartPointerMove(event: PointerEvent): void {
   if (!path) return;
 
   const chartRect = chart.getBoundingClientRect();
-  const localX = ((event.clientX - chartRect.left) / chartRect.width) * chart.clientWidth;
+  const localX = ((event.clientX - chartRect.left) / chartRect.width) * 308;
   const targetX = Math.min(308, Math.max(0, localX));
+  hoveredDownloadIndex.value = Math.min(
+    chartDownloads.value.length - 1,
+    Math.max(0, Math.round((targetX / 308) * (chartDownloads.value.length - 1))),
+  );
   const pathLength = path.getTotalLength();
   let start = 0;
   let end = pathLength;
@@ -277,6 +326,12 @@ onMounted(() => {
   getDeveloperStories();
   getUsageData().then((data) => {
     usageData.value = data;
+    const lastPoint = chartPoints.value[chartPoints.value.length - 1];
+    hoveredDownloadIndex.value = Math.max(0, chartDownloads.value.length - 1);
+    if (lastPoint) {
+      chartHoverX.value = lastPoint.x;
+      chartHoverY.value = lastPoint.y;
+    }
   });
   updateSpreadProgress();
   window.addEventListener('scroll', scheduleSpreadUpdate, { passive: true });
