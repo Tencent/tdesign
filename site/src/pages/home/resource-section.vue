@@ -140,7 +140,8 @@ function parseReleaseDates(value: unknown): Record<string, string> {
 
 function formatUpdatedAt(value: string): string {
   const elapsedDays = Math.max(0, Math.floor((Date.now() - new Date(value).getTime()) / (24 * 60 * 60 * 1000)));
-  const relativeTime = new Intl.RelativeTimeFormat(locale.value, { numeric: 'auto' }).format(-elapsedDays, 'day');
+  const elapsedWeeks = Math.floor(elapsedDays / 7);
+  const relativeTime = new Intl.RelativeTimeFormat(locale.value, { numeric: 'auto' }).format(-elapsedWeeks, 'week');
   return locale.value.startsWith('zh') ? `${relativeTime}更新` : `Updated ${relativeTime}`;
 }
 
