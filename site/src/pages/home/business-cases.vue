@@ -21,34 +21,24 @@
       <div class="business-cases__canvas">
         <article
           v-for="(item, index) in cases"
-          :key="item.prompt"
+          :key="item.nickname"
           :class="['business-case', `business-case--${index + 1}`]"
           :style="getCaseStyle(item)"
         >
           <div class="business-case__card">
             <span class="business-case__noise" aria-hidden="true"></span>
-            <p class="business-case__quote">{{ t('home.businessCases.quote') }}</p>
+            <p class="business-case__quote">{{ item.content }}</p>
             <footer class="business-case__user">
               <div class="business-case__profile">
-                <t-avatar size="40px" :alt="t('home.businessCases.user')">
-                  <svg viewBox="0 0 40 40" aria-hidden="true">
-                    <rect width="40" height="40" fill="#d9e1ff" />
-                    <path fill="#fff" d="M11 7h18v3h3v20h-3v3H11v-3H8V10h3z" />
-                    <path fill="#292929" d="M13 8h14v3h3v8H10v-8h3zm-3 8h4v8h-4zm16 0h4v9h-4z" />
-                    <path fill="#f1b18b" d="M14 16h12v13H14zm-2 4h4v7h-4zm14 1h3v6h-3z" />
-                    <path fill="#292929" d="M15 20h3v3h-3zm8 0h3v3h-3z" />
-                    <path fill="#de806b" d="M18 26h6v2h-6z" />
-                  </svg>
-                </t-avatar>
+                <t-avatar size="40px" :image="item.avatar" :alt="item.nickname" />
                 <div>
-                  <strong>{{ t('home.businessCases.user') }}</strong>
-                  <span>{{ t('home.businessCases.role') }}</span>
+                  <strong>{{ item.nickname }}</strong>
+                  <span>{{ item.position }}</span>
                 </div>
               </div>
-              <t-tag size="medium" shape="round" :theme="item.theme" :variant="item.variant"> TEG </t-tag>
             </footer>
           </div>
-          <p class="business-case__prompt">› {{ t(item.prompt) }}</p>
+          <p class="business-case__prompt">› {{ item.scene }}</p>
         </article>
 
         <article class="usage-card">
@@ -56,19 +46,21 @@
             <div>
               <p>{{ t('home.businessCases.downloads') }}</p>
               <div class="usage-card__total">
-                <strong>12.8</strong><span>{{ t('home.businessCases.tenThousandPlus') }}</span>
+                <strong>{{ usageData.downloadPerMonth }}</strong>
+                <span>{{ t('home.businessCases.tenThousandPlus') }}</span>
               </div>
             </div>
             <div class="usage-card__metrics">
               <div>
                 <span>{{ t('home.businessCases.designReferences') }}</span>
-                <strong
-                  >2,456<small>{{ t('home.businessCases.tenThousand') }}</small></strong
-                >
+                <strong>
+                  {{ usageData.figmaReferenceCount }}
+                  <small>{{ t('home.businessCases.tenThousand') }}</small>
+                </strong>
               </div>
               <div>
                 <span>{{ t('home.businessCases.projects') }}</span>
-                <strong>3,826</strong>
+                <strong>{{ usageData.projectsCount }}</strong>
               </div>
             </div>
           </div>
@@ -111,65 +103,60 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import type { TdTagProps } from 'tdesign-vue-next';
 import { useI18n } from 'vue-i18n';
 
 import homeMessages from '@/locales/pages/home';
 
-const { t } = useI18n({ messages: homeMessages });
+import { fallbackUsageData, getUsageData } from './usage-data';
 
-interface BusinessCase {
-  prompt: string;
-  theme: TdTagProps['theme'];
-  variant: TdTagProps['variant'];
+const { t } = useI18n({ messages: homeMessages });
+const developerStoriesUrl = 'https://tdesign.gtimg.com/site/info/developer-stories.json';
+
+interface DeveloperStory {
+  content: string;
+  nickname: string;
+  position: string;
+  avatar: string;
+  scene: string;
+}
+
+interface BusinessCase extends DeveloperStory {
   spreadX: number;
   spreadY: number;
   rotation: number;
 }
 
-const cases: BusinessCase[] = [
+type BusinessCaseLayout = Pick<BusinessCase, 'spreadX' | 'spreadY' | 'rotation'>;
+
+const caseLayouts: BusinessCaseLayout[] = [
   {
-    prompt: 'home.businessCases.prompts.activity',
-    theme: 'default',
-    variant: 'light-outline',
     spreadX: 488,
     spreadY: 141,
     rotation: -7,
   },
   {
-    prompt: 'home.businessCases.prompts.multiplatform',
-    theme: 'primary',
-    variant: 'light',
     spreadX: 527,
     spreadY: -172,
     rotation: -5,
   },
   {
-    prompt: 'home.businessCases.prompts.enterprise',
-    theme: 'warning',
-    variant: 'light',
     spreadX: -505,
     spreadY: -151,
     rotation: 6,
   },
   {
-    prompt: 'home.businessCases.prompts.d2c',
-    theme: 'primary',
-    variant: 'light',
     spreadX: -486,
     spreadY: 137,
     rotation: 6,
   },
   {
-    prompt: 'home.businessCases.prompts.theme',
-    theme: 'default',
-    variant: 'light-outline',
     spreadX: 21,
     spreadY: -319,
     rotation: -4,
   },
 ];
 
+const cases = ref<BusinessCase[]>([]);
 const months = ['2026.04', '2026.05', '2026.06', '2026.07', '2026.08', '2026.09'];
 const businessCasesRef = ref<HTMLElement | null>(null);
 const usageLineRef = ref<SVGPathElement | null>(null);
@@ -183,7 +170,31 @@ const mobileLayoutScale = ref('1');
 const mobileSectionHeight = ref('0px');
 const chartHoverX = ref(226);
 const chartHoverY = ref(65);
+const usageData = ref(fallbackUsageData);
 let animationFrame: number | null = null;
+
+function isDeveloperStory(value: unknown): value is DeveloperStory {
+  if (!value || typeof value !== 'object') return false;
+  const story = value as Record<string, unknown>;
+  return ['content', 'nickname', 'position', 'avatar', 'scene'].every((key) => typeof story[key] === 'string');
+}
+
+async function getDeveloperStories(): Promise<void> {
+  try {
+    const response = await fetch(developerStoriesUrl);
+    if (!response.ok) return;
+
+    const result: unknown = await response.json();
+    if (!result || typeof result !== 'object' || !Array.isArray((result as { data?: unknown }).data)) return;
+
+    cases.value = (result as { data: unknown[] }).data
+      .filter(isDeveloperStory)
+      .slice(0, caseLayouts.length)
+      .map((story, index) => ({ ...story, ...caseLayouts[index] }));
+  } catch {
+    cases.value = [];
+  }
+}
 
 function handleChartPointerMove(event: PointerEvent): void {
   const chart = event.currentTarget as HTMLElement;
@@ -263,6 +274,10 @@ function scheduleSpreadUpdate(): void {
 }
 
 onMounted(() => {
+  getDeveloperStories();
+  getUsageData().then((data) => {
+    usageData.value = data;
+  });
   updateSpreadProgress();
   window.addEventListener('scroll', scheduleSpreadUpdate, { passive: true });
   window.addEventListener('resize', scheduleSpreadUpdate);

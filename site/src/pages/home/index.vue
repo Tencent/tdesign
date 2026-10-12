@@ -569,6 +569,22 @@ function scheduleWheelUnlock(): void {
   }, 180);
 }
 
+function isActiveModuleContentVisible(direction: number): boolean {
+  const board = moduleBoardRef.value;
+  const activeCard = board?.querySelector<HTMLElement>('.module-board__card--active');
+  if (!activeCard) return false;
+
+  const cardRect = activeCard.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  const fitsInViewport = cardRect.height <= viewportHeight;
+
+  if (fitsInViewport) {
+    return cardRect.top >= 0 && cardRect.bottom <= viewportHeight;
+  }
+
+  return direction > 0 ? cardRect.bottom <= viewportHeight : cardRect.top >= 0;
+}
+
 function handleModuleWheel(event: WheelEvent): void {
   if (event.deltaY === 0) return;
   if (wheelLocked) {
@@ -581,6 +597,7 @@ function handleModuleWheel(event: WheelEvent): void {
   const direction = event.deltaY > 0 ? 1 : -1;
   const nextTab = state.currentTab + direction;
   if (nextTab < 0 || nextTab > 2) return;
+  if (!isActiveModuleContentVisible(direction)) return;
 
   event.preventDefault();
   event.stopPropagation();

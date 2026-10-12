@@ -34,7 +34,13 @@
       <div class="activity-feed">
         <header class="activity-feed__header">
           <h3>实时动态</h3>
-          <t-link theme="default" size="small" :underline="false">
+          <t-link
+            theme="default"
+            size="small"
+            :underline="false"
+            href="https://tdesign.tencent.com/about/release"
+            target="_blank"
+          >
             查看全部
             <template #suffixIcon><icon name="chevron-right" /></template>
           </t-link>
@@ -159,6 +165,38 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
 
+function getStringList(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => typeof item === 'string');
+}
+
+function parseContributors(value: unknown): string[] {
+  if (!isRecord(value)) return [];
+
+  const names: string[] = [];
+  Object.entries(value).forEach(([group, items]) => {
+    if (group === 'design' && isRecord(items)) {
+      Object.values(items).forEach((members) => names.push(...getStringList(members)));
+      return;
+    }
+
+    if (!Array.isArray(items)) return;
+    items.forEach((component) => {
+      if (!isRecord(component) || !Array.isArray(component.tasks)) return;
+      component.tasks.forEach((task) => {
+        if (isRecord(task)) names.push(...getStringList(task.contributors));
+      });
+    });
+  });
+
+  const uniqueNames = new Map<string, string>();
+  names.forEach((name) => {
+    const normalizedName = name.trim();
+    if (normalizedName) uniqueNames.set(normalizedName.toLowerCase(), normalizedName);
+  });
+  return Array.from(uniqueNames.values());
+}
+
 function isGithubMember(value: string): boolean {
   return !value.includes('🏻');
 }
@@ -198,14 +236,10 @@ function startContributorAnimation(): void {
 async function fetchContributors(): Promise<void> {
   try {
     const response = await fetch(contributorsUrl);
+    if (!response.ok) return;
+
     const data: unknown = await response.json();
-    const design = isRecord(data) && isRecord(data.design) ? data.design : {};
-    const names = [
-      ...(Array.isArray(design.web) ? design.web : []),
-      ...(Array.isArray(design.mobile) ? design.mobile : []),
-      ...(Array.isArray(design.chart) ? design.chart : []),
-    ];
-    contributors = Array.from(new Set(names.map((name) => String(name).trim()).filter(Boolean)));
+    contributors = parseContributors(data);
     if (contributors.length) {
       communityMembers.value = networkPoints.map((_, index) => contributors[index % contributors.length]);
     }

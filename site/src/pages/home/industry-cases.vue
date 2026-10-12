@@ -39,7 +39,7 @@
     </div>
 
     <div class="industry-cases__stats">
-      <div v-for="stat in stats" :key="stat.value" class="industry-cases__stat">
+      <div v-for="stat in stats" :key="stat.labelKey" class="industry-cases__stat">
         <div class="industry-cases__value">
           <strong>{{ stat.value }}</strong>
           <span>{{ t(stat.unitKey) }}</span>
@@ -55,6 +55,8 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import homeMessages from '@/locales/pages/home';
+
+import { fallbackUsageData, getUsageData } from './usage-data';
 
 interface LogoItem {
   name: string;
@@ -72,6 +74,7 @@ const MOBILE_LOGO_HEIGHT = 36;
 const LOGO_ROW_GAP = 16;
 
 const brandList = ref<LogoItem[]>([]);
+const usageData = ref(fallbackUsageData);
 const viewportWidth = ref(typeof window === 'undefined' ? TABLET_BREAKPOINT : window.innerWidth);
 const logoScale = computed(() => {
   if (viewportWidth.value >= TABLET_BREAKPOINT) return 1;
@@ -104,6 +107,7 @@ function handleResize(): void {
 
 onMounted(async () => {
   window.addEventListener('resize', handleResize);
+  usageData.value = await getUsageData();
 
   try {
     const response = await fetch(BRAND_LIST_URL);
@@ -128,11 +132,23 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize);
 });
 
-const stats = [
-  { value: '8,000', unitKey: 'home.service.stats.projectsUnit', labelKey: 'home.service.stats.projects' },
-  { value: '120', unitKey: 'home.service.stats.teamsUnit', labelKey: 'home.service.stats.teams' },
-  { value: '5,000', unitKey: 'home.service.stats.downloadsUnit', labelKey: 'home.service.stats.downloads' },
-];
+const stats = computed(() => [
+  {
+    value: usageData.value.projectsCount,
+    unitKey: 'home.service.stats.projectsUnit',
+    labelKey: 'home.service.stats.projects',
+  },
+  {
+    value: usageData.value.enterpriseCustomersCount,
+    unitKey: 'home.service.stats.teamsUnit',
+    labelKey: 'home.service.stats.teams',
+  },
+  {
+    value: usageData.value.downloadPerMonth,
+    unitKey: 'home.service.stats.downloadsUnit',
+    labelKey: 'home.service.stats.downloads',
+  },
+]);
 </script>
 
 <style scoped lang="less">
