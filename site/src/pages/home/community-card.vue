@@ -47,10 +47,12 @@
         </header>
 
         <div class="activity-feed__list">
-          <div v-for="item in activities" :key="item.title" class="activity-feed__item">
-            <p class="activity-feed__title">{{ item.title }}</p>
+          <div v-for="item in activities" :key="item.url" class="activity-feed__item">
+            <a class="activity-feed__title" :href="item.url" target="_blank" rel="noopener noreferrer">
+              {{ item.title }}
+            </a>
             <div class="activity-feed__meta">
-              <t-avatar size="20px" :style="{ backgroundColor: item.color }">{{ item.avatar }}</t-avatar>
+              <t-avatar size="20px" :image="item.avatar" :alt="item.author" />
               <span>{{ item.meta }}</span>
             </div>
           </div>
@@ -63,7 +65,6 @@
           <div class="community-stat">
             <div class="community-stat__value">
               <strong>{{ item.value }}</strong>
-              <span :style="{ color: item.color }"><icon name="trending-up" />{{ item.change }}</span>
             </div>
             <p>{{ item.label }}</p>
           </div>
@@ -80,6 +81,7 @@ import { Icon } from 'tdesign-icons-vue-next';
 import tdesignLogo from './assets/community-tdesign-logo.png';
 
 const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
+const activityUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/github/tdesign-activity';
 
 const networkPoints = [
   { x: 216, y: 24 },
@@ -128,38 +130,22 @@ let contributorCursor = networkPoints.length;
 let avatarTimer: number | undefined;
 let randomTimer: number | undefined;
 
-const activities = [
-  {
-    title: 'feat(button): add loading state props',
-    meta: '@alice · 2 小时前 · +42 lines',
-    avatar: '👩🏻',
-    color: '#d9f5ed',
-  },
-  {
-    title: 'fix: virtualScroll scroll jumps on Safari',
-    meta: '@kai · 4 小时前 · 3 files changed',
-    avatar: '👨🏻',
-    color: '#ffe9bf',
-  },
-  {
-    title: 'Release: tdesign-react v1.9.0 正式发布',
-    meta: '@tdesign-bot · 1 天前 · 🎉 Major release',
-    avatar: '👩🏻',
-    color: '#fbe2f5',
-  },
-  {
-    title: 'chore: docs website tokens refreshed',
-    meta: '@marvin · 2 天前 · 12 components',
-    avatar: '👨🏻',
-    color: '#d9f1ff',
-  },
-];
+interface Activity {
+  title: string;
+  meta: string;
+  author: string;
+  avatar: string;
+  url: string;
+  updatedAt: string;
+}
 
-const stats = [
-  { value: 42, change: '12%', label: '本周新增 PR', color: '#2ba471' },
-  { value: 186, change: '38%', label: '本周合并 Commit', color: '#0052d9' },
-  { value: 264, change: '12%', label: '活跃 Issue', color: '#e37318' },
-];
+interface CommunityStat {
+  value: number;
+  label: string;
+}
+
+const activities = ref<Activity[]>([]);
+const stats = ref<CommunityStat[]>([]);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
@@ -205,6 +191,78 @@ function githubAvatar(value: string): string {
   return `https://avatars.githubusercontent.com/${value}`;
 }
 
+function formatRelativeTime(value: string): string {
+  const elapsed = Date.now() - new Date(value).getTime();
+  if (!Number.isFinite(elapsed) || elapsed < 60 * 1000) return '刚刚';
+
+  const minutes = Math.floor(elapsed / (60 * 1000));
+  if (minutes < 60) return `${minutes} 分钟前`;
+
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} 小时前`;
+
+  return `${Math.floor(hours / 24)} 天前`;
+}
+
+function parseActivities(value: unknown): Activity[] {
+  if (!isRecord(value) || !Array.isArray(value.repositories)) return [];
+
+  return value.repositories
+    .flatMap((repository) => {
+      if (!isRecord(repository) || typeof repository.name !== 'string' || !isRecord(repository.pullRequests)) {
+        return [];
+      }
+
+      const recent = repository.pullRequests.recent;
+      if (!Array.isArray(recent)) return [];
+
+      return recent.flatMap((item) => {
+        if (
+          !isRecord(item) ||
+          typeof item.title !== 'string' ||
+          typeof item.author !== 'string' ||
+          typeof item.updatedAt !== 'string' ||
+          typeof item.url !== 'string' ||
+          typeof item.number !== 'number'
+        ) {
+          return [];
+        }
+
+        return [
+          {
+            title: item.title,
+            meta: `@${item.author} · ${formatRelativeTime(item.updatedAt)} · ${repository.name} #${item.number}`,
+            author: item.author,
+            avatar: githubAvatar(item.author),
+            url: item.url,
+            updatedAt: item.updatedAt,
+          },
+        ];
+      });
+    })
+    .sort((left, right) => Date.parse(right.updatedAt) - Date.parse(left.updatedAt))
+    .slice(0, 4);
+}
+
+function parseStats(value: unknown): CommunityStat[] {
+  if (!isRecord(value) || !isRecord(value.summary)) return [];
+
+  const { newPullRequests, defaultBranchCommits, activeIssues } = value.summary;
+  if (
+    typeof newPullRequests !== 'number' ||
+    typeof defaultBranchCommits !== 'number' ||
+    typeof activeIssues !== 'number'
+  ) {
+    return [];
+  }
+
+  return [
+    { value: newPullRequests, label: '本周新增 PR' },
+    { value: defaultBranchCommits, label: '本周新增 Commit' },
+    { value: activeIssues, label: '活跃 Issue' },
+  ];
+}
+
 function randomIndexes(count: number): number[] {
   return Array.from({ length: count }, () => Math.floor(Math.random() * networkPoints.length));
 }
@@ -248,8 +306,22 @@ async function fetchContributors(): Promise<void> {
   }
 }
 
+async function fetchActivity(): Promise<void> {
+  try {
+    const response = await fetch(activityUrl);
+    if (!response.ok) return;
+
+    const data: unknown = await response.json();
+    activities.value = parseActivities(data);
+    stats.value = parseStats(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 onMounted(() => {
   fetchContributors();
+  fetchActivity();
   startContributorAnimation();
 });
 
@@ -413,12 +485,19 @@ onBeforeUnmount(() => {
   }
 
   &__title {
+    display: block;
     margin: 0 0 4px;
     overflow: hidden;
+    color: var(--text-primary);
     font-size: 14px;
     line-height: 20px;
+    text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &:hover {
+      color: var(--text-interactive);
+    }
   }
 
   &__meta {
@@ -463,25 +542,12 @@ onBeforeUnmount(() => {
     display: flex;
     height: 23px;
     align-items: center;
-    gap: 4px;
 
     strong {
       font-family: TCloudNumber, sans-serif;
       font-size: 32px;
       font-weight: 500;
       line-height: 23px;
-    }
-
-    span {
-      display: flex;
-      align-items: center;
-      font-size: 12px;
-      line-height: 20px;
-    }
-
-    .t-icon {
-      width: 14px;
-      height: 14px;
     }
   }
 
