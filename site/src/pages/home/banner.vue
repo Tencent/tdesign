@@ -3,7 +3,7 @@
     <div class="banner-img-wrap">
       <div v-show="showCanvas">
         <div :class="{ filtered: !imageLoaded }" class="banner-bg-wrapper __light__">
-          <img style="z-index: 10" :class="{ hide: imageLoaded }" src="/home/compressed-banner.png" />
+          <img style="z-index: 10" :class="{ hide: imageLoaded }" :src="compressedBanner" />
           <img
             style="z-index: 5"
             :class="{ hide: !imageLoaded }"
@@ -21,7 +21,7 @@
           <span class="banner-trigger4 light"></span>
         </div>
         <div :class="{ filtered: !imageLoaded }" class="banner-bg-wrapper __dark__">
-          <img style="z-index: 10" :class="{ hide: imageLoaded }" src="/home/compressed-banner-dark.png" />
+          <img style="z-index: 10" :class="{ hide: imageLoaded }" :src="compressedBannerDark" />
           <img
             style="z-index: 5"
             :class="{ hide: !imageLoaded }"
@@ -57,6 +57,8 @@ import modelData from './assets/banner.glb';
 import hdrData from './assets/banner.hdr';
 import modelDataDark from './assets/banner-dark.glb';
 import hdrDataDark from './assets/banner-dark.hdr';
+import compressedBannerDark from './assets/compressed-banner-dark.png';
+import compressedBanner from './assets/compressed-banner.png';
 // @ts-expect-error three@0.127.0 does not publish TypeScript declarations.
 import * as THREE from 'three';
 // import Stats from './stats.module';
