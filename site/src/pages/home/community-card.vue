@@ -40,6 +40,7 @@
             :underline="false"
             href="https://tdesign.tencent.com/about/release"
             target="_blank"
+            rel="noopener noreferrer"
           >
             查看全部
             <template #suffixIcon><icon name="chevron-right" /></template>
@@ -78,7 +79,7 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 import { Icon } from 'tdesign-icons-vue-next';
-import tdesignLogo from './assets/community-tdesign-logo.png';
+import tdesignLogo from './assets/tdesign.svg';
 
 const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
 const activityUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/github/tdesign-activity';

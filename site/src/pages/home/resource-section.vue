@@ -20,11 +20,24 @@
         <article
           v-for="card in resourceCards"
           :key="card.title"
-          :class="['resource-card', `resource-card--${card.type}`]"
+          :class="[
+            'resource-card',
+            `resource-card--${card.type}`,
+            { 'resource-card--playing': hoveredCard === card.type },
+          ]"
+          @mouseenter="playIllustration(card.type)"
+          @mouseleave="stopIllustration"
         >
-          <!-- SVG content is generated locally from the trusted Figma export. -->
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div class="resource-card__illustration" aria-hidden="true" v-html="card.illustration"></div>
+          <div class="resource-card__illustration" aria-hidden="true">
+            <img class="resource-card__poster" :src="card.poster" alt="" />
+            <img
+              v-if="hoveredCard === card.type"
+              :key="illustrationPlayKey"
+              class="resource-card__gif"
+              :src="card.illustration"
+              alt=""
+            />
+          </div>
 
           <div class="resource-card__content">
             <span class="resource-card__label">{{ card.label }}</span>
@@ -68,10 +81,16 @@ import uniappLogo from '@/assets/uniapp-logo.png';
 import vueLogo from '@/assets/vue-logo.svg';
 import homeMessages from '@/locales/pages/home';
 import iconLibrary from './assets/icon-library.svg';
-import resourceAigc from './assets/resource-aigc.svg?raw';
-import resourceIcons from './assets/resource-icons.svg?raw';
-import resourceMobile from './assets/resource-mobile.svg?raw';
-import resourceWeb from './assets/resource-web.svg?raw';
+import resourceAigc from './assets/aigc-resource.gif';
+import resourceAigcPoster from './assets/aigc-resource-poster.png';
+import resourceIcons from './assets/icon-resource.gif';
+import resourceIconsPoster from './assets/icon-resource-poster.png';
+import resourceMobile from './assets/mobile-resource.gif';
+import resourceMobilePoster from './assets/mobile-resource-poster.png';
+import resourceWeb from './assets/desktop-resource.gif';
+import resourceWebPoster from './assets/desktop-resource-poster.png';
+
+type ResourceCardType = 'web' | 'mobile' | 'aigc' | 'icons';
 
 interface ResourceItem {
   name: string;
@@ -81,11 +100,12 @@ interface ResourceItem {
 }
 
 interface ResourceCard {
-  type: 'web' | 'mobile' | 'aigc' | 'icons';
+  type: ResourceCardType;
   label: string;
   title: string;
   description: string;
   illustration: string;
+  poster: string;
   items: ResourceItem[];
 }
 
@@ -117,7 +137,21 @@ const mobileLayoutScale = ref('1');
 const mobileSectionHeight = ref('auto');
 const tabletLayoutScale = ref('1');
 const tabletSectionHeight = ref('auto');
+const hoveredCard = ref<ResourceCardType | null>(null);
+const illustrationPlayKey = ref(0);
+const prefersReducedMotion =
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let layoutObserver: ResizeObserver | undefined;
+
+function playIllustration(type: ResourceCardType) {
+  if (prefersReducedMotion) return;
+  hoveredCard.value = type;
+  illustrationPlayKey.value += 1;
+}
+
+function stopIllustration() {
+  hoveredCard.value = null;
+}
 
 function parseReleases(value: unknown): Release[] {
   if (!Array.isArray(value)) return [];
@@ -203,6 +237,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
     title: t('home.resources.cards.web.title'),
     description: t('home.resources.cards.web.description'),
     illustration: resourceWeb,
+    poster: resourceWebPoster,
     items: [
       { name: 'Vue Next', logo: vueLogo, href: 'https://tdesign.tencent.com/vue-next/', releaseKey: 'vue-next' },
       { name: 'React', logo: reactLogo, href: 'https://tdesign.tencent.com/react/', releaseKey: 'react-web' },
@@ -221,6 +256,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
     title: t('home.resources.cards.mobile.title'),
     description: t('home.resources.cards.mobile.description'),
     illustration: resourceMobile,
+    poster: resourceMobilePoster,
     items: [
       {
         name: t('home.resources.items.miniprogram'),
@@ -256,6 +292,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
     title: t('home.resources.cards.aigc.title'),
     description: t('home.resources.cards.aigc.description'),
     illustration: resourceAigc,
+    poster: resourceAigcPoster,
     items: [
       {
         name: 'Vue Next',
@@ -289,6 +326,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
     title: t('home.resources.cards.icons.title'),
     description: t('home.resources.cards.icons.description'),
     illustration: resourceIcons,
+    poster: resourceIconsPoster,
     items: [
       {
         name: t('home.resources.items.iconLibrary'),
@@ -426,24 +464,35 @@ const resourceCards = computed<ResourceCard[]>(() => [
     height: 180px;
     pointer-events: none;
 
-    :deep(svg) {
+    img {
       display: block;
       width: 100%;
       height: 100%;
+      object-fit: contain;
     }
 
-    :deep(.illustration-glow),
-    :deep(.illustration-subject) {
-      transform-box: fill-box;
-      transform-origin: center;
+    .resource-card__poster,
+    .resource-card__gif {
+      position: absolute;
+      inset: 0;
     }
+
+    .resource-card__gif {
+      opacity: 0;
+    }
+  }
+
+  &--playing &__illustration .resource-card__gif {
+    opacity: 1;
+  }
+
+  &--playing &__illustration .resource-card__poster {
+    opacity: 0;
   }
 
   &--mobile &__illustration {
     top: 0;
-    right: 0;
-    width: 588px;
-    height: 308px;
+    right: 28px;
   }
 
   &--mobile {
@@ -452,18 +501,23 @@ const resourceCards = computed<ResourceCard[]>(() => [
 
   &--aigc &__illustration {
     top: -20px;
-    right: auto;
-    left: 0;
-    width: 600px;
-    height: 328px;
+    right: 8px;
+    left: auto;
   }
 
   &--icons &__illustration {
-    top: 0;
-    right: auto;
-    left: 0;
-    width: 664px;
-    height: 308px;
+    top: 56px;
+    right: 32px;
+    left: auto;
+    width: 268px;
+    height: 197px;
+    overflow: hidden;
+
+    img {
+      width: 268px;
+      height: 268px;
+      transform: translateY(-26px);
+    }
   }
 
   &--icons {
@@ -546,16 +600,8 @@ const resourceCards = computed<ResourceCard[]>(() => [
       width: 640px;
     }
 
-    &--aigc &__illustration :deep(.illustration-subject) {
-      transform: translateX(-86px);
-    }
-
     &--icons {
       width: 574px;
-    }
-
-    &--icons &__illustration :deep(.illustration-subject) {
-      transform: translateX(-44px) scale(0.7);
     }
   }
 }
@@ -639,10 +685,10 @@ const resourceCards = computed<ResourceCard[]>(() => [
     }
 
     &__illustration {
-      top: -8px;
-      right: 20px;
-      width: 220px;
-      height: 220px;
+      top: -40px;
+      right: -16px;
+      width: 280px;
+      height: 280px;
     }
 
     &--web .resource-item:nth-child(3) {
@@ -670,10 +716,10 @@ const resourceCards = computed<ResourceCard[]>(() => [
     }
 
     &--mobile &__illustration {
-      top: 20px;
-      right: 14px;
-      width: 588px;
-      height: 308px;
+      top: -24px;
+      right: -8px;
+      width: 280px;
+      height: 280px;
     }
 
     &--mobile &__items {
@@ -705,19 +751,11 @@ const resourceCards = computed<ResourceCard[]>(() => [
     }
 
     &--aigc &__illustration {
-      top: 0;
-      right: 0;
+      top: -36px;
+      right: -20px;
       left: auto;
-      width: 600px;
-      height: 328px;
-    }
-
-    &--aigc &__illustration :deep(.illustration-glow) {
-      transform: translate(-211px, -235px);
-    }
-
-    &--aigc &__illustration :deep(.illustration-subject) {
-      transform: translate(-6px, 0) scale(1.2222);
+      width: 300px;
+      height: 300px;
     }
 
     &--aigc .resource-item:nth-child(1) {
@@ -737,19 +775,17 @@ const resourceCards = computed<ResourceCard[]>(() => [
     }
 
     &--icons &__illustration {
-      top: 0;
-      right: 0;
+      top: -28px;
+      right: -28px;
       left: auto;
-      width: 664px;
-      height: 308px;
-    }
+      width: 340px;
+      height: 340px;
 
-    &--icons &__illustration :deep(.illustration-glow) {
-      transform: translate(-215px, 0);
-    }
-
-    &--icons &__illustration :deep(.illustration-subject) {
-      transform: translate(56px, 14px) scale(0.72, 0.75);
+      img {
+        width: 100%;
+        height: 100%;
+        transform: none;
+      }
     }
   }
 

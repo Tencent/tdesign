@@ -113,7 +113,11 @@
               </t-radio-group>
 
               <ul class="code-list">
-                <li class="code-item" v-for="item in codeList[codeFramework]" :key="item.code">
+                <li
+                  v-for="item in codeList[codeFramework]"
+                  :key="item.code"
+                  :class="['code-item', { 'code-item--multiline': item.code?.includes('\n') }]"
+                >
                   <pre><code :class="[`language-${item.type}`]">{{ displayCode(item) }}</code></pre>
                 </li>
               </ul>
@@ -373,13 +377,14 @@ import openPlatformsIcon from './assets/open-platforms.svg';
 import ResourceSection from './resource-section.vue';
 // @ts-expect-error prismjs does not publish TypeScript declarations.
 import Prismjs from 'prismjs';
+import 'prismjs/components/prism-dart';
 
 import homeMessages from '@/locales/pages/home';
 import type { ThemeMode } from '@/pages/types';
 
 const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
 
-type CodeFramework = 'vue' | 'vue-next' | 'react' | 'angular' | 'miniprogram' | 'mobile-vue';
+type CodeFramework = 'vue-next' | 'react' | 'flutter' | 'miniprogram' | 'uniapp';
 
 interface CodeItem {
   type: string;
@@ -421,12 +426,11 @@ const canScrollNewsBack = ref(false);
 const canScrollNewsForward = ref(false);
 
 const codeFrameworkOptions: Array<{ label: string; value: CodeFramework }> = [
-  { label: 'vue.js', value: 'vue' },
-  { label: 'vue-next.js', value: 'vue-next' },
-  { label: 'react.js', value: 'react' },
-  { label: 'angular.js', value: 'angular' },
+  { label: 'vue-next.ts', value: 'vue-next' },
+  { label: 'react.tsx', value: 'react' },
+  { label: 'flutter.dart', value: 'flutter' },
   { label: 'mini-program.js', value: 'miniprogram' },
-  { label: 'vue-mobile.js', value: 'mobile-vue' },
+  { label: 'uniapp.js', value: 'uniapp' },
 ];
 
 const state = reactive<HomeState>({
@@ -435,14 +439,8 @@ const state = reactive<HomeState>({
   tabTransformWidth: 0,
   windowWidth: window.innerWidth,
   themeMode: 'light',
-  codeFramework: 'vue',
+  codeFramework: 'vue-next',
   codeList: {
-    vue: [
-      { type: 'bash', code: 'npm i tdesign-vue' },
-      { type: 'javascript', code: "import Vue from 'vue';" },
-      { type: 'javascript', code: "import TDesign from 'tdesign-vue';" },
-      { type: 'javascript', code: 'Vue.use(TDesign);' },
-    ],
     'vue-next': [
       { type: 'bash', code: 'npm i tdesign-vue-next' },
       { type: 'javascript', code: "import { createApp } from 'vue';" },
@@ -455,11 +453,17 @@ const state = reactive<HomeState>({
       { type: 'javascript', code: "import { Button } from 'tdesign-react';" },
       { type: 'javascript', code: 'export default () => <Button>TDesign</Button>;' },
     ],
-    angular: [
-      { type: 'bash', code: 'npm i tdesign-angular' },
-      { type: 'javascript', code: "import { TDesignModule } from 'tdesign-angular';" },
-      { type: 'javascript', code: '@NgModule({ imports: [TDesignModule] })' },
-      { type: 'javascript', code: 'export class AppModule {}' },
+    flutter: [
+      {
+        type: 'dart',
+        code: `import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+void main() => runApp(
+  const MaterialApp(
+    home: TButton(child: Text('按钮')),
+  ),
+);`,
+      },
     ],
     miniprogram: [
       { type: 'bash', code: 'npm i tdesign-miniprogram' },
@@ -467,11 +471,10 @@ const state = reactive<HomeState>({
       { type: 'javascript', codeKey: 'home.code.importantTag' },
       { type: 'javascript', code: 'Page({})' },
     ],
-    'mobile-vue': [
-      { type: 'bash', code: 'npm i tdesign-mobile-vue' },
-      { type: 'javascript', code: "import { createApp } from 'vue';" },
-      { type: 'javascript', code: "import TDesign from 'tdesign-mobile-vue';" },
-      { type: 'javascript', code: 'createApp(App).use(TDesign);' },
+    uniapp: [
+      { type: 'bash', code: 'npm i @tdesign/uniapp' },
+      { type: 'javascript', code: "import TButton from '@tdesign/uniapp/button/button.vue';" },
+      { type: 'markup', code: '<t-button size="large"> 按钮 </t-button>' },
     ],
   },
   componentModel: {

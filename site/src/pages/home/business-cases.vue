@@ -70,8 +70,11 @@
             @pointermove="handleChartPointerMove"
           >
             <div class="usage-card__tooltip">
-              <strong>{{ t('home.businessCases.downloads') }}</strong>
-              <span>{{ hoveredDownloadMonth }}</span>
+              <strong>{{ t('home.businessCases.downloadTrend') }}</strong>
+              <span>
+                {{ hoveredDownloadMonth }}
+                {{ t('home.businessCases.downloadCount', { count: hoveredDownloadCount }) }}
+              </span>
             </div>
             <div class="usage-card__grid" aria-hidden="true">
               <span v-for="month in months" :key="month">{{ month }}</span>
@@ -102,7 +105,7 @@ import homeMessages from '@/locales/pages/home';
 
 import { fallbackUsageData, getUsageData } from './usage-data';
 
-const { t } = useI18n({ messages: homeMessages });
+const { locale, t } = useI18n({ messages: homeMessages });
 const developerStoriesUrl = 'https://tdesign.gtimg.com/site/info/developer-stories.json';
 
 interface DeveloperStory {
@@ -217,6 +220,10 @@ const hoveredDownloadIndex = ref(0);
 const hoveredDownloadMonth = computed(
   () => chartDownloads.value[hoveredDownloadIndex.value]?.month.replace('-', '.') ?? '',
 );
+const hoveredDownloadCount = computed(() => {
+  const count = chartDownloads.value[hoveredDownloadIndex.value]?.totalDownloads;
+  return typeof count === 'number' ? new Intl.NumberFormat(locale.value).format(count) : '';
+});
 
 function isDeveloperStory(value: unknown): value is DeveloperStory {
   if (!value || typeof value !== 'object') return false;
@@ -266,6 +273,17 @@ function handleChartPointerMove(event: PointerEvent): void {
   const point = path.getPointAtLength((start + end) / 2);
   chartHoverX.value = targetX;
   chartHoverY.value = point.y;
+}
+
+function setDefaultChartHover(): void {
+  const defaultIndex = Math.max(0, chartDownloads.value.length - 2);
+  const defaultPoint = chartPoints.value[defaultIndex];
+
+  hoveredDownloadIndex.value = defaultIndex;
+  if (defaultPoint) {
+    chartHoverX.value = defaultPoint.x;
+    chartHoverY.value = defaultPoint.y;
+  }
 }
 
 function getCaseStyle(item: BusinessCase): Record<string, string> {
@@ -326,12 +344,7 @@ onMounted(() => {
   getDeveloperStories();
   getUsageData().then((data) => {
     usageData.value = data;
-    const lastPoint = chartPoints.value[chartPoints.value.length - 1];
-    hoveredDownloadIndex.value = Math.max(0, chartDownloads.value.length - 1);
-    if (lastPoint) {
-      chartHoverX.value = lastPoint.x;
-      chartHoverY.value = lastPoint.y;
-    }
+    setDefaultChartHover();
   });
   updateSpreadProgress();
   window.addEventListener('scroll', scheduleSpreadUpdate, { passive: true });
@@ -543,13 +556,6 @@ onBeforeUnmount(() => {
   color: var(--text-primary);
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.04);
 
-  &:hover {
-    .usage-card__chart::after,
-    .usage-card__marker {
-      opacity: 1;
-    }
-  }
-
   &__data {
     width: 240px;
     flex: none;
@@ -639,7 +645,7 @@ onBeforeUnmount(() => {
       transform: translateX(-50%);
       background: var(--text-primary);
       content: '';
-      opacity: 0;
+      opacity: 1;
       pointer-events: none;
       transition: opacity 0.2s ease;
     }
@@ -720,7 +726,7 @@ onBeforeUnmount(() => {
     border-radius: 50%;
     box-sizing: border-box;
     background: var(--text-primary);
-    opacity: 0;
+    opacity: 1;
     pointer-events: none;
     transition: opacity 0.2s ease;
   }
