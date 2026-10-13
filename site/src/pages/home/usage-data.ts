@@ -1,4 +1,4 @@
-const USAGE_DATA_URL = 'https://tdesign.gtimg.com/site/info/usage-data.json';
+import { HOME_API_ENDPOINTS } from './api';
 
 export interface MonthlyDownload {
   month: string;
@@ -46,7 +46,7 @@ function isUsageData(value: unknown): value is UsageData {
 
 export function getUsageData(): Promise<UsageData> {
   if (!usageDataRequest) {
-    usageDataRequest = fetch(USAGE_DATA_URL)
+    usageDataRequest = fetch(HOME_API_ENDPOINTS.usageData)
       .then(async (response) => {
         if (!response.ok) throw new Error(`Failed to load usage data: ${response.status}`);
 

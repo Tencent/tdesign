@@ -114,10 +114,10 @@ import { useI18n } from 'vue-i18n';
 
 import homeMessages from '@/locales/pages/home';
 
+import { HOME_API_ENDPOINTS } from './api';
 import { fallbackUsageData, getUsageData } from './usage-data';
 
 const { locale, t } = useI18n({ messages: homeMessages });
-const developerStoriesUrl = 'https://tdesign.gtimg.com/site/info/developer-stories.json';
 
 interface DeveloperStory {
   content: string;
@@ -244,7 +244,7 @@ function isDeveloperStory(value: unknown): value is DeveloperStory {
 
 async function getDeveloperStories(): Promise<void> {
   try {
-    const response = await fetch(developerStoriesUrl);
+    const response = await fetch(HOME_API_ENDPOINTS.developerStories);
     if (!response.ok) return;
 
     const result: unknown = await response.json();

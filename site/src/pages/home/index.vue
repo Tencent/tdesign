@@ -366,6 +366,7 @@ import openFrameworksIcon from './assets/open-frameworks.svg';
 import openIndustriesIcon from './assets/open-industries.svg';
 import openPlatformsIcon from './assets/open-platforms.svg';
 import ResourceSection from './resource-section.vue';
+import { HOME_API_ENDPOINTS } from './api';
 // @ts-expect-error prismjs does not publish TypeScript declarations.
 import Prismjs from 'prismjs';
 import 'prismjs/components/prism-dart';
@@ -374,7 +375,6 @@ import homeMessages from '@/locales/pages/home';
 import type { ThemeMode } from '@/pages/types';
 
 const CommunityCard = defineAsyncComponent(() => import('./community-card.vue'));
-const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
 const newsItemStride = 342 + 16;
 
 type CodeFramework = 'vue-next' | 'react' | 'flutter' | 'miniprogram' | 'uniapp';
@@ -682,7 +682,7 @@ function parseNews(value: unknown): NewsItem[] {
 }
 
 function getNews(): void {
-  fetch(newsUrl).then((data) => {
+  fetch(HOME_API_ENDPOINTS.news).then((data) => {
     data.json().then((value: unknown) => {
       const list = parseNews(value);
       state.newsList = isIntranet ? list : list.filter((value) => !value.isIntranet);

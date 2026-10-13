@@ -56,6 +56,7 @@ import { useI18n } from 'vue-i18n';
 
 import homeMessages from '@/locales/pages/home';
 
+import { HOME_API_ENDPOINTS } from './api';
 import { fallbackUsageData, getUsageData } from './usage-data';
 
 interface LogoItem {
@@ -66,7 +67,6 @@ interface LogoItem {
 
 const { t } = useI18n({ messages: homeMessages });
 
-const BRAND_LIST_URL = 'https://tdesign.gtimg.com/site/info/brand-list.json';
 const MOBILE_BREAKPOINT = 494;
 const TABLET_BREAKPOINT = 960;
 const DESKTOP_LOGO_HEIGHT = 88;
@@ -110,7 +110,7 @@ onMounted(async () => {
   usageData.value = await getUsageData();
 
   try {
-    const response = await fetch(BRAND_LIST_URL);
+    const response = await fetch(HOME_API_ENDPOINTS.brandList);
     if (!response.ok) return;
 
     const data: unknown = await response.json();

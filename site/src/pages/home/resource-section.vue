@@ -75,6 +75,7 @@ import reactLogo from '@/assets/react-logo.svg';
 import uniappLogo from '@/assets/uniapp-logo.png';
 import vueLogo from '@/assets/vue-logo.svg';
 import homeMessages from '@/locales/pages/home';
+import { HOME_API_ENDPOINTS } from './api';
 import aiResourceData from './assets/ai-resource/data.json';
 import desktopResourceData from './assets/desktop-resource/data.json';
 import iconResourceData from './assets/icon-resource/data.json';
@@ -103,7 +104,6 @@ interface Release {
   body: string;
 }
 
-const releaseApi = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/release';
 const releaseMatchers: Record<string, string> = {
   'vue-next': 'tdesign-vue-next@',
   'react-web': 'tdesign-react@',
@@ -403,7 +403,7 @@ function formatUpdatedAt(value: string): string {
 
 async function fetchReleaseDates(): Promise<void> {
   try {
-    const response = await fetch(releaseApi);
+    const response = await fetch(HOME_API_ENDPOINTS.releases);
     if (!response.ok) return;
 
     const data: unknown = await response.json();

@@ -79,10 +79,10 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 import { Icon } from 'tdesign-icons-vue-next';
+import { HOME_API_ENDPOINTS } from './api';
 import tdesignLogo from './assets/tdesign.svg';
 
-const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
-const activityUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/github/tdesign-activity';
+const contributorLimit = 50;
 
 const networkPoints = [
   { x: 216, y: 24 },
@@ -181,7 +181,7 @@ function parseContributors(value: unknown): string[] {
     const normalizedName = name.trim();
     if (normalizedName) uniqueNames.set(normalizedName.toLowerCase(), normalizedName);
   });
-  return Array.from(uniqueNames.values());
+  return Array.from(uniqueNames.values()).slice(0, contributorLimit);
 }
 
 function isGithubMember(value: string): boolean {
@@ -278,11 +278,17 @@ function startContributorAnimation(): void {
 
   randomTimer = window.setInterval(() => {
     if (!contributors.length) return;
+    if (contributorCursor >= contributors.length) {
+      clearInterval(randomTimer);
+      randomTimer = undefined;
+      return;
+    }
     const indexes = randomIndexes(2);
     changingMembers.value = indexes;
     window.setTimeout(() => {
       indexes.forEach((index) => {
-        communityMembers.value[index] = contributors[contributorCursor % contributors.length];
+        if (contributorCursor >= contributors.length) return;
+        communityMembers.value[index] = contributors[contributorCursor];
         contributorCursor += 1;
       });
     }, 500);
@@ -294,7 +300,7 @@ function startContributorAnimation(): void {
 
 async function fetchContributors(): Promise<void> {
   try {
-    const response = await fetch(contributorsUrl);
+    const response = await fetch(HOME_API_ENDPOINTS.contributors);
     if (!response.ok) return;
 
     const data: unknown = await response.json();
@@ -309,7 +315,7 @@ async function fetchContributors(): Promise<void> {
 
 async function fetchActivity(): Promise<void> {
   try {
-    const response = await fetch(activityUrl);
+    const response = await fetch(HOME_API_ENDPOINTS.communityActivity);
     if (!response.ok) return;
 
     const data: unknown = await response.json();
