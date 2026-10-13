@@ -624,7 +624,8 @@ const resourceCards = computed<ResourceCard[]>(() => [
   .resource-card:nth-child(3),
   .resource-card:nth-child(4) {
     width: 912px;
-    height: 224px;
+    height: auto;
+    min-height: 224px;
     padding: 32px;
     margin: 0;
     justify-content: flex-start;
@@ -663,10 +664,6 @@ const resourceCards = computed<ResourceCard[]>(() => [
 
     &--web .resource-item:nth-child(4) {
       order: 4;
-    }
-
-    &--mobile {
-      height: 328px;
     }
 
     &--mobile &__illustration {
