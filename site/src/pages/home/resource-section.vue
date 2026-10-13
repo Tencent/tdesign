@@ -20,18 +20,12 @@
         <article
           v-for="card in resourceCards"
           :key="card.title"
-          :ref="(element) => setResourceCard(card.type, element)"
           :class="['resource-card', `resource-card--${card.type}`]"
           @mousemove="updateResourceIllustrationHover(card.type, $event)"
           @mouseleave="leaveResourceCard(card.type)"
         >
           <div class="resource-card__illustration" aria-hidden="true">
-            <canvas
-              :ref="(element) => setResourceCanvas(card.type, element)"
-              class="resource-card__frames"
-              width="800"
-              height="800"
-            ></canvas>
+            <div :ref="(element) => setResourceSprite(card.type, element)" class="resource-card__frames"></div>
           </div>
 
           <div class="resource-card__content">
@@ -77,10 +71,14 @@ import vueLogo from '@/assets/vue-logo.svg';
 import homeMessages from '@/locales/pages/home';
 import { HOME_API_ENDPOINTS } from './api';
 import aiResourceData from './assets/ai-resource/data.json';
+import aiResourceSprite from './assets/ai-resource/sprite.webp';
 import desktopResourceData from './assets/desktop-resource/data.json';
+import desktopResourceSprite from './assets/desktop-resource/sprite.webp';
 import iconResourceData from './assets/icon-resource/data.json';
+import iconResourceSprite from './assets/icon-resource/sprite.webp';
 import iconLibrary from './assets/icon-library.svg';
 import mobileResourceData from './assets/mobile-resource/data.json';
+import mobileResourceSprite from './assets/mobile-resource/sprite.webp';
 
 type ResourceCardType = 'web' | 'mobile' | 'aigc' | 'icons';
 
@@ -127,40 +125,11 @@ const mobileSectionHeight = ref('auto');
 const tabletLayoutScale = ref('1');
 const tabletSectionHeight = ref('auto');
 
-const loadResourceFrames = (modules: Record<string, string>) =>
-  Object.entries(modules)
-    .sort(([pathA], [pathB]) => pathA.localeCompare(pathB, undefined, { numeric: true }))
-    .map(([, url]) => url);
-
-const resourceFrames: Record<ResourceCardType, string[]> = {
-  web: loadResourceFrames(
-    import.meta.glob<string>('./assets/desktop-resource/images/*.webp', {
-      eager: true,
-      query: '?url',
-      import: 'default',
-    }),
-  ),
-  mobile: loadResourceFrames(
-    import.meta.glob<string>('./assets/mobile-resource/images/*.webp', {
-      eager: true,
-      query: '?url',
-      import: 'default',
-    }),
-  ),
-  aigc: loadResourceFrames(
-    import.meta.glob<string>('./assets/ai-resource/images/*.webp', {
-      eager: true,
-      query: '?url',
-      import: 'default',
-    }),
-  ),
-  icons: loadResourceFrames(
-    import.meta.glob<string>('./assets/icon-resource/images/*.webp', {
-      eager: true,
-      query: '?url',
-      import: 'default',
-    }),
-  ),
+const resourceSprites: Record<ResourceCardType, string> = {
+  web: desktopResourceSprite,
+  mobile: mobileResourceSprite,
+  aigc: aiResourceSprite,
+  icons: iconResourceSprite,
 };
 const resourceAnimationData: Record<ResourceCardType, { fr: number; op: number }> = {
   web: desktopResourceData,
@@ -168,7 +137,7 @@ const resourceAnimationData: Record<ResourceCardType, { fr: number; op: number }
   aigc: aiResourceData,
   icons: iconResourceData,
 };
-const resourceTypes = Object.keys(resourceFrames) as ResourceCardType[];
+const resourceTypes = Object.keys(resourceSprites) as ResourceCardType[];
 const frameIndexes: Record<ResourceCardType, number> = {
   web: 0,
   mobile: 0,
@@ -181,61 +150,25 @@ const animationTokens: Record<ResourceCardType, number> = {
   aigc: 0,
   icons: 0,
 };
-const resourceCanvases = {} as Record<ResourceCardType, HTMLCanvasElement>;
-const resourceCardElements = {} as Record<ResourceCardType, HTMLElement>;
-const initializedResourceTypes = new Set<ResourceCardType>();
-const queuedResourceFrames = new Set<string>();
-const resourcePreloadQueue: string[] = [];
+const resourceSpriteElements = {} as Record<ResourceCardType, HTMLElement>;
 const prefersReducedMotion =
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const resourcePreloadConcurrency = 2;
 let hoveredIllustrationType: ResourceCardType | undefined;
 let layoutObserver: ResizeObserver | undefined;
-let resourcePreloadObserver: IntersectionObserver | undefined;
-let activeResourcePreloads = 0;
-let resourcePreloadSchedule: number | undefined;
-let isResourceSectionUnmounted = false;
 
-function loadResourceFrame(type: ResourceCardType, frame: number): Promise<HTMLImageElement> {
-  const image = new Image();
-  image.decoding = 'async';
-  image.src = resourceFrames[type][frame];
-  return image.decode().then(() => image);
+function drawResourceFrame(type: ResourceCardType) {
+  const element = resourceSpriteElements[type];
+  if (!element) return;
+  const lastFrame = resourceAnimationData[type].op - 1;
+  const position = lastFrame > 0 ? (frameIndexes[type] / lastFrame) * 100 : 0;
+  element.style.backgroundImage = `url("${resourceSprites[type]}")`;
+  element.style.backgroundPosition = `center ${position}%`;
 }
 
-function drawResourceFrame(type: ResourceCardType, image: HTMLImageElement) {
-  const canvas = resourceCanvases[type];
-  const context = canvas?.getContext('2d');
-  if (!context) return;
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  context.drawImage(image, 0, 0, canvas.width, canvas.height);
-}
-
-async function drawInitialResourceFrame(type: ResourceCardType) {
-  if (initializedResourceTypes.has(type)) return;
-  initializedResourceTypes.add(type);
-  const initialFrame = frameIndexes[type];
-  const canvas = resourceCanvases[type];
-  try {
-    const image = await loadResourceFrame(type, initialFrame);
-    if (resourceCanvases[type] === canvas && frameIndexes[type] === initialFrame) {
-      drawResourceFrame(type, image);
-    }
-  } catch (error) {
-    initializedResourceTypes.delete(type);
-    console.error(error);
-  }
-}
-
-function setResourceCanvas(type: ResourceCardType, element: unknown) {
-  if (!(element instanceof HTMLCanvasElement)) return;
-  resourceCanvases[type] = element;
-  if (window.innerWidth >= 1200) drawInitialResourceFrame(type);
-}
-
-function setResourceCard(type: ResourceCardType, element: unknown) {
+function setResourceSprite(type: ResourceCardType, element: unknown) {
   if (!(element instanceof HTMLElement)) return;
-  resourceCardElements[type] = element;
+  resourceSpriteElements[type] = element;
+  if (window.innerWidth >= 1200) drawResourceFrame(type);
 }
 
 function waitForNextFrame(delay: number): Promise<void> {
@@ -249,83 +182,12 @@ async function startResourceAnimation(type: ResourceCardType, targetFrame: numbe
 
   while (frameIndexes[type] !== targetFrame && token === animationTokens[type]) {
     const direction = targetFrame > frameIndexes[type] ? 1 : -1;
-    const nextFrame = frameIndexes[type] + direction;
-
-    try {
-      const image = await loadResourceFrame(type, nextFrame);
-      if (token !== animationTokens[type]) return;
-      nextFrameAt += frameDuration;
-      await waitForNextFrame(nextFrameAt - performance.now());
-      if (token !== animationTokens[type]) return;
-      drawResourceFrame(type, image);
-      frameIndexes[type] = nextFrame;
-    } catch (error) {
-      console.error(error);
-      return;
-    }
+    nextFrameAt += frameDuration;
+    await waitForNextFrame(nextFrameAt - performance.now());
+    if (token !== animationTokens[type]) return;
+    frameIndexes[type] += direction;
+    drawResourceFrame(type);
   }
-}
-
-function runResourcePreloadQueue() {
-  resourcePreloadSchedule = undefined;
-  while (activeResourcePreloads < resourcePreloadConcurrency && resourcePreloadQueue.length) {
-    const src = resourcePreloadQueue.shift();
-    if (!src) return;
-
-    activeResourcePreloads += 1;
-    fetch(src, { cache: 'force-cache' })
-      .catch(() => undefined)
-      .finally(() => {
-        activeResourcePreloads -= 1;
-        scheduleResourcePreload();
-      });
-  }
-}
-
-function scheduleResourcePreload() {
-  if (
-    isResourceSectionUnmounted ||
-    resourcePreloadSchedule !== undefined ||
-    activeResourcePreloads >= resourcePreloadConcurrency ||
-    !resourcePreloadQueue.length
-  ) {
-    return;
-  }
-
-  if ('requestIdleCallback' in window) {
-    resourcePreloadSchedule = window.requestIdleCallback(runResourcePreloadQueue, { timeout: 1000 });
-  } else {
-    resourcePreloadSchedule = window.setTimeout(runResourcePreloadQueue, 300);
-  }
-}
-
-function preloadResourceFrames(type: ResourceCardType) {
-  resourceFrames[type].slice(1).forEach((src) => {
-    if (queuedResourceFrames.has(src)) return;
-    queuedResourceFrames.add(src);
-    resourcePreloadQueue.push(src);
-  });
-  scheduleResourcePreload();
-}
-
-function observeResourceCards() {
-  if (window.innerWidth < 1200 || prefersReducedMotion || resourcePreloadObserver) return;
-
-  resourcePreloadObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        const type = resourceTypes.find((resourceType) => resourceCardElements[resourceType] === entry.target);
-        if (!type) return;
-        preloadResourceFrames(type);
-        observer.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.1 },
-  );
-  resourceTypes.forEach((type) => {
-    if (resourceCardElements[type]) resourcePreloadObserver?.observe(resourceCardElements[type]);
-  });
 }
 
 function playResourceIllustration(type: ResourceCardType) {
@@ -417,11 +279,7 @@ const updateScaledLayout = () => {
   if (!resourceLayoutRef.value) return;
 
   if (window.innerWidth >= 1200) {
-    resourceTypes.forEach(drawInitialResourceFrame);
-    observeResourceCards();
-  } else {
-    resourcePreloadObserver?.disconnect();
-    resourcePreloadObserver = undefined;
+    resourceTypes.forEach(drawResourceFrame);
   }
 
   if (window.innerWidth <= 596) {
@@ -443,7 +301,6 @@ const updateScaledLayout = () => {
 
 onMounted(() => {
   fetchReleaseDates();
-  observeResourceCards();
   nextTick(updateScaledLayout);
   window.addEventListener('resize', updateScaledLayout);
   layoutObserver = new ResizeObserver(updateScaledLayout);
@@ -451,21 +308,11 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  isResourceSectionUnmounted = true;
-  resourcePreloadQueue.length = 0;
   resourceTypes.forEach((type) => {
     animationTokens[type] += 1;
   });
   window.removeEventListener('resize', updateScaledLayout);
   layoutObserver?.disconnect();
-  resourcePreloadObserver?.disconnect();
-  if (resourcePreloadSchedule !== undefined) {
-    if ('cancelIdleCallback' in window) {
-      window.cancelIdleCallback(resourcePreloadSchedule);
-    } else {
-      window.clearTimeout(resourcePreloadSchedule);
-    }
-  }
 });
 
 const resourceCards = computed<ResourceCard[]>(() => [
@@ -742,6 +589,8 @@ const resourceCards = computed<ResourceCard[]>(() => [
       inset: 0;
       width: 100%;
       height: 100%;
+      background-repeat: no-repeat;
+      background-size: 100% auto;
     }
   }
 
