@@ -70,14 +70,10 @@ import uniappLogo from '@/assets/uniapp-logo.png';
 import vueLogo from '@/assets/vue-logo.svg';
 import homeMessages from '@/locales/pages/home';
 import { HOME_API_ENDPOINTS } from './api';
-import aiResourceData from './assets/ai-resource/data.json';
 import aiResourceSprite from './assets/ai-resource/sprite.webp';
-import desktopResourceData from './assets/desktop-resource/data.json';
 import desktopResourceSprite from './assets/desktop-resource/sprite.webp';
-import iconResourceData from './assets/icon-resource/data.json';
 import iconResourceSprite from './assets/icon-resource/sprite.webp';
 import iconLibrary from './assets/icon-library.svg';
-import mobileResourceData from './assets/mobile-resource/data.json';
 import mobileResourceSprite from './assets/mobile-resource/sprite.webp';
 
 type ResourceCardType = 'web' | 'mobile' | 'aigc' | 'icons';
@@ -131,12 +127,8 @@ const resourceSprites: Record<ResourceCardType, string> = {
   aigc: aiResourceSprite,
   icons: iconResourceSprite,
 };
-const resourceAnimationData: Record<ResourceCardType, { fr: number; op: number }> = {
-  web: desktopResourceData,
-  mobile: mobileResourceData,
-  aigc: aiResourceData,
-  icons: iconResourceData,
-};
+const RESOURCE_FRAME_RATE = 24;
+const RESOURCE_FRAME_COUNT = 27;
 const resourceTypes = Object.keys(resourceSprites) as ResourceCardType[];
 const frameIndexes: Record<ResourceCardType, number> = {
   web: 0,
@@ -159,7 +151,7 @@ let layoutObserver: ResizeObserver | undefined;
 function drawResourceFrame(type: ResourceCardType) {
   const element = resourceSpriteElements[type];
   if (!element) return;
-  const lastFrame = resourceAnimationData[type].op - 1;
+  const lastFrame = RESOURCE_FRAME_COUNT - 1;
   const position = lastFrame > 0 ? (frameIndexes[type] / lastFrame) * 100 : 0;
   element.style.backgroundImage = `url("${resourceSprites[type]}")`;
   element.style.backgroundPosition = `center ${position}%`;
@@ -177,7 +169,7 @@ function waitForNextFrame(delay: number): Promise<void> {
 
 async function startResourceAnimation(type: ResourceCardType, targetFrame: number) {
   const token = ++animationTokens[type];
-  const frameDuration = 1000 / resourceAnimationData[type].fr;
+  const frameDuration = 1000 / RESOURCE_FRAME_RATE;
   let nextFrameAt = performance.now();
 
   while (frameIndexes[type] !== targetFrame && token === animationTokens[type]) {
@@ -192,7 +184,7 @@ async function startResourceAnimation(type: ResourceCardType, targetFrame: numbe
 
 function playResourceIllustration(type: ResourceCardType) {
   if (!prefersReducedMotion) {
-    startResourceAnimation(type, resourceAnimationData[type].op - 1);
+    startResourceAnimation(type, RESOURCE_FRAME_COUNT - 1);
   }
 }
 
