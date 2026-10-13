@@ -25,7 +25,12 @@
           @mouseleave="leaveResourceCard(card.type)"
         >
           <div class="resource-card__illustration" aria-hidden="true">
-            <div class="resource-card__frames" :style="resourceFrameStyle(card.type)"></div>
+            <canvas
+              :ref="(element) => setResourceCanvas(card.type, element)"
+              class="resource-card__frames"
+              width="800"
+              height="800"
+            ></canvas>
           </div>
 
           <div class="resource-card__content">
@@ -70,14 +75,10 @@ import uniappLogo from '@/assets/uniapp-logo.png';
 import vueLogo from '@/assets/vue-logo.svg';
 import homeMessages from '@/locales/pages/home';
 import aiResourceData from './assets/ai-resource/data.json';
-import aiResourceSprite from './assets/ai-resource/sprite.webp';
 import desktopResourceData from './assets/desktop-resource/data.json';
-import desktopResourceSprite from './assets/desktop-resource/sprite.webp';
 import iconResourceData from './assets/icon-resource/data.json';
-import iconResourceSprite from './assets/icon-resource/sprite.webp';
 import iconLibrary from './assets/icon-library.svg';
 import mobileResourceData from './assets/mobile-resource/data.json';
-import mobileResourceSprite from './assets/mobile-resource/sprite.webp';
 
 type ResourceCardType = 'web' | 'mobile' | 'aigc' | 'icons';
 
@@ -125,11 +126,40 @@ const mobileSectionHeight = ref('auto');
 const tabletLayoutScale = ref('1');
 const tabletSectionHeight = ref('auto');
 
-const resourceSprites: Record<ResourceCardType, string> = {
-  web: desktopResourceSprite,
-  mobile: mobileResourceSprite,
-  aigc: aiResourceSprite,
-  icons: iconResourceSprite,
+const loadResourceFrames = (modules: Record<string, string>) =>
+  Object.entries(modules)
+    .sort(([pathA], [pathB]) => pathA.localeCompare(pathB, undefined, { numeric: true }))
+    .map(([, url]) => url);
+
+const resourceFrames: Record<ResourceCardType, string[]> = {
+  web: loadResourceFrames(
+    import.meta.glob<string>('./assets/desktop-resource/images/*.webp', {
+      eager: true,
+      query: '?url',
+      import: 'default',
+    }),
+  ),
+  mobile: loadResourceFrames(
+    import.meta.glob<string>('./assets/mobile-resource/images/*.webp', {
+      eager: true,
+      query: '?url',
+      import: 'default',
+    }),
+  ),
+  aigc: loadResourceFrames(
+    import.meta.glob<string>('./assets/ai-resource/images/*.webp', {
+      eager: true,
+      query: '?url',
+      import: 'default',
+    }),
+  ),
+  icons: loadResourceFrames(
+    import.meta.glob<string>('./assets/icon-resource/images/*.webp', {
+      eager: true,
+      query: '?url',
+      import: 'default',
+    }),
+  ),
 };
 const resourceAnimationData: Record<ResourceCardType, { fr: number; op: number }> = {
   web: desktopResourceData,
@@ -137,86 +167,94 @@ const resourceAnimationData: Record<ResourceCardType, { fr: number; op: number }
   aigc: aiResourceData,
   icons: iconResourceData,
 };
-const resourceTypes = Object.keys(resourceSprites) as ResourceCardType[];
-const frameIndexes = ref<Record<ResourceCardType, number>>({
-  web: 0,
-  mobile: 0,
-  aigc: 0,
-  icons: 0,
-});
-const animationFrameIds: Record<ResourceCardType, number | undefined> = {
-  web: undefined,
-  mobile: undefined,
-  aigc: undefined,
-  icons: undefined,
-};
-const animationTargetFrames: Record<ResourceCardType, number> = {
+const resourceTypes = Object.keys(resourceFrames) as ResourceCardType[];
+const frameIndexes: Record<ResourceCardType, number> = {
   web: 0,
   mobile: 0,
   aigc: 0,
   icons: 0,
 };
-const animationLastTimestamps: Record<ResourceCardType, number> = {
+const animationTokens: Record<ResourceCardType, number> = {
   web: 0,
   mobile: 0,
   aigc: 0,
   icons: 0,
 };
+const resourceCanvases = {} as Record<ResourceCardType, HTMLCanvasElement>;
 const prefersReducedMotion =
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let hoveredIllustrationType: ResourceCardType | undefined;
 let layoutObserver: ResizeObserver | undefined;
+let resourcePreloadObserver: IntersectionObserver | undefined;
 
-function resourceFrameStyle(type: ResourceCardType) {
-  const frame = frameIndexes.value[type];
-  const column = frame % 9;
-  const row = Math.floor(frame / 9);
-  return {
-    backgroundImage: `url(${resourceSprites[type]})`,
-    backgroundPosition: `${(column / 8) * 100}% ${(row / 2) * 100}%`,
-  };
+function loadResourceFrame(type: ResourceCardType, frame: number): Promise<HTMLImageElement> {
+  const image = new Image();
+  image.decoding = 'async';
+  image.src = resourceFrames[type][frame];
+  return image.decode().then(() => image);
 }
 
-function animateResourceFrames(type: ResourceCardType, timestamp: number) {
-  if (!animationLastTimestamps[type]) animationLastTimestamps[type] = timestamp;
+function drawResourceFrame(type: ResourceCardType, image: HTMLImageElement) {
+  const canvas = resourceCanvases[type];
+  const context = canvas?.getContext('2d');
+  if (!context) return;
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+}
 
+async function drawInitialResourceFrame(type: ResourceCardType) {
+  const initialFrame = frameIndexes[type];
+  const canvas = resourceCanvases[type];
+  try {
+    const image = await loadResourceFrame(type, initialFrame);
+    if (resourceCanvases[type] === canvas && frameIndexes[type] === initialFrame) {
+      drawResourceFrame(type, image);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function setResourceCanvas(type: ResourceCardType, element: unknown) {
+  if (!(element instanceof HTMLCanvasElement)) return;
+  resourceCanvases[type] = element;
+  drawInitialResourceFrame(type);
+}
+
+function waitForNextFrame(delay: number): Promise<void> {
+  return new Promise((resolve) => window.setTimeout(resolve, Math.max(0, delay)));
+}
+
+async function startResourceAnimation(type: ResourceCardType, targetFrame: number) {
+  const token = ++animationTokens[type];
   const frameDuration = 1000 / resourceAnimationData[type].fr;
-  const elapsedFrames = Math.floor((timestamp - animationLastTimestamps[type]) / frameDuration);
+  let nextFrameAt = performance.now();
 
-  if (elapsedFrames > 0) {
-    const currentFrame = frameIndexes.value[type];
-    const targetFrame = animationTargetFrames[type];
-    const direction = targetFrame > currentFrame ? 1 : -1;
-    const nextFrame = currentFrame + elapsedFrames * direction;
-    frameIndexes.value[type] = direction === 1 ? Math.min(nextFrame, targetFrame) : Math.max(nextFrame, targetFrame);
-    animationLastTimestamps[type] += elapsedFrames * frameDuration;
+  while (frameIndexes[type] !== targetFrame && token === animationTokens[type]) {
+    const direction = targetFrame > frameIndexes[type] ? 1 : -1;
+    const nextFrame = frameIndexes[type] + direction;
 
-    if (frameIndexes.value[type] === targetFrame) {
-      animationFrameIds[type] = undefined;
+    try {
+      const image = await loadResourceFrame(type, nextFrame);
+      if (token !== animationTokens[type]) return;
+      nextFrameAt += frameDuration;
+      await waitForNextFrame(nextFrameAt - performance.now());
+      if (token !== animationTokens[type]) return;
+      drawResourceFrame(type, image);
+      frameIndexes[type] = nextFrame;
+    } catch (error) {
+      console.error(error);
       return;
     }
   }
-
-  animationFrameIds[type] = requestAnimationFrame((nextTimestamp) => animateResourceFrames(type, nextTimestamp));
 }
 
-function stopResourceAnimation(type: ResourceCardType) {
-  if (animationFrameIds[type] !== undefined) cancelAnimationFrame(animationFrameIds[type]);
-  animationFrameIds[type] = undefined;
-  animationLastTimestamps[type] = 0;
-}
-
-function startResourceAnimation(type: ResourceCardType, targetFrame: number) {
-  stopResourceAnimation(type);
-  animationTargetFrames[type] = targetFrame;
-  if (frameIndexes.value[type] === targetFrame) return;
-
-  const direction = targetFrame > frameIndexes.value[type] ? 1 : -1;
-  frameIndexes.value[type] += direction;
-  if (frameIndexes.value[type] === targetFrame) return;
-
-  animationLastTimestamps[type] = performance.now();
-  animationFrameIds[type] = requestAnimationFrame((timestamp) => animateResourceFrames(type, timestamp));
+function preloadResourceFrames() {
+  Object.values(resourceFrames)
+    .flat()
+    .forEach((src) => {
+      fetch(src, { cache: 'force-cache' }).catch(() => undefined);
+    });
 }
 
 function playResourceIllustration(type: ResourceCardType) {
@@ -326,6 +364,17 @@ const updateScaledLayout = () => {
 
 onMounted(() => {
   fetchReleaseDates();
+  if (resourceSectionRef.value) {
+    resourcePreloadObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        preloadResourceFrames();
+        resourcePreloadObserver?.disconnect();
+      },
+      { rootMargin: '400px 0px' },
+    );
+    resourcePreloadObserver.observe(resourceSectionRef.value);
+  }
   nextTick(updateScaledLayout);
   window.addEventListener('resize', updateScaledLayout);
   layoutObserver = new ResizeObserver(updateScaledLayout);
@@ -333,9 +382,12 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  resourceTypes.forEach(stopResourceAnimation);
+  resourceTypes.forEach((type) => {
+    animationTokens[type] += 1;
+  });
   window.removeEventListener('resize', updateScaledLayout);
   layoutObserver?.disconnect();
+  resourcePreloadObserver?.disconnect();
 });
 
 const resourceCards = computed<ResourceCard[]>(() => [
@@ -612,8 +664,6 @@ const resourceCards = computed<ResourceCard[]>(() => [
       inset: 0;
       width: 100%;
       height: 100%;
-      background-repeat: no-repeat;
-      background-size: 900% 300%;
     }
   }
 
