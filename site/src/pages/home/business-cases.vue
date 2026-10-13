@@ -85,9 +85,20 @@
                   <stop offset="0" stop-color="var(--text-primary)" stop-opacity=".12" />
                   <stop offset="1" stop-color="var(--text-primary)" stop-opacity="0" />
                 </linearGradient>
+                <linearGradient id="business-cases-edge-fade">
+                  <stop offset="0" stop-color="white" stop-opacity="0" />
+                  <stop offset=".12" stop-color="white" />
+                  <stop offset=".88" stop-color="white" />
+                  <stop offset="1" stop-color="white" stop-opacity="0" />
+                </linearGradient>
+                <mask id="business-cases-chart-mask">
+                  <rect width="308" height="212" fill="url(#business-cases-edge-fade)" />
+                </mask>
               </defs>
-              <path v-if="chartAreaPath" class="usage-card__area" :d="chartAreaPath" />
-              <path v-if="chartLinePath" ref="usageLineRef" class="usage-card__line" :d="chartLinePath" />
+              <g mask="url(#business-cases-chart-mask)">
+                <path v-if="chartAreaPath" class="usage-card__area" :d="chartAreaPath" />
+                <path v-if="chartLinePath" ref="usageLineRef" class="usage-card__line" :d="chartLinePath" />
+              </g>
             </svg>
             <span v-if="chartLinePath" class="usage-card__marker" aria-hidden="true"></span>
           </div>

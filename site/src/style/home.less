@@ -271,7 +271,7 @@
 
     .banner-info {
       position: relative;
-      max-width: 1440px;
+      max-width: 1280px;
       margin: 0 auto 28px;
       box-sizing: border-box;
       display: flex;
@@ -358,82 +358,45 @@
   overflow: hidden;
 
   &__track {
+    --news-fade-width: max(0px, calc((100% - 1280px) / 2));
+    --news-track-padding: var(--outer-padding-left-right);
+
     display: flex;
     gap: 16px;
     width: 100%;
     height: 100%;
-    padding-left: var(--outer-padding-left-right);
-    overflow-x: auto;
+    padding: 0 var(--news-track-padding);
+    overflow-x: hidden;
     box-sizing: border-box;
     scrollbar-width: none;
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0,
+      #000 var(--news-fade-width),
+      #000 calc(100% - var(--news-fade-width)),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0,
+      #000 var(--news-fade-width),
+      #000 calc(100% - var(--news-fade-width)),
+      transparent 100%
+    );
 
     &::-webkit-scrollbar {
       display: none;
     }
   }
 
+  @media screen and (min-width: 1281px) {
+    &__track {
+      --news-track-padding: calc((100% - 1280px) / 2);
+    }
+  }
+
   &__item {
     flex: 0 0 342px;
-  }
-
-  &__mask {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    width: 184px;
-    height: 100%;
-    pointer-events: none;
-
-    &--left {
-      left: 0;
-      background: linear-gradient(90deg, var(--bg-color-page) 0%, transparent 100%);
-    }
-
-    &--right {
-      right: 0;
-      background: linear-gradient(90deg, transparent 0%, var(--bg-color-page) 100%);
-    }
-  }
-
-  &__previous,
-  &__next {
-    position: absolute;
-    z-index: 2;
-    top: 51px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    padding: 16px;
-    border: 0;
-    border-radius: 999px;
-    box-sizing: border-box;
-    cursor: pointer;
-    background: transparent;
-    filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.08)) drop-shadow(0 16px 24px rgba(0, 0, 0, 0.04))
-      drop-shadow(0 6px 30px rgba(0, 0, 0, 0.05));
-
-    svg {
-      width: 36px;
-      height: 36px;
-      flex: none;
-      fill: none;
-    }
-
-    path {
-      stroke: var(--text-secondary);
-      stroke-width: 1.5;
-      stroke-linecap: square;
-    }
-  }
-
-  &__previous {
-    left: 24px;
-  }
-
-  &__next {
-    right: 24px;
   }
 
   .t-card {
@@ -1068,8 +1031,6 @@
   color: var(--text-primary);
   background: radial-gradient(ellipse 54% 58% at 24% 100%, rgba(92, 112, 255, 0.18), transparent 72%),
     radial-gradient(ellipse 45% 50% at 60% 100%, rgba(49, 211, 228, 0.09), transparent 75%), var(--bg-color-summary);
-  border-bottom: 4px solid transparent;
-  border-image: linear-gradient(90deg, #0052d9 0%, #f94de2 38.46%, #ffbd2e 72.6%, #29eae9 100%) 1;
 
   &::before {
     position: absolute;

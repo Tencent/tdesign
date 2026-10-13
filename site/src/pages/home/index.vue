@@ -43,12 +43,18 @@
           <template #content><img width="100" src="https://tdesign.gtimg.com/site/wechat-account.png" /></template>
         </t-popup>
       </div>
-      <div class="module-news" v-if="newsList.length > 0">
-        <div ref="newsTrackRef" class="module-news__track" @scroll="handleNewsScroll">
+      <div
+        v-if="newsList.length > 0"
+        class="module-news"
+        @mouseenter="stopNewsAutoplay"
+        @mouseleave="startNewsAutoplay"
+      >
+        <div ref="newsTrackRef" class="module-news__track">
           <div
-            v-for="(news, index) in newsList"
-            :key="index"
+            v-for="(news, index) in loopedNewsList"
+            :key="`${index >= newsList.length ? 'clone' : 'original'}-${index % newsList.length}`"
             class="module-news__item"
+            :aria-hidden="index >= newsList.length ? 'true' : undefined"
             @click="() => handleClickNews(news.url)"
           >
             <t-card
@@ -61,30 +67,6 @@
             </t-card>
           </div>
         </div>
-        <div v-if="canScrollNewsBack" class="module-news__mask module-news__mask--left" aria-hidden="true"></div>
-        <button
-          v-if="canScrollNewsBack"
-          type="button"
-          class="module-news__previous"
-          aria-label="Previous news"
-          @click="handlePreviousNews"
-        >
-          <svg aria-hidden="true" viewBox="0 0 36 36">
-            <path d="M21.75 9.75L13.5 18L21.75 26.25" />
-          </svg>
-        </button>
-        <div v-if="canScrollNewsForward" class="module-news__mask module-news__mask--right" aria-hidden="true"></div>
-        <button
-          v-if="canScrollNewsForward"
-          type="button"
-          class="module-news__next"
-          aria-label="Next news"
-          @click="handleNextNews"
-        >
-          <svg aria-hidden="true" viewBox="0 0 36 36">
-            <path d="M14.25 26.25L22.5 18L14.25 9.75" />
-          </svg>
-        </button>
       </div>
       <resource-section />
     </section>
@@ -363,7 +345,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, reactive, ref, toRefs, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { DesktopIcon, Icon } from 'tdesign-icons-vue-next';
@@ -383,6 +365,7 @@ import homeMessages from '@/locales/pages/home';
 import type { ThemeMode } from '@/pages/types';
 
 const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
+const newsItemStride = 342 + 16;
 
 type CodeFramework = 'vue-next' | 'react' | 'flutter' | 'miniprogram' | 'uniapp';
 
@@ -422,8 +405,6 @@ const isIntranet = location.host.includes('woa.com'); // 部分动态或内容�
 const { t } = useI18n({ messages: homeMessages });
 const moduleBoardRef = ref<HTMLElement | null>(null);
 const newsTrackRef = ref<HTMLElement | null>(null);
-const canScrollNewsBack = ref(false);
-const canScrollNewsForward = ref(false);
 
 const codeFrameworkOptions: Array<{ label: string; value: CodeFramework }> = [
   { label: 'vue-next.ts', value: 'vue-next' },
@@ -510,6 +491,13 @@ void main() => runApp(
 
 const { currentTab, newsList, tabTransformWidth, windowWidth, themeMode, codeFramework, codeList, componentModel } =
   toRefs(state);
+const loopedNewsList = computed(() => {
+  if (newsList.value.length <= 1) return newsList.value;
+
+  const cycleWidth = newsList.value.length * newsItemStride;
+  const copyCount = Math.ceil(windowWidth.value / cycleWidth) + 2;
+  return Array.from({ length: copyCount }, () => newsList.value).flat();
+});
 const componentSelectOptions = computed(() => [
   { label: t('home.componentDemo.departments.marketing'), value: '1' },
   { label: t('home.componentDemo.departments.finance'), value: '2' },
@@ -559,6 +547,8 @@ const footerStyle = computed(() => ({
 let observer: MutationObserver | null = null;
 let wheelLocked = false;
 let wheelUnlockTimer: number | null = null;
+let newsAnimationFrame: number | null = null;
+let newsLastTimestamp = 0;
 
 function displayCode(item: CodeItem): string {
   return item.codeKey ? String(t(item.codeKey)) : item.code ?? '';
@@ -613,31 +603,43 @@ function handleClickNews(url?: string): void {
   if (url) window.open(url, '_blank');
 }
 
-function updateNewsControls(): void {
+function animateNews(timestamp: number): void {
   const track = newsTrackRef.value;
-  if (!track) return;
-  canScrollNewsBack.value = track.scrollLeft > 1;
-  canScrollNewsForward.value = track.scrollLeft + track.clientWidth < track.scrollWidth - 1;
+  const items = track?.querySelectorAll<HTMLElement>('.module-news__item');
+  if (!track || !items || newsList.value.length < 2) {
+    newsAnimationFrame = null;
+    return;
+  }
+
+  if (newsLastTimestamp > 0) {
+    const elapsed = Math.min(timestamp - newsLastTimestamp, 50);
+    track.scrollLeft += (elapsed / 1000) * 48;
+
+    const cycleWidth = items[newsList.value.length].offsetLeft - items[0].offsetLeft;
+    if (cycleWidth > 0 && track.scrollLeft >= cycleWidth) track.scrollLeft -= cycleWidth;
+  }
+
+  newsLastTimestamp = timestamp;
+  newsAnimationFrame = requestAnimationFrame(animateNews);
 }
 
-function handleNewsScroll(): void {
-  updateNewsControls();
+function startNewsAutoplay(): void {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || newsAnimationFrame !== null) return;
+  newsLastTimestamp = 0;
+  newsAnimationFrame = requestAnimationFrame(animateNews);
 }
 
-function handlePreviousNews(): void {
-  const track = newsTrackRef.value;
-  if (!track) return;
-  const firstCardOffset = track.querySelector<HTMLElement>('.module-news__item')?.offsetLeft ?? 0;
-  const left = track.scrollLeft <= 358 + firstCardOffset ? 0 : track.scrollLeft - 358;
-  track.scrollTo({ left, behavior: 'smooth' });
+function stopNewsAutoplay(): void {
+  if (newsAnimationFrame === null) return;
+  cancelAnimationFrame(newsAnimationFrame);
+  newsAnimationFrame = null;
+  newsLastTimestamp = 0;
 }
 
-function handleNextNews(): void {
+function resetAndStartNewsAutoplay(): void {
   const track = newsTrackRef.value;
-  if (!track) return;
-  const firstCardOffset = track.querySelector<HTMLElement>('.module-news__item')?.offsetLeft ?? 0;
-  const distance = track.scrollLeft <= 1 ? 358 + firstCardOffset : 358;
-  track.scrollBy({ left: distance, behavior: 'smooth' });
+  if (track) track.scrollLeft = 0;
+  startNewsAutoplay();
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -672,7 +674,7 @@ function getNews(): void {
     data.json().then((value: unknown) => {
       const list = parseNews(value);
       state.newsList = isIntranet ? list : list.filter((value) => !value.isIntranet);
-      requestAnimationFrame(updateNewsControls);
+      nextTick(resetAndStartNewsAutoplay);
     });
   });
 }
@@ -702,7 +704,6 @@ function handleResize(): void {
   state.windowWidth = window.innerWidth;
   const isFirstTab = state.currentTab === 0;
   state.currentTab = 0;
-  requestAnimationFrame(updateNewsControls);
   if (isFirstTab) updateModuleBoardTransform(0);
 }
 
@@ -742,6 +743,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   if (wheelUnlockTimer !== null) clearTimeout(wheelUnlockTimer);
+  stopNewsAutoplay();
   observer?.disconnect();
   window.removeEventListener('resize', handleResize);
   moduleBoardRef.value?.removeEventListener('wheel', handleModuleWheel);

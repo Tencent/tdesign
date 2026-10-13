@@ -20,23 +20,12 @@
         <article
           v-for="card in resourceCards"
           :key="card.title"
-          :class="[
-            'resource-card',
-            `resource-card--${card.type}`,
-            { 'resource-card--playing': hoveredCard === card.type },
-          ]"
-          @mouseenter="playIllustration(card.type)"
-          @mouseleave="stopIllustration"
+          :class="['resource-card', `resource-card--${card.type}`]"
+          @mousemove="updateResourceIllustrationHover(card.type, $event)"
+          @mouseleave="leaveResourceCard(card.type)"
         >
           <div class="resource-card__illustration" aria-hidden="true">
-            <img class="resource-card__poster" :src="card.poster" alt="" />
-            <img
-              v-if="hoveredCard === card.type"
-              :key="illustrationPlayKey"
-              class="resource-card__gif"
-              :src="card.illustration"
-              alt=""
-            />
+            <img class="resource-card__frames" :src="resourceFrame(card.type)" alt="" />
           </div>
 
           <div class="resource-card__content">
@@ -80,15 +69,11 @@ import reactLogo from '@/assets/react-logo.svg';
 import uniappLogo from '@/assets/uniapp-logo.png';
 import vueLogo from '@/assets/vue-logo.svg';
 import homeMessages from '@/locales/pages/home';
+import aiResourceData from './assets/ai-resource/data.json';
+import desktopResourceData from './assets/desktop-resource/data.json';
+import iconResourceData from './assets/icon-resource/data.json';
 import iconLibrary from './assets/icon-library.svg';
-import resourceAigc from './assets/aigc-resource.gif';
-import resourceAigcPoster from './assets/aigc-resource-poster.png';
-import resourceIcons from './assets/icon-resource.gif';
-import resourceIconsPoster from './assets/icon-resource-poster.png';
-import resourceMobile from './assets/mobile-resource.gif';
-import resourceMobilePoster from './assets/mobile-resource-poster.png';
-import resourceWeb from './assets/desktop-resource.gif';
-import resourceWebPoster from './assets/desktop-resource-poster.png';
+import mobileResourceData from './assets/mobile-resource/data.json';
 
 type ResourceCardType = 'web' | 'mobile' | 'aigc' | 'icons';
 
@@ -104,8 +89,6 @@ interface ResourceCard {
   label: string;
   title: string;
   description: string;
-  illustration: string;
-  poster: string;
   items: ResourceItem[];
 }
 
@@ -137,20 +120,163 @@ const mobileLayoutScale = ref('1');
 const mobileSectionHeight = ref('auto');
 const tabletLayoutScale = ref('1');
 const tabletSectionHeight = ref('auto');
-const hoveredCard = ref<ResourceCardType | null>(null);
-const illustrationPlayKey = ref(0);
+
+const loadResourceFrames = (modules: Record<string, string>) =>
+  Object.entries(modules)
+    .sort(([pathA], [pathB]) => pathA.localeCompare(pathB, undefined, { numeric: true }))
+    .map(([, url]) => url);
+
+const resourceFrames: Record<ResourceCardType, string[]> = {
+  web: loadResourceFrames(
+    import.meta.glob<string>('./assets/desktop-resource/images/*.png', {
+      eager: true,
+      query: '?url',
+      import: 'default',
+    }),
+  ),
+  mobile: loadResourceFrames(
+    import.meta.glob<string>('./assets/mobile-resource/images/*.png', {
+      eager: true,
+      query: '?url',
+      import: 'default',
+    }),
+  ),
+  aigc: loadResourceFrames(
+    import.meta.glob<string>('./assets/ai-resource/images/*.png', {
+      eager: true,
+      query: '?url',
+      import: 'default',
+    }),
+  ),
+  icons: loadResourceFrames(
+    import.meta.glob<string>('./assets/icon-resource/images/*.png', {
+      eager: true,
+      query: '?url',
+      import: 'default',
+    }),
+  ),
+};
+const resourceAnimationData: Record<ResourceCardType, { fr: number }> = {
+  web: desktopResourceData,
+  mobile: mobileResourceData,
+  aigc: aiResourceData,
+  icons: iconResourceData,
+};
+const resourceTypes = Object.keys(resourceFrames) as ResourceCardType[];
+const frameIndexes = ref<Record<ResourceCardType, number>>({
+  web: 0,
+  mobile: 0,
+  aigc: 0,
+  icons: 0,
+});
+const animationFrameIds: Record<ResourceCardType, number | undefined> = {
+  web: undefined,
+  mobile: undefined,
+  aigc: undefined,
+  icons: undefined,
+};
+const animationTargetFrames: Record<ResourceCardType, number> = {
+  web: 0,
+  mobile: 0,
+  aigc: 0,
+  icons: 0,
+};
+const animationLastTimestamps: Record<ResourceCardType, number> = {
+  web: 0,
+  mobile: 0,
+  aigc: 0,
+  icons: 0,
+};
 const prefersReducedMotion =
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let hoveredIllustrationType: ResourceCardType | undefined;
 let layoutObserver: ResizeObserver | undefined;
 
-function playIllustration(type: ResourceCardType) {
-  if (prefersReducedMotion) return;
-  hoveredCard.value = type;
-  illustrationPlayKey.value += 1;
+function resourceFrame(type: ResourceCardType): string {
+  return resourceFrames[type][frameIndexes.value[type]] ?? '';
 }
 
-function stopIllustration() {
-  hoveredCard.value = null;
+function animateResourceFrames(type: ResourceCardType, timestamp: number) {
+  if (!animationLastTimestamps[type]) animationLastTimestamps[type] = timestamp;
+
+  const frameDuration = 1000 / resourceAnimationData[type].fr;
+  const elapsedFrames = Math.floor((timestamp - animationLastTimestamps[type]) / frameDuration);
+
+  if (elapsedFrames > 0) {
+    const currentFrame = frameIndexes.value[type];
+    const targetFrame = animationTargetFrames[type];
+    const direction = targetFrame > currentFrame ? 1 : -1;
+    const nextFrame = currentFrame + elapsedFrames * direction;
+    frameIndexes.value[type] = direction === 1 ? Math.min(nextFrame, targetFrame) : Math.max(nextFrame, targetFrame);
+    animationLastTimestamps[type] += elapsedFrames * frameDuration;
+
+    if (frameIndexes.value[type] === targetFrame) {
+      animationFrameIds[type] = undefined;
+      return;
+    }
+  }
+
+  animationFrameIds[type] = requestAnimationFrame((nextTimestamp) => animateResourceFrames(type, nextTimestamp));
+}
+
+function stopResourceAnimation(type: ResourceCardType) {
+  if (animationFrameIds[type] !== undefined) cancelAnimationFrame(animationFrameIds[type]);
+  animationFrameIds[type] = undefined;
+  animationLastTimestamps[type] = 0;
+}
+
+function startResourceAnimation(type: ResourceCardType, targetFrame: number) {
+  stopResourceAnimation(type);
+  animationTargetFrames[type] = targetFrame;
+  if (frameIndexes.value[type] === targetFrame) return;
+
+  const direction = targetFrame > frameIndexes.value[type] ? 1 : -1;
+  frameIndexes.value[type] += direction;
+  if (frameIndexes.value[type] === targetFrame) return;
+
+  animationLastTimestamps[type] = performance.now();
+  animationFrameIds[type] = requestAnimationFrame((timestamp) => animateResourceFrames(type, timestamp));
+}
+
+function playResourceIllustration(type: ResourceCardType) {
+  if (!prefersReducedMotion && resourceFrames[type].length) {
+    startResourceAnimation(type, resourceFrames[type].length - 1);
+  }
+}
+
+function reverseResourceIllustration(type: ResourceCardType) {
+  if (!prefersReducedMotion) {
+    startResourceAnimation(type, 0);
+  }
+}
+
+function updateResourceIllustrationHover(type: ResourceCardType, event: MouseEvent) {
+  const card = event.currentTarget;
+  if (!(card instanceof HTMLElement)) return;
+
+  const illustration = card.querySelector<HTMLElement>('.resource-card__illustration');
+  if (!illustration) return;
+
+  const rect = illustration.getBoundingClientRect();
+  const isInside =
+    event.clientX >= rect.left &&
+    event.clientX <= rect.right &&
+    event.clientY >= rect.top &&
+    event.clientY <= rect.bottom;
+
+  if (isInside && hoveredIllustrationType !== type) {
+    hoveredIllustrationType = type;
+    playResourceIllustration(type);
+  } else if (!isInside && hoveredIllustrationType === type) {
+    hoveredIllustrationType = undefined;
+    reverseResourceIllustration(type);
+  }
+}
+
+function leaveResourceCard(type: ResourceCardType) {
+  if (hoveredIllustrationType !== type) return;
+  hoveredIllustrationType = undefined;
+  reverseResourceIllustration(type);
 }
 
 function parseReleases(value: unknown): Release[] {
@@ -219,6 +345,12 @@ const updateScaledLayout = () => {
 
 onMounted(() => {
   fetchReleaseDates();
+  Object.values(resourceFrames)
+    .flat()
+    .forEach((src) => {
+      const image = new Image();
+      image.src = src;
+    });
   nextTick(updateScaledLayout);
   window.addEventListener('resize', updateScaledLayout);
   layoutObserver = new ResizeObserver(updateScaledLayout);
@@ -226,6 +358,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  resourceTypes.forEach(stopResourceAnimation);
   window.removeEventListener('resize', updateScaledLayout);
   layoutObserver?.disconnect();
 });
@@ -236,8 +369,6 @@ const resourceCards = computed<ResourceCard[]>(() => [
     label: 'Web Components',
     title: t('home.resources.cards.web.title'),
     description: t('home.resources.cards.web.description'),
-    illustration: resourceWeb,
-    poster: resourceWebPoster,
     items: [
       { name: 'Vue Next', logo: vueLogo, href: 'https://tdesign.tencent.com/vue-next/', releaseKey: 'vue-next' },
       { name: 'React', logo: reactLogo, href: 'https://tdesign.tencent.com/react/', releaseKey: 'react-web' },
@@ -255,8 +386,6 @@ const resourceCards = computed<ResourceCard[]>(() => [
     label: 'Mobile Components',
     title: t('home.resources.cards.mobile.title'),
     description: t('home.resources.cards.mobile.description'),
-    illustration: resourceMobile,
-    poster: resourceMobilePoster,
     items: [
       {
         name: t('home.resources.items.miniprogram'),
@@ -291,8 +420,6 @@ const resourceCards = computed<ResourceCard[]>(() => [
     label: 'AIGC Components',
     title: t('home.resources.cards.aigc.title'),
     description: t('home.resources.cards.aigc.description'),
-    illustration: resourceAigc,
-    poster: resourceAigcPoster,
     items: [
       {
         name: 'Vue Next',
@@ -325,8 +452,6 @@ const resourceCards = computed<ResourceCard[]>(() => [
     label: 'Icon Library',
     title: t('home.resources.cards.icons.title'),
     description: t('home.resources.cards.icons.description'),
-    illustration: resourceIcons,
-    poster: resourceIconsPoster,
     items: [
       {
         name: t('home.resources.items.iconLibrary'),
@@ -399,6 +524,42 @@ const resourceCards = computed<ResourceCard[]>(() => [
   border-radius: 12px;
   background: var(--bg-color-card);
 
+  &::before {
+    position: absolute;
+    z-index: 0;
+    border-radius: 50%;
+    content: '';
+    pointer-events: none;
+    filter: blur(100px);
+  }
+
+  &--mobile::before {
+    top: -260px;
+    left: 348px;
+    width: 440px;
+    height: 440px;
+    background: linear-gradient(246deg, #b5fff5 44.26%, #4794ff 63.43%, #3700ff 89.4%);
+    opacity: 0.12;
+  }
+
+  &--aigc::before {
+    top: 32px;
+    left: 44px;
+    width: 430px;
+    height: 430px;
+    background: linear-gradient(221deg, #b5c7ff 50%, #c574ff 62.12%, #ff47d4 74.43%, #ff0004 90.66%);
+    opacity: 0.1;
+  }
+
+  &--icons::before {
+    top: 120px;
+    left: 120px;
+    width: 430px;
+    height: 430px;
+    background: linear-gradient(221deg, #ffb5b5 50%, #ffd874 62.12%, #ceff47 74.43%, #6fff00 90.66%);
+    opacity: 0.1;
+  }
+
   &:nth-child(3) {
     grid-column: 1;
     width: 600px;
@@ -462,7 +623,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
     right: 12px;
     width: 180px;
     height: 180px;
-    pointer-events: none;
+    pointer-events: auto;
 
     img {
       display: block;
@@ -471,23 +632,10 @@ const resourceCards = computed<ResourceCard[]>(() => [
       object-fit: contain;
     }
 
-    .resource-card__poster,
-    .resource-card__gif {
+    .resource-card__frames {
       position: absolute;
       inset: 0;
     }
-
-    .resource-card__gif {
-      opacity: 0;
-    }
-  }
-
-  &--playing &__illustration .resource-card__gif {
-    opacity: 1;
-  }
-
-  &--playing &__illustration .resource-card__poster {
-    opacity: 0;
   }
 
   &--mobile &__illustration {
@@ -506,17 +654,18 @@ const resourceCards = computed<ResourceCard[]>(() => [
   }
 
   &--icons &__illustration {
-    top: 56px;
+    top: 20px;
     right: 32px;
     left: auto;
     width: 268px;
-    height: 197px;
-    overflow: hidden;
+    height: 268px;
 
-    img {
+    img,
+    .resource-card__frames {
       width: 268px;
       height: 268px;
-      transform: translateY(-26px);
+      object-fit: contain;
+      transform: none;
     }
   }
 
@@ -625,6 +774,10 @@ const resourceCards = computed<ResourceCard[]>(() => [
     width: 100%;
     margin-left: 0;
   }
+
+  .resource-card__illustration {
+    display: none;
+  }
 }
 
 @media screen and (min-width: 960px) and (max-width: 1199px) {
@@ -685,33 +838,6 @@ const resourceCards = computed<ResourceCard[]>(() => [
       gap: 8px;
     }
 
-    &__illustration {
-      top: -40px;
-      right: -16px;
-      width: 280px;
-      height: 280px;
-    }
-
-    &--web .resource-item:nth-child(3) {
-      background: var(--bg-color-card-hover);
-    }
-
-    &--web .resource-item:nth-child(1) {
-      order: 3;
-    }
-
-    &--web .resource-item:nth-child(2) {
-      order: 2;
-    }
-
-    &--web .resource-item:nth-child(3) {
-      order: 1;
-    }
-
-    &--web .resource-item:nth-child(4) {
-      order: 4;
-    }
-
     &--mobile &__illustration {
       top: -24px;
       right: -8px;
@@ -723,52 +849,12 @@ const resourceCards = computed<ResourceCard[]>(() => [
       width: 620px;
     }
 
-    &--mobile .resource-item:nth-child(1) {
-      order: 2;
-    }
-
-    &--mobile .resource-item:nth-child(2) {
-      order: 3;
-    }
-
-    &--mobile .resource-item:nth-child(3) {
-      order: 1;
-    }
-
-    &--mobile .resource-item:nth-child(4) {
-      order: 5;
-    }
-
-    &--mobile .resource-item:nth-child(5) {
-      order: 4;
-    }
-
-    &--mobile .resource-item:nth-child(6) {
-      order: 6;
-    }
-
     &--aigc &__illustration {
       top: -36px;
       right: -20px;
       left: auto;
       width: 300px;
       height: 300px;
-    }
-
-    &--aigc .resource-item:nth-child(1) {
-      order: 3;
-    }
-
-    &--aigc .resource-item:nth-child(2) {
-      order: 1;
-    }
-
-    &--aigc .resource-item:nth-child(3) {
-      order: 2;
-    }
-
-    &--aigc .resource-item:nth-child(4) {
-      order: 4;
     }
 
     &--icons &__illustration {
@@ -778,7 +864,8 @@ const resourceCards = computed<ResourceCard[]>(() => [
       width: 340px;
       height: 340px;
 
-      img {
+      img,
+      .resource-card__frames {
         width: 100%;
         height: 100%;
         transform: none;
@@ -993,68 +1080,6 @@ const resourceCards = computed<ResourceCard[]>(() => [
 
     &--icons &__items {
       gap: 4px;
-    }
-
-    &--web .resource-item:nth-child(3) {
-      width: 280px;
-      padding-right: 8px;
-      padding-left: 8px;
-      margin-left: -8px;
-      order: 1;
-      background: var(--bg-color-card-hover);
-      border-radius: 8px;
-    }
-
-    &--web .resource-item:nth-child(2) {
-      order: 2;
-    }
-
-    &--web .resource-item:nth-child(1) {
-      order: 3;
-    }
-
-    &--web .resource-item:nth-child(4) {
-      order: 4;
-    }
-
-    &--mobile .resource-item:nth-child(3) {
-      order: 1;
-    }
-
-    &--mobile .resource-item:nth-child(1) {
-      order: 2;
-    }
-
-    &--mobile .resource-item:nth-child(2) {
-      order: 3;
-    }
-
-    &--mobile .resource-item:nth-child(4) {
-      order: 4;
-    }
-
-    &--mobile .resource-item:nth-child(5) {
-      display: none;
-    }
-
-    &--mobile .resource-item:nth-child(6) {
-      order: 5;
-    }
-
-    &--aigc .resource-item:nth-child(2) {
-      order: 1;
-    }
-
-    &--aigc .resource-item:nth-child(3) {
-      order: 2;
-    }
-
-    &--aigc .resource-item:nth-child(1) {
-      order: 3;
-    }
-
-    &--aigc .resource-item:nth-child(4) {
-      order: 4;
     }
   }
 
