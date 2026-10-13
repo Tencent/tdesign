@@ -298,7 +298,7 @@
             <h3 class="title">{{ t('home.contributors.title') }}</h3>
             <p class="desc">{{ t('home.contributors.description') }}</p>
           </div>
-          <community-card />
+          <community-card v-if="shouldLoadCommunity" />
         </div>
       </div>
     </div>
@@ -345,13 +345,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, toRefs, watch } from 'vue';
+import {
+  computed,
+  defineAsyncComponent,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  toRefs,
+  watch,
+} from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { DesktopIcon, Icon } from 'tdesign-icons-vue-next';
 import Banner from './banner.vue';
 import BusinessCases from './business-cases.vue';
-import CommunityCard from './community-card.vue';
 import IndustryCases from './industry-cases.vue';
 import openFrameworksIcon from './assets/open-frameworks.svg';
 import openIndustriesIcon from './assets/open-industries.svg';
@@ -364,6 +373,7 @@ import 'prismjs/components/prism-dart';
 import homeMessages from '@/locales/pages/home';
 import type { ThemeMode } from '@/pages/types';
 
+const CommunityCard = defineAsyncComponent(() => import('./community-card.vue'));
 const newsUrl = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com/news';
 const newsItemStride = 342 + 16;
 
@@ -405,6 +415,7 @@ const isIntranet = location.host.includes('woa.com'); // 部分动态或内容�
 const { t } = useI18n({ messages: homeMessages });
 const moduleBoardRef = ref<HTMLElement | null>(null);
 const newsTrackRef = ref<HTMLElement | null>(null);
+const shouldLoadCommunity = ref(false);
 
 const codeFrameworkOptions: Array<{ label: string; value: CodeFramework }> = [
   { label: 'vue-next.ts', value: 'vue-next' },
@@ -545,6 +556,7 @@ const footerStyle = computed(() => ({
   '--footer-logo-position': 'unset',
 }));
 let observer: MutationObserver | null = null;
+let communityPreloadObserver: IntersectionObserver | null = null;
 let wheelLocked = false;
 let wheelUnlockTimer: number | null = null;
 let newsAnimationFrame: number | null = null;
@@ -722,7 +734,15 @@ function watchHtmlMode(): void {
   observer.observe(targetNode, { attributes: true });
 }
 
+function loadCommunity(): void {
+  if (shouldLoadCommunity.value) return;
+  shouldLoadCommunity.value = true;
+  communityPreloadObserver?.disconnect();
+  communityPreloadObserver = null;
+}
+
 watch(currentTab, (tab) => {
+  if (tab >= 1) loadCommunity();
   updateModuleBoardTransform(tab);
 });
 
@@ -737,6 +757,15 @@ watch(
 onMounted(() => {
   watchHtmlMode();
   getNews();
+  if (moduleBoardRef.value) {
+    communityPreloadObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) loadCommunity();
+      },
+      { rootMargin: '100% 0px' },
+    );
+    communityPreloadObserver.observe(moduleBoardRef.value);
+  }
   window.addEventListener('resize', handleResize);
   moduleBoardRef.value?.addEventListener('wheel', handleModuleWheel, { passive: false });
 });
@@ -745,6 +774,7 @@ onBeforeUnmount(() => {
   if (wheelUnlockTimer !== null) clearTimeout(wheelUnlockTimer);
   stopNewsAutoplay();
   observer?.disconnect();
+  communityPreloadObserver?.disconnect();
   window.removeEventListener('resize', handleResize);
   moduleBoardRef.value?.removeEventListener('wheel', handleModuleWheel);
 });
