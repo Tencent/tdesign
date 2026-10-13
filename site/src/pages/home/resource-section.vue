@@ -70,11 +70,11 @@ import uniappLogo from '@/assets/uniapp-logo.png';
 import vueLogo from '@/assets/vue-logo.svg';
 import homeMessages from '@/locales/pages/home';
 import { HOME_API_ENDPOINTS } from './api';
-import aiResourceSprite from './assets/ai-resource/sprite.webp';
-import desktopResourceSprite from './assets/desktop-resource/sprite.webp';
-import iconResourceSprite from './assets/icon-resource/sprite.webp';
+import aiResourceSprite from './assets/ai-resource/sprite.png';
+import desktopResourceSprite from './assets/desktop-resource/sprite.png';
+import iconResourceSprite from './assets/icon-resource/sprite.png';
 import iconLibrary from './assets/icon-library.svg';
-import mobileResourceSprite from './assets/mobile-resource/sprite.webp';
+import mobileResourceSprite from './assets/mobile-resource/sprite.png';
 
 type ResourceCardType = 'web' | 'mobile' | 'aigc' | 'icons';
 
