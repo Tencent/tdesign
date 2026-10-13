@@ -436,8 +436,9 @@ onBeforeUnmount(() => {
     }
 
     img {
-      width: auto;
+      width: 100%;
       height: 640px;
+      object-fit: cover;
       position: absolute;
       left: 50%;
       top: 0;
