@@ -182,20 +182,10 @@
       background: #1e1e1e;
 
       &::before {
-        inset: 0 0 4px;
-        opacity: 0.9;
-        background-image: radial-gradient(circle, rgba(255, 255, 255, 0.16) 0 1px, transparent 1.4px),
-          radial-gradient(
-            ellipse 88% 112% at 50% 122%,
-            rgba(220, 236, 255, 0.72) 0%,
-            rgba(101, 159, 255, 0.46) 34%,
-            rgba(75, 101, 255, 0.2) 68%,
-            transparent 100%
-          );
-        background-size:
-          8px 8px,
-          100% 100%;
-        mask-image: linear-gradient(to bottom, transparent 8%, rgba(0, 0, 0, 0.16) 44%, #000 100%);
+        inset: 0;
+        opacity: 1;
+        background: url('../pages/home/assets/community-growth-bg-dark.png') center / 100% 100% no-repeat;
+        mask-image: none;
         mix-blend-mode: hard-light;
       }
 
@@ -1029,15 +1019,13 @@
   box-sizing: border-box;
   overflow: hidden;
   color: var(--text-primary);
-  background: radial-gradient(ellipse 54% 58% at 24% 100%, rgba(92, 112, 255, 0.18), transparent 72%),
-    radial-gradient(ellipse 45% 50% at 60% 100%, rgba(49, 211, 228, 0.09), transparent 75%), var(--bg-color-summary);
+  background: var(--bg-color-summary);
 
   &::before {
     position: absolute;
-    inset: 0 0 4px;
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 1px, transparent 1.4px);
-    background-size: 8px 8px;
-    mask-image: linear-gradient(to bottom, transparent, #000);
+    inset: 0;
+    background: url('../pages/home/assets/community-growth-bg-light.png') center / 100% 100% no-repeat;
+    mix-blend-mode: hard-light;
     content: '';
   }
 
