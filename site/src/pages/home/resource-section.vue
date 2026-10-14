@@ -70,11 +70,11 @@ import uniappLogo from '@/assets/uniapp-logo.png';
 import vueLogo from '@/assets/vue-logo.svg';
 import homeMessages from '@/locales/pages/home';
 import { HOME_API_ENDPOINTS } from './api';
-import aiResourceSprite from './assets/ai-resource/sprite.png';
-import desktopResourceSprite from './assets/desktop-resource/sprite.png';
-import iconResourceSprite from './assets/icon-resource/sprite.png';
+import aiResourceSprite from './assets/ai-resource/sprite.webp';
+import desktopResourceSprite from './assets/desktop-resource/sprite.webp';
+import iconResourceSprite from './assets/icon-resource/sprite.webp';
 import iconLibrary from './assets/icon-library.svg';
-import mobileResourceSprite from './assets/mobile-resource/sprite.png';
+import mobileResourceSprite from './assets/mobile-resource/sprite.webp';
 
 type ResourceCardType = 'web' | 'mobile' | 'aigc' | 'icons';
 
@@ -129,6 +129,8 @@ const resourceSprites: Record<ResourceCardType, string> = {
 };
 const RESOURCE_FRAME_RATE = 24;
 const RESOURCE_FRAME_COUNT = 27;
+const RESOURCE_SPRITE_COLUMNS = 9;
+const RESOURCE_SPRITE_ROWS = 3;
 const resourceTypes = Object.keys(resourceSprites) as ResourceCardType[];
 const frameIndexes: Record<ResourceCardType, number> = {
   web: 0,
@@ -151,10 +153,13 @@ let layoutObserver: ResizeObserver | undefined;
 function drawResourceFrame(type: ResourceCardType) {
   const element = resourceSpriteElements[type];
   if (!element) return;
-  const lastFrame = RESOURCE_FRAME_COUNT - 1;
-  const position = lastFrame > 0 ? (frameIndexes[type] / lastFrame) * 100 : 0;
+  const frame = frameIndexes[type];
+  const column = frame % RESOURCE_SPRITE_COLUMNS;
+  const row = Math.floor(frame / RESOURCE_SPRITE_COLUMNS);
+  const x = RESOURCE_SPRITE_COLUMNS > 1 ? (column / (RESOURCE_SPRITE_COLUMNS - 1)) * 100 : 0;
+  const y = RESOURCE_SPRITE_ROWS > 1 ? (row / (RESOURCE_SPRITE_ROWS - 1)) * 100 : 0;
   element.style.backgroundImage = `url("${resourceSprites[type]}")`;
-  element.style.backgroundPosition = `center ${position}%`;
+  element.style.backgroundPosition = `${x}% ${y}%`;
 }
 
 function setResourceSprite(type: ResourceCardType, element: unknown) {
@@ -582,7 +587,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
       width: 100%;
       height: 100%;
       background-repeat: no-repeat;
-      background-size: 100% auto;
+      background-size: 900% 300%;
     }
   }
 
