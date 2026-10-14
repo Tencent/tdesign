@@ -1,33 +1,39 @@
 <template>
   <section class="community-card">
     <div class="community-network" aria-hidden="true">
-      <svg class="community-network__lines" viewBox="0 0 432 413" fill="none">
-        <circle cx="216" cy="206.5" r="119" />
-        <circle cx="216" cy="206.5" r="183" />
-        <path v-for="point in networkPoints" :key="`${point.x}-${point.y}`" :d="`M216 206.5 L${point.x} ${point.y}`" />
-      </svg>
-      <span class="community-network__logo">
-        <img :src="tdesignLogo" alt="TDesign" />
-      </span>
-      <span
-        v-for="(member, index) in communityMembers"
-        :key="index"
-        :class="[
-          'community-network__avatar',
-          {
-            'community-network__avatar--active': activeMembers.includes(index),
-            'community-network__avatar--change': changingMembers.includes(index),
-          },
-        ]"
-        :style="{
-          left: `${networkPoints[index].x}px`,
-          top: `${networkPoints[index].y}px`,
-          backgroundColor: avatarColors[index % avatarColors.length],
-        }"
-      >
-        <img v-if="isGithubMember(member)" :src="githubAvatar(member)" :alt="member" />
-        <template v-else>{{ member }}</template>
-      </span>
+      <div class="community-network__canvas">
+        <svg class="community-network__lines" viewBox="0 0 432 413" fill="none">
+          <circle cx="216" cy="206.5" r="119" />
+          <circle cx="216" cy="206.5" r="183" />
+          <path
+            v-for="point in networkPoints"
+            :key="`${point.x}-${point.y}`"
+            :d="`M216 206.5 L${point.x} ${point.y}`"
+          />
+        </svg>
+        <span class="community-network__logo">
+          <img :src="tdesignLogo" alt="TDesign" />
+        </span>
+        <span
+          v-for="(member, index) in communityMembers"
+          :key="index"
+          :class="[
+            'community-network__avatar',
+            {
+              'community-network__avatar--active': activeMembers.includes(index),
+              'community-network__avatar--change': changingMembers.includes(index),
+            },
+          ]"
+          :style="{
+            left: `${networkPoints[index].x}px`,
+            top: `${networkPoints[index].y}px`,
+            backgroundColor: avatarColors[index % avatarColors.length],
+          }"
+        >
+          <img v-if="isGithubMember(member)" :src="githubAvatar(member)" :alt="member" />
+          <template v-else>{{ member }}</template>
+        </span>
+      </div>
     </div>
 
     <div class="community-activity">
@@ -54,7 +60,8 @@
             </a>
             <div class="activity-feed__meta">
               <t-avatar size="20px" :image="item.avatar" :alt="item.author" />
-              <span>{{ item.meta }}</span>
+              <span class="activity-feed__meta-full">{{ item.meta }}</span>
+              <span class="activity-feed__meta-compact">{{ item.compactMeta }}</span>
             </div>
           </div>
         </div>
@@ -134,6 +141,7 @@ let randomTimer: number | undefined;
 interface Activity {
   title: string;
   meta: string;
+  compactMeta: string;
   author: string;
   avatar: string;
   url: string;
@@ -233,6 +241,7 @@ function parseActivities(value: unknown): Activity[] {
           {
             title: item.title,
             meta: `@${item.author} · ${formatRelativeTime(item.updatedAt)} · ${repository.name} #${item.number}`,
+            compactMeta: `@${item.author} · ${formatRelativeTime(item.updatedAt)}`,
             author: item.author,
             avatar: githubAvatar(item.author),
             url: item.url,
@@ -242,7 +251,7 @@ function parseActivities(value: unknown): Activity[] {
       });
     })
     .sort((left, right) => Date.parse(right.updatedAt) - Date.parse(left.updatedAt))
-    .slice(0, 4);
+    .slice(0, 7);
 }
 
 function parseStats(value: unknown): CommunityStat[] {
@@ -360,6 +369,16 @@ onBeforeUnmount(() => {
   width: 432px;
   height: 413px;
   flex: none;
+  overflow: hidden;
+
+  &__canvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 432px;
+    height: 413px;
+    transform: translate(-50%, -50%);
+  }
 
   &__lines {
     position: absolute;
@@ -486,6 +505,10 @@ onBeforeUnmount(() => {
     box-sizing: border-box;
     border-top: 1px solid var(--component-border);
 
+    &:nth-child(n + 5) {
+      display: none;
+    }
+
     &:last-child {
       border-bottom: 1px solid var(--component-border);
     }
@@ -519,6 +542,10 @@ onBeforeUnmount(() => {
     :deep(.t-avatar) {
       font-size: 13px;
     }
+  }
+
+  &__meta-compact {
+    display: none;
   }
 }
 
@@ -567,7 +594,55 @@ onBeforeUnmount(() => {
   }
 }
 
+@media screen and (min-width: 701px) and (max-width: 960px) {
+  .community-card {
+    width: 652px;
+    height: 736px;
+    padding: 32px clamp(24px, calc(2.8571vw + 4px), 32px);
+    align-items: stretch;
+    gap: clamp(16px, calc(9.2308vw - 48.6154px), 40px);
+  }
+
+  .community-network {
+    width: calc(60.91% - 69.88px);
+    height: 672px;
+    min-height: 672px;
+
+    &__canvas {
+      transform: translate(-50%, -50%) scale(1.33);
+    }
+  }
+
+  .community-activity {
+    width: auto;
+    height: 672px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .activity-feed {
+    height: 544px;
+    box-sizing: border-box;
+
+    &__item:nth-child(n + 5) {
+      display: block;
+    }
+  }
+}
+
 @media screen and (max-width: 960px) {
+  .activity-feed {
+    &__meta-full {
+      display: none;
+    }
+
+    &__meta-compact {
+      display: inline;
+    }
+  }
+}
+
+@media screen and (max-width: 700px) {
   .community-card {
     width: min(888px, calc(100vw - 48px));
     height: 795px;
@@ -582,8 +657,12 @@ onBeforeUnmount(() => {
     max-width: none;
     height: 413px;
     margin-bottom: -159px;
-    transform: scale(0.6156);
-    transform-origin: top center;
+
+    &__canvas {
+      top: 0;
+      transform: translateX(-50%) scale(0.6156);
+      transform-origin: top center;
+    }
   }
 
   .community-activity {
@@ -618,6 +697,69 @@ onBeforeUnmount(() => {
       font-size: 10px;
       line-height: 20px;
     }
+  }
+}
+
+@media screen and (min-width: 500px) and (max-width: 700px) {
+  .community-card {
+    width: calc(100vw - 48px);
+    height: 736px;
+    min-height: 736px;
+    align-items: center;
+  }
+
+  .community-network {
+    width: 356px;
+    height: 340px;
+    margin-bottom: 0;
+
+    &__canvas {
+      transform: translateX(-50%) scale(0.823);
+    }
+  }
+
+  .community-activity {
+    height: 316px;
+  }
+
+  .activity-feed {
+    height: 212px;
+    padding: 0;
+
+    &__item {
+      display: grid;
+      height: 44px;
+      align-items: center;
+      gap: 24px;
+      grid-template-columns: minmax(200px, 1fr) minmax(0, 254px);
+    }
+
+    &__title {
+      min-width: 200px;
+      margin: 0;
+    }
+
+    &__meta {
+      max-width: 254px;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    &__meta-full {
+      display: block;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__meta-compact {
+      display: none;
+    }
+  }
+
+  .community-stats,
+  .community-stat {
+    height: 88px;
   }
 }
 </style>
