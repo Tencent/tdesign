@@ -9,27 +9,6 @@
             <p class="primary">TDesign</p>
             <div style="display: flex">
               <p class="sub-title">{{ t('home.hero.subtitle') }}</p>
-              <t-popconfirm :popup-props="{ trigger: 'hover' }" placement="top-left">
-                <t-tag class="tds-intro-button" theme="primary" style="height: 24px; cursor: pointer">{{
-                  t('home.hero.alliance.title')
-                }}</t-tag>
-                <template #content>
-                  <div class="tds-intro">
-                    <h4>{{ t('home.hero.alliance.title') }}</h4>
-                    <p>{{ t('home.hero.alliance.description') }}</p>
-                  </div>
-                </template>
-                <template #icon><div /></template>
-                <template #cancelBtn><div /></template>
-                <template #confirmBtn>
-                  <t-button
-                    size="small"
-                    style="margin-left: 8px"
-                    @click="() => handleIntroClick('https://tds.qq.com/?from=tdesign')"
-                    >{{ t('home.hero.alliance.details') }}</t-button
-                  >
-                </template>
-              </t-popconfirm>
             </div>
           </h2>
         </div>
@@ -559,6 +538,7 @@ let observer: MutationObserver | null = null;
 let communityPreloadObserver: IntersectionObserver | null = null;
 let wheelLocked = false;
 let wheelUnlockTimer: number | null = null;
+const wheelLockDuration = 700;
 let newsAnimationFrame: number | null = null;
 let newsLastTimestamp = 0;
 
@@ -571,38 +551,46 @@ function scheduleWheelUnlock(): void {
   wheelUnlockTimer = window.setTimeout(() => {
     wheelLocked = false;
     wheelUnlockTimer = null;
-  }, 180);
+  }, wheelLockDuration);
 }
 
-function isActiveModuleContentVisible(direction: number): boolean {
+function isModuleBoardFullyVisible(): boolean {
   const board = moduleBoardRef.value;
-  const activeCard = board?.querySelector<HTMLElement>('.module-board__card--active');
-  if (!activeCard) return false;
+  if (!board) return false;
 
-  const cardRect = activeCard.getBoundingClientRect();
-  const viewportHeight = window.innerHeight;
-  const fitsInViewport = cardRect.height <= viewportHeight;
+  const boardRect = board.getBoundingClientRect();
+  const visibilityTolerance = 1;
 
-  if (fitsInViewport) {
-    return cardRect.top >= 0 && cardRect.bottom <= viewportHeight;
-  }
+  return (
+    boardRect.height <= window.innerHeight + visibilityTolerance &&
+    boardRect.top >= -visibilityTolerance &&
+    boardRect.bottom <= window.innerHeight + visibilityTolerance
+  );
+}
 
-  return direction > 0 ? cardRect.bottom <= viewportHeight : cardRect.top >= 0;
+function getWheelScrollDistance(event: WheelEvent): number {
+  if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) return event.deltaY * 16;
+  if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) return event.deltaY * window.innerHeight;
+  return event.deltaY;
 }
 
 function handleModuleWheel(event: WheelEvent): void {
-  if (event.deltaY === 0) return;
+  if (event.deltaY === 0 || !isModuleBoardFullyVisible()) return;
+
   if (wheelLocked) {
     event.preventDefault();
     event.stopPropagation();
-    scheduleWheelUnlock();
     return;
   }
 
   const direction = event.deltaY > 0 ? 1 : -1;
   const nextTab = state.currentTab + direction;
-  if (nextTab < 0 || nextTab > 2) return;
-  if (!isActiveModuleContentVisible(direction)) return;
+  if (nextTab < 0 || nextTab > 2) {
+    event.preventDefault();
+    event.stopPropagation();
+    window.scrollBy({ top: getWheelScrollDistance(event), behavior: 'auto' });
+    return;
+  }
 
   event.preventDefault();
   event.stopPropagation();
@@ -689,10 +677,6 @@ function getNews(): void {
       nextTick(resetAndStartNewsAutoplay);
     });
   });
-}
-
-function handleIntroClick(url: string): void {
-  window.open(url, '_blank');
 }
 
 function updateModuleBoardTransform(tab: number): void {

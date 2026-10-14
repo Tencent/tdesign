@@ -148,6 +148,7 @@ export const zhCN = {
       title: '全方位资源支持，赋能每一个技术栈',
       description: '提供桌面端、移动端、AIGC 组件及丰富图标资源能力，覆盖主流框架与平台，开箱即用',
       logoAlt: '{name} 标志',
+      enterAction: '点击进入',
       cards: {
         web: {
           title: '桌面端组件',
@@ -351,6 +352,7 @@ export const enUS = {
       description:
         'Desktop, mobile, AIGC components, and D2C capabilities for mainstream frameworks and platforms, ready to use.',
       logoAlt: '{name} logo',
+      enterAction: 'Click to enter',
       cards: {
         web: {
           title: 'Desktop Components',

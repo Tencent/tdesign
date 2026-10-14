@@ -1028,7 +1028,7 @@ onBeforeUnmount(() => {
       flex-direction: column;
       align-items: center;
       gap: 64px;
-      padding: 120px 24px 60px;
+      padding: 0 24px 60px;
       box-sizing: border-box;
       transform: translateX(-50%) scale(var(--mobile-layout-scale));
       transform-origin: top center;
@@ -1049,7 +1049,7 @@ onBeforeUnmount(() => {
       }
 
       p {
-        margin-top: 20px;
+        margin: 12px 0 24px;
         font-size: 20px;
         line-height: 28px;
       }
@@ -1269,9 +1269,19 @@ onBeforeUnmount(() => {
   }
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 959px) {
   .business-cases__heading {
     top: 60px;
+
+    h2 {
+      font-size: 28px;
+      line-height: 36px;
+    }
+
+    p {
+      font-size: 12px;
+      line-height: 20px;
+    }
   }
 }
 </style>

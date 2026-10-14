@@ -50,6 +50,7 @@
                 {{ formatUpdatedAt(releaseDates[item.releaseKey]) }}
               </span>
               <span v-else class="resource-item__updated" aria-hidden="true"></span>
+              <span class="resource-item__action">{{ t('home.resources.enterAction') }}</span>
             </a>
           </div>
         </article>
@@ -656,12 +657,25 @@ const resourceCards = computed<ResourceCard[]>(() => [
     line-height: 24px;
   }
 
-  &__updated {
+  &__updated,
+  &__action {
     min-height: 20px;
     color: var(--text-placeholder);
     font-size: 12px;
     font-weight: 300;
     line-height: 20px;
+  }
+
+  &__action {
+    display: none;
+  }
+
+  &:hover &__updated {
+    display: none;
+  }
+
+  &:hover &__action {
+    display: block;
   }
 }
 
@@ -850,7 +864,8 @@ const resourceCards = computed<ResourceCard[]>(() => [
       grid-row: 1;
     }
 
-    &__updated {
+    &__updated,
+    &__action {
       grid-column: 2;
       grid-row: 2;
     }
@@ -1059,11 +1074,33 @@ const resourceCards = computed<ResourceCard[]>(() => [
       white-space: nowrap;
     }
 
-    &__updated {
+    &__updated,
+    &__action {
       font-size: 12px;
       line-height: 20px;
       white-space: nowrap;
     }
+  }
+}
+
+@media screen and (max-width: 959px) {
+  .resource-section__heading {
+    h2 {
+      font-size: 28px;
+      line-height: 36px;
+    }
+
+    p {
+      font-size: 12px;
+      line-height: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 596px) {
+  .resource-card__content p {
+    font-size: 12px;
+    line-height: 20px;
   }
 }
 </style>

@@ -473,4 +473,22 @@ const stats = computed(() => [
     }
   }
 }
+
+@media screen and (max-width: 959px) {
+  .industry-cases__heading {
+    h2 {
+      font-size: 28px;
+      line-height: 36px;
+    }
+
+    p {
+      font-size: 12px;
+      line-height: 20px;
+    }
+  }
+
+  .industry-cases__stats {
+    min-height: 240px;
+  }
+}
 </style>
