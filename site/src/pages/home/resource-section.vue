@@ -67,7 +67,7 @@ import figmaLogo from '@/assets/figma-logo.svg';
 import flutterLogo from '@/assets/flutter-logo.svg';
 import miniprogramLogo from '@/assets/miniprogram-logo.svg';
 import reactLogo from '@/assets/react-logo.svg';
-import uniappLogo from '@/assets/uniapp-logo.png';
+import uniappLogo from '@/assets/uniapp-logo.svg';
 import vueLogo from '@/assets/vue-logo.svg';
 import homeMessages from '@/locales/pages/home';
 import { HOME_API_ENDPOINTS } from './api';
@@ -481,6 +481,8 @@ const resourceCards = computed<ResourceCard[]>(() => [
     content: '';
     pointer-events: none;
     filter: blur(100px);
+    transform-origin: center;
+    will-change: transform;
   }
 
   &--mobile::before {
@@ -490,6 +492,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
     height: 440px;
     background: linear-gradient(246deg, #b5fff5 44.26%, #4794ff 63.43%, #3700ff 89.4%);
     opacity: 0.12;
+    animation: resource-glow-mobile 14s ease-in-out infinite;
   }
 
   &--aigc::before {
@@ -499,6 +502,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
     height: 430px;
     background: linear-gradient(221deg, #b5c7ff 50%, #c574ff 62.12%, #ff47d4 74.43%, #ff0004 90.66%);
     opacity: 0.1;
+    animation: resource-glow-aigc 16s ease-in-out -5s infinite;
   }
 
   &--icons::before {
@@ -508,6 +512,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
     height: 430px;
     background: linear-gradient(221deg, #ffb5b5 50%, #ffd874 62.12%, #ceff47 74.43%, #6fff00 90.66%);
     opacity: 0.1;
+    animation: resource-glow-icons 15s ease-in-out -9s infinite;
   }
 
   &:nth-child(3) {
@@ -628,6 +633,70 @@ const resourceCards = computed<ResourceCard[]>(() => [
   }
 }
 
+@keyframes resource-glow-mobile {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(0.96);
+  }
+
+  25% {
+    transform: translate3d(-180px, 180px, 0) rotate(90deg) scale(1.06);
+  }
+
+  50% {
+    transform: translate3d(-360px, 120px, 0) rotate(180deg) scale(0.94);
+  }
+
+  75% {
+    transform: translate3d(-180px, 240px, 0) rotate(270deg) scale(1.08);
+  }
+}
+
+@keyframes resource-glow-aigc {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(0.94);
+  }
+
+  25% {
+    transform: translate3d(140px, -100px, 0) rotate(90deg) scale(1.08);
+  }
+
+  50% {
+    transform: translate3d(80px, -220px, 0) rotate(180deg) scale(0.96);
+  }
+
+  75% {
+    transform: translate3d(-100px, -100px, 0) rotate(270deg) scale(1.04);
+  }
+}
+
+@keyframes resource-glow-icons {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1.04);
+  }
+
+  25% {
+    transform: translate3d(140px, -140px, 0) rotate(90deg) scale(0.94);
+  }
+
+  50% {
+    transform: translate3d(0, -260px, 0) rotate(180deg) scale(1.08);
+  }
+
+  75% {
+    transform: translate3d(-140px, -120px, 0) rotate(270deg) scale(0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .resource-card::before {
+    animation: none;
+    will-change: auto;
+  }
+}
+
 .resource-item {
   display: flex;
   width: 100px;
@@ -643,7 +712,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
   transition: background 0.2s;
 
   &:hover {
-    background: var(--bg-color-card-hover);
+    background: var(--bg-color-demo-hover);
   }
 
   img {
@@ -1101,6 +1170,12 @@ const resourceCards = computed<ResourceCard[]>(() => [
   .resource-card__content p {
     font-size: 12px;
     line-height: 20px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .resource-section__heading h2 {
+    margin-bottom: 12px;
   }
 }
 </style>

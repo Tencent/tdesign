@@ -6,12 +6,12 @@ import tencentCloudIcon from '@images/tencentcloud-logo.svg?raw';
 import committeeIcon from '@images/committee-logo.svg?raw';
 import tdesignLogo from '@images/logo.svg?raw';
 
-import flutterLogo from '@images/groups/flutter-logo.svg?raw';
-import vueLogo from '@images/groups/vue-logo.svg?raw';
-import reactLogo from '@images/groups/react-logo.svg?raw';
-import wxLogo from '@images/groups/wx-logo.svg?raw';
-import uniappLogo from './uniapp-logo.svg?raw';
-import figmaLogo from './figma-logo.svg?raw';
+import flutterLogo from '@images/flutter-logo.svg?raw';
+import vueLogo from '@images/vue-logo.svg?raw';
+import reactLogo from '@images/react-logo.svg?raw';
+import wxLogo from '@images/miniprogram-logo.svg?raw';
+import uniappLogo from '@images/uniapp-logo.svg?raw';
+import figmaLogo from '@images/figma-logo.svg?raw';
 
 import designGroup from '@images/groups/design-group.png';
 import flutterGroup from '@images/groups/flutter-group.png';

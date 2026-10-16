@@ -1,10 +1,21 @@
 
 @font-face {
-  font-family: TCloudNumber;
+  font-family: TCloudNumberDigits;
   src: url("../pages/design/assets/TCloudNumber-Regular.ttf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0030-0039;
+}
+
+html,
+body {
+  font-family: TCloudNumberDigits, BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+:root {
+  --td-font-family: tcloudnumberdigits, blinkmacsystemfont, -apple-system, 'Segoe UI', roboto, helvetica, arial, sans-serif;
+  --td-font-family-medium: tcloudnumberdigits, blinkmacsystemfont, -apple-system, 'Segoe UI', roboto, helvetica, arial, sans-serif;
 }
 
 .font(@i) when(@i <= 64){

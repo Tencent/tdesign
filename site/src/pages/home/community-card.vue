@@ -59,7 +59,7 @@
               {{ item.title }}
             </a>
             <div class="activity-feed__meta">
-              <t-avatar size="20px" :image="item.avatar" :alt="item.author" />
+              <t-avatar size="16px" :image="item.avatar" :alt="item.author" />
               <span class="activity-feed__meta-full">{{ item.meta }}</span>
               <span class="activity-feed__meta-compact">{{ item.compactMeta }}</span>
             </div>
@@ -532,16 +532,37 @@ onBeforeUnmount(() => {
 
   &__meta {
     display: flex;
+    max-width: 100%;
+    min-width: 0;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
+    overflow: hidden;
     color: var(--text-placeholder);
     font-size: 12px;
     line-height: 20px;
     white-space: nowrap;
 
     :deep(.t-avatar) {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 16px;
+      align-self: center;
       font-size: 13px;
+      line-height: 0;
+      vertical-align: middle;
     }
+  }
+
+  &__meta-full,
+  &__meta-compact {
+    max-width: calc(100% - 24px);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__meta-full {
+    display: block;
   }
 
   &__meta-compact {
@@ -570,7 +591,7 @@ onBeforeUnmount(() => {
   box-sizing: border-box;
   flex-direction: column;
   justify-content: center;
-  gap: 16px;
+  gap: 8px;
 
   &__value {
     display: flex;
@@ -637,7 +658,7 @@ onBeforeUnmount(() => {
     }
 
     &__meta-compact {
-      display: inline;
+      display: block;
     }
   }
 }

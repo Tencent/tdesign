@@ -47,7 +47,7 @@ export const zhCN = {
       features: {
         frameworks: {
           title: '多技术栈版本实现',
-          description: '官方支持业界目前主流的开发技术栈：React、Vue、Angular、微信小程序、Flutter',
+          description: '官方支持业界目前主流的开发技术栈：React、Vue、微信小程序、Uniapp、Flutter',
         },
         platforms: {
           title: '多端适配',
@@ -59,7 +59,7 @@ export const zhCN = {
         },
       },
       title: '开源开放，持续迭代',
-      description: '采用 MIT 许可协议，始终保持开放的心态，期待各方一起共建开源生态。',
+      description: '采用 MIT 许可协议，始终保持开放的心态，期待各方一起共建开源生态',
     },
     componentDemo: {
       accountPlaceholder: '请输入用户名',
@@ -116,7 +116,7 @@ export const zhCN = {
         },
       },
       title: '包容多元，灵活易用',
-      description: '保持设计敏锐感，在繁杂的业务中寻找共性，提供通用的设计解决方案。',
+      description: '保持设计敏锐感，在繁杂的业务中寻找共性，提供通用的设计解决方案',
     },
     contributors: {
       title: '协同共建，共享活跃社区',
@@ -129,8 +129,8 @@ export const zhCN = {
         '“复杂层级的精确还原——一个未经整理的设计稿，且包含有悬浮元素，D2C 的视觉还原竟然跟设计稿完全对得上，有点儿超预期。”',
       user: 'bruceren',
       role: '视觉设计师',
-      downloads: '内外部月下载量',
-      downloadTrend: '内外部月下载量趋势',
+      downloads: '当月下载量（内外部）',
+      downloadTrend: '下载量趋势',
       downloadCount: '{count} 次',
       tenThousandPlus: '万次+',
       tenThousand: '万次',

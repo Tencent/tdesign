@@ -269,7 +269,7 @@
       color: var(--text-primary);
 
       &__left {
-        font-family: 'tencentW7';
+        font-family: TCloudNumberDigits, 'tencentW7', sans-serif;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -324,40 +324,41 @@
   overflow: hidden;
 
   &__track {
-    --news-fade-width: max(0px, calc((100% - 1280px) / 2));
-    --news-track-padding: var(--outer-padding-left-right);
-
     display: flex;
     gap: 16px;
     width: 100%;
     height: 100%;
-    padding: 0 var(--news-track-padding);
     overflow-x: hidden;
     box-sizing: border-box;
     scrollbar-width: none;
-    mask-image: linear-gradient(
-      90deg,
-      transparent 0,
-      #000 var(--news-fade-width),
-      #000 calc(100% - var(--news-fade-width)),
-      transparent 100%
-    );
-    -webkit-mask-image: linear-gradient(
-      90deg,
-      transparent 0,
-      #000 var(--news-fade-width),
-      #000 calc(100% - var(--news-fade-width)),
-      transparent 100%
-    );
 
     &::-webkit-scrollbar {
       display: none;
     }
   }
 
-  @media screen and (min-width: 1281px) {
+  @media screen and (min-width: 1441px) {
     &__track {
-      --news-track-padding: calc((100% - 1280px) / 2);
+      --news-mask-edge: max(0px, calc((100% - 1660px) / 2));
+
+      mask-image: linear-gradient(
+        90deg,
+        transparent 0,
+        transparent var(--news-mask-edge),
+        #000 calc(50% - 529px),
+        #000 calc(50% + 529px),
+        transparent calc(100% - var(--news-mask-edge)),
+        transparent 100%
+      );
+      -webkit-mask-image: linear-gradient(
+        90deg,
+        transparent 0,
+        transparent var(--news-mask-edge),
+        #000 calc(50% - 529px),
+        #000 calc(50% + 529px),
+        transparent calc(100% - var(--news-mask-edge)),
+        transparent 100%
+      );
     }
   }
 
@@ -584,20 +585,20 @@
         }
 
         &.alpha {
-          font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+          font-family: TCloudNumberDigits, SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
           color: var(--brand-main);
           background: var(--brand-main-light);
         }
 
         &.beta,
         &.rc {
-          font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+          font-family: TCloudNumberDigits, SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
           color: var(--success-main);
           background: var(--success-main-light);
         }
 
         &.stable {
-          font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+          font-family: TCloudNumberDigits, SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
           color: #029cd4;
           background: rgba(2, 156, 212, 0.1);
         }
@@ -681,6 +682,7 @@
     .title {
       margin: 0;
       font-size: 36px;
+      font-weight: 600;
       line-height: 44px;
       word-break: keep-all;
       color: var(--text-primary);
@@ -857,12 +859,15 @@
         .desc-title {
           margin: 24px 0 8px;
           font-size: 16px;
+          font-weight: 500;
+          line-height: 24px;
           color: var(--text-primary);
         }
 
         .desc-text {
-          font-size: 14px;
-          line-height: 22px;
+          font-size: 12px;
+          font-weight: 300;
+          line-height: 20px;
           color: var(--text-secondary);
         }
       }
@@ -889,7 +894,7 @@
             height: 40px;
             padding: 6px 16px;
             flex: none;
-            font-family: 'Source Code Pro', monospace;
+            font-family: TCloudNumberDigits, 'Source Code Pro', monospace;
             font-size: 16px;
             line-height: 28px;
             white-space: nowrap;
@@ -904,7 +909,7 @@
           .code-item {
             gap: 0;
             padding: 12px 16px;
-            font-family: 'Source Code Pro', monospace;
+            font-family: TCloudNumberDigits, 'Source Code Pro', monospace;
             line-height: 24px;
           }
         }
@@ -1407,10 +1412,6 @@
             .desc-title {
               margin: 16px 0 8px;
             }
-
-            &:not(:first-child) .desc-title {
-              font-size: 20px;
-            }
           }
         }
       }
@@ -1532,6 +1533,16 @@
       padding-right: 48px;
       padding-left: 48px;
     }
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .module-board__card-desc .desc {
+    margin-top: 12px;
+  }
+
+  .module-setup__heading {
+    gap: 12px;
   }
 }
 

@@ -224,7 +224,6 @@ const stats = computed(() => [
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    min-width: 206px;
 
     > p {
       width: 100%;
@@ -249,7 +248,7 @@ const stats = computed(() => [
     white-space: nowrap;
 
     strong {
-      font-family: 'DIN Alternate', 'Roboto Mono', sans-serif;
+      font-family: TCloudNumberDigits, 'DIN Alternate', 'Roboto Mono', sans-serif;
       font-size: 52px;
       font-weight: 400;
       line-height: 56px;
@@ -489,6 +488,12 @@ const stats = computed(() => [
 
   .industry-cases__stats {
     min-height: 240px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .industry-cases__heading {
+    gap: 12px;
   }
 }
 </style>

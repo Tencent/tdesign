@@ -1,10 +1,10 @@
 import { isEn, isIntranet } from '@utils';
 import { jumpLocation } from '@utils/locale';
 import flutterIcon from '../src/images/flutter-logo.svg?url';
-import uniappIcon from '../src/images/uniapp-logo.png?url';
+import uniappIcon from '../src/images/uniapp-logo.svg?url';
 import reactIcon from '../src/images/react-logo.svg?url';
 import vueIcon from '../src/images/vue-logo.svg?url';
-import wxIcon from '../src/images/wx-logo.svg?url';
+import wxIcon from '../src/images/miniprogram-logo.svg?url';
 import type { ComponentLinkGroup, HeaderConfig, HeaderItem } from './types';
 
 const baseComponentsLinks: HeaderConfig['baseComponentsLinks'] = {

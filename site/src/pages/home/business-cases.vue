@@ -54,8 +54,7 @@
               <div>
                 <span>{{ t('home.businessCases.designReferences') }}</span>
                 <strong>
-                  {{ usageData.figmaReferenceCount }}
-                  <small>{{ t('home.businessCases.tenThousand') }}</small>
+                  {{ usageData.figmaReferenceCount }}<small>{{ t('home.businessCases.tenThousand') }}</small>
                 </strong>
               </div>
               <div>
@@ -91,14 +90,50 @@
                   <stop offset=".88" stop-color="white" />
                   <stop offset="1" stop-color="white" stop-opacity="0" />
                 </linearGradient>
+                <linearGradient id="business-cases-line-edge-fade">
+                  <stop offset="0" stop-color="white" stop-opacity="0" />
+                  <stop offset=".04" stop-color="white" />
+                  <stop offset=".96" stop-color="white" />
+                  <stop offset="1" stop-color="white" stop-opacity="0" />
+                </linearGradient>
+                <linearGradient id="business-cases-line-middle-fade">
+                  <stop offset="0" stop-color="white" stop-opacity="0" />
+                  <stop offset=".08" stop-color="white" />
+                  <stop offset=".92" stop-color="white" />
+                  <stop offset="1" stop-color="white" stop-opacity="0" />
+                </linearGradient>
                 <mask id="business-cases-chart-mask">
                   <rect width="308" height="212" fill="url(#business-cases-edge-fade)" />
+                </mask>
+                <mask id="business-cases-line-edge-mask">
+                  <rect width="308" height="212" fill="url(#business-cases-line-edge-fade)" />
+                </mask>
+                <mask id="business-cases-line-middle-mask">
+                  <rect width="308" height="212" fill="url(#business-cases-line-middle-fade)" />
                 </mask>
               </defs>
               <g mask="url(#business-cases-chart-mask)">
                 <path v-if="chartAreaPath" class="usage-card__area" :d="chartAreaPath" />
-                <path v-if="chartLinePath" ref="usageLineRef" class="usage-card__line" :d="chartLinePath" />
               </g>
+              <path
+                v-if="chartLinePath"
+                class="usage-card__line usage-card__line--edge"
+                :d="chartLinePath"
+                mask="url(#business-cases-line-edge-mask)"
+              />
+              <path
+                v-if="chartLinePath"
+                class="usage-card__line usage-card__line--middle"
+                :d="chartLinePath"
+                mask="url(#business-cases-line-middle-mask)"
+              />
+              <path
+                v-if="chartLinePath"
+                ref="usageLineRef"
+                class="usage-card__line usage-card__line--main"
+                :d="chartLinePath"
+                mask="url(#business-cases-chart-mask)"
+              />
             </svg>
             <span v-if="chartLinePath" class="usage-card__marker" aria-hidden="true"></span>
           </div>
@@ -178,6 +213,10 @@ const chartHoverX = ref(226);
 const chartHoverY = ref(65);
 const usageData = ref(fallbackUsageData);
 let animationFrame: number | null = null;
+let spreadAnimationStartedAt: number | null = null;
+let spreadAnimationFrom = 0;
+let spreadAnimationTarget = 0;
+const SPREAD_ANIMATION_DURATION = 700;
 
 interface ChartPoint {
   x: number;
@@ -301,15 +340,14 @@ function getCaseStyle(item: BusinessCase): Record<string, string> {
   const inverseProgress = 1 - spreadProgress.value;
 
   return {
-    '--spread-translate-x': `${item.spreadX * inverseProgress}px`,
-    '--spread-translate-y': `${item.spreadY * inverseProgress}px`,
-    '--spread-rotation': `${item.rotation * spreadProgress.value}deg`,
-    '--spread-scale': `${0.9 + spreadProgress.value * 0.1}`,
+    '--spread-translate-x': `${Math.round(item.spreadX * inverseProgress)}px`,
+    '--spread-translate-y': `${Math.round(item.spreadY * inverseProgress)}px`,
+    '--spread-rotation': `${item.rotation}deg`,
     '--spread-opacity': `${0.35 + spreadProgress.value * 0.65}`,
   };
 }
 
-function updateSpreadProgress(): void {
+function updateSpreadProgress(timestamp = performance.now()): void {
   animationFrame = null;
 
   if (businessCasesRef.value) {
@@ -332,17 +370,41 @@ function updateSpreadProgress(): void {
     mobileSectionHeight.value = `${(mobileLayout?.offsetHeight ?? 0) * mobileScale}px`;
   }
 
-  if (!businessCasesRef.value || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    spreadProgress.value = 1;
+  if (!businessCasesRef.value) return;
+
+  const sectionTop = businessCasesRef.value.getBoundingClientRect().top;
+  const animationTrigger = window.innerHeight * 0.16;
+  const nextTarget = sectionTop <= animationTrigger ? 1 : 0;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    spreadProgress.value = nextTarget;
+    spreadAnimationTarget = nextTarget;
+    spreadAnimationStartedAt = null;
     return;
   }
 
-  const sectionTop = businessCasesRef.value.getBoundingClientRect().top;
-  const animationStart = window.innerHeight * 0.55;
-  const animationEnd = window.innerHeight * 0.08;
-  const progress = Math.min(1, Math.max(0, (animationStart - sectionTop) / (animationStart - animationEnd)));
+  if (nextTarget !== spreadAnimationTarget) {
+    spreadAnimationFrom = spreadProgress.value;
+    spreadAnimationTarget = nextTarget;
+    spreadAnimationStartedAt = timestamp;
+  }
 
-  spreadProgress.value = Number(progress.toFixed(3));
+  if (spreadAnimationStartedAt === null) return;
+
+  const distance = Math.abs(spreadAnimationTarget - spreadAnimationFrom);
+  const duration = Math.max(1, SPREAD_ANIMATION_DURATION * distance);
+  const progress = Math.min(1, (timestamp - spreadAnimationStartedAt) / duration);
+  const easedProgress = 1 - (1 - progress) ** 3;
+  spreadProgress.value = Number(
+    (spreadAnimationFrom + (spreadAnimationTarget - spreadAnimationFrom) * easedProgress).toFixed(3),
+  );
+
+  if (progress < 1) {
+    animationFrame = window.requestAnimationFrame(updateSpreadProgress);
+  } else {
+    spreadProgress.value = spreadAnimationTarget;
+    spreadAnimationStartedAt = null;
+  }
 }
 
 function scheduleSpreadUpdate(): void {
@@ -422,10 +484,8 @@ onBeforeUnmount(() => {
   position: absolute;
   z-index: 1;
   opacity: var(--spread-opacity);
-  transform: translate(var(--spread-translate-x), var(--spread-translate-y)) rotate(var(--spread-rotation))
-    scale(var(--spread-scale));
+  transform: rotate(var(--spread-rotation));
   transform-origin: center;
-  will-change: transform, opacity;
 
   &__card {
     height: 180px;
@@ -489,6 +549,7 @@ onBeforeUnmount(() => {
 
     strong {
       font-size: 14px;
+      font-weight: 700;
       line-height: 22px;
     }
 
@@ -665,6 +726,7 @@ onBeforeUnmount(() => {
       width: 308px;
       height: 212px;
       position: absolute;
+      z-index: 1;
       top: 28px;
       left: 0;
     }
@@ -686,14 +748,14 @@ onBeforeUnmount(() => {
 
     span {
       color: var(--text-secondary);
-      font-size: 8px;
-      line-height: 12px;
+      font-size: 12px;
+      line-height: 20px;
     }
   }
 
   &__grid {
     position: absolute;
-    z-index: 1;
+    z-index: 0;
     top: 24px;
     left: 24px;
     display: flex;
@@ -702,16 +764,25 @@ onBeforeUnmount(() => {
     span {
       width: 20px;
       height: 212px;
+      position: relative;
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      padding-bottom: 2px;
       box-sizing: border-box;
-      border-left: 1px dashed var(--component-border);
       color: var(--text-placeholder);
       font-size: 8px;
       line-height: 11px;
       writing-mode: horizontal-tb;
+
+      &::before {
+        position: absolute;
+        top: 0;
+        bottom: 19px;
+        left: 50%;
+        border-left: 0.5px dashed var(--component-border);
+        content: '';
+        transform: translateX(-50%);
+      }
     }
   }
 
@@ -722,7 +793,20 @@ onBeforeUnmount(() => {
   &__line {
     fill: none;
     stroke: var(--text-primary);
-    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    &--edge {
+      stroke-width: 0.5;
+    }
+
+    &--middle {
+      stroke-width: 1;
+    }
+
+    &--main {
+      stroke-width: 1.5;
+    }
   }
 
   &__marker {
@@ -836,8 +920,16 @@ onBeforeUnmount(() => {
   }
 }
 
+@media screen and (min-width: 1201px) {
+  .business-case {
+    margin-top: var(--spread-translate-y);
+    margin-left: var(--spread-translate-x);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .business-case {
+    margin: 0;
     opacity: 1;
     transform: translate(0, 0) rotate(var(--case-rotation)) scale(1);
     will-change: auto;
@@ -1119,8 +1211,8 @@ onBeforeUnmount(() => {
       }
 
       span {
-        font-size: 11.12px;
-        line-height: 18.54px;
+        font-size: 12px;
+        line-height: 20px;
       }
 
       strong {
@@ -1175,6 +1267,10 @@ onBeforeUnmount(() => {
         height: 196.53px;
         font-size: 7.42px;
         line-height: 10.2px;
+
+        &::before {
+          bottom: 18.2px;
+        }
       }
     }
 
@@ -1282,6 +1378,12 @@ onBeforeUnmount(() => {
       font-size: 12px;
       line-height: 20px;
     }
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .business-cases__heading p {
+    margin-top: 12px;
   }
 }
 </style>
