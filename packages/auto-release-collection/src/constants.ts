@@ -34,7 +34,7 @@ export const submodules = {
   },
   'tdesign-flutter': {
     title: '## Flutter for Mobile 发布',
-    changelogUrl: 'https://raw.githubusercontent.com/Tencent/tdesign-flutter/refs/heads/main/tdesign-site/CHANGELOG.md',
+    changelogUrl: 'https://raw.githubusercontent.com/Tencent/tdesign-flutter/refs/heads/main/tdesign-component/CHANGELOG.md',
     tagPrefix: '',
     repo: 'Tencent/tdesign-flutter',
   },
