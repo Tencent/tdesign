@@ -22,10 +22,9 @@
   }
 
   &__main {
-    height: 320px;
     padding: 96px 0 60px;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 664px) auto;
     align-items: flex-start;
     box-sizing: border-box;
   }
@@ -271,6 +270,7 @@
     &__main {
       height: auto;
       padding: 48px 0;
+      display: flex;
       flex-direction: column;
       align-items: center;
       gap: 40px;
