@@ -730,9 +730,9 @@ const state = reactive<HomeState>({
   ],
   mobileSourceList: [
     { logo: vueLogo, nameKey: 'home.resourceNames.vueNext', href: '/mobile-vue/', status: 1 },
-    { logo: reactLogo, nameKey: 'home.resourceNames.react', href: '/mobile-react/', status: 2 },
-    { logo: uniappLogo, nameKey: 'home.resourceNames.uniapp', href: '/uniapp/', status: 2 },
-    { logo: flutterLogo, nameKey: 'home.resourceNames.flutter', href: '/flutter/', status: 2 },
+    { logo: reactLogo, nameKey: 'home.resourceNames.react', href: '/mobile-react/', status: 1 },
+    { logo: uniappLogo, nameKey: 'home.resourceNames.uniapp', href: '/uniapp/', status: 1 },
+    { logo: flutterLogo, nameKey: 'home.resourceNames.flutter', href: '/flutter/', status: 1 },
   ],
   mobileDesignList: [
     { logo: figmaLogo, nameKey: 'home.resourceNames.figma', href: figmaMobileUrl, status: 1 },
