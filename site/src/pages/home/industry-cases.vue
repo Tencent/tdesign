@@ -209,6 +209,8 @@ const stats = computed(() => [
   }
 
   &__stats {
+    --industry-grid-color: rgba(0, 0, 0, 0.06);
+
     position: relative;
     display: flex;
     justify-content: center;
@@ -216,10 +218,24 @@ const stats = computed(() => [
     gap: 160px;
     min-height: 388px;
     margin-top: 0;
-    background: url('./assets/industry-cases/pattern.png') center / cover no-repeat;
+
+    &::before {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(to right, var(--industry-grid-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--industry-grid-color) 1px, transparent 1px);
+      background-position: center;
+      background-size: 80px 80px;
+      mask-image: linear-gradient(to right, transparent, #000 24%, #000 76%, transparent),
+        linear-gradient(to bottom, transparent, #000 24%, #000 68%, transparent);
+      mask-composite: intersect;
+      pointer-events: none;
+      content: '';
+    }
   }
 
   &__stat {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
