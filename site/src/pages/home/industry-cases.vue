@@ -68,8 +68,11 @@ interface LogoItem {
 const { t } = useI18n({ messages: homeMessages });
 
 const MOBILE_BREAKPOINT = 494;
+const COMPACT_BREAKPOINT = 700;
 const TABLET_BREAKPOINT = 960;
+const DESKTOP_BREAKPOINT = 1200;
 const DESKTOP_LOGO_HEIGHT = 88;
+const TABLET_LOGO_HEIGHT = 70;
 const MOBILE_LOGO_HEIGHT = 36;
 const LOGO_ROW_GAP = 16;
 
@@ -77,11 +80,19 @@ const brandList = ref<LogoItem[]>([]);
 const usageData = ref(fallbackUsageData);
 const viewportWidth = ref(typeof window === 'undefined' ? TABLET_BREAKPOINT : window.innerWidth);
 const logoScale = computed(() => {
-  if (viewportWidth.value >= TABLET_BREAKPOINT) return 1;
-  if (viewportWidth.value <= MOBILE_BREAKPOINT) return MOBILE_LOGO_HEIGHT / DESKTOP_LOGO_HEIGHT;
+  const tabletScale = TABLET_LOGO_HEIGHT / DESKTOP_LOGO_HEIGHT;
+  const mobileScale = MOBILE_LOGO_HEIGHT / DESKTOP_LOGO_HEIGHT;
 
-  const progress = (viewportWidth.value - MOBILE_BREAKPOINT) / (TABLET_BREAKPOINT - MOBILE_BREAKPOINT);
-  return MOBILE_LOGO_HEIGHT / DESKTOP_LOGO_HEIGHT + progress * (1 - MOBILE_LOGO_HEIGHT / DESKTOP_LOGO_HEIGHT);
+  if (viewportWidth.value >= DESKTOP_BREAKPOINT) return 1;
+  if (viewportWidth.value >= TABLET_BREAKPOINT) {
+    const progress = (viewportWidth.value - TABLET_BREAKPOINT) / (DESKTOP_BREAKPOINT - TABLET_BREAKPOINT);
+    return tabletScale + progress * (1 - tabletScale);
+  }
+  if (viewportWidth.value >= COMPACT_BREAKPOINT) return tabletScale;
+  if (viewportWidth.value <= MOBILE_BREAKPOINT) return mobileScale;
+
+  const progress = (viewportWidth.value - MOBILE_BREAKPOINT) / (COMPACT_BREAKPOINT - MOBILE_BREAKPOINT);
+  return mobileScale + progress * (tabletScale - mobileScale);
 });
 const logoRowCount = computed(() => (viewportWidth.value <= MOBILE_BREAKPOINT ? 4 : 3));
 const logoRows = computed(() =>
@@ -365,13 +376,17 @@ const stats = computed(() => [
 
 @media screen and (max-width: 960px) {
   .industry-cases {
-    padding-top: 0;
+    padding: 60px 0;
 
     &__content {
       gap: clamp(40px, calc(31.52px + 1.77vw), 48px);
     }
 
     &__heading {
+      width: 100%;
+      padding: 0 24px;
+      box-sizing: border-box;
+
       h2 {
         font-size: clamp(28px, calc(25.88px + 0.44vw), 30px);
         line-height: clamp(39px, calc(37.94px + 0.22vw), 40px);
@@ -386,6 +401,8 @@ const stats = computed(() => [
     &__stats {
       gap: clamp(0px, calc(-50.88px + 10.6vw), 48px);
       min-height: clamp(132px, calc(-67.46px + 41.6vw), 320px);
+      margin-top: 40px;
+      padding: 48px 0;
     }
 
     &__stat {
@@ -418,26 +435,19 @@ const stats = computed(() => [
 
 @media screen and (max-width: 494px) {
   .industry-cases {
-    padding-top: 0;
-
     &__content {
       gap: 40px;
     }
 
     &__heading {
-      width: calc(100% - 48px);
-
       h2 {
         font-size: 28px;
         line-height: 39px;
       }
 
       p {
-        overflow: hidden;
         font-size: 12px;
         line-height: 17px;
-        text-overflow: clip;
-        white-space: nowrap;
       }
     }
 
@@ -501,15 +511,23 @@ const stats = computed(() => [
       line-height: 20px;
     }
   }
+}
 
+@media screen and (max-width: 960px) {
   .industry-cases__stats {
-    min-height: 240px;
+    height: 84px;
+    min-height: 84px;
   }
 }
 
 @media screen and (max-width: 360px) {
   .industry-cases__heading {
     gap: 12px;
+  }
+
+  .industry-cases__stat > p {
+    font-size: 10px;
+    line-height: 18px;
   }
 }
 </style>

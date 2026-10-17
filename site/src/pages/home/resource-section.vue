@@ -735,6 +735,10 @@ const resourceCards = computed<ResourceCard[]>(() => [
     line-height: 20px;
   }
 
+  &__updated {
+    font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
   &__action {
     display: none;
   }
@@ -840,7 +844,6 @@ const resourceCards = computed<ResourceCard[]>(() => [
 
     &__heading {
       width: 912px;
-      padding: 0 14px;
       box-sizing: border-box;
       margin: 0;
 
@@ -869,9 +872,12 @@ const resourceCards = computed<ResourceCard[]>(() => [
 
   .resource-card {
     &__items {
-      flex-wrap: wrap;
-      justify-content: flex-start;
-      gap: 8px;
+      display: grid;
+      width: 100%;
+      grid-template-columns: repeat(4, 200px);
+      justify-content: space-between;
+      column-gap: 0;
+      row-gap: 8px;
     }
 
     &--mobile &__illustration {
@@ -882,7 +888,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
     }
 
     &--mobile &__items {
-      width: 620px;
+      width: 100%;
     }
 
     &--aigc &__illustration {
@@ -907,15 +913,19 @@ const resourceCards = computed<ResourceCard[]>(() => [
         transform: none;
       }
     }
+
+    &--icons &__items {
+      justify-content: space-between;
+      column-gap: 0;
+    }
   }
 
   .resource-item {
     display: grid;
-    width: auto;
-    min-width: 132px;
+    width: 200px;
+    min-width: 200px;
     height: 64px;
     padding: 12px 24px 12px 16px;
-    flex: 0 0 auto;
     grid-template-columns: 40px 1fr;
     grid-template-rows: 24px 20px;
     column-gap: 8px;
@@ -985,6 +995,8 @@ const resourceCards = computed<ResourceCard[]>(() => [
 @media screen and (min-width: 751px) and (max-width: 959px) {
   .resource-section {
     padding-top: 0;
+    padding-right: 24px;
+    padding-left: 24px;
   }
 }
 
@@ -993,7 +1005,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
     left: 50%;
     width: 100vw;
     height: var(--mobile-section-height);
-    padding: 0;
+    padding: 0 24px;
     overflow: hidden;
     transform: translateX(-50%);
 
@@ -1122,7 +1134,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
 
   .resource-item {
     z-index: 1;
-    width: 192px;
+    width: 100%;
     height: 48px;
     padding: 12px 0;
     flex: 0 0 48px;

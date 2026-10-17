@@ -30,7 +30,7 @@
             backgroundColor: avatarColors[index % avatarColors.length],
           }"
         >
-          <img v-if="isGithubMember(member)" :src="githubAvatar(member)" :alt="member" />
+          <img v-if="isGithubMember(member)" :src="githubAvatar(member)" alt="" />
           <template v-else>{{ member }}</template>
         </span>
       </div>
@@ -59,7 +59,7 @@
               {{ item.title }}
             </a>
             <div class="activity-feed__meta">
-              <t-avatar size="16px" :image="item.avatar" :alt="item.author" />
+              <t-avatar size="16px" :image="item.avatar" alt="" />
               <span class="activity-feed__meta-full">{{ item.meta }}</span>
               <span class="activity-feed__meta-compact">{{ item.compactMeta }}</span>
             </div>
@@ -503,14 +503,15 @@ onBeforeUnmount(() => {
     height: 68px;
     padding: 12px 0;
     box-sizing: border-box;
-    border-top: 1px solid var(--component-border);
+    border-top: 0.5px solid var(--component-border);
 
     &:nth-child(n + 5) {
       display: none;
     }
 
+    &:nth-child(4),
     &:last-child {
-      border-bottom: 1px solid var(--component-border);
+      border-bottom: 0.5px solid var(--component-border);
     }
   }
 
@@ -648,6 +649,10 @@ onBeforeUnmount(() => {
     &__item:nth-child(n + 5) {
       display: block;
     }
+
+    &__item:nth-child(4):not(:last-child) {
+      border-bottom: 0;
+    }
   }
 }
 
@@ -767,14 +772,11 @@ onBeforeUnmount(() => {
     }
 
     &__meta-full {
-      display: block;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      display: none;
     }
 
     &__meta-compact {
-      display: none;
+      display: block;
     }
   }
 

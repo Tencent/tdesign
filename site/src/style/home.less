@@ -135,9 +135,10 @@
 :root[theme-mode='dark'] {
   .tdesign-homepage {
     --box-shadow-detail: 0px 50px 100px -12px rgba(0, 0, 0, 0.2), 0px 30px 60px -30px rgba(0, 0, 0, 0.4);
+    --box-shadow-detail-outline: 0 0 0 0 rgba(255, 255, 255, 0.08);
 
     .component-board {
-      background: var(--bg-color-secondarypage);
+      background: var(--bg-color-component-board);
     }
 
     .business-cases {
@@ -184,9 +185,8 @@
       background: #1e1e1e;
 
       &::before {
-        inset: 0;
         opacity: 1;
-        background: url('../pages/home/assets/community-growth-bg-dark.png') left center / 105% 100% no-repeat;
+        content: url('../pages/home/assets/community-growth-bg-dark.png');
         mask-image: none;
         mix-blend-mode: hard-light;
       }
@@ -226,6 +226,7 @@
   --outer-padding-left-right: 48px;
   --inner-padding-left-right: 32px;
   --box-shadow-detail: 0px 50px 100px -12px rgba(0, 0, 0, 0.05), 0px 30px 60px -30px rgba(0, 0, 0, 0.1);
+  --box-shadow-detail-outline: 0 0 0 0 rgba(0, 0, 0, 0.06);
 
   td-header {
     position: fixed;
@@ -267,6 +268,7 @@
       margin: 0 auto 28px;
       box-sizing: border-box;
       display: flex;
+      align-items: flex-end;
       justify-content: space-between;
       color: var(--text-primary);
 
@@ -704,10 +706,6 @@
     overflow: hidden;
     width: 888px;
 
-    &--creation {
-      border-color: #dcdcdc;
-    }
-
     @media screen and (max-width: 960px) {
       max-width: calc(100vw - 48px);
     }
@@ -758,7 +756,7 @@
 
     .component-board {
       padding: var(--inner-padding-left-right) var(--inner-padding-left-right) 0;
-      background: var(--td-gray-color-1);
+      background: var(--bg-color-component-board);
       display: grid;
       grid-template-columns: repeat(3, 256px);
       justify-content: center;
@@ -950,7 +948,7 @@
       height: 520px;
       border: 0;
       border-radius: 12px;
-      box-shadow: 0 30px 60px -30px rgb(0 0 0 / 10%), 0 50px 100px -12px rgb(0 0 0 / 5%);
+      box-shadow: var(--box-shadow-detail-outline), var(--box-shadow-detail);
     }
   }
 }
@@ -1006,9 +1004,25 @@
 
   &::before {
     position: absolute;
-    inset: 0;
-    background: url('../pages/home/assets/community-growth-bg-light.png') left center / 105% 100% no-repeat;
+    top: 50%;
+    left: 0;
+    width: auto;
+    min-width: 100%;
+    height: auto;
+    content: url('../pages/home/assets/community-growth-bg-light.png');
+    transform: translateY(-50%);
     mix-blend-mode: hard-light;
+  }
+
+  &::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #0052d9 0%, #f94de2 38.46%, #ffbd2e 72.6%, #29eae9 100%);
+    background-size: 200% 100%;
+    animation: animatedgradient 4s ease infinite;
     content: '';
   }
 
@@ -1188,7 +1202,8 @@
 
   .module-board {
     &__inner {
-      padding-top: 20px;
+      padding-left: 0;
+      padding-top: 60px;
       padding-bottom: 60px;
     }
 
@@ -1204,7 +1219,7 @@
     // The first card uses the 360 px design as its mobile baseline and
     // interpolates the heading spacing/type smoothly up to the 960 px layout.
     &__inner .module-board__card:first-child {
-      width: min(888px, calc(100vw - 48px));
+      width: calc(100vw - 48px);
 
       .module-board__card-desc {
         margin-bottom: clamp(24px, 6.6667vw, 64px);
@@ -1279,7 +1294,7 @@
     }
 
     &__inner .module-board__card:nth-child(2) {
-      width: min(652px, calc(100vw - 48px));
+      width: calc(100vw - 48px);
       max-width: none;
 
       .module-board__card-desc {
@@ -1347,7 +1362,7 @@
     }
 
     &__inner .module-board__card:nth-child(3) {
-      width: min(652px, calc(100vw - 48px));
+      width: calc(100vw - 48px);
       max-width: none;
 
       .module-board__card-desc {
@@ -1374,17 +1389,16 @@
 @media screen and (min-width: 700px) and (max-width: 960px) {
   .module-board {
     &__inner .module-board__card:first-child {
-      width: 652px;
-      margin-left: calc(50vw - 350px);
-      margin-right: calc(50vw - 326px);
+      width: calc(100vw - 48px);
+      margin-left: 0;
 
       .module-board__detail--open {
-        width: 652px;
+        width: 100%;
         height: 732px;
 
         .code-board {
           width: 888px;
-          height: 256px;
+          height: 320px;
           padding: 32px;
 
           .code-list {
@@ -1405,9 +1419,11 @@
 
         .desc-list {
           width: 100%;
-          height: 460px;
-          margin-top: 0;
+          height: 412px;
+          margin-top: -16px;
           padding: 24px;
+          box-sizing: border-box;
+          align-content: space-between;
           row-gap: 24px;
 
           .desc-item {
@@ -1421,20 +1437,20 @@
 
     &__inner .module-board__card:nth-child(2) {
       .module-board__detail--creation {
+        height: 732px;
+
         .component-board {
-          height: 256px;
+          height: 320px;
         }
 
         .desc-list {
-          height: 477px;
+          height: 412px;
+          box-sizing: border-box;
           align-content: space-between;
         }
       }
     }
 
-    &__inner .module-board__card:nth-child(3) {
-      margin-left: calc(50vw - 326px);
-    }
   }
 }
 
@@ -1442,17 +1458,21 @@
   .module-board {
     &__inner .module-board__card:first-child {
       .module-board__detail--open {
-        height: 736px;
+        height: 804px;
 
         .desc-list {
-          height: 408px;
+          height: 476px;
+
+          .desc-item .desc-title {
+            margin-top: 16px;
+          }
         }
       }
     }
 
     &__inner .module-board__card:nth-child(2) {
       .module-board__detail--creation {
-        height: 736px;
+        height: 804px;
 
         .component-board {
           width: 872px;
@@ -1467,7 +1487,7 @@
         }
 
         .desc-list {
-          height: 408px;
+          height: 476px;
           margin-top: -32px;
           padding: 40px clamp(24px, calc(2.8571vw + 4px), 32px) 24px;
           align-content: space-between;
@@ -1481,10 +1501,8 @@
   .module-board {
     &__inner .module-board__card:first-child .module-board__detail--open,
     &__inner .module-board__card:nth-child(2) .module-board__detail--creation {
-      height: 795px;
-
       .desc-list {
-        height: 467px;
+        height: 476px;
       }
     }
   }
@@ -1543,8 +1561,28 @@
     margin-top: 12px;
   }
 
-  .module-setup__heading {
-    gap: 12px;
+  .module-setup {
+    align-items: flex-start;
+    height: auto;
+    padding: 60px 0;
+
+    &__heading {
+      gap: 12px;
+    }
+
+    &__button.t-button {
+      height: 40px;
+      font-size: 12px;
+
+      .module-setup__icon {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
+  :root[theme-mode='dark'] .tdesign-homepage .module-setup {
+    height: auto;
   }
 }
 

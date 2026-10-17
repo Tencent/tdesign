@@ -182,7 +182,7 @@ export const zhCN = {
         teamsUnit: '家+',
         teams: '企业团队深度合作中',
         downloadsUnit: '万次+',
-        downloads: '内外部月下载量稳定增长',
+        downloads: '下载量稳定增长',
       },
     },
     setup: {

@@ -257,19 +257,19 @@
   }
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (min-width: 960px) and (max-width: 1200px) {
   :host {
     min-height: auto;
   }
 
   .TDesign-doc-footer {
     &__inner {
-      width: calc(100% - 48px);
+      width: 100%;
+      max-width: none;
     }
 
     &__main {
-      height: auto;
-      padding: 48px 0;
+      padding: 96px 48px 60px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -279,10 +279,143 @@
     &__brand {
       align-self: auto;
       align-items: center;
+      gap: 24px;
       text-align: center;
 
+      &-logo {
+        width: 160px;
+        height: 39px;
+
+        svg {
+          width: 160px;
+          height: 39px;
+        }
+      }
+
       p {
-        width: min(340px, 100%);
+        width: 512px;
+      }
+    }
+
+    &__links {
+      justify-content: center;
+      gap: 40px;
+    }
+
+    &__community {
+      padding: 32px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+
+      > p {
+        font-size: 20px;
+        line-height: 24px;
+      }
+
+      &-actions {
+        gap: 12px;
+
+        strong {
+          width: 120px;
+          font-size: 20px;
+          line-height: 24px;
+        }
+      }
+    }
+
+    &__platforms {
+      .platform {
+        width: 56px;
+        height: 56px;
+        padding: 12px;
+
+        i,
+        i svg,
+        &-react i svg,
+        &-vue i svg,
+        &-flutter i svg,
+        &-design i svg {
+          width: 32px;
+          height: 32px;
+        }
+      }
+    }
+
+    &__legal {
+      min-height: auto;
+      padding: 32px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+
+      .copyright {
+        height: 22px;
+      }
+    }
+
+    &__company-logos {
+      .company-logo {
+        height: 29px;
+      }
+
+      .committee {
+        width: 144px;
+
+        svg {
+          width: 144px;
+          height: 29px;
+        }
+      }
+
+      .cloud {
+        width: 80px;
+
+        svg {
+          width: 80px;
+          height: 22px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 959px) {
+  :host {
+    min-height: auto;
+  }
+
+  .TDesign-doc-footer {
+    &__inner {
+      width: 100%;
+      max-width: none;
+    }
+
+    &__main {
+      height: auto;
+      padding: 60px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    &__brand {
+      align-self: auto;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+
+      &-logo,
+      &-logo svg {
+        width: 140px;
+        height: 34px;
+      }
+
+      p {
+        width: min(318px, 100%);
         height: auto;
       }
     }
@@ -298,28 +431,27 @@
       &-group:last-child {
         width: 100%;
         align-items: center;
-        gap: 12px;
+        gap: 16px;
 
         .links {
           align-items: center;
+          gap: 16px;
         }
 
         .link {
-          color: var(--text-placeholder);
+          color: var(--text-secondary);
         }
       }
 
-      .is-desktop-only {
-        display: none;
-      }
     }
 
     &__community {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 24px;
-      padding: 32px 0;
+      gap: 16px;
+      min-height: auto;
+      padding: 24px;
       text-align: center;
 
       &-actions {
@@ -327,6 +459,7 @@
         flex-direction: column;
         flex-wrap: nowrap;
         justify-content: center;
+        gap: 12px;
 
         strong {
           width: auto;
@@ -335,39 +468,24 @@
     }
 
     &__platforms {
-      width: 100%;
       flex-wrap: wrap;
       justify-content: center;
     }
 
     &__legal {
+      min-height: auto;
       display: flex;
-      flex-direction: column-reverse;
+      flex-direction: column;
       align-items: center;
       gap: 24px;
-      padding: 32px 0;
+      padding: 24px;
       text-align: center;
-    }
 
-    .copyright {
-      height: auto;
-      white-space: normal;
-    }
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .TDesign-doc-footer {
-    &__inner {
-      width: calc(100% - 32px);
-    }
-
-    &__main {
-      padding: 40px 0;
-    }
-
-    &__platforms {
-      max-width: 260px;
+      .copyright {
+        width: min(252px, 100%);
+        height: auto;
+        white-space: normal;
+      }
     }
   }
 }
