@@ -24,18 +24,23 @@
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
+    "@tdesign/d2c-utils": "^0.4.2",
     "cz-conventional-changelog": "^3.0.2",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-html": "^7.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.0",
+    "jimp": "^1.6.1",
     "lint-staged": "^16.3.4",
+    "pixelmatch": "^8.0.0",
+    "playwright": "^1.64.0",
     "prettier": "^2.8.8",
     "rimraf": "^3.0.2",
     "stylelint": "^15.10.3",
     "stylelint-config-standard": "^34.0.0",
-    "stylelint-config-standard-less": "^2.0.0"
+    "stylelint-config-standard-less": "^2.0.0",
+    "tsx": "^4.19.3"
   },
   "engines": {
     "pnpm": ">=9.0.0"
