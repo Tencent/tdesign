@@ -1,42 +1,8 @@
-export const ShadowSelectType = {
-  Super_Light: 0,
-  Light: 1,
-  Default: 2,
-  Deep: 3,
-  Super_Deep: 4,
-  Self_Defined: 5,
-} as const;
+import { SHADOW_TOKENS, ShadowSelectType } from '@/common/themes/presets';
+import type { ShadowSelectTypeValue } from '@/common/themes/presets';
 
-export type ShadowSelectTypeValue = (typeof ShadowSelectType)[keyof typeof ShadowSelectType];
-
-export const ShadowSelectDetail: Record<number, string[]> = {
-  [ShadowSelectType.Super_Light]: [
-    '0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 2px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05)',
-    '0 2px 6px rgba(0, 0, 0, 0.02), 0 4px 6px rgba(0, 0, 0, 0.05), 0 3px 3px rgba(0, 0, 0, 0.06)',
-    '0 4px 10px 3px rgba(0, 0, 0, 0.05), 0 4px 6px 2px rgba(0, 0, 0, 0.04), 0 2px 3px -3px rgba(0, 0, 0, 0.08)',
-  ],
-  [ShadowSelectType.Light]: [
-    '0 1px 6px rgba(0, 0, 0, 0.05), 0 3px 4px rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.08)',
-    '0 3px 10px 2px rgba(0, 0, 0, 0.04), 0 6px 8px rgba(0, 0, 0, 0.05), 0 4px 4px -2px rgba(0, 0, 0, 0.08)',
-    '0 4px 18px 5px rgba(0, 0, 0, 0.05), 0 10px 9px 2px rgba(0, 0, 0, 0.04), 0 3px 5px -3px rgba(0, 0, 0, 0.08)',
-  ],
-  [ShadowSelectType.Default]: [
-    '0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.12)',
-    '0 3px 14px 2px rgba(0, 0, 0, 0.05), 0 8px 10px 1px rgba(0, 0, 0, 0.06), 0 5px 5px -3px rgba(0, 0, 0, 0.1)',
-    '0 6px 30px 5px rgba(0, 0, 0, 0.05), 0 16px 24px 2px rgba(0, 0, 0, 0.04), 0 8px 10px -5px rgba(0, 0, 0, 0.08)',
-  ],
-  [ShadowSelectType.Deep]: [
-    '0 3px 18px rgba(0, 0, 0, 0.06), 0 4px 7px rgba(0, 0, 0, 0.1), 0 2px 7px -1px rgba(0, 0, 0, 0.14)',
-    '0 5px 18px 2px rgba(0, 0, 0, 0.07), 0 10px 15px 1px rgba(0, 0, 0, 0.1), 0 6px 10px -4px rgba(0, 0, 0, 0.14)',
-    '0 8px 33px 5px rgba(0, 0, 0, 0.07), 0 18px 28px 2px rgba(0, 0, 0, 0.07), 0 10px 12px -6px rgba(0, 0, 0, 0.17)',
-  ],
-  [ShadowSelectType.Super_Deep]: [
-    '0 5px 20px rgba(0, 0, 0, 0.08), 0 5px 8px rgba(0, 0, 0, 0.12), 0 5px 10px -1px rgba(0, 0, 0, 0.18)',
-    '0 7px 23px 2px rgba(0, 0, 0, 0.09), 0 12px 17px 1px rgba(0, 0, 0, 0.1), 0 8px 14px -4px rgba(0, 0, 0, 0.18)',
-    '0 11px 37px 5px rgba(0, 0, 0, 0.1), 0 21px 31px 2px rgba(0, 0, 0, 0.12), 0 14px 20px -6px rgba(0, 0, 0, 0.16)',
-  ],
-  [ShadowSelectType.Self_Defined]: ['', '', ''],
-};
+export { ShadowSelectType, ShadowSelectDetail } from '@/common/themes/presets';
+export type { ShadowSelectTypeValue } from '@/common/themes/presets';
 
 export interface ShadowSelectOption {
   label: string;
@@ -90,15 +56,15 @@ export interface ShadowTypeMapItem {
 
 export const ShadowTypeMap: ShadowTypeMapItem[] = [
   {
-    name: '--td-shadow-1',
-    from: '--td-shadow-1',
+    name: SHADOW_TOKENS[0],
+    from: SHADOW_TOKENS[0],
   },
   {
-    name: '--td-shadow-2',
-    from: '--td-shadow-2',
+    name: SHADOW_TOKENS[1],
+    from: SHADOW_TOKENS[1],
   },
   {
-    name: '--td-shadow-3',
-    from: '--td-shadow-3',
+    name: SHADOW_TOKENS[2],
+    from: SHADOW_TOKENS[2],
   },
 ];
