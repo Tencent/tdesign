@@ -271,13 +271,15 @@ export default define<HeaderProps>({
     },
   },
   npmVersions: {
-    value: (_host, v) => v || {},
+    // Flutter 发布在 pub.dev，npm 版本接口暂无此包，先固定展示 1.0
+    value: (_host, v) => v || { 'tdesign-flutter': '1.0' },
     connect: (host) => {
       fetch(import.meta.env.VITE_NPM_VERSIONS_API_URL)
         .then((res) => res.json())
         .then((res: NpmVersions) => {
           host.npmVersions = {
             ...res,
+            'tdesign-flutter': '1.0',
           };
         })
         .catch(console.error);
