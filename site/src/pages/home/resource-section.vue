@@ -60,21 +60,26 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import figmaLogo from '@/assets/figma-logo.svg';
 import flutterLogo from '@/assets/flutter-logo.svg';
 import miniprogramLogo from '@/assets/miniprogram-logo.svg';
+import type { ThemeMode } from '@/pages/types';
 import reactLogo from '@/assets/react-logo.svg';
 import uniappLogo from '@/assets/uniapp-logo.svg';
 import vueLogo from '@/assets/vue-logo.svg';
 import homeMessages from '@/locales/pages/home';
 import { HOME_API_ENDPOINTS } from './api';
+import aiResourceDarkSprite from './assets/ai-resource/sprite-dark.webp';
 import aiResourceSprite from './assets/ai-resource/sprite.webp';
+import desktopResourceDarkSprite from './assets/desktop-resource/sprite-dark.webp';
 import desktopResourceSprite from './assets/desktop-resource/sprite.webp';
+import iconResourceDarkSprite from './assets/icon-resource/sprite-dark.webp';
 import iconResourceSprite from './assets/icon-resource/sprite.webp';
 import iconLibrary from './assets/icon-library.svg';
+import mobileResourceDarkSprite from './assets/mobile-resource/sprite-dark.webp';
 import mobileResourceSprite from './assets/mobile-resource/sprite.webp';
 
 type ResourceCardType = 'web' | 'mobile' | 'aigc' | 'icons';
@@ -99,6 +104,10 @@ interface Release {
   body: string;
 }
 
+const props = withDefaults(defineProps<{ themeMode?: ThemeMode }>(), {
+  themeMode: 'light',
+});
+
 const releaseMatchers: Record<string, string> = {
   'vue-next': 'tdesign-vue-next@',
   'react-web': 'tdesign-react@',
@@ -122,17 +131,25 @@ const mobileSectionHeight = ref('auto');
 const tabletLayoutScale = ref('1');
 const tabletSectionHeight = ref('auto');
 
-const resourceSprites: Record<ResourceCardType, string> = {
-  web: desktopResourceSprite,
-  mobile: mobileResourceSprite,
-  aigc: aiResourceSprite,
-  icons: iconResourceSprite,
+const resourceSprites: Record<ThemeMode, Record<ResourceCardType, string>> = {
+  light: {
+    web: desktopResourceSprite,
+    mobile: mobileResourceSprite,
+    aigc: aiResourceSprite,
+    icons: iconResourceSprite,
+  },
+  dark: {
+    web: desktopResourceDarkSprite,
+    mobile: mobileResourceDarkSprite,
+    aigc: aiResourceDarkSprite,
+    icons: iconResourceDarkSprite,
+  },
 };
 const RESOURCE_FRAME_RATE = 24;
 const RESOURCE_FRAME_COUNT = 27;
 const RESOURCE_SPRITE_COLUMNS = 9;
 const RESOURCE_SPRITE_ROWS = 3;
-const resourceTypes = Object.keys(resourceSprites) as ResourceCardType[];
+const resourceTypes: ResourceCardType[] = ['web', 'mobile', 'aigc', 'icons'];
 const frameIndexes: Record<ResourceCardType, number> = {
   web: 0,
   mobile: 0,
@@ -159,7 +176,7 @@ function drawResourceFrame(type: ResourceCardType) {
   const row = Math.floor(frame / RESOURCE_SPRITE_COLUMNS);
   const x = RESOURCE_SPRITE_COLUMNS > 1 ? (column / (RESOURCE_SPRITE_COLUMNS - 1)) * 100 : 0;
   const y = RESOURCE_SPRITE_ROWS > 1 ? (row / (RESOURCE_SPRITE_ROWS - 1)) * 100 : 0;
-  element.style.backgroundImage = `url("${resourceSprites[type]}")`;
+  element.style.backgroundImage = `url("${resourceSprites[props.themeMode][type]}")`;
   element.style.backgroundPosition = `${x}% ${y}%`;
 }
 
@@ -228,6 +245,11 @@ function leaveResourceCard(type: ResourceCardType) {
   hoveredIllustrationType = undefined;
   reverseResourceIllustration(type);
 }
+
+watch(
+  () => props.themeMode,
+  () => resourceTypes.forEach(drawResourceFrame),
+);
 
 function parseReleases(value: unknown): Release[] {
   if (!Array.isArray(value)) return [];
@@ -574,10 +596,11 @@ const resourceCards = computed<ResourceCard[]>(() => [
   &__illustration {
     position: absolute;
     z-index: 1;
-    top: -20px;
+    top: 0;
     right: 12px;
     width: 180px;
     height: 180px;
+    opacity: 0.7;
     pointer-events: auto;
 
     img {
@@ -599,7 +622,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
 
   &--mobile &__illustration {
     top: 0;
-    right: 28px;
+    right: 12px;
   }
 
   &--mobile {
@@ -607,14 +630,14 @@ const resourceCards = computed<ResourceCard[]>(() => [
   }
 
   &--aigc &__illustration {
-    top: -20px;
-    right: 8px;
+    top: 0;
+    right: 12px;
     left: auto;
   }
 
   &--icons &__illustration {
-    top: 20px;
-    right: 32px;
+    top: 32px;
+    right: 12px;
     left: auto;
     width: 268px;
     height: 268px;
@@ -757,7 +780,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
   gap: 16px;
 }
 
-@media screen and (min-width: 1200px) and (max-width: 1279px) {
+@media screen and (min-width: 1200px) and (max-width: 1375px) {
   .resource-section {
     width: 100vw;
     padding-right: 48px;
@@ -766,7 +789,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
 
   .resource-grid {
     width: 100%;
-    grid-template-columns: 448px 640px;
+    grid-template-columns: minmax(0, 528fr) minmax(0, 736fr);
   }
 
   .resource-card {
@@ -777,20 +800,34 @@ const resourceCards = computed<ResourceCard[]>(() => [
     }
 
     &:nth-child(3) {
-      width: 514px;
+      width: calc(100% + 72px);
     }
 
     &:nth-child(4) {
-      width: 574px;
-      margin-left: 66px;
+      width: calc(100% - 72px);
+      margin-left: 72px;
     }
 
     &--mobile {
-      width: 640px;
+      width: 100%;
     }
 
     &--icons {
-      width: 574px;
+      width: calc(100% - 72px);
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1280px) {
+  .resource-card--icons .resource-card__illustration {
+    right: 0;
+    width: 256px;
+    height: 256px;
+
+    img,
+    .resource-card__frames {
+      width: 100%;
+      height: 100%;
     }
   }
 }
@@ -881,8 +918,8 @@ const resourceCards = computed<ResourceCard[]>(() => [
     }
 
     &--mobile &__illustration {
-      top: -24px;
-      right: -8px;
+      top: 0;
+      right: 12px;
       width: 280px;
       height: 280px;
     }
@@ -892,16 +929,16 @@ const resourceCards = computed<ResourceCard[]>(() => [
     }
 
     &--aigc &__illustration {
-      top: -36px;
-      right: -20px;
+      top: 0;
+      right: 12px;
       left: auto;
       width: 300px;
       height: 300px;
     }
 
     &--icons &__illustration {
-      top: -28px;
-      right: -28px;
+      top: 32px;
+      right: 12px;
       left: auto;
       width: 340px;
       height: 340px;
@@ -983,7 +1020,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
     }
 
     &__illustration {
-      opacity: 0.65;
+      opacity: 0.7;
     }
   }
 

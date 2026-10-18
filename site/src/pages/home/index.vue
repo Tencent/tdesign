@@ -47,7 +47,7 @@
           </div>
         </div>
       </div>
-      <resource-section />
+      <resource-section :theme-mode="themeMode" />
     </section>
 
     <!-- swiper content -->
