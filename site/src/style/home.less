@@ -651,6 +651,10 @@
       width: min(184px, 12.17vw);
       content: '';
       pointer-events: none;
+
+      @media screen and (width < 960px) {
+        display: none;
+      }
     }
 
     &::before {

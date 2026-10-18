@@ -584,11 +584,8 @@ function measureModuleBoard(): void {
   if (!board || !viewport || !inner) return;
 
   const cards = Array.from(inner.querySelectorAll<HTMLElement>('.module-board__card'));
-  const innerStyle = getComputedStyle(inner);
   const height = inner.offsetHeight;
-  const contentHeight = height - parseFloat(innerStyle.paddingTop) - parseFloat(innerStyle.paddingBottom);
-  const enabled =
-    window.innerWidth > 960 && window.innerHeight >= contentHeight + 128 && !moduleBoardMotionQuery?.matches;
+  const enabled = !moduleBoardMotionQuery?.matches;
   const wasEnabled = moduleBoardScrollEnabled.value;
 
   moduleBoardStops = cards.map((card) => Math.max(0, card.offsetLeft + card.offsetWidth / 2 - board.clientWidth / 2));
