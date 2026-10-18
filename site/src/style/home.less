@@ -624,21 +624,59 @@
 }
 
 .module-board {
+  position: relative;
   width: 100%;
-  background: var(--bg-color-page);
-  padding: 0 var(--outer-padding-left-right);
   box-sizing: border-box;
+  background: var(--bg-color-page);
+
+  &__viewport {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+
+  &--scroll-driven &__viewport {
+    overflow: hidden;
+    scroll-snap-type: none;
+    scrollbar-width: none;
+
+    &::before,
+    &::after {
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      bottom: 0;
+      width: min(184px, 12.17vw);
+      content: '';
+      pointer-events: none;
+    }
+
+    &::before {
+      left: 0;
+      background: linear-gradient(90deg, var(--bg-color-page), transparent);
+    }
+
+    &::after {
+      right: 0;
+      background: linear-gradient(90deg, transparent, var(--bg-color-page));
+    }
+  }
+
+  &--scroll-driven &__inner {
+    will-change: transform;
+  }
 
   &__inner {
-    margin: 0 auto;
-    padding-top: 120px;
-    padding-bottom: 120px;
+    position: relative;
+    padding: 120px max(var(--outer-padding-left-right), calc((100vw - 888px) / 2));
     display: flex;
     flex-wrap: nowrap;
-    transition: transform 0.3s;
     color: var(--text-primary);
-    padding-left: calc(50% - 444px);
-    width: 100%;
+    width: max-content;
+    min-width: 100%;
+    box-sizing: border-box;
 
     .module-board__card {
       flex-shrink: 0;
@@ -646,6 +684,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      scroll-snap-align: center;
 
       @media screen and (max-width: 960px) {
         max-width: 100%;
@@ -1202,9 +1241,7 @@
 
   .module-board {
     &__inner {
-      padding-left: 0;
-      padding-top: 60px;
-      padding-bottom: 60px;
+      padding: 60px var(--outer-padding-left-right);
     }
 
     &__detail {
@@ -1450,7 +1487,6 @@
         }
       }
     }
-
   }
 }
 

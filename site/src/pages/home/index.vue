@@ -50,234 +50,254 @@
       <resource-section :theme-mode="themeMode" />
     </section>
 
-    <!-- swiper content -->
-    <div ref="moduleBoardRef" class="module-board" id="moduleBoard">
-      <div class="module-board__inner" :style="`transform: translateX(-${tabTransformWidth}px);`">
+    <div
+      ref="moduleBoardRef"
+      class="module-board"
+      :class="{ 'module-board--scroll-driven': moduleBoardScrollEnabled }"
+      :style="moduleBoardStyle"
+      id="moduleBoard"
+    >
+      <div
+        ref="moduleBoardViewportRef"
+        class="module-board__viewport"
+        :style="moduleBoardViewportStyle"
+        :tabindex="moduleBoardScrollEnabled ? undefined : 0"
+        @scroll.passive="scheduleModuleBoardUpdate"
+        @focusin="handleModuleBoardFocus"
+      >
         <div
-          :class="[
-            'module-board__card',
-            {
-              'module-board__card--active': currentTab === 0,
-            },
-          ]"
+          ref="moduleBoardInnerRef"
+          class="module-board__inner"
+          :style="{ transform: `translate3d(-${tabTransformWidth}px, 0, 0)` }"
         >
-          <div class="module-board__card-desc">
-            <h3 class="title">{{ t('home.open.title') }}</h3>
-            <p class="desc">{{ t('home.open.description') }}</p>
-          </div>
-          <div class="module-board__detail module-board__detail--open">
-            <div class="code-board">
-              <t-radio-group v-model="codeFramework" class="code-tab" variant="default-filled" size="large">
-                <t-radio-button v-for="item in codeFrameworkOptions" :key="item.value" :value="item.value">
-                  {{ item.label }}
-                </t-radio-button>
-              </t-radio-group>
+          <div
+            :class="[
+              'module-board__card',
+              {
+                'module-board__card--active': currentTab === 0,
+              },
+            ]"
+          >
+            <div class="module-board__card-desc">
+              <h3 class="title">{{ t('home.open.title') }}</h3>
+              <p class="desc">{{ t('home.open.description') }}</p>
+            </div>
+            <div class="module-board__detail module-board__detail--open">
+              <div class="code-board">
+                <t-radio-group v-model="codeFramework" class="code-tab" variant="default-filled" size="large">
+                  <t-radio-button v-for="item in codeFrameworkOptions" :key="item.value" :value="item.value">
+                    {{ item.label }}
+                  </t-radio-button>
+                </t-radio-group>
 
-              <ul class="code-list">
-                <li
-                  v-for="item in codeList[codeFramework]"
-                  :key="item.code"
-                  :class="['code-item', { 'code-item--multiline': item.code?.includes('\n') }]"
-                >
-                  <pre><code :class="[`language-${item.type}`]">{{ displayCode(item) }}</code></pre>
+                <ul class="code-list">
+                  <li
+                    v-for="item in codeList[codeFramework]"
+                    :key="item.code"
+                    :class="['code-item', { 'code-item--multiline': item.code?.includes('\n') }]"
+                  >
+                    <pre><code :class="[`language-${item.type}`]">{{ displayCode(item) }}</code></pre>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="line"></div>
+
+              <ul class="desc-list">
+                <li class="desc-item">
+                  <img class="desc-icon" :src="openFrameworksIcon" alt="" />
+                  <h3 class="desc-title">{{ t('home.open.features.frameworks.title') }}</h3>
+                  <p class="desc-text">{{ t('home.open.features.frameworks.description') }}</p>
+                </li>
+                <li class="desc-item">
+                  <img class="desc-icon" :src="openPlatformsIcon" alt="" />
+                  <h3 class="desc-title">{{ t('home.open.features.platforms.title') }}</h3>
+                  <p class="desc-text">{{ t('home.open.features.platforms.description') }}</p>
+                </li>
+                <li class="desc-item">
+                  <img class="desc-icon" :src="openIndustriesIcon" alt="" />
+                  <h3 class="desc-title">{{ t('home.open.features.industries.title') }}</h3>
+                  <p class="desc-text">{{ t('home.open.features.industries.description') }}</p>
                 </li>
               </ul>
             </div>
-
-            <div class="line"></div>
-
-            <ul class="desc-list">
-              <li class="desc-item">
-                <img class="desc-icon" :src="openFrameworksIcon" alt="" />
-                <h3 class="desc-title">{{ t('home.open.features.frameworks.title') }}</h3>
-                <p class="desc-text">{{ t('home.open.features.frameworks.description') }}</p>
-              </li>
-              <li class="desc-item">
-                <img class="desc-icon" :src="openPlatformsIcon" alt="" />
-                <h3 class="desc-title">{{ t('home.open.features.platforms.title') }}</h3>
-                <p class="desc-text">{{ t('home.open.features.platforms.description') }}</p>
-              </li>
-              <li class="desc-item">
-                <img class="desc-icon" :src="openIndustriesIcon" alt="" />
-                <h3 class="desc-title">{{ t('home.open.features.industries.title') }}</h3>
-                <p class="desc-text">{{ t('home.open.features.industries.description') }}</p>
-              </li>
-            </ul>
           </div>
-        </div>
 
-        <div
-          :class="[
-            'module-board__card',
-            {
-              'module-board__card--active': currentTab === 1,
-            },
-          ]"
-        >
-          <div class="module-board__card-desc">
-            <h3 class="title">{{ t('home.creation.title') }}</h3>
-            <p class="desc">{{ t('home.creation.description') }}</p>
-          </div>
-          <div class="module-board__detail module-board__detail--creation">
-            <div class="component-board">
-              <div class="component-board-item">
-                <t-input clearable :placeholder="t('home.componentDemo.accountPlaceholder')">
-                  <template #prefixIcon><desktop-icon /></template>
-                </t-input>
-                <t-select
-                  v-model="componentModel.selectValue"
-                  multiple
-                  :placeholder="t('home.componentDemo.selectPlaceholder')"
-                >
-                  <t-option
-                    v-for="item in componentSelectOptions"
-                    :value="item.value"
-                    :label="item.label"
-                    :key="item.value"
-                  ></t-option>
-                </t-select>
-                <t-tree :data="componentTreeData" hover checkable expand-all />
-              </div>
-              <div class="component-board-item">
-                <t-menu
-                  :theme="themeMode"
-                  defaultValue="dashboard/base"
-                  :defaultExpanded="componentModel.menuExpanded"
-                  width="256px"
-                >
-                  <template #logo>
-                    <img
-                      class="__light__"
-                      width="172"
-                      style="margin-left: 24px"
-                      src="./assets/tdesign-starter.svg"
-                      alt="logo"
-                    />
-                    <img
-                      class="__dark__"
-                      width="172"
-                      style="margin-left: 24px"
-                      src="./assets/tdesign-starter-dark.svg"
-                      alt="logo"
-                    />
-                  </template>
-                  <t-submenu :title="t('home.componentDemo.menu.dashboard')" value="dashboard">
-                    <template #icon>
-                      <icon name="dashboard" />
-                    </template>
-                    <t-menu-item value="dashboard/base">{{
-                      t('home.componentDemo.menu.dashboardOverview')
-                    }}</t-menu-item>
-                    <t-menu-item value="dashboard/detail">{{ t('home.componentDemo.menu.report') }}</t-menu-item>
-                  </t-submenu>
-                  <t-submenu :title="t('home.componentDemo.menu.list')" value="list">
-                    <template #icon>
-                      <icon name="server" />
-                    </template>
-                    <t-menu-item value="list/base">{{ t('home.componentDemo.menu.baseList') }}</t-menu-item>
-                    <t-menu-item value="list/card">{{ t('home.componentDemo.menu.cardList') }}</t-menu-item>
-                    <t-menu-item value="list/select">{{ t('home.componentDemo.menu.filterList') }}</t-menu-item>
-                    <t-menu-item value="list/tree">{{ t('home.componentDemo.menu.treeList') }}</t-menu-item>
-                  </t-submenu>
-                  <t-submenu :title="t('home.componentDemo.menu.form')" value="form">
-                    <template #icon>
-                      <icon name="root-list" />
-                    </template>
-                    <t-menu-item value="form/base">{{ t('home.componentDemo.menu.baseForm') }}</t-menu-item>
-                    <t-menu-item value="form/step">{{ t('home.componentDemo.menu.stepForm') }}</t-menu-item>
-                  </t-submenu>
-                  <t-submenu :title="t('home.componentDemo.menu.detail')" value="detail">
-                    <template #icon>
-                      <icon name="control-platform" />
-                    </template>
-                    <t-menu-item value="detail/base">{{ t('home.componentDemo.menu.baseDetail') }}</t-menu-item>
-                    <t-menu-item value="detail/advanced">{{ t('home.componentDemo.menu.advancedDetail') }}</t-menu-item>
-                    <t-menu-item value="detail/deploy">{{ t('home.componentDemo.menu.deployDetail') }}</t-menu-item>
-                    <t-menu-item value="detail/secondary">{{
-                      t('home.componentDemo.menu.secondaryDetail')
-                    }}</t-menu-item>
-                  </t-submenu>
-                </t-menu>
-              </div>
-              <div class="component-board-item">
-                <div class="component-board-item-row">
-                  <t-button>
-                    <template #icon><icon name="file" /></template>
-                    {{ t('home.componentDemo.primaryButton') }}
-                  </t-button>
-                  <t-button theme="default">{{ t('home.componentDemo.button') }}</t-button>
-                  <t-button theme="default">{{ t('home.componentDemo.button') }}</t-button>
-                </div>
-                <div class="component-board-item-row">
-                  <t-slider v-model="componentModel.sliderValue" :inputNumberProps="false" />
-                </div>
-                <div class="component-board-item-row">
-                  <t-switch size="large" :defaultValue="true" />
-                  <t-switch size="large" />
-                  <t-check-tag>{{ t('home.componentDemo.checkableTag') }}</t-check-tag>
-                  <t-tag>{{ t('home.componentDemo.defaultTag') }}</t-tag>
-                </div>
-                <div>
-                  <t-radio-group defaultValue="1" variant="default-filled">
-                    <t-radio-button value="1">{{ t('home.componentDemo.light') }}</t-radio-button>
-                    <t-radio-button value="2">{{ t('home.componentDemo.dark') }}</t-radio-button>
-                    <t-radio-button value="3">{{ t('home.componentDemo.neutral') }}</t-radio-button>
-                  </t-radio-group>
-                </div>
-                <div class="color-block-wrapper">
-                  <span
-                    class="color-block"
-                    v-for="color in componentModel.colorList1"
-                    :key="color"
-                    :style="{ background: color }"
-                  ></span>
-                </div>
-                <div class="color-block-wrapper">
-                  <span
-                    class="color-block"
-                    v-for="color in componentModel.colorList2"
-                    :key="color"
-                    :style="{ background: color }"
-                  ></span>
-                </div>
-              </div>
+          <div
+            :class="[
+              'module-board__card',
+              {
+                'module-board__card--active': currentTab === 1,
+              },
+            ]"
+          >
+            <div class="module-board__card-desc">
+              <h3 class="title">{{ t('home.creation.title') }}</h3>
+              <p class="desc">{{ t('home.creation.description') }}</p>
             </div>
+            <div class="module-board__detail module-board__detail--creation">
+              <div class="component-board">
+                <div class="component-board-item">
+                  <t-input clearable :placeholder="t('home.componentDemo.accountPlaceholder')">
+                    <template #prefixIcon><desktop-icon /></template>
+                  </t-input>
+                  <t-select
+                    v-model="componentModel.selectValue"
+                    multiple
+                    :placeholder="t('home.componentDemo.selectPlaceholder')"
+                  >
+                    <t-option
+                      v-for="item in componentSelectOptions"
+                      :value="item.value"
+                      :label="item.label"
+                      :key="item.value"
+                    ></t-option>
+                  </t-select>
+                  <t-tree :data="componentTreeData" hover checkable expand-all />
+                </div>
+                <div class="component-board-item">
+                  <t-menu
+                    :theme="themeMode"
+                    defaultValue="dashboard/base"
+                    :defaultExpanded="componentModel.menuExpanded"
+                    width="256px"
+                  >
+                    <template #logo>
+                      <img
+                        class="__light__"
+                        width="172"
+                        style="margin-left: 24px"
+                        src="./assets/tdesign-starter.svg"
+                        alt="logo"
+                      />
+                      <img
+                        class="__dark__"
+                        width="172"
+                        style="margin-left: 24px"
+                        src="./assets/tdesign-starter-dark.svg"
+                        alt="logo"
+                      />
+                    </template>
+                    <t-submenu :title="t('home.componentDemo.menu.dashboard')" value="dashboard">
+                      <template #icon>
+                        <icon name="dashboard" />
+                      </template>
+                      <t-menu-item value="dashboard/base">{{
+                        t('home.componentDemo.menu.dashboardOverview')
+                      }}</t-menu-item>
+                      <t-menu-item value="dashboard/detail">{{ t('home.componentDemo.menu.report') }}</t-menu-item>
+                    </t-submenu>
+                    <t-submenu :title="t('home.componentDemo.menu.list')" value="list">
+                      <template #icon>
+                        <icon name="server" />
+                      </template>
+                      <t-menu-item value="list/base">{{ t('home.componentDemo.menu.baseList') }}</t-menu-item>
+                      <t-menu-item value="list/card">{{ t('home.componentDemo.menu.cardList') }}</t-menu-item>
+                      <t-menu-item value="list/select">{{ t('home.componentDemo.menu.filterList') }}</t-menu-item>
+                      <t-menu-item value="list/tree">{{ t('home.componentDemo.menu.treeList') }}</t-menu-item>
+                    </t-submenu>
+                    <t-submenu :title="t('home.componentDemo.menu.form')" value="form">
+                      <template #icon>
+                        <icon name="root-list" />
+                      </template>
+                      <t-menu-item value="form/base">{{ t('home.componentDemo.menu.baseForm') }}</t-menu-item>
+                      <t-menu-item value="form/step">{{ t('home.componentDemo.menu.stepForm') }}</t-menu-item>
+                    </t-submenu>
+                    <t-submenu :title="t('home.componentDemo.menu.detail')" value="detail">
+                      <template #icon>
+                        <icon name="control-platform" />
+                      </template>
+                      <t-menu-item value="detail/base">{{ t('home.componentDemo.menu.baseDetail') }}</t-menu-item>
+                      <t-menu-item value="detail/advanced">{{
+                        t('home.componentDemo.menu.advancedDetail')
+                      }}</t-menu-item>
+                      <t-menu-item value="detail/deploy">{{ t('home.componentDemo.menu.deployDetail') }}</t-menu-item>
+                      <t-menu-item value="detail/secondary">{{
+                        t('home.componentDemo.menu.secondaryDetail')
+                      }}</t-menu-item>
+                    </t-submenu>
+                  </t-menu>
+                </div>
+                <div class="component-board-item">
+                  <div class="component-board-item-row">
+                    <t-button>
+                      <template #icon><icon name="file" /></template>
+                      {{ t('home.componentDemo.primaryButton') }}
+                    </t-button>
+                    <t-button theme="default">{{ t('home.componentDemo.button') }}</t-button>
+                    <t-button theme="default">{{ t('home.componentDemo.button') }}</t-button>
+                  </div>
+                  <div class="component-board-item-row">
+                    <t-slider v-model="componentModel.sliderValue" :inputNumberProps="false" />
+                  </div>
+                  <div class="component-board-item-row">
+                    <t-switch size="large" :defaultValue="true" />
+                    <t-switch size="large" />
+                    <t-check-tag>{{ t('home.componentDemo.checkableTag') }}</t-check-tag>
+                    <t-tag>{{ t('home.componentDemo.defaultTag') }}</t-tag>
+                  </div>
+                  <div>
+                    <t-radio-group defaultValue="1" variant="default-filled">
+                      <t-radio-button value="1">{{ t('home.componentDemo.light') }}</t-radio-button>
+                      <t-radio-button value="2">{{ t('home.componentDemo.dark') }}</t-radio-button>
+                      <t-radio-button value="3">{{ t('home.componentDemo.neutral') }}</t-radio-button>
+                    </t-radio-group>
+                  </div>
+                  <div class="color-block-wrapper">
+                    <span
+                      class="color-block"
+                      v-for="color in componentModel.colorList1"
+                      :key="color"
+                      :style="{ background: color }"
+                    ></span>
+                  </div>
+                  <div class="color-block-wrapper">
+                    <span
+                      class="color-block"
+                      v-for="color in componentModel.colorList2"
+                      :key="color"
+                      :style="{ background: color }"
+                    ></span>
+                  </div>
+                </div>
+              </div>
 
-            <div class="line"></div>
+              <div class="line"></div>
 
-            <ul class="desc-list">
-              <li class="desc-item">
-                <icon class="desc-icon" name="tips" />
-                <h3 class="desc-title">{{ t('home.creation.features.scalable.title') }}</h3>
-                <p class="desc-text">{{ t('home.creation.features.scalable.description') }}</p>
-              </li>
-              <li class="desc-item">
-                <icon class="desc-icon" name="chart-bubble" />
-                <h3 class="desc-title">{{ t('home.creation.features.resources.title') }}</h3>
-                <p class="desc-text">{{ t('home.creation.features.resources.description') }}</p>
-              </li>
-              <li class="desc-item">
-                <icon class="desc-icon" name="file-image" />
-                <h3 class="desc-title">{{ t('home.creation.features.guidelines.title') }}</h3>
-                <p class="desc-text">{{ t('home.creation.features.guidelines.description') }}</p>
-              </li>
-            </ul>
+              <ul class="desc-list">
+                <li class="desc-item">
+                  <icon class="desc-icon" name="tips" />
+                  <h3 class="desc-title">{{ t('home.creation.features.scalable.title') }}</h3>
+                  <p class="desc-text">{{ t('home.creation.features.scalable.description') }}</p>
+                </li>
+                <li class="desc-item">
+                  <icon class="desc-icon" name="chart-bubble" />
+                  <h3 class="desc-title">{{ t('home.creation.features.resources.title') }}</h3>
+                  <p class="desc-text">{{ t('home.creation.features.resources.description') }}</p>
+                </li>
+                <li class="desc-item">
+                  <icon class="desc-icon" name="file-image" />
+                  <h3 class="desc-title">{{ t('home.creation.features.guidelines.title') }}</h3>
+                  <p class="desc-text">{{ t('home.creation.features.guidelines.description') }}</p>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <div
-          :class="[
-            'module-board__card',
-            'module-contributor',
-            {
-              'module-board__card--active': currentTab === 2,
-            },
-          ]"
-        >
-          <div class="module-board__card-desc">
-            <h3 class="title">{{ t('home.contributors.title') }}</h3>
-            <p class="desc">{{ t('home.contributors.description') }}</p>
+          <div
+            :class="[
+              'module-board__card',
+              'module-contributor',
+              {
+                'module-board__card--active': currentTab === 2,
+              },
+            ]"
+          >
+            <div class="module-board__card-desc">
+              <h3 class="title">{{ t('home.contributors.title') }}</h3>
+              <p class="desc">{{ t('home.contributors.description') }}</p>
+            </div>
+            <community-card v-if="shouldLoadCommunity" />
           </div>
-          <community-card v-if="shouldLoadCommunity" />
         </div>
       </div>
     </div>
@@ -393,6 +413,11 @@ const isIntranet = location.host.includes('woa.com'); // 部分动态或内容�
 
 const { t } = useI18n({ messages: homeMessages });
 const moduleBoardRef = ref<HTMLElement | null>(null);
+const moduleBoardViewportRef = ref<HTMLElement | null>(null);
+const moduleBoardInnerRef = ref<HTMLElement | null>(null);
+const moduleBoardScrollEnabled = ref(false);
+const moduleBoardStyle = ref<Record<string, string>>({});
+const moduleBoardViewportStyle = ref<Record<string, string>>({});
 const newsTrackRef = ref<HTMLElement | null>(null);
 const shouldLoadCommunity = ref(false);
 
@@ -536,9 +561,15 @@ const footerStyle = computed(() => ({
 }));
 let observer: MutationObserver | null = null;
 let communityPreloadObserver: IntersectionObserver | null = null;
-let wheelLocked = false;
-let wheelUnlockTimer: number | null = null;
-const wheelLockDuration = 700;
+let moduleBoardResizeObserver: ResizeObserver | null = null;
+let moduleBoardMotionQuery: MediaQueryList | null = null;
+let moduleBoardAnimationFrame: number | null = null;
+let moduleBoardNeedsMeasure = true;
+let moduleBoardStops: number[] = [];
+let moduleBoardPinTop = 0;
+let moduleBoardScrollDistance = 0;
+const moduleBoardDwellDistance = 320;
+const moduleBoardMoveDistance = 900;
 let newsAnimationFrame: number | null = null;
 let newsLastTimestamp = 0;
 
@@ -546,57 +577,117 @@ function displayCode(item: CodeItem): string {
   return item.codeKey ? String(t(item.codeKey)) : item.code ?? '';
 }
 
-function scheduleWheelUnlock(): void {
-  if (wheelUnlockTimer !== null) clearTimeout(wheelUnlockTimer);
-  wheelUnlockTimer = window.setTimeout(() => {
-    wheelLocked = false;
-    wheelUnlockTimer = null;
-  }, wheelLockDuration);
+function measureModuleBoard(): void {
+  const board = moduleBoardRef.value;
+  const viewport = moduleBoardViewportRef.value;
+  const inner = moduleBoardInnerRef.value;
+  if (!board || !viewport || !inner) return;
+
+  const cards = Array.from(inner.querySelectorAll<HTMLElement>('.module-board__card'));
+  const innerStyle = getComputedStyle(inner);
+  const height = inner.offsetHeight;
+  const contentHeight = height - parseFloat(innerStyle.paddingTop) - parseFloat(innerStyle.paddingBottom);
+  const enabled =
+    window.innerWidth > 960 && window.innerHeight >= contentHeight + 128 && !moduleBoardMotionQuery?.matches;
+  const wasEnabled = moduleBoardScrollEnabled.value;
+
+  moduleBoardStops = cards.map((card) => Math.max(0, card.offsetLeft + card.offsetWidth / 2 - board.clientWidth / 2));
+  moduleBoardPinTop = (window.innerHeight - height) / 2;
+  moduleBoardScrollDistance = enabled
+    ? cards.length * moduleBoardDwellDistance + Math.max(0, cards.length - 1) * moduleBoardMoveDistance
+    : 0;
+  moduleBoardScrollEnabled.value = enabled;
+  moduleBoardStyle.value = enabled ? { height: `${height + moduleBoardScrollDistance}px` } : {};
+
+  if (enabled) {
+    viewport.scrollLeft = 0;
+  } else {
+    moduleBoardViewportStyle.value = {};
+    state.tabTransformWidth = 0;
+    if (wasEnabled) {
+      const left = moduleBoardStops[state.currentTab] ?? 0;
+      nextTick(() => viewport.scrollTo({ left, behavior: 'instant' }));
+    }
+  }
 }
 
-function isModuleBoardFullyVisible(): boolean {
+function updateModuleBoard(): void {
+  moduleBoardAnimationFrame = null;
+  if (moduleBoardNeedsMeasure) {
+    moduleBoardNeedsMeasure = false;
+    measureModuleBoard();
+  }
+
   const board = moduleBoardRef.value;
-  if (!board) return false;
+  const viewport = moduleBoardViewportRef.value;
+  if (!board || !viewport || moduleBoardStops.length === 0) return;
 
-  const boardRect = board.getBoundingClientRect();
-  const visibilityTolerance = 1;
+  let offset = viewport.scrollLeft;
+  if (moduleBoardScrollEnabled.value) {
+    const boardRect = board.getBoundingClientRect();
+    const progress = Math.max(0, Math.min(moduleBoardScrollDistance, moduleBoardPinTop - boardRect.top));
+    if (progress > 0 && progress < moduleBoardScrollDistance) {
+      moduleBoardViewportStyle.value = {
+        position: 'fixed',
+        top: `${moduleBoardPinTop}px`,
+        left: `${boardRect.left}px`,
+        width: `${boardRect.width}px`,
+      };
+    } else {
+      moduleBoardViewportStyle.value = { position: 'absolute', top: `${progress}px`, left: '0', width: '100%' };
+    }
+    offset = moduleBoardStops[moduleBoardStops.length - 1];
+    for (let index = 0; index < moduleBoardStops.length - 1; index++) {
+      const moveStart = moduleBoardDwellDistance + index * (moduleBoardDwellDistance + moduleBoardMoveDistance);
+      if (progress <= moveStart) {
+        offset = moduleBoardStops[index];
+        break;
+      }
+      if (progress < moveStart + moduleBoardMoveDistance) {
+        const fraction = (progress - moveStart) / moduleBoardMoveDistance;
+        const eased = fraction * fraction * (3 - 2 * fraction);
+        offset = moduleBoardStops[index] + (moduleBoardStops[index + 1] - moduleBoardStops[index]) * eased;
+        break;
+      }
+    }
+    state.tabTransformWidth = offset;
+  }
 
-  return (
-    boardRect.height <= window.innerHeight + visibilityTolerance &&
-    boardRect.top >= -visibilityTolerance &&
-    boardRect.bottom <= window.innerHeight + visibilityTolerance
+  state.currentTab = moduleBoardStops.reduce(
+    (nearest, stop, index) =>
+      Math.abs(stop - offset) < Math.abs(moduleBoardStops[nearest] - offset) ? index : nearest,
+    0,
   );
 }
 
-function getWheelScrollDistance(event: WheelEvent): number {
-  if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) return event.deltaY * 16;
-  if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) return event.deltaY * window.innerHeight;
-  return event.deltaY;
+function scheduleModuleBoardUpdate(): void {
+  if (moduleBoardAnimationFrame === null) moduleBoardAnimationFrame = requestAnimationFrame(updateModuleBoard);
 }
 
-function handleModuleWheel(event: WheelEvent): void {
-  if (event.deltaY === 0 || !isModuleBoardFullyVisible()) return;
+function refreshModuleBoard(): void {
+  moduleBoardNeedsMeasure = true;
+  scheduleModuleBoardUpdate();
+}
 
-  if (wheelLocked) {
-    event.preventDefault();
-    event.stopPropagation();
-    return;
-  }
+function handleModuleBoardFocus(event: FocusEvent): void {
+  if (!moduleBoardScrollEnabled.value || !(event.target instanceof HTMLElement)) return;
+  const card = event.target.closest<HTMLElement>('.module-board__card');
+  const cards = moduleBoardInnerRef.value?.querySelectorAll<HTMLElement>('.module-board__card');
+  const board = moduleBoardRef.value;
+  if (!board || !card || !cards) return;
 
-  const direction = event.deltaY > 0 ? 1 : -1;
-  const nextTab = state.currentTab + direction;
-  if (nextTab < 0 || nextTab > 2) {
-    event.preventDefault();
-    event.stopPropagation();
-    window.scrollBy({ top: getWheelScrollDistance(event), behavior: 'auto' });
-    return;
-  }
-
-  event.preventDefault();
-  event.stopPropagation();
-  state.currentTab = nextTab;
-  wheelLocked = true;
-  scheduleWheelUnlock();
+  const index = Array.from(cards).indexOf(card);
+  if (index < 0 || index === state.currentTab) return;
+  moduleBoardViewportRef.value?.scrollTo({ left: 0, behavior: 'instant' });
+  window.scrollTo({
+    top:
+      window.scrollY +
+      board.getBoundingClientRect().top -
+      moduleBoardPinTop +
+      index * (moduleBoardDwellDistance + moduleBoardMoveDistance),
+    behavior: 'instant',
+  });
+  scheduleModuleBoardUpdate();
 }
 
 function handleClickNews(url?: string): void {
@@ -679,28 +770,9 @@ function getNews(): void {
   });
 }
 
-function updateModuleBoardTransform(tab: number): void {
-  requestAnimationFrame(() => {
-    const board = moduleBoardRef.value;
-    const inner = board?.querySelector<HTMLElement>('.module-board__inner');
-    const card = inner?.querySelectorAll<HTMLElement>('.module-board__card')[tab];
-    if (!board || !inner || !card) return;
-
-    const boardRect = board.getBoundingClientRect();
-    const cardRect = card.getBoundingClientRect();
-    const currentTranslateX = new DOMMatrixReadOnly(getComputedStyle(inner).transform).m41;
-    const cardCenterWithoutTransform = cardRect.left + cardRect.width / 2 - currentTranslateX;
-    const boardCenter = boardRect.left + boardRect.width / 2;
-
-    state.tabTransformWidth = Math.max(0, cardCenterWithoutTransform - boardCenter);
-  });
-}
-
 function handleResize(): void {
   state.windowWidth = window.innerWidth;
-  const isFirstTab = state.currentTab === 0;
-  state.currentTab = 0;
-  if (isFirstTab) updateModuleBoardTransform(0);
+  refreshModuleBoard();
 }
 
 function watchHtmlMode(): void {
@@ -727,7 +799,6 @@ function loadCommunity(): void {
 
 watch(currentTab, (tab) => {
   if (tab >= 1) loadCommunity();
-  updateModuleBoardTransform(tab);
 });
 
 watch(
@@ -750,16 +821,25 @@ onMounted(() => {
     );
     communityPreloadObserver.observe(moduleBoardRef.value);
   }
+  moduleBoardMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  moduleBoardMotionQuery.addEventListener('change', refreshModuleBoard);
+  moduleBoardResizeObserver = new ResizeObserver(refreshModuleBoard);
+  if (moduleBoardInnerRef.value) moduleBoardResizeObserver.observe(moduleBoardInnerRef.value);
+  const mainPage = moduleBoardRef.value?.previousElementSibling;
+  if (mainPage) moduleBoardResizeObserver.observe(mainPage);
+  refreshModuleBoard();
   window.addEventListener('resize', handleResize);
-  moduleBoardRef.value?.addEventListener('wheel', handleModuleWheel, { passive: false });
+  window.addEventListener('scroll', scheduleModuleBoardUpdate, { passive: true });
 });
 
 onBeforeUnmount(() => {
-  if (wheelUnlockTimer !== null) clearTimeout(wheelUnlockTimer);
+  if (moduleBoardAnimationFrame !== null) cancelAnimationFrame(moduleBoardAnimationFrame);
   stopNewsAutoplay();
   observer?.disconnect();
   communityPreloadObserver?.disconnect();
+  moduleBoardResizeObserver?.disconnect();
+  moduleBoardMotionQuery?.removeEventListener('change', refreshModuleBoard);
   window.removeEventListener('resize', handleResize);
-  moduleBoardRef.value?.removeEventListener('wheel', handleModuleWheel);
+  window.removeEventListener('scroll', scheduleModuleBoardUpdate);
 });
 </script>
