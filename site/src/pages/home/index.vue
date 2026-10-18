@@ -8,7 +8,9 @@
           <h2 class="name">
             <p class="primary">TDesign</p>
             <div style="display: flex">
-              <p class="sub-title">{{ t('home.hero.subtitle') }}</p>
+              <p :class="['sub-title', { 'sub-title--en': locale === 'en-US' }]">
+                {{ t('home.hero.subtitle') }}
+              </p>
             </div>
           </h2>
         </div>
@@ -411,7 +413,7 @@ interface HomeState {
 
 const isIntranet = location.host.includes('woa.com'); // 部分动态或内容只能通过内网访问
 
-const { t } = useI18n({ messages: homeMessages });
+const { locale, t } = useI18n({ messages: homeMessages });
 const moduleBoardRef = ref<HTMLElement | null>(null);
 const moduleBoardViewportRef = ref<HTMLElement | null>(null);
 const moduleBoardInnerRef = ref<HTMLElement | null>(null);

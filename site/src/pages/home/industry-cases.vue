@@ -65,7 +65,7 @@ interface LogoItem {
   height?: number;
 }
 
-const { t } = useI18n({ messages: homeMessages });
+const { locale, t } = useI18n({ messages: homeMessages });
 
 const MOBILE_BREAKPOINT = 494;
 const COMPACT_BREAKPOINT = 700;
@@ -143,6 +143,15 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize);
 });
 
+function formatDownloads(value: string): string {
+  if (!locale.value.startsWith('en')) return value;
+
+  const numericValue = Number(value.replace(/,/g, ''));
+  if (!Number.isFinite(numericValue)) return value;
+
+  return new Intl.NumberFormat(locale.value, { maximumFractionDigits: 1 }).format(numericValue / 100);
+}
+
 const stats = computed(() => [
   {
     value: usageData.value.projectsCount,
@@ -155,7 +164,7 @@ const stats = computed(() => [
     labelKey: 'home.service.stats.teams',
   },
   {
-    value: usageData.value.downloadPerMonth,
+    value: formatDownloads(usageData.value.downloadPerMonth),
     unitKey: 'home.service.stats.downloadsUnit',
     labelKey: 'home.service.stats.downloads',
   },

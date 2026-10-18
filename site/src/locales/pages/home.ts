@@ -200,23 +200,23 @@ export const zhCN = {
 export const enUS = {
   home: {
     hero: {
-      subtitle: 'Build work aesthetics for designers and developers',
+      subtitle: 'Better work for designers & developers',
       alliance: {
-        title: 'A Tencent Device-oriented Service product',
+        title: 'A Tencent TDS Alliance product',
         description:
-          'Tencent Device-oriented Service (TDS) is a front-end technology product alliance founded by the Tencent Front-end Technology Committee.',
+          "Tencent Device-oriented Service (TDS) is a front-end technology alliance founded by Tencent's Front-end Technology Committee.",
         details: 'Learn more',
       },
-      followWechat: 'Follow the TDesign WeChat account',
+      followWechat: 'Follow TDesign on WeChat',
       followWechatCompact: 'Follow on WeChat',
     },
     solution: {
-      label: 'Solution',
+      label: 'Solutions',
       desktop: 'Desktop',
       mobile: 'Mobile',
-      miniprogram: 'MiniProgram',
-      developmentResources: 'Development Resources',
-      designResources: 'Design Resources',
+      miniprogram: 'Mini Program',
+      developmentResources: 'Development',
+      designResources: 'Design',
     },
     resourceNames: {
       vue: 'Vue',
@@ -228,10 +228,10 @@ export const enUS = {
       sketch: 'Sketch',
       axure: 'Axure',
       adobeXd: 'AdobeXD',
-      miniprogram: 'WeChat MiniProgram',
+      miniprogram: 'WeChat Mini Program',
     },
     status: {
-      pending: 'In Progress',
+      pending: 'Coming Soon',
       stable: 'Stable',
       alpha: 'Alpha',
       beta: 'Beta',
@@ -239,40 +239,39 @@ export const enUS = {
     },
     tabs: {
       open: 'Open',
-      creation: 'Creation',
-      corporation: 'Corporation',
+      creation: 'Create',
+      corporation: 'Co-create',
     },
     open: {
       features: {
         frameworks: {
-          title: 'Multiple-framework versions',
-          description:
-            'Official support for React, Vue, Angular, Mini Program, Flutter, and other popular tech stacks.',
+          title: 'Multiple tech stacks',
+          description: 'Official support for React, Vue, WeChat Mini Program, Uniapp, and Flutter.',
         },
         platforms: {
-          title: 'Multi-platform compatibility',
-          description: 'Unified component resources for both desktop and mobile.',
+          title: 'Desktop & mobile',
+          description: 'Unified component resources for desktop and mobile.',
         },
         industries: {
-          title: 'Industry-specific component libraries',
-          description: 'Industry components co-created with Tencent business teams under one design system.',
+          title: 'Industry components',
+          description: 'Built with Tencent teams for different industries under one design system.',
         },
       },
-      title: 'Open Resources, Continuous Iteration',
-      description: 'Always maintain an open mindset and look forward to building an open source ecosystem.',
+      title: 'Open source, always evolving',
+      description: 'MIT-licensed and open to all. Join us in growing the open-source ecosystem.',
     },
     componentDemo: {
-      accountPlaceholder: 'Please enter account',
-      selectPlaceholder: 'Please select',
+      accountPlaceholder: 'Username',
+      selectPlaceholder: 'Select',
       departments: {
-        marketing: 'Marketing Department',
-        finance: 'Finance Department',
-        development: 'Development Department',
+        marketing: 'Marketing',
+        finance: 'Finance',
+        development: 'Engineering',
       },
       regions: {
         headquarters: 'Headquarters',
-        eastChina: 'East China Region',
-        southChina: 'South China Region',
+        eastChina: 'East China',
+        southChina: 'South China',
       },
       menu: {
         dashboard: 'Dashboard',
@@ -292,10 +291,10 @@ export const enUS = {
         deployDetail: 'Deploy Page',
         secondaryDetail: 'Secondary',
       },
-      primaryButton: 'Primary Button',
+      primaryButton: 'Primary',
       button: 'Button',
-      checkableTag: 'Checkable Tag',
-      defaultTag: 'Default Tag',
+      checkableTag: 'Selectable',
+      defaultTag: 'Default',
       light: 'Light',
       dark: 'Dark',
       neutral: 'Neutral',
@@ -303,72 +302,69 @@ export const enUS = {
     creation: {
       features: {
         scalable: {
-          title: 'Scalable Design Style',
-          description:
-            'Abstracted design styles into Design Tokens to meet the brand customization needs of different products.',
+          title: 'Flexible design styles',
+          description: 'Design Tokens make brand customization easy.',
         },
         resources: {
-          title: 'Variety of Design Resources',
-          description:
-            'Provide a variety of design resources for desktop and mobile applications such as Sketch/Figma.',
+          title: 'Rich design resources',
+          description: 'Sketch and Figma resources for desktop and mobile.',
         },
         guidelines: {
-          title: 'Professional Design Guidelines',
-          description: 'Summarize design experience into guidelines to assist users in properly using components.',
+          title: 'Expert design guides',
+          description: 'Practical guidance for using components correctly.',
         },
       },
-      title: 'Inclusive, flexible, and easy-to-use',
-      description: 'Maintain a keen sense of design, seeking commonalities in complex business scenarios.',
+      title: 'Inclusive, flexible, easy to use',
+      description: 'Finding shared design solutions across complex business needs.',
     },
     contributors: {
-      title: 'Collaborative co-creation, powered by an active community',
-      description: '16 core contributors and 380+ open-source partners collaborate with developers worldwide.',
+      title: 'Built together by our community',
+      description: '10+ open-source repos and 800+ contributors working together worldwide.',
     },
     businessCases: {
-      title: 'More businesses are adopting TDesign',
+      title: 'More products are adopting TDesign',
       description:
-        'Desktop, mobile, AIGC components, and D2C capabilities for mainstream frameworks and platforms, ready to use.',
-      quote:
-        '“Pixel-perfect even with complex layers and floating elements. D2C matched an unorganized design far better than expected.”',
+        'Desktop, mobile, and AIGC components plus rich icon resources—ready for major frameworks and platforms.',
+      quote: '“Even with complex layers and floating elements, D2C matched the original design better than expected.”',
       user: 'bruceren',
       role: 'Visual Designer',
-      downloads: 'Internal and external monthly downloads',
-      downloadTrend: 'Internal and external monthly download trends',
+      downloads: 'Monthly downloads',
+      downloadTrend: 'Download trend',
       downloadCount: '{count} downloads',
-      tenThousandPlus: '0K+',
-      tenThousand: '0K',
-      designReferences: 'Design references',
+      tenThousandPlus: 'M+',
+      tenThousand: 'M+',
+      designReferences: 'Design resource uses',
       projects: 'Projects',
       prompts: {
         activity: 'Create an e-commerce campaign with TDesign',
-        multiplatform: 'Adapt designs across platforms with AI matching',
+        multiplatform: 'Use AI to adapt designs across platforms',
         enterprise: 'Build an enterprise admin system 60% faster',
-        d2c: 'Convert designs into frontend code with D2C',
-        theme: 'Build a brand design system with TDesign themes',
+        d2c: 'Turn designs into frontend code with D2C',
+        theme: 'Build a brand system with TDesign themes',
       },
     },
     resources: {
-      title: 'Resources for every technology stack',
+      title: 'Resources for every stack',
       description:
-        'Desktop, mobile, AIGC components, and D2C capabilities for mainstream frameworks and platforms, ready to use.',
+        'Desktop, mobile, and AIGC components plus rich icon resources—ready for major frameworks and platforms.',
       logoAlt: '{name} logo',
-      enterAction: 'Click to enter',
+      enterAction: 'Open',
       cards: {
         web: {
           title: 'Desktop Components',
-          description: 'Unified component resources designed for desktop applications',
+          description: 'Unified components for desktop apps',
         },
         mobile: {
           title: 'Mobile Components',
-          description: 'Unified component resources designed for mobile applications',
+          description: 'Unified components for mobile apps',
         },
         aigc: {
           title: 'AIGC Components',
-          description: 'Unified component resources for desktop and mobile applications',
+          description: 'Unified AI components for desktop and mobile',
         },
         icons: {
           title: 'TDesign Icon Library',
-          description: 'Adjust stroke width and multiple colors with ease',
+          description: 'Adjust stroke width and colors with ease',
         },
       },
       items: {
@@ -378,24 +374,23 @@ export const enUS = {
       },
     },
     service: {
-      title: 'Built for every field, chosen by enterprises',
-      description:
-        'From consumer to industrial internet, from B2B to B2C products, from leading brands to independent developers',
+      title: 'Built for all, trusted by enterprises',
+      description: 'For consumer and industrial products, B2B and B2C, leading brands and independent developers',
       stats: {
-        projectsUnit: 'M',
-        projects: 'Cross-industry products and projects',
+        projectsUnit: '+',
+        projects: 'Products & projects',
         teamsUnit: '+',
-        teams: 'Enterprise teams in close collaboration',
-        downloadsUnit: 'M',
-        downloads: 'Internal and external monthly downloads continue to grow',
+        teams: 'Enterprise partners',
+        downloadsUnit: 'M+',
+        downloads: 'Growing downloads',
       },
     },
     setup: {
       title: 'Grow together with TDesign',
       description:
-        'With a more stable and sustainable design system, TDesign helps the Tencent ecosystem, a broader range of industries, and developers improve product experiences and development efficiency.',
-      developmentAction: 'Development resources',
-      designAction: 'Design resources',
+        'A stable, evolving design system that helps teams improve product quality and development efficiency.',
+      developmentAction: 'Development',
+      designAction: 'Design',
     },
     code: {
       importantTag: '<t-tag theme="primary">Important</t-tag>',

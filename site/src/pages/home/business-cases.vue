@@ -46,7 +46,7 @@
             <div>
               <p>{{ t('home.businessCases.downloads') }}</p>
               <div class="usage-card__total">
-                <strong>{{ usageData.downloadPerMonth }}</strong>
+                <strong>{{ localizedDownloadPerMonth }}</strong>
                 <span>{{ t('home.businessCases.tenThousandPlus') }}</span>
               </div>
             </div>
@@ -54,7 +54,7 @@
               <div>
                 <span>{{ t('home.businessCases.designReferences') }}</span>
                 <strong>
-                  {{ usageData.figmaReferenceCount }}<small>{{ t('home.businessCases.tenThousand') }}</small>
+                  {{ localizedFigmaReferenceCount }}<small>{{ t('home.businessCases.tenThousand') }}</small>
                 </strong>
               </div>
               <div>
@@ -224,6 +224,16 @@ interface ChartPoint {
 }
 
 const chartDownloads = computed(() => usageData.value.downloadsPerMonth.slice(-24));
+const formatTenThousands = (value: string) => {
+  if (!locale.value.startsWith('en')) return value;
+
+  const numericValue = Number(value.replace(/[,+]/g, ''));
+  if (!Number.isFinite(numericValue)) return value;
+
+  return new Intl.NumberFormat(locale.value, { maximumFractionDigits: 1 }).format(numericValue / 100);
+};
+const localizedDownloadPerMonth = computed(() => formatTenThousands(usageData.value.downloadPerMonth));
+const localizedFigmaReferenceCount = computed(() => formatTenThousands(usageData.value.figmaReferenceCount));
 const months = computed(() => {
   const downloads = chartDownloads.value;
   if (downloads.length <= 6) return downloads.map((item) => item.month.replace('-', '.'));

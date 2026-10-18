@@ -74,9 +74,9 @@ export default define<FooterHost>({
           <section class="TDesign-doc-footer__main">
             <div class="TDesign-doc-footer__brand">
               <span class="TDesign-doc-footer__brand-logo" aria-label="TDesign" innerHTML="${tdesignLogo}"></span>
-              <p>为腾讯业务打造的一站式企业级设计体系，连接设计与开发，助力高效构建一致的产品体验。</p>
+              <p>${locale.footer.brandDescription}</p>
             </div>
-            <nav class="TDesign-doc-footer__links" aria-label="页脚导航">
+            <nav class="TDesign-doc-footer__links" aria-label="${locale.footer.navigationLabel}">
               ${footerLinks.map(
                 (item) => html`
                   <div class="TDesign-doc-footer__links-group ${item.desktopOnly ? 'is-desktop-only' : ''}">
@@ -97,9 +97,9 @@ export default define<FooterHost>({
           </section>
 
           <section class="TDesign-doc-footer__community">
-            <p>加入社群实时交流，答疑解惑分享经验。</p>
+            <p>${locale.footer.communityDescription}</p>
             <div class="TDesign-doc-footer__community-actions">
-              <strong>扫描二维码：</strong>
+              <strong>${locale.footer.scanQrCode}</strong>
               <div class="TDesign-doc-footer__platforms">
                 ${communityPlatforms.map(
                   (item) => html`
@@ -117,7 +117,12 @@ export default define<FooterHost>({
                         <i innerHTML="${item.icon}"></i>
                       </button>
                       <div slot="content" class="TDesign-doc__qrcode-inner">
-                        <img width="120" height="120" src="${groupCodeMap[item.type]}" alt="${item.name} 社群二维码" />
+                        <img
+                          width="120"
+                          height="120"
+                          src="${groupCodeMap[item.type]}"
+                          alt="${item.name} ${locale.footer.communityQrCode}"
+                        />
                       </div>
                     </td-doc-popup>
                   `,
@@ -136,7 +141,7 @@ export default define<FooterHost>({
                 class="company-logo cloud"
                 href="https://cloud.tencent.com/"
                 target="_blank"
-                aria-label="腾讯云"
+                aria-label="${locale.footer.tencentCloud}"
                 innerHTML="${tencentCloudIcon}"
               ></a>
             </div>
