@@ -247,7 +247,7 @@ const stats = computed(() => [
       background-position: center;
       background-size: 80px 80px;
       mask-image: linear-gradient(to right, transparent, #000 24%, #000 76%, transparent),
-        linear-gradient(to bottom, transparent, #000 24%, #000 68%, transparent);
+        linear-gradient(to bottom, transparent, #000 24%, #000 48%, transparent);
       mask-composite: intersect;
       pointer-events: none;
       content: '';
@@ -410,7 +410,6 @@ const stats = computed(() => [
     &__stats {
       gap: clamp(0px, calc(-50.88px + 10.6vw), 48px);
       min-height: clamp(132px, calc(-67.46px + 41.6vw), 320px);
-      margin-top: 40px;
       padding: 48px 0;
     }
 

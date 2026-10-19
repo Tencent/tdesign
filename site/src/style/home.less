@@ -1,6 +1,19 @@
 /* stylelint-disable */
 @base-width: 100vw;
 
+/* Glass interaction adapted from Petr Knoll: https://codepen.io/Petr-Knoll/pen/QwWLZdx */
+@property --booking-glass-border-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: -75deg;
+}
+
+@property --booking-glass-sheen-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: -45deg;
+}
+
 @font-face {
   font-family: 'tencentW7';
   src: url('../pages/home/assets/TencentSans-W7.ttf');
@@ -180,7 +193,6 @@
     }
 
     .module-setup {
-      height: 436px;
       color: rgba(255, 255, 255, 0.9);
       background: #1e1e1e;
 
@@ -244,21 +256,284 @@
     margin: 464px auto 24px;
 
     .banner-booking {
-      text-align: center;
-      cursor: pointer;
-      img {
-        height: 108px;
+      --booking-glass-tint-low: rgba(255, 255, 255, 0.05);
+      --booking-glass-tint-high: rgba(255, 255, 255, 0.2);
+      --booking-glass-highlight: rgba(255, 255, 255, 0.5);
+      --booking-glass-ambient: rgba(255, 255, 255, 0.2);
+      --booking-glass-shadow: rgba(0, 0, 0, 0.2);
+      --booking-glass-ease: cubic-bezier(0.25, 1, 0.5, 1);
 
-        @media screen and (max-width: 960px) {
-          height: 92px;
+      position: relative;
+      z-index: 0;
+      flex: 0 0 206px;
+      width: 206px;
+      height: 64px;
+      border-radius: 999px;
+      pointer-events: none;
+      transition: transform 400ms var(--booking-glass-ease);
+
+      [theme-mode='dark'] & {
+        --booking-glass-tint-low: rgba(24, 28, 36, 0.12);
+        --booking-glass-tint-high: rgba(24, 28, 36, 0.3);
+        --booking-glass-highlight: rgba(255, 255, 255, 0.3);
+        --booking-glass-ambient: rgba(255, 255, 255, 0.08);
+        --booking-glass-shadow: rgba(0, 0, 0, 0.5);
+      }
+
+      &__button {
+        position: relative;
+        z-index: 1;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        height: 100%;
+        padding: 0 20px 0 6px;
+        border: 0;
+        border-radius: inherit;
+        background: var(--bg-color-component-transparent);
+        color: inherit;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        pointer-events: auto;
+        -webkit-tap-highlight-color: transparent;
+        box-shadow:
+          inset 0 3px 3px rgba(0, 0, 0, 0.05),
+          inset 0 -3px 3px var(--booking-glass-highlight),
+          0 6px 3px -3px var(--booking-glass-shadow),
+          inset 0 0 2.4px 6px var(--booking-glass-ambient);
+        -webkit-backdrop-filter: blur(3px);
+        backdrop-filter: blur(3px);
+        transition:
+          transform 400ms var(--booking-glass-ease),
+          box-shadow 400ms var(--booking-glass-ease),
+          backdrop-filter 400ms var(--booking-glass-ease);
+
+        @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+          background: linear-gradient(
+            -75deg,
+            var(--booking-glass-tint-low),
+            var(--booking-glass-tint-high),
+            var(--booking-glass-tint-low)
+          );
+        }
+
+        &:focus-visible {
+          outline: 2px solid var(--brand-main, #0052d9);
+          outline-offset: 5px;
+        }
+
+        &::before {
+          --booking-glass-sheen-angle: -45deg;
+          content: '';
+          position: absolute;
+          z-index: 0;
+          inset: 0.75px;
+          border-radius: inherit;
+          pointer-events: none;
+          background: linear-gradient(
+            var(--booking-glass-sheen-angle),
+            rgba(255, 255, 255, 0) 0%,
+            var(--booking-glass-highlight) 40% 50%,
+            rgba(255, 255, 255, 0) 55%
+          );
+          background-size: 200% 200%;
+          background-position: 0% 50%;
+          background-repeat: no-repeat;
+          mix-blend-mode: screen;
+          transition:
+            background-position 500ms var(--booking-glass-ease),
+            --booking-glass-sheen-angle 500ms var(--booking-glass-ease);
+        }
+      }
+
+      &__shadow {
+        position: absolute;
+        z-index: 0;
+        inset: -24px;
+        border-radius: inherit;
+        filter: blur(3px);
+        pointer-events: none;
+        transition: filter 400ms var(--booking-glass-ease);
+      }
+
+      @supports ((mask-composite: exclude) or (-webkit-mask-composite: xor)) {
+        &__button::after,
+        &__shadow::after {
+          content: '';
+          position: absolute;
+          box-sizing: border-box;
+          border-radius: inherit;
+          pointer-events: none;
+          -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask-composite: exclude;
+        }
+
+        &__button::after {
+          --booking-glass-border-angle: -75deg;
+          z-index: 2;
+          inset: -0.75px;
+          padding: 1.5px;
+          background:
+            conic-gradient(
+              from var(--booking-glass-border-angle) at 50% 50%,
+              rgba(0, 0, 0, 0.5),
+              rgba(0, 0, 0, 0) 5% 40%,
+              rgba(0, 0, 0, 0.5) 50%,
+              rgba(0, 0, 0, 0) 60% 95%,
+              rgba(0, 0, 0, 0.5)
+            ),
+            linear-gradient(var(--booking-glass-highlight), var(--booking-glass-highlight));
+          box-shadow: inset 0 0 0 0.75px var(--booking-glass-highlight);
+          transition: --booking-glass-border-angle 500ms ease;
+        }
+
+        &__shadow::after {
+          top: 36px;
+          left: 27px;
+          width: calc(100% - 54px);
+          height: calc(100% - 54px);
+          padding: 3px;
+          background: linear-gradient(180deg, var(--booking-glass-shadow), rgba(0, 0, 0, 0.1));
+          transition: top 400ms var(--booking-glass-ease), opacity 400ms var(--booking-glass-ease);
+        }
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        &__button:hover {
+          transform: scale(0.975);
+          -webkit-backdrop-filter: blur(0.24px);
+          backdrop-filter: blur(0.24px);
+          box-shadow:
+            inset 0 3px 3px rgba(0, 0, 0, 0.05),
+            inset 0 -3px 3px var(--booking-glass-highlight),
+            0 3.6px 1.2px -2.4px var(--booking-glass-shadow),
+            inset 0 0 1.2px 2.4px var(--booking-glass-highlight);
+        }
+
+        &__button:hover::before {
+          background-position: 25% 50%;
+        }
+
+        &__button:hover::after {
+          --booking-glass-border-angle: -125deg;
+        }
+
+        &:has(.banner-booking__button:hover) .banner-booking__shadow {
+          filter: blur(2px);
+        }
+
+        &:has(.banner-booking__button:hover) .banner-booking__shadow::after {
+          top: 27px;
+        }
+      }
+
+      &:has(.banner-booking__button:active) {
+        transform: rotate3d(1, 0, 0, 25deg);
+      }
+
+      &__button:active {
+        box-shadow:
+          inset 0 3px 3px rgba(0, 0, 0, 0.05),
+          inset 0 -3px 3px var(--booking-glass-highlight),
+          0 3px 3px -3px var(--booking-glass-shadow),
+          inset 0 0 2.4px 6px var(--booking-glass-ambient),
+          0 5.4px 1.2px rgba(0, 0, 0, 0.05),
+          0 6px 0 rgba(255, 255, 255, 0.75),
+          inset 0 6px 1.2px rgba(0, 0, 0, 0.15);
+      }
+
+      &__button:active::before {
+        --booking-glass-sheen-angle: -15deg;
+        background-position: 50% 15%;
+      }
+
+      &__button:active::after {
+        --booking-glass-border-angle: -75deg;
+      }
+
+      &:has(.banner-booking__button:active) .banner-booking__shadow {
+        filter: blur(3px);
+      }
+
+      &:has(.banner-booking__button:active) .banner-booking__shadow::after {
+        top: 36px;
+        opacity: 0.75;
+      }
+
+      @media (hover: none) and (pointer: coarse) {
+        &__button:active::before {
+          --booking-glass-sheen-angle: -45deg;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        &,
+        &__button,
+        &__button::before,
+        &__button::after,
+        &__shadow,
+        &__shadow::after {
+          transition: none;
+        }
+
+        &:has(.banner-booking__button:active),
+        &__button:hover {
+          transform: none;
+        }
+      }
+
+      &__logo,
+      &__info {
+        position: relative;
+        z-index: 1;
+      }
+
+      &__logo {
+        box-sizing: border-box;
+        display: flex;
+        flex: 0 0 52px;
+        align-items: center;
+        justify-content: center;
+        width: 52px;
+        height: 52px;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        border-radius: 50%;
+        background: var(--booking-glass-ambient);
+        box-shadow: inset 0 1px 1px var(--booking-glass-highlight), 0 1px 4px rgba(0, 0, 0, 0.04);
+
+        img {
+          width: 32px;
+          height: 32px;
         }
       }
 
       &__info {
-        border-radius: 25px;
-        background-color: var(--bg-color-card);
-        padding: 7px 15px;
-        border: 1px solid var(--component-border);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        min-width: 0;
+        white-space: nowrap;
+      }
+
+      &__eyebrow {
+        height: 20px;
+        color: var(--text-secondary);
+        font-size: 12px;
+        line-height: 20px;
+      }
+
+      &__title {
+        height: 24px;
+        margin-top: -2px;
+        color: var(--text-primary);
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 24px;
       }
     }
 
@@ -345,7 +620,7 @@
     }
   }
 
-  @media screen and (min-width: 1441px) {
+  @media screen and (min-width: 1200px) {
     &__track {
       --news-mask-edge: max(0px, calc((100% - 1660px) / 2));
 
@@ -717,6 +992,10 @@
 
       &.module-contributor {
         display: block;
+
+        .desc {
+          font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
       }
 
       &-desc {
@@ -1150,12 +1429,6 @@
 }
 
 @media screen and (max-width: 1439px) {
-  .tdesign-homepage {
-    .main-page {
-      margin-bottom: 80px;
-    }
-  }
-
   .module-board {
     &__inner {
       padding-top: 80px;
@@ -1431,7 +1704,7 @@
   }
 }
 
-@media screen and (min-width: 700px) and (max-width: 960px) {
+@media screen and (min-width: 500px) and (max-width: 960px) {
   .module-board {
     &__inner .module-board__card:first-child {
       width: calc(100vw - 48px);
@@ -1498,7 +1771,7 @@
   }
 }
 
-@media screen and (max-width: 699px) {
+@media screen and (max-width: 499px) {
   .module-board {
     &__inner .module-board__card:first-child {
       .module-board__detail--open {
@@ -1593,15 +1866,21 @@
 
     &__button.t-button,
     &__button--design.t-button {
-      width: 196px;
-      padding-right: 48px;
-      padding-left: 48px;
+      width: 140px;
+      padding: 10px 32px;
+      font-size: 12px;
+      line-height: 20px;
+
+      .module-setup__icon {
+        width: 18px;
+        height: 18px;
+      }
     }
   }
 }
 
 @media screen and (max-width: 360px) {
-  .module-board__card-desc .desc {
+  .module-board__inner .module-board__card:nth-child(n) .module-board__card-desc .desc {
     margin-top: 12px;
   }
 
@@ -1616,12 +1895,6 @@
 
     &__button.t-button {
       height: 40px;
-      font-size: 12px;
-
-      .module-setup__icon {
-        width: 18px;
-        height: 18px;
-      }
     }
   }
 

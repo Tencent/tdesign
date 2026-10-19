@@ -59,7 +59,7 @@
               </div>
               <div>
                 <span>{{ t('home.businessCases.projects') }}</span>
-                <strong>{{ usageData.projectsCount }}</strong>
+                <strong>{{ usageData.projectsCount }}+</strong>
               </div>
             </div>
           </div>
@@ -71,8 +71,7 @@
             <div class="usage-card__tooltip">
               <strong>{{ t('home.businessCases.downloadTrend') }}</strong>
               <span>
-                {{ hoveredDownloadMonth }}
-                {{ t('home.businessCases.downloadCount', { count: hoveredDownloadCount }) }}
+                {{ hoveredDownloadMonth }}, {{ t('home.businessCases.downloadCount', { count: hoveredDownloadCount }) }}
               </span>
             </div>
             <div class="usage-card__grid" aria-hidden="true">
@@ -91,15 +90,25 @@
                   <stop offset="1" stop-color="white" stop-opacity="0" />
                 </linearGradient>
                 <linearGradient id="business-cases-line-edge-fade">
-                  <stop offset="0" stop-color="white" stop-opacity="0" />
-                  <stop offset=".04" stop-color="white" />
-                  <stop offset=".96" stop-color="white" />
-                  <stop offset="1" stop-color="white" stop-opacity="0" />
+                  <stop offset="0" stop-color="white" stop-opacity=".06" />
+                  <stop offset=".14" stop-color="white" />
+                  <stop offset=".86" stop-color="white" />
+                  <stop offset="1" stop-color="white" stop-opacity=".06" />
                 </linearGradient>
                 <linearGradient id="business-cases-line-middle-fade">
                   <stop offset="0" stop-color="white" stop-opacity="0" />
-                  <stop offset=".08" stop-color="white" />
-                  <stop offset=".92" stop-color="white" />
+                  <stop offset=".05" stop-color="white" stop-opacity="0" />
+                  <stop offset=".25" stop-color="white" />
+                  <stop offset=".75" stop-color="white" />
+                  <stop offset=".95" stop-color="white" stop-opacity="0" />
+                  <stop offset="1" stop-color="white" stop-opacity="0" />
+                </linearGradient>
+                <linearGradient id="business-cases-line-main-fade">
+                  <stop offset="0" stop-color="white" stop-opacity="0" />
+                  <stop offset=".14" stop-color="white" stop-opacity="0" />
+                  <stop offset=".35" stop-color="white" />
+                  <stop offset=".65" stop-color="white" />
+                  <stop offset=".86" stop-color="white" stop-opacity="0" />
                   <stop offset="1" stop-color="white" stop-opacity="0" />
                 </linearGradient>
                 <mask id="business-cases-chart-mask">
@@ -110,6 +119,9 @@
                 </mask>
                 <mask id="business-cases-line-middle-mask">
                   <rect width="308" height="212" fill="url(#business-cases-line-middle-fade)" />
+                </mask>
+                <mask id="business-cases-line-main-mask">
+                  <rect width="308" height="212" fill="url(#business-cases-line-main-fade)" />
                 </mask>
               </defs>
               <g mask="url(#business-cases-chart-mask)">
@@ -132,7 +144,7 @@
                 ref="usageLineRef"
                 class="usage-card__line usage-card__line--main"
                 :d="chartLinePath"
-                mask="url(#business-cases-chart-mask)"
+                mask="url(#business-cases-line-main-mask)"
               />
             </svg>
             <span v-if="chartLinePath" class="usage-card__marker" aria-hidden="true"></span>
@@ -282,7 +294,7 @@ const hoveredDownloadMonth = computed(
 );
 const hoveredDownloadCount = computed(() => {
   const count = chartDownloads.value[hoveredDownloadIndex.value]?.totalDownloads;
-  return typeof count === 'number' ? new Intl.NumberFormat(locale.value).format(count) : '';
+  return typeof count === 'number' ? String(count) : '';
 });
 
 function isDeveloperStory(value: unknown): value is DeveloperStory {
@@ -558,9 +570,9 @@ onBeforeUnmount(() => {
     }
 
     strong {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
-      line-height: 22px;
+      line-height: 24px;
     }
 
     span {
@@ -665,7 +677,7 @@ onBeforeUnmount(() => {
     strong {
       font-family: 'TCloudNumber', sans-serif;
       font-size: 56px;
-      font-weight: 400;
+      font-weight: 300;
       letter-spacing: -1.12px;
       line-height: 48px;
     }
@@ -700,7 +712,7 @@ onBeforeUnmount(() => {
     strong {
       font-family: 'TCloudNumber', sans-serif;
       font-size: 20px;
-      font-weight: 400;
+      font-weight: 300;
       line-height: 20px;
       white-space: nowrap;
     }
@@ -719,10 +731,10 @@ onBeforeUnmount(() => {
 
     &::after {
       width: 2px;
-      height: 212px;
+      height: 193px;
       position: absolute;
       z-index: 2;
-      top: 28px;
+      top: 24px;
       left: var(--hover-x);
       transform: translateX(-50%);
       background: var(--text-primary);
@@ -758,8 +770,10 @@ onBeforeUnmount(() => {
 
     span {
       color: var(--text-secondary);
-      font-size: 12px;
-      line-height: 20px;
+      font-family: 'TCloudNumberLight', sans-serif;
+      font-size: 10px;
+      font-weight: 300;
+      line-height: 16px;
     }
   }
 
@@ -780,6 +794,7 @@ onBeforeUnmount(() => {
       justify-content: center;
       box-sizing: border-box;
       color: var(--text-placeholder);
+      font-family: 'TCloudNumberLight', sans-serif;
       font-size: 8px;
       line-height: 11px;
       writing-mode: horizontal-tb;
@@ -789,7 +804,8 @@ onBeforeUnmount(() => {
         top: 0;
         bottom: 19px;
         left: 50%;
-        border-left: 0.5px dashed var(--component-border);
+        width: 1px;
+        background: repeating-linear-gradient(to bottom, var(--component-border) 0 3px, transparent 3px 8px);
         content: '';
         transform: translateX(-50%);
       }
@@ -807,11 +823,11 @@ onBeforeUnmount(() => {
     stroke-linejoin: round;
 
     &--edge {
-      stroke-width: 0.5;
+      stroke-width: 0.3;
     }
 
     &--middle {
-      stroke-width: 1;
+      stroke-width: 0.75;
     }
 
     &--main {
@@ -1241,8 +1257,8 @@ onBeforeUnmount(() => {
       height: 241.02px;
 
       &::after {
-        height: 196.53px;
-        top: 25.96px;
+        height: 178.33px;
+        top: 22.25px;
       }
 
       > svg {

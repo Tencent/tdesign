@@ -10,6 +10,8 @@ export const zhCN = {
       },
       followWechat: '点击关注 TDesign 公众号',
       followWechatCompact: '关注公众号',
+      followWechatEyebrow: '欢迎关注',
+      followWechatTitle: 'TDesign 公众号',
     },
     solution: {
       label: '解决方案',
@@ -133,7 +135,7 @@ export const zhCN = {
       downloadTrend: '下载量趋势',
       downloadCount: '{count} 次',
       tenThousandPlus: '万次+',
-      tenThousand: '万次',
+      tenThousand: '万次+',
       designReferences: '设计资源引用',
       projects: '使用项目数',
       prompts: {
@@ -209,6 +211,8 @@ export const enUS = {
       },
       followWechat: 'Follow TDesign on WeChat',
       followWechatCompact: 'Follow on WeChat',
+      followWechatEyebrow: 'Follow us',
+      followWechatTitle: 'TDesign WeChat',
     },
     solution: {
       label: 'Solutions',

@@ -302,7 +302,7 @@ const updateScaledLayout = () => {
     resourceTypes.forEach(drawResourceFrame);
   }
 
-  if (window.innerWidth <= 596) {
+  if (window.innerWidth < 700) {
     const scale = window.innerWidth / 360;
     mobileLayoutScale.value = scale.toFixed(4);
     mobileSectionHeight.value = `${resourceLayoutRef.value.offsetHeight * scale}px`;
@@ -1037,7 +1037,54 @@ const resourceCards = computed<ResourceCard[]>(() => [
   }
 }
 
-@media screen and (max-width: 596px) {
+@media screen and (min-width: 700px) and (max-width: 959px) {
+  .resource-card {
+    gap: 24px;
+    justify-content: flex-start;
+
+    &__items,
+    &--icons &__items {
+      display: flex;
+      width: 100%;
+      margin-top: 0;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 8px;
+    }
+  }
+
+  .resource-item {
+    display: grid;
+    width: 200px;
+    min-width: 200px;
+    height: 64px;
+    padding: 12px 24px 12px 16px;
+    grid-template-columns: 40px 1fr;
+    grid-template-rows: 24px 20px;
+    column-gap: 8px;
+    row-gap: 0;
+
+    img {
+      width: 40px;
+      height: 40px;
+      margin: 0;
+      grid-row: 1 / 3;
+    }
+
+    &__name {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    &__updated,
+    &__action {
+      grid-column: 2;
+      grid-row: 2;
+    }
+  }
+}
+
+@media screen and (max-width: 699px) {
   .resource-section {
     left: 50%;
     width: 100vw;
@@ -1171,9 +1218,10 @@ const resourceCards = computed<ResourceCard[]>(() => [
 
   .resource-item {
     z-index: 1;
-    width: 100%;
+    width: calc(100% + 16px);
     height: 48px;
-    padding: 12px 0;
+    padding: 12px 8px;
+    margin-left: -8px;
     flex: 0 0 48px;
     flex-direction: row;
     justify-content: flex-start;
@@ -1215,7 +1263,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
   }
 }
 
-@media screen and (max-width: 596px) {
+@media screen and (max-width: 699px) {
   .resource-card__content p {
     font-size: 12px;
     line-height: 20px;

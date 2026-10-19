@@ -619,7 +619,7 @@ onBeforeUnmount(() => {
 @media screen and (min-width: 701px) and (max-width: 960px) {
   .community-card {
     width: 652px;
-    height: 736px;
+    height: 732px;
     padding: 32px clamp(24px, calc(2.8571vw + 4px), 32px);
     align-items: stretch;
     gap: clamp(16px, calc(9.2308vw - 48.6154px), 40px);
@@ -700,6 +700,15 @@ onBeforeUnmount(() => {
   .activity-feed {
     height: 324px;
     box-sizing: border-box;
+
+    &__meta-full {
+      display: block;
+      text-overflow: clip;
+    }
+
+    &__meta-compact {
+      display: none;
+    }
   }
 
   .community-stats {
@@ -769,14 +778,6 @@ onBeforeUnmount(() => {
       max-width: 254px;
       min-width: 0;
       overflow: hidden;
-    }
-
-    &__meta-full {
-      display: none;
-    }
-
-    &__meta-compact {
-      display: block;
     }
   }
 

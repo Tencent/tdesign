@@ -15,11 +15,17 @@
           </h2>
         </div>
         <t-popup trigger="click" placement="left" overlay-inner-class-name="wechat-qrcode" :z-index="100">
-          <div class="banner-booking">
-            <img src="./assets/tdesign-profile.png" />
-            <div class="banner-booking__info">
-              {{ windowWidth > 960 ? t('home.hero.followWechat') : t('home.hero.followWechatCompact') }}
-            </div>
+          <div class="banner-booking" data-screenshot-root>
+            <button class="banner-booking__button" type="button">
+              <span class="banner-booking__logo">
+                <img src="./assets/tdesign.svg" alt="" />
+              </span>
+              <span class="banner-booking__info">
+                <span class="banner-booking__eyebrow">{{ t('home.hero.followWechatEyebrow') }}</span>
+                <span class="banner-booking__title">{{ t('home.hero.followWechatTitle') }}</span>
+              </span>
+            </button>
+            <span class="banner-booking__shadow" aria-hidden="true"></span>
           </div>
           <template #content><img width="100" src="https://tdesign.gtimg.com/site/wechat-account.png" /></template>
         </t-popup>

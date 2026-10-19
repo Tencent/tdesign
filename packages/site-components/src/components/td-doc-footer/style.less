@@ -1,7 +1,6 @@
 /* stylelint-disable */
 :host {
   display: block;
-  min-height: 530px;
   box-sizing: border-box;
   color: var(--text-secondary);
   font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -258,10 +257,6 @@
 }
 
 @media screen and (min-width: 960px) and (max-width: 1200px) {
-  :host {
-    min-height: auto;
-  }
-
   .TDesign-doc-footer {
     &__inner {
       width: 100%;
@@ -383,10 +378,6 @@
 }
 
 @media screen and (max-width: 959px) {
-  :host {
-    min-height: auto;
-  }
-
   .TDesign-doc-footer {
     &__inner {
       width: 100%;
@@ -451,7 +442,7 @@
       align-items: center;
       gap: 16px;
       min-height: auto;
-      padding: 24px;
+      padding: 32px 24px;
       text-align: center;
 
       &-actions {
