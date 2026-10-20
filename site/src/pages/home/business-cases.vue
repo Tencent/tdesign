@@ -36,6 +36,9 @@
                   <span>{{ item.position }}</span>
                 </div>
               </div>
+              <t-tag size="medium" shape="round" :theme="item.theme" :variant="item.variant">
+                {{ userTypeLabels[item.userType] }}
+              </t-tag>
             </footer>
           </div>
           <p class="business-case__prompt">› {{ item.scene }}</p>
@@ -157,6 +160,7 @@
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import type { TdTagProps } from 'tdesign-vue-next';
 import { useI18n } from 'vue-i18n';
 
 import homeMessages from '@/locales/pages/home';
@@ -166,44 +170,65 @@ import { fallbackUsageData, getUsageData } from './usage-data';
 
 const { locale, t } = useI18n({ messages: homeMessages });
 
+type DeveloperUserType = 'contributor' | 'community' | 'enterprise';
+
 interface DeveloperStory {
   content: string;
   nickname: string;
   position: string;
   avatar: string;
   scene: string;
+  userType: DeveloperUserType;
 }
 
 interface BusinessCase extends DeveloperStory {
+  theme: TdTagProps['theme'];
+  variant: TdTagProps['variant'];
   spreadX: number;
   spreadY: number;
   rotation: number;
 }
 
-type BusinessCaseLayout = Pick<BusinessCase, 'spreadX' | 'spreadY' | 'rotation'>;
+type BusinessCaseLayout = Pick<BusinessCase, 'theme' | 'variant' | 'spreadX' | 'spreadY' | 'rotation'>;
+
+const userTypeLabels: Record<DeveloperUserType, string> = {
+  contributor: '贡献者',
+  community: '社区用户',
+  enterprise: '企业用户',
+};
 
 const caseLayouts: BusinessCaseLayout[] = [
   {
+    theme: 'default',
+    variant: 'light-outline',
     spreadX: 488,
     spreadY: 141,
     rotation: -7,
   },
   {
+    theme: 'primary',
+    variant: 'light',
     spreadX: 527,
     spreadY: -172,
     rotation: -5,
   },
   {
+    theme: 'warning',
+    variant: 'light',
     spreadX: -505,
     spreadY: -151,
     rotation: 6,
   },
   {
+    theme: 'primary',
+    variant: 'light',
     spreadX: -486,
     spreadY: 137,
     rotation: 6,
   },
   {
+    theme: 'default',
+    variant: 'light-outline',
     spreadX: 21,
     spreadY: -319,
     rotation: -4,
@@ -217,8 +242,8 @@ const spreadProgress = ref(0);
 const canvasScale = ref('1');
 const compactCanvasScale = ref('1');
 const compactCanvasTop = ref('276px');
-const compactCanvasHeight = ref('623px');
-const compactSectionHeight = ref('959px');
+const compactCanvasHeight = ref('635px');
+const compactSectionHeight = ref('971px');
 const mobileLayoutScale = ref('1');
 const mobileSectionHeight = ref('0px');
 const chartHoverX = ref(226);
@@ -300,7 +325,10 @@ const hoveredDownloadCount = computed(() => {
 function isDeveloperStory(value: unknown): value is DeveloperStory {
   if (!value || typeof value !== 'object') return false;
   const story = value as Record<string, unknown>;
-  return ['content', 'nickname', 'position', 'avatar', 'scene'].every((key) => typeof story[key] === 'string');
+  const hasRequiredText = ['content', 'nickname', 'position', 'avatar', 'scene'].every(
+    (key) => typeof story[key] === 'string',
+  );
+  return hasRequiredText && ['contributor', 'community', 'enterprise'].includes(story.userType as string);
 }
 
 async function getDeveloperStories(): Promise<void> {
@@ -376,7 +404,7 @@ function updateSpreadProgress(timestamp = performance.now()): void {
     const sectionWidth = businessCasesRef.value.clientWidth;
     const scale = Math.min(1, Math.max(1200 / 1440, sectionWidth / 1440));
     const compactScale = Math.min(1200 / 1060, Math.max(1, window.innerWidth / 1060));
-    const canvasHeight = window.innerWidth >= 882 ? 623 : 801;
+    const canvasHeight = window.innerWidth >= 882 ? 635 : 813;
     const heading = businessCasesRef.value.querySelector<HTMLElement>('.business-cases__heading');
     const canvasTop = heading ? heading.offsetTop + heading.offsetHeight + 64 : 276;
 
@@ -571,7 +599,7 @@ onBeforeUnmount(() => {
 
     strong {
       font-size: 16px;
-      font-weight: 700;
+      font-weight: 600;
       line-height: 24px;
     }
 
@@ -580,6 +608,11 @@ onBeforeUnmount(() => {
       font-size: 12px;
       line-height: 20px;
     }
+  }
+
+  :deep(.t-tag) {
+    background: var(--bg-color-container);
+    font-weight: 300;
   }
 
   &__prompt {
@@ -982,6 +1015,12 @@ onBeforeUnmount(() => {
   }
 }
 
+@media screen and (max-width: 1200px) {
+  .business-case__prompt {
+    display: none;
+  }
+}
+
 @media screen and (min-width: 596px) and (max-width: 1200px) {
   .business-cases {
     height: var(--compact-section-height);
@@ -1017,7 +1056,7 @@ onBeforeUnmount(() => {
       align-content: start;
       justify-content: center;
       gap: 24px;
-      padding-top: 284px;
+      padding-top: 296px;
       box-sizing: border-box;
       margin: 0;
       transform: translateX(-50%) scale(var(--compact-canvas-scale));
@@ -1083,6 +1122,13 @@ onBeforeUnmount(() => {
         font-size: 10px;
         line-height: 18px;
       }
+    }
+
+    :deep(.t-tag) {
+      height: 22.15px;
+      padding: 0 7.38px;
+      font-size: 11.07px;
+      line-height: 18.45px;
     }
 
     &__prompt {
@@ -1198,6 +1244,7 @@ onBeforeUnmount(() => {
     left: auto;
     order: -1;
     flex-direction: row;
+    margin-bottom: 12px;
     border-radius: 14.83px;
     transform: none;
 
@@ -1349,6 +1396,13 @@ onBeforeUnmount(() => {
         font-size: 16.28px;
         line-height: 29.3px;
       }
+    }
+
+    :deep(.t-tag) {
+      height: 36.06px;
+      padding: 0 12.02px;
+      font-size: 18.03px;
+      line-height: 30.05px;
     }
 
     &__prompt {

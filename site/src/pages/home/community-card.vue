@@ -1,8 +1,8 @@
 <template>
   <section class="community-card">
-    <div class="community-network" aria-hidden="true">
+    <div class="community-network">
       <div class="community-network__canvas">
-        <svg class="community-network__lines" viewBox="0 0 432 413" fill="none">
+        <svg class="community-network__lines" viewBox="0 0 432 413" fill="none" aria-hidden="true">
           <circle cx="216" cy="206.5" r="119" />
           <circle cx="216" cy="206.5" r="183" />
           <path
@@ -30,7 +30,16 @@
             backgroundColor: avatarColors[index % avatarColors.length],
           }"
         >
-          <img v-if="isGithubMember(member)" :src="githubAvatar(member)" alt="" />
+          <a
+            v-if="isGithubMember(member)"
+            class="community-network__profile-link"
+            :href="githubProfile(member)"
+            :aria-label="`${member} 的 GitHub 主页`"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img :src="githubAvatar(member)" :alt="member" />
+          </a>
           <template v-else>{{ member }}</template>
         </span>
       </div>
@@ -103,8 +112,6 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { Icon } from 'tdesign-icons-vue-next';
 import { HOME_API_ENDPOINTS } from './api';
 import tdesignLogo from './assets/tdesign.svg';
-
-const contributorLimit = 50;
 
 const networkPoints = [
   { x: 216, y: 24 },
@@ -216,7 +223,7 @@ function parseContributors(value: unknown): string[] {
     const normalizedName = name.trim();
     if (normalizedName) uniqueNames.set(normalizedName.toLowerCase(), normalizedName);
   });
-  return Array.from(uniqueNames.values()).slice(0, contributorLimit);
+  return Array.from(uniqueNames.values());
 }
 
 function isGithubMember(value: string): boolean {
@@ -225,6 +232,10 @@ function isGithubMember(value: string): boolean {
 
 function githubAvatar(value: string): string {
   return `https://avatars.githubusercontent.com/${value}`;
+}
+
+function githubProfile(value: string): string {
+  return `https://github.com/${encodeURIComponent(value)}`;
 }
 
 function formatRelativeTime(value: string): string {
@@ -471,6 +482,13 @@ onBeforeUnmount(() => {
       animation: avatar-change 1s cubic-bezier(0.38, 0, 0.24, 1);
     }
   }
+
+  &__profile-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
 }
 
 @keyframes avatar-change {
@@ -599,6 +617,7 @@ onBeforeUnmount(() => {
 
   &__meta-full {
     display: block;
+    font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
 
   &__meta-compact {
