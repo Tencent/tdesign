@@ -269,7 +269,13 @@ const formatTenThousands = (value: string) => {
 
   return new Intl.NumberFormat(locale.value, { maximumFractionDigits: 1 }).format(numericValue / 100);
 };
-const localizedDownloadPerMonth = computed(() => formatTenThousands(usageData.value.downloadPerMonth));
+const localizedDownloadPerMonth = computed(() => {
+  const latestDownloads = chartDownloads.value.at(-1)?.totalDownloads;
+  if (typeof latestDownloads !== 'number') return formatTenThousands(usageData.value.downloadPerMonth);
+
+  const divisor = locale.value.startsWith('en') ? 1_000_000 : 10_000;
+  return (latestDownloads / divisor).toFixed(1);
+});
 const localizedFigmaReferenceCount = computed(() => formatTenThousands(usageData.value.figmaReferenceCount));
 const months = computed(() => {
   const downloads = chartDownloads.value;
