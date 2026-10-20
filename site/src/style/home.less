@@ -257,11 +257,12 @@
     margin: 464px auto 0;
 
     .banner-booking {
-      --booking-glass-tint-low: rgba(255, 255, 255, 0.05);
-      --booking-glass-tint-high: rgba(255, 255, 255, 0.2);
-      --booking-glass-highlight: rgba(255, 255, 255, 0.5);
-      --booking-glass-ambient: rgba(255, 255, 255, 0.2);
-      --booking-glass-shadow: rgba(0, 0, 0, 0.2);
+      --booking-glass-tint-low: rgba(255, 255, 255, 0.18);
+      --booking-glass-tint-high: rgba(255, 255, 255, 0.3);
+      --booking-glass-highlight: rgba(255, 255, 255, 0.9);
+      --booking-glass-ambient: rgba(255, 255, 255, 0.16);
+      --booking-glass-shadow: rgba(0, 0, 0, 0.04);
+      --booking-glass-logo: rgba(255, 255, 255, 0.94);
       --booking-glass-ease: cubic-bezier(0.25, 1, 0.5, 1);
 
       position: relative;
@@ -276,9 +277,10 @@
       [theme-mode='dark'] & {
         --booking-glass-tint-low: rgba(24, 28, 36, 0.12);
         --booking-glass-tint-high: rgba(24, 28, 36, 0.3);
-        --booking-glass-highlight: rgba(255, 255, 255, 0.3);
+        --booking-glass-highlight: rgba(255, 255, 255, 0.4);
         --booking-glass-ambient: rgba(255, 255, 255, 0.08);
-        --booking-glass-shadow: rgba(0, 0, 0, 0.5);
+        --booking-glass-shadow: rgba(0, 0, 0, 0.16);
+        --booking-glass-logo: rgba(255, 255, 255, 0.12);
       }
 
       &__button {
@@ -301,12 +303,11 @@
         pointer-events: auto;
         -webkit-tap-highlight-color: transparent;
         box-shadow:
-          inset 0 3px 3px rgba(0, 0, 0, 0.05),
-          inset 0 -3px 3px var(--booking-glass-highlight),
-          0 6px 3px -3px var(--booking-glass-shadow),
-          inset 0 0 2.4px 6px var(--booking-glass-ambient);
-        -webkit-backdrop-filter: blur(3px);
-        backdrop-filter: blur(3px);
+          inset 0 1px 3px rgba(0, 0, 0, 0.025),
+          inset 0 -1px 2px var(--booking-glass-ambient),
+          0 2px 8px -4px var(--booking-glass-shadow);
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
         transition:
           transform 400ms var(--booking-glass-ease),
           box-shadow 400ms var(--booking-glass-ease),
@@ -337,7 +338,7 @@
           background: linear-gradient(
             var(--booking-glass-sheen-angle),
             rgba(255, 255, 255, 0) 0%,
-            var(--booking-glass-highlight) 40% 50%,
+            var(--booking-glass-ambient) 40% 50%,
             rgba(255, 255, 255, 0) 55%
           );
           background-size: 200% 200%;
@@ -377,29 +378,26 @@
         &__button::after {
           --booking-glass-border-angle: -75deg;
           z-index: 2;
-          inset: -0.75px;
-          padding: 1.5px;
-          background:
-            conic-gradient(
-              from var(--booking-glass-border-angle) at 50% 50%,
-              rgba(0, 0, 0, 0.5),
-              rgba(0, 0, 0, 0) 5% 40%,
-              rgba(0, 0, 0, 0.5) 50%,
-              rgba(0, 0, 0, 0) 60% 95%,
-              rgba(0, 0, 0, 0.5)
-            ),
-            linear-gradient(var(--booking-glass-highlight), var(--booking-glass-highlight));
-          box-shadow: inset 0 0 0 0.75px var(--booking-glass-highlight);
+          inset: -0.5px;
+          padding: 1px;
+          background: conic-gradient(
+            from var(--booking-glass-border-angle) at 50% 50%,
+            var(--booking-glass-highlight),
+            rgba(255, 255, 255, 0.3) 12% 35%,
+            var(--booking-glass-highlight) 50% 90%,
+            var(--booking-glass-highlight)
+          );
+          box-shadow: inset 0 0 0 0.5px var(--booking-glass-ambient);
           transition: --booking-glass-border-angle 500ms ease;
         }
 
         &__shadow::after {
-          top: 36px;
+          top: 28px;
           left: 27px;
           width: calc(100% - 54px);
           height: calc(100% - 54px);
-          padding: 3px;
-          background: linear-gradient(180deg, var(--booking-glass-shadow), rgba(0, 0, 0, 0.1));
+          padding: 1px;
+          background: linear-gradient(180deg, var(--booking-glass-shadow), transparent);
           transition: top 400ms var(--booking-glass-ease), opacity 400ms var(--booking-glass-ease);
         }
       }
@@ -407,13 +405,12 @@
       @media (hover: hover) and (pointer: fine) {
         &__button:hover {
           transform: scale(0.975);
-          -webkit-backdrop-filter: blur(0.24px);
-          backdrop-filter: blur(0.24px);
+          -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
           box-shadow:
-            inset 0 3px 3px rgba(0, 0, 0, 0.05),
-            inset 0 -3px 3px var(--booking-glass-highlight),
-            0 3.6px 1.2px -2.4px var(--booking-glass-shadow),
-            inset 0 0 1.2px 2.4px var(--booking-glass-highlight);
+            inset 0 1px 2px rgba(0, 0, 0, 0.02),
+            inset 0 -1px 2px var(--booking-glass-ambient),
+            0 1px 6px -3px var(--booking-glass-shadow);
         }
 
         &__button:hover::before {
@@ -439,13 +436,9 @@
 
       &__button:active {
         box-shadow:
-          inset 0 3px 3px rgba(0, 0, 0, 0.05),
-          inset 0 -3px 3px var(--booking-glass-highlight),
-          0 3px 3px -3px var(--booking-glass-shadow),
-          inset 0 0 2.4px 6px var(--booking-glass-ambient),
-          0 5.4px 1.2px rgba(0, 0, 0, 0.05),
-          0 6px 0 rgba(255, 255, 255, 0.75),
-          inset 0 6px 1.2px rgba(0, 0, 0, 0.15);
+          inset 0 1px 3px var(--booking-glass-shadow),
+          inset 0 -1px 2px var(--booking-glass-ambient),
+          0 1px 4px -3px var(--booking-glass-shadow);
       }
 
       &__button:active::before {
@@ -462,8 +455,8 @@
       }
 
       &:has(.banner-booking__button:active) .banner-booking__shadow::after {
-        top: 36px;
-        opacity: 0.75;
+        top: 28px;
+        opacity: 0.5;
       }
 
       @media (hover: none) and (pointer: coarse) {
@@ -502,10 +495,11 @@
         justify-content: center;
         width: 52px;
         height: 52px;
-        border: 1px solid rgba(255, 255, 255, 0.24);
+        border: 2px solid rgba(255, 255, 255, 0.5);
         border-radius: 50%;
-        background: var(--booking-glass-ambient);
-        box-shadow: inset 0 1px 1px var(--booking-glass-highlight), 0 1px 4px rgba(0, 0, 0, 0.04);
+        background: var(--booking-glass-logo);
+        background-clip: padding-box;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.035);
 
         img {
           width: 32px;
