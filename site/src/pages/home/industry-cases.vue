@@ -38,10 +38,10 @@
       </div>
     </div>
 
-    <div class="industry-cases__stats">
-      <div v-for="stat in stats" :key="stat.labelKey" class="industry-cases__stat">
+    <div ref="statsRef" class="industry-cases__stats">
+      <div v-for="(stat, index) in stats" :key="stat.labelKey" class="industry-cases__stat">
         <div class="industry-cases__value">
-          <strong>{{ stat.value }}</strong>
+          <strong>{{ formatStatValue(animatedStatValues[index], stat.target) }}</strong>
           <span>{{ t(stat.unitKey) }}</span>
         </div>
         <p>{{ t(stat.labelKey) }}</p>
@@ -78,7 +78,13 @@ const LOGO_ROW_GAP = 16;
 
 const brandList = ref<LogoItem[]>([]);
 const usageData = ref(fallbackUsageData);
+const statsRef = ref<HTMLElement | null>(null);
+const animatedStatValues = ref([0, 0, 0]);
 const viewportWidth = ref(typeof window === 'undefined' ? TABLET_BREAKPOINT : window.innerWidth);
+let statsObserver: IntersectionObserver | null = null;
+let statsAnimationFrame: number | null = null;
+let hasAnimatedStats = false;
+const STATS_ANIMATION_DURATION = 1200;
 const logoScale = computed(() => {
   const tabletScale = TABLET_LOGO_HEIGHT / DESKTOP_LOGO_HEIGHT;
   const mobileScale = MOBILE_LOGO_HEIGHT / DESKTOP_LOGO_HEIGHT;
@@ -116,9 +122,47 @@ function handleResize(): void {
   viewportWidth.value = window.innerWidth;
 }
 
+function startStatsAnimation(): void {
+  if (hasAnimatedStats) return;
+  hasAnimatedStats = true;
+  statsObserver?.disconnect();
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    animatedStatValues.value = stats.value.map((stat) => stat.target);
+    return;
+  }
+
+  const startedAt = performance.now();
+  const update = (timestamp: number) => {
+    const progress = Math.min(1, (timestamp - startedAt) / STATS_ANIMATION_DURATION);
+    const easedProgress = 1 - (1 - progress) ** 3;
+    const targets = stats.value.map((stat) => stat.target);
+    animatedStatValues.value = targets.map((target) => target * easedProgress);
+
+    if (progress < 1) {
+      statsAnimationFrame = window.requestAnimationFrame(update);
+    } else {
+      animatedStatValues.value = targets;
+      statsAnimationFrame = null;
+    }
+  };
+
+  statsAnimationFrame = window.requestAnimationFrame(update);
+}
+
 onMounted(async () => {
   window.addEventListener('resize', handleResize);
+  statsObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) startStatsAnimation();
+    },
+    { rootMargin: '-20% 0px -20% 0px' },
+  );
+  if (statsRef.value) statsObserver.observe(statsRef.value);
   usageData.value = await getUsageData();
+  if (hasAnimatedStats && statsAnimationFrame === null) {
+    animatedStatValues.value = stats.value.map((stat) => stat.target);
+  }
 
   try {
     const response = await fetch(HOME_API_ENDPOINTS.brandList);
@@ -140,31 +184,37 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
+  statsObserver?.disconnect();
+  if (statsAnimationFrame !== null) window.cancelAnimationFrame(statsAnimationFrame);
   window.removeEventListener('resize', handleResize);
 });
 
-function formatDownloads(value: string): string {
-  if (!locale.value.startsWith('en')) return value;
-
+function parseStatValue(value: string): number {
   const numericValue = Number(value.replace(/,/g, ''));
-  if (!Number.isFinite(numericValue)) return value;
+  return Number.isFinite(numericValue) ? numericValue : 0;
+}
 
-  return new Intl.NumberFormat(locale.value, { maximumFractionDigits: 1 }).format(numericValue / 100);
+function formatStatValue(value: number, target: number): string {
+  const fractionDigits = Number.isInteger(target) ? 0 : 1;
+  return new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  }).format(value);
 }
 
 const stats = computed(() => [
   {
-    value: usageData.value.projectsCount,
+    target: parseStatValue(usageData.value.projectsCount),
     unitKey: 'home.service.stats.projectsUnit',
     labelKey: 'home.service.stats.projects',
   },
   {
-    value: usageData.value.enterpriseCustomersCount,
+    target: parseStatValue(usageData.value.enterpriseCustomersCount),
     unitKey: 'home.service.stats.teamsUnit',
     labelKey: 'home.service.stats.teams',
   },
   {
-    value: formatDownloads(usageData.value.downloadPerMonth),
+    target: parseStatValue(usageData.value.downloadPerMonth) / (locale.value.startsWith('en') ? 100 : 1),
     unitKey: 'home.service.stats.downloadsUnit',
     labelKey: 'home.service.stats.downloads',
   },

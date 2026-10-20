@@ -41,6 +41,7 @@
               v-for="item in card.items"
               :key="item.name"
               class="resource-item"
+              :class="{ 'resource-item--single-line': !releaseDates[item.releaseKey] }"
               :href="item.href"
               referrerpolicy="no-referrer"
             >
@@ -1081,6 +1082,13 @@ const resourceCards = computed<ResourceCard[]>(() => [
       grid-column: 2;
       grid-row: 2;
     }
+  }
+}
+
+@media screen and (min-width: 700px) and (max-width: 1199px) {
+  .resource-item--single-line:not(:hover) .resource-item__name {
+    grid-row: 1 / 3;
+    align-self: center;
   }
 }
 
