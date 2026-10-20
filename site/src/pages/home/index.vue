@@ -279,12 +279,12 @@
                   <p class="desc-text">{{ t('home.creation.features.scalable.description') }}</p>
                 </li>
                 <li class="desc-item">
-                  <icon class="desc-icon" name="chart-bubble" />
+                  <img class="desc-icon" :src="bubbleIcon" alt="" />
                   <h3 class="desc-title">{{ t('home.creation.features.resources.title') }}</h3>
                   <p class="desc-text">{{ t('home.creation.features.resources.description') }}</p>
                 </li>
                 <li class="desc-item">
-                  <icon class="desc-icon" name="file-image" />
+                  <img class="desc-icon" :src="fileImageIcon" alt="" />
                   <h3 class="desc-title">{{ t('home.creation.features.guidelines.title') }}</h3>
                   <p class="desc-text">{{ t('home.creation.features.guidelines.description') }}</p>
                 </li>
@@ -369,6 +369,8 @@ import { DesktopIcon, Icon } from 'tdesign-icons-vue-next';
 import Banner from './banner.vue';
 import BusinessCases from './business-cases.vue';
 import IndustryCases from './industry-cases.vue';
+import bubbleIcon from './assets/bubble.svg';
+import fileImageIcon from './assets/file-image.svg';
 import openFrameworksIcon from './assets/open-frameworks.svg';
 import openIndustriesIcon from './assets/open-industries.svg';
 import openPlatformsIcon from './assets/open-platforms.svg';

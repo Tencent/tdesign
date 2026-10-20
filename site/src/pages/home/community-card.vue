@@ -404,6 +404,12 @@ onBeforeUnmount(() => {
   box-shadow: 0 30px 60px rgb(0 0 0 / 10%), 0 50px 100px rgb(0 0 0 / 5%);
 }
 
+@media screen and (min-width: 1920px) {
+  .community-card {
+    width: 1000px;
+  }
+}
+
 .community-network {
   position: relative;
   width: 432px;

@@ -840,7 +840,8 @@ onBeforeUnmount(() => {
         width: 1px;
         background: repeating-linear-gradient(to bottom, var(--component-border) 0 3px, transparent 3px 8px);
         content: '';
-        transform: translateX(-50%);
+        transform: translateX(-50%) scaleX(0.5);
+        transform-origin: center;
       }
     }
   }
