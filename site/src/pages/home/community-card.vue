@@ -3,45 +3,63 @@
     <div class="community-network">
       <div class="community-network__canvas">
         <svg class="community-network__lines" viewBox="0 0 432 413" fill="none" aria-hidden="true">
-          <circle cx="216" cy="206.5" r="119" />
-          <circle cx="216" cy="206.5" r="183" />
-          <path
-            v-for="point in networkPoints"
-            :key="`${point.x}-${point.y}`"
-            :d="`M216 206.5 L${point.x} ${point.y}`"
-          />
+          <g class="community-network__wheel community-network__wheel--outer">
+            <circle cx="216" cy="206.5" r="183" />
+            <path
+              v-for="point in networkPoints.slice(0, outerRingPointCount)"
+              :key="`${point.x}-${point.y}`"
+              :d="`M216 206.5 L${point.x} ${point.y}`"
+            />
+          </g>
+          <g class="community-network__wheel community-network__wheel--inner">
+            <circle cx="216" cy="206.5" r="119" />
+            <path
+              v-for="point in networkPoints.slice(outerRingPointCount)"
+              :key="`${point.x}-${point.y}`"
+              :d="`M216 206.5 L${point.x} ${point.y}`"
+            />
+          </g>
         </svg>
         <span class="community-network__logo">
           <img :src="tdesignLogo" alt="TDesign" />
         </span>
-        <span
+        <div
           v-for="(member, index) in communityMembers"
           :key="index"
           :class="[
-            'community-network__avatar',
-            {
-              'community-network__avatar--active': activeMembers.includes(index),
-              'community-network__avatar--change': changingMembers.includes(index),
-            },
+            'community-network__orbit',
+            index < outerRingPointCount ? 'community-network__orbit--outer' : 'community-network__orbit--inner',
           ]"
-          :style="{
-            left: `${networkPoints[index].x}px`,
-            top: `${networkPoints[index].y}px`,
-            backgroundColor: avatarColors[index % avatarColors.length],
-          }"
         >
-          <a
-            v-if="isGithubMember(member)"
-            class="community-network__profile-link"
-            :href="githubProfile(member)"
-            :aria-label="`${member} 的 GitHub 主页`"
-            target="_blank"
-            rel="noopener noreferrer"
+          <span
+            :class="[
+              'community-network__avatar',
+              {
+                'community-network__avatar--active': activeMembers.includes(index),
+                'community-network__avatar--change': changingMembers.includes(index),
+              },
+            ]"
+            :style="{
+              left: `${networkPoints[index].x}px`,
+              top: `${networkPoints[index].y}px`,
+              backgroundColor: avatarColors[index % avatarColors.length],
+            }"
           >
-            <img :src="githubAvatar(member)" :alt="member" />
-          </a>
-          <template v-else>{{ member }}</template>
-        </span>
+            <span class="community-network__avatar-content">
+              <a
+                v-if="isGithubMember(member)"
+                class="community-network__profile-link"
+                :href="githubProfile(member)"
+                :aria-label="`${member} 的 GitHub 主页`"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img :src="githubAvatar(member)" :alt="member" />
+              </a>
+              <template v-else>{{ member }}</template>
+            </span>
+          </span>
+        </div>
       </div>
     </div>
 
@@ -132,6 +150,7 @@ const networkPoints = [
   { x: 113, y: 265 },
   { x: 112, y: 164 },
 ] as const;
+const outerRingPointCount = 11;
 
 const communityMembers = ref([
   '👩🏻',
@@ -407,6 +426,11 @@ onBeforeUnmount(() => {
 @media screen and (min-width: 1920px) {
   .community-card {
     width: 1000px;
+    gap: 60px;
+  }
+
+  .community-network {
+    margin-left: 60px;
   }
 }
 
@@ -415,7 +439,8 @@ onBeforeUnmount(() => {
   width: 432px;
   height: 413px;
   flex: none;
-  overflow: hidden;
+  overflow: clip;
+  overflow-clip-margin: 20px;
 
   &__canvas {
     position: absolute;
@@ -440,8 +465,21 @@ onBeforeUnmount(() => {
     }
   }
 
+  &__wheel {
+    transform-origin: 216px 206.5px;
+
+    &--outer {
+      animation: network-wheel-rotate 48s linear infinite;
+    }
+
+    &--inner {
+      animation: network-wheel-rotate 32s linear infinite reverse;
+    }
+  }
+
   &__logo {
     position: absolute;
+    z-index: 2;
     top: 50%;
     left: 50%;
     display: grid;
@@ -460,6 +498,30 @@ onBeforeUnmount(() => {
     }
   }
 
+  &__orbit {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    pointer-events: none;
+    transform-origin: center;
+
+    &--outer {
+      animation: network-wheel-rotate 48s linear infinite;
+
+      .community-network__avatar-content {
+        animation: network-avatar-counter-rotate 48s linear infinite;
+      }
+    }
+
+    &--inner {
+      animation: network-wheel-rotate 32s linear infinite reverse;
+
+      .community-network__avatar-content {
+        animation: network-avatar-counter-rotate 32s linear infinite reverse;
+      }
+    }
+  }
+
   &__avatar {
     position: absolute;
     display: grid;
@@ -470,6 +532,7 @@ onBeforeUnmount(() => {
     border: 5px solid var(--bg-color-card);
     border-radius: 50%;
     box-shadow: 0 2px 8px rgb(0 0 0 / 6%);
+    pointer-events: auto;
     transform: translate(-50%, -50%);
 
     img {
@@ -489,11 +552,49 @@ onBeforeUnmount(() => {
     }
   }
 
+  &__avatar-content {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    border-radius: inherit;
+  }
+
   &__profile-link {
     display: block;
     width: 100%;
     height: 100%;
+    overflow: hidden;
+    line-height: 0;
     border-radius: 50%;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+    }
+  }
+}
+
+@keyframes network-wheel-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes network-avatar-counter-rotate {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .community-network__wheel,
+  .community-network__orbit,
+  .community-network__avatar-content {
+    animation: none;
   }
 }
 
@@ -800,6 +901,17 @@ onBeforeUnmount(() => {
       font-size: 10px;
       line-height: 20px;
     }
+  }
+}
+
+@media screen and (max-width: 499px) {
+  .community-card {
+    height: 804px;
+    min-height: 804px;
+  }
+
+  .community-stat {
+    gap: 16px;
   }
 }
 

@@ -573,12 +573,17 @@ let communityPreloadObserver: IntersectionObserver | null = null;
 let moduleBoardResizeObserver: ResizeObserver | null = null;
 let moduleBoardMotionQuery: MediaQueryList | null = null;
 let moduleBoardAnimationFrame: number | null = null;
+let moduleBoardSnapTimer: ReturnType<typeof setTimeout> | null = null;
+let moduleBoardSnapAnimationFrame: number | null = null;
+let moduleBoardScrollDirection: -1 | 0 | 1 = 0;
+let moduleBoardLastScrollY: number | null = null;
 let moduleBoardNeedsMeasure = true;
 let moduleBoardStops: number[] = [];
 let moduleBoardPinTop = 0;
 let moduleBoardScrollDistance = 0;
 const moduleBoardDwellDistance = 320;
 const moduleBoardMoveDistance = 900;
+const moduleBoardSnapDelay = 120;
 let newsAnimationFrame: number | null = null;
 let newsLastTimestamp = 0;
 
@@ -668,6 +673,78 @@ function updateModuleBoard(): void {
 
 function scheduleModuleBoardUpdate(): void {
   if (moduleBoardAnimationFrame === null) moduleBoardAnimationFrame = requestAnimationFrame(updateModuleBoard);
+}
+
+function cancelModuleBoardSnapAnimation(): void {
+  if (moduleBoardSnapAnimationFrame === null) return;
+  cancelAnimationFrame(moduleBoardSnapAnimationFrame);
+  moduleBoardSnapAnimationFrame = null;
+  moduleBoardLastScrollY = window.scrollY;
+}
+
+function animateModuleBoardScroll(targetScrollY: number): void {
+  cancelModuleBoardSnapAnimation();
+  const startScrollY = window.scrollY;
+  const distance = targetScrollY - startScrollY;
+  const duration = Math.min(650, Math.max(360, Math.abs(distance) * 0.65));
+  const startedAt = performance.now();
+
+  const animate = (timestamp: number): void => {
+    const progress = Math.min(1, (timestamp - startedAt) / duration);
+    const eased = progress < 0.5 ? 4 * progress ** 3 : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+    window.scrollTo({ top: startScrollY + distance * eased });
+
+    if (progress < 1) {
+      moduleBoardSnapAnimationFrame = requestAnimationFrame(animate);
+    } else {
+      moduleBoardSnapAnimationFrame = null;
+      moduleBoardLastScrollY = window.scrollY;
+    }
+  };
+
+  moduleBoardSnapAnimationFrame = requestAnimationFrame(animate);
+}
+
+function snapModuleBoardByDirection(): void {
+  moduleBoardSnapTimer = null;
+  const board = moduleBoardRef.value;
+  if (!board || !moduleBoardScrollEnabled.value) return;
+
+  const boardRect = board.getBoundingClientRect();
+  const progress = moduleBoardPinTop - boardRect.top;
+  if (progress <= 0 || progress >= moduleBoardScrollDistance) return;
+
+  for (let index = 0; index < moduleBoardStops.length - 1; index++) {
+    const moveStart = moduleBoardDwellDistance + index * (moduleBoardDwellDistance + moduleBoardMoveDistance);
+    const moveEnd = moveStart + moduleBoardMoveDistance;
+    if (progress <= moveStart || progress >= moveEnd) continue;
+
+    const targetProgress =
+      moduleBoardScrollDirection === 0
+        ? progress - moveStart < moduleBoardMoveDistance / 2
+          ? moveStart
+          : moveEnd
+        : moduleBoardScrollDirection > 0
+        ? moveEnd
+        : moveStart;
+    animateModuleBoardScroll(window.scrollY + boardRect.top - moduleBoardPinTop + targetProgress);
+    return;
+  }
+}
+
+function handleModuleBoardScroll(): void {
+  scheduleModuleBoardUpdate();
+  if (moduleBoardSnapAnimationFrame !== null) return;
+
+  const scrollY = window.scrollY;
+  if (moduleBoardLastScrollY !== null && scrollY !== moduleBoardLastScrollY) {
+    moduleBoardScrollDirection = scrollY > moduleBoardLastScrollY ? 1 : -1;
+  }
+  moduleBoardLastScrollY = scrollY;
+  if (!moduleBoardScrollEnabled.value) return;
+
+  if (moduleBoardSnapTimer !== null) clearTimeout(moduleBoardSnapTimer);
+  moduleBoardSnapTimer = setTimeout(snapModuleBoardByDirection, moduleBoardSnapDelay);
 }
 
 function refreshModuleBoard(): void {
@@ -834,18 +911,25 @@ onMounted(() => {
   const mainPage = moduleBoardRef.value?.previousElementSibling;
   if (mainPage) moduleBoardResizeObserver.observe(mainPage);
   refreshModuleBoard();
+  moduleBoardLastScrollY = window.scrollY;
   window.addEventListener('resize', handleResize);
-  window.addEventListener('scroll', scheduleModuleBoardUpdate, { passive: true });
+  window.addEventListener('scroll', handleModuleBoardScroll, { passive: true });
+  window.addEventListener('wheel', cancelModuleBoardSnapAnimation, { passive: true });
+  window.addEventListener('touchstart', cancelModuleBoardSnapAnimation, { passive: true });
 });
 
 onBeforeUnmount(() => {
   if (moduleBoardAnimationFrame !== null) cancelAnimationFrame(moduleBoardAnimationFrame);
+  if (moduleBoardSnapTimer !== null) clearTimeout(moduleBoardSnapTimer);
+  cancelModuleBoardSnapAnimation();
   stopNewsAutoplay();
   observer?.disconnect();
   communityPreloadObserver?.disconnect();
   moduleBoardResizeObserver?.disconnect();
   moduleBoardMotionQuery?.removeEventListener('change', refreshModuleBoard);
   window.removeEventListener('resize', handleResize);
-  window.removeEventListener('scroll', scheduleModuleBoardUpdate);
+  window.removeEventListener('scroll', handleModuleBoardScroll);
+  window.removeEventListener('wheel', cancelModuleBoardSnapAnimation);
+  window.removeEventListener('touchstart', cancelModuleBoardSnapAnimation);
 });
 </script>

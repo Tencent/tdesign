@@ -416,8 +416,11 @@ function updateSpreadProgress(timestamp = performance.now()): void {
 
     const mobileScale = Math.min(1, window.innerWidth / 596);
     const mobileLayout = businessCasesRef.value.querySelector<HTMLElement>('.business-cases__layout');
+    const mobileCanvas = businessCasesRef.value.querySelector<HTMLElement>('.business-cases__canvas');
     mobileLayoutScale.value = mobileScale.toFixed(4);
-    mobileSectionHeight.value = `${(mobileLayout?.offsetHeight ?? 0) * mobileScale}px`;
+    mobileSectionHeight.value = `${
+      (mobileLayout?.offsetHeight ?? 0) - (mobileCanvas?.offsetHeight ?? 0) * (1 - mobileScale)
+    }px`;
   }
 
   if (!businessCasesRef.value) return;
@@ -1185,27 +1188,24 @@ onBeforeUnmount(() => {
     padding: 0;
 
     &__layout {
-      width: 596px;
+      width: 100%;
       position: absolute;
       top: 0;
       left: 50%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 64px;
-      padding: 0 24px 60px;
+      gap: 24px;
+      padding: 60px 24px;
       box-sizing: border-box;
-      transform: translateX(-50%) scale(var(--mobile-layout-scale));
-      transform-origin: top center;
+      transform: translateX(-50%);
     }
 
     &__heading {
-      width: 540px;
+      width: min(540px, 100%);
       position: relative;
       top: auto;
       left: auto;
-      padding: 0 24px;
-      box-sizing: border-box;
       transform: none;
 
       h2 {
@@ -1223,6 +1223,7 @@ onBeforeUnmount(() => {
     &__canvas {
       width: 508px;
       height: auto;
+      flex: none;
       position: relative;
       top: auto;
       left: auto;
@@ -1233,7 +1234,8 @@ onBeforeUnmount(() => {
       gap: 24px;
       padding: 0;
       margin: 0;
-      transform: none;
+      transform: scale(var(--mobile-layout-scale));
+      transform-origin: top center;
     }
   }
 
@@ -1448,8 +1450,6 @@ onBeforeUnmount(() => {
 
 @media screen and (max-width: 959px) {
   .business-cases__heading {
-    top: 60px;
-
     h2 {
       font-size: 28px;
       line-height: 36px;
@@ -1459,6 +1459,12 @@ onBeforeUnmount(() => {
       font-size: 12px;
       line-height: 20px;
     }
+  }
+}
+
+@media screen and (min-width: 596px) and (max-width: 959px) {
+  .business-cases__heading {
+    top: 60px;
   }
 }
 
