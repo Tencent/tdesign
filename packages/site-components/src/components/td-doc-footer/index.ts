@@ -2,6 +2,8 @@ import { html, define } from 'hybrids';
 import { getFooterConfig } from '@config/footer';
 import { getLocale } from '@config/locale';
 import { patchShadowDomIntoDom, mobileBodyStyle } from '@utils';
+import { fetchEcosystemConfig, getEcosystemLinkTarget } from '@utils/ecosystem';
+import type { FooterGroup } from '@config/types';
 import tencentCloudIcon from '@images/tencentcloud-logo.svg?raw';
 import committeeIcon from '@images/committee-logo.svg?raw';
 import tdesignLogo from '@images/logo.svg?raw';
@@ -22,7 +24,6 @@ import wxGroup from '@images/groups/wx-group.png';
 import style from './style.less?inline';
 import portalStyle from './portal.less?inline';
 
-const footerLinks = getFooterConfig();
 const locale = getLocale();
 const currentYear = new Date().getFullYear();
 
@@ -54,6 +55,7 @@ interface FooterHost {
   platform: string;
   displayQrCode: string;
   patchDom: boolean;
+  footerLinks: FooterGroup[];
 }
 
 export default define<FooterHost>({
@@ -61,6 +63,23 @@ export default define<FooterHost>({
   mobileBodyStyle,
   platform: 'web',
   displayQrCode: '',
+  footerLinks: {
+    value: (_host, value) => value || getFooterConfig(),
+    connect: (host) => {
+      fetchEcosystemConfig()
+        .then((categories) => {
+          const links = categories.flatMap((category) =>
+            category.items.map((item) => ({
+              name: item.name,
+              url: item.url,
+              target: getEcosystemLinkTarget(item.url),
+            })),
+          );
+          host.footerLinks = host.footerLinks.map((group) => (group.desktopOnly ? { ...group, links } : group));
+        })
+        .catch(console.error);
+    },
+  },
   patchDom: {
     value: (_host, v) => v || false,
     connect: patchShadowDomIntoDom,
@@ -77,7 +96,7 @@ export default define<FooterHost>({
               <p>${locale.footer.brandDescription}</p>
             </div>
             <nav class="TDesign-doc-footer__links" aria-label="${locale.footer.navigationLabel}">
-              ${footerLinks.map(
+              ${host.footerLinks.map(
                 (item) => html`
                   <div class="TDesign-doc-footer__links-group ${item.desktopOnly ? 'is-desktop-only' : ''}">
                     <p class="title">${item.title}</p>

@@ -110,7 +110,7 @@ export const zhCN = {
         },
         resources: {
           title: '丰富的设计资源',
-          description: '提供桌面和移动端 Sketch/Figma 等多种格式的设计资源',
+          description: '提供桌面和移动端 Figma 等多种格式的设计资源',
         },
         guidelines: {
           title: '专业的设计指南',
@@ -311,7 +311,7 @@ export const enUS = {
         },
         resources: {
           title: 'Rich design resources',
-          description: 'Sketch and Figma resources for desktop and mobile.',
+          description: 'Provide Figma resources for desktop and mobile.',
         },
         guidelines: {
           title: 'Expert design guides',

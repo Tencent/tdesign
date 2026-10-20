@@ -5,6 +5,28 @@ const COMMUNITY_RELEASE_BASE_URL =
   'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors';
 // 首页云函数接口基础地址。
 const CLOUD_FUNCTION_BASE_URL = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com';
+// 用已有的内网图片服务探测当前网络是否可访问 WOA。
+const WOA_REACHABILITY_URL = 'https://dayu.woa.com/favicon.ico';
+
+export async function canAccessWoa(timeout = 1500): Promise<boolean> {
+  if (location.hostname === 'woa.com' || location.hostname.endsWith('.woa.com')) return true;
+
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), timeout);
+
+  try {
+    await fetch(WOA_REACHABILITY_URL, {
+      cache: 'no-store',
+      mode: 'no-cors',
+      signal: controller.signal,
+    });
+    return true;
+  } catch {
+    return false;
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
+}
 
 export const HOME_API_ENDPOINTS = {
   // 首页新闻列表。

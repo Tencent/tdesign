@@ -53,7 +53,12 @@
           </t-link>
         </header>
 
-        <div class="activity-feed__list">
+        <div v-if="isActivityLoading" class="activity-feed__list" aria-label="实时动态加载中" aria-busy="true">
+          <div v-for="index in 7" :key="index" class="activity-feed__item activity-feed__item--skeleton">
+            <t-skeleton animation="gradient" :row-col="activitySkeletonRows" />
+          </div>
+        </div>
+        <div v-else class="activity-feed__list">
           <div v-for="item in activities" :key="item.url" class="activity-feed__item">
             <a class="activity-feed__title" :href="item.url" target="_blank" rel="noopener noreferrer">
               {{ item.title }}
@@ -68,14 +73,24 @@
       </div>
 
       <div class="community-stats">
-        <template v-for="(item, index) in stats" :key="item.label">
-          <span v-if="index" class="community-stats__divider"></span>
-          <div class="community-stat">
-            <div class="community-stat__value">
-              <strong>{{ item.value }}</strong>
+        <template v-if="isActivityLoading">
+          <template v-for="index in 3" :key="index">
+            <span v-if="index > 1" class="community-stats__divider"></span>
+            <div class="community-stat community-stat--skeleton">
+              <t-skeleton animation="gradient" :row-col="statSkeletonRows" />
             </div>
-            <p>{{ item.label }}</p>
-          </div>
+          </template>
+        </template>
+        <template v-else>
+          <template v-for="(item, index) in stats" :key="item.label">
+            <span v-if="index" class="community-stats__divider"></span>
+            <div class="community-stat">
+              <div class="community-stat__value">
+                <strong>{{ item.value }}</strong>
+              </div>
+              <p>{{ item.label }}</p>
+            </div>
+          </template>
         </template>
       </div>
     </div>
@@ -155,6 +170,18 @@ interface CommunityStat {
 
 const activities = ref<Activity[]>([]);
 const stats = ref<CommunityStat[]>([]);
+const isActivityLoading = ref(true);
+const activitySkeletonRows = [
+  { width: '72%', height: '16px' },
+  [
+    { type: 'circle' as const, size: '16px', marginRight: '8px' },
+    { width: '56%', height: '12px' },
+  ],
+];
+const statSkeletonRows = [
+  { width: '56px', height: '23px' },
+  { width: '72px', height: '12px' },
+];
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
@@ -332,6 +359,8 @@ async function fetchActivity(): Promise<void> {
     stats.value = parseStats(data);
   } catch (error) {
     console.error(error);
+  } finally {
+    isActivityLoading.value = false;
   }
 }
 
@@ -515,6 +544,12 @@ onBeforeUnmount(() => {
     }
   }
 
+  &__item--skeleton {
+    :deep(.t-skeleton) {
+      width: 100%;
+    }
+  }
+
   &__title {
     display: block;
     margin: 0 0 4px;
@@ -613,6 +648,14 @@ onBeforeUnmount(() => {
     font-size: 12px;
     line-height: 20px;
     white-space: nowrap;
+  }
+
+  &--skeleton {
+    min-width: 72px;
+
+    :deep(.t-skeleton) {
+      width: 72px;
+    }
   }
 }
 

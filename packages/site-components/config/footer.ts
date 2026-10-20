@@ -1,6 +1,6 @@
-import { isEn, isIntranet } from '@utils';
+import { isEn } from '@utils';
 import { jumpLocation } from '@utils/locale';
-import type { FooterGroup, FooterLink } from './types';
+import type { FooterGroup } from './types';
 
 export const getFooterConfig = (): FooterGroup[] => {
   const en = isEn();
@@ -16,12 +16,9 @@ export const getFooterConfig = (): FooterGroup[] => {
     {
       title: en ? 'Tencent Ecosystem' : '腾讯生态',
       links: [
-        { name: 'TDesign', url: `https://tdesign.${isIntranet() ? 'woa' : 'tencent'}.com`, target: '_self' },
+        { name: 'TDesign', url: 'https://tdesign.tencent.com', target: '_self' },
         { name: 'TDS', url: 'https://tds.qq.com/', target: '_blank' },
-        { name: 'Miora', url: 'https://miora.qq.com/', target: '_blank' },
-        isIntranet() ? { name: 'TVision', url: 'https://tvision.woa.com/', target: '_blank' } : null,
-        isIntranet() ? { name: 'TEditor', url: 'https://teditor.woa.com/', target: '_blank' } : null,
-      ].filter((item): item is FooterLink => item !== null),
+      ],
       desktopOnly: true,
     },
     {

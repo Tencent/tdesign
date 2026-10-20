@@ -373,7 +373,7 @@ import openFrameworksIcon from './assets/open-frameworks.svg';
 import openIndustriesIcon from './assets/open-industries.svg';
 import openPlatformsIcon from './assets/open-platforms.svg';
 import ResourceSection from './resource-section.vue';
-import { HOME_API_ENDPOINTS } from './api';
+import { canAccessWoa, HOME_API_ENDPOINTS } from './api';
 // @ts-expect-error prismjs does not publish TypeScript declarations.
 import Prismjs from 'prismjs';
 import 'prismjs/components/prism-dart';
@@ -417,8 +417,6 @@ interface HomeState {
   };
 }
 
-const isIntranet = location.host.includes('woa.com'); // 部分动态或内容只能通过内网访问
-
 const { locale, t } = useI18n({ messages: homeMessages });
 const moduleBoardRef = ref<HTMLElement | null>(null);
 const moduleBoardViewportRef = ref<HTMLElement | null>(null);
@@ -428,6 +426,7 @@ const moduleBoardStyle = ref<Record<string, string>>({});
 const moduleBoardViewportStyle = ref<Record<string, string>>({});
 const newsTrackRef = ref<HTMLElement | null>(null);
 const shouldLoadCommunity = ref(false);
+const isIntranet = ref(false); // 部分动态或内容只能通过内网访问
 
 const codeFrameworkOptions: Array<{ label: string; value: CodeFramework }> = [
   { label: 'vue-next.ts', value: 'vue-next' },
@@ -765,14 +764,14 @@ function parseNews(value: unknown): NewsItem[] {
   });
 }
 
-function getNews(): void {
-  fetch(HOME_API_ENDPOINTS.news).then((data) => {
-    data.json().then((value: unknown) => {
-      const list = parseNews(value);
-      state.newsList = isIntranet ? list : list.filter((value) => !value.isIntranet);
-      nextTick(resetAndStartNewsAutoplay);
-    });
-  });
+async function getNews(): Promise<void> {
+  const [response, intranetAccessible] = await Promise.all([fetch(HOME_API_ENDPOINTS.news), canAccessWoa()]);
+  const value: unknown = await response.json();
+  const list = parseNews(value);
+
+  isIntranet.value = intranetAccessible;
+  state.newsList = isIntranet.value ? list : list.filter((item) => !item.isIntranet);
+  nextTick(resetAndStartNewsAutoplay);
 }
 
 function handleResize(): void {
