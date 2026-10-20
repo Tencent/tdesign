@@ -102,7 +102,6 @@ export default tseslint.config(
       '.commitlintrc.js',
       '.prettierrc.js',
       '.stylelintrc.js',
-      'site/commitlint.config.js',
       'site/postcss.config.js',
     ],
     languageOptions: {
