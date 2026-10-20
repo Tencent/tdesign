@@ -1,1 +1,13 @@
-npx lint-staged && log_emails=$(git config user.email) && if [[ ${log_emails} =~ '@tencent.com' ]];then echo 本地提交邮箱 $log_emails 校验非法，需要本地更改重新提交 && exit 2;else echo 邮箱 $log_emails 校验通过;fi
+#!/usr/bin/env sh
+npx lint-staged || exit $?
+
+log_emails=$(git config user.email)
+case "$log_emails" in
+  *@tencent.com)
+    echo "本地提交邮箱 $log_emails 校验非法，需要本地更改重新提交"
+    exit 2
+    ;;
+  *)
+    echo "邮箱 $log_emails 校验通过"
+    ;;
+esac
