@@ -1,7 +1,6 @@
-
 @font-face {
   font-family: TCloudNumberDigits;
-  src: url("../pages/design/assets/TCloudNumber-Regular.ttf");
+  src: url('../pages/design/assets/TCloudNumber-Regular.ttf');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -10,15 +9,15 @@
 
 html,
 body {
-  font-family: TCloudNumberDigits, BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 :root {
-  --td-font-family: tcloudnumberdigits, blinkmacsystemfont, -apple-system, 'Segoe UI', roboto, helvetica, arial, sans-serif;
-  --td-font-family-medium: tcloudnumberdigits, blinkmacsystemfont, -apple-system, 'Segoe UI', roboto, helvetica, arial, sans-serif;
+  --td-font-family: blinkmacsystemfont, -apple-system, 'Segoe UI', roboto, helvetica, arial, sans-serif;
+  --td-font-family-medium: blinkmacsystemfont, -apple-system, 'Segoe UI', roboto, helvetica, arial, sans-serif;
 }
 
-.font(@i) when(@i <= 64){
+.font(@i) when(@i <= 64) {
   .font-@{i} {
     font-size: unit(@i, px);
     line-height: @i + 8px;
@@ -54,13 +53,13 @@ body {
         font-size: 36px;
         line-height: 48px;
       }
-  
+
       .tag {
         font-family: TCloudNumber, sans-serif;
         position: absolute;
         right: 16px;
         bottom: 12px;
-  
+
         svg {
           width: 14px;
           margin: 0 12px;
@@ -95,14 +94,14 @@ body {
     }
 
     &.font-size {
-      input[type="range"] {
+      input[type='range'] {
         appearance: none;
         width: 154px;
         background: transparent;
         margin-left: 16px;
       }
-      
-      input[type="range"]::-webkit-slider-thumb {
+
+      input[type='range']::-webkit-slider-thumb {
         appearance: none;
         border: 1px solid var(--brand-main);
         height: 14px;
@@ -113,17 +112,17 @@ body {
         margin-top: -5px;
       }
 
-      input[type="range"]::-webkit-slider-runnable-track {
+      input[type='range']::-webkit-slider-runnable-track {
         width: 100%;
         height: 4px;
         cursor: pointer;
         border-radius: 2px;
         background: var(--brand-main);
       }
-      
-      input[type="range"]:focus {
+
+      input[type='range']:focus {
         outline: none;
-      }      
+      }
 
       .ctrl {
         display: flex;
@@ -147,7 +146,6 @@ body {
         margin-bottom: 16px;
       }
     }
-
   }
 
   .fonts-block-wrapper {
