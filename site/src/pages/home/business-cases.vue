@@ -74,7 +74,7 @@
             <div class="usage-card__tooltip">
               <strong>{{ t('home.businessCases.downloadTrend') }}</strong>
               <span>
-                {{ hoveredDownloadMonth }}, {{ t('home.businessCases.downloadCount', { count: hoveredDownloadCount }) }}
+                {{ hoveredDownloadMonth }}，{{ t('home.businessCases.downloadCount', { count: hoveredDownloadCount }) }}
               </span>
             </div>
             <div class="usage-card__grid" aria-hidden="true">
@@ -550,7 +550,7 @@ onBeforeUnmount(() => {
     padding: 24px;
     overflow: hidden;
     box-sizing: border-box;
-    border: 1px solid var(--component-border);
+    border: 0.25px solid var(--component-border);
     border-radius: 16px;
     background: var(--bg-color-card);
     color: var(--text-primary);
@@ -579,15 +579,21 @@ onBeforeUnmount(() => {
   &__user {
     z-index: 1;
     display: flex;
+    flex-shrink: 0;
     align-items: flex-end;
     justify-content: space-between;
     overflow: hidden;
   }
 
   &__profile {
+    min-width: 0;
     display: flex;
     align-items: center;
     gap: 12px;
+
+    :deep(.t-avatar) {
+      flex: none;
+    }
 
     svg {
       width: 40px;
@@ -614,6 +620,9 @@ onBeforeUnmount(() => {
   }
 
   :deep(.t-tag) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: var(--bg-color-container);
     font-weight: 300;
   }
@@ -626,7 +635,7 @@ onBeforeUnmount(() => {
     margin: -8px auto 0;
     padding: 6px 10px;
     box-sizing: border-box;
-    border: 1px solid var(--component-border);
+    border: 0.25px solid var(--component-border);
     border-radius: 8px;
     background: var(--bg-color-card);
     color: var(--text-placeholder);
@@ -679,7 +688,7 @@ onBeforeUnmount(() => {
   left: 478px;
   display: flex;
   overflow: hidden;
-  border: 1px solid var(--component-border);
+  border: 0.5px solid var(--component-border);
   border-radius: 16px;
   box-sizing: border-box;
   background: var(--bg-color-card);
@@ -729,7 +738,7 @@ onBeforeUnmount(() => {
     display: flex;
     gap: 36px;
     padding-top: 12px;
-    border-top: 1px solid var(--bg-color-data);
+    border-top: 0.5px solid var(--bg-color-data);
 
     div {
       display: flex;
@@ -757,6 +766,7 @@ onBeforeUnmount(() => {
       margin-left: 4px;
       font-family: inherit;
       font-size: 12px;
+      font-weight: 500;
     }
   }
 

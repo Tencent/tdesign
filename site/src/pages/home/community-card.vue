@@ -787,7 +787,7 @@ onBeforeUnmount(() => {
 
 @media screen and (min-width: 701px) and (max-width: 960px) {
   .community-card {
-    width: 652px;
+    width: calc(100vw - 48px);
     height: 732px;
     padding: 32px clamp(24px, calc(2.8571vw + 4px), 32px);
     align-items: stretch;
