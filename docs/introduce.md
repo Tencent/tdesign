@@ -24,7 +24,7 @@ TDesign was founded with the principles of open-source collaboration from the be
 
 Many participants started by trying out the component library in their personal projects, advancing to submit their first Issue, then their first Feature MR, and gradually becoming involved in Code Review and solution-formulating tasks, eventually turning into core contributors. In the past year, TDesign has closed 1k+ issues and conducted 5k+ Code Reviews to maintained a [weekly iterative release](<(https://tdesign.tencent.com/vue/components/changelog)>) of new versions.
 
-TDesign currently supports [multiple platforms and mainstream front-end UI framework](#Repositories). Desktop versions for Vue2, Vue3, and React, as well as mobile versions for Vue3 and WeChat Mini Programs, have all released their 1.x versions. Mobile versions for React, Flutter, and Uniapp have released Alpha test versions.
+TDesign currently supports [multiple platforms and mainstream front-end UI framework](#Repositories). Desktop versions for Vue2, Vue3, and React, as well as mobile versions for Vue3, React, WeChat Mini Programs, Flutter, and Uniapp, have all released their 1.0 LTS / Stable versions.
 
 ## Repositories
 
@@ -42,9 +42,9 @@ TDesign currently supports [multiple platforms and mainstream front-end UI frame
 | ----------------------------------------------------------------------- | ------------------------------------------------ | --------- |
 | [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | Wechat MiniProgram UI components lib for TDesign | `1.0 LTS` |
 | [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue3.x Mobile UI components lib for TDesign      | `1.0 LTS` |
-| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React Mobile UI components lib for TDesign       | `Alpha`   |
-| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | Flutter UI components lib for TDesign            | `Alpha`   |
-| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | Uniapp UI components lib for TDesign             | `Alpha`   |
+| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React Mobile UI components lib for TDesign       | `1.0 LTS` |
+| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | Flutter UI components lib for TDesign            | `1.0 LTS` |
+| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | Uniapp UI components lib for TDesign             | `1.0 LTS` |
 
 ### Repositories for Common
 
@@ -70,7 +70,7 @@ For TDesign's subsequent development plan, please refer to the [TDesign upcoming
 
 ### Comprehensive
 
-TDesign Support [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/react/) components for Desktop Application and [Vue 3](https://tdesign.tencent.com/vue-mobile/)、[Wechat MiniProgram](https://tdesign.tencent.com/miniprogram/) components for Mobile Application.
+TDesign Support [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/react/) components for Desktop Application and [Vue 3](https://tdesign.tencent.com/vue-mobile/)、[React](https://tdesign.tencent.com/mobile-react/)、[Wechat MiniProgram](https://tdesign.tencent.com/miniprogram/)、[Flutter](https://tdesign.tencent.com/flutter/)、[Uniapp](https://tdesign.tencent.com/uniapp/) components for Mobile Application.
 
 To improve collaboration efficiency between developers and designers, TDesign provides a wide variety of reusable design components such as [color systems](https://tdesign.tencent.com/design/color), [font system](https://tdesign.tencent.com/design/fonts), [motion design](https://tdesign.tencent.com/design/motion), [icons](https://tdesign.tencent.com/design/icon), and [layout](https://tdesign.tencent.com/design/layout). These components are compatible with popular design software like [Axure, Sketch, Figma, and Adobe XD](https://tdesign.tencent.com/source).
 

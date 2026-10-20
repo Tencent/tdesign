@@ -24,13 +24,13 @@ The following are the repositories for TDesign：
 
 ### Repositories for Mobile Components
 
-| Repository                                                              | Description                                      | Status                                                                                                                                                                                                                    |
-| ----------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | Wechat MiniProgram UI components lib for TDesign | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-miniprogram/latest&color=blue)](https://npmjs.com/package/tdesign-miniprogram)         |
-| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue3.x Mobile UI components lib for TDesign      | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-mobile-vue/latest&color=blue)](https://npmjs.com/package/tdesign-mobile-vue)           |
-| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React Mobile UI components lib for TDesign       | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=version&url=https://registry.npmjs.org/tdesign-mobile-react/latest&color=orange)](https://npmjs.com/package/tdesign-mobile-react) |
-| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | Flutter UI components lib for TDesign            | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=latest.version&url=https://pub.dev/api/packages/tdesign_flutter&color=orange)](https://pub.dev/packages/tdesign_flutter)          |
-| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | Uniapp UI components lib for TDesign             | [![Alpha](https://img.shields.io/badge/dynamic/json?style=flat-square&label=Alpha&query=version&url=https://registry.npmjs.org/@tdesign/uniapp/latest&color=orange)](https://npmjs.com/package/@tdesign/uniapp)           |
+| Repository                                                              | Description                                      | Status                                                                                                                                                                                                              |
+| ----------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | Wechat MiniProgram UI components lib for TDesign | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-miniprogram/latest&color=blue)](https://npmjs.com/package/tdesign-miniprogram)   |
+| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue3.x Mobile UI components lib for TDesign      | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-mobile-vue/latest&color=blue)](https://npmjs.com/package/tdesign-mobile-vue)     |
+| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React Mobile UI components lib for TDesign       | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-mobile-react/latest&color=blue)](https://npmjs.com/package/tdesign-mobile-react) |
+| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | Flutter UI components lib for TDesign            | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=latest.version&url=https://pub.dev/api/packages/tdesign_flutter&color=blue)](https://pub.dev/packages/tdesign_flutter)          |
+| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | Uniapp UI components lib for TDesign             | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/@tdesign/uniapp/latest&color=blue)](https://npmjs.com/package/@tdesign/uniapp)           |
 
 ### Repositories for Shared
 
@@ -66,7 +66,7 @@ TDesign was founded with the principles of open-source collaboration from the be
 
 Many participants started by trying out the component library in their personal projects, advancing to submit their first Issue, then their first Feature MR, and gradually becoming involved in Code Review and solution-formulating tasks, eventually turning into core contributors. In the past year, TDesign has closed 1k+ issues and conducted 5k+ Code Reviews to maintained a [weekly iterative release](<(https://tdesign.tencent.com/vue/components/changelog)>) of new versions.
 
-TDesign currently supports [multiple platforms and mainstream front-end UI framework](#Repositories). Desktop versions for Vue2, Vue3, and React, as well as mobile versions for Vue3 and WeChat Mini Programs, have all released their 1.x versions. Mobile versions for React, Flutter, and Uniapp have released Alpha test versions.
+TDesign currently supports [multiple platforms and mainstream front-end UI framework](#Repositories). Desktop versions for Vue2, Vue3, and React, as well as mobile versions for Vue3, React, WeChat Mini Programs, Flutter, and Uniapp, have all released their 1.0 LTS / Stable versions.
 
 ## Why Open-source
 
@@ -82,7 +82,7 @@ For TDesign's subsequent development plan, please refer to the [TDesign upcoming
 
 #### Comprehensive
 
-- Support [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/react/) for Desktop Application and [Vue 3](https://tdesign.tencent.com/vue-mobile/)、[Wechat MiniProgram](https://tdesign.tencent.com/miniprogram/) for Mobile Application.
+- Support [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/react/) for Desktop Application and [Vue 3](https://tdesign.tencent.com/vue-mobile/)、[React](https://tdesign.tencent.com/mobile-react/)、[Wechat MiniProgram](https://tdesign.tencent.com/miniprogram/)、[Flutter](https://tdesign.tencent.com/flutter/)、[Uniapp](https://tdesign.tencent.com/uniapp/) for Mobile Application.
 - Provide a wide variety of [design resources](#设计资源), including Figma, Adobe XD, Sketch, etc.
 - Provide auxiliary design tools, such as [Sketch Plugin](https://tdesign.tencent.com/source)，and support using in [CoDesign](https://codesign.qq.com/)、Pixso、即时设计、墨刀 as well.
 
