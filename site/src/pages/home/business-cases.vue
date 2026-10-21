@@ -555,6 +555,11 @@ onBeforeUnmount(() => {
   width: 340px;
   position: absolute;
   z-index: 1;
+  --case-tint: #dcdcdc;
+  --case-text: rgba(0, 0, 0, 0.6);
+  --case-title: rgba(0, 0, 0, 0.9);
+  --case-meta: rgba(0, 0, 0, 0.4);
+  --case-noise-color: #fff;
   opacity: var(--spread-opacity);
   transform: rotate(var(--spread-rotation));
   transform-origin: center;
@@ -566,31 +571,43 @@ onBeforeUnmount(() => {
     flex-direction: column;
     justify-content: space-between;
     gap: 24px;
-    padding: 24px;
+    padding: 23.75px;
     overflow: hidden;
+    isolation: isolate;
     box-sizing: border-box;
     border: 0.25px solid var(--component-border);
     border-radius: 16px;
     background: var(--bg-color-card);
-    color: var(--text-primary);
+    color: var(--case-title);
     backdrop-filter: blur(2px);
   }
 
   &__noise {
     position: absolute;
+    z-index: 0;
     inset: 0;
-    background: radial-gradient(
-      ellipse 121% 121% at 50% -21%,
-      transparent 0%,
-      var(--case-tint, var(--bg-color-card-user)) 85%
-    );
+    border-radius: inherit;
+    background: radial-gradient(ellipse 121% 121% at 50% -21%, transparent 0%, var(--case-tint) 85%);
     pointer-events: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: var(--case-noise-color);
+      opacity: var(--case-noise-opacity, 1);
+      mask-image: url("data:image/svg+xml,%3Csvg width='180' height='180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 0 0 0 0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='.25 .5'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      mask-size: 180px 180px;
+      mask-repeat: repeat;
+      mask-mode: alpha;
+    }
   }
 
   &__quote {
     z-index: 1;
     margin: 0;
-    color: var(--text-secondary);
+    color: var(--case-text);
     font-size: 14px;
     line-height: 22px;
   }
@@ -626,13 +643,14 @@ onBeforeUnmount(() => {
     }
 
     strong {
-      font-size: 16px;
+      color: var(--case-title);
+      font-size: 14px;
       font-weight: 600;
-      line-height: 24px;
+      line-height: 22px;
     }
 
     span {
-      color: var(--text-placeholder);
+      color: var(--case-meta);
       font-size: 12px;
       line-height: 20px;
     }
@@ -643,7 +661,7 @@ onBeforeUnmount(() => {
     align-items: center;
     justify-content: center;
     background: var(--bg-color-container);
-    font-weight: 300;
+    font-weight: 400;
   }
 
   &__prompt {
@@ -674,21 +692,21 @@ onBeforeUnmount(() => {
     top: 342px;
     left: 59px;
     --case-rotation: -5deg;
-    --case-tint: var(--brand-main-light-hover);
+    --case-tint: rgba(0, 82, 217, 0.16);
   }
 
   &--3 {
     top: 321px;
     left: 1091px;
     --case-rotation: 6deg;
-    --case-tint: var(--warning-main-light-hover);
+    --case-tint: rgba(227, 115, 24, 0.16);
   }
 
   &--4 {
     top: 33px;
     left: 1072px;
     --case-rotation: 6deg;
-    --case-tint: var(--brand-main-light-hover);
+    --case-tint: rgba(0, 82, 217, 0.16);
   }
 
   &--5 {
@@ -696,6 +714,24 @@ onBeforeUnmount(() => {
     left: 565px;
     --case-rotation: -4deg;
   }
+}
+
+:global(:root[theme-mode='dark'] .business-case) {
+  --case-tint: rgba(255, 255, 255, 0.14);
+  --case-text: rgba(255, 255, 255, 0.7);
+  --case-title: rgba(255, 255, 255, 0.9);
+  --case-meta: rgba(255, 255, 255, 0.5);
+  --case-noise-color: #000;
+  --case-noise-opacity: 0.12;
+}
+
+:global(:root[theme-mode='dark'] .business-case--2),
+:global(:root[theme-mode='dark'] .business-case--4) {
+  --case-tint: rgba(69, 130, 230, 0.24);
+}
+
+:global(:root[theme-mode='dark'] .business-case--3) {
+  --case-tint: rgba(207, 110, 45, 0.24);
 }
 
 .usage-card {
