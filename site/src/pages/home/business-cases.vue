@@ -62,7 +62,7 @@
               </div>
               <div>
                 <span>{{ t('home.businessCases.projects') }}</span>
-                <strong>{{ usageData.projectsCount }}+</strong>
+                <strong>{{ localizedProjectsCount }}+</strong>
               </div>
             </div>
           </div>
@@ -261,6 +261,14 @@ interface ChartPoint {
 }
 
 const chartDownloads = computed(() => usageData.value.downloadsPerMonth.slice(-24));
+const formatWithThousandsSeparator = (value: string | number) => {
+  const normalizedValue = String(value).replace(/,/g, '');
+  const match = normalizedValue.match(/^(-?)(\d+)(\.\d+)?$/);
+  if (!match) return String(value);
+
+  const [, sign, integer, fraction = ''] = match;
+  return `${sign}${integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}${fraction}`;
+};
 const formatTenThousands = (value: string) => {
   if (!locale.value.startsWith('en')) return value;
 
@@ -271,12 +279,17 @@ const formatTenThousands = (value: string) => {
 };
 const localizedDownloadPerMonth = computed(() => {
   const latestDownloads = chartDownloads.value.at(-1)?.totalDownloads;
-  if (typeof latestDownloads !== 'number') return formatTenThousands(usageData.value.downloadPerMonth);
+  if (typeof latestDownloads !== 'number') {
+    return formatWithThousandsSeparator(formatTenThousands(usageData.value.downloadPerMonth));
+  }
 
   const divisor = locale.value.startsWith('en') ? 1_000_000 : 10_000;
-  return (latestDownloads / divisor).toFixed(1);
+  return formatWithThousandsSeparator((latestDownloads / divisor).toFixed(1));
 });
-const localizedFigmaReferenceCount = computed(() => formatTenThousands(usageData.value.figmaReferenceCount));
+const localizedFigmaReferenceCount = computed(() =>
+  formatWithThousandsSeparator(formatTenThousands(usageData.value.figmaReferenceCount)),
+);
+const localizedProjectsCount = computed(() => formatWithThousandsSeparator(usageData.value.projectsCount));
 const months = computed(() => {
   const downloads = chartDownloads.value;
   if (downloads.length <= 6) return downloads.map((item) => item.month.replace('-', '.'));

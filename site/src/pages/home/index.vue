@@ -14,7 +14,7 @@
             </div>
           </h2>
         </div>
-        <t-popup trigger="click" placement="left" overlay-inner-class-name="wechat-qrcode" :z-index="100">
+        <t-popup trigger="click" placement="top" overlay-inner-class-name="wechat-qrcode" :z-index="100">
           <div class="banner-booking" data-screenshot-root>
             <button class="banner-booking__button" type="button">
               <span class="banner-booking__logo">
@@ -30,12 +30,7 @@
           <template #content><img width="100" src="https://tdesign.gtimg.com/site/wechat-account.png" /></template>
         </t-popup>
       </div>
-      <div
-        v-if="newsList.length > 0"
-        class="module-news"
-        @mouseenter="stopNewsAutoplay"
-        @mouseleave="startNewsAutoplay"
-      >
+      <div v-if="newsList.length > 0" class="module-news" @mousemove="stopNewsAutoplay" @mouseleave="startNewsAutoplay">
         <div ref="newsTrackRef" class="module-news__track">
           <div
             v-for="(news, index) in loopedNewsList"

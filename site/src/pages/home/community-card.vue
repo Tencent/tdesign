@@ -113,7 +113,7 @@
             <span v-if="index" class="community-stats__divider"></span>
             <div class="community-stat">
               <div class="community-stat__value">
-                <strong>{{ item.value }}</strong>
+                <strong>{{ formatStatValue(item.value) }}</strong>
               </div>
               <p>{{ item.label }}</p>
             </div>
@@ -131,26 +131,21 @@ import { Icon } from 'tdesign-icons-vue-next';
 import { HOME_API_ENDPOINTS } from './api';
 import tdesignLogo from './assets/tdesign.svg';
 
-const networkPoints = [
-  { x: 216, y: 24 },
-  { x: 328, y: 52 },
-  { x: 396, y: 137 },
-  { x: 408, y: 246 },
-  { x: 350, y: 348 },
-  { x: 254, y: 389 },
-  { x: 146, y: 386 },
-  { x: 64, y: 328 },
-  { x: 25, y: 229 },
-  { x: 50, y: 126 },
-  { x: 104, y: 52 },
-  { x: 216, y: 87.5 },
-  { x: 321.38, y: 151.23 },
-  { x: 311.58, y: 277.39 },
-  { x: 193.24, y: 323.3 },
-  { x: 112.52, y: 265.27 },
-  { x: 105.84, y: 161.48 },
-] as const;
 const outerRingPointCount = 11;
+const innerRingPointCount = 6;
+const networkCenter = { x: 216, y: 206.5 };
+
+function createRingPoints(radius: number, count: number) {
+  return Array.from({ length: count }, (_, index) => {
+    const angle = -Math.PI / 2 + (index * Math.PI * 2) / count;
+    return {
+      x: networkCenter.x + radius * Math.cos(angle),
+      y: networkCenter.y + radius * Math.sin(angle),
+    };
+  });
+}
+
+const networkPoints = [...createRingPoints(183, outerRingPointCount), ...createRingPoints(119, innerRingPointCount)];
 
 const communityMembers = ref([
   '👩🏻',
@@ -193,6 +188,8 @@ interface CommunityStat {
   value: number;
   label: string;
 }
+
+const formatStatValue = (value: number) => new Intl.NumberFormat('en-US').format(value);
 
 const activities = ref<Activity[]>([]);
 const stats = ref<CommunityStat[]>([]);
