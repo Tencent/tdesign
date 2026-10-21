@@ -44,12 +44,12 @@
           <p class="business-case__prompt">› {{ item.scene }}</p>
         </article>
 
-        <article class="usage-card">
+        <article ref="usageCardRef" class="usage-card">
           <div class="usage-card__data">
             <div>
               <p>{{ t('home.businessCases.downloads') }}</p>
               <div class="usage-card__total">
-                <strong>{{ localizedDownloadPerMonth }}</strong>
+                <strong>{{ animatedDownloadPerMonth }}</strong>
                 <span>{{ t('home.businessCases.tenThousandPlus') }}</span>
               </div>
             </div>
@@ -57,12 +57,12 @@
               <div>
                 <span>{{ t('home.businessCases.designReferences') }}</span>
                 <strong>
-                  {{ localizedFigmaReferenceCount }}<small>{{ t('home.businessCases.tenThousand') }}</small>
+                  {{ animatedFigmaReferenceCount }}<small>{{ t('home.businessCases.tenThousand') }}</small>
                 </strong>
               </div>
               <div>
                 <span>{{ t('home.businessCases.projects') }}</span>
-                <strong>{{ localizedProjectsCount }}+</strong>
+                <strong>{{ animatedProjectsCount }}+</strong>
               </div>
             </div>
           </div>
@@ -237,8 +237,10 @@ const caseLayouts: BusinessCaseLayout[] = [
 
 const cases = ref<BusinessCase[]>([]);
 const businessCasesRef = ref<HTMLElement | null>(null);
+const usageCardRef = ref<HTMLElement | null>(null);
 const usageLineRef = ref<SVGPathElement | null>(null);
 const spreadProgress = ref(0);
+const usageAnimationProgress = ref(0);
 const canvasScale = ref('1');
 const compactCanvasScale = ref('1');
 const compactCanvasTop = ref('276px');
@@ -250,10 +252,14 @@ const chartHoverX = ref(226);
 const chartHoverY = ref(65);
 const usageData = ref(fallbackUsageData);
 let animationFrame: number | null = null;
+let usageAnimationFrame: number | null = null;
+let usageObserver: IntersectionObserver | null = null;
+let hasAnimatedUsage = false;
 let spreadAnimationStartedAt: number | null = null;
 let spreadAnimationFrom = 0;
 let spreadAnimationTarget = 0;
 const SPREAD_ANIMATION_DURATION = 700;
+const USAGE_ANIMATION_DURATION = 1200;
 
 interface ChartPoint {
   x: number;
@@ -269,27 +275,38 @@ const formatWithThousandsSeparator = (value: string | number) => {
   const [, sign, integer, fraction = ''] = match;
   return `${sign}${integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}${fraction}`;
 };
-const formatTenThousands = (value: string) => {
-  if (!locale.value.startsWith('en')) return value;
-
-  const numericValue = Number(value.replace(/[,+]/g, ''));
-  if (!Number.isFinite(numericValue)) return value;
-
-  return new Intl.NumberFormat(locale.value, { maximumFractionDigits: 1 }).format(numericValue / 100);
-};
-const localizedDownloadPerMonth = computed(() => {
+const downloadPerMonthTarget = computed(() => {
   const latestDownloads = chartDownloads.value.at(-1)?.totalDownloads;
   if (typeof latestDownloads !== 'number') {
-    return formatWithThousandsSeparator(formatTenThousands(usageData.value.downloadPerMonth));
+    const fallbackValue = Number(usageData.value.downloadPerMonth.replace(/[,+]/g, ''));
+    return locale.value.startsWith('en') ? fallbackValue / 100 : fallbackValue;
   }
 
   const divisor = locale.value.startsWith('en') ? 1_000_000 : 10_000;
-  return formatWithThousandsSeparator((latestDownloads / divisor).toFixed(1));
+  return latestDownloads / divisor;
 });
-const localizedFigmaReferenceCount = computed(() =>
-  formatWithThousandsSeparator(formatTenThousands(usageData.value.figmaReferenceCount)),
+const figmaReferenceCountTarget = computed(() => {
+  const value = Number(usageData.value.figmaReferenceCount.replace(/[,+]/g, ''));
+  return locale.value.startsWith('en') ? value / 100 : value;
+});
+const projectsCountTarget = computed(() => Number(usageData.value.projectsCount.replace(/[,+]/g, '')));
+const animatedDownloadPerMonth = computed(() =>
+  formatWithThousandsSeparator(
+    (downloadPerMonthTarget.value * usageAnimationProgress.value).toFixed(
+      chartDownloads.value.length > 0 || !Number.isInteger(downloadPerMonthTarget.value) ? 1 : 0,
+    ),
+  ),
 );
-const localizedProjectsCount = computed(() => formatWithThousandsSeparator(usageData.value.projectsCount));
+const animatedFigmaReferenceCount = computed(() =>
+  formatWithThousandsSeparator(
+    (figmaReferenceCountTarget.value * usageAnimationProgress.value).toFixed(
+      Number.isInteger(figmaReferenceCountTarget.value) ? 0 : 1,
+    ),
+  ),
+);
+const animatedProjectsCount = computed(() =>
+  formatWithThousandsSeparator(Math.round(projectsCountTarget.value * usageAnimationProgress.value)),
+);
 const months = computed(() => {
   const downloads = chartDownloads.value;
   if (downloads.length <= 6) return downloads.map((item) => item.month.replace('-', '.'));
@@ -405,6 +422,32 @@ function setDefaultChartHover(): void {
   }
 }
 
+function startUsageAnimation(): void {
+  if (hasAnimatedUsage) return;
+  hasAnimatedUsage = true;
+  usageObserver?.disconnect();
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    usageAnimationProgress.value = 1;
+    return;
+  }
+
+  const startedAt = performance.now();
+  const update = (timestamp: number) => {
+    const progress = Math.min(1, (timestamp - startedAt) / USAGE_ANIMATION_DURATION);
+    usageAnimationProgress.value = 1 - (1 - progress) ** 3;
+
+    if (progress < 1) {
+      usageAnimationFrame = window.requestAnimationFrame(update);
+    } else {
+      usageAnimationProgress.value = 1;
+      usageAnimationFrame = null;
+    }
+  };
+
+  usageAnimationFrame = window.requestAnimationFrame(update);
+}
+
 function getCaseStyle(item: BusinessCase): Record<string, string> {
   const inverseProgress = 1 - spreadProgress.value;
 
@@ -491,13 +534,22 @@ onMounted(() => {
     usageData.value = data;
     setDefaultChartHover();
   });
+  usageObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) startUsageAnimation();
+    },
+    { rootMargin: '-20% 0px -20% 0px' },
+  );
+  if (usageCardRef.value) usageObserver.observe(usageCardRef.value);
   updateSpreadProgress();
   window.addEventListener('scroll', scheduleSpreadUpdate, { passive: true });
   window.addEventListener('resize', scheduleSpreadUpdate);
 });
 
 onBeforeUnmount(() => {
+  usageObserver?.disconnect();
   if (animationFrame !== null) window.cancelAnimationFrame(animationFrame);
+  if (usageAnimationFrame !== null) window.cancelAnimationFrame(usageAnimationFrame);
   window.removeEventListener('scroll', scheduleSpreadUpdate);
   window.removeEventListener('resize', scheduleSpreadUpdate);
 });

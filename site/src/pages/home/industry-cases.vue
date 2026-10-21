@@ -296,9 +296,13 @@ const stats = computed(() => [
         linear-gradient(to bottom, var(--industry-grid-color) 1px, transparent 1px);
       background-position: center;
       background-size: 80px 80px;
-      mask-image: linear-gradient(to right, transparent, #000 24%, #000 76%, transparent),
-        linear-gradient(to bottom, transparent, #000 24%, #000 48%, transparent);
-      mask-composite: intersect;
+      mask-image: radial-gradient(
+        ellipse 44% 42% at 50% 50%,
+        #000 0%,
+        rgba(0, 0, 0, 0.5) 32%,
+        rgba(0, 0, 0, 0.12) 64%,
+        transparent 100%
+      );
       pointer-events: none;
       content: '';
     }

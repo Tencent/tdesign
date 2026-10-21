@@ -4,7 +4,6 @@
     class="resource-section"
     data-screenshot-root
     :style="{
-      '--mobile-layout-scale': mobileLayoutScale,
       '--mobile-section-height': mobileSectionHeight,
       '--tablet-layout-scale': tabletLayoutScale,
       '--tablet-section-height': tabletSectionHeight,
@@ -127,7 +126,6 @@ const { t, locale } = useI18n({ messages: homeMessages });
 const resourceSectionRef = ref<HTMLElement>();
 const resourceLayoutRef = ref<HTMLElement>();
 const releaseDates = ref<Record<string, string>>({});
-const mobileLayoutScale = ref('1');
 const mobileSectionHeight = ref('auto');
 const tabletLayoutScale = ref('1');
 const tabletSectionHeight = ref('auto');
@@ -304,9 +302,7 @@ const updateScaledLayout = () => {
   }
 
   if (window.innerWidth < 700) {
-    const scale = window.innerWidth / 360;
-    mobileLayoutScale.value = scale.toFixed(4);
-    mobileSectionHeight.value = `${resourceLayoutRef.value.offsetHeight * scale}px`;
+    mobileSectionHeight.value = `${resourceLayoutRef.value.offsetHeight}px`;
   } else {
     mobileSectionHeight.value = 'auto';
   }
@@ -1105,21 +1101,19 @@ const resourceCards = computed<ResourceCard[]>(() => [
     &__layout {
       position: absolute;
       top: 0;
-      left: 50%;
+      left: 0;
       display: flex;
-      width: 360px;
+      width: 100%;
       padding: 60px 24px;
       box-sizing: border-box;
       flex-direction: column;
       align-items: center;
       gap: 24px;
-      transform: translateX(-50%) scale(var(--mobile-layout-scale));
-      transform-origin: top center;
     }
 
     &__heading {
-      width: 360px;
-      padding: 0 24px;
+      width: 100%;
+      padding: 0;
       box-sizing: border-box;
       margin: 0;
 
