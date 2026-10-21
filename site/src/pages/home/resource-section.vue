@@ -642,6 +642,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
     left: auto;
     width: 268px;
     height: 268px;
+    opacity: 1;
 
     img,
     .resource-card__frames {
