@@ -50,7 +50,7 @@
               <p>{{ t('home.businessCases.downloads') }}</p>
               <div class="usage-card__total">
                 <strong>{{ animatedDownloadPerMonth }}</strong>
-                <span>{{ t('home.businessCases.tenThousandPlus') }}</span>
+                <span>{{ animatedDownloadUnit }}</span>
               </div>
             </div>
             <div class="usage-card__metrics">
@@ -62,7 +62,7 @@
               </div>
               <div>
                 <span>{{ t('home.businessCases.projects') }}</span>
-                <strong>{{ animatedProjectsCount }}+</strong>
+                <strong> {{ animatedProjectsCount }}<small>+</small> </strong>
               </div>
             </div>
           </div>
@@ -277,26 +277,29 @@ const formatWithThousandsSeparator = (value: string | number) => {
 };
 const downloadPerMonthTarget = computed(() => {
   const latestDownloads = chartDownloads.value.at(-1)?.totalDownloads;
-  if (typeof latestDownloads !== 'number') {
-    const fallbackValue = Number(usageData.value.downloadPerMonth.replace(/[,+]/g, ''));
-    return locale.value.startsWith('en') ? fallbackValue / 100 : fallbackValue;
-  }
+  if (typeof latestDownloads === 'number') return latestDownloads;
 
-  const divisor = locale.value.startsWith('en') ? 1_000_000 : 10_000;
-  return latestDownloads / divisor;
+  const fallbackValue = Number(usageData.value.downloadPerMonth.replace(/[,+]/g, ''));
+  return fallbackValue * 10_000;
 });
 const figmaReferenceCountTarget = computed(() => {
   const value = Number(usageData.value.figmaReferenceCount.replace(/[,+]/g, ''));
   return locale.value.startsWith('en') ? value / 100 : value;
 });
 const projectsCountTarget = computed(() => Number(usageData.value.projectsCount.replace(/[,+]/g, '')));
-const animatedDownloadPerMonth = computed(() =>
-  formatWithThousandsSeparator(
-    (downloadPerMonthTarget.value * usageAnimationProgress.value).toFixed(
-      chartDownloads.value.length > 0 || !Number.isInteger(downloadPerMonthTarget.value) ? 1 : 0,
-    ),
-  ),
-);
+const animatedDownloadCount = computed(() => downloadPerMonthTarget.value * usageAnimationProgress.value);
+const animatedDownloadUnit = computed(() => {
+  if (!locale.value.startsWith('en')) return t('home.businessCases.tenThousandPlus');
+  return animatedDownloadCount.value >= 1_000_000 ? 'M' : 'K';
+});
+const animatedDownloadPerMonth = computed(() => {
+  const count = animatedDownloadCount.value;
+  if (locale.value.startsWith('en')) {
+    const useMillions = count >= 1_000_000;
+    return formatWithThousandsSeparator((count / (useMillions ? 1_000_000 : 1_000)).toFixed(useMillions ? 1 : 0));
+  }
+  return formatWithThousandsSeparator((count / 10_000).toFixed(chartDownloads.value.length > 0 ? 1 : 0));
+});
 const animatedFigmaReferenceCount = computed(() =>
   formatWithThousandsSeparator(
     (figmaReferenceCountTarget.value * usageAnimationProgress.value).toFixed(
@@ -474,7 +477,8 @@ function updateSpreadProgress(timestamp = performance.now()): void {
     compactCanvasScale.value = compactScale.toFixed(4);
     compactCanvasTop.value = `${canvasTop}px`;
     compactCanvasHeight.value = `${canvasHeight}px`;
-    compactSectionHeight.value = `${canvasTop + canvasHeight * compactScale + 60}px`;
+    const compactBottomSpacing = window.innerWidth >= 960 ? 60 : 0;
+    compactSectionHeight.value = `${canvasTop + canvasHeight * compactScale + compactBottomSpacing}px`;
 
     const mobileScale = Math.min(1, window.innerWidth / 596);
     const mobileLayout = businessCasesRef.value.querySelector<HTMLElement>('.business-cases__layout');
@@ -1313,7 +1317,7 @@ onBeforeUnmount(() => {
       flex-direction: column;
       align-items: center;
       gap: 24px;
-      padding: 60px 24px;
+      padding: 60px 24px 0;
       box-sizing: border-box;
       transform: translateX(-50%);
     }
@@ -1573,6 +1577,7 @@ onBeforeUnmount(() => {
     }
 
     p {
+      margin-top: 12px;
       font-size: 12px;
       line-height: 20px;
     }
@@ -1582,12 +1587,6 @@ onBeforeUnmount(() => {
 @media screen and (min-width: 596px) and (max-width: 959px) {
   .business-cases__heading {
     top: 60px;
-  }
-}
-
-@media screen and (max-width: 360px) {
-  .business-cases__heading p {
-    margin-top: 12px;
   }
 }
 </style>

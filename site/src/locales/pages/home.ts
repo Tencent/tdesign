@@ -110,7 +110,7 @@ export const zhCN = {
         },
         resources: {
           title: '丰富的设计资源',
-          description: '提供桌面和移动端 Figma 等多种格式的设计资源',
+          description: '提供适配桌面端和移动端的 Figma 设计资源',
         },
         guidelines: {
           title: '专业的设计指南',
@@ -123,6 +123,18 @@ export const zhCN = {
     contributors: {
       title: '协同共建，共享活跃社区',
       description: '10+ 开源仓库，800+ 位开源伙伴，来自各地的开发者共同协同工作',
+      activity: {
+        title: '实时动态',
+        viewAll: '查看全部',
+        loading: '实时动态加载中',
+        githubProfile: '{name} 的 GitHub 主页',
+        justNow: '刚刚',
+        stats: {
+          pullRequests: '本周新增 PR',
+          commits: '本周新增 Commit',
+          issues: '活跃 Issue',
+        },
+      },
     },
     businessCases: {
       title: '越来越多的业务，正在接入 TDesign',
@@ -324,6 +336,18 @@ export const enUS = {
     contributors: {
       title: 'Built together by our community',
       description: '10+ open-source repos and 800+ contributors working together worldwide.',
+      activity: {
+        title: 'Live activity',
+        viewAll: 'View all',
+        loading: 'Loading live activity',
+        githubProfile: "{name}'s GitHub profile",
+        justNow: 'Just now',
+        stats: {
+          pullRequests: 'New PRs this week',
+          commits: 'New commits this week',
+          issues: 'Active issues',
+        },
+      },
     },
     businessCases: {
       title: 'More products are adopting TDesign',
@@ -337,7 +361,7 @@ export const enUS = {
       downloadCount: '{count} downloads',
       tenThousandPlus: 'M',
       tenThousand: 'M+',
-      designReferences: 'Design resource uses',
+      designReferences: 'Figma usage',
       projects: 'Projects',
       prompts: {
         activity: 'Create an e-commerce campaign with TDesign',
@@ -349,32 +373,31 @@ export const enUS = {
     },
     resources: {
       title: 'Resources for every stack',
-      description:
-        'Desktop, mobile, and AIGC components plus rich icon resources—ready for major frameworks and platforms.',
+      description: 'Components and icons for major frameworks and platforms.',
       logoAlt: '{name} logo',
       enterAction: 'Open',
       cards: {
         web: {
           title: 'Desktop Components',
-          description: 'Unified components for desktop apps',
+          description: 'Unified UI for desktop apps',
         },
         mobile: {
           title: 'Mobile Components',
-          description: 'Unified components for mobile apps',
+          description: 'Unified UI for mobile apps',
         },
         aigc: {
           title: 'AIGC Components',
-          description: 'Unified AI components for desktop and mobile',
+          description: 'AI components for desktop and mobile',
         },
         icons: {
-          title: 'TDesign Icon Library',
-          description: 'Adjust stroke width and colors with ease',
+          title: 'TDesign Icons',
+          description: 'Customize strokes and colors',
         },
       },
       items: {
         miniprogram: 'MiniProgram',
-        iconLibrary: 'Icon Library',
-        designResources: 'Design Resources',
+        iconLibrary: 'Icons',
+        designResources: 'Design Kit',
       },
     },
     service: {

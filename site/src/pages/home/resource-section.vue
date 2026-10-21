@@ -279,7 +279,7 @@ function formatUpdatedAt(value: string): string {
   const elapsedDays = Math.max(0, Math.floor((Date.now() - new Date(value).getTime()) / (24 * 60 * 60 * 1000)));
   const elapsedWeeks = Math.floor(elapsedDays / 7);
   const relativeTime = new Intl.RelativeTimeFormat(locale.value, { numeric: 'auto' }).format(-elapsedWeeks, 'week');
-  return locale.value.startsWith('zh') ? `${relativeTime}更新` : `Updated ${relativeTime}`;
+  return locale.value.startsWith('zh') ? `${relativeTime}更新` : relativeTime;
 }
 
 async function fetchReleaseDates(): Promise<void> {
@@ -633,7 +633,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
   }
 
   &--icons &__illustration {
-    top: 32px;
+    top: 20px;
     right: 12px;
     left: auto;
     width: 268px;
@@ -935,7 +935,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
     }
 
     &--icons &__illustration {
-      top: 32px;
+      top: 20px;
       right: 12px;
       left: auto;
       width: 340px;
@@ -1042,19 +1042,19 @@ const resourceCards = computed<ResourceCard[]>(() => [
 
     &__items,
     &--icons &__items {
-      display: flex;
+      display: grid;
       width: 100%;
       margin-top: 0;
-      flex-wrap: wrap;
-      justify-content: flex-start;
+      grid-template-columns: repeat(auto-fit, minmax(164px, 200px));
+      justify-content: space-between;
       gap: 8px;
     }
   }
 
   .resource-item {
     display: grid;
-    width: 200px;
-    min-width: 200px;
+    width: 100%;
+    min-width: 0;
     height: 64px;
     padding: 12px 24px 12px 16px;
     grid-template-columns: 40px 1fr;
@@ -1255,6 +1255,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
 @media screen and (max-width: 959px) {
   .resource-section__heading {
     h2 {
+      margin-bottom: 12px;
       font-size: 28px;
       line-height: 36px;
     }
@@ -1270,12 +1271,6 @@ const resourceCards = computed<ResourceCard[]>(() => [
   .resource-card__content p {
     font-size: 12px;
     line-height: 20px;
-  }
-}
-
-@media screen and (max-width: 360px) {
-  .resource-section__heading h2 {
-    margin-bottom: 12px;
   }
 }
 </style>

@@ -50,7 +50,7 @@
                 v-if="isGithubMember(member)"
                 class="community-network__profile-link"
                 :href="githubProfile(member)"
-                :aria-label="`${member} 的 GitHub 主页`"
+                :aria-label="t('home.contributors.activity.githubProfile', { name: member })"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -66,7 +66,7 @@
     <div class="community-activity">
       <div class="activity-feed">
         <header class="activity-feed__header">
-          <h3>实时动态</h3>
+          <h3>{{ t('home.contributors.activity.title') }}</h3>
           <t-link
             theme="default"
             size="small"
@@ -75,12 +75,17 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            查看全部
+            {{ t('home.contributors.activity.viewAll') }}
             <template #suffixIcon><icon name="chevron-right" /></template>
           </t-link>
         </header>
 
-        <div v-if="isActivityLoading" class="activity-feed__list" aria-label="实时动态加载中" aria-busy="true">
+        <div
+          v-if="isActivityLoading"
+          class="activity-feed__list"
+          :aria-label="t('home.contributors.activity.loading')"
+          aria-busy="true"
+        >
           <div v-for="index in 7" :key="index" class="activity-feed__item activity-feed__item--skeleton">
             <t-skeleton animation="gradient" :row-col="activitySkeletonRows" />
           </div>
@@ -92,8 +97,8 @@
             </a>
             <div class="activity-feed__meta">
               <t-avatar size="16px" :image="item.avatar" alt="" />
-              <span class="activity-feed__meta-full">{{ item.meta }}</span>
-              <span class="activity-feed__meta-compact">{{ item.compactMeta }}</span>
+              <span class="activity-feed__meta-full">{{ activityMeta(item) }}</span>
+              <span class="activity-feed__meta-compact">{{ activityMeta(item, true) }}</span>
             </div>
           </div>
         </div>
@@ -109,13 +114,13 @@
           </template>
         </template>
         <template v-else>
-          <template v-for="(item, index) in stats" :key="item.label">
+          <template v-for="(item, index) in stats" :key="item.labelKey">
             <span v-if="index" class="community-stats__divider"></span>
             <div class="community-stat">
               <div class="community-stat__value">
                 <strong>{{ formatStatValue(item.value) }}</strong>
               </div>
-              <p>{{ item.label }}</p>
+              <p>{{ t(item.labelKey) }}</p>
             </div>
           </template>
         </template>
@@ -126,10 +131,14 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import { Icon } from 'tdesign-icons-vue-next';
+import homeMessages from '@/locales/pages/home';
 import { HOME_API_ENDPOINTS } from './api';
 import tdesignLogo from './assets/tdesign.svg';
+
+const { locale, t } = useI18n({ messages: homeMessages });
 
 const outerRingPointCount = 11;
 const innerRingPointCount = 6;
@@ -176,20 +185,20 @@ let randomTimer: number | undefined;
 
 interface Activity {
   title: string;
-  meta: string;
-  compactMeta: string;
   author: string;
   avatar: string;
+  repository: string;
+  number: number;
   url: string;
   updatedAt: string;
 }
 
 interface CommunityStat {
   value: number;
-  label: string;
+  labelKey: string;
 }
 
-const formatStatValue = (value: number) => new Intl.NumberFormat('en-US').format(value);
+const formatStatValue = (value: number) => new Intl.NumberFormat(locale.value).format(value);
 
 const activities = ref<Activity[]>([]);
 const stats = ref<CommunityStat[]>([]);
@@ -256,15 +265,21 @@ function githubProfile(value: string): string {
 
 function formatRelativeTime(value: string): string {
   const elapsed = Date.now() - new Date(value).getTime();
-  if (!Number.isFinite(elapsed) || elapsed < 60 * 1000) return '刚刚';
+  if (!Number.isFinite(elapsed) || elapsed < 60 * 1000) return t('home.contributors.activity.justNow');
 
   const minutes = Math.floor(elapsed / (60 * 1000));
-  if (minutes < 60) return `${minutes} 分钟前`;
+  const formatter = new Intl.RelativeTimeFormat(locale.value, { numeric: 'always' });
+  if (minutes < 60) return formatter.format(-minutes, 'minute');
 
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} 小时前`;
+  if (hours < 24) return formatter.format(-hours, 'hour');
 
-  return `${Math.floor(hours / 24)} 天前`;
+  return formatter.format(-Math.floor(hours / 24), 'day');
+}
+
+function activityMeta(item: Activity, compact = false): string {
+  const base = `@${item.author} · ${formatRelativeTime(item.updatedAt)}`;
+  return compact ? base : `${base} · ${item.repository} #${item.number}`;
 }
 
 function parseActivities(value: unknown): Activity[] {
@@ -294,10 +309,10 @@ function parseActivities(value: unknown): Activity[] {
         return [
           {
             title: item.title,
-            meta: `@${item.author} · ${formatRelativeTime(item.updatedAt)} · ${repository.name} #${item.number}`,
-            compactMeta: `@${item.author} · ${formatRelativeTime(item.updatedAt)}`,
             author: item.author,
             avatar: githubAvatar(item.author),
+            repository: repository.name,
+            number: item.number,
             url: item.url,
             updatedAt: item.updatedAt,
           },
@@ -321,9 +336,9 @@ function parseStats(value: unknown): CommunityStat[] {
   }
 
   return [
-    { value: newPullRequests, label: '本周新增 PR' },
-    { value: defaultBranchCommits, label: '本周新增 Commit' },
-    { value: activeIssues, label: '活跃 Issue' },
+    { value: newPullRequests, labelKey: 'home.contributors.activity.stats.pullRequests' },
+    { value: defaultBranchCommits, labelKey: 'home.contributors.activity.stats.commits' },
+    { value: activeIssues, labelKey: 'home.contributors.activity.stats.issues' },
   ];
 }
 
@@ -427,7 +442,11 @@ onBeforeUnmount(() => {
   }
 
   .community-network {
-    margin-left: 60px;
+    margin-left: 46px;
+  }
+
+  .community-activity {
+    margin-right: 46px;
   }
 }
 
@@ -792,9 +811,12 @@ onBeforeUnmount(() => {
   }
 
   .community-network {
-    width: calc(60.91% - 69.88px);
+    width: auto;
     height: 672px;
+    min-width: 0;
     min-height: 672px;
+    margin-left: 24px;
+    flex: 1;
 
     &__canvas {
       transform: translate(-50%, -50%) scale(1.33);
@@ -802,13 +824,15 @@ onBeforeUnmount(() => {
   }
 
   .community-activity {
-    width: auto;
+    width: 290px;
     height: 672px;
     min-width: 0;
-    flex: 1;
+    margin-left: 40px;
+    flex: none;
   }
 
   .activity-feed {
+    width: 290px;
     height: 544px;
     box-sizing: border-box;
 
@@ -819,6 +843,10 @@ onBeforeUnmount(() => {
     &__item:nth-child(4):not(:last-child) {
       border-bottom: 0;
     }
+  }
+
+  .community-stat {
+    gap: 16px;
   }
 }
 
@@ -961,6 +989,11 @@ onBeforeUnmount(() => {
   .community-stats,
   .community-stat {
     height: 88px;
+  }
+
+  .community-stat {
+    flex: 1;
+    align-items: center;
   }
 }
 </style>

@@ -563,6 +563,8 @@ const stats = computed(() => [
 
 @media screen and (max-width: 959px) {
   .industry-cases__heading {
+    gap: 12px;
+
     h2 {
       font-size: 28px;
       line-height: 36px;
@@ -583,10 +585,6 @@ const stats = computed(() => [
 }
 
 @media screen and (max-width: 360px) {
-  .industry-cases__heading {
-    gap: 12px;
-  }
-
   .industry-cases__stat > p {
     font-size: 10px;
     line-height: 18px;

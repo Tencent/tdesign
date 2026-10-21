@@ -14,7 +14,7 @@
             </div>
           </h2>
         </div>
-        <t-popup trigger="click" placement="top" overlay-inner-class-name="wechat-qrcode" :z-index="100">
+        <t-popup trigger="hover" placement="top" overlay-inner-class-name="wechat-qrcode" :z-index="100">
           <div class="banner-booking" data-screenshot-root>
             <button class="banner-booking__button" type="button">
               <span class="banner-booking__logo">
@@ -240,7 +240,7 @@
                     <t-tag>{{ t('home.componentDemo.defaultTag') }}</t-tag>
                   </div>
                   <div>
-                    <t-radio-group defaultValue="1" variant="default-filled">
+                    <t-radio-group class="component-theme-tabs" defaultValue="1" variant="default-filled">
                       <t-radio-button value="1">{{ t('home.componentDemo.light') }}</t-radio-button>
                       <t-radio-button value="2">{{ t('home.componentDemo.dark') }}</t-radio-button>
                       <t-radio-button value="3">{{ t('home.componentDemo.neutral') }}</t-radio-button>
@@ -269,17 +269,17 @@
 
               <ul class="desc-list">
                 <li class="desc-item">
-                  <icon class="desc-icon" name="tips" />
+                  <img class="desc-icon" :src="paletteIcon" alt="" />
                   <h3 class="desc-title">{{ t('home.creation.features.scalable.title') }}</h3>
                   <p class="desc-text">{{ t('home.creation.features.scalable.description') }}</p>
                 </li>
                 <li class="desc-item">
-                  <img class="desc-icon" :src="bubbleIcon" alt="" />
+                  <img class="desc-icon" :src="figmaIcon" alt="" />
                   <h3 class="desc-title">{{ t('home.creation.features.resources.title') }}</h3>
                   <p class="desc-text">{{ t('home.creation.features.resources.description') }}</p>
                 </li>
                 <li class="desc-item">
-                  <img class="desc-icon" :src="fileImageIcon" alt="" />
+                  <img class="desc-icon" :src="fileIcon" alt="" />
                   <h3 class="desc-title">{{ t('home.creation.features.guidelines.title') }}</h3>
                   <p class="desc-text">{{ t('home.creation.features.guidelines.description') }}</p>
                 </li>
@@ -364,11 +364,12 @@ import { DesktopIcon, Icon } from 'tdesign-icons-vue-next';
 import Banner from './banner.vue';
 import BusinessCases from './business-cases.vue';
 import IndustryCases from './industry-cases.vue';
-import bubbleIcon from './assets/bubble.svg';
-import fileImageIcon from './assets/file-image.svg';
+import figmaIcon from './assets/figma.svg';
+import fileIcon from './assets/file.svg';
 import openFrameworksIcon from './assets/open-frameworks.svg';
 import openIndustriesIcon from './assets/open-industries.svg';
 import openPlatformsIcon from './assets/open-platforms.svg';
+import paletteIcon from './assets/palette.svg';
 import ResourceSection from './resource-section.vue';
 import { canAccessWoa, HOME_API_ENDPOINTS } from './api';
 // @ts-expect-error prismjs does not publish TypeScript declarations.
