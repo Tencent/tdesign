@@ -260,6 +260,8 @@ let spreadAnimationFrom = 0;
 let spreadAnimationTarget = 0;
 const SPREAD_ANIMATION_DURATION = 700;
 const USAGE_ANIMATION_DURATION = 1200;
+const CHART_AXIS_START_X = 34;
+const CHART_AXIS_END_X = 274;
 
 interface ChartPoint {
   x: number;
@@ -395,9 +397,10 @@ function handleChartPointerMove(event: PointerEvent): void {
   const chartRect = chart.getBoundingClientRect();
   const localX = ((event.clientX - chartRect.left) / chartRect.width) * 308;
   const targetX = Math.min(308, Math.max(0, localX));
+  const axisProgress = (targetX - CHART_AXIS_START_X) / (CHART_AXIS_END_X - CHART_AXIS_START_X);
   hoveredDownloadIndex.value = Math.min(
     chartDownloads.value.length - 1,
-    Math.max(0, Math.round((targetX / 308) * (chartDownloads.value.length - 1))),
+    Math.max(0, Math.round(axisProgress * (chartDownloads.value.length - 1))),
   );
   const pathLength = path.getTotalLength();
   let start = 0;
