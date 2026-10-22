@@ -52,6 +52,11 @@
               <span v-else class="resource-item__updated" aria-hidden="true"></span>
               <span class="resource-item__action">{{ t('home.resources.enterAction') }}</span>
             </a>
+            <span
+              v-if="card.type === 'icons'"
+              class="resource-item resource-item--placeholder"
+              aria-hidden="true"
+            ></span>
           </div>
         </article>
       </div>
@@ -778,6 +783,10 @@ const resourceCards = computed<ResourceCard[]>(() => [
   gap: 16px;
 }
 
+.resource-card .resource-item--placeholder {
+  display: none;
+}
+
 @media screen and (min-width: 1200px) and (max-width: 1375px) {
   .resource-section {
     width: 100vw;
@@ -1038,11 +1047,11 @@ const resourceCards = computed<ResourceCard[]>(() => [
 @media screen and (min-width: 700px) and (max-width: 959px) {
   .resource-card {
     height: auto;
+    min-height: 0;
     gap: 24px;
     justify-content: flex-start;
 
-    &__items,
-    &--icons &__items {
+    &__items {
       display: grid;
       width: 100%;
       margin-top: 0;
@@ -1050,6 +1059,18 @@ const resourceCards = computed<ResourceCard[]>(() => [
       justify-content: space-between;
       gap: 8px;
     }
+
+    &--icons &__items {
+      grid-template-columns: repeat(3, minmax(164px, 200px));
+      justify-content: space-between;
+      gap: 8px;
+    }
+  }
+
+  .resource-card .resource-item--placeholder {
+    display: grid;
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .resource-item {
