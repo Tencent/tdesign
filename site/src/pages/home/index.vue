@@ -1,8 +1,8 @@
 <template>
-  <section class="tdesign-homepage">
-    <banner :themeMode="themeMode" />
+  <section ref="homepageRef" class="tdesign-homepage">
+    <banner :themeMode="themeMode" data-board-section="before" />
 
-    <section class="main-page">
+    <section class="main-page" data-board-section="before">
       <div class="banner-info">
         <div class="banner-info__left">
           <h2 class="name">
@@ -305,10 +305,10 @@
       </div>
     </div>
 
-    <business-cases />
+    <business-cases data-board-section="after" />
 
-    <industry-cases />
-    <div class="module-setup">
+    <industry-cases data-board-section="after" />
+    <div class="module-setup" data-board-section="after">
       <div class="module-setup__content">
         <div class="module-setup__heading">
           <h2 class="module-title">{{ t('home.setup.title') }}</h2>
@@ -341,8 +341,8 @@
       </div>
     </div>
 
+    <td-doc-footer :style="footerStyle" data-board-section="after" />
     <td-backtop />
-    <td-doc-footer :style="footerStyle" />
   </section>
 </template>
 
@@ -416,6 +416,7 @@ interface HomeState {
 }
 
 const { locale, t } = useI18n({ messages: homeMessages });
+const homepageRef = ref<HTMLElement | null>(null);
 const moduleBoardRef = ref<HTMLElement | null>(null);
 const moduleBoardViewportRef = ref<HTMLElement | null>(null);
 const moduleBoardInnerRef = ref<HTMLElement | null>(null);
@@ -577,6 +578,7 @@ let moduleBoardNeedsMeasure = true;
 let moduleBoardStops: number[] = [];
 let moduleBoardPinTop = 0;
 let moduleBoardScrollDistance = 0;
+let moduleBoardBeforeHeight = 0;
 const moduleBoardDwellDistance = 320;
 const moduleBoardMoveDistance = 900;
 const moduleBoardSnapDelay = 120;
@@ -588,10 +590,23 @@ function displayCode(item: CodeItem): string {
 }
 
 function measureModuleBoard(): void {
+  const home = homepageRef.value;
   const board = moduleBoardRef.value;
   const viewport = moduleBoardViewportRef.value;
   const inner = moduleBoardInnerRef.value;
-  if (!board || !viewport || !inner) return;
+  if (!home || !board || !viewport || !inner) return;
+
+  const previousLayout = home.dataset.boardLayout;
+  delete home.dataset.boardLayout;
+  const homeRect = home.getBoundingClientRect();
+  const boardRect = board.getBoundingClientRect();
+  moduleBoardBeforeHeight = boardRect.top - homeRect.top;
+  home.style.setProperty('--board-before-height', `${moduleBoardBeforeHeight}px`);
+  home.style.setProperty('--board-after-height', `${homeRect.bottom - boardRect.bottom}px`);
+  home.querySelectorAll<HTMLElement>(':scope > [data-board-section]').forEach((section) => {
+    const origin = section.dataset.boardSection === 'before' ? homeRect.top : boardRect.bottom;
+    section.style.setProperty('--board-section-top', `${section.getBoundingClientRect().top - origin}px`);
+  });
 
   const cards = Array.from(inner.querySelectorAll<HTMLElement>('.module-board__card'));
   const height = inner.offsetHeight;
@@ -607,6 +622,7 @@ function measureModuleBoard(): void {
   moduleBoardStyle.value = enabled ? { height: `${height + moduleBoardScrollDistance}px` } : {};
 
   if (enabled) {
+    home.dataset.boardLayout = previousLayout ?? 'flow';
     viewport.scrollLeft = 0;
   } else {
     moduleBoardViewportStyle.value = {};
@@ -625,23 +641,34 @@ function updateModuleBoard(): void {
     measureModuleBoard();
   }
 
+  const home = homepageRef.value;
   const board = moduleBoardRef.value;
   const viewport = moduleBoardViewportRef.value;
-  if (!board || !viewport || moduleBoardStops.length === 0) return;
+  if (!home || !board || !viewport || moduleBoardStops.length === 0) return;
 
   let offset = viewport.scrollLeft;
   if (moduleBoardScrollEnabled.value) {
     const boardRect = board.getBoundingClientRect();
     const progress = Math.max(0, Math.min(moduleBoardScrollDistance, moduleBoardPinTop - boardRect.top));
     if (progress > 0 && progress < moduleBoardScrollDistance) {
-      moduleBoardViewportStyle.value = {
+      const fixedStyle = {
         position: 'fixed',
-        top: `${moduleBoardPinTop}px`,
         left: `${boardRect.left}px`,
         width: `${boardRect.width}px`,
       };
+      moduleBoardViewportStyle.value = { ...fixedStyle, top: `${moduleBoardPinTop}px` };
+      home.dataset.boardLayout = 'pinned';
+      home.style.setProperty('--board-before-top', `${moduleBoardPinTop - moduleBoardBeforeHeight}px`);
+      home.style.setProperty('--board-after-top', `${window.innerHeight - moduleBoardPinTop}px`);
     } else {
-      moduleBoardViewportStyle.value = { position: 'absolute', top: `${progress}px`, left: '0', width: '100%' };
+      const absoluteStyle = { position: 'absolute', left: '0', width: '100%' };
+      moduleBoardViewportStyle.value = { ...absoluteStyle, top: `${progress}px` };
+      home.dataset.boardLayout = 'flow';
+      home.style.setProperty('--board-before-top', `${progress}px`);
+      home.style.setProperty(
+        '--board-after-top',
+        `${moduleBoardBeforeHeight + window.innerHeight - 2 * moduleBoardPinTop + progress}px`,
+      );
     }
     offset = moduleBoardStops[moduleBoardStops.length - 1];
     for (let index = 0; index < moduleBoardStops.length - 1; index++) {
@@ -715,14 +742,10 @@ function snapModuleBoardByDirection(): void {
     const moveEnd = moveStart + moduleBoardMoveDistance;
     if (progress <= moveStart || progress >= moveEnd) continue;
 
-    const targetProgress =
-      moduleBoardScrollDirection === 0
-        ? progress - moveStart < moduleBoardMoveDistance / 2
-          ? moveStart
-          : moveEnd
-        : moduleBoardScrollDirection > 0
-        ? moveEnd
-        : moveStart;
+    const snapForward =
+      moduleBoardScrollDirection > 0 ||
+      (moduleBoardScrollDirection === 0 && progress - moveStart >= moduleBoardMoveDistance / 2);
+    const targetProgress = snapForward ? moveEnd : moveStart;
     animateModuleBoardScroll(window.scrollY + boardRect.top - moduleBoardPinTop + targetProgress);
     return;
   }
@@ -904,8 +927,9 @@ onMounted(() => {
   moduleBoardMotionQuery.addEventListener('change', refreshModuleBoard);
   moduleBoardResizeObserver = new ResizeObserver(refreshModuleBoard);
   if (moduleBoardInnerRef.value) moduleBoardResizeObserver.observe(moduleBoardInnerRef.value);
-  const mainPage = moduleBoardRef.value?.previousElementSibling;
-  if (mainPage) moduleBoardResizeObserver.observe(mainPage);
+  homepageRef.value?.querySelectorAll<HTMLElement>(':scope > [data-board-section]').forEach((section) => {
+    moduleBoardResizeObserver?.observe(section, { box: 'border-box' });
+  });
   refreshModuleBoard();
   moduleBoardLastScrollY = window.scrollY;
   window.addEventListener('resize', handleResize);

@@ -275,6 +275,10 @@
       pointer-events: none;
       transition: transform 400ms var(--booking-glass-ease);
 
+      @media screen and (max-width: 700px) {
+        display: none;
+      }
+
       [theme-mode='dark'] & {
         --booking-glass-tint-low: rgba(24, 28, 36, 0.04);
         --booking-glass-tint-high: rgba(24, 28, 36, 0.1);
@@ -903,6 +907,32 @@
   }
 }
 
+.tdesign-homepage[data-board-layout] {
+  padding-top: var(--board-before-height);
+  padding-bottom: var(--board-after-height);
+
+  > [data-board-section] {
+    position: absolute;
+    z-index: 1;
+    top: calc(var(--board-section-top) + var(--board-before-top));
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+
+    &:not(.banner-wrap) {
+      left: 0;
+    }
+  }
+
+  > [data-board-section='after'] {
+    top: calc(var(--board-section-top) + var(--board-after-top));
+  }
+
+  &[data-board-layout='pinned'] > [data-board-section] {
+    position: fixed;
+  }
+}
+
 .module-board {
   position: relative;
   width: 100%;
@@ -918,6 +948,7 @@
   }
 
   &--scroll-driven &__viewport {
+    z-index: 2;
     overflow: hidden;
     scroll-snap-type: none;
     scrollbar-width: none;
