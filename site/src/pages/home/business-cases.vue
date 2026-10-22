@@ -471,21 +471,23 @@ function updateSpreadProgress(timestamp = performance.now()): void {
     const compactScale = Math.min(1200 / 1060, Math.max(1, window.innerWidth / 1060));
     const canvasHeight = window.innerWidth >= 882 ? 635 : 813;
     const heading = businessCasesRef.value.querySelector<HTMLElement>('.business-cases__heading');
-    const canvasTop = heading ? heading.offsetTop + heading.offsetHeight + 64 : 276;
+    const canvas = businessCasesRef.value.querySelector<HTMLElement>('.business-cases__canvas');
+    const headingCanvasGap = window.innerWidth < 960 ? 24 : 64;
+    const canvasTop = heading ? heading.offsetTop + heading.offsetHeight + headingCanvasGap : 212 + headingCanvasGap;
+    const canvasLayoutHeight = window.innerWidth < 960 ? canvas?.offsetHeight ?? canvasHeight : canvasHeight;
 
     canvasScale.value = scale.toFixed(4);
     compactCanvasScale.value = compactScale.toFixed(4);
     compactCanvasTop.value = `${canvasTop}px`;
     compactCanvasHeight.value = `${canvasHeight}px`;
-    const compactBottomSpacing = window.innerWidth >= 960 ? 60 : 0;
-    compactSectionHeight.value = `${canvasTop + canvasHeight * compactScale + compactBottomSpacing}px`;
+    const compactBottomSpacing = 60;
+    compactSectionHeight.value = `${canvasTop + canvasLayoutHeight * compactScale + compactBottomSpacing}px`;
 
     const mobileScale = Math.min(1, window.innerWidth / 596);
     const mobileLayout = businessCasesRef.value.querySelector<HTMLElement>('.business-cases__layout');
-    const mobileCanvas = businessCasesRef.value.querySelector<HTMLElement>('.business-cases__canvas');
     mobileLayoutScale.value = mobileScale.toFixed(4);
     mobileSectionHeight.value = `${
-      (mobileLayout?.offsetHeight ?? 0) - (mobileCanvas?.offsetHeight ?? 0) * (1 - mobileScale)
+      (mobileLayout?.offsetHeight ?? 0) - (canvas?.offsetHeight ?? 0) * (1 - mobileScale)
     }px`;
   }
 
@@ -1317,7 +1319,7 @@ onBeforeUnmount(() => {
       flex-direction: column;
       align-items: center;
       gap: 24px;
-      padding: 60px 24px 0;
+      padding: 60px 24px;
       box-sizing: border-box;
       transform: translateX(-50%);
     }
@@ -1570,6 +1572,10 @@ onBeforeUnmount(() => {
 }
 
 @media screen and (max-width: 959px) {
+  .business-cases__canvas {
+    height: auto;
+  }
+
   .business-cases__heading {
     h2 {
       font-size: 28px;

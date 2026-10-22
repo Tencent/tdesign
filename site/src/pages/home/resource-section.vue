@@ -859,7 +859,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
   .resource-section {
     width: 100vw;
     height: var(--tablet-section-height);
-    padding: 0;
+    padding: 0 0 60px;
     overflow: hidden;
 
     &__layout {
@@ -988,7 +988,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
 
 @media screen and (min-width: 597px) and (max-width: 750px) {
   .resource-section {
-    padding: 0 24px 40px;
+    padding: 0 24px 60px;
 
     &__heading {
       margin-bottom: 36px;
@@ -1037,6 +1037,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
 
 @media screen and (min-width: 700px) and (max-width: 959px) {
   .resource-card {
+    height: auto;
     gap: 24px;
     justify-content: flex-start;
 
@@ -1094,7 +1095,7 @@ const resourceCards = computed<ResourceCard[]>(() => [
     left: 50%;
     width: 100vw;
     height: var(--mobile-section-height);
-    padding: 0 24px;
+    padding: 0 24px 60px;
     overflow: hidden;
     transform: translateX(-50%);
 
@@ -1108,7 +1109,6 @@ const resourceCards = computed<ResourceCard[]>(() => [
       box-sizing: border-box;
       flex-direction: column;
       align-items: center;
-      gap: 24px;
     }
 
     &__heading {
@@ -1254,6 +1254,8 @@ const resourceCards = computed<ResourceCard[]>(() => [
 
 @media screen and (max-width: 959px) {
   .resource-section__heading {
+    margin-bottom: 24px;
+
     h2 {
       margin-bottom: 12px;
       font-size: 28px;

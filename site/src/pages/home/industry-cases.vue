@@ -442,7 +442,7 @@ const stats = computed(() => [
     padding: 60px 0;
 
     &__content {
-      gap: clamp(40px, calc(31.52px + 1.77vw), 48px);
+      gap: 24px;
     }
 
     &__heading {
@@ -497,10 +497,6 @@ const stats = computed(() => [
 
 @media screen and (max-width: 494px) {
   .industry-cases {
-    &__content {
-      gap: 40px;
-    }
-
     &__heading {
       h2 {
         font-size: 28px;
