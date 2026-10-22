@@ -497,7 +497,7 @@ function updateSpreadProgress(timestamp = performance.now()): void {
   if (!businessCasesRef.value) return;
 
   const sectionTop = businessCasesRef.value.getBoundingClientRect().top;
-  const animationTrigger = window.innerHeight * 0.16;
+  const animationTrigger = window.innerHeight * 0.28;
   const nextTarget = sectionTop <= animationTrigger ? 1 : 0;
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -677,7 +677,7 @@ onBeforeUnmount(() => {
     z-index: 1;
     display: flex;
     flex-shrink: 0;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
     overflow: hidden;
   }
@@ -721,8 +721,13 @@ onBeforeUnmount(() => {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
+    border: 0;
+    padding-top: 0;
+    padding-bottom: 0;
     background: var(--bg-color-container);
     font-weight: 400;
+    line-height: 1;
   }
 
   &__prompt {
@@ -749,25 +754,33 @@ onBeforeUnmount(() => {
     --case-rotation: -7deg;
   }
 
+  &--2,
+  &--3,
+  &--4 {
+    .business-case__noise {
+      background: radial-gradient(ellipse 122% 123% at 50% -22%, rgba(255, 255, 255, 0) 0%, var(--case-tint) 85%);
+    }
+  }
+
   &--2 {
     top: 342px;
     left: 59px;
     --case-rotation: -5deg;
-    --case-tint: rgba(0, 82, 217, 0.16);
+    --case-tint: #d9e1ff;
   }
 
   &--3 {
     top: 321px;
     left: 1091px;
     --case-rotation: 6deg;
-    --case-tint: rgba(227, 115, 24, 0.16);
+    --case-tint: #ffd9c2;
   }
 
   &--4 {
     top: 33px;
     left: 1072px;
     --case-rotation: 6deg;
-    --case-tint: rgba(0, 82, 217, 0.16);
+    --case-tint: #d9e1ff;
   }
 
   &--5 {
@@ -856,7 +869,7 @@ onBeforeUnmount(() => {
     padding-top: 12px;
     border-top: 0.5px solid var(--bg-color-data);
 
-    div {
+    > div {
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -879,10 +892,13 @@ onBeforeUnmount(() => {
     }
 
     small {
+      display: inline-block;
       margin-left: 4px;
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 500;
+      font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 16px;
+      vertical-align: bottom;
     }
   }
 
@@ -1258,7 +1274,7 @@ onBeforeUnmount(() => {
       height: 22.15px;
       padding: 0 7.38px;
       font-size: 11.07px;
-      line-height: 18.45px;
+      line-height: 1;
     }
 
     &__prompt {
@@ -1408,7 +1424,7 @@ onBeforeUnmount(() => {
       gap: 33.37px;
       padding-top: 11.12px;
 
-      div {
+      > div {
         gap: 7.42px;
       }
 
@@ -1424,7 +1440,8 @@ onBeforeUnmount(() => {
 
       small {
         margin-left: 3.71px;
-        font-size: 11.12px;
+        font-size: 9.27px;
+        line-height: 14.83px;
       }
     }
 
@@ -1531,7 +1548,7 @@ onBeforeUnmount(() => {
       height: 36.06px;
       padding: 0 12.02px;
       font-size: 18.03px;
-      line-height: 30.05px;
+      line-height: 1;
     }
 
     &__prompt {
