@@ -49,7 +49,7 @@ export const zhCN = {
       features: {
         frameworks: {
           title: '多技术栈版本实现',
-          description: '官方支持业界目前主流的开发技术栈：React、Vue、微信小程序、Uniapp、Flutter',
+          description: '支持主流的开发技术栈：React、Vue、微信小程序、Uniapp、Flutter',
         },
         platforms: {
           title: '多端适配',
