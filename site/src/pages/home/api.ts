@@ -9,18 +9,18 @@ const CLOUD_FUNCTION_BASE_URL = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.
 const WOA_REACHABILITY_URL = 'https://dayu.woa.com/avatars/tdesign/profile.jpg';
 
 export async function canAccessWoa(timeout = 1500): Promise<boolean> {
-  if (location.hostname === 'woa.com' || location.hostname.endsWith('.woa.com')) return true;
-
   const controller = new AbortController();
   const timeoutId = window.setTimeout(() => controller.abort(), timeout);
 
   try {
-    await fetch(`${WOA_REACHABILITY_URL}?t=${Date.now()}`, {
+    const response = await fetch(`${WOA_REACHABILITY_URL}?t=${Date.now()}`, {
       cache: 'no-store',
-      mode: 'no-cors',
+      mode: 'cors',
+      credentials: 'omit',
+      redirect: 'error',
       signal: controller.signal,
     });
-    return true;
+    return response.ok && !response.redirected && Boolean(response.headers.get('content-type')?.startsWith('image/'));
   } catch {
     return false;
   } finally {
