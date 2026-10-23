@@ -1,7 +1,6 @@
 /* stylelint-disable */
 @base-width: 100vw;
 
-/* Glass interaction adapted from Petr Knoll: https://codepen.io/Petr-Knoll/pen/QwWLZdx */
 @property --booking-glass-border-angle {
   syntax: '<angle>';
   inherits: false;
@@ -308,15 +307,11 @@
         cursor: pointer;
         pointer-events: auto;
         -webkit-tap-highlight-color: transparent;
-        box-shadow:
-          inset 0 1px 3px rgba(0, 0, 0, 0.025),
-          inset 0 -1px 2px var(--booking-glass-ambient),
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.025), inset 0 -1px 2px var(--booking-glass-ambient),
           0 2px 8px -4px var(--booking-glass-shadow);
         -webkit-backdrop-filter: blur(6px);
         backdrop-filter: blur(6px);
-        transition:
-          transform 400ms var(--booking-glass-ease),
-          box-shadow 400ms var(--booking-glass-ease),
+        transition: transform 400ms var(--booking-glass-ease), box-shadow 400ms var(--booking-glass-ease),
           backdrop-filter 400ms var(--booking-glass-ease);
 
         @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -351,8 +346,7 @@
           background-position: 0% 50%;
           background-repeat: no-repeat;
           mix-blend-mode: screen;
-          transition:
-            background-position 500ms var(--booking-glass-ease),
+          transition: background-position 500ms var(--booking-glass-ease),
             --booking-glass-sheen-angle 500ms var(--booking-glass-ease);
         }
       }
@@ -413,9 +407,7 @@
           transform: scale(0.975);
           -webkit-backdrop-filter: blur(5px);
           backdrop-filter: blur(5px);
-          box-shadow:
-            inset 0 1px 2px rgba(0, 0, 0, 0.02),
-            inset 0 -1px 2px var(--booking-glass-ambient),
+          box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02), inset 0 -1px 2px var(--booking-glass-ambient),
             0 1px 6px -3px var(--booking-glass-shadow);
         }
 
@@ -441,9 +433,7 @@
       }
 
       &__button:active {
-        box-shadow:
-          inset 0 1px 3px var(--booking-glass-shadow),
-          inset 0 -1px 2px var(--booking-glass-ambient),
+        box-shadow: inset 0 1px 3px var(--booking-glass-shadow), inset 0 -1px 2px var(--booking-glass-ambient),
           0 1px 4px -3px var(--booking-glass-shadow);
       }
 

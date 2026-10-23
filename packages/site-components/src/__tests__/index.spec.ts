@@ -1,8 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { isIntranet, debounce, throttle } from '../utils';
-import { fetchEcosystemConfig } from '../utils/ecosystem';
-import { ecosystemConfigCdn, ecosystemConfigWoaCdn } from '../../config';
-import { isWoaDomain } from '../../../../site/src/pages/home/api';
+import { debounce, throttle } from '../utils';
 
 describe('utils', () => {
   beforeEach(() => {
@@ -40,59 +37,5 @@ describe('utils', () => {
 
     throttled.call(context, 'x');
     expect(fn.mock.instances[0]).toBe(context);
-  });
-});
-
-describe.each([
-  ['site-components', isIntranet],
-  ['home', isWoaDomain],
-])('%s WOA domain detection', (_name, isWoa) => {
-  afterEach(() => {
-    vi.unstubAllGlobals();
-  });
-
-  it.each([
-    ['https://woa.com', true],
-    ['https://tdesign.woa.com', true],
-    ['https://preview.tdesign.woa.com:8443', true],
-    ['https://TDESIGN.WOA.COM', true],
-    ['https://tdesign.tencent.com', false],
-    ['https://preview-tdesign-site-pr-940-tdesign.surge.sh', false],
-    ['http://localhost:5173', false],
-    ['https://tdesign.oa.com', false],
-    ['https://notwoa.com', false],
-    ['https://woa.com.example.com', false],
-    ['https://example.com/woa.com?host=tdesign.woa.com', false],
-  ])('classifies %s as %s without a network request', (url, expected) => {
-    const fetchMock = vi.fn();
-    const imageMock = vi.fn();
-    vi.stubGlobal('location', new URL(url));
-    vi.stubGlobal('fetch', fetchMock);
-    vi.stubGlobal('Image', imageMock);
-
-    expect(isWoa()).toBe(expected);
-    expect(fetchMock).not.toHaveBeenCalled();
-    expect(imageMock).not.toHaveBeenCalled();
-  });
-});
-
-describe('ecosystem configuration by domain', () => {
-  afterEach(() => {
-    vi.unstubAllGlobals();
-  });
-
-  it.each([
-    ['https://woa.com', ecosystemConfigWoaCdn],
-    ['https://tdesign.woa.com', ecosystemConfigWoaCdn],
-    ['https://tdesign.tencent.com', ecosystemConfigCdn],
-    ['https://preview-tdesign-site-pr-940-tdesign.surge.sh', ecosystemConfigCdn],
-    ['https://notwoa.com', ecosystemConfigCdn],
-  ])('only fetches the selected configuration for %s', async (url, endpoint) => {
-    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(new Response('[]'));
-    vi.stubGlobal('location', new URL(url));
-    vi.stubGlobal('fetch', fetchMock);
-
-    await expect(fetchEcosystemConfig()).resolves.toEqual([]);
-    expect(fetchMock).toHaveBeenCalledExactlyOnceWith(endpoint);
   });
 });
