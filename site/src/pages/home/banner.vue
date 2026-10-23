@@ -61,7 +61,7 @@ import compressedBannerDark from './assets/compressed-banner-dark.png';
 import compressedBanner from './assets/compressed-banner.png';
 // @ts-expect-error three@0.127.0 does not publish TypeScript declarations.
 import * as THREE from 'three';
-// import Stats from './stats.module';
+// import Stats from './utils/stats';
 // const stats = new Stats();
 import { CDN_BASE } from '@constants';
 import type { ThemeMode } from '@/pages/types';

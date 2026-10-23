@@ -347,217 +347,62 @@
 </template>
 
 <script setup lang="ts">
-import {
-  computed,
-  defineAsyncComponent,
-  nextTick,
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  ref,
-  toRefs,
-  watch,
-} from 'vue';
+import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { DesktopIcon, Icon } from 'tdesign-icons-vue-next';
-import Banner from './banner.vue';
-import BusinessCases from './business-cases.vue';
-import IndustryCases from './industry-cases.vue';
+// @ts-expect-error prismjs does not publish TypeScript declarations.
+import Prismjs from 'prismjs';
+import 'prismjs/components/prism-dart';
+
+import homeMessages from '@/locales/pages/home';
+
 import figmaIcon from './assets/figma.svg';
 import fileIcon from './assets/file.svg';
 import openFrameworksIcon from './assets/open-frameworks.svg';
 import openIndustriesIcon from './assets/open-industries.svg';
 import openPlatformsIcon from './assets/open-platforms.svg';
 import paletteIcon from './assets/palette.svg';
+import Banner from './banner.vue';
+import BusinessCases from './business-cases.vue';
+import IndustryCases from './industry-cases.vue';
 import ResourceSection from './resource-section.vue';
-import { isWoaDomain, HOME_API_ENDPOINTS } from './api';
-// @ts-expect-error prismjs does not publish TypeScript declarations.
-import Prismjs from 'prismjs';
-import 'prismjs/components/prism-dart';
-
-import homeMessages from '@/locales/pages/home';
-import type { ThemeMode } from '@/pages/types';
+import { createHomeDemoModel } from './logic/demo-model';
+import { createModuleBoard } from './logic/module-board';
+import { createHomeNews } from './logic/news';
+import { createHomeTheme } from './logic/theme';
 
 const CommunityCard = defineAsyncComponent(() => import('./community-card.vue'));
-const newsItemStride = 342 + 16;
-
-type CodeFramework = 'vue-next' | 'react' | 'flutter' | 'miniprogram' | 'uniapp';
-
-interface CodeItem {
-  type: string;
-  code?: string;
-  codeKey?: string;
-}
-
-interface NewsItem {
-  title: string;
-  desc: string;
-  date: string;
-  url?: string;
-  isIntranet?: boolean;
-}
-
-interface HomeState {
-  currentTab: number;
-  newsList: NewsItem[];
-  tabTransformWidth: number;
-  windowWidth: number;
-  themeMode: ThemeMode;
-  codeFramework: CodeFramework;
-  codeList: Record<CodeFramework, CodeItem[]>;
-  componentModel: {
-    selectValue: string[];
-    menuExpanded: string[];
-    sliderValue: number;
-    colorList1: string[];
-    colorList2: string[];
-  };
-}
-
 const { t } = useI18n({ messages: homeMessages });
 const homepageRef = ref<HTMLElement | null>(null);
-const moduleBoardRef = ref<HTMLElement | null>(null);
-const moduleBoardViewportRef = ref<HTMLElement | null>(null);
-const moduleBoardInnerRef = ref<HTMLElement | null>(null);
-const moduleBoardScrollEnabled = ref(false);
-const moduleBoardStyle = ref<Record<string, string>>({});
-const moduleBoardViewportStyle = ref<Record<string, string>>({});
-const newsTrackRef = ref<HTMLElement | null>(null);
+const {
+  currentTab,
+  handleModuleBoardFocus,
+  moduleBoardInnerRef,
+  moduleBoardRef,
+  moduleBoardScrollEnabled,
+  moduleBoardStyle,
+  moduleBoardViewportRef,
+  moduleBoardViewportStyle,
+  scheduleModuleBoardUpdate,
+  tabTransformWidth,
+  windowWidth,
+} = createModuleBoard(homepageRef);
+const { handleClickNews, loopedNewsList, newsList, newsTrackRef, startNewsAutoplay, stopNewsAutoplay } =
+  createHomeNews(windowWidth);
+const { themeMode } = createHomeTheme();
+const {
+  codeFramework,
+  codeFrameworkOptions,
+  codeList,
+  componentModel,
+  componentSelectOptions,
+  componentTreeData,
+  displayCode,
+} = createHomeDemoModel(t);
+
 const shouldLoadCommunity = ref(false);
-const isIntranet = ref(false); // 部分动态或内容只能通过内网访问
-
-const codeFrameworkOptions: Array<{ label: string; value: CodeFramework }> = [
-  { label: 'vue-next.ts', value: 'vue-next' },
-  { label: 'react.tsx', value: 'react' },
-  { label: 'flutter.dart', value: 'flutter' },
-  { label: 'mini-program.js', value: 'miniprogram' },
-  { label: 'uniapp.js', value: 'uniapp' },
-];
-
-const state = reactive<HomeState>({
-  currentTab: 0,
-  newsList: [],
-  tabTransformWidth: 0,
-  windowWidth: window.innerWidth,
-  themeMode: 'light',
-  codeFramework: 'vue-next',
-  codeList: {
-    'vue-next': [
-      { type: 'bash', code: 'npm i tdesign-vue-next' },
-      { type: 'javascript', code: "import { createApp } from 'vue';" },
-      { type: 'javascript', code: "import TDesign from 'tdesign-vue-next';" },
-      { type: 'javascript', code: 'createApp(App).use(TDesign);' },
-    ],
-    react: [
-      { type: 'bash', code: 'npm i tdesign-react' },
-      { type: 'javascript', code: "import React from 'react';" },
-      { type: 'javascript', code: "import { Button } from 'tdesign-react';" },
-      { type: 'javascript', code: 'export default () => <Button>TDesign</Button>;' },
-    ],
-    flutter: [
-      {
-        type: 'dart',
-        code: `import 'package:tdesign_flutter/tdesign_flutter.dart';
-
-void main() => runApp(
-  const MaterialApp(
-    home: TButton(child: Text('按钮')),
-  ),
-);`,
-      },
-    ],
-    miniprogram: [
-      { type: 'bash', code: 'npm i tdesign-miniprogram' },
-      { type: 'javascript', code: '{ "usingComponents": { "t-tag": "tdesign-miniprogram/tag/tag" } }' },
-      { type: 'javascript', codeKey: 'home.code.importantTag' },
-      { type: 'javascript', code: 'Page({})' },
-    ],
-    uniapp: [
-      { type: 'bash', code: 'npm i @tdesign/uniapp' },
-      { type: 'javascript', code: "import TButton from '@tdesign/uniapp/button/button.vue';" },
-      { type: 'markup', code: '<t-button size="large"> 按钮 </t-button>' },
-    ],
-  },
-  componentModel: {
-    selectValue: ['1'],
-    menuExpanded: ['dashboard'],
-    sliderValue: 60,
-    colorList1: [
-      '#ecf2fe',
-      '#d4e3fc',
-      '#bbd3fb',
-      '#96bbf8',
-      '#699ef5',
-      '#4787f0',
-      '#266fe8',
-      '#0052d9',
-      '#0034b5',
-      '#001f97',
-    ],
-    colorList2: [
-      '#ebedf1',
-      '#e3e6eB',
-      '#d6dbe3',
-      '#bcc4d0',
-      '#97a3b7',
-      '#7787a2',
-      '#5f7292',
-      '#4b5b76',
-      '#3c485c',
-      '#2c3645',
-    ],
-  },
-});
-
-const { currentTab, newsList, tabTransformWidth, windowWidth, themeMode, codeFramework, codeList, componentModel } =
-  toRefs(state);
-const loopedNewsList = computed(() => {
-  if (newsList.value.length <= 1) return newsList.value;
-
-  const cycleWidth = newsList.value.length * newsItemStride;
-  const copyCount = Math.ceil(windowWidth.value / cycleWidth) + 2;
-  return Array.from({ length: copyCount }, () => newsList.value).flat();
-});
-const componentSelectOptions = computed(() => [
-  { label: t('home.componentDemo.departments.marketing'), value: '1' },
-  { label: t('home.componentDemo.departments.finance'), value: '2' },
-  { label: t('home.componentDemo.departments.development'), value: '3' },
-]);
-const componentTreeData = computed(() => [
-  {
-    value: '1',
-    label: t('home.componentDemo.regions.headquarters'),
-  },
-  {
-    value: '2',
-    label: t('home.componentDemo.regions.eastChina'),
-    children: [
-      {
-        value: '2.1',
-        label: t('home.componentDemo.departments.marketing'),
-      },
-      {
-        value: '2.2',
-        label: t('home.componentDemo.departments.finance'),
-      },
-    ],
-  },
-  {
-    value: '3',
-    label: t('home.componentDemo.regions.southChina'),
-    children: [
-      {
-        value: '3.1',
-        label: t('home.componentDemo.departments.marketing'),
-      },
-      {
-        value: '3.2',
-        label: t('home.componentDemo.departments.finance'),
-      },
-    ],
-  },
-]);
+let communityPreloadObserver: IntersectionObserver | null = null;
 const footerStyle = computed(() => ({
   '--content-padding-right': '0',
   '--content-max-width': '1440px',
@@ -565,530 +410,6 @@ const footerStyle = computed(() => ({
   '--footer-inner-position': 'relative',
   '--footer-logo-position': 'unset',
 }));
-let observer: MutationObserver | null = null;
-let communityPreloadObserver: IntersectionObserver | null = null;
-let moduleBoardResizeObserver: ResizeObserver | null = null;
-let moduleBoardMotionQuery: MediaQueryList | null = null;
-let moduleBoardAnimationFrame: number | null = null;
-let moduleBoardSnapTimer: ReturnType<typeof setTimeout> | null = null;
-let moduleBoardSnapAnimationFrame: number | null = null;
-let moduleBoardSnapScrollY: number | null = null;
-let moduleBoardScrollDirection: -1 | 0 | 1 = 0;
-let moduleBoardLastScrollY: number | null = null;
-let moduleBoardPendingWheelDelta = 0;
-let moduleBoardWheelGesture: {
-  direction: -1 | 1;
-  targetProgress: number;
-  lastEventAt: number;
-  lastDelta: number;
-  impulseDelta: number;
-  limited: boolean;
-} | null = null;
-const moduleBoardWheelIdleDelay = 240;
-const moduleBoardWheelMomentumDelay = 1000;
-let moduleBoardNeedsMeasure = true;
-let moduleBoardStops: number[] = [];
-let moduleBoardPinTop = 0;
-let moduleBoardScrollDistance = 0;
-let moduleBoardBusinessCasesProgress: number | null = null;
-let moduleBoardBeforeHeight = 0;
-const moduleBoardDwellDistance = 320;
-const moduleBoardMoveDistance = 900;
-const moduleBoardSnapDelay = 120;
-let newsAnimationFrame: number | null = null;
-let newsLastTimestamp = 0;
-
-function displayCode(item: CodeItem): string {
-  return item.codeKey ? String(t(item.codeKey)) : item.code ?? '';
-}
-
-function measureModuleBoard(): void {
-  const home = homepageRef.value;
-  const board = moduleBoardRef.value;
-  const viewport = moduleBoardViewportRef.value;
-  const inner = moduleBoardInnerRef.value;
-  if (!home || !board || !viewport || !inner) return;
-
-  const previousLayout = home.dataset.boardLayout;
-  delete home.dataset.boardLayout;
-  const homeRect = home.getBoundingClientRect();
-  const boardRect = board.getBoundingClientRect();
-  moduleBoardBeforeHeight = boardRect.top - homeRect.top;
-  home.style.setProperty('--board-before-height', `${moduleBoardBeforeHeight}px`);
-  home.style.setProperty('--board-after-height', `${homeRect.bottom - boardRect.bottom}px`);
-  home.querySelectorAll<HTMLElement>(':scope > [data-board-section]').forEach((section) => {
-    const origin = section.dataset.boardSection === 'before' ? homeRect.top : boardRect.bottom;
-    section.style.setProperty('--board-section-top', `${section.getBoundingClientRect().top - origin}px`);
-  });
-
-  const cards = Array.from(inner.querySelectorAll<HTMLElement>('.module-board__card'));
-  const height = inner.offsetHeight;
-  const enabled = window.innerWidth >= 500 && !moduleBoardMotionQuery?.matches;
-  const wasEnabled = moduleBoardScrollEnabled.value;
-
-  moduleBoardStops = cards.map((card) => Math.max(0, card.offsetLeft + card.offsetWidth / 2 - board.clientWidth / 2));
-  moduleBoardPinTop = (window.innerHeight - height) / 2;
-  moduleBoardScrollDistance = enabled
-    ? cards.length * moduleBoardDwellDistance + Math.max(0, cards.length - 1) * moduleBoardMoveDistance
-    : 0;
-  const businessCases = home.querySelector<HTMLElement>(':scope > .business-cases');
-  moduleBoardBusinessCasesProgress =
-    enabled && businessCases
-      ? moduleBoardScrollDistance +
-        height +
-        moduleBoardPinTop +
-        businessCases.getBoundingClientRect().top -
-        boardRect.bottom
-      : null;
-  moduleBoardScrollEnabled.value = enabled;
-  moduleBoardStyle.value = enabled ? { height: `${height + moduleBoardScrollDistance}px` } : {};
-
-  if (enabled) {
-    home.dataset.boardLayout = previousLayout ?? 'flow';
-    viewport.scrollLeft = 0;
-  } else {
-    resetModuleBoardGesture();
-    moduleBoardViewportStyle.value = {};
-    state.tabTransformWidth = 0;
-    if (wasEnabled) {
-      const left = moduleBoardStops[state.currentTab] ?? 0;
-      nextTick(() => viewport.scrollTo({ left, behavior: 'instant' }));
-    }
-  }
-}
-
-function updateModuleBoard(): void {
-  moduleBoardAnimationFrame = null;
-  if (moduleBoardNeedsMeasure) {
-    moduleBoardNeedsMeasure = false;
-    measureModuleBoard();
-  }
-
-  const home = homepageRef.value;
-  const board = moduleBoardRef.value;
-  const viewport = moduleBoardViewportRef.value;
-  if (!home || !board || !viewport || moduleBoardStops.length === 0) return;
-
-  let offset = viewport.scrollLeft;
-  if (moduleBoardScrollEnabled.value) {
-    constrainModuleBoardScroll();
-    const boardRect = board.getBoundingClientRect();
-    const progress = Math.max(0, Math.min(moduleBoardScrollDistance, moduleBoardPinTop - boardRect.top));
-    if (progress > 0 && progress < moduleBoardScrollDistance) {
-      const fixedStyle = {
-        position: 'fixed',
-        left: `${boardRect.left}px`,
-        width: `${boardRect.width}px`,
-      };
-      moduleBoardViewportStyle.value = { ...fixedStyle, top: `${moduleBoardPinTop}px` };
-      home.dataset.boardLayout = 'pinned';
-      home.style.setProperty('--board-before-top', `${moduleBoardPinTop - moduleBoardBeforeHeight}px`);
-      home.style.setProperty('--board-after-top', `${window.innerHeight - moduleBoardPinTop}px`);
-    } else {
-      const absoluteStyle = { position: 'absolute', left: '0', width: '100%' };
-      moduleBoardViewportStyle.value = { ...absoluteStyle, top: `${progress}px` };
-      home.dataset.boardLayout = 'flow';
-      home.style.setProperty('--board-before-top', `${progress}px`);
-      home.style.setProperty(
-        '--board-after-top',
-        `${moduleBoardBeforeHeight + window.innerHeight - 2 * moduleBoardPinTop + progress}px`,
-      );
-    }
-    offset = moduleBoardStops[moduleBoardStops.length - 1];
-    for (let index = 0; index < moduleBoardStops.length - 1; index++) {
-      const moveStart = moduleBoardDwellDistance + index * (moduleBoardDwellDistance + moduleBoardMoveDistance);
-      if (progress <= moveStart) {
-        offset = moduleBoardStops[index];
-        break;
-      }
-      if (progress < moveStart + moduleBoardMoveDistance) {
-        const fraction = (progress - moveStart) / moduleBoardMoveDistance;
-        const eased = fraction * fraction * (3 - 2 * fraction);
-        offset = moduleBoardStops[index] + (moduleBoardStops[index + 1] - moduleBoardStops[index]) * eased;
-        break;
-      }
-    }
-    state.tabTransformWidth = offset;
-  }
-
-  state.currentTab = moduleBoardStops.reduce(
-    (nearest, stop, index) =>
-      Math.abs(stop - offset) < Math.abs(moduleBoardStops[nearest] - offset) ? index : nearest,
-    0,
-  );
-}
-
-function scheduleModuleBoardUpdate(): void {
-  if (moduleBoardAnimationFrame === null) moduleBoardAnimationFrame = requestAnimationFrame(updateModuleBoard);
-}
-
-function cancelModuleBoardSnapAnimation(): void {
-  moduleBoardPendingWheelDelta = 0;
-  if (moduleBoardSnapAnimationFrame === null) return;
-  cancelAnimationFrame(moduleBoardSnapAnimationFrame);
-  moduleBoardSnapAnimationFrame = null;
-  moduleBoardSnapScrollY = null;
-  moduleBoardLastScrollY = window.scrollY;
-}
-
-function resetModuleBoardGesture(): void {
-  moduleBoardWheelGesture = null;
-  cancelModuleBoardSnapAnimation();
-  if (moduleBoardSnapTimer !== null) {
-    clearTimeout(moduleBoardSnapTimer);
-    moduleBoardSnapTimer = null;
-  }
-}
-
-function handleModuleBoardKeydown(event: KeyboardEvent): void {
-  if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key)) {
-    resetModuleBoardGesture();
-  }
-}
-
-function animateModuleBoardScroll(targetScrollY: number): void {
-  cancelModuleBoardSnapAnimation();
-  const startScrollY = window.scrollY;
-  const distance = targetScrollY - startScrollY;
-  const duration = Math.min(650, Math.max(360, Math.abs(distance) * 0.65));
-  const startedAt = performance.now();
-  moduleBoardSnapScrollY = startScrollY;
-
-  const animate = (timestamp: number): void => {
-    const progress = Math.min(1, (timestamp - startedAt) / duration);
-    const eased = progress < 0.5 ? 4 * progress ** 3 : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-    moduleBoardSnapScrollY = startScrollY + distance * eased;
-    window.scrollTo({ top: moduleBoardSnapScrollY, behavior: 'instant' });
-
-    if (progress < 1) {
-      moduleBoardSnapAnimationFrame = requestAnimationFrame(animate);
-    } else {
-      moduleBoardSnapAnimationFrame = null;
-      moduleBoardSnapScrollY = null;
-      moduleBoardLastScrollY = window.scrollY;
-      const pendingDelta = moduleBoardPendingWheelDelta;
-      moduleBoardPendingWheelDelta = 0;
-      if (pendingDelta !== 0) {
-        moduleBoardWheelGesture = null;
-        if (!scrollModuleBoardByWheel(pendingDelta, true)) {
-          window.scrollBy({ top: pendingDelta, behavior: 'instant' });
-        }
-      }
-    }
-  };
-
-  moduleBoardSnapAnimationFrame = requestAnimationFrame(animate);
-}
-
-function snapModuleBoardByDirection(): void {
-  moduleBoardSnapTimer = null;
-  const board = moduleBoardRef.value;
-  if (!board || !moduleBoardScrollEnabled.value) return;
-
-  const boardRect = board.getBoundingClientRect();
-  const progress = moduleBoardPinTop - boardRect.top;
-  if (progress <= 0 || progress >= moduleBoardScrollDistance) return;
-
-  for (let index = 0; index < moduleBoardStops.length - 1; index++) {
-    const moveStart = moduleBoardDwellDistance + index * (moduleBoardDwellDistance + moduleBoardMoveDistance);
-    const moveEnd = moveStart + moduleBoardMoveDistance;
-    if (progress <= moveStart || progress >= moveEnd) continue;
-
-    const snapForward =
-      moduleBoardScrollDirection > 0 ||
-      (moduleBoardScrollDirection === 0 && progress - moveStart >= moduleBoardMoveDistance / 2);
-    const targetProgress = snapForward ? moveEnd : moveStart;
-    animateModuleBoardScroll(window.scrollY + boardRect.top - moduleBoardPinTop + targetProgress);
-    return;
-  }
-}
-
-function handleModuleBoardWheel(event: WheelEvent): void {
-  const board = moduleBoardRef.value;
-  if (
-    !board ||
-    !moduleBoardScrollEnabled.value ||
-    moduleBoardStops.length < 2 ||
-    event.defaultPrevented ||
-    event.ctrlKey ||
-    event.deltaY === 0
-  ) {
-    return;
-  }
-
-  const now = performance.now();
-  const deltaUnit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
-  const delta = event.deltaY * deltaUnit;
-  const direction = delta > 0 ? 1 : -1;
-  if (moduleBoardWheelGesture) {
-    const elapsed = now - moduleBoardWheelGesture.lastEventAt;
-    const directionChanged = direction !== moduleBoardWheelGesture.direction;
-    const increase = Math.abs(delta) - moduleBoardWheelGesture.lastDelta;
-    moduleBoardWheelGesture.impulseDelta = increase > 0 ? moduleBoardWheelGesture.impulseDelta + increase : 0;
-    const newImpulse =
-      moduleBoardWheelGesture.limited &&
-      (Math.abs(delta) > Math.max(8, moduleBoardWheelGesture.lastDelta * 2) ||
-        moduleBoardWheelGesture.impulseDelta >= 4);
-    if (
-      moduleBoardSnapAnimationFrame !== null &&
-      moduleBoardWheelGesture.limited &&
-      (moduleBoardPendingWheelDelta !== 0 || elapsed > moduleBoardWheelIdleDelay)
-    ) {
-      moduleBoardPendingWheelDelta += delta;
-      moduleBoardWheelGesture.lastEventAt = now;
-      moduleBoardWheelGesture.lastDelta = Math.abs(delta);
-      if (event.cancelable) event.preventDefault();
-      return;
-    }
-    if (
-      (moduleBoardSnapAnimationFrame === null &&
-        (elapsed > moduleBoardWheelIdleDelay || directionChanged || newImpulse)) ||
-      (!moduleBoardWheelGesture.limited && directionChanged)
-    ) {
-      moduleBoardWheelGesture = null;
-    }
-  }
-
-  if (scrollModuleBoardByWheel(delta, event.cancelable) && event.cancelable) event.preventDefault();
-}
-
-function scrollModuleBoardByWheel(delta: number, applyDelta: boolean): boolean {
-  const board = moduleBoardRef.value;
-  if (!board || !moduleBoardScrollEnabled.value) return false;
-  const now = performance.now();
-  const direction = delta > 0 ? 1 : -1;
-  const progress = moduleBoardPinTop - board.getBoundingClientRect().top;
-  let nextProgress = progress + delta;
-  if (!moduleBoardWheelGesture) {
-    cancelModuleBoardSnapAnimation();
-    const scrollLimit =
-      direction > 0 ? moduleBoardBusinessCasesProgress ?? moduleBoardScrollDistance : moduleBoardScrollDistance;
-    if (Math.max(progress, nextProgress) < 0 || Math.min(progress, nextProgress) > scrollLimit) {
-      return false;
-    }
-    const step = moduleBoardDwellDistance + moduleBoardMoveDistance;
-    const lastIndex = moduleBoardStops.length - 1;
-    const currentIndex = Math.max(0, Math.min(lastIndex, Math.round((progress - moduleBoardDwellDistance / 2) / step)));
-    const targetIndex = currentIndex + direction;
-    const snapToBusinessCases =
-      targetIndex > lastIndex &&
-      moduleBoardBusinessCasesProgress !== null &&
-      progress < moduleBoardBusinessCasesProgress - 1;
-    if (targetIndex < 0 || (targetIndex > lastIndex && !snapToBusinessCases)) return false;
-    const dwellStart = currentIndex * step;
-    if (
-      currentIndex > 0 &&
-      currentIndex < lastIndex &&
-      progress >= dwellStart &&
-      progress <= dwellStart + moduleBoardDwellDistance
-    ) {
-      nextProgress = dwellStart + (direction > 0 ? moduleBoardDwellDistance : 0) + delta;
-    }
-    const targetProgress =
-      snapToBusinessCases && moduleBoardBusinessCasesProgress !== null
-        ? moduleBoardBusinessCasesProgress
-        : targetIndex * step + (direction < 0 ? moduleBoardDwellDistance : 0);
-    if (snapToBusinessCases) nextProgress = targetProgress;
-    moduleBoardWheelGesture = {
-      direction,
-      targetProgress,
-      lastEventAt: now,
-      lastDelta: Math.abs(delta),
-      impulseDelta: 0,
-      limited: false,
-    };
-  }
-
-  const gesture = moduleBoardWheelGesture;
-  gesture.lastEventAt = now;
-  gesture.lastDelta = Math.abs(delta);
-  if (gesture.limited) return true;
-
-  if ((nextProgress - gesture.targetProgress) * gesture.direction >= 0) {
-    gesture.limited = true;
-    if (moduleBoardSnapTimer !== null) {
-      clearTimeout(moduleBoardSnapTimer);
-      moduleBoardSnapTimer = null;
-    }
-    animateModuleBoardScroll(window.scrollY + gesture.targetProgress - progress);
-    return true;
-  }
-
-  cancelModuleBoardSnapAnimation();
-  if (applyDelta) window.scrollBy({ top: nextProgress - progress, behavior: 'instant' });
-  return true;
-}
-
-function constrainModuleBoardScroll(): void {
-  if (!moduleBoardScrollEnabled.value) return;
-  if (moduleBoardSnapAnimationFrame !== null && moduleBoardSnapScrollY !== null) {
-    if (Math.abs(window.scrollY - moduleBoardSnapScrollY) > 1) {
-      window.scrollTo({ top: moduleBoardSnapScrollY, behavior: 'instant' });
-    }
-    return;
-  }
-
-  const gesture = moduleBoardWheelGesture;
-  const board = moduleBoardRef.value;
-  if (!gesture || !board) return;
-  if (performance.now() - gesture.lastEventAt >= moduleBoardWheelMomentumDelay) {
-    moduleBoardWheelGesture = null;
-    return;
-  }
-  const progress = moduleBoardPinTop - board.getBoundingClientRect().top;
-  if ((progress - gesture.targetProgress) * gesture.direction > 1) {
-    gesture.limited = true;
-    window.scrollTo({ top: window.scrollY + gesture.targetProgress - progress, behavior: 'instant' });
-  }
-}
-
-function handleModuleBoardScroll(): void {
-  constrainModuleBoardScroll();
-  scheduleModuleBoardUpdate();
-  if (moduleBoardSnapAnimationFrame !== null) return;
-
-  const scrollY = window.scrollY;
-  if (moduleBoardLastScrollY !== null && scrollY !== moduleBoardLastScrollY) {
-    moduleBoardScrollDirection = scrollY > moduleBoardLastScrollY ? 1 : -1;
-  }
-  moduleBoardLastScrollY = scrollY;
-  if (!moduleBoardScrollEnabled.value) return;
-
-  if (moduleBoardSnapTimer !== null) clearTimeout(moduleBoardSnapTimer);
-  moduleBoardSnapTimer = setTimeout(snapModuleBoardByDirection, moduleBoardSnapDelay);
-}
-
-function refreshModuleBoard(): void {
-  moduleBoardNeedsMeasure = true;
-  scheduleModuleBoardUpdate();
-}
-
-function handleModuleBoardFocus(event: FocusEvent): void {
-  if (!moduleBoardScrollEnabled.value || !(event.target instanceof HTMLElement)) return;
-  const card = event.target.closest<HTMLElement>('.module-board__card');
-  const cards = moduleBoardInnerRef.value?.querySelectorAll<HTMLElement>('.module-board__card');
-  const board = moduleBoardRef.value;
-  if (!board || !card || !cards) return;
-
-  const index = Array.from(cards).indexOf(card);
-  if (index < 0 || index === state.currentTab) return;
-  resetModuleBoardGesture();
-  moduleBoardViewportRef.value?.scrollTo({ left: 0, behavior: 'instant' });
-  window.scrollTo({
-    top:
-      window.scrollY +
-      board.getBoundingClientRect().top -
-      moduleBoardPinTop +
-      index * (moduleBoardDwellDistance + moduleBoardMoveDistance),
-    behavior: 'instant',
-  });
-  scheduleModuleBoardUpdate();
-}
-
-function handleClickNews(url?: string): void {
-  if (url) window.open(url, '_blank');
-}
-
-function animateNews(timestamp: number): void {
-  const track = newsTrackRef.value;
-  const items = track?.querySelectorAll<HTMLElement>('.module-news__item');
-  if (!track || !items || newsList.value.length < 2) {
-    newsAnimationFrame = null;
-    return;
-  }
-
-  if (newsLastTimestamp > 0) {
-    const elapsed = Math.min(timestamp - newsLastTimestamp, 50);
-    track.scrollLeft += (elapsed / 1000) * 48;
-
-    const cycleWidth = items[newsList.value.length].offsetLeft - items[0].offsetLeft;
-    if (cycleWidth > 0 && track.scrollLeft >= cycleWidth) track.scrollLeft -= cycleWidth;
-  }
-
-  newsLastTimestamp = timestamp;
-  newsAnimationFrame = requestAnimationFrame(animateNews);
-}
-
-function startNewsAutoplay(): void {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || newsAnimationFrame !== null) return;
-  newsLastTimestamp = 0;
-  newsAnimationFrame = requestAnimationFrame(animateNews);
-}
-
-function stopNewsAutoplay(): void {
-  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-  if (newsAnimationFrame === null) return;
-  cancelAnimationFrame(newsAnimationFrame);
-  newsAnimationFrame = null;
-  newsLastTimestamp = 0;
-}
-
-function handlePageShow(): void {
-  startNewsAutoplay();
-}
-
-function resetAndStartNewsAutoplay(): void {
-  const track = newsTrackRef.value;
-  if (track) track.scrollLeft = 0;
-  startNewsAutoplay();
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
-
-function parseNews(value: unknown): NewsItem[] {
-  if (!Array.isArray(value)) return [];
-  return value.flatMap((item) => {
-    if (
-      !isRecord(item) ||
-      typeof item.title !== 'string' ||
-      typeof item.desc !== 'string' ||
-      typeof item.date !== 'string'
-    ) {
-      return [];
-    }
-    return [
-      {
-        title: item.title,
-        desc: item.desc,
-        date: item.date,
-        url: typeof item.url === 'string' ? item.url : undefined,
-        isIntranet: item.isIntranet === true,
-      },
-    ];
-  });
-}
-
-async function getNews(): Promise<void> {
-  const response = await fetch(HOME_API_ENDPOINTS.news);
-  const value: unknown = await response.json();
-  const list = parseNews(value);
-
-  isIntranet.value = isWoaDomain();
-  state.newsList = isIntranet.value ? list : list.filter((item) => !item.isIntranet);
-  nextTick(resetAndStartNewsAutoplay);
-}
-
-function handleResize(): void {
-  state.windowWidth = window.innerWidth;
-  refreshModuleBoard();
-}
-
-function watchHtmlMode(): void {
-  state.themeMode = document.documentElement.getAttribute('theme-mode') === 'dark' ? 'dark' : 'light';
-  const targetNode = document.documentElement;
-  const callback = (mutationsList: MutationRecord[]): void => {
-    for (const mutation of mutationsList) {
-      if (mutation.attributeName === 'theme-mode') {
-        state.themeMode = (mutation.target as Element).getAttribute('theme-mode') === 'dark' ? 'dark' : 'light';
-      }
-    }
-  };
-
-  observer = new MutationObserver(callback);
-  observer.observe(targetNode, { attributes: true });
-}
 
 function loadCommunity(): void {
   if (shouldLoadCommunity.value) return;
@@ -1110,48 +431,17 @@ watch(
 );
 
 onMounted(() => {
-  watchHtmlMode();
-  getNews();
-  if (moduleBoardRef.value) {
-    communityPreloadObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) loadCommunity();
-      },
-      { rootMargin: '100% 0px' },
-    );
-    communityPreloadObserver.observe(moduleBoardRef.value);
-  }
-  moduleBoardMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  moduleBoardMotionQuery.addEventListener('change', refreshModuleBoard);
-  moduleBoardResizeObserver = new ResizeObserver(refreshModuleBoard);
-  if (moduleBoardInnerRef.value) moduleBoardResizeObserver.observe(moduleBoardInnerRef.value);
-  homepageRef.value?.querySelectorAll<HTMLElement>(':scope > [data-board-section]').forEach((section) => {
-    moduleBoardResizeObserver?.observe(section, { box: 'border-box' });
-  });
-  refreshModuleBoard();
-  moduleBoardLastScrollY = window.scrollY;
-  window.addEventListener('pageshow', handlePageShow);
-  window.addEventListener('resize', handleResize);
-  window.addEventListener('scroll', handleModuleBoardScroll, { passive: true });
-  window.addEventListener('wheel', handleModuleBoardWheel, { passive: false, capture: true });
-  window.addEventListener('pointerdown', resetModuleBoardGesture, { passive: true });
-  window.addEventListener('keydown', handleModuleBoardKeydown);
+  if (!moduleBoardRef.value) return;
+  communityPreloadObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) loadCommunity();
+    },
+    { rootMargin: '100% 0px' },
+  );
+  communityPreloadObserver.observe(moduleBoardRef.value);
 });
 
 onBeforeUnmount(() => {
-  if (moduleBoardAnimationFrame !== null) cancelAnimationFrame(moduleBoardAnimationFrame);
-  if (moduleBoardSnapTimer !== null) clearTimeout(moduleBoardSnapTimer);
-  cancelModuleBoardSnapAnimation();
-  stopNewsAutoplay();
-  observer?.disconnect();
   communityPreloadObserver?.disconnect();
-  moduleBoardResizeObserver?.disconnect();
-  moduleBoardMotionQuery?.removeEventListener('change', refreshModuleBoard);
-  window.removeEventListener('pageshow', handlePageShow);
-  window.removeEventListener('resize', handleResize);
-  window.removeEventListener('scroll', handleModuleBoardScroll);
-  window.removeEventListener('wheel', handleModuleBoardWheel, true);
-  window.removeEventListener('pointerdown', resetModuleBoardGesture);
-  window.removeEventListener('keydown', handleModuleBoardKeydown);
 });
 </script>

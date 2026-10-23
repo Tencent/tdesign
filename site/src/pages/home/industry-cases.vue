@@ -51,178 +51,26 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import homeMessages from '@/locales/pages/home';
 
-import { HOME_API_ENDPOINTS } from './api';
-import { getUsageData, type UsageData } from './usage-data';
-
-interface LogoItem {
-  name: string;
-  src: string;
-  height?: number;
-}
+import { createIndustryCasesModel } from './logic/industry-cases';
 
 const { locale, t } = useI18n({ messages: homeMessages });
-
-const MOBILE_BREAKPOINT = 494;
-const COMPACT_BREAKPOINT = 700;
-const TABLET_BREAKPOINT = 960;
-const DESKTOP_BREAKPOINT = 1200;
-const DESKTOP_LOGO_HEIGHT = 88;
-const TABLET_LOGO_HEIGHT = 70;
-const MOBILE_LOGO_HEIGHT = 36;
-const LOGO_ROW_GAP = 16;
-
-const brandList = ref<LogoItem[]>([]);
-const usageData = ref<UsageData>();
-const statsRef = ref<HTMLElement | null>(null);
-const animatedStatValues = ref([0, 0, 0]);
-const viewportWidth = ref(typeof window === 'undefined' ? TABLET_BREAKPOINT : window.innerWidth);
-let statsObserver: IntersectionObserver | null = null;
-let statsAnimationFrame: number | null = null;
-let hasAnimatedStats = false;
-const STATS_ANIMATION_DURATION = 1200;
-const logoScale = computed(() => {
-  const tabletScale = TABLET_LOGO_HEIGHT / DESKTOP_LOGO_HEIGHT;
-  const mobileScale = MOBILE_LOGO_HEIGHT / DESKTOP_LOGO_HEIGHT;
-
-  if (viewportWidth.value >= DESKTOP_BREAKPOINT) return 1;
-  if (viewportWidth.value >= TABLET_BREAKPOINT) {
-    const progress = (viewportWidth.value - TABLET_BREAKPOINT) / (DESKTOP_BREAKPOINT - TABLET_BREAKPOINT);
-    return tabletScale + progress * (1 - tabletScale);
-  }
-  if (viewportWidth.value >= COMPACT_BREAKPOINT) return tabletScale;
-  if (viewportWidth.value <= MOBILE_BREAKPOINT) return mobileScale;
-
-  const progress = (viewportWidth.value - MOBILE_BREAKPOINT) / (COMPACT_BREAKPOINT - MOBILE_BREAKPOINT);
-  return mobileScale + progress * (tabletScale - mobileScale);
-});
-const logoRowCount = computed(() => (viewportWidth.value <= MOBILE_BREAKPOINT ? 4 : 3));
-const logoRows = computed(() =>
-  brandList.value.reduce<LogoItem[][]>(
-    (rows, logo, index) => {
-      rows[index % rows.length].push(logo);
-      return rows;
-    },
-    Array.from({ length: logoRowCount.value }, () => []),
-  ),
-);
-const logoItemHeight = computed(() => DESKTOP_LOGO_HEIGHT * logoScale.value);
-const logoItemPadding = computed(() => 40 * logoScale.value);
-const logoItemRadius = computed(() => 14 * logoScale.value);
-const logoRowStep = computed(() => logoItemHeight.value + LOGO_ROW_GAP);
-const logoMarqueeHeight = computed(
-  () => logoItemHeight.value * logoRowCount.value + LOGO_ROW_GAP * (logoRowCount.value - 1),
-);
-
-function handleResize(): void {
-  viewportWidth.value = window.innerWidth;
-}
-
-function startStatsAnimation(): void {
-  if (hasAnimatedStats) return;
-  hasAnimatedStats = true;
-  statsObserver?.disconnect();
-
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    animatedStatValues.value = stats.value.map((stat) => stat.target);
-    return;
-  }
-
-  const startedAt = performance.now();
-  const update = (timestamp: number) => {
-    const progress = Math.min(1, (timestamp - startedAt) / STATS_ANIMATION_DURATION);
-    const easedProgress = 1 - (1 - progress) ** 3;
-    const targets = stats.value.map((stat) => stat.target);
-    animatedStatValues.value = targets.map((target) => target * easedProgress);
-
-    if (progress < 1) {
-      statsAnimationFrame = window.requestAnimationFrame(update);
-    } else {
-      animatedStatValues.value = targets;
-      statsAnimationFrame = null;
-    }
-  };
-
-  statsAnimationFrame = window.requestAnimationFrame(update);
-}
-
-onMounted(async () => {
-  window.addEventListener('resize', handleResize);
-  statsObserver = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) startStatsAnimation();
-    },
-    { rootMargin: '-20% 0px -20% 0px' },
-  );
-  if (statsRef.value) statsObserver.observe(statsRef.value);
-  try {
-    usageData.value = await getUsageData();
-    if (hasAnimatedStats && statsAnimationFrame === null) {
-      animatedStatValues.value = stats.value.map((stat) => stat.target);
-    }
-  } catch {
-    usageData.value = undefined;
-  }
-
-  try {
-    const response = await fetch(HOME_API_ENDPOINTS.brandList);
-    if (!response.ok) return;
-
-    const data: unknown = await response.json();
-    if (!Array.isArray(data)) return;
-
-    brandList.value = data.filter(
-      (item): item is LogoItem =>
-        typeof item === 'object' &&
-        item !== null &&
-        typeof (item as LogoItem).src === 'string' &&
-        typeof (item as LogoItem).name === 'string',
-    );
-  } catch {
-    brandList.value = [];
-  }
-});
-
-onBeforeUnmount(() => {
-  statsObserver?.disconnect();
-  if (statsAnimationFrame !== null) window.cancelAnimationFrame(statsAnimationFrame);
-  window.removeEventListener('resize', handleResize);
-});
-
-function parseStatValue(value: string): number {
-  const numericValue = Number(value.replace(/,/g, ''));
-  return Number.isFinite(numericValue) ? numericValue : 0;
-}
-
-function formatStatValue(value: number, target: number): string {
-  const fractionDigits = Number.isInteger(target) ? 0 : 1;
-  return new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
-  }).format(value);
-}
-
-const stats = computed(() => [
-  {
-    target: parseStatValue(usageData.value?.projectsCount ?? '0'),
-    unitKey: 'home.service.stats.projectsUnit',
-    labelKey: 'home.service.stats.projects',
-  },
-  {
-    target: parseStatValue(usageData.value?.enterpriseCustomersCount ?? '0'),
-    unitKey: 'home.service.stats.teamsUnit',
-    labelKey: 'home.service.stats.teams',
-  },
-  {
-    target: parseStatValue(usageData.value?.downloadPerMonth ?? '0') / (locale.value.startsWith('en') ? 100 : 1),
-    unitKey: 'home.service.stats.downloadsUnit',
-    labelKey: 'home.service.stats.downloads',
-  },
-]);
+const {
+  animatedStatValues,
+  formatStatValue,
+  logoItemHeight,
+  logoItemPadding,
+  logoItemRadius,
+  logoMarqueeHeight,
+  logoRows,
+  logoRowStep,
+  logoScale,
+  stats,
+  statsRef,
+} = createIndustryCasesModel(locale);
 </script>
 
 <style scoped lang="less">
