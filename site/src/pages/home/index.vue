@@ -331,7 +331,7 @@
             theme="default"
             shape="round"
             size="large"
-            href="https://www.figma.com/@tdesign"
+            href="https://www.figma.com/@tencent"
             target="_blank"
           >
             <template #icon><img class="module-setup__icon" src="./assets/setup-figma.svg" alt="" /></template>
