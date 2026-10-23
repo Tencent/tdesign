@@ -2,7 +2,7 @@ import { html, define } from 'hybrids';
 import { getFooterConfig } from '@config/footer';
 import { getLocale } from '@config/locale';
 import { patchShadowDomIntoDom, mobileBodyStyle } from '@utils';
-import { fetchEcosystemConfig, getEcosystemLinkTarget } from '@utils/ecosystem';
+import { fetchEcosystemConfig, getEcosystemLinkTarget } from '@config/ecosystem';
 import type { FooterGroup } from '@config/types';
 import tencentCloudIcon from '@images/tencentcloud-logo.svg?raw';
 import committeeIcon from '@images/committee-logo.svg?raw';

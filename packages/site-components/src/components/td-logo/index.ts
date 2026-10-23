@@ -8,7 +8,7 @@ import {
   getEcosystemLinkTarget,
   type EcosystemCategory,
   type EcosystemItem,
-} from '@utils/ecosystem';
+} from '@config/ecosystem';
 import { isEn } from '@utils';
 
 import style from './style.less?inline';

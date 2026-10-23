@@ -1,5 +1,7 @@
-import { ecosystemConfigCdn, ecosystemConfigWoaCdn } from '@config';
-import { isIntranet } from './index';
+import { isIntranet } from '@utils';
+
+const ecosystemConfigCdn = 'https://tdesign.gtimg.com/site/info/ecosystem.json';
+const ecosystemConfigWoaCdn = 'https://tdesign.gtimg.com/site/info/ecosystem-woa.json';
 
 export type EcosystemLinkTarget = '_blank' | '_self';
 
