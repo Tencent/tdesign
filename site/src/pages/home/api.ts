@@ -6,26 +6,27 @@ const COMMUNITY_RELEASE_BASE_URL =
 // 首页云函数接口基础地址。
 const CLOUD_FUNCTION_BASE_URL = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com';
 // 用已有的内网图片服务探测当前网络是否可访问 WOA。
-const WOA_REACHABILITY_URL = 'https://dayu.woa.com/favicon.ico';
+const WOA_REACHABILITY_URL = 'https://dayu.woa.com/avatars/tdesign/profile.jpg';
 
 export async function canAccessWoa(timeout = 1500): Promise<boolean> {
   if (location.hostname === 'woa.com' || location.hostname.endsWith('.woa.com')) return true;
 
-  const controller = new AbortController();
-  const timeoutId = window.setTimeout(() => controller.abort(), timeout);
+  return new Promise((resolve) => {
+    const image = new Image();
+    let timeoutId = 0;
 
-  try {
-    await fetch(WOA_REACHABILITY_URL, {
-      cache: 'no-store',
-      mode: 'no-cors',
-      signal: controller.signal,
-    });
-    return true;
-  } catch {
-    return false;
-  } finally {
-    window.clearTimeout(timeoutId);
-  }
+    const finish = (accessible: boolean) => {
+      window.clearTimeout(timeoutId);
+      image.onload = null;
+      image.onerror = null;
+      resolve(accessible);
+    };
+
+    timeoutId = window.setTimeout(() => finish(false), timeout);
+    image.onload = () => finish(true);
+    image.onerror = () => finish(false);
+    image.src = `${WOA_REACHABILITY_URL}?t=${Date.now()}`;
+  });
 }
 
 export const HOME_API_ENDPOINTS = {

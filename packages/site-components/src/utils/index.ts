@@ -90,27 +90,28 @@ export function isIntranet() {
   return location.host.includes('oa.com');
 }
 
-const WOA_HEALTH_URL = 'https://dayu.woa.com/favicon.ico';
+const WOA_HEALTH_URL = 'https://dayu.woa.com/avatars/tdesign/profile.jpg';
 
 // 浏览器无法执行 ICMP ping，通过内网 HTTPS 资源判断 WOA 是否可访问。
 export async function canAccessWoa(timeout = 1500): Promise<boolean> {
   if (isIntranet()) return true;
 
-  const controller = new AbortController();
-  const timeoutId = window.setTimeout(() => controller.abort(), timeout);
+  return new Promise((resolve) => {
+    const image = new Image();
+    let timeoutId = 0;
 
-  try {
-    await fetch(WOA_HEALTH_URL, {
-      cache: 'no-store',
-      mode: 'no-cors',
-      signal: controller.signal,
-    });
-    return true;
-  } catch {
-    return false;
-  } finally {
-    window.clearTimeout(timeoutId);
-  }
+    const finish = (accessible: boolean) => {
+      window.clearTimeout(timeoutId);
+      image.onload = null;
+      image.onerror = null;
+      resolve(accessible);
+    };
+
+    timeoutId = window.setTimeout(() => finish(false), timeout);
+    image.onload = () => finish(true);
+    image.onerror = () => finish(false);
+    image.src = `${WOA_HEALTH_URL}?t=${Date.now()}`;
+  });
 }
 
 // 监听暗黑模式
