@@ -1,5 +1,5 @@
 import { ecosystemConfigCdn, ecosystemConfigWoaCdn } from '@config';
-import { canAccessWoa } from './index';
+import { isIntranet } from './index';
 
 export type EcosystemLinkTarget = '_blank' | '_self';
 
@@ -21,8 +21,7 @@ export function getEcosystemLinkTarget(url: string): EcosystemLinkTarget {
 }
 
 export async function fetchEcosystemConfig(): Promise<EcosystemCategory[]> {
-  const isIntranet = await canAccessWoa();
-  const endpoint = isIntranet ? ecosystemConfigWoaCdn : ecosystemConfigCdn;
+  const endpoint = isIntranet() ? ecosystemConfigWoaCdn : ecosystemConfigCdn;
   const response = await fetch(endpoint);
 
   if (!response.ok) throw new Error(`Failed to fetch ecosystem config: ${response.status}`);

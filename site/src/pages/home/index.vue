@@ -8,7 +8,7 @@
           <h2 class="name">
             <p class="primary">TDesign</p>
             <div style="display: flex">
-              <p :class="['sub-title', { 'sub-title--en': locale === 'en-US' }]">
+              <p class="sub-title">
                 {{ t('home.hero.subtitle') }}
               </p>
             </div>
@@ -371,7 +371,7 @@ import openIndustriesIcon from './assets/open-industries.svg';
 import openPlatformsIcon from './assets/open-platforms.svg';
 import paletteIcon from './assets/palette.svg';
 import ResourceSection from './resource-section.vue';
-import { canAccessWoa, HOME_API_ENDPOINTS } from './api';
+import { isWoaDomain, HOME_API_ENDPOINTS } from './api';
 // @ts-expect-error prismjs does not publish TypeScript declarations.
 import Prismjs from 'prismjs';
 import 'prismjs/components/prism-dart';
@@ -415,7 +415,7 @@ interface HomeState {
   };
 }
 
-const { locale, t } = useI18n({ messages: homeMessages });
+const { t } = useI18n({ messages: homeMessages });
 const homepageRef = ref<HTMLElement | null>(null);
 const moduleBoardRef = ref<HTMLElement | null>(null);
 const moduleBoardViewportRef = ref<HTMLElement | null>(null);
@@ -1061,11 +1061,11 @@ function parseNews(value: unknown): NewsItem[] {
 }
 
 async function getNews(): Promise<void> {
-  const [response, intranetAccessible] = await Promise.all([fetch(HOME_API_ENDPOINTS.news), canAccessWoa()]);
+  const response = await fetch(HOME_API_ENDPOINTS.news);
   const value: unknown = await response.json();
   const list = parseNews(value);
 
-  isIntranet.value = intranetAccessible;
+  isIntranet.value = isWoaDomain();
   state.newsList = isIntranet.value ? list : list.filter((item) => !item.isIntranet);
   nextTick(resetAndStartNewsAutoplay);
 }
