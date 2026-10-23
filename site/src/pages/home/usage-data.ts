@@ -13,14 +13,6 @@ export interface UsageData {
   downloadsPerMonth: MonthlyDownload[];
 }
 
-export const fallbackUsageData: UsageData = {
-  downloadPerMonth: '100',
-  figmaReferenceCount: '2500',
-  projectsCount: '8,000',
-  enterpriseCustomersCount: '100',
-  downloadsPerMonth: [],
-};
-
 let usageDataRequest: Promise<UsageData> | undefined;
 
 function isUsageData(value: unknown): value is UsageData {
@@ -46,18 +38,15 @@ function isUsageData(value: unknown): value is UsageData {
 
 export function getUsageData(): Promise<UsageData> {
   if (!usageDataRequest) {
-    usageDataRequest = fetch(HOME_API_ENDPOINTS.usageData)
-      .then(async (response) => {
-        if (!response.ok) throw new Error(`Failed to load usage data: ${response.status}`);
+    usageDataRequest = fetch(HOME_API_ENDPOINTS.usageData).then(async (response) => {
+      if (!response.ok) throw new Error(`Failed to load usage data: ${response.status}`);
 
-        const result: unknown = await response.json();
-        if (!result || typeof result !== 'object' || !isUsageData((result as { data?: unknown }).data)) {
-          throw new Error('Invalid usage data');
-        }
-
-        return (result as { data: UsageData }).data;
-      })
-      .catch(() => fallbackUsageData);
+      const result: unknown = await response.json();
+      if (!result || typeof result !== 'object' || !isUsageData((result as { data?: unknown }).data)) {
+        throw new Error('Invalid usage data');
+      }
+      return (result as { data: UsageData }).data;
+    });
   }
 
   return usageDataRequest;

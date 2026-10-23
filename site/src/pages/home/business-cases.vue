@@ -165,7 +165,7 @@ import { useI18n } from 'vue-i18n';
 import homeMessages from '@/locales/pages/home';
 
 import { HOME_API_ENDPOINTS } from './api';
-import { fallbackUsageData, getUsageData } from './usage-data';
+import { getUsageData, type UsageData } from './usage-data';
 
 const { locale, t } = useI18n({ messages: homeMessages });
 
@@ -248,7 +248,7 @@ const mobileLayoutScale = ref('1');
 const mobileSectionHeight = ref('0px');
 const chartHoverX = ref(226);
 const chartHoverY = ref(65);
-const usageData = ref(fallbackUsageData);
+const usageData = ref<UsageData>();
 let animationFrame: number | null = null;
 let usageAnimationFrame: number | null = null;
 let usageObserver: IntersectionObserver | null = null;
@@ -272,7 +272,7 @@ interface ChartPoint {
   y: number;
 }
 
-const chartDownloads = computed(() => usageData.value.downloadsPerMonth.slice(-24));
+const chartDownloads = computed(() => usageData.value?.downloadsPerMonth.slice(-24) ?? []);
 const formatWithThousandsSeparator = (value: string | number) => {
   const normalizedValue = String(value).replace(/,/g, '');
   const match = normalizedValue.match(/^(-?)(\d+)(\.\d+)?$/);
@@ -285,14 +285,14 @@ const downloadPerMonthTarget = computed(() => {
   const latestDownloads = chartDownloads.value.at(-1)?.totalDownloads;
   if (typeof latestDownloads === 'number') return latestDownloads;
 
-  const fallbackValue = Number(usageData.value.downloadPerMonth.replace(/[,+]/g, ''));
+  const fallbackValue = Number(usageData.value?.downloadPerMonth.replace(/[,+]/g, '') ?? 0);
   return fallbackValue * 10_000;
 });
 const figmaReferenceCountTarget = computed(() => {
-  const value = Number(usageData.value.figmaReferenceCount.replace(/[,+]/g, ''));
+  const value = Number(usageData.value?.figmaReferenceCount.replace(/[,+]/g, '') ?? 0);
   return locale.value.startsWith('en') ? value / 100 : value;
 });
-const projectsCountTarget = computed(() => Number(usageData.value.projectsCount.replace(/[,+]/g, '')));
+const projectsCountTarget = computed(() => Number(usageData.value?.projectsCount.replace(/[,+]/g, '') ?? 0));
 const animatedDownloadCount = computed(() => downloadPerMonthTarget.value * usageAnimationProgress.value);
 const animatedDownloadUnit = computed(() => {
   if (!locale.value.startsWith('en')) return t('home.businessCases.tenThousandPlus');
@@ -572,10 +572,14 @@ function scheduleSpreadUpdate(): void {
 
 onMounted(() => {
   getDeveloperStories();
-  getUsageData().then((data) => {
-    usageData.value = data;
-    setDefaultChartHover();
-  });
+  getUsageData()
+    .then((data) => {
+      usageData.value = data;
+      setDefaultChartHover();
+    })
+    .catch(() => {
+      usageData.value = undefined;
+    });
   usageObserver = new IntersectionObserver(
     ([entry]) => {
       if (entry.isIntersecting) startUsageAnimation();

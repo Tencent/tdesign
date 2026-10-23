@@ -57,7 +57,7 @@ import { useI18n } from 'vue-i18n';
 import homeMessages from '@/locales/pages/home';
 
 import { HOME_API_ENDPOINTS } from './api';
-import { fallbackUsageData, getUsageData } from './usage-data';
+import { getUsageData, type UsageData } from './usage-data';
 
 interface LogoItem {
   name: string;
@@ -77,7 +77,7 @@ const MOBILE_LOGO_HEIGHT = 36;
 const LOGO_ROW_GAP = 16;
 
 const brandList = ref<LogoItem[]>([]);
-const usageData = ref(fallbackUsageData);
+const usageData = ref<UsageData>();
 const statsRef = ref<HTMLElement | null>(null);
 const animatedStatValues = ref([0, 0, 0]);
 const viewportWidth = ref(typeof window === 'undefined' ? TABLET_BREAKPOINT : window.innerWidth);
@@ -159,9 +159,13 @@ onMounted(async () => {
     { rootMargin: '-20% 0px -20% 0px' },
   );
   if (statsRef.value) statsObserver.observe(statsRef.value);
-  usageData.value = await getUsageData();
-  if (hasAnimatedStats && statsAnimationFrame === null) {
-    animatedStatValues.value = stats.value.map((stat) => stat.target);
+  try {
+    usageData.value = await getUsageData();
+    if (hasAnimatedStats && statsAnimationFrame === null) {
+      animatedStatValues.value = stats.value.map((stat) => stat.target);
+    }
+  } catch {
+    usageData.value = undefined;
   }
 
   try {
@@ -204,17 +208,17 @@ function formatStatValue(value: number, target: number): string {
 
 const stats = computed(() => [
   {
-    target: parseStatValue(usageData.value.projectsCount),
+    target: parseStatValue(usageData.value?.projectsCount ?? '0'),
     unitKey: 'home.service.stats.projectsUnit',
     labelKey: 'home.service.stats.projects',
   },
   {
-    target: parseStatValue(usageData.value.enterpriseCustomersCount),
+    target: parseStatValue(usageData.value?.enterpriseCustomersCount ?? '0'),
     unitKey: 'home.service.stats.teamsUnit',
     labelKey: 'home.service.stats.teams',
   },
   {
-    target: parseStatValue(usageData.value.downloadPerMonth) / (locale.value.startsWith('en') ? 100 : 1),
+    target: parseStatValue(usageData.value?.downloadPerMonth ?? '0') / (locale.value.startsWith('en') ? 100 : 1),
     unitKey: 'home.service.stats.downloadsUnit',
     labelKey: 'home.service.stats.downloads',
   },
