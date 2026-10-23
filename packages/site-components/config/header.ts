@@ -96,11 +96,9 @@ export const getHeaderConfig = (): HeaderConfig => {
   const intranet = isIntranet();
   const en = isEn();
 
-  const headerItems: Array<HeaderItem | null> = [
-    { name: en ? 'Design' : '设计语言', path: jumpLocation('/design'), type: 'main', target: '_self' },
-    { name: en ? 'Resources' : '设计资源', path: jumpLocation('/source'), type: 'main', target: '_self' },
-    { name: en ? 'Components' : '前端组件', type: 'base', target: '_self' },
-    { name: en ? 'Icons' : '图标', path: jumpLocation('/icons'), type: 'main', target: '_self' },
+  const headerItems: (HeaderItem | null)[] = [
+    { name: en ? 'Design' : '设计', path: jumpLocation('/design'), type: 'main', target: '_self' },
+    { name: en ? 'Components' : '基础组件', path: jumpLocation('/vue/overview'), type: 'base', target: '_self' },
     intranet ? { name: en ? 'Industry component' : '行业组件', path: '/trade', type: 'main', target: '_self' } : null,
     {
       name: en ? 'Templates' : '页面模板',

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import fs from 'fs-extra';
 import { execSync } from 'child_process';
 

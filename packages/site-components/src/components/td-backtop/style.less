@@ -14,20 +14,20 @@
     box-sizing: border-box;
     backdrop-filter: blur(10px);
     background-color: var(--component-border);
-
     cursor: pointer;
-    transition: all .2s ease;
+    transition: all 0.2s ease;
     opacity: 0;
     visibility: hidden;
     color: var(--text-secondary);
-  
+
     &.show {
       opacity: 1;
       visibility: visible;
     }
-  
+
     &:hover {
       color: var(--text-primary);
+
       .TDesign-backtop__inner {
         transform: scale(0.95);
       }
@@ -42,7 +42,7 @@
       align-items: center;
       background-color: var(--bg-color-container-transparent);
       box-sizing: border-box;
-      transition: all .2s ease;
+      transition: all 0.2s ease;
 
       svg {
         width: 20px;
@@ -51,4 +51,3 @@
     }
   }
 }
-

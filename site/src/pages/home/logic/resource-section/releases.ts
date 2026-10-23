@@ -27,7 +27,7 @@ function parseReleases(value: unknown): Release[] {
   return value.flatMap((item) => {
     if (typeof item !== 'object' || item === null) return [];
     const release = item as Record<string, unknown>;
-    // eslint-disable-next-line camelcase
+
     const publishedAt = release.published_at;
     if (typeof publishedAt !== 'string' || typeof release.body !== 'string') return [];
     return [{ publishedAt, body: release.body }];

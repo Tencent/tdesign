@@ -4,21 +4,21 @@ about: 新组件招募
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 <!--
 参考样例：
 issue label 需要设置为 help wanted，发起招募
 -->
-## 组件名称中英文
 
+## 组件名称中英文
 
 ### 交互稿
 
 <!--
 需要给到 CoDesign 分享地址，不需要登录访问
 -->
+
 交互稿：
 
 ### 设计稿
@@ -42,4 +42,3 @@ issue label 需要设置为 help wanted，发起招募
 详细提交过程请参考：[如何贡献](https://tdesign.tencent.com/about/contributing)。
 
 欢迎填写[《贡献者加入意向收集》](https://wj.qq.com/s2/9772260/7cbe/)问卷加入 TDesign 贡献者群，参与过程中遇到的各类问题可以得到实时解答和指引。
-

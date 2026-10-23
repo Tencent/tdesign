@@ -2,10 +2,10 @@
   <div ref="article" name="DOC" class="doc-fonts">
     <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
       <ol class="tdesign-toc_list">
-        <li class="tdesign-toc_list_item" v-for="anchor in catalog" :key="anchor.id">
+        <li v-for="anchor in catalog" :key="anchor.id" class="tdesign-toc_list_item">
           <a class="tdesign-toc_list_item_a" :href="'#' + anchor.id">{{ anchor.title }} </a>
-          <ol class="tdesign-toc_list" v-if="anchor.children.length">
-            <li class="tdesign-toc_list_item" v-for="subAnchor in anchor.children" :key="subAnchor.id">
+          <ol v-if="anchor.children.length" class="tdesign-toc_list">
+            <li v-for="subAnchor in anchor.children" :key="subAnchor.id" class="tdesign-toc_list_item">
               <a class="tdesign-toc_list_item_a" :href="'#' + subAnchor.id">{{ subAnchor.title }} </a>
             </li>
           </ol>
@@ -67,7 +67,7 @@
           :placeholder="t('fonts.lineHeight.placeholder')"
           :options="fontSelectList"
         />
-        <t-slider v-model="fontSize" :min="10" :max="64" :step="2" :inputNumberProps="false" />
+        <t-slider v-model="fontSize" :min="10" :max="64" :step="2" :input-number-props="false" />
       </div>
       <p :class="['font-' + fontSize]">{{ t('fonts.sample') }}</p>
       <div class="divider"></div>
@@ -94,11 +94,11 @@
       <div class="fonts-block">
         <ul class="color-list">
           <li
-            class="item"
-            @click="copyColor(item.background)"
             v-for="item in fontColorListLeft"
             :key="item.text"
+            class="item"
             :style="{ background: item.background, color: item.color }"
+            @click="copyColor(item.background)"
           >
             <span>{{ item.text }}</span>
             <span>{{ item.style }}</span>
@@ -108,11 +108,11 @@
       <div class="fonts-block black">
         <ul class="color-list">
           <li
-            class="item"
-            @click="copyColor(item.background)"
             v-for="item in fontColorListRight"
             :key="item.text"
+            class="item"
             :style="{ background: item.background, color: item.color }"
+            @click="copyColor(item.background)"
           >
             <span>{{ item.text }}</span>
             <span>{{ item.style }}</span>

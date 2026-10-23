@@ -2,10 +2,10 @@
   <div class="shadow-card">
     <t-popup
       placement="left"
-      showArrow
-      destroyOnClose
+      show-arrow
+      destroy-on-close
       :attach="handleAttach"
-      :overlayStyle="{ borderRadius: '9px', padding: '12px 16px 8px' }"
+      :overlay-style="{ borderRadius: '9px', padding: '12px 16px 8px' }"
     >
       <div class="shadow-card__item" :style="{ 'box-shadow': shadow.join(',') }">
         <div class="shadow-card__title">{{ detail.label }}:</div>
@@ -14,7 +14,7 @@
         </div>
         <t-divider class="shadow-card__divided"></t-divider>
         <div class="shadow-card__info">
-          <div :class="['shadow-card__info-item', 'text-ellipsis']" v-for="(value, i) in shadow" :key="i">
+          <div v-for="(value, i) in shadow" :key="i" :class="['shadow-card__info-item', 'text-ellipsis']">
             {{ value }} {{ i === shadow.length - 1 ? ';' : ',' }}
           </div>
         </div>
@@ -57,6 +57,7 @@ function change(value: string[]) {
   margin-top: 8px;
   background-color: var(--bg-color-theme-secondary);
   border-radius: 9px;
+
   &__item {
     display: flex;
     flex-direction: column;
@@ -67,23 +68,28 @@ function change(value: string[]) {
     overflow: hidden;
     background-color: var(--bg-color-theme-surface);
   }
+
   &__item--active {
     border: 1px solid var(--brand-main);
   }
+
   &__title {
     font-size: 12px;
     color: var(--text-primary);
     line-height: 20px;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
+
   &__tips {
     font-size: 12px;
     color: var(--text-placeholder);
     line-height: 20px;
   }
+
   &__divided {
     margin: 4px 0;
   }
+
   &__info {
     font-size: 12px;
     color: var(--text-placeholder);
@@ -91,6 +97,7 @@ function change(value: string[]) {
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
 }
+
 .text-ellipsis {
   overflow: hidden;
   white-space: nowrap;

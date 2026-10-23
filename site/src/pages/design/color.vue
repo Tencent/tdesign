@@ -3,10 +3,10 @@
     <div ref="article" name="DOC" class="doc-color">
       <nav class="tdesign-toc_container" style="position: absolute; top: 328px">
         <ol class="tdesign-toc_list">
-          <li class="tdesign-toc_list_item" v-for="anchor in catalog" :key="anchor.id">
+          <li v-for="anchor in catalog" :key="anchor.id" class="tdesign-toc_list_item">
             <a class="tdesign-toc_list_item_a" :href="'#' + anchor.id">{{ anchor.title }} </a>
-            <ol class="tdesign-toc_list" v-if="anchor.children.length">
-              <li class="tdesign-toc_list_item" v-for="subAnchor in anchor.children" :key="subAnchor.id">
+            <ol v-if="anchor.children.length" class="tdesign-toc_list">
+              <li v-for="subAnchor in anchor.children" :key="subAnchor.id" class="tdesign-toc_list_item">
                 <a class="tdesign-toc_list_item_a" :href="'#' + subAnchor.id">{{ subAnchor.title }} </a>
               </li>
             </ol>
@@ -31,15 +31,15 @@
       <p v-for="paragraph in functionalDescription" :key="paragraph">{{ paragraph }}</p>
 
       <div class="tdesign-color-features">
-        <div class="tdesign-color-features-lists" v-for="(item, index) in listFeatures" :key="index">
+        <div v-for="(item, index) in listFeatures" :key="index" class="tdesign-color-features-lists">
           <div
-            class="tdesign-color-features-list"
-            @click="copyColor(listLi.rightTxt)"
             v-for="(listLi, itemIndex) in item"
             :key="itemIndex"
+            class="tdesign-color-features-list"
             :style="{ background: listLi.rightTxt }"
+            @click="copyColor(listLi.rightTxt)"
           >
-            <p class="tdesign-color-features-bottomTxt" v-if="listLi.topTitle">{{ listLi.topTitle }}</p>
+            <p v-if="listLi.topTitle" class="tdesign-color-features-bottomTxt">{{ listLi.topTitle }}</p>
             <p class="tdesign-color-features-topTxt">
               <span>{{ listLi.leftTxt }}</span>
               <span>{{ listLi.rightTxt }}</span>
@@ -53,11 +53,11 @@
         <div class="tdesign-color-neutral-l">
           <div class="tdesign-color-neutral-l-lists">
             <div
-              class="tdesign-color-neutral-l-list"
-              @click="copyColor(item.rightTxt)"
               v-for="(item, index) in listNeutralLeft"
               :key="index"
+              class="tdesign-color-neutral-l-list"
               :style="{ background: item.rightTxt }"
+              @click="copyColor(item.rightTxt)"
             >
               <span>{{ item.leftTxt }}</span>
               <span>{{ item.rightTxt }}</span>
@@ -65,7 +65,7 @@
           </div>
         </div>
         <div class="tdesign-color-neutral-r">
-          <div class="tdesign-color-neutral-r-item" v-for="(list, index) in listNeutralRight" :key="index">
+          <div v-for="(list, index) in listNeutralRight" :key="index" class="tdesign-color-neutral-r-item">
             <ul>
               <li>
                 <p>
@@ -94,11 +94,11 @@
         <div class="tdesign-color-neutral-brand-l">
           <div class="tdesign-color-neutral-brand-l-lists">
             <div
-              class="tdesign-color-neutral-brand-l-list"
-              @click="copyColor(item.color)"
               v-for="(item, index) in listBrandLeft"
               :key="index"
+              class="tdesign-color-neutral-brand-l-list"
               :style="{ background: item.color }"
+              @click="copyColor(item.color)"
             >
               <span>{{ item.colorName }}</span>
               <span v-if="item.colorTxt">{{ item.colorTxt }}</span>
@@ -109,11 +109,11 @@
         <div class="tdesign-color-neutral-brand-m">
           <div class="tdesign-color-neutral-brand-m-lists">
             <div
-              class="tdesign-color-neutral-brand-m-list"
-              @click="copyColor(item.rightTxt)"
               v-for="(item, index) in listNeutralLeft.slice(1)"
               :key="index"
+              class="tdesign-color-neutral-brand-m-list"
               :style="{ background: item.rightTxt }"
+              @click="copyColor(item.rightTxt)"
             >
               <span>{{ item.leftTxt }}</span>
               <span>{{ item.rightTxt }}</span>
@@ -125,11 +125,11 @@
         <div class="tdesign-color-neutral-brand-r">
           <div class="tdesign-color-neutral-brand-r-lists">
             <div
-              class="tdesign-color-neutral-brand-r-list"
-              @click="copyColor(item.colorTxt)"
               v-for="(item, index) in listBrandRight"
               :key="index"
+              class="tdesign-color-neutral-brand-r-list"
               :style="{ background: item.colorTxt }"
+              @click="copyColor(item.colorTxt)"
             >
               <span>{{ item.colorName }}</span>
               <span>{{ item.colorTxt }}</span>
@@ -141,13 +141,13 @@
       <h3>{{ t('color.extended.title') }}</h3>
       <p>{{ t('color.extended.description') }}</p>
       <div class="tdesign-color-expand tdesign-color-features">
-        <div class="tdesign-color-features-lists" v-for="(item, index) in listExpand" :key="index">
+        <div v-for="(item, index) in listExpand" :key="index" class="tdesign-color-features-lists">
           <div
-            class="tdesign-color-features-list"
-            @click="copyColor(listLi.rightTxt)"
             v-for="(listLi, itemIndex) in item"
             :key="itemIndex"
+            class="tdesign-color-features-list"
             :style="{ background: listLi.rightTxt }"
+            @click="copyColor(listLi.rightTxt)"
           >
             <p class="tdesign-color-expand-item">
               <span>{{ listLi.leftTxt }}</span>
@@ -161,11 +161,15 @@
       <p>{{ t('color.application.uiDescription') }}</p>
       <div class="tdesign-guide-ui-box">
         <div class="tdesign-guide-ui">
-          <div class="tdesign-guide-ui-item" v-for="(item, index) in listGuideUi" :key="index">
+          <div v-for="(item, index) in listGuideUi" :key="index" class="tdesign-guide-ui-item">
             <div class="tdesign-guide-ui-item-lists">
               <div class="tdesign-guide-ui-item-list name">{{ item.name }}</div>
               <div class="tdesign-guide-ui-item-list title">{{ item.title }}</div>
-              <div class="tdesign-guide-ui-item-list" v-for="(itemCon, index) in item.content" :key="index">
+              <div
+                v-for="(itemCon, contentIndex) in item.content"
+                :key="contentIndex"
+                class="tdesign-guide-ui-item-list"
+              >
                 <span class="color-txt-l" :style="{ background: itemCon.color }">{{ itemCon.colorN }}</span>
                 <span class="color-txt-r">{{ itemCon.colorTxt }}</span>
               </div>

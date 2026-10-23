@@ -87,12 +87,12 @@ export default define<DemoHost>({
     },
   },
   render: (host) => {
-    let { code, language, showCode, mode, theme, currentLangIndex, languages, activeStyleMap } = host;
+    const { code, language, showCode, mode, theme, currentLangIndex, languages, activeStyleMap } = host;
     const languageArr = typeof languages === 'string' ? languages.split(',') : [];
 
     const tabsDisplay =
       languageArr.length > 0 &&
-      languageArr.filter((lang) => host.dataset?.[lang] || host.dataset?.[lang.toLocaleLowerCase()]).length ==
+      languageArr.filter((lang) => host.dataset?.[lang] || host.dataset?.[lang.toLocaleLowerCase()]).length ===
         languageArr.length;
 
     const currentLang = languageArr[currentLangIndex] || '';

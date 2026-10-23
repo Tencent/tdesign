@@ -5,27 +5,27 @@
       <remove-icon class="shadow-layer__remove" @click="handleMove" />
     </div>
     <div class="shadow-layer__card--item">
-      <t-input-number theme="normal" autoWidth v-model="shadow[0]" class="shadow-layer__card--x" placeholder="0px">
+      <t-input-number v-model="shadow[0]" theme="normal" auto-width class="shadow-layer__card--x" placeholder="0px">
         <template #suffix><div class="shadow-layer__suffix">X</div></template>
       </t-input-number>
-      <t-input-number theme="normal" autoWidth v-model="shadow[1]" class="shadow-layer__card--x" placeholder="0px">
+      <t-input-number v-model="shadow[1]" theme="normal" auto-width class="shadow-layer__card--x" placeholder="0px">
         <template #suffix><div class="shadow-layer__suffix">Y</div></template>
       </t-input-number>
     </div>
-    <t-input-number autoWidth theme="normal" v-model="shadow[2]" class="shadow-layer__card--item" placeholder="0px">
+    <t-input-number v-model="shadow[2]" auto-width theme="normal" class="shadow-layer__card--item" placeholder="0px">
       <template #suffix><div class="shadow-layer__suffix">Blur</div></template>
     </t-input-number>
-    <t-input-number autoWidth theme="normal" v-model="shadow[3]" class="shadow-layer__card--item" placeholder="0px">
+    <t-input-number v-model="shadow[3]" auto-width theme="normal" class="shadow-layer__card--item" placeholder="0px">
       <template #suffix><span class="shadow-layer__suffix">Spread</span></template>
     </t-input-number>
-    <t-popup class="placement top center" placement="left" showArrow destroyOnClose :attach="handleAttach">
+    <t-popup class="placement top center" placement="left" show-arrow destroy-on-close :attach="handleAttach">
       <t-input v-model="color">
         <template #prefix-icon>
           <div class="shadow-layer__card--sharp" :style="{ background: color }"></div>
         </template>
       </t-input>
       <template #content>
-        <color-picker :value="color" enableAlpha format="RGBA" @change="changeColor" />
+        <color-picker :value="color" enable-alpha format="RGBA" @change="changeColor" />
       </template>
     </t-popup>
   </div>
@@ -122,50 +122,60 @@ watch(color, (nVal) => {
 .shadow-layer {
   display: flex;
   flex-direction: column;
+
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 4px;
+
     &--name {
       font-size: 14px;
       color: var(--text-primary);
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
   }
+
   &__remove {
     color: var(--text-primary);
     cursor: pointer;
   }
+
   &__card {
     padding: 8px;
     width: 208px;
     background: var(--bg-color-code);
     border-radius: 6px;
+
     &--item {
       display: flex;
       margin-bottom: 8px;
+
       &:last-child {
         margin-bottom: 0;
       }
+
       :deep(.t-input--auto-width) {
         width: auto;
       }
     }
+
     &--x {
-      width: 60px;
       margin-right: 8px;
       width: 50%;
+
       &:last-child {
         margin-right: 0;
       }
     }
+
     &--sharp {
       width: 24px;
       height: 24px;
       border: 1px solid var(--bg-color-demo-select);
       border-radius: 3px;
     }
+
     &--color {
       margin-left: 4px;
       font-size: 14px;
@@ -173,18 +183,20 @@ watch(color, (nVal) => {
       color: var(--text-primary);
     }
   }
+
   &__title {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 4px;
   }
+
   &__name {
-    font-family: 'SF Mono';
     font-size: 12px;
     color: var(--text-primary);
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
+
   &__suffix {
     font-size: 14px;
     color: var(--text-placeholder);

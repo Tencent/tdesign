@@ -15,7 +15,7 @@
             class="breathe"
             src="https://tdesign.gtimg.com/site/images/breathe-bottom.png"
           />
-          <canvas class="banner-canvas" ref="canvasLight"></canvas>
+          <canvas ref="canvasLight" class="banner-canvas"></canvas>
           <span class="banner-trigger1 light"></span>
           <span class="banner-trigger3 light"></span>
           <span class="banner-trigger4 light"></span>
@@ -33,7 +33,7 @@
             class="breathe"
             src="https://tdesign.gtimg.com/site/images/breathe-bottom-dark.png"
           />
-          <canvas class="banner-canvas" ref="canvasDark"></canvas>
+          <canvas ref="canvasDark" class="banner-canvas"></canvas>
           <span class="banner-trigger1 dark"></span>
           <!-- <span class="banner-trigger2 dark"></span> -->
           <span class="banner-trigger3 dark"></span>
@@ -149,11 +149,13 @@ function initWebgl(): void {
     return;
   }
   if (props.themeMode === 'dark' || document.documentElement.getAttribute('theme-mode') === 'dark') {
-    canvas3dLight && canvas3dLight.cancelAnimationFrame();
-    canvas3dDark ? canvas3dDark.animate() : (canvas3dDark = renderWebgl('dark'));
+    if (canvas3dLight) canvas3dLight.cancelAnimationFrame();
+    if (canvas3dDark) canvas3dDark.animate();
+    else canvas3dDark = renderWebgl('dark');
   } else {
-    canvas3dDark && canvas3dDark.cancelAnimationFrame();
-    canvas3dLight ? canvas3dLight.animate() : (canvas3dLight = renderWebgl('light'));
+    if (canvas3dDark) canvas3dDark.cancelAnimationFrame();
+    if (canvas3dLight) canvas3dLight.animate();
+    else canvas3dLight = renderWebgl('light');
   }
 }
 
@@ -386,8 +388,8 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   // 离开当前页面时，可以调用该方法取消掉requestAnimationFrame
-  canvas3dLight && canvas3dLight.cancelAnimationFrame();
-  canvas3dDark && canvas3dDark.cancelAnimationFrame();
+  if (canvas3dLight) canvas3dLight.cancelAnimationFrame();
+  if (canvas3dDark) canvas3dDark.cancelAnimationFrame();
 });
 </script>
 
@@ -396,14 +398,17 @@ onBeforeUnmount(() => {
   0% {
     opacity: 1;
   }
+
   100% {
     opacity: 0.1;
   }
 }
+
 @-webkit-keyframes breathe {
   0% {
     opacity: 1;
   }
+
   100% {
     opacity: 0.1;
   }
@@ -471,6 +476,7 @@ onBeforeUnmount(() => {
     transform: translate3d(-50%, 0, 0);
     -webkit-transform: translate3d(-50%, 0, 0);
   }
+
   .banner-img-wrap {
     width: 100%;
     height: 100%;
@@ -480,6 +486,7 @@ onBeforeUnmount(() => {
     transform: translate3d(-50%, 0, 0);
     -webkit-transform: translate3d(-50%, 0, 0);
   }
+
   .banner-canvas {
     position: absolute;
     left: 50%;
@@ -490,6 +497,7 @@ onBeforeUnmount(() => {
     height: 100% !important;
     width: auto !important;
   }
+
   .banner-trigger1 {
     display: inline-block;
     width: 150px;
@@ -500,6 +508,7 @@ onBeforeUnmount(() => {
     opacity: 0;
     z-index: 100;
   }
+
   .banner-trigger2 {
     display: inline-block;
     width: 7.59375%;
@@ -511,6 +520,7 @@ onBeforeUnmount(() => {
     z-index: 100;
     border-radius: 80px;
   }
+
   .banner-trigger3 {
     display: inline-block;
     width: 180px;
@@ -521,6 +531,7 @@ onBeforeUnmount(() => {
     opacity: 0;
     z-index: 100;
   }
+
   .banner-trigger4 {
     display: inline-block;
     width: 12.59375%;
@@ -533,6 +544,7 @@ onBeforeUnmount(() => {
     border-radius: 82px;
   }
 }
+
 @media screen and (max-width: 960px) {
   .banner-wrap .banner-bg {
     height: 480px;

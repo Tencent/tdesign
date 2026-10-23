@@ -22,8 +22,8 @@
               :style="{ paddingBottom: '4px', color: 'var(--text-secondary)' }"
             >
               <div
-                @click="changeBrandColor(color.value)"
                 :class="{ 'is-active': $brandColor.toLowerCase() === color.value.toLowerCase() }"
+                @click="changeBrandColor(color.value)"
               >
                 <div
                   :style="{
@@ -41,18 +41,18 @@
           </t-col>
           <t-col :span="3" :style="{ padding: '0' }">
             <t-popup
-              showArrow
+              show-arrow
               placement="bottom-left"
               trigger="hover"
               :attach="handleAttach"
-              @visible-change="isMoreVisible = $event"
-              overlayClassName="popup-arrow"
-              :overlayStyle="{
+              overlay-class-name="popup-arrow"
+              :overlay-style="{
                 width: '268px',
                 padding: '16px',
                 borderRadius: '9px',
                 marginTop: '8px',
               }"
+              @visible-change="isMoreVisible = $event"
             >
               <div
                 :class="{
@@ -83,17 +83,17 @@
                 </p>
                 <div class="color-content__flex">
                   <div
+                    v-for="(color, idx) in RECOMMEND_COLORS"
+                    :key="idx"
                     class="color-content__block"
                     style="background: none"
-                    :key="idx"
-                    v-for="(color, idx) in RECOMMEND_COLORS"
                   >
                     <div
-                      @click="changeBrandColor(color.value)"
                       :class="{
                         'is-active': $brandColor === color.value,
                       }"
                       :style="{ color: 'var(--text-secondary)' }"
+                      @click="changeBrandColor(color.value)"
                     >
                       <p
                         :style="{
@@ -113,16 +113,16 @@
                 </p>
                 <div class="color-content__flex">
                   <div
+                    v-for="(color, idx) in SCENE_COLORS"
+                    :key="idx"
                     class="color-content__block"
                     style="background: none"
-                    :key="idx"
-                    v-for="(color, idx) in SCENE_COLORS"
                   >
                     <div
-                      @click="changeBrandColor(color.value)"
                       :class="{
                         'is-active': $brandColor === color.value,
                       }"
+                      @click="changeBrandColor(color.value)"
                     >
                       <p
                         :style="{
@@ -143,11 +143,11 @@
         <!-- 自定义主题颜色 -->
         <t-popup
           placement="bottom-left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
-          :overlayStyle="{ borderRadius: '9px' }"
+          :overlay-style="{ borderRadius: '9px' }"
         >
           <div class="color-content__custom">
             <div class="color-content__custom-inner">
@@ -239,75 +239,75 @@
         <!-- 主题色 -->
         <color-column
           type="brand"
-          :gradientStep="10"
-          :tokenMap="brandTokenMap"
-          @changeGradation="changeGradation"
-          @recoverGradation="recoverGradation"
+          :gradient-step="10"
+          :token-map="brandTokenMap"
+          @change-gradation="changeGradation"
+          @recover-gradation="recoverGradation"
         />
       </div>
       <!-- 中性色 -->
       <color-collapse
         type="gray"
         :title="lang.color.neutralColor"
-        :mainColor="grayMainColor"
+        :main-color="grayMainColor"
         :disabled="isGrayRelatedToTheme"
-        @changeMainColor="changeFunctionColor"
+        @change-main-color="changeFunctionColor"
       >
         <template #subTitle>
           {{ lang.color.fromThemeColor }}
-          <t-switch style="margin-left: 8px" v-model="isGrayRelatedToTheme" @change="handleNeutralChange"></t-switch>
+          <t-switch v-model="isGrayRelatedToTheme" style="margin-left: 8px" @change="handleNeutralChange"></t-switch>
         </template>
         <color-column
           type="gray"
-          :gradientStep="14"
-          :tokenMap="functionTokenMap['gray']"
-          @changeGradation="changeGradation"
-          @recoverGradation="recoverGradation"
+          :gradient-step="14"
+          :token-map="functionTokenMap['gray']"
+          @change-gradation="changeGradation"
+          @recover-gradation="recoverGradation"
         />
       </color-collapse>
       <!-- 成功色 -->
       <color-collapse
         type="success"
         :title="lang.color.successColor"
-        :mainColor="successMainColor"
-        @changeMainColor="changeFunctionColor"
+        :main-color="successMainColor"
+        @change-main-color="changeFunctionColor"
       >
         <color-column
           type="success"
-          :gradientStep="10"
-          :tokenMap="functionTokenMap['success']"
-          @changeGradation="changeGradation"
-          @recoverGradation="recoverGradation"
+          :gradient-step="10"
+          :token-map="functionTokenMap['success']"
+          @change-gradation="changeGradation"
+          @recover-gradation="recoverGradation"
         />
       </color-collapse>
       <!-- 错误色 -->
       <color-collapse
         type="error"
         :title="lang.color.errorColor"
-        :mainColor="errorMainColor"
-        @changeMainColor="changeFunctionColor"
+        :main-color="errorMainColor"
+        @change-main-color="changeFunctionColor"
       >
         <color-column
           type="error"
-          :gradientStep="10"
-          :tokenMap="functionTokenMap['error']"
-          @changeGradation="changeGradation"
-          @recoverGradation="recoverGradation"
+          :gradient-step="10"
+          :token-map="functionTokenMap['error']"
+          @change-gradation="changeGradation"
+          @recover-gradation="recoverGradation"
         />
       </color-collapse>
       <!-- 警告色 -->
       <color-collapse
         type="warning"
         :title="lang.color.warningColor"
-        :mainColor="warningMainColor"
-        @changeMainColor="changeFunctionColor"
+        :main-color="warningMainColor"
+        @change-main-color="changeFunctionColor"
       >
         <color-column
           type="warning"
-          :gradientStep="10"
-          :tokenMap="functionTokenMap['warning']"
-          @changeGradation="changeGradation"
-          @recoverGradation="recoverGradation"
+          :gradient-step="10"
+          :token-map="functionTokenMap['warning']"
+          @change-gradation="changeGradation"
+          @recover-gradation="recoverGradation"
         />
       </color-collapse>
     </div>
@@ -381,7 +381,7 @@ const successMainColor = ref(getOptionFromLocal('success') || getTokenValue('--t
 const errorMainColor = ref(getOptionFromLocal('error') || getTokenValue('--td-error-color'));
 const warningMainColor = ref(getOptionFromLocal('warning') || getTokenValue('--td-warning-color'));
 const generationMode = ref(getOptionFromLocal('recommend') === 'true' ? 'recommend' : 'remain'); // remain: 保留输入, recommend: 智能推荐
-const isGrayRelatedToTheme = ref(getOptionFromLocal('neutral') == 'true');
+const isGrayRelatedToTheme = ref(getOptionFromLocal('neutral') === 'true');
 const isMoreVisible = ref(false);
 
 // 用于动态访问 `this[\`${type}MainColor\`]`
@@ -454,7 +454,7 @@ function changeBrandColor(hex: string, trigger: 'update' | 'init' = 'update') {
   const darkExtraTokens = generateBrandTokenMap(darkBrandIdx);
 
   currentBrandIdx.value = brandIndexes.value[getThemeMode()];
-  const shouldUpdateStyleSheet = $brandColor.value != $theme.value.value || trigger === 'update';
+  const shouldUpdateStyleSheet = $brandColor.value !== $theme.value.value || trigger === 'update';
   if (shouldUpdateStyleSheet) {
     // 只在用户手动修改主题色时同步 stylesheet，避免覆盖内置主题自身的逻辑
     updateStyleSheetColor('brand', lightPalette, darkPalette, trigger);
@@ -600,7 +600,7 @@ onUnmounted(() => {
     font-size: 14px;
     color: var(--text-primary);
     font-weight: 600;
-    margin: 0 0 8px 0;
+    margin: 0 0 8px;
     line-height: 22px;
     display: flex;
     align-items: center;
@@ -608,7 +608,7 @@ onUnmounted(() => {
 
   &__subtitle {
     font-size: 12px;
-    margin: 4px 0 10px 0;
+    margin: 4px 0 10px;
 
     button {
       margin-right: 8px;
@@ -621,6 +621,7 @@ onUnmounted(() => {
     display: flex;
     flex-wrap: wrap;
     margin: 0 -2px;
+
     > div {
       margin: 2px;
     }
@@ -673,7 +674,7 @@ onUnmounted(() => {
   }
 
   &__custom {
-    margin: 8px 0px;
+    margin: 8px 0;
     padding: 2px;
     height: 106px;
     background: conic-gradient(
@@ -688,15 +689,18 @@ onUnmounted(() => {
     border-radius: 9px;
     cursor: pointer;
     transition: padding 0.2s;
+
     &:hover {
       padding: 4px;
     }
+
     &-inner {
       background-color: var(--bg-color-card);
-      padding: 2px 2px 4px 2px;
+      padding: 2px 2px 4px;
       border-radius: 7px;
       max-height: 100%;
     }
+
     &-top {
       padding: 4px 8px;
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
@@ -724,6 +728,7 @@ onUnmounted(() => {
           color: var(--text-primary);
           font-weight: 600;
         }
+
         &:last-child {
           font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
         }
@@ -743,6 +748,7 @@ onUnmounted(() => {
       height: 40px;
       width: 118px;
       border-radius: 8px;
+
       &.is-active {
         background: conic-gradient(
           from 180deg at 50% 50%,
@@ -754,6 +760,7 @@ onUnmounted(() => {
           #00c3ff 360deg
         );
       }
+
       &-inner {
         border-radius: 6px;
         border: 2px solid var(--bg-color-card);

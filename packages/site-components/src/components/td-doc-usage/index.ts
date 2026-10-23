@@ -63,46 +63,50 @@ function renderConfig(configList: ConfigItem[] = []) {
   });
 
   return html`
-    ${booleanList.length
-      ? html`
-          <ul class="TDesign-doc-usage__config-list">
-            ${booleanList.map(
-              (item) => html`
-                <li class="item">
-                  <span class="name" title="${item.name}">${item.name}</span>
-                  <td-switch
-                    size="small"
-                    value="${item.defaultValue}"
-                    onchange="${(host: DocUsageHost, event?: Event) =>
-                      event && handleConfigChange(host, event as ConfigChangeEvent, item)}"
-                  ></td-switch>
-                </li>
-              `,
-            )}
-          </ul>
-        `
-      : ''}
-    ${enumList.length
-      ? html`
-          ${booleanList.length ? html`<div class="TDesign-doc-usage__config-divider"></div>` : ''}
-          <ul class="TDesign-doc-usage__config-list">
-            ${enumList.map(
-              (item) => html`
-                <li class="item">
-                  <span class="name" title="${item.name}">${item.name}</span>
-                  <td-select
-                    borderless
-                    value="${item.defaultValue}"
-                    options="${item.options}"
-                    onchange="${(host: DocUsageHost, event?: Event) =>
-                      event && handleConfigChange(host, event as ConfigChangeEvent, item)}"
-                  ></td-select>
-                </li>
-              `,
-            )}
-          </ul>
-        `
-      : ''}
+    ${
+      booleanList.length
+        ? html`
+            <ul class="TDesign-doc-usage__config-list">
+              ${booleanList.map(
+                (item) => html`
+                  <li class="item">
+                    <span class="name" title="${item.name}">${item.name}</span>
+                    <td-switch
+                      size="small"
+                      value="${item.defaultValue}"
+                      onchange="${(host: DocUsageHost, event?: Event) =>
+                        event && handleConfigChange(host, event as ConfigChangeEvent, item)}"
+                    ></td-switch>
+                  </li>
+                `,
+              )}
+            </ul>
+          `
+        : ''
+    }
+    ${
+      enumList.length
+        ? html`
+            ${booleanList.length ? html`<div class="TDesign-doc-usage__config-divider"></div>` : ''}
+            <ul class="TDesign-doc-usage__config-list">
+              ${enumList.map(
+                (item) => html`
+                  <li class="item">
+                    <span class="name" title="${item.name}">${item.name}</span>
+                    <td-select
+                      borderless
+                      value="${item.defaultValue}"
+                      options="${item.options}"
+                      onchange="${(host: DocUsageHost, event?: Event) =>
+                        event && handleConfigChange(host, event as ConfigChangeEvent, item)}"
+                    ></td-select>
+                  </li>
+                `,
+              )}
+            </ul>
+          `
+        : ''
+    }
   `;
 }
 
