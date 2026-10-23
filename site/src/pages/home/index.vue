@@ -572,8 +572,18 @@ let moduleBoardMotionQuery: MediaQueryList | null = null;
 let moduleBoardAnimationFrame: number | null = null;
 let moduleBoardSnapTimer: ReturnType<typeof setTimeout> | null = null;
 let moduleBoardSnapAnimationFrame: number | null = null;
+let moduleBoardSnapScrollY: number | null = null;
 let moduleBoardScrollDirection: -1 | 0 | 1 = 0;
 let moduleBoardLastScrollY: number | null = null;
+let moduleBoardWheelGesture: {
+  direction: -1 | 1;
+  targetProgress: number;
+  lastEventAt: number;
+  lastDelta: number;
+  limited: boolean;
+} | null = null;
+const moduleBoardWheelIdleDelay = 240;
+const moduleBoardWheelMomentumDelay = 1000;
 let moduleBoardNeedsMeasure = true;
 let moduleBoardStops: number[] = [];
 let moduleBoardPinTop = 0;
@@ -625,6 +635,7 @@ function measureModuleBoard(): void {
     home.dataset.boardLayout = previousLayout ?? 'flow';
     viewport.scrollLeft = 0;
   } else {
+    resetModuleBoardGesture();
     moduleBoardViewportStyle.value = {};
     state.tabTransformWidth = 0;
     if (wasEnabled) {
@@ -648,6 +659,7 @@ function updateModuleBoard(): void {
 
   let offset = viewport.scrollLeft;
   if (moduleBoardScrollEnabled.value) {
+    constrainModuleBoardScroll();
     const boardRect = board.getBoundingClientRect();
     const progress = Math.max(0, Math.min(moduleBoardScrollDistance, moduleBoardPinTop - boardRect.top));
     if (progress > 0 && progress < moduleBoardScrollDistance) {
@@ -702,7 +714,23 @@ function cancelModuleBoardSnapAnimation(): void {
   if (moduleBoardSnapAnimationFrame === null) return;
   cancelAnimationFrame(moduleBoardSnapAnimationFrame);
   moduleBoardSnapAnimationFrame = null;
+  moduleBoardSnapScrollY = null;
   moduleBoardLastScrollY = window.scrollY;
+}
+
+function resetModuleBoardGesture(): void {
+  moduleBoardWheelGesture = null;
+  cancelModuleBoardSnapAnimation();
+  if (moduleBoardSnapTimer !== null) {
+    clearTimeout(moduleBoardSnapTimer);
+    moduleBoardSnapTimer = null;
+  }
+}
+
+function handleModuleBoardKeydown(event: KeyboardEvent): void {
+  if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key)) {
+    resetModuleBoardGesture();
+  }
 }
 
 function animateModuleBoardScroll(targetScrollY: number): void {
@@ -711,11 +739,13 @@ function animateModuleBoardScroll(targetScrollY: number): void {
   const distance = targetScrollY - startScrollY;
   const duration = Math.min(650, Math.max(360, Math.abs(distance) * 0.65));
   const startedAt = performance.now();
+  moduleBoardSnapScrollY = startScrollY;
 
   const animate = (timestamp: number): void => {
     const progress = Math.min(1, (timestamp - startedAt) / duration);
     const eased = progress < 0.5 ? 4 * progress ** 3 : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-    window.scrollTo({ top: startScrollY + distance * eased });
+    moduleBoardSnapScrollY = startScrollY + distance * eased;
+    window.scrollTo({ top: moduleBoardSnapScrollY, behavior: 'instant' });
 
     if (progress < 1) {
       moduleBoardSnapAnimationFrame = requestAnimationFrame(animate);
@@ -751,7 +781,102 @@ function snapModuleBoardByDirection(): void {
   }
 }
 
+function handleModuleBoardWheel(event: WheelEvent): void {
+  const board = moduleBoardRef.value;
+  if (
+    !board ||
+    !moduleBoardScrollEnabled.value ||
+    moduleBoardStops.length < 2 ||
+    event.defaultPrevented ||
+    event.ctrlKey ||
+    event.deltaY === 0
+  ) {
+    return;
+  }
+
+  const now = performance.now();
+  const deltaUnit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
+  const delta = event.deltaY * deltaUnit;
+  const direction = delta > 0 ? 1 : -1;
+  if (moduleBoardWheelGesture) {
+    const elapsed = now - moduleBoardWheelGesture.lastEventAt;
+    const directionChanged = direction !== moduleBoardWheelGesture.direction;
+    const newImpulse =
+      moduleBoardWheelGesture.limited && Math.abs(delta) > Math.max(8, moduleBoardWheelGesture.lastDelta * 2);
+    if (
+      (moduleBoardSnapAnimationFrame === null &&
+        (elapsed > moduleBoardWheelIdleDelay || directionChanged || newImpulse)) ||
+      (!moduleBoardWheelGesture.limited && directionChanged)
+    ) {
+      moduleBoardWheelGesture = null;
+    }
+  }
+
+  const progress = moduleBoardPinTop - board.getBoundingClientRect().top;
+  if (!moduleBoardWheelGesture) {
+    cancelModuleBoardSnapAnimation();
+    if (Math.max(progress, progress + delta) < 0 || Math.min(progress, progress + delta) > moduleBoardScrollDistance) {
+      return;
+    }
+    const step = moduleBoardDwellDistance + moduleBoardMoveDistance;
+    const lastIndex = moduleBoardStops.length - 1;
+    const currentIndex = Math.max(0, Math.min(lastIndex, Math.round((progress - moduleBoardDwellDistance / 2) / step)));
+    const targetIndex = currentIndex + direction;
+    if (targetIndex < 0 || targetIndex > lastIndex) return;
+    moduleBoardWheelGesture = {
+      direction,
+      targetProgress: targetIndex * step + (direction < 0 ? moduleBoardDwellDistance : 0),
+      lastEventAt: now,
+      lastDelta: Math.abs(delta),
+      limited: false,
+    };
+  }
+
+  const gesture = moduleBoardWheelGesture;
+  gesture.lastEventAt = now;
+  gesture.lastDelta = Math.abs(delta);
+  if (event.cancelable) event.preventDefault();
+  if (gesture.limited) return;
+
+  if ((progress + delta - gesture.targetProgress) * gesture.direction >= 0) {
+    gesture.limited = true;
+    if (moduleBoardSnapTimer !== null) {
+      clearTimeout(moduleBoardSnapTimer);
+      moduleBoardSnapTimer = null;
+    }
+    animateModuleBoardScroll(window.scrollY + gesture.targetProgress - progress);
+    return;
+  }
+
+  cancelModuleBoardSnapAnimation();
+  if (event.cancelable) window.scrollBy({ top: delta, behavior: 'instant' });
+}
+
+function constrainModuleBoardScroll(): void {
+  if (!moduleBoardScrollEnabled.value) return;
+  if (moduleBoardSnapAnimationFrame !== null && moduleBoardSnapScrollY !== null) {
+    if (Math.abs(window.scrollY - moduleBoardSnapScrollY) > 1) {
+      window.scrollTo({ top: moduleBoardSnapScrollY, behavior: 'instant' });
+    }
+    return;
+  }
+
+  const gesture = moduleBoardWheelGesture;
+  const board = moduleBoardRef.value;
+  if (!gesture || !board) return;
+  if (performance.now() - gesture.lastEventAt >= moduleBoardWheelMomentumDelay) {
+    moduleBoardWheelGesture = null;
+    return;
+  }
+  const progress = moduleBoardPinTop - board.getBoundingClientRect().top;
+  if ((progress - gesture.targetProgress) * gesture.direction > 1) {
+    gesture.limited = true;
+    window.scrollTo({ top: window.scrollY + gesture.targetProgress - progress, behavior: 'instant' });
+  }
+}
+
 function handleModuleBoardScroll(): void {
+  constrainModuleBoardScroll();
   scheduleModuleBoardUpdate();
   if (moduleBoardSnapAnimationFrame !== null) return;
 
@@ -780,6 +905,7 @@ function handleModuleBoardFocus(event: FocusEvent): void {
 
   const index = Array.from(cards).indexOf(card);
   if (index < 0 || index === state.currentTab) return;
+  resetModuleBoardGesture();
   moduleBoardViewportRef.value?.scrollTo({ left: 0, behavior: 'instant' });
   window.scrollTo({
     top:
@@ -934,8 +1060,9 @@ onMounted(() => {
   moduleBoardLastScrollY = window.scrollY;
   window.addEventListener('resize', handleResize);
   window.addEventListener('scroll', handleModuleBoardScroll, { passive: true });
-  window.addEventListener('wheel', cancelModuleBoardSnapAnimation, { passive: true });
-  window.addEventListener('touchstart', cancelModuleBoardSnapAnimation, { passive: true });
+  window.addEventListener('wheel', handleModuleBoardWheel, { passive: false, capture: true });
+  window.addEventListener('pointerdown', resetModuleBoardGesture, { passive: true });
+  window.addEventListener('keydown', handleModuleBoardKeydown);
 });
 
 onBeforeUnmount(() => {
@@ -949,7 +1076,8 @@ onBeforeUnmount(() => {
   moduleBoardMotionQuery?.removeEventListener('change', refreshModuleBoard);
   window.removeEventListener('resize', handleResize);
   window.removeEventListener('scroll', handleModuleBoardScroll);
-  window.removeEventListener('wheel', cancelModuleBoardSnapAnimation);
-  window.removeEventListener('touchstart', cancelModuleBoardSnapAnimation);
+  window.removeEventListener('wheel', handleModuleBoardWheel, true);
+  window.removeEventListener('pointerdown', resetModuleBoardGesture);
+  window.removeEventListener('keydown', handleModuleBoardKeydown);
 });
 </script>

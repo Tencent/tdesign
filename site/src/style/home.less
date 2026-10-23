@@ -1636,8 +1636,6 @@
       grid-template-columns: 1fr;
     }
 
-    // The first card uses the 360 px design as its mobile baseline and
-    // interpolates the heading spacing/type smoothly up to the 960 px layout.
     &__inner .module-board__card:first-child {
       width: calc(100vw - 48px);
 
@@ -1645,16 +1643,16 @@
         margin-bottom: 24px;
 
         .title {
-          font-size: clamp(28px, calc(23.2px + 1.3333vw), 36px);
+          font-size: 28px;
           font-weight: 600;
-          line-height: clamp(39px, calc(36px + 0.8333vw), 44px);
+          line-height: 36px;
         }
 
         .desc {
           margin-top: clamp(12px, calc(7.2px + 1.3333vw), 20px);
-          font-size: clamp(12px, calc(7.2px + 1.3333vw), 20px);
+          font-size: 12px;
           font-weight: 300;
-          line-height: clamp(17px, calc(10.4px + 1.8333vw), 28px);
+          line-height: 20px;
         }
       }
 
@@ -1721,16 +1719,16 @@
         margin-bottom: 24px;
 
         .title {
-          font-size: clamp(28px, calc(23.2px + 1.3333vw), 36px);
+          font-size: 28px;
           font-weight: 600;
-          line-height: clamp(39px, calc(36px + 0.8333vw), 44px);
+          line-height: 36px;
         }
 
         .desc {
           margin-top: clamp(16px, calc(13.6px + 0.6667vw), 20px);
-          font-size: clamp(12px, calc(7.2px + 1.3333vw), 20px);
+          font-size: 12px;
           font-weight: 300;
-          line-height: clamp(17px, calc(10.4px + 1.8333vw), 28px);
+          line-height: 20px;
         }
       }
 
@@ -1789,17 +1787,17 @@
         margin-bottom: 24px;
 
         .title {
-          font-size: clamp(28px, calc(23.2px + 1.3333vw), 36px);
+          font-size: 28px;
           font-weight: 600;
-          line-height: clamp(39px, calc(36px + 0.8333vw), 44px);
+          line-height: 36px;
           white-space: nowrap;
         }
 
         .desc {
           margin-top: clamp(16px, calc(13.6px + 0.6667vw), 20px);
-          font-size: clamp(12px, calc(7.2px + 1.3333vw), 20px);
+          font-size: 12px;
           font-weight: 300;
-          line-height: clamp(17px, calc(10.4px + 1.8333vw), 28px);
+          line-height: 20px;
         }
       }
     }

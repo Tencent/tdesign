@@ -144,7 +144,6 @@
               />
               <path
                 v-if="chartLinePath"
-                ref="usageLineRef"
                 class="usage-card__line usage-card__line--main"
                 :d="chartLinePath"
                 mask="url(#business-cases-line-main-mask)"
@@ -238,7 +237,6 @@ const caseLayouts: BusinessCaseLayout[] = [
 const cases = ref<BusinessCase[]>([]);
 const businessCasesRef = ref<HTMLElement | null>(null);
 const usageCardRef = ref<HTMLElement | null>(null);
-const usageLineRef = ref<SVGPathElement | null>(null);
 const spreadProgress = ref(0);
 const usageAnimationProgress = ref(0);
 const canvasScale = ref('1');
@@ -260,8 +258,12 @@ let spreadAnimationFrom = 0;
 let spreadAnimationTarget = 0;
 const SPREAD_ANIMATION_DURATION = 700;
 const USAGE_ANIMATION_DURATION = 1200;
+const CHART_WIDTH = 308;
+const CHART_EDGE_INSET = 5;
 const CHART_AXIS_START_X = 34;
 const CHART_AXIS_END_X = 274;
+const CHART_AXIS_TICK_COUNT = 6;
+const CHART_AXIS_TICK_GAP = (CHART_AXIS_END_X - CHART_AXIS_START_X) / (CHART_AXIS_TICK_COUNT - 1);
 
 interface ChartPoint {
   x: number;
@@ -312,15 +314,23 @@ const animatedFigmaReferenceCount = computed(() =>
 const animatedProjectsCount = computed(() =>
   formatWithThousandsSeparator(Math.round(projectsCountTarget.value * usageAnimationProgress.value)),
 );
-const months = computed(() => {
+const chartLabelIndices = computed(() => {
   const downloads = chartDownloads.value;
-  if (downloads.length <= 6) return downloads.map((item) => item.month.replace('-', '.'));
+  if (downloads.length === 0) return [];
 
-  return Array.from({ length: 6 }, (_, index) => {
-    const downloadIndex = Math.round((index / 5) * (downloads.length - 1));
-    return downloads[downloadIndex].month.replace('-', '.');
-  });
+  const lastLabelIndex = Math.max(0, downloads.length - 3);
+  const firstLabelIndex = Math.min(2, lastLabelIndex);
+  const labelCount = Math.min(CHART_AXIS_TICK_COUNT, lastLabelIndex - firstLabelIndex + 1);
+
+  return Array.from({ length: labelCount }, (_, index) =>
+    labelCount === 1
+      ? firstLabelIndex
+      : Math.round(firstLabelIndex + (index / (labelCount - 1)) * (lastLabelIndex - firstLabelIndex)),
+  );
 });
+const months = computed(() =>
+  chartLabelIndices.value.map((downloadIndex) => chartDownloads.value[downloadIndex].month.replace('-', '.')),
+);
 const chartPoints = computed<ChartPoint[]>(() => {
   const downloads = chartDownloads.value;
   if (downloads.length < 2) return [];
@@ -329,11 +339,34 @@ const chartPoints = computed<ChartPoint[]>(() => {
   const min = Math.min(...values);
   const max = Math.max(...values);
   const range = max - min || 1;
+  const labelIndices = chartLabelIndices.value;
+  const canAlignWithAxis =
+    labelIndices.length >= 2 && labelIndices[0] > 0 && labelIndices[labelIndices.length - 1] < values.length - 1;
+  const anchorIndices = canAlignWithAxis ? [0, ...labelIndices, values.length - 1] : [];
+  const axisAnchorXs = labelIndices.map((_, index) => CHART_AXIS_START_X + index * CHART_AXIS_TICK_GAP);
+  const anchorXs = canAlignWithAxis ? [CHART_EDGE_INSET, ...axisAnchorXs, CHART_WIDTH - CHART_EDGE_INSET] : [];
 
-  return values.map((value, index) => ({
-    x: (index / (values.length - 1)) * 308,
-    y: 160 - ((value - min) / range) * 140,
-  }));
+  return values.map((value, index) => {
+    let x = CHART_EDGE_INSET + (index / (values.length - 1)) * (CHART_WIDTH - CHART_EDGE_INSET * 2);
+
+    if (canAlignWithAxis) {
+      let upperLabelPosition = anchorIndices.findIndex((anchorIndex) => anchorIndex >= index);
+      if (upperLabelPosition === -1) upperLabelPosition = anchorIndices.length - 1;
+      if (upperLabelPosition < 1) upperLabelPosition = 1;
+
+      const lowerLabelPosition = upperLabelPosition - 1;
+      const lowerIndex = anchorIndices[lowerLabelPosition];
+      const upperIndex = anchorIndices[upperLabelPosition];
+      const segmentProgress = (index - lowerIndex) / (upperIndex - lowerIndex);
+      x =
+        anchorXs[lowerLabelPosition] + segmentProgress * (anchorXs[upperLabelPosition] - anchorXs[lowerLabelPosition]);
+    }
+
+    return {
+      x,
+      y: 160 - ((value - min) / range) * 140,
+    };
+  });
 });
 
 function createSmoothPath(points: ChartPoint[]): string {
@@ -391,29 +424,21 @@ async function getDeveloperStories(): Promise<void> {
 
 function handleChartPointerMove(event: PointerEvent): void {
   const chart = event.currentTarget as HTMLElement;
-  const path = usageLineRef.value;
-  if (!path) return;
+  const points = chartPoints.value;
+  if (points.length === 0) return;
 
   const chartRect = chart.getBoundingClientRect();
-  const localX = ((event.clientX - chartRect.left) / chartRect.width) * 308;
-  const targetX = Math.min(308, Math.max(0, localX));
-  const axisProgress = (targetX - CHART_AXIS_START_X) / (CHART_AXIS_END_X - CHART_AXIS_START_X);
-  hoveredDownloadIndex.value = Math.min(
-    chartDownloads.value.length - 1,
-    Math.max(0, Math.round(axisProgress * (chartDownloads.value.length - 1))),
+  const localX = ((event.clientX - chartRect.left) / chartRect.width) * CHART_WIDTH;
+  const targetX = Math.min(CHART_WIDTH, Math.max(0, localX));
+  const targetIndex = points.reduce(
+    (closestIndex, point, index) =>
+      Math.abs(point.x - targetX) < Math.abs(points[closestIndex].x - targetX) ? index : closestIndex,
+    0,
   );
-  const pathLength = path.getTotalLength();
-  let start = 0;
-  let end = pathLength;
+  const point = points[targetIndex];
 
-  for (let index = 0; index < 16; index += 1) {
-    const middle = (start + end) / 2;
-    if (path.getPointAtLength(middle).x < targetX) start = middle;
-    else end = middle;
-  }
-
-  const point = path.getPointAtLength((start + end) / 2);
-  chartHoverX.value = targetX;
+  hoveredDownloadIndex.value = targetIndex;
+  chartHoverX.value = point.x;
   chartHoverY.value = point.y;
 }
 
@@ -677,7 +702,7 @@ onBeforeUnmount(() => {
     z-index: 1;
     display: flex;
     flex-shrink: 0;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     overflow: hidden;
   }
@@ -723,10 +748,18 @@ onBeforeUnmount(() => {
     justify-content: center;
     box-sizing: border-box;
     border: 0;
+    border-radius: 999px;
     padding-top: 0;
     padding-bottom: 0;
     background: var(--bg-color-container);
     font-weight: 400;
+    line-height: 1;
+  }
+
+  :deep(.t-tag > span) {
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
     line-height: 1;
   }
 
