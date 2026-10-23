@@ -64,7 +64,7 @@
         ref="moduleBoardViewportRef"
         class="module-board__viewport"
         :style="moduleBoardViewportStyle"
-        :tabindex="moduleBoardScrollEnabled ? undefined : 0"
+        :tabindex="moduleBoardScrollEnabled || windowWidth < 500 ? undefined : 0"
         @scroll.passive="scheduleModuleBoardUpdate"
         @focusin="handleModuleBoardFocus"
       >
@@ -575,11 +575,13 @@ let moduleBoardSnapAnimationFrame: number | null = null;
 let moduleBoardSnapScrollY: number | null = null;
 let moduleBoardScrollDirection: -1 | 0 | 1 = 0;
 let moduleBoardLastScrollY: number | null = null;
+let moduleBoardPendingWheelDelta = 0;
 let moduleBoardWheelGesture: {
   direction: -1 | 1;
   targetProgress: number;
   lastEventAt: number;
   lastDelta: number;
+  impulseDelta: number;
   limited: boolean;
 } | null = null;
 const moduleBoardWheelIdleDelay = 240;
@@ -588,6 +590,7 @@ let moduleBoardNeedsMeasure = true;
 let moduleBoardStops: number[] = [];
 let moduleBoardPinTop = 0;
 let moduleBoardScrollDistance = 0;
+let moduleBoardBusinessCasesProgress: number | null = null;
 let moduleBoardBeforeHeight = 0;
 const moduleBoardDwellDistance = 320;
 const moduleBoardMoveDistance = 900;
@@ -620,7 +623,7 @@ function measureModuleBoard(): void {
 
   const cards = Array.from(inner.querySelectorAll<HTMLElement>('.module-board__card'));
   const height = inner.offsetHeight;
-  const enabled = !moduleBoardMotionQuery?.matches;
+  const enabled = window.innerWidth >= 500 && !moduleBoardMotionQuery?.matches;
   const wasEnabled = moduleBoardScrollEnabled.value;
 
   moduleBoardStops = cards.map((card) => Math.max(0, card.offsetLeft + card.offsetWidth / 2 - board.clientWidth / 2));
@@ -628,6 +631,15 @@ function measureModuleBoard(): void {
   moduleBoardScrollDistance = enabled
     ? cards.length * moduleBoardDwellDistance + Math.max(0, cards.length - 1) * moduleBoardMoveDistance
     : 0;
+  const businessCases = home.querySelector<HTMLElement>(':scope > .business-cases');
+  moduleBoardBusinessCasesProgress =
+    enabled && businessCases
+      ? moduleBoardScrollDistance +
+        height +
+        moduleBoardPinTop +
+        businessCases.getBoundingClientRect().top -
+        boardRect.bottom
+      : null;
   moduleBoardScrollEnabled.value = enabled;
   moduleBoardStyle.value = enabled ? { height: `${height + moduleBoardScrollDistance}px` } : {};
 
@@ -711,6 +723,7 @@ function scheduleModuleBoardUpdate(): void {
 }
 
 function cancelModuleBoardSnapAnimation(): void {
+  moduleBoardPendingWheelDelta = 0;
   if (moduleBoardSnapAnimationFrame === null) return;
   cancelAnimationFrame(moduleBoardSnapAnimationFrame);
   moduleBoardSnapAnimationFrame = null;
@@ -751,7 +764,16 @@ function animateModuleBoardScroll(targetScrollY: number): void {
       moduleBoardSnapAnimationFrame = requestAnimationFrame(animate);
     } else {
       moduleBoardSnapAnimationFrame = null;
+      moduleBoardSnapScrollY = null;
       moduleBoardLastScrollY = window.scrollY;
+      const pendingDelta = moduleBoardPendingWheelDelta;
+      moduleBoardPendingWheelDelta = 0;
+      if (pendingDelta !== 0) {
+        moduleBoardWheelGesture = null;
+        if (!scrollModuleBoardByWheel(pendingDelta, true)) {
+          window.scrollBy({ top: pendingDelta, behavior: 'instant' });
+        }
+      }
     }
   };
 
@@ -801,8 +823,23 @@ function handleModuleBoardWheel(event: WheelEvent): void {
   if (moduleBoardWheelGesture) {
     const elapsed = now - moduleBoardWheelGesture.lastEventAt;
     const directionChanged = direction !== moduleBoardWheelGesture.direction;
+    const increase = Math.abs(delta) - moduleBoardWheelGesture.lastDelta;
+    moduleBoardWheelGesture.impulseDelta = increase > 0 ? moduleBoardWheelGesture.impulseDelta + increase : 0;
     const newImpulse =
-      moduleBoardWheelGesture.limited && Math.abs(delta) > Math.max(8, moduleBoardWheelGesture.lastDelta * 2);
+      moduleBoardWheelGesture.limited &&
+      (Math.abs(delta) > Math.max(8, moduleBoardWheelGesture.lastDelta * 2) ||
+        moduleBoardWheelGesture.impulseDelta >= 4);
+    if (
+      moduleBoardSnapAnimationFrame !== null &&
+      moduleBoardWheelGesture.limited &&
+      (moduleBoardPendingWheelDelta !== 0 || elapsed > moduleBoardWheelIdleDelay)
+    ) {
+      moduleBoardPendingWheelDelta += delta;
+      moduleBoardWheelGesture.lastEventAt = now;
+      moduleBoardWheelGesture.lastDelta = Math.abs(delta);
+      if (event.cancelable) event.preventDefault();
+      return;
+    }
     if (
       (moduleBoardSnapAnimationFrame === null &&
         (elapsed > moduleBoardWheelIdleDelay || directionChanged || newImpulse)) ||
@@ -812,22 +849,52 @@ function handleModuleBoardWheel(event: WheelEvent): void {
     }
   }
 
+  if (scrollModuleBoardByWheel(delta, event.cancelable) && event.cancelable) event.preventDefault();
+}
+
+function scrollModuleBoardByWheel(delta: number, applyDelta: boolean): boolean {
+  const board = moduleBoardRef.value;
+  if (!board || !moduleBoardScrollEnabled.value) return false;
+  const now = performance.now();
+  const direction = delta > 0 ? 1 : -1;
   const progress = moduleBoardPinTop - board.getBoundingClientRect().top;
+  let nextProgress = progress + delta;
   if (!moduleBoardWheelGesture) {
     cancelModuleBoardSnapAnimation();
-    if (Math.max(progress, progress + delta) < 0 || Math.min(progress, progress + delta) > moduleBoardScrollDistance) {
-      return;
+    const scrollLimit =
+      direction > 0 ? moduleBoardBusinessCasesProgress ?? moduleBoardScrollDistance : moduleBoardScrollDistance;
+    if (Math.max(progress, nextProgress) < 0 || Math.min(progress, nextProgress) > scrollLimit) {
+      return false;
     }
     const step = moduleBoardDwellDistance + moduleBoardMoveDistance;
     const lastIndex = moduleBoardStops.length - 1;
     const currentIndex = Math.max(0, Math.min(lastIndex, Math.round((progress - moduleBoardDwellDistance / 2) / step)));
     const targetIndex = currentIndex + direction;
-    if (targetIndex < 0 || targetIndex > lastIndex) return;
+    const snapToBusinessCases =
+      targetIndex > lastIndex &&
+      moduleBoardBusinessCasesProgress !== null &&
+      progress < moduleBoardBusinessCasesProgress - 1;
+    if (targetIndex < 0 || (targetIndex > lastIndex && !snapToBusinessCases)) return false;
+    const dwellStart = currentIndex * step;
+    if (
+      currentIndex > 0 &&
+      currentIndex < lastIndex &&
+      progress >= dwellStart &&
+      progress <= dwellStart + moduleBoardDwellDistance
+    ) {
+      nextProgress = dwellStart + (direction > 0 ? moduleBoardDwellDistance : 0) + delta;
+    }
+    const targetProgress =
+      snapToBusinessCases && moduleBoardBusinessCasesProgress !== null
+        ? moduleBoardBusinessCasesProgress
+        : targetIndex * step + (direction < 0 ? moduleBoardDwellDistance : 0);
+    if (snapToBusinessCases) nextProgress = targetProgress;
     moduleBoardWheelGesture = {
       direction,
-      targetProgress: targetIndex * step + (direction < 0 ? moduleBoardDwellDistance : 0),
+      targetProgress,
       lastEventAt: now,
       lastDelta: Math.abs(delta),
+      impulseDelta: 0,
       limited: false,
     };
   }
@@ -835,21 +902,21 @@ function handleModuleBoardWheel(event: WheelEvent): void {
   const gesture = moduleBoardWheelGesture;
   gesture.lastEventAt = now;
   gesture.lastDelta = Math.abs(delta);
-  if (event.cancelable) event.preventDefault();
-  if (gesture.limited) return;
+  if (gesture.limited) return true;
 
-  if ((progress + delta - gesture.targetProgress) * gesture.direction >= 0) {
+  if ((nextProgress - gesture.targetProgress) * gesture.direction >= 0) {
     gesture.limited = true;
     if (moduleBoardSnapTimer !== null) {
       clearTimeout(moduleBoardSnapTimer);
       moduleBoardSnapTimer = null;
     }
     animateModuleBoardScroll(window.scrollY + gesture.targetProgress - progress);
-    return;
+    return true;
   }
 
   cancelModuleBoardSnapAnimation();
-  if (event.cancelable) window.scrollBy({ top: delta, behavior: 'instant' });
+  if (applyDelta) window.scrollBy({ top: nextProgress - progress, behavior: 'instant' });
+  return true;
 }
 
 function constrainModuleBoardScroll(): void {

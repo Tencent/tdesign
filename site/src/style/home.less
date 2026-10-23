@@ -1164,6 +1164,7 @@
 
           .t-radio-button {
             flex: 1;
+            justify-content: center;
             min-width: 0;
             padding-right: 8px;
             padding-left: 8px;
@@ -1871,8 +1872,28 @@
   }
 }
 
-@media screen and (max-width: 499px) {
+@media screen and (width < 500px) {
   .module-board {
+    &__viewport {
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+
+    &__inner {
+      width: 100%;
+      flex-direction: column;
+      gap: 60px;
+
+      .module-board__card {
+        scroll-snap-align: none;
+
+        &:first-child,
+        &:last-child {
+          margin: 0;
+        }
+      }
+    }
+
     &__inner .module-board__card:first-child {
       .module-board__detail--open {
         height: 804px;

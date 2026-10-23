@@ -256,6 +256,8 @@ let hasAnimatedUsage = false;
 let spreadAnimationStartedAt: number | null = null;
 let spreadAnimationFrom = 0;
 let spreadAnimationTarget = 0;
+let spreadLastViewportChangeAt = 0;
+const SPREAD_SETTLE_DELAY = 180;
 const SPREAD_ANIMATION_DURATION = 700;
 const USAGE_ANIMATION_DURATION = 1200;
 const CHART_WIDTH = 308;
@@ -532,6 +534,11 @@ function updateSpreadProgress(timestamp = performance.now()): void {
     return;
   }
 
+  if (nextTarget === 1 && spreadAnimationTarget === 0 && timestamp - spreadLastViewportChangeAt < SPREAD_SETTLE_DELAY) {
+    animationFrame = window.requestAnimationFrame(updateSpreadProgress);
+    return;
+  }
+
   if (nextTarget !== spreadAnimationTarget) {
     spreadAnimationFrom = spreadProgress.value;
     spreadAnimationTarget = nextTarget;
@@ -557,6 +564,7 @@ function updateSpreadProgress(timestamp = performance.now()): void {
 }
 
 function scheduleSpreadUpdate(): void {
+  spreadLastViewportChangeAt = performance.now();
   if (animationFrame === null) {
     animationFrame = window.requestAnimationFrame(updateSpreadProgress);
   }
@@ -575,7 +583,7 @@ onMounted(() => {
     { rootMargin: '-20% 0px -20% 0px' },
   );
   if (usageCardRef.value) usageObserver.observe(usageCardRef.value);
-  updateSpreadProgress();
+  scheduleSpreadUpdate();
   window.addEventListener('scroll', scheduleSpreadUpdate, { passive: true });
   window.addEventListener('resize', scheduleSpreadUpdate);
 });
