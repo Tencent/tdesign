@@ -41,6 +41,8 @@
               class="resource-item"
               :class="{ 'resource-item--single-line': !releaseDates[item.releaseKey] }"
               :href="item.href"
+              target="_blank"
+              rel="noopener noreferrer"
               referrerpolicy="no-referrer"
             >
               <img :src="item.logo" :alt="t('home.resources.logoAlt', { name: item.name })" />
