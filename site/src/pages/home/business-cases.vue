@@ -928,9 +928,9 @@ onBeforeUnmount(() => {
       display: inline-block;
       margin-left: 4px;
       font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 400;
-      line-height: 16px;
+      line-height: 18px;
       vertical-align: bottom;
     }
   }
@@ -1473,8 +1473,8 @@ onBeforeUnmount(() => {
 
       small {
         margin-left: 3.71px;
-        font-size: 9.27px;
-        line-height: 14.83px;
+        font-size: 12px;
+        line-height: 18px;
       }
     }
 
