@@ -42,9 +42,9 @@ const groupCodeMap = {
 } satisfies Record<GroupType, string>;
 
 const communityPlatforms: Array<{ type: GroupType; name: string; icon: string }> = [
-  { type: 'react', name: 'React', icon: reactLogo },
   { type: 'vue', name: 'Vue', icon: vueLogo },
   { type: 'wx', name: 'MiniProgram', icon: wxLogo },
+  { type: 'react', name: 'React', icon: reactLogo },
   { type: 'uniapp', name: 'UniApp', icon: uniappLogo },
   { type: 'flutter', name: 'Flutter', icon: flutterLogo },
   { type: 'design', name: 'Figma', icon: figmaLogo },
