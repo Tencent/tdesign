@@ -1016,10 +1016,15 @@ function startNewsAutoplay(): void {
 }
 
 function stopNewsAutoplay(): void {
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   if (newsAnimationFrame === null) return;
   cancelAnimationFrame(newsAnimationFrame);
   newsAnimationFrame = null;
   newsLastTimestamp = 0;
+}
+
+function handlePageShow(): void {
+  startNewsAutoplay();
 }
 
 function resetAndStartNewsAutoplay(): void {
@@ -1125,6 +1130,7 @@ onMounted(() => {
   });
   refreshModuleBoard();
   moduleBoardLastScrollY = window.scrollY;
+  window.addEventListener('pageshow', handlePageShow);
   window.addEventListener('resize', handleResize);
   window.addEventListener('scroll', handleModuleBoardScroll, { passive: true });
   window.addEventListener('wheel', handleModuleBoardWheel, { passive: false, capture: true });
@@ -1141,6 +1147,7 @@ onBeforeUnmount(() => {
   communityPreloadObserver?.disconnect();
   moduleBoardResizeObserver?.disconnect();
   moduleBoardMotionQuery?.removeEventListener('change', refreshModuleBoard);
+  window.removeEventListener('pageshow', handlePageShow);
   window.removeEventListener('resize', handleResize);
   window.removeEventListener('scroll', handleModuleBoardScroll);
   window.removeEventListener('wheel', handleModuleBoardWheel, true);
