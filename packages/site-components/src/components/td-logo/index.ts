@@ -2,64 +2,50 @@ import { html, define } from 'hybrids';
 import logoIcon from '@images/logo.svg?raw';
 import menuApplicationIcon from '@images/menu-application.svg?raw';
 import chevronRightIcon from '@images/chevron-right.svg?raw';
-import { isIntranet } from '@utils/index';
-import { logoMenuConfigCdn, logoMenuConfigWoaCdn, logoMenuSvgPrefix } from '@config';
+import {
+  fetchEcosystemConfig,
+  getEcosystemLinkTarget,
+  type EcosystemCategory,
+  type EcosystemItem,
+} from '@config/ecosystem';
 import { isEn } from '@utils';
 
 import style from './style.less?inline';
 import portalStyle from './portal.less?inline';
 
-type LinkTarget = '_blank' | '_self';
-
-interface MenuChild {
-  url: string;
-  key: string;
-  title: string;
-  desc: string;
-  target: LinkTarget;
-}
-
-interface MenuCategory {
-  category_url?: string;
-  category_title: string;
-  target: LinkTarget;
-  children: MenuChild[];
-}
-
 interface LogoProps {
-  menuList: MenuCategory[];
-  isIntranet: boolean;
+  menuList: EcosystemCategory[];
 }
 
-function renderList(list: MenuChild[] = []) {
+function renderList(list: EcosystemItem[] = []) {
   return html` <div class="list">
     ${list.map(
       (item) =>
-        html` <a class="item" href="${item.url}" target="${item.target}">
-          <img class="icon" src="${logoMenuSvgPrefix}/${item.key}.svg" />
+        html` <a class="item" href="${item.url}" target="${getEcosystemLinkTarget(item.url)}">
+          <img class="icon" src="${item.logoSrc}" />
           <div class="details">
-            <span class="name">${item.title}</span>
-            <span class="desc">${item.desc}</span>
+            <span class="name">${item.name}</span>
+            <span class="desc">${item.description}</span>
           </div>
         </a>`,
     )}
   </div>`;
 }
 
-function renderMenu(list: MenuCategory[]) {
+function renderMenu(list: EcosystemCategory[]) {
   const len = list.length;
   return list.map(
-    (item, index) => html`
+    (category, index) => html`
       ${
-        item.category_url
+        category.categoryUrl && category.categoryUrl !== 'null'
           ? html`
-              <a href="${item.category_url}" class="title" target="${item.target}">
-                ${item.category_title} <i innerHTML="${chevronRightIcon}"></i>
+              <a href="${category.categoryUrl}" class="title" target="${getEcosystemLinkTarget(category.categoryUrl)}">
+                ${category.categoryTitle} <i innerHTML="${chevronRightIcon}"></i>
               </a>
             `
-          : html` <span class="title"> ${item.category_title} </span> `
+          : html` <span class="title"> ${category.categoryTitle} </span> `
       }
-      ${renderList(item.children)} ${index < len - 1 ? html`<div class="line"></div>` : html``}
+      ${renderList(category.items)} ${index < len - 1 ? html`<div class="line"></div>` : html``}
     `,
   );
 }
@@ -68,27 +54,12 @@ export default define<LogoProps>({
   tag: 'td-logo',
   menuList: {
     value: (host, v) => v || [],
-  },
-  isIntranet: {
-    value: () => isIntranet(),
     connect: (host) => {
-      const menuCdn = isIntranet() ? logoMenuConfigWoaCdn : logoMenuConfigCdn;
-      fetch(menuCdn)
-        .then((res) => res.json())
-        .then((menuList: MenuCategory[]) => {
-          // 整理 menu 字段
-          menuList.forEach((menu) => {
-            menu.target = '_blank';
-            menu.children.forEach((child) => {
-              if (child.url.includes('tdesign')) {
-                child.target = '_self';
-              } else {
-                child.target = '_blank';
-              }
-            });
-          });
-          Object.assign(host, { menuList });
-        });
+      fetchEcosystemConfig()
+        .then((menuList) => {
+          host.menuList = menuList;
+        })
+        .catch(console.error);
     },
   },
   render: ({ menuList }) => html`

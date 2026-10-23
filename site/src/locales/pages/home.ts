@@ -10,6 +10,8 @@ export const zhCN = {
       },
       followWechat: '点击关注 TDesign 公众号',
       followWechatCompact: '关注公众号',
+      followWechatEyebrow: '欢迎关注',
+      followWechatTitle: 'TDesign 公众号',
     },
     solution: {
       label: '解决方案',
@@ -47,19 +49,19 @@ export const zhCN = {
       features: {
         frameworks: {
           title: '多技术栈版本实现',
-          description: '支持业界主流的 React/Vue/微信小程序/Flutter 开发技术栈',
+          description: '支持主流的开发技术栈：React、Vue、微信小程序、Uniapp、Flutter',
         },
         platforms: {
           title: '多端适配',
-          description: '提供桌面端和移动端两套风格统一的组件资源',
+          description: '提供桌面端和移动端风格统一的两套组件资源',
         },
         industries: {
           title: '丰富的行业组件',
-          description: '由腾讯多个业务团队，基于统一的设计体系提供多个垂直领域的行业组件库产品',
+          description: '联合腾讯多个业务团队，基于统一的设计体系提供各垂直领域的行业组件',
         },
       },
       title: '开源开放，持续迭代',
-      description: '采用 MIT 许可协议，始终保持开放的心态，期待各方一起共建开源生态。',
+      description: '采用 MIT 许可协议，始终保持开放的心态，期待各方一起共建开源生态',
     },
     componentDemo: {
       accountPlaceholder: '请输入用户名',
@@ -108,7 +110,7 @@ export const zhCN = {
         },
         resources: {
           title: '丰富的设计资源',
-          description: '提供桌面和移动端 Sketch/Figma 等多种格式的设计资源',
+          description: '提供适配桌面端和移动端的 Figma 设计资源',
         },
         guidelines: {
           title: '专业的设计指南',
@@ -116,24 +118,92 @@ export const zhCN = {
         },
       },
       title: '包容多元，灵活易用',
-      description: '保持设计敏锐感，在繁杂的业务中寻找共性，提供通用的设计解决方案。',
+      description: '保持设计敏锐感，在繁杂的业务中寻找共性，提供通用的设计解决方案',
     },
     contributors: {
-      title: '汇集来自社区内网 400+ 位贡献者',
-      description:
-        'TDesign 的诞生和发展都受益于开源，在创建之初就按照开源协作的平等、公开、开放的原则运行，通过内部开源的形式将腾讯内部各大优秀和成熟的组件库集合一起共建共享。',
+      title: '协同共建，共享活跃社区',
+      description: '10+ 开源仓库，800+ 位开源伙伴，来自各地的开发者共同协同工作',
+      activity: {
+        title: '实时动态',
+        viewAll: '查看全部',
+        loading: '实时动态加载中',
+        githubProfile: '{name} 的 GitHub 主页',
+        justNow: '刚刚',
+        stats: {
+          pullRequests: '本周新增 PR',
+          commits: '本周新增 Commit',
+          issues: '活跃 Issue',
+        },
+      },
+    },
+    businessCases: {
+      title: '越来越多的业务，正在接入 TDesign',
+      description: '提供桌面端、移动端、AIGC 组件及丰富图标资源能力，覆盖主流框架与平台，开箱即用',
+      quote:
+        '“复杂层级的精确还原——一个未经整理的设计稿，且包含有悬浮元素，D2C 的视觉还原竟然跟设计稿完全对得上，有点儿超预期。”',
+      user: 'bruceren',
+      role: '视觉设计师',
+      downloads: '当月下载量（内外部）',
+      downloadTrend: '下载量趋势',
+      downloadCount: '{count} 次',
+      tenThousandPlus: '万次',
+      tenThousand: '万次+',
+      designReferences: '设计资源引用',
+      projects: '使用项目数',
+      prompts: {
+        activity: '基于 TDesign 组件库生成电商活动页面',
+        multiplatform: '通过 AI 智能匹配，自动适配多端设计规范',
+        enterprise: '从零搭建企业级中后台，用 TDesign 提效 60%',
+        d2c: '使用 D2C 将设计稿一键转换为前端代码',
+        theme: '利用 TDesign 主题定制能力快速落地品牌设计系统',
+      },
+    },
+    resources: {
+      title: '全方位资源支持，赋能每一个技术栈',
+      description: '提供桌面端、移动端、AIGC 组件及丰富图标资源能力，覆盖主流框架与平台，开箱即用',
+      logoAlt: '{name} 标志',
+      enterAction: '点击进入',
+      cards: {
+        web: {
+          title: '桌面端组件',
+          description: '提供桌面端风格统一的组件资源',
+        },
+        mobile: {
+          title: '移动端组件',
+          description: '提供移动端风格统一的组件资源',
+        },
+        aigc: {
+          title: 'AIGC 组件',
+          description: '提供桌面端和移动端风格统一的组件资源',
+        },
+        icons: {
+          title: 'TDesign 图标库',
+          description: '支持一键调整描边粗细与多色动态调节',
+        },
+      },
+      items: {
+        miniprogram: '小程序',
+        iconLibrary: '图标库',
+        designResources: '设计资源',
+      },
     },
     service: {
-      title: '行行可用，企业首选',
-      usage: '不同行业产品已使用',
-      description:
-        '从消费产品到金融服务，从 B 端到 C 端产品，从大品牌到个人开发者，TDesign 都能充分满足低成本，高效有品质感的前端设计和开发工作，助力提升产品体验，有效提升设计研发效能',
+      title: '全域适配，企业优选',
+      description: '从消费互联网到产业互联网，从 B 端到 C 端产品，从大型品牌到独立开发者',
+      stats: {
+        projectsUnit: '+',
+        projects: '产品/项目使用',
+        teamsUnit: '家+',
+        teams: '企业团队深度合作中',
+        downloadsUnit: '万次+',
+        downloads: '月下载量稳定增长',
+      },
     },
     setup: {
       title: '与 TDesign，共生长',
-      description:
-        '不止腾讯生态，更有质感，更稳定，更持续的 TDesign 助力更多行业和开发者，提升产品体验，提高设计研发效能，用 TDesign，更低成本，探索更多可能',
-      action: '开始使用',
+      description: 'TDesign 以更稳定、持续的设计体系，助力腾讯生态和更多行业与开发者提升产品体验与研发效能',
+      developmentAction: '开发资源',
+      designAction: '设计资源',
     },
     code: {
       importantTag: '<t-tag theme="primary">重要</t-tag>',
@@ -144,23 +214,25 @@ export const zhCN = {
 export const enUS = {
   home: {
     hero: {
-      subtitle: 'Build work aesthetics for designers and developers',
+      subtitle: 'Better work for designers & developers',
       alliance: {
-        title: 'A Tencent Device-oriented Service product',
+        title: 'A Tencent TDS Alliance product',
         description:
-          'Tencent Device-oriented Service (TDS) is a front-end technology product alliance founded by the Tencent Front-end Technology Committee.',
+          "Tencent Device-oriented Service (TDS) is a front-end technology alliance founded by Tencent's Front-end Technology Committee.",
         details: 'Learn more',
       },
-      followWechat: 'Follow the TDesign WeChat account',
+      followWechat: 'Follow TDesign on WeChat',
       followWechatCompact: 'Follow on WeChat',
+      followWechatEyebrow: 'Follow us',
+      followWechatTitle: 'TDesign WeChat',
     },
     solution: {
-      label: 'Solution',
+      label: 'Solutions',
       desktop: 'Desktop',
       mobile: 'Mobile',
-      miniprogram: 'MiniProgram',
-      developmentResources: 'Development Resources',
-      designResources: 'Design Resources',
+      miniprogram: 'Mini Program',
+      developmentResources: 'Development',
+      designResources: 'Design',
     },
     resourceNames: {
       vue: 'Vue',
@@ -172,10 +244,10 @@ export const enUS = {
       sketch: 'Sketch',
       axure: 'Axure',
       adobeXd: 'AdobeXD',
-      miniprogram: 'WeChat MiniProgram',
+      miniprogram: 'WeChat Mini Program',
     },
     status: {
-      pending: 'In Progress',
+      pending: 'Coming Soon',
       stable: 'Stable',
       alpha: 'Alpha',
       beta: 'Beta',
@@ -183,39 +255,39 @@ export const enUS = {
     },
     tabs: {
       open: 'Open',
-      creation: 'Creation',
-      corporation: 'Corporation',
+      creation: 'Create',
+      corporation: 'Co-create',
     },
     open: {
       features: {
         frameworks: {
-          title: 'Multiple-framework versions',
-          description: 'Support popular tech stacks React/Vue/MiniProgram/Flutter',
+          title: 'Multiple tech stacks',
+          description: 'Official support for React, Vue, WeChat Mini Program, Uniapp, and Flutter.',
         },
         platforms: {
-          title: 'Multi-platform compatibility',
-          description: 'Provide two sets of component resources in unified desktop and mobile styles.',
+          title: 'Desktop & mobile',
+          description: 'Unified component resources for desktop and mobile.',
         },
         industries: {
-          title: 'Industry-specific component libraries',
-          description: 'Developed by multiple Tencent business teams based on a unified design system.',
+          title: 'Industry components',
+          description: 'Built with Tencent teams for different industries under one design system.',
         },
       },
-      title: 'Open Resources, Continuous Iteration',
-      description: 'Always maintain an open mindset and look forward to building an open source ecosystem.',
+      title: 'Open source, always evolving',
+      description: 'MIT-licensed and open to all. Join us in growing the open-source ecosystem.',
     },
     componentDemo: {
-      accountPlaceholder: 'Please enter account',
-      selectPlaceholder: 'Please select',
+      accountPlaceholder: 'Username',
+      selectPlaceholder: 'Select',
       departments: {
-        marketing: 'Marketing Department',
-        finance: 'Finance Department',
-        development: 'Development Department',
+        marketing: 'Marketing',
+        finance: 'Finance',
+        development: 'Engineering',
       },
       regions: {
         headquarters: 'Headquarters',
-        eastChina: 'East China Region',
-        southChina: 'South China Region',
+        eastChina: 'East China',
+        southChina: 'South China',
       },
       menu: {
         dashboard: 'Dashboard',
@@ -235,10 +307,10 @@ export const enUS = {
         deployDetail: 'Deploy Page',
         secondaryDetail: 'Secondary',
       },
-      primaryButton: 'Primary Button',
+      primaryButton: 'Primary',
       button: 'Button',
-      checkableTag: 'Checkable Tag',
-      defaultTag: 'Default Tag',
+      checkableTag: 'Selectable',
+      defaultTag: 'Default',
       light: 'Light',
       dark: 'Dark',
       neutral: 'Neutral',
@@ -246,39 +318,106 @@ export const enUS = {
     creation: {
       features: {
         scalable: {
-          title: 'Scalable Design Style',
-          description:
-            'Abstracted design styles into Design Tokens to meet the brand customization needs of different products.',
+          title: 'Flexible design styles',
+          description: 'Design Tokens make brand customization easy.',
         },
         resources: {
-          title: 'Variety of Design Resources',
-          description:
-            'Provide a variety of design resources for desktop and mobile applications such as Sketch/Figma.',
+          title: 'Rich design resources',
+          description: 'Provide Figma resources for desktop and mobile.',
         },
         guidelines: {
-          title: 'Professional Design Guidelines',
-          description: 'Summarize design experience into guidelines to assist users in properly using components.',
+          title: 'Expert design guides',
+          description: 'Practical guidance for using components correctly.',
         },
       },
-      title: 'Inclusive, flexible, and easy-to-use',
-      description: 'Maintain a keen sense of design, seeking commonalities in complex business scenarios.',
+      title: 'Inclusive, flexible, easy to use',
+      description: 'Finding shared design solutions across complex business needs.',
     },
     contributors: {
-      title: 'TDesign is a collective effort, with 400+ contributors from 60+ teams',
+      title: 'Built together by our community',
+      description: '10+ open-source repos and 800+ contributors working together worldwide.',
+      activity: {
+        title: 'Live activity',
+        viewAll: 'View all',
+        loading: 'Loading live activity',
+        githubProfile: "{name}'s GitHub profile",
+        justNow: 'Just now',
+        stats: {
+          pullRequests: 'New PRs this week',
+          commits: 'New commits this week',
+          issues: 'Active issues',
+        },
+      },
+    },
+    businessCases: {
+      title: 'More products are adopting TDesign',
       description:
-        "TDesign owes its birth and growth to open source. From the outset, TDesign has adhered to the principles of equality, transparency, and openness in accordance with open-source collaboration. Through internal open-source practices, we have brought together Tencent's best and mature component libraries for co-creation and sharing.",
+        'Desktop, mobile, and AIGC components plus rich icon resources—ready for major frameworks and platforms.',
+      quote: '“Even with complex layers and floating elements, D2C matched the original design better than expected.”',
+      user: 'bruceren',
+      role: 'Visual Designer',
+      downloads: 'Monthly downloads',
+      downloadTrend: 'Download trend',
+      downloadCount: '{count} downloads',
+      tenThousandPlus: 'M',
+      tenThousand: 'M+',
+      designReferences: 'Figma usage',
+      projects: 'Projects',
+      prompts: {
+        activity: 'Create an e-commerce campaign with TDesign',
+        multiplatform: 'Use AI to adapt designs across platforms',
+        enterprise: 'Build an enterprise admin system 60% faster',
+        d2c: 'Turn designs into frontend code with D2C',
+        theme: 'Build a brand system with TDesign themes',
+      },
+    },
+    resources: {
+      title: 'Resources for every stack',
+      description: 'Components and icons for major frameworks and platforms.',
+      logoAlt: '{name} logo',
+      enterAction: 'Open',
+      cards: {
+        web: {
+          title: 'Desktop Components',
+          description: 'Unified UI for desktop apps',
+        },
+        mobile: {
+          title: 'Mobile Components',
+          description: 'Unified UI for mobile apps',
+        },
+        aigc: {
+          title: 'AIGC Components',
+          description: 'AI components for desktop and mobile',
+        },
+        icons: {
+          title: 'TDesign Icons',
+          description: 'Customize strokes and colors',
+        },
+      },
+      items: {
+        miniprogram: 'MiniProgram',
+        iconLibrary: 'Icons',
+        designResources: 'Design Kit',
+      },
     },
     service: {
-      title: 'Versatile and the top choice for businesses',
-      usage: 'different industry products in use',
-      description:
-        'From consumer products to financial services, from B2B to B2C products, from major brands to individual developers, TDesign fully meets the needs of low-cost, efficient, and high-quality front-end design and development work, helping to enhance product experience and effectively improve design and development efficiency.',
+      title: 'Built for all, trusted by enterprises',
+      description: 'For consumer and industrial products, B2B and B2C, leading brands and independent developers',
+      stats: {
+        projectsUnit: '+',
+        projects: 'Products & projects',
+        teamsUnit: '+',
+        teams: 'Enterprise partners',
+        downloadsUnit: 'M+',
+        downloads: 'Growing downloads',
+      },
     },
     setup: {
       title: 'Grow together with TDesign',
       description:
-        'Not only limited to the Tencent ecosystem, TDesign provides a more textured, stable, and sustainable experience to help a wider range of industries and developers enhance product experience, improve design and development efficiency, and explore more possibilities at a lower cost with TDesign.',
-      action: 'Get started',
+        'A stable, evolving design system that helps teams improve product quality and development efficiency.',
+      developmentAction: 'Development',
+      designAction: 'Design',
     },
     code: {
       importantTag: '<t-tag theme="primary">Important</t-tag>',

@@ -32,6 +32,13 @@ export default defineConfig(({ mode }) => ({
         index: path.resolve(__dirname, 'index.html'),
         contributor: path.resolve(__dirname, 'contributor.html'),
       },
+      output: {
+        manualChunks: {
+          'icons-view': ['tdesign-icons-view'],
+          'site-components': ['@tdesign/site-components'],
+          'tdesign-vue': ['tdesign-vue-next'],
+        },
+      },
     },
   },
   server: {

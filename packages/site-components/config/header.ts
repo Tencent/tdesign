@@ -1,50 +1,11 @@
 import { isEn, isIntranet } from '@utils';
 import { jumpLocation } from '@utils/locale';
 import flutterIcon from '../src/images/flutter-logo.svg?url';
-import uniappIcon from '../src/images/uniapp-logo.png?url';
+import uniappIcon from '../src/images/uniapp-logo.svg?url';
 import reactIcon from '../src/images/react-logo.svg?url';
 import vueIcon from '../src/images/vue-logo.svg?url';
-import wxIcon from '../src/images/wx-logo.svg?url';
+import wxIcon from '../src/images/miniprogram-logo.svg?url';
 import type { ComponentLinkGroup, HeaderConfig, HeaderItem } from './types';
-
-const headerList: HeaderItem[] = [
-  {
-    name: '设计',
-    path: jumpLocation('/design'),
-    type: 'main',
-    target: '_self',
-  },
-  {
-    name: '基础组件',
-    type: 'base',
-    target: '_self',
-  },
-  {
-    // 内网展示
-    name: '行业组件',
-    path: '/trade',
-    type: 'main',
-    target: '_self',
-  },
-  {
-    name: '页面模板',
-    path: 'https://tdesign.tencent.com/starter/',
-    type: 'main',
-    target: '_self',
-  },
-  {
-    name: '资源',
-    path: jumpLocation('/source'),
-    type: 'main',
-    target: '_self',
-  },
-  {
-    name: '关于',
-    path: jumpLocation('/about'),
-    type: 'main',
-    target: '_self',
-  },
-];
 
 const baseComponentsLinks: HeaderConfig['baseComponentsLinks'] = {
   web: {
@@ -127,7 +88,6 @@ const baseComponentPrefix = [
 ];
 
 export default {
-  headerList,
   baseComponentsLinks,
   baseComponentPrefix,
 };
@@ -146,7 +106,6 @@ export const getHeaderConfig = (): HeaderConfig => {
       type: 'main',
       target: '_self',
     },
-    { name: en ? 'Resources' : '资源', path: jumpLocation('/source'), type: 'main', target: '_self' },
     { name: en ? 'About' : '关于', path: jumpLocation('/about/introduce'), type: 'main', target: '_self' },
   ];
   const headerList = headerItems.filter((item): item is HeaderItem => item !== null);

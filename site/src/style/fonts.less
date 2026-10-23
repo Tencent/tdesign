@@ -4,6 +4,7 @@
   font-weight: normal;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0030-0039;
 }
 
 .font(@i) when(@i <= 64) {
@@ -150,10 +151,6 @@
   .fonts-block-wrapper {
     display: flex;
 
-    .fonts-block + .fonts-block {
-      margin-left: 24px;
-    }
-
     .fonts-block {
       padding: 16px;
       flex: 1;
@@ -189,6 +186,10 @@
           }
         }
       }
+    }
+
+    .fonts-block + .fonts-block {
+      margin-left: 24px;
     }
   }
 }

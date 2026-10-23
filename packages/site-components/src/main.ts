@@ -34,4 +34,5 @@ import './components/td-portal/index';
 import './components/td-select/index';
 import './components/td-switch/index';
 
-export { getLang, registerLocaleChange } from './utils/locale';
+export { getLang, jumpLocation, registerLocaleChange } from './utils/locale';
+export { isIntranet } from './utils';

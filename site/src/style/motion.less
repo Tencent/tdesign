@@ -8,32 +8,6 @@
   }
 }
 
-:root[theme-mode='dark'] {
-  .axis-motion-stage:not(.dark) {
-    display: none;
-  }
-
-  .axis-motion-stage.dark {
-    display: block;
-  }
-
-  .container-motion:not(.dark) {
-    display: none;
-  }
-
-  .container-motion.dark {
-    display: block;
-  }
-
-  .fade-motion:not(.dark) {
-    display: none;
-  }
-
-  .fade-motion.dark {
-    display: block;
-  }
-}
-
 .doc-motion {
   img {
     margin: 0;
@@ -113,8 +87,8 @@
           flex-shrink: 0;
           width: 44px;
           height: 44px;
-          border: 1px solid #0052d9;
-          background: #ecf2fe;
+          border: 1px solid var(--brand-main);
+          background: var(--brand-main-light);
           border-radius: 100%;
           position: absolute;
           left: 48px;
@@ -174,7 +148,7 @@
           position: absolute;
           left: 24px;
           top: 50%;
-          color: #00a870;
+          color: var(--success-main);
           width: 14px;
           height: 14px;
           transform: translate(0, -50%);
@@ -218,5 +192,31 @@
       display: inline-flex;
       align-items: center;
     }
+  }
+}
+
+:root[theme-mode='dark'] {
+  .axis-motion-stage:not(.dark) {
+    display: none;
+  }
+
+  .axis-motion-stage.dark {
+    display: block;
+  }
+
+  .container-motion:not(.dark) {
+    display: none;
+  }
+
+  .container-motion.dark {
+    display: block;
+  }
+
+  .fade-motion:not(.dark) {
+    display: none;
+  }
+
+  .fade-motion.dark {
+    display: block;
   }
 }

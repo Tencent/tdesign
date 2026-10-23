@@ -4,7 +4,6 @@ import TDesign from 'tdesign-vue-next';
 import routes from './routes';
 import App from './App.vue';
 import { getLocaleFromPath, i18n, setLocale } from './i18n';
-import '@/style/index.less';
 
 // import tdesign style;
 import 'tdesign-vue-next/es/style/index.css';
@@ -15,6 +14,7 @@ import '@tdesign/site-components/lib/styles/style.css';
 import '@tdesign/site-components/lib/styles/prism-theme.less';
 import '@tdesign/site-components/lib/styles/prism-theme-dark.less';
 import 'tdesign-icons-view';
+import '@/style/index.less';
 import { registerLocaleChange } from '@tdesign/site-components';
 
 registerLocaleChange();
