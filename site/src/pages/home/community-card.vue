@@ -24,7 +24,7 @@
           <img :src="tdesignLogo" alt="TDesign" />
         </span>
         <div
-          v-for="(member, index) in communityMembers"
+          v-for="(point, index) in networkPoints"
           :key="index"
           :class="[
             'community-network__orbit',
@@ -40,23 +40,30 @@
               },
             ]"
             :style="{
-              left: `${networkPoints[index].x}px`,
-              top: `${networkPoints[index].y}px`,
-              backgroundColor: avatarColors[index % avatarColors.length],
+              left: `${point.x}px`,
+              top: `${point.y}px`,
+              backgroundColor: communityMembers[index] ? avatarColors[index % avatarColors.length] : 'transparent',
             }"
           >
             <span class="community-network__avatar-content">
-              <a
-                v-if="isGithubMember(member)"
-                class="community-network__profile-link"
-                :href="githubProfile(member)"
-                :aria-label="t('home.contributors.activity.githubProfile', { name: member })"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img :src="githubAvatar(member)" :alt="member" />
-              </a>
-              <template v-else>{{ member }}</template>
+              <template v-if="communityMembers[index]">
+                <a
+                  v-if="isGithubMember(communityMembers[index])"
+                  class="community-network__profile-link"
+                  :href="githubProfile(communityMembers[index])"
+                  :aria-label="
+                    t('home.contributors.activity.githubProfile', {
+                      name: communityMembers[index],
+                    })
+                  "
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img :src="githubAvatar(communityMembers[index])" :alt="communityMembers[index]" />
+                </a>
+                <template v-else>{{ communityMembers[index] }}</template>
+              </template>
+              <t-skeleton v-else animation="gradient" :row-col="[{ type: 'circle', size: '48px' }]" />
             </span>
           </span>
         </div>

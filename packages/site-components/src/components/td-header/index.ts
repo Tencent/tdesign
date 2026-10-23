@@ -271,7 +271,7 @@ export default define<HeaderProps>({
     },
   },
   npmVersions: {
-    value: (_host, v) => v,
+    value: (_host, v) => v || {},
     connect: (host) => {
       fetch(import.meta.env.VITE_NPM_VERSIONS_API_URL)
         .then((res) => res.json())

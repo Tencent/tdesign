@@ -7,25 +7,6 @@ import { HOME_API_ENDPOINTS } from '../services/api';
 const OUTER_RING_POINT_COUNT = 11;
 const INNER_RING_POINT_COUNT = 6;
 const NETWORK_CENTER = { x: 216, y: 206.5 };
-const DEFAULT_COMMUNITY_MEMBERS = [
-  '👩🏻',
-  '👨🏻',
-  '👩🏻',
-  '👨🏻',
-  '👩🏻',
-  '👨🏻',
-  '👩🏻',
-  '👨🏻',
-  '👨🏻',
-  '👨🏻',
-  '👩🏻',
-  '👨🏻',
-  '👩🏻',
-  '👨🏻',
-  '👩🏻',
-  '👨🏻',
-  '👨🏻',
-];
 
 interface Activity {
   title: string;
@@ -160,7 +141,7 @@ function parseStats(value: unknown): CommunityStat[] {
 
 export function createCommunityCardModel() {
   const { locale, t } = useI18n({ messages: homeMessages });
-  const communityMembers = ref([...DEFAULT_COMMUNITY_MEMBERS]);
+  const communityMembers = ref<string[]>([]);
   const activeMembers = ref<number[]>([]);
   const changingMembers = ref<number[]>([]);
   const activities = ref<Activity[]>([]);
@@ -224,6 +205,7 @@ export function createCommunityCardModel() {
       contributors = parseContributors(data);
       if (contributors.length) {
         communityMembers.value = NETWORK_POINTS.map((_, index) => contributors[index % contributors.length]);
+        startContributorAnimation();
       }
     } catch (error) {
       console.error(error);
@@ -262,7 +244,6 @@ export function createCommunityCardModel() {
   onMounted(() => {
     fetchContributors();
     fetchActivity();
-    startContributorAnimation();
   });
 
   onBeforeUnmount(() => {
