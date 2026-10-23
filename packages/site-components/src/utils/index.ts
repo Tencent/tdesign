@@ -85,9 +85,9 @@ export const mobileBodyStyle = {
   },
 };
 
-// 判断是否内网
+// 根据当前页面是否为 WOA 域名选择内外网内容。
 export function isIntranet() {
-  return location.host.includes('oa.com');
+  return location.hostname === 'woa.com' || location.hostname.endsWith('.woa.com');
 }
 
 // 监听暗黑模式

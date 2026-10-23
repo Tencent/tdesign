@@ -208,8 +208,8 @@ importers:
   site:
     dependencies:
       '@tdesign/site-components':
-        specifier: ^0.19.4
-        version: 0.19.4
+        specifier: workspace:*
+        version: link:../packages/site-components
       canvas-3d:
         specifier: ^1.0.14
         version: 1.0.14
@@ -865,9 +865,6 @@ packages:
 
   '@rtsao/scc@1.1.0':
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
-
-  '@tdesign/site-components@0.19.4':
-    resolution: {integrity: sha512-kMqctp5D6JdGf7/pDNCsMhBD4V27h0V3ByGICMUu8HRsigKk30fgP3Y4GL8tM2lLe2b7mVrcVXJwGhBQKEHF8Q==}
 
   '@tootallnate/once@1.1.2':
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
@@ -2592,11 +2589,6 @@ packages:
 
   hybrids@9.1.23:
     resolution: {integrity: sha512-WMM/5wsE2f7nL3DL0BPokeSFOBaiQrUxt/9oWnejahZLqk0Mqs+FZOD9K96R13v066EJdhlachpmF2dD84ynSg==}
-    engines: {node: '>=18.0.0'}
-    hasBin: true
-
-  hybrids@9.2.1:
-    resolution: {integrity: sha512-E4Isjj1JgdbtA0DMZnzL5P5KztR3RZwNBHgiHkh/T43ZP6gnYmIo1z3y9nOovK66TMQ0RzCZczC4zz+Te7wPMA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -5297,15 +5289,6 @@ snapshots:
 
   '@rtsao/scc@1.1.0': {}
 
-  '@tdesign/site-components@0.19.4':
-    dependencies:
-      '@popperjs/core': 2.11.8
-      hybrids: 9.2.1
-      nprogress: 0.2.0
-      prismjs: 1.29.0
-      qrcode: 1.5.4
-      tdesign-icons-svg: 0.0.1
-
   '@tootallnate/once@1.1.2':
     optional: true
 
@@ -7382,8 +7365,6 @@ snapshots:
   husky@8.0.3: {}
 
   hybrids@9.1.23: {}
-
-  hybrids@9.2.1: {}
 
   iconv-lite@0.4.24:
     dependencies:
