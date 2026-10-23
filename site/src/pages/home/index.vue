@@ -15,7 +15,7 @@
           </h2>
         </div>
         <t-popup trigger="hover" placement="top" overlay-inner-class-name="wechat-qrcode" :z-index="100">
-          <div class="banner-booking" data-screenshot-root>
+          <div class="banner-booking">
             <button class="banner-booking__button" type="button">
               <span class="banner-booking__logo">
                 <img src="./assets/tdesign.svg" alt="" />
@@ -34,7 +34,7 @@
         <div ref="newsTrackRef" class="module-news__track">
           <div
             v-for="(news, index) in loopedNewsList"
-            :key="`${index >= newsList.length ? 'clone' : 'original'}-${index % newsList.length}`"
+            :key="index"
             class="module-news__item"
             :aria-hidden="index >= newsList.length ? 'true' : undefined"
             @click="() => handleClickNews(news.url)"

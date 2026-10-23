@@ -2,7 +2,6 @@
   <section
     ref="resourceSectionRef"
     class="resource-section"
-    data-screenshot-root
     :style="{
       '--mobile-section-height': mobileSectionHeight,
       '--tablet-layout-scale': tabletLayoutScale,

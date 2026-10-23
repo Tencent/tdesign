@@ -1,6 +1,8 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, type Ref } from 'vue';
+import { isIntranet } from '@tdesign/site-components';
 
-import { HOME_API_ENDPOINTS, isWoaDomain } from '../services/api';
+import { isRecord } from '@/utils/type';
+import { HOME_API_ENDPOINTS } from '../services/api';
 
 const NEWS_ITEM_STRIDE = 342 + 16;
 
@@ -10,10 +12,6 @@ export interface NewsItem {
   date: string;
   url?: string;
   isIntranet?: boolean;
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
 }
 
 function parseNews(value: unknown): NewsItem[] {
@@ -102,7 +100,7 @@ export function createHomeNews(windowWidth: Ref<number>) {
     const value: unknown = await response.json();
     const list = parseNews(value);
 
-    newsList.value = isWoaDomain() ? list : list.filter((item) => !item.isIntranet);
+    newsList.value = isIntranet() ? list : list.filter((item) => !item.isIntranet);
     nextTick(resetAndStartAutoplay);
   }
 

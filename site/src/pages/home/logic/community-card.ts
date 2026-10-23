@@ -2,6 +2,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import homeMessages from '@/locales/pages/home';
+import { isRecord } from '@/utils/type';
 import { HOME_API_ENDPOINTS } from '../services/api';
 
 const OUTER_RING_POINT_COUNT = 11;
@@ -37,10 +38,6 @@ const NETWORK_POINTS = [
   ...createRingPoints(183, OUTER_RING_POINT_COUNT),
   ...createRingPoints(119, INNER_RING_POINT_COUNT),
 ];
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
 
 function getStringList(value: unknown): string[] {
   if (!Array.isArray(value)) return [];

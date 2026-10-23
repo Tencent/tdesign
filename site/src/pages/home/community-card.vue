@@ -78,7 +78,7 @@
             theme="default"
             size="small"
             :underline="false"
-            href="https://tdesign.tencent.com/about/release"
+            :href="jumpLocation('/about/release')"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -138,6 +138,8 @@
 
 <script setup lang="ts">
 import { Icon } from 'tdesign-icons-vue-next';
+import { jumpLocation } from '@tdesign/site-components';
+
 import tdesignLogo from './assets/tdesign.svg';
 import { createCommunityCardModel } from './logic/community-card';
 

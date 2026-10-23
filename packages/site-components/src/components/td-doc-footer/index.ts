@@ -88,7 +88,7 @@ export default define<FooterHost>({
     const mobileBodyStyle = { ...host.mobileBodyStyle };
 
     return html`
-      <footer class="TDesign-doc-footer" style="${mobileBodyStyle}" data-screenshot-root>
+      <footer class="TDesign-doc-footer" style="${mobileBodyStyle}">
         <div class="TDesign-doc-footer__inner">
           <section class="TDesign-doc-footer__main">
             <div class="TDesign-doc-footer__brand">

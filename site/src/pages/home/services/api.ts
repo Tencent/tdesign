@@ -6,10 +6,6 @@ const COMMUNITY_RELEASE_BASE_URL =
 // 首页云函数接口基础地址。
 const CLOUD_FUNCTION_BASE_URL = 'https://1257786608-faj515jw5t-hk.scf.tencentcs.com';
 
-export function isWoaDomain(): boolean {
-  return location.hostname === 'woa.com' || location.hostname.endsWith('.woa.com');
-}
-
 export const HOME_API_ENDPOINTS = {
   // 首页新闻列表。
   news: `${CLOUD_FUNCTION_BASE_URL}/news`,

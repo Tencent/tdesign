@@ -1,4 +1,5 @@
 import { computed, type ComputedRef } from 'vue';
+import { jumpLocation } from '@tdesign/site-components';
 
 import figmaLogo from '@/assets/figma-logo.svg';
 import flutterLogo from '@/assets/flutter-logo.svg';
@@ -35,9 +36,9 @@ export function createResourceCards(t: Translate): ComputedRef<ResourceCard[]> {
       title: t('home.resources.cards.web.title'),
       description: t('home.resources.cards.web.description'),
       items: [
-        { name: 'Vue Next', logo: vueLogo, href: 'https://tdesign.tencent.com/vue-next/', releaseKey: 'vue-next' },
-        { name: 'React', logo: reactLogo, href: 'https://tdesign.tencent.com/react/', releaseKey: 'react-web' },
-        { name: 'Vue', logo: vueLogo, href: 'https://tdesign.tencent.com/vue/', releaseKey: 'vue2' },
+        { name: 'Vue Next', logo: vueLogo, href: jumpLocation('/vue-next'), releaseKey: 'vue-next' },
+        { name: 'React', logo: reactLogo, href: jumpLocation('/react'), releaseKey: 'react-web' },
+        { name: 'Vue', logo: vueLogo, href: jumpLocation('/vue'), releaseKey: 'vue2' },
         {
           name: t('home.resources.items.designResources'),
           logo: figmaLogo,
@@ -55,23 +56,23 @@ export function createResourceCards(t: Translate): ComputedRef<ResourceCard[]> {
         {
           name: t('home.resources.items.miniprogram'),
           logo: miniprogramLogo,
-          href: 'https://tdesign.tencent.com/miniprogram/',
+          href: jumpLocation('/miniprogram'),
           releaseKey: 'miniprogram',
         },
         {
           name: 'Vue Next',
           logo: vueLogo,
-          href: 'https://tdesign.tencent.com/mobile-vue/',
+          href: jumpLocation('/mobile-vue'),
           releaseKey: 'vue-mobile',
         },
         {
           name: 'React',
           logo: reactLogo,
-          href: 'https://tdesign.tencent.com/mobile-react/',
+          href: jumpLocation('/mobile-react'),
           releaseKey: 'react-mobile',
         },
-        { name: 'Uniapp', logo: uniappLogo, href: 'https://tdesign.tencent.com/uniapp/', releaseKey: 'uniapp-mobile' },
-        { name: 'Flutter', logo: flutterLogo, href: 'https://tdesign.tencent.com/flutter/', releaseKey: 'flutter' },
+        { name: 'Uniapp', logo: uniappLogo, href: jumpLocation('/uniapp'), releaseKey: 'uniapp-mobile' },
+        { name: 'Flutter', logo: flutterLogo, href: jumpLocation('/flutter'), releaseKey: 'flutter' },
         {
           name: t('home.resources.items.designResources'),
           logo: figmaLogo,
@@ -89,19 +90,19 @@ export function createResourceCards(t: Translate): ComputedRef<ResourceCard[]> {
         {
           name: 'Vue Next',
           logo: vueLogo,
-          href: 'https://tdesign.tencent.com/vue-next-chat/',
+          href: jumpLocation('/vue-next-chat'),
           releaseKey: 'vue-chat',
         },
         {
           name: 'React',
           logo: reactLogo,
-          href: 'https://tdesign.tencent.com/react-chat/',
+          href: jumpLocation('/react-chat'),
           releaseKey: 'react-chat',
         },
         {
           name: t('home.resources.items.miniprogram'),
           logo: miniprogramLogo,
-          href: 'https://tdesign.tencent.com/miniprogram-chat/',
+          href: jumpLocation('/miniprogram-chat'),
           releaseKey: 'miniprogram-chat',
         },
         {
@@ -121,7 +122,7 @@ export function createResourceCards(t: Translate): ComputedRef<ResourceCard[]> {
         {
           name: t('home.resources.items.iconLibrary'),
           logo: iconLibrary,
-          href: 'https://tdesign.tencent.com/icons/',
+          href: jumpLocation('/icons'),
           releaseKey: 'icons',
         },
         {
