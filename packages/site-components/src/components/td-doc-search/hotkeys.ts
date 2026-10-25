@@ -34,7 +34,11 @@ export function registerHotkeys({ onOpen, onClose }: HotkeyHandlers): () => void
       return;
     }
     // "/"：不在输入态下触发
-    if (e.key === '/' && !isEditable(document.activeElement)) {
+    if (
+      e.key === '/' &&
+      !isEditable(document.activeElement) &&
+      !e.composedPath().some((target) => target instanceof Element && isEditable(target))
+    ) {
       e.preventDefault();
       onOpen && onOpen();
       return;
