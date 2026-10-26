@@ -50,6 +50,7 @@ export function createHomeNews(windowWidth: Ref<number>) {
 
   let animationFrame: number | null = null;
   let lastTimestamp = 0;
+  let scrollPosition = 0;
 
   function handleClickNews(url?: string): void {
     if (url) window.open(url, '_blank');
@@ -65,10 +66,11 @@ export function createHomeNews(windowWidth: Ref<number>) {
 
     if (lastTimestamp > 0) {
       const elapsed = Math.min(timestamp - lastTimestamp, 50);
-      track.scrollLeft += (elapsed / 1000) * 48;
+      scrollPosition += (elapsed / 1000) * 48;
 
       const cycleWidth = items[newsList.value.length].offsetLeft - items[0].offsetLeft;
-      if (cycleWidth > 0 && track.scrollLeft >= cycleWidth) track.scrollLeft -= cycleWidth;
+      if (cycleWidth > 0) scrollPosition %= cycleWidth;
+      track.scrollLeft = scrollPosition;
     }
 
     lastTimestamp = timestamp;
@@ -77,6 +79,7 @@ export function createHomeNews(windowWidth: Ref<number>) {
 
   function startNewsAutoplay(): void {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || animationFrame !== null) return;
+    scrollPosition = newsTrackRef.value?.scrollLeft ?? 0;
     lastTimestamp = 0;
     animationFrame = requestAnimationFrame(animate);
   }
