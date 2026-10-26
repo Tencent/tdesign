@@ -1,4 +1,5 @@
 import { html, define, dispatch } from 'hybrids';
+import { parseBoolean } from '@utils';
 import style from './style.less?inline';
 import tipsIcon from '@images/tips.svg?raw';
 import codeIcon from '@images/code.svg?raw';
@@ -109,7 +110,9 @@ function renderConfig(configList: ConfigItem[] = []) {
 export default define<DocUsageProps>({
   tag: 'td-doc-usage',
   code: '',
-  showCode: false,
+  showCode: {
+    value: (_host, v) => parseBoolean(v, false),
+  },
   language: 'markup',
   panel: {
     value: (host, v) => v || host.panelList[0]?.value,

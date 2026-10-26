@@ -1,5 +1,6 @@
 import { html, define, dispatch } from 'hybrids';
 import Prism from 'prismjs';
+import { parseBoolean } from '@utils';
 import style from './style.less?inline';
 import codeIcon from '@images/code.svg?raw';
 import 'prismjs/components/prism-markup.js';
@@ -32,7 +33,9 @@ export default define<DemoHost>({
   tag: 'td-doc-demo',
   code: '',
   language: 'jsx',
-  showCode: false,
+  showCode: {
+    value: (_host, v) => parseBoolean(v, false),
+  },
   mode: 'auto', // auto open
   currentLangIndex: 0,
   languages: undefined, // multiple languages display
@@ -100,10 +103,12 @@ export default define<DemoHost>({
     const highlightCode = Prism.highlight(currentCode, Prism.languages[language], language);
     const activeStyle =
       activeStyleMap && languageArr.length ? getTabStyle(activeStyleMap, languageArr[currentLangIndex]) : {};
+    // mode 为 open 时始终保持展开，且不渲染切换按钮
+    const expanded = mode === 'open' || showCode;
     const showCodeStyle = {
       transitionDuration: '.2s',
-      maxHeight: showCode ? '560px' : 0,
-      transitionTimingFunction: showCode ? 'cubic-bezier(.82, 0, 1, .9)' : 'ease',
+      maxHeight: expanded ? '560px' : 0,
+      transitionTimingFunction: expanded ? 'cubic-bezier(.82, 0, 1, .9)' : 'ease',
     };
 
     const handleClick = (index: number) => {
