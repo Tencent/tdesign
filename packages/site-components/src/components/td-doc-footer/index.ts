@@ -1,7 +1,7 @@
 import { html, define } from 'hybrids';
 import { getFooterConfig } from '@config/footer';
 import { getLocale } from '@config/locale';
-import { patchShadowDomIntoDom, mobileBodyStyle } from '@utils';
+import { patchShadowDomIntoDom } from '@utils';
 import { fetchEcosystemConfig, getEcosystemLinkTarget } from '@config/ecosystem';
 import type { FooterGroup } from '@config/types';
 import tencentCloudIcon from '@images/tencentcloud-logo.svg?raw';
@@ -28,9 +28,6 @@ const locale = getLocale();
 const currentYear = new Date().getFullYear();
 
 type GroupType = 'vue' | 'react' | 'wx' | 'uniapp' | 'flutter' | 'design';
-interface BodyStyle {
-  paddingRight?: string;
-}
 
 const groupCodeMap = {
   vue: vueGroup,
@@ -51,7 +48,6 @@ const communityPlatforms: Array<{ type: GroupType; name: string; icon: string }>
 ];
 
 interface FooterHost {
-  mobileBodyStyle: BodyStyle;
   platform: string;
   displayQrCode: string;
   patchDom: boolean;
@@ -60,7 +56,6 @@ interface FooterHost {
 
 export default define<FooterHost>({
   tag: 'td-doc-footer',
-  mobileBodyStyle,
   platform: 'web',
   displayQrCode: '',
   footerLinks: {
@@ -85,10 +80,8 @@ export default define<FooterHost>({
     connect: patchShadowDomIntoDom,
   },
   render: (host) => {
-    const mobileBodyStyle = { ...host.mobileBodyStyle };
-
     return html`
-      <footer class="TDesign-doc-footer" style="${mobileBodyStyle}">
+      <footer class="TDesign-doc-footer">
         <div class="TDesign-doc-footer__inner">
           <section class="TDesign-doc-footer__main">
             <div class="TDesign-doc-footer__brand">
