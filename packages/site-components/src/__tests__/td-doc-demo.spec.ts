@@ -39,6 +39,19 @@ vi.mock('prismjs/components/prism-jsx.js', () => ({}));
 vi.mock('prismjs/components/prism-javascript.js', () => ({}));
 vi.mock('prismjs/components/prism-typescript', () => ({}));
 
+const showCodeProp = docDemo.showCode as unknown as {
+  value: (host: { showCode?: boolean }, value: unknown) => boolean;
+};
+
+describe('td-doc-demo showCode parsing', () => {
+  it('treats the boolean attribute `show-code` (empty string) as true', () => {
+    expect(showCodeProp.value({}, '')).toBe(true);
+    expect(showCodeProp.value({}, 'true')).toBe(true);
+    expect(showCodeProp.value({}, 'false')).toBe(false);
+    expect(showCodeProp.value({}, undefined)).toBe(false);
+  });
+});
+
 describe('td-doc-demo theme synchronization', () => {
   let listeners: Map<string, EventListener>;
 
