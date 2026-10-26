@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { html, define } from 'hybrids';
 import logoIcon from '@images/logo.svg?raw';
 import menuApplicationIcon from '@images/menu-application.svg?raw';
@@ -37,13 +36,15 @@ function renderMenu(list: EcosystemCategory[]) {
   const len = list.length;
   return list.map(
     (category, index) => html`
-      ${category.categoryUrl && category.categoryUrl !== 'null'
-        ? html`
-            <a href="${category.categoryUrl}" class="title" target="${getEcosystemLinkTarget(category.categoryUrl)}">
-              ${category.categoryTitle} <i innerHTML="${chevronRightIcon}"></i>
-            </a>
-          `
-        : html` <span class="title"> ${category.categoryTitle} </span> `}
+      ${
+        category.categoryUrl && category.categoryUrl !== 'null'
+          ? html`
+              <a href="${category.categoryUrl}" class="title" target="${getEcosystemLinkTarget(category.categoryUrl)}">
+                ${category.categoryTitle} <i innerHTML="${chevronRightIcon}"></i>
+              </a>
+            `
+          : html` <span class="title"> ${category.categoryTitle} </span> `
+      }
       ${renderList(category.items)} ${index < len - 1 ? html`<div class="line"></div>` : html``}
     `,
   );

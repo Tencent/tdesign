@@ -84,6 +84,7 @@ const {
   from {
     transform: translateX(-50%);
   }
+
   to {
     transform: translateX(0);
   }
@@ -144,7 +145,8 @@ const {
     &::before {
       position: absolute;
       inset: 0;
-      background-image: linear-gradient(to right, var(--industry-grid-color) 1px, transparent 1px),
+      background-image:
+        linear-gradient(to right, var(--industry-grid-color) 1px, transparent 1px),
         linear-gradient(to bottom, var(--industry-grid-color) 1px, transparent 1px);
       background-position: center;
       background-size: 80px 80px;

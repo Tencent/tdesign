@@ -22,13 +22,13 @@
         <div
           ref="btn"
           class="generator-btn"
-          @click="handleClickTheme"
-          @mouseleave="handleLeaveTheme"
           :style="{
             width: generateBtnWidth,
             marginRight: '4px',
             transition: 'width .3s',
           }"
+          @click="handleClickTheme"
+          @mouseleave="handleLeaveTheme"
         >
           <t-button variant="outline" shape="square" size="large">
             <template #icon>
@@ -41,12 +41,12 @@
         </div>
         <div
           class="generator-btn"
-          @click="handleClickCustomize"
           :style="{
             width: !isCustomizeDrawerVisible ? '48px' : '216px',
             margin: '0 4px',
             transition: 'width .3s',
           }"
+          @click="handleClickCustomize"
         >
           <t-button variant="outline" shape="square" size="large">
             <template #icon>
@@ -67,8 +67,8 @@
         <div
           v-if="isCustomizeDrawerVisible || isThemeTabVisible"
           class="export-btn"
-          @click="handleDownload"
           :style="{ width: '48px', margin: '0 4px' }"
+          @click="handleDownload"
         >
           <t-button variant="outline" shape="square" size="large">
             <template #icon>
@@ -262,6 +262,7 @@ function resetTheme() {
   0% {
     background-position: 0 0;
   }
+
   100% {
     background-position: 100% 50%;
   }
@@ -271,18 +272,22 @@ function resetTheme() {
   0% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0 0;
   }
 }
+
 .fade-enter-active,
 .fad-leave-active {
   transition: opacity 0.3s;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
+
 .dock {
   position: fixed;
   margin: auto;
@@ -292,13 +297,16 @@ function resetTheme() {
   box-sizing: border-box;
   backdrop-filter: blur(10px);
   border-radius: 32px;
+
   &__theme-tab {
     transition: height 0.3s;
   }
+
   &__operation {
     display: flex;
   }
 }
+
 .generator-btn,
 .export-btn,
 .setting-btn,
@@ -315,26 +323,34 @@ function resetTheme() {
     #7ee94c
   );
   background-size: 400%;
+
   &.is-mouseleave {
     animation: toPure 0.5s cubic-bezier(0.38, 0, 0.24, 1);
   }
+
   :deep(.t-button--variant-text:hover) {
     background: var(--bg-color-container-hover);
   }
+
   :deep(.t-button) {
     height: 46px;
     width: 100%;
     border-radius: 24px;
     border: none;
     margin: auto;
-    transition: transform 0.2s, color 0.2s;
+    transition:
+      transform 0.2s,
+      color 0.2s;
     background-color: var(--bg-color-card);
+
     --ripple-color: transparent;
+
     color: var(--text-secondary);
   }
 
   &:hover {
     animation: toConic 0.5s cubic-bezier(0.38, 0, 0.24, 1) forwards;
+
     :deep(.t-button) {
       background-color: var(--bg-color-card);
       color: var(--text-primary);

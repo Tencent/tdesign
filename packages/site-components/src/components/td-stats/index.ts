@@ -23,7 +23,7 @@ function initStats(statsId: string, scriptAttrs: ScriptAttributes, statsCallback
     if (value !== undefined) script.setAttribute(key, value);
   });
   script.onload = () => {
-    statsCallback && statsCallback();
+    if (statsCallback) statsCallback();
   };
   document.head.appendChild(script);
 }
@@ -34,7 +34,7 @@ export default define<StatsProps>({
   track: {
     value() {
       return () => {
-        window._horizon && window._horizon.track();
+        if (window._horizon) window._horizon.track();
       };
     },
   },
@@ -55,14 +55,14 @@ export default define<StatsProps>({
             src: 'https://pingjs.qq.com/tcss.ping.https.js',
           },
           () => {
-            window.pgvMain && window.pgvMain();
+            if (window.pgvMain) window.pgvMain();
           },
         );
       }
 
       function handleRouterTrack() {
         requestAnimationFrame(() => {
-          window._horizon && window._horizon.track();
+          if (window._horizon) window._horizon.track();
         });
       }
 

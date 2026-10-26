@@ -3,12 +3,12 @@
     <div class="color-collapse__header">
       <t-popup
         placement="left"
-        showArrow
+        show-arrow
         trigger="click"
-        :destroyOnClose="true"
+        :destroy-on-close="true"
         :attach="handleAttach"
-        :overlayStyle="{ borderRadius: '9px' }"
-        :hideEmptyPopup="true"
+        :overlay-style="{ borderRadius: '9px' }"
+        :hide-empty-popup="true"
       >
         <div
           class="block"
@@ -31,7 +31,7 @@
             <edit-1-icon v-if="!disabled && isHover" size="24px" />
           </transition>
         </div>
-        <template #content v-if="!disabled">
+        <template v-if="!disabled" #content>
           <color-picker :value="mainColor" @change="changeColor" />
         </template>
       </t-popup>
@@ -45,11 +45,11 @@
             HEX: {{ mainColor }}
             <t-popup
               placement="top"
-              showArrow
+              show-arrow
               trigger="click"
-              :destroyOnClose="true"
+              :destroy-on-close="true"
               :attach="handleAttach"
-              :overlayStyle="{ borderRadius: '6px' }"
+              :overlay-style="{ borderRadius: '6px' }"
             >
               <file-copy-icon @click="() => copyHex(mainColor)" />
               <template #content>
@@ -60,7 +60,7 @@
         </div>
       </div>
       <div @click="isActive = !isActive">
-        <arrow-icon :isActive="isActive" overlayClassName="color-collapse__arrow" />
+        <arrow-icon :is-active="isActive" overlay-class-name="color-collapse__arrow" />
       </div>
     </div>
     <transition
@@ -70,7 +70,7 @@
       @after-enter="afterEnter"
       @before-leave="beforeLeave"
       @leave="leave"
-      @afterLeave="afterLeave"
+      @after-leave="afterLeave"
     >
       <slot v-if="isActive"></slot>
     </transition>
@@ -130,6 +130,7 @@ async function copyHex(hex?: string) {
 .fade-leave-active {
   transition: opacity 0.1s;
 }
+
 .fade-enter-from, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
@@ -157,6 +158,7 @@ async function copyHex(hex?: string) {
         transition: background-color 0.2s;
         border-radius: 6px;
       }
+
       &:hover {
         &::after {
           background-color: rgba(0, 0, 0, 0.1);
@@ -187,6 +189,7 @@ async function copyHex(hex?: string) {
     align-items: center;
     color: var(--text-secondary);
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
     :deep(.t-icon) {
       margin-left: 4px;
       cursor: pointer;

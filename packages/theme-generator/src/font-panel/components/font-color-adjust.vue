@@ -1,6 +1,6 @@
 <template>
   <div :style="{ width: '100%' }">
-    <t-radio-group class="font-color__type-radio" variant="default-filled" v-model="colorType">
+    <t-radio-group v-model="colorType" class="font-color__type-radio" variant="default-filled">
       <t-radio-button :value="1">{{ lang.font.colorDefault }}</t-radio-button>
     </t-radio-group>
 
@@ -23,11 +23,11 @@
       <div v-for="(color, idx) in flattenPalette.filter((v) => !!v.name)" :key="idx">
         <t-popup
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
-          :overlayStyle="{ borderRadius: '9px' }"
+          :overlay-style="{ borderRadius: '9px' }"
         >
           <div
             class="block"
@@ -51,7 +51,7 @@
             </transition>
           </div>
           <template #content>
-            <color-picker :value="color.value" @change="(hex) => changeColor(hex, idx)" :enable-alpha="true" />
+            <color-picker :value="color.value" :enable-alpha="true" @change="(hex) => changeColor(hex, idx)" />
           </template>
         </t-popup>
         <div v-if="color.name" class="font-color__vertical-list-content">
@@ -116,6 +116,7 @@ function changeColor(hex: string, idx: number) {
 .fade-leave-active {
   transition: opacity 0.1s;
 }
+
 .fade-enter-from, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
@@ -138,6 +139,7 @@ function changeColor(hex: string, idx: number) {
       align-items: center;
     }
   }
+
   &__horizontal-list {
     width: 100%;
     margin: 20px 0;
@@ -166,8 +168,10 @@ function changeColor(hex: string, idx: number) {
         &:hover {
           transform: scale(1.2);
           border-radius: 3px;
-          box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.05), 0px 4px 5px rgba(0, 0, 0, 0.08),
-            0px 2px 4px -1px rgba(0, 0, 0, 0.12);
+          box-shadow:
+            0 1px 10px rgba(0, 0, 0, 0.05),
+            0 4px 5px rgba(0, 0, 0, 0.08),
+            0 2px 4px -1px rgba(0, 0, 0, 0.12);
         }
       }
     }
@@ -205,6 +209,7 @@ function changeColor(hex: string, idx: number) {
         transition: background-color 0.2s;
         border-radius: 5px;
       }
+
       &:hover {
         &::after {
           background-color: rgba(0, 0, 0, 0.2);

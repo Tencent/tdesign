@@ -1,6 +1,6 @@
 <template>
   <span :class="_class" :style="_style">
-    <img :src="imgSrc" alt="user avatar" @error="onError" v-if="!error && imgSrc" />
+    <img v-if="!error && imgSrc" :src="imgSrc" alt="user avatar" @error="onError" />
     <div class="tdesign-avatar-name">{{ username }}</div>
   </span>
 </template>
@@ -78,7 +78,7 @@ function onError(_event: Event): void {
   }
 
   &__default {
-    background: url(http://tdesign.gtimg.com/docs/male.png) no-repeat center;
+    background: url('http://tdesign.gtimg.com/docs/male.png') no-repeat center;
     background-size: 100%;
   }
 

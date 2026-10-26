@@ -288,7 +288,7 @@ export function createModuleBoard(homepageRef: Ref<HTMLElement | null>) {
     let nextProgress = progress + delta;
     if (!wheelGesture) {
       cancelSnapAnimation();
-      const scrollLimit = direction > 0 ? businessCasesProgress ?? scrollDistance : scrollDistance;
+      const scrollLimit = direction > 0 ? (businessCasesProgress ?? scrollDistance) : scrollDistance;
       if (Math.max(progress, nextProgress) < 0 || Math.min(progress, nextProgress) > scrollLimit) {
         return false;
       }

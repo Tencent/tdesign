@@ -9,9 +9,7 @@
     "build:watch": "vite build --watch",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "vue-tsc --noEmit",
-    "lint": "eslint src --ext .vue,.ts",
-    "lint:fix": "eslint src --ext .vue,.ts --fix"
+    "typecheck": "vue-tsc --noEmit"
   },
   "main": "dist/td-theme-generator.js",
   "files": [
@@ -43,17 +41,13 @@
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.10.0",
-    "@typescript-eslint/eslint-plugin": "^5.6.0",
-    "@typescript-eslint/parser": "^5.6.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/test-utils": "^2.4.6",
-    "eslint-plugin-vue": "^9.32.0",
     "happy-dom": "^15.11.7",
     "less": "^4.2.0",
     "typescript": "^5.8.3",
     "vite": "^6.4.3",
     "vitest": "^5.0.3",
-    "vue-eslint-parser": "^9.4.2",
     "vue-tsc": "^3.3.11"
   },
   "browserslist": [

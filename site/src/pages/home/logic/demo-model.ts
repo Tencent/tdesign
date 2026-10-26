@@ -8,7 +8,7 @@ export interface CodeItem {
   codeKey?: string;
 }
 
-const codeFrameworkOptions: Array<{ label: string; value: CodeFramework }> = [
+const codeFrameworkOptions: { label: string; value: CodeFramework }[] = [
   { label: 'vue-next.ts', value: 'vue-next' },
   { label: 'react.tsx', value: 'react' },
   { label: 'flutter.dart', value: 'flutter' },
@@ -127,7 +127,7 @@ export function createHomeDemoModel(t: (key: string) => string) {
   ]);
 
   function displayCode(item: CodeItem): string {
-    return item.codeKey ? String(t(item.codeKey)) : item.code ?? '';
+    return item.codeKey ? String(t(item.codeKey)) : (item.code ?? '');
   }
 
   return {

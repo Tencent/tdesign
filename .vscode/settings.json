@@ -1,30 +1,28 @@
 {
-  "typescript.preferences.importModuleSpecifier": "relative",
+  "js/ts.preferences.importModuleSpecifier": "relative",
+
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "vue"],
-  "[html]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "stylelint.validate": ["css", "less", "vue"],
+
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
   },
-  "[typescriptreact]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascriptreact]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascript]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[vue]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "cSpell.words": ["miniprogram", "tdesign", "uniapp"],
+
+  "[html]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[javascript]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescript]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[vue]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[json]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[jsonc]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[markdown]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[css]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[less]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[yaml]": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode" },
+
+  "prettier.requireConfig": true,
+  "files.eol": "\n",
+
+  "cSpell.words": ["miniprogram", "tdesign", "uniapp", "stylelint", "postcss", "wxss", "husky", "pnpm"],
   "cSpell.ignorePaths": ["pnpm-lock.yaml", "node_modules", ".git", ".vscode"]
 }

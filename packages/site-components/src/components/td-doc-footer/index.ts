@@ -41,7 +41,7 @@ const groupCodeMap = {
   design: designGroup,
 } satisfies Record<GroupType, string>;
 
-const communityPlatforms: Array<{ type: GroupType; name: string; icon: string }> = [
+const communityPlatforms: { type: GroupType; name: string; icon: string }[] = [
   { type: 'vue', name: 'Vue', icon: vueLogo },
   { type: 'wx', name: 'MiniProgram', icon: wxLogo },
   { type: 'react', name: 'React', icon: reactLogo },

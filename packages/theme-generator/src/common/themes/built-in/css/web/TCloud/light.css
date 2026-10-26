@@ -1,5 +1,5 @@
 :root,
-:root[theme-mode="light"] {
+:root[theme-mode='light'] {
   --td-brand-color-1: #d5e7ff;
   --td-brand-color-2: #aacfff;
   --td-brand-color-3: #7fb7ff;
@@ -55,13 +55,13 @@
   --td-gray-color-13: #1e222d;
   --td-gray-color-14: #151822;
   --td-font-white-1: #fff;
-  --td-font-white-2: rgba(255, 255, 255, .55);
-  --td-font-white-3: rgba(255, 255, 255, .35);
-  --td-font-white-4: rgba(255, 255, 255, .22);
-  --td-font-gray-1: rgba(0, 0, 0, .9);
-  --td-font-gray-2: rgba(0, 0, 0, .6);
-  --td-font-gray-3: rgba(0, 0, 0, .4);
-  --td-font-gray-4: rgba(0, 0, 0, .25);
+  --td-font-white-2: rgba(255, 255, 255, 0.55);
+  --td-font-white-3: rgba(255, 255, 255, 0.35);
+  --td-font-white-4: rgba(255, 255, 255, 0.22);
+  --td-font-gray-1: rgba(0, 0, 0, 0.9);
+  --td-font-gray-2: rgba(0, 0, 0, 0.6);
+  --td-font-gray-3: rgba(0, 0, 0, 0.4);
+  --td-font-gray-4: rgba(0, 0, 0, 0.25);
   --td-brand-color: var(--td-brand-color-6);
   --td-warning-color: var(--td-warning-color-6);
   --td-error-color: var(--td-error-color-6);
@@ -86,8 +86,8 @@
   --td-success-color-active: var(--td-success-color-7);
   --td-success-color-disabled: var(--td-success-color-2);
   --td-success-color-light: var(--td-success-color-1);
-  --td-mask-active: rgba(0, 0, 0, .8);
-  --td-mask-disabled: rgba(255, 255, 255, .6);
+  --td-mask-active: rgba(0, 0, 0, 0.8);
+  --td-mask-disabled: rgba(255, 255, 255, 0.6);
   --td-bg-color-page: #ebeef2;
   --td-bg-color-container: #fff;
   --td-bg-color-container-hover: var(--td-gray-color-2);
@@ -115,14 +115,16 @@
   --td-component-stroke: var(--td-gray-color-2);
   --td-border-level-2-color: var(--td-gray-color-3);
   --td-component-border: var(--td-gray-color-3);
-  --td-shadow-1: 0 1px 10px rgba(0, 0, 0, .05), 0 4px 5px rgba(0, 0, 0, .08), 0 2px 4px -1px rgba(0, 0, 0, .12);
-  --td-shadow-2: 0 3px 14px 2px rgba(0, 0, 0, .05), 0 8px 10px 1px rgba(0, 0, 0, .06), 0 5px 5px -3px rgba(0, 0, 0, .1);
-  --td-shadow-3: 0 6px 30px 5px rgba(0, 0, 0, .05), 0 16px 24px 2px rgba(0, 0, 0, .04), 0 8px 10px -5px rgba(0, 0, 0, .08);
+  --td-shadow-1: 0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.12);
+  --td-shadow-2:
+    0 3px 14px 2px rgba(0, 0, 0, 0.05), 0 8px 10px 1px rgba(0, 0, 0, 0.06), 0 5px 5px -3px rgba(0, 0, 0, 0.1);
+  --td-shadow-3:
+    0 6px 30px 5px rgba(0, 0, 0, 0.05), 0 16px 24px 2px rgba(0, 0, 0, 0.04), 0 8px 10px -5px rgba(0, 0, 0, 0.08);
   --td-shadow-inset-top: inset 0 0.5px 0 #e7eaef;
   --td-shadow-inset-right: inset 0.5px 0 0 #e7eaef;
   --td-shadow-inset-bottom: inset 0 -0.5px 0 #e7eaef;
-  --td-table-shadow-color: rgba(0, 0, 0, .08);
-  --td-scrollbar-color: rgba(0, 0, 0, .1);
-  --td-scrollbar-hover-color: rgba(0, 0, 0, .3);
+  --td-table-shadow-color: rgba(0, 0, 0, 0.08);
+  --td-scrollbar-color: rgba(0, 0, 0, 0.1);
+  --td-scrollbar-hover-color: rgba(0, 0, 0, 0.3);
   --td-scroll-track-color: #d3b3b3;
 }

@@ -1,7 +1,7 @@
 /* stylelint-disable */
 
-@import "../../styles/prism-theme.less";
-@import "../../styles/prism-theme-dark.less";
+@import '../../styles/prism-theme.less';
+@import '../../styles/prism-theme-dark.less';
 
 .TDesign-doc-demo {
   margin: 24px 0 48px;
@@ -21,7 +21,7 @@
       position: relative;
 
       &::after {
-        content: "";
+        content: '';
         width: 100%;
         height: 20px;
         position: absolute;
@@ -35,7 +35,6 @@
         background-color: var(--bg-color-component-hover);
       }
     }
-
   }
 
   &__footer {
@@ -59,7 +58,7 @@
       border-radius: var(--border-radius);
       cursor: pointer;
       user-select: none;
-      transition: all .1s;
+      transition: all 0.1s;
       display: inline-flex;
       color: var(--text-secondary);
 
@@ -95,7 +94,7 @@
           background-color: var(--bg-color-scroll);
         }
       }
-    
+
       &::-webkit-scrollbar {
         width: 12px;
         height: 12px;
@@ -105,7 +104,7 @@
       &::-webkit-scrollbar-corner {
         width: 0;
       }
-    
+
       &::-webkit-scrollbar-thumb {
         border-radius: 6px;
         border: 4px solid transparent;
@@ -152,18 +151,15 @@
     color: var(--text-secondary);
     word-break: keep-all;
     white-space: nowrap;
-    transition: background .2s;
+    transition: background 0.2s;
 
     &:hover,
     &.active {
       color: var(--text-interactive);
-
     }
 
     &:hover {
       background: var(--bg-color-demo-hover);
     }
-
   }
-
 }

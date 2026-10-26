@@ -1,5 +1,5 @@
 :root,
-:root[theme-mode="light"] {
+:root[theme-mode='light'] {
   --header-height: 64px;
   --doc-header-height: 252px;
   --aside-width: 260px;
@@ -26,8 +26,10 @@
   --header-box-shadow: inset 0 -1px 0 #e7e7e7;
   --footer-box-shadow: inset 0 1px 0 #e7e7e7;
   --aside-box-shadow: inset -1px 0 0 #e7e7e7;
-  --portal-box-shadow: inset 1px 0px 0px #dcdcdc, inset -1px 0px 0px #dcdcdc, inset 0px -1px 0px #dcdcdc, inset 0px 1px 0px #dcdcdc;
-  --table-box-shadow: inset 0px 1px 0px #e7e7e7, inset 0px -1px 0px #e7e7e7, inset -1px 0px 0px #e7e7e7, inset 1px 0px 0px #e7e7e7;
+  --portal-box-shadow:
+    inset 1px 0px 0px #dcdcdc, inset -1px 0px 0px #dcdcdc, inset 0px -1px 0px #dcdcdc, inset 0px 1px 0px #dcdcdc;
+  --table-box-shadow:
+    inset 0px 1px 0px #e7e7e7, inset 0px -1px 0px #e7e7e7, inset -1px 0px 0px #e7e7e7, inset 1px 0px 0px #e7e7e7;
 
   // 基础/下层 投影 hover 使用的组件包括：表格 /
   --shadow-1: 0 1px 10px rgba(0, 0, 0, .05), 0 4px 5px rgba(0, 0, 0, .08), 0 2px 4px -1px rgba(0, 0, 0, .12);
@@ -60,10 +62,10 @@
   --bg-color-secondaryfooter: #e7e7e7;
   --bg-color-docpage: #fff; // 默认页面文档底层背景
   --bg-color-container: #fff; // 主要容器背景 默认页面顶层背景
-  --bg-color-container-transparent: rgba(255, 255, 255, .9); // 默认页面次要底层背景透明度
+  --bg-color-container-transparent: rgba(255, 255, 255, 0.9); // 默认页面次要底层背景透明度
   --bg-color-secondarycontainer: #f5f5f5; // 次要容器背景
   --bg-color-component: #eee; // 组件背景 主要容器之上组件背景
-  --bg-color-component-transparent: rgba(238, 238, 238, .8);; // 组件背景透明度
+  --bg-color-component-transparent: rgba(238, 238, 238, 0.8); // 组件背景透明度
   --bg-color-tag: #eee; // 标签背景色
   --bg-color-tab: #eee;
   --bg-color-table: #fff;
@@ -85,8 +87,8 @@
 
   // 中性色彩交互 token
   // 交互状态token
-  --bg-color-demo-hover: rgba(0, 0, 0, .05); // 默认 demo底层背景hover
-  --bg-color-demo-select: rgba(0, 0, 0, .1); // 默认 demo底层背景hover
+  --bg-color-demo-hover: rgba(0, 0, 0, 0.05); // 默认 demo底层背景hover
+  --bg-color-demo-select: rgba(0, 0, 0, 0.1); // 默认 demo底层背景hover
   --bg-color-code-hover: #e7e7e7;
   --bg-color-code-select: #dcdcdc;
   --bg-color-container-hover: #f3f3f3; // 主要容器背景 默认页面顶层背景hover
@@ -98,15 +100,15 @@
   --bg-color-navigation-hover: #f3f3f3;
   --bg-color-navigation-select: #e7e7e7;
   --bg-color-card-hover: #f3f3f3;
-  --bg-color-scroll: rgba(0, 0, 0, .14); // 滚动条颜色
+  --bg-color-scroll: rgba(0, 0, 0, 0.14); // 滚动条颜色
   --bg-color-component-disabled: #eee; // 组件背景 disabled 主要容器之上组件背景disabled
 
   // 文字&图标色彩
   // 默认light模式文字和图标色彩配置
-  --text-primary: rgba(0, 0, 0, .9); // 主要文字色彩
-  --text-secondary: rgba(0, 0, 0, .6); // 次要文字色彩
-  --text-placeholder: rgba(0, 0, 0, .4); // 占位符文字色彩
-  --text-disabled: rgba(0, 0, 0, .26); // 文字disabled态
+  --text-primary: rgba(0, 0, 0, 0.9); // 主要文字色彩
+  --text-secondary: rgba(0, 0, 0, 0.6); // 次要文字色彩
+  --text-placeholder: rgba(0, 0, 0, 0.4); // 占位符文字色彩
+  --text-disabled: rgba(0, 0, 0, 0.26); // 文字disabled态
   --text-anti: #fff; // 文字反色色彩
   --text-interactive: var(--td-brand-color); // 主题色文字色彩
 
@@ -114,7 +116,7 @@
   // 主题相关配置
   --brand-main: var(--td-brand-color);
   // 移动端缺失 hover Token 时，使用 active 兜底
-  --brand-main-hover: var(--td-brand-color-hover, var(--td-brand-color-active)); 
+  --brand-main-hover: var(--td-brand-color-hover, var(--td-brand-color-active));
   --brand-main-focus: var(--td-brand-color-focus);
   --brand-main-disabled: var(--td-brand-color-disabled);
   --brand-main-light: rgba(0, 82, 217, .1);
@@ -146,11 +148,11 @@
 
   // 主题中心相关
   // light模式中性色配置
-  --bg-color-theme-transparent: rgba(238, 238, 238, .6);
+  --bg-color-theme-transparent: rgba(238, 238, 238, 0.6);
   --bg-color-theme-secondary: #f3f3f3;
   --bg-color-theme-surface: #fff;
   --bg-color-theme-tertiary: #e7e7e7;
-  --theme-component-border: rgba(0, 0, 0, .06);
+  --theme-component-border: rgba(0, 0, 0, 0.06);
   --bg-color-theme-radio: #e7e7e7;
   --bg-color-theme-radio-active: #fff;
 }

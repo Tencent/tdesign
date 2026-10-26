@@ -1,7 +1,8 @@
 <template>
-  <div class="component-list" ref="listWrapper">
+  <div ref="listWrapper" class="component-list">
     <div class="lottie-wrapper __light__">
       <video
+        ref="lightVideoRef"
         width="2560"
         height="296"
         autoplay
@@ -13,7 +14,6 @@
         webkit-playsinline
         x5-video-player
         preload="auto"
-        ref="lightVideoRef"
       >
         <source :src="lightVideo" type="video/mp4" />
       </video>
@@ -21,6 +21,7 @@
 
     <div class="lottie-wrapper __dark__">
       <video
+        ref="darkVideoRef"
         width="2560"
         height="296"
         autoplay
@@ -32,7 +33,6 @@
         webkit-playsinline
         x5-video-player
         preload="auto"
-        ref="darkVideoRef"
       >
         <source :src="darkVideo" type="video/mp4" />
       </video>

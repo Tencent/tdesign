@@ -81,7 +81,7 @@ watch(
     line-height: 24px;
     font-weight: 700;
     color: #fff;
-    margin: 0 0 10px 0;
+    margin: 0 0 10px;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
 
