@@ -469,7 +469,16 @@ function changeNeutralColor(related: boolean, trigger: 'update' | 'init' = 'upda
   updateLocalOption('neutral', related ? 'true' : null);
   // grayMainColor 始终保持用户自定义的中性色，不随关联状态改变
   // 关联时只是借用品牌色作为生成算法的输入
-  const inputHex = related ? $brandColor.value : grayMainColor.value;
+  let inputHex = related ? $brandColor.value : grayMainColor.value;
+  const validHex = /^#(?:[\da-f]{3}|[\da-f]{6}|[\da-f]{8})$/i;
+  if (!validHex.test(inputHex)) {
+    inputHex = getTokenValue(related ? '--td-brand-color' : '--td-gray-color-4');
+    if (!validHex.test(inputHex)) {
+      console.warn('Cannot generate neutral colors: theme CSS does not contain a valid HEX color.');
+      return;
+    }
+    if (!related) grayMainColor.value = inputHex;
+  }
   const palette = generateNeutralPalette(inputHex, related);
   updateStyleSheetColor('gray', palette, palette, trigger);
   nextTick(refreshColorTokens);

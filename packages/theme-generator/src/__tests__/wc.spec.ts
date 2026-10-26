@@ -1,17 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { nextTick } from 'vue';
 
-// generator.vue 经 core.ts 间接依赖 tvision-color → @material/material-color-utilities，
-// 后者存在无扩展名 ESM 互导入，Node 原生 loader 无法解析。WC smoke 测试不需要真实 color 工具。
-vi.mock('tvision-color', () => ({
-  Color: {
-    colorTransform: () => [0, 0, 0],
-    // generateBrandPalette 需要 colors[primary±1] 非空，返回 10 个占位色
-    getColorGradations: () => [{ colors: Array(10).fill('#0052D9'), primary: 6 }],
-    getNeutralColor: () => Array(10).fill('#888888'),
-  },
-}));
-
 // color-panel 挂载时调用 colorAnimation()，依赖 canvas 2d context + requestAnimationFrame，
 // happy-dom 不支持。该动画是装饰性的，测试中置空。
 vi.mock('../common/utils/animation', async (importOriginal) => {
