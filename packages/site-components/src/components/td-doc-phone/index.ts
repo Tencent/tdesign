@@ -64,19 +64,19 @@ export default define<DocPhoneProps>({
         const isMobileResponse = window.innerWidth < 960;
         if (isMobileResponse) return;
 
-        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+        const { scrollTop } = document.documentElement;
+        const phone = host.shadowRoot?.querySelector<HTMLElement>('.TDesign-doc-phone');
+        const footer = document.querySelector<HTMLElement>('td-doc-footer');
+        const fixedTop = 152;
+        const initialTop = 316;
+        const footerGap = 66;
 
-        // 当底部出现时不要超过底部区域
-        const FOOTER_HEIGHT = parseFloat(
-          getComputedStyle(document.documentElement).getPropertyValue('--footer-height'),
-        );
-        const PHONE_HEIGHT = parseFloat(getComputedStyle(host).getPropertyValue('--phone-body-height'));
-        const TD_HEIGHT = 64;
-        const maxPhonePos = scrollHeight - FOOTER_HEIGHT - PHONE_HEIGHT - TD_HEIGHT - 64; // 预留底部 64 像素间距
-        const canViewPhoneAndFooter = clientHeight <= FOOTER_HEIGHT + PHONE_HEIGHT + 64;
+        // 使用 footer 的实际位置计算边界，避免 footer 高度变化后手机预览遮挡 footer。
+        const footerTop = footer ? footer.getBoundingClientRect().top + scrollTop : Number.POSITIVE_INFINITY;
+        const maxPhonePos = footerTop - (phone?.offsetHeight || 0) - footerGap;
 
         if (scrollTop >= 228) {
-          if (scrollTop + 88 >= maxPhonePos && canViewPhoneAndFooter) {
+          if (scrollTop + fixedTop >= maxPhonePos) {
             Object.assign(host, {
               [key]: {
                 ...host.fixedStyle,
@@ -89,7 +89,7 @@ export default define<DocPhoneProps>({
               [key]: {
                 ...host.fixedStyle,
                 position: 'fixed',
-                top: '152px',
+                top: `${fixedTop}px`,
               },
             });
           }
@@ -98,7 +98,7 @@ export default define<DocPhoneProps>({
             [key]: {
               ...host.fixedStyle,
               position: 'absolute',
-              top: '316px',
+              top: `${Math.min(initialTop, maxPhonePos)}px`,
             },
           });
         }
@@ -121,12 +121,16 @@ export default define<DocPhoneProps>({
       }
 
       document.addEventListener('scroll', handleScroll);
+      window.addEventListener('resize', handleScroll);
       window.addEventListener('resize', responsePhone);
+      window.addEventListener('load', handleScroll);
       window.addEventListener('load', responsePhone);
 
       return () => {
         document.removeEventListener('scroll', handleScroll);
+        window.removeEventListener('resize', handleScroll);
         window.removeEventListener('resize', responsePhone);
+        window.removeEventListener('load', handleScroll);
         window.removeEventListener('load', responsePhone);
       };
     },
