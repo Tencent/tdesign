@@ -1,5 +1,4 @@
-import { html, define } from 'hybrids';
-import { attribute } from '@utils';
+import { html, define } from '@utils/hybrids';
 import style from './style.less?inline';
 
 const apiUrl = import.meta.env.VITE_CONTRIBUTORS_API_URL;
@@ -91,9 +90,9 @@ function getContributors(
 
 export default define<ContributorsProps>({
   tag: 'td-contributors',
-  platform: attribute(''),
-  framework: attribute(''),
-  componentName: attribute(''),
+  platform: '',
+  framework: '',
+  componentName: '',
   contributorsData: {
     value: (host, v) => v || {},
     connect: (host, key, invalidate) => {

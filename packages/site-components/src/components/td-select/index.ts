@@ -1,5 +1,5 @@
-import { html, define, dispatch } from 'hybrids';
-import { attribute, parseBoolean } from '@utils';
+import { html, define, dispatch } from '@utils/hybrids';
+import { parseBoolean } from '@utils';
 import style from './style.less?inline';
 import portalStyle from './portal.less?inline';
 import fakeArrowIcon from '@images/fake-arrow.svg?raw';
@@ -52,8 +52,12 @@ function renderOptions(host: SelectHost) {
 
 export default define<SelectProps>({
   tag: 'td-select',
-  borderless: attribute(false, (value) => parseBoolean(value, false)),
-  value: attribute<SelectValue>(''),
+  borderless: {
+    value: (_host, value) => parseBoolean(value, false),
+  },
+  value: {
+    value: (_host, value) => value ?? '',
+  },
   visible: false,
   options: {
     value: (host, v) => v || [],

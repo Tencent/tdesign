@@ -1,5 +1,4 @@
-import { html, define } from 'hybrids';
-import { attribute } from '@utils';
+import { html, define } from '@utils/hybrids';
 import style from './style.less?inline';
 
 type TooltipTrigger = 'click' | 'hover';
@@ -34,10 +33,10 @@ function handleLeave(host: TooltipHost) {
 
 export default define<TooltipProps>({
   tag: 'td-tooltip',
-  placement: attribute('top'),
+  placement: 'top',
   showTip: false,
-  duration: attribute(1800, Number),
-  triggerType: attribute<TooltipTrigger>('click'),
+  duration: 1800,
+  triggerType: 'click',
   render: (host) => {
     const { showTip, placement } = host;
 

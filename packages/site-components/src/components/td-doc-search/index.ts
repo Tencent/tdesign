@@ -16,7 +16,7 @@
  *                  → views.js 根据最新 host 输出 html``
  */
 
-import { define, html, type Descriptor } from 'hybrids';
+import { define, html, type Descriptor } from '@utils/hybrids';
 
 import style from './style.less?inline';
 import {

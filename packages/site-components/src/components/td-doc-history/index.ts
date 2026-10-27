@@ -1,5 +1,4 @@
-import { html, define } from 'hybrids';
-import { attribute } from '@utils';
+import { html, define } from '@utils/hybrids';
 import style from './style.less?inline';
 import historyIcon from '@images/history.svg?raw';
 
@@ -19,7 +18,7 @@ function transformTime(time: string): string {
 
 export default define<HistoryHost>({
   tag: 'td-doc-history',
-  time: attribute(''),
+  time: '',
   content: '',
   render: ({ time, content }) => {
     return html`

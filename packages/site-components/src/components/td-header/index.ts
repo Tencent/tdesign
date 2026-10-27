@@ -1,4 +1,4 @@
-import { define, html, type UpdateFunctionWithMethods } from 'hybrids';
+import { define, html, type UpdateFunctionWithMethods } from '@utils/hybrids';
 import { getHeaderConfig } from '@config/header';
 import closeIcon from '@images/close.svg?raw';
 import fakeArrowIcon from '@images/fake-arrow.svg?raw';

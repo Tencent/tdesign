@@ -1,4 +1,4 @@
-import { html, define } from 'hybrids';
+import { html, define } from '@utils/hybrids';
 import style from './style.less?inline';
 import portalStyle from './portal.less?inline';
 import bulletpointIcon from '@images/bulletpoint.svg?raw';

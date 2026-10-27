@@ -1,4 +1,4 @@
-import { html, define } from 'hybrids';
+import { html, define } from '@utils/hybrids';
 
 interface ScriptAttributes {
   src: string;

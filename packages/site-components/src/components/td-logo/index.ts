@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { html, define } from 'hybrids';
+import { html, define } from '@utils/hybrids';
 import logoIcon from '@images/logo.svg?raw';
 import menuApplicationIcon from '@images/menu-application.svg?raw';
 import chevronRightIcon from '@images/chevron-right.svg?raw';

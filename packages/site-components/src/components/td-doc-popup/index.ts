@@ -1,6 +1,6 @@
-import { html, define, dispatch } from 'hybrids';
+import { html, define, dispatch } from '@utils/hybrids';
 import { createPopper, type Instance, type Placement } from '@popperjs/core';
-import { attribute, parseBoolean } from '@utils';
+import { parseBoolean } from '@utils';
 import style from './style.less?inline';
 
 interface PortalElement extends HTMLElement {
@@ -49,14 +49,16 @@ function handleClick(host: DocPopupHost): void {
 export default define<DocPopupProps>({
   tag: 'td-doc-popup',
   reference: ({ render }) => render().querySelector<HTMLElement>('.TDesign-doc-popup') as HTMLElement,
-  portalClass: attribute(''),
-  portalStyle: attribute(''),
-  placement: attribute<Placement>('bottom-end'),
-  triggerType: attribute<DocPopupProps['triggerType']>('hover'),
+  portalClass: '',
+  portalStyle: '',
+  placement: 'bottom-end',
+  triggerType: 'hover',
   portals: null,
   portal: null,
   popper: null,
-  equalWidth: attribute(false, (value) => parseBoolean(value, false)),
+  equalWidth: {
+    value: (_host, value) => parseBoolean(value, false),
+  },
   visible: {
     value: (host, v) => v || false,
     connect: (host) => {

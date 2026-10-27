@@ -1,8 +1,8 @@
 import { getLocale } from '@config/locale';
 import splineConfig from '@config/spline';
 import historyIcon from '@images/history.svg?raw';
-import { attribute, isComponentPage, isGlobalConfigPage, mobileBodyStyle, parseBoolean, watchHtmlMode } from '@utils';
-import { define, html } from 'hybrids';
+import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, parseBoolean, watchHtmlMode } from '@utils';
+import { define, html } from '@utils/hybrids';
 import style from './style.less?inline';
 
 interface DocInfo {
@@ -87,7 +87,8 @@ function iframeOnload(host: HeaderHost & HTMLElement): void {
 
 export default define<HeaderHost>({
   tag: 'td-doc-header',
-  spline: attribute<string, HeaderHost>('', undefined, {
+  spline: {
+    value: (_host, value) => value || '',
     connect: (host) => {
       const observer = watchHtmlMode((themeMode) => handleModeChange(themeMode, host));
 
@@ -100,8 +101,8 @@ export default define<HeaderHost>({
         handleModeChange(themeMode, host);
       }, 600);
     },
-  }),
-  platform: attribute('web'),
+  },
+  platform: 'web',
   changelog: {
     value: (_host, v) => parseBoolean(v, true),
   },

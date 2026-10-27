@@ -1,4 +1,4 @@
-import { html, define } from 'hybrids';
+import { html, define } from '@utils/hybrids';
 import { getFooterConfig } from '@config/footer';
 import { getLocale } from '@config/locale';
 import { patchShadowDomIntoDom } from '@utils';
