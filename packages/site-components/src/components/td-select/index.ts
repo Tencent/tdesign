@@ -54,7 +54,7 @@ export default define<SelectProps>({
   tag: 'td-select',
   borderless: attribute(false, (value) => parseBoolean(value, false)),
   value: attribute<SelectValue>(''),
-  visible: attribute(false, (value) => parseBoolean(value, false)),
+  visible: false,
   options: {
     value: (host, v) => v || [],
   },

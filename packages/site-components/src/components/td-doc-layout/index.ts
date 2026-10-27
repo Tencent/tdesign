@@ -1,6 +1,5 @@
 import { html, define } from 'hybrids';
 import NProgress from 'nprogress';
-import { attribute } from '@utils';
 import style from './style.less?inline';
 
 interface DocLayoutProps {
@@ -27,7 +26,7 @@ export default define<DocLayoutProps>({
       return () => window.removeEventListener('load', onLoad);
     },
   },
-  direction: attribute('row'), // row column
+  direction: 'row', // row column
   render: ({ direction }) =>
     html`
       <div class="TDesign-page-doc">

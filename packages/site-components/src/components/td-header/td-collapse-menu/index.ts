@@ -2,7 +2,7 @@ import { html, define } from 'hybrids';
 import style from './style.less?inline';
 import portalStyle from './portal.less?inline';
 import bulletpointIcon from '@images/bulletpoint.svg?raw';
-import { attribute, isIntranet, parseBoolean } from '@utils/index';
+import { isIntranet } from '@utils/index';
 import { gitPath, renderTag, handleLinkClick, type BaseComponentsLinks, type HeaderNavItem } from '../index';
 
 interface CollapseMenuProps {
@@ -79,9 +79,9 @@ export default define<CollapseMenuProps>({
   baseComponentsLinks: {
     value: (_host, value) => value || [],
   },
-  platform: attribute('web'),
-  framework: attribute('vue'),
-  disabledTheme: attribute(false, (value) => parseBoolean(value, false)),
+  platform: 'web',
+  framework: 'vue',
+  disabledTheme: false,
   render: (host) =>
     html`
       <div class="TDesign-collapse-menu">

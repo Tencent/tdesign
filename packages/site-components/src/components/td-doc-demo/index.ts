@@ -1,6 +1,6 @@
 import { html, define, dispatch } from 'hybrids';
 import Prism from 'prismjs';
-import { parseBoolean } from '@utils';
+import { attribute, parseBoolean } from '@utils';
 import style from './style.less?inline';
 import codeIcon from '@images/code.svg?raw';
 import 'prismjs/components/prism-markup.js';
@@ -21,6 +21,7 @@ interface DemoHost {
   mode: string;
   currentLangIndex: number;
   languages: string | undefined;
+  _dataVersion: number;
   theme: string;
   activeStyleMap: Record<string, TabStyle> | null | undefined;
 }
@@ -38,7 +39,20 @@ export default define<DemoHost>({
   },
   mode: 'auto', // auto open
   currentLangIndex: 0,
-  languages: undefined, // multiple languages display
+  languages: attribute<string | undefined>(undefined), // multiple languages display
+  _dataVersion: {
+    value: (_host, value) => value || 0,
+    connect: (host) => {
+      const observer = new MutationObserver((mutations) => {
+        if (mutations.some(({ attributeName }) => attributeName?.startsWith('data-'))) {
+          host._dataVersion += 1;
+        }
+      });
+      observer.observe(host, { attributes: true });
+
+      return () => observer.disconnect();
+    },
+  },
   theme: {
     value: (_host, v) => v || localStorage.getItem('--tdesign-theme') || 'light',
     connect(host, key, invalidate) {
@@ -90,7 +104,8 @@ export default define<DemoHost>({
     },
   },
   render: (host) => {
-    let { code, language, showCode, mode, theme, currentLangIndex, languages, activeStyleMap } = host;
+    let { code, language, showCode, mode, theme, currentLangIndex, languages, _dataVersion, activeStyleMap } = host;
+    void _dataVersion;
     const languageArr = typeof languages === 'string' ? languages.split(',') : [];
 
     const tabsDisplay =

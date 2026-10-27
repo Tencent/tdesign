@@ -1,4 +1,5 @@
 import { define, html } from 'hybrids';
+import { attribute } from '@utils';
 import style from './style.less?inline';
 
 interface CodeProps {
@@ -7,6 +8,6 @@ interface CodeProps {
 
 export default define<CodeProps>({
   tag: 'td-code',
-  text: '',
+  text: attribute(''),
   render: ({ text }) => html`<code class="TDesign-code">${text}</code>`.css`${style}`,
 });

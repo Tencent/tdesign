@@ -4,7 +4,7 @@ import closeIcon from '@images/close.svg?raw';
 import fakeArrowIcon from '@images/fake-arrow.svg?raw';
 import githubIcon from '@images/github.svg?raw';
 import translateIcon from '@images/translate.svg?raw';
-import { attribute, isEn, parseBoolean } from '@utils';
+import { isEn } from '@utils';
 import portalStyle from './portal.less?inline';
 import style from './style.less?inline';
 
@@ -255,10 +255,10 @@ function renderLinks(host: HeaderHost, items: HeaderNavItem[], platform: string,
 
 export default define<HeaderProps>({
   tag: 'td-header',
-  platform: attribute('web'),
-  framework: attribute('vue'),
-  disabledTheme: attribute(false, (value) => parseBoolean(value, false)),
-  disabledLocale: attribute(false, (value) => parseBoolean(value, false)),
+  platform: 'web',
+  framework: 'vue',
+  disabledTheme: false,
+  disabledLocale: false,
   notice: {
     value: (_host, v) => v || {},
     connect: (host) => {

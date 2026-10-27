@@ -102,8 +102,12 @@ export default define<HeaderHost>({
     },
   }),
   platform: attribute('web'),
-  changelog: attribute(true, (value) => parseBoolean(value, true)),
-  changelogEn: attribute(true, (value) => parseBoolean(value, true)),
+  changelog: {
+    value: (_host, v) => parseBoolean(v, true),
+  },
+  changelogEn: {
+    value: (_host, v) => parseBoolean(v, true),
+  },
   mobileBodyStyle,
   shouldShowPopup: {
     value: (_host, v) => v || false,
@@ -227,7 +231,9 @@ export default define<HeaderHost>({
       };
     },
   },
-  showIssue: attribute(true, (value) => parseBoolean(value, true)),
+  showIssue: {
+    value: (_host, v) => parseBoolean(v, true),
+  },
 
   render: (host) => {
     const { changelog, changelogEn, docInfo, spline, showIssue } = host;

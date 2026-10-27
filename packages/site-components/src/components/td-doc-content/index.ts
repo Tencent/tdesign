@@ -1,5 +1,5 @@
 import { html, define } from 'hybrids';
-import { attribute, mobileBodyStyle } from '@utils';
+import { mobileBodyStyle } from '@utils';
 import style from './style.less?inline';
 
 const FIXED_HEADER_TOP = 228;
@@ -52,8 +52,8 @@ function anchorHighlight(): void {
 
 export default define<ContentHost>({
   tag: 'td-doc-content',
-  platform: attribute('web'),
-  pageStatus: attribute('show'),
+  platform: 'web',
+  pageStatus: 'show',
   mobileBodyStyle,
   fixedAnchor: {
     value: (_host, v) => v || undefined,
