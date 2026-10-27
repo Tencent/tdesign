@@ -3,6 +3,7 @@ import { define as baseDefine, type Component } from 'hybrids';
 export * from 'hybrids';
 
 const ATTRIBUTE_VERSION = '__attributeVersion';
+const explicitlySetProperties = new WeakMap<AttributeSyncHost, Set<string>>();
 
 interface AttributeSyncHost extends HTMLElement {
   [ATTRIBUTE_VERSION]: number;
@@ -11,6 +12,15 @@ interface AttributeSyncHost extends HTMLElement {
 
 interface PropertyConfig {
   type: string;
+}
+
+function markPropertyAsExplicitlySet(host: AttributeSyncHost, key: string): void {
+  let properties = explicitlySetProperties.get(host);
+  if (!properties) {
+    properties = new Set();
+    explicitlySetProperties.set(host, properties);
+  }
+  properties.add(key);
 }
 
 function getWritableProperties(component: Component<unknown>): Map<string, PropertyConfig> {
@@ -32,6 +42,25 @@ function getWritableProperties(component: Component<unknown>): Map<string, Prope
   });
 
   return properties;
+}
+
+function trackPropertySetters(tag: string, properties: Map<string, PropertyConfig>): void {
+  const constructor = customElements.get(tag);
+  if (!constructor) return;
+
+  properties.forEach((_property, key) => {
+    const descriptor = Object.getOwnPropertyDescriptor(constructor.prototype, key);
+    if (!descriptor?.set) return;
+
+    const setter = descriptor.set;
+    Object.defineProperty(constructor.prototype, key, {
+      ...descriptor,
+      set(this: AttributeSyncHost, value: unknown) {
+        markPropertyAsExplicitlySet(this, key);
+        setter.call(this, value);
+      },
+    });
+  });
 }
 
 function dashToCamelCase(value: string): string {
@@ -77,8 +106,11 @@ function withAttributeSync<E>(component: Component<E>): Component<E> {
       value: 0,
       connect: (host: AttributeSyncHost) => {
         Array.from(host.attributes).forEach(({ name }) => {
-          const property = properties.get(dashToCamelCase(name));
-          if (property) syncAttribute(host, name, property);
+          const key = dashToCamelCase(name);
+          const property = properties.get(key);
+          if (property && !explicitlySetProperties.get(host)?.has(key)) {
+            syncAttribute(host, name, property);
+          }
         });
 
         const observer = new MutationObserver((mutations) => {
@@ -103,7 +135,12 @@ function withAttributeSync<E>(component: Component<E>): Component<E> {
 }
 
 export const define = Object.assign(
-  <E>(component: Component<E>): Component<E> => baseDefine(withAttributeSync(component)),
+  <E>(component: Component<E>): Component<E> => {
+    const properties = getWritableProperties(component as Component<unknown>);
+    const definition = baseDefine(withAttributeSync(component));
+    trackPropertySetters(component.tag, properties);
+    return definition;
+  },
   {
     compile: baseDefine.compile,
     from: baseDefine.from,
