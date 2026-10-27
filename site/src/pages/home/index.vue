@@ -341,7 +341,7 @@
       </div>
     </div>
 
-    <td-doc-footer :style="footerStyle" data-board-section="after" />
+    <td-doc-footer mode="site" :style="footerStyle" data-board-section="after" />
     <td-backtop />
   </section>
 </template>

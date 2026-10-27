@@ -22,6 +22,9 @@ interface DocPhoneProps {
 
 type DocPhoneHost = HTMLElement & DocPhoneProps;
 
+const PHONE_FIXED_TOP = 152;
+const PHONE_FOOTER_GAP = 60;
+
 function toggleCollapsePhone(host: DocPhoneHost): void {
   const tdDocPhoneMask = host.shadowRoot?.querySelector<HTMLElement>('.TDesign-doc-phone-mask')?.classList;
   if (!tdDocPhoneMask) return;
@@ -64,35 +67,23 @@ export default define<DocPhoneProps>({
         const isMobileResponse = window.innerWidth < 960;
         if (isMobileResponse) return;
 
-        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+        const { scrollTop } = document.documentElement;
 
-        // 当底部出现时不要超过底部区域
-        const FOOTER_HEIGHT = parseFloat(
-          getComputedStyle(document.documentElement).getPropertyValue('--footer-height'),
-        );
-        const PHONE_HEIGHT = parseFloat(getComputedStyle(host).getPropertyValue('--phone-body-height'));
-        const TD_HEIGHT = 64;
-        const maxPhonePos = scrollHeight - FOOTER_HEIGHT - PHONE_HEIGHT - TD_HEIGHT - 64; // 预留底部 64 像素间距
-        const canViewPhoneAndFooter = clientHeight <= FOOTER_HEIGHT + PHONE_HEIGHT + 64;
+        const phone = host.shadowRoot?.querySelector<HTMLElement>('.TDesign-doc-phone');
+        const footer = document.querySelector<HTMLElement>('td-doc-footer');
+        const phoneTopBeforeFooter =
+          phone && footer
+            ? footer.getBoundingClientRect().top - phone.offsetHeight - PHONE_FOOTER_GAP
+            : PHONE_FIXED_TOP;
 
         if (scrollTop >= 228) {
-          if (scrollTop + 88 >= maxPhonePos && canViewPhoneAndFooter) {
-            Object.assign(host, {
-              [key]: {
-                ...host.fixedStyle,
-                position: 'absolute',
-                top: `${maxPhonePos}px`,
-              },
-            });
-          } else {
-            Object.assign(host, {
-              [key]: {
-                ...host.fixedStyle,
-                position: 'fixed',
-                top: '152px',
-              },
-            });
-          }
+          Object.assign(host, {
+            [key]: {
+              ...host.fixedStyle,
+              position: 'fixed',
+              top: `${Math.min(PHONE_FIXED_TOP, phoneTopBeforeFooter)}px`,
+            },
+          });
         } else {
           Object.assign(host, {
             [key]: {
@@ -118,6 +109,8 @@ export default define<DocPhoneProps>({
           tdDocPhoneMask.classList.remove('show');
           tdDocPhoneMask.classList.remove('hide');
         }
+
+        handleScroll();
       }
 
       document.addEventListener('scroll', handleScroll);
