@@ -3,6 +3,8 @@ import { attribute, mobileBodyStyle } from '@utils';
 import style from './style.less?inline';
 
 const FIXED_HEADER_TOP = 228;
+const TOC_FIXED_TOP = 152;
+const TOC_FOOTER_GAP = 60;
 const CONTENT_SELECTORS = ['div[name="DEMO"]', 'div[name="API"]', 'div[name="DESIGN"]', 'div[name="DOC"]'];
 
 interface ContentHost {
@@ -62,10 +64,17 @@ export default define<ContentHost>({
         const { scrollTop } = document.documentElement;
         // 固定右侧目录
         const containers = document.querySelectorAll<HTMLElement>('.tdesign-toc_container');
+        const footer = document.querySelector<HTMLElement>('td-doc-footer');
 
         if (scrollTop > FIXED_HEADER_TOP) {
           containers.forEach((container) => {
-            Object.assign(container.style, { position: 'fixed', top: '152px' });
+            const topBeforeFooter = footer
+              ? footer.getBoundingClientRect().top - container.offsetHeight - TOC_FOOTER_GAP
+              : TOC_FIXED_TOP;
+            Object.assign(container.style, {
+              position: 'fixed',
+              top: `${Math.min(TOC_FIXED_TOP, topBeforeFooter)}px`,
+            });
           });
         } else {
           containers.forEach((container) => {

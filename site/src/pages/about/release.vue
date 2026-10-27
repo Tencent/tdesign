@@ -22,7 +22,7 @@
     </div>
     <t-loading v-else />
 
-    <td-doc-footer slot="doc-footer"></td-doc-footer>
+    <td-doc-footer mode="site" slot="doc-footer"></td-doc-footer>
   </td-doc-content>
 </template>
 
