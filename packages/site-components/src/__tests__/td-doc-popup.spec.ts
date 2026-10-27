@@ -28,7 +28,10 @@ vi.mock('hybrids', () => ({
 }));
 
 vi.mock('@popperjs/core', () => ({ createPopper: mockCreatePopper }));
-vi.mock('@utils', () => ({ parseBoolean: vi.fn((value: unknown) => Boolean(value)) }));
+vi.mock('@utils', () => ({
+  attribute: vi.fn((value: unknown) => ({ value })),
+  parseBoolean: vi.fn((value: unknown) => Boolean(value)),
+}));
 vi.mock('../components/td-doc-popup/style.less?inline', () => ({ default: '' }));
 
 interface PortalContainerMock {

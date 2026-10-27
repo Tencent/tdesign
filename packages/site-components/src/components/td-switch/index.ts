@@ -1,4 +1,5 @@
 import { html, define, dispatch } from 'hybrids';
+import { attribute, parseBoolean } from '@utils';
 import style from './style.less?inline';
 
 type SwitchSize = 'small' | 'medium' | 'large';
@@ -15,8 +16,8 @@ function handleChange(host: SwitchProps & HTMLElement) {
 
 export default define<SwitchProps>({
   tag: 'td-switch',
-  value: false,
-  size: 'medium',
+  value: attribute(false, (value) => parseBoolean(value, false)),
+  size: attribute<SwitchSize>('medium'),
   render: (host) => {
     const { value, size } = host;
 

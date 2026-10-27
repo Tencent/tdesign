@@ -1,4 +1,5 @@
 import { html, define, dispatch } from 'hybrids';
+import { attribute, parseBoolean } from '@utils';
 import style from './style.less?inline';
 import portalStyle from './portal.less?inline';
 import fakeArrowIcon from '@images/fake-arrow.svg?raw';
@@ -51,9 +52,9 @@ function renderOptions(host: SelectHost) {
 
 export default define<SelectProps>({
   tag: 'td-select',
-  borderless: false,
-  value: '',
-  visible: false,
+  borderless: attribute(false, (value) => parseBoolean(value, false)),
+  value: attribute<SelectValue>(''),
+  visible: attribute(false, (value) => parseBoolean(value, false)),
   options: {
     value: (host, v) => v || [],
   },
@@ -75,7 +76,7 @@ export default define<SelectProps>({
         placement="bottom-start"
         trigger-type="click"
         portal-class="td-select-portal"
-        portalStyle="${portalStyle}"
+        portal-style="${portalStyle}"
         onvisible-change="${(host: SelectHost, event: VisibleChangeEvent) => (host.visible = event.detail.visible)}"
       >
         <div class="${selectInputClass}">

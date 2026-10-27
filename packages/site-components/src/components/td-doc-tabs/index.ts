@@ -1,5 +1,5 @@
 import { html, dispatch, define } from 'hybrids';
-import { isEn } from '@utils';
+import { attribute, isEn, parseBoolean } from '@utils';
 import style from './style.less?inline';
 
 interface TabItem {
@@ -53,9 +53,9 @@ const defaultTabs = [
 
 export default define<DocTabsProps>({
   tag: 'td-doc-tabs',
-  tab: 'demo',
+  tab: attribute('demo'),
   // 记录每个 tab 滚动条并自动滚动
-  autoScroll: true,
+  autoScroll: attribute(true, (value) => parseBoolean(value, true)),
   // 记录每个 tab 的滚动距离
   tabScrollMap: {
     value: (host, v) => {

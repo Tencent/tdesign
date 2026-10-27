@@ -4,7 +4,7 @@ import closeIcon from '@images/close.svg?raw';
 import fakeArrowIcon from '@images/fake-arrow.svg?raw';
 import githubIcon from '@images/github.svg?raw';
 import translateIcon from '@images/translate.svg?raw';
-import { isEn } from '@utils';
+import { attribute, isEn, parseBoolean } from '@utils';
 import portalStyle from './portal.less?inline';
 import style from './style.less?inline';
 
@@ -133,7 +133,7 @@ function renderNotice(host: HeaderHost) {
 
 function renderLinksPopup(host: HeaderHost, trigger: UpdateFunctionWithMethods<unknown>) {
   return html`
-    <td-doc-popup placement="bottom" portalStyle="${portalStyle}">
+    <td-doc-popup placement="bottom" portal-style="${portalStyle}">
       ${trigger}
       <div slot="content" class="TDesign-base-components-links">
         <div class="TDesign-base-components-links__web">
@@ -255,10 +255,10 @@ function renderLinks(host: HeaderHost, items: HeaderNavItem[], platform: string,
 
 export default define<HeaderProps>({
   tag: 'td-header',
-  platform: 'web',
-  framework: 'vue',
-  disabledTheme: false,
-  disabledLocale: false,
+  platform: attribute('web'),
+  framework: attribute('vue'),
+  disabledTheme: attribute(false, (value) => parseBoolean(value, false)),
+  disabledLocale: attribute(false, (value) => parseBoolean(value, false)),
   notice: {
     value: (_host, v) => v || {},
     connect: (host) => {
@@ -316,11 +316,11 @@ export default define<HeaderProps>({
             ${collapseMenu
               ? html`
                   <td-collapse-menu
-                    disabledTheme="${disabledTheme}"
+                    disabled-theme="${disabledTheme}"
                     platform="${platform}"
                     framework="${framework}"
-                    headerList="${headerList}"
-                    baseComponentsLinks="${baseComponentsLinks}"
+                    header-list="${headerList}"
+                    base-components-links="${baseComponentsLinks}"
                   >
                   </td-collapse-menu>
                 `

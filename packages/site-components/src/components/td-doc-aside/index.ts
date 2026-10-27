@@ -1,7 +1,7 @@
 import { html, dispatch, define, type Component } from 'hybrids';
 import menuFoldIcon from '@images/menu-fold.svg?raw';
 import menuUnfoldIcon from '@images/menu-unfold.svg?raw';
-import { patchShadowDomIntoDom } from '@utils';
+import { attribute, patchShadowDomIntoDom } from '@utils';
 import style from './style.less?inline';
 
 const replaceStateEvent = new CustomEvent('replaceState');
@@ -130,7 +130,7 @@ const asideComponent = {
   routerList: {
     value: (_host: AsideHost & HTMLElement, v?: NavItem[]) => v || [],
   },
-  title: '',
+  title: attribute(''),
   patchDom: {
     value: (_host: AsideHost & HTMLElement, v?: boolean) => v || false,
     connect: patchShadowDomIntoDom,

@@ -37,7 +37,10 @@ vi.mock('hybrids', () => ({
   html: mockHtml,
 }));
 
-vi.mock('@utils', () => ({ mobileBodyStyle: {} }));
+vi.mock('@utils', () => ({
+  attribute: vi.fn((value: unknown) => ({ value })),
+  mobileBodyStyle: {},
+}));
 vi.mock('../components/td-doc-content/style.less?inline', () => ({ default: '' }));
 
 describe('td-doc-content anchor scroll', () => {

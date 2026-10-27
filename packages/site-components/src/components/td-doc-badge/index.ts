@@ -1,28 +1,11 @@
-import { html, define, type Descriptor } from 'hybrids';
+import { html, define } from 'hybrids';
+import { attribute } from '@utils';
 import style from './style.less?inline';
 
 interface BadgeHost {
   label: string;
   message: string;
   color: string;
-}
-
-function attribute(defaultValue: string): Descriptor<BadgeHost, string> {
-  return {
-    value: (_host, value) => value ?? defaultValue,
-    connect: (host, key) => {
-      const attributeName = key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
-      const syncAttribute = () => {
-        host[key] = host.getAttribute(attributeName) ?? defaultValue;
-      };
-      const observer = new MutationObserver(syncAttribute);
-
-      if (host.hasAttribute(attributeName)) syncAttribute();
-      observer.observe(host, { attributes: true, attributeFilter: [attributeName] });
-
-      return () => observer.disconnect();
-    },
-  };
 }
 
 function getColor(message: string): string {

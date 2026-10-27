@@ -1,3 +1,35 @@
+import type { Descriptor } from 'hybrids';
+
+export function attribute<T, H extends object = object>(
+  defaultValue: T,
+  parse: (value: string) => T = (value) => value as T,
+  descriptor: Omit<Descriptor<H, T>, 'value'> = {},
+): Descriptor<H, T> {
+  const { connect, ...options } = descriptor;
+
+  return {
+    ...options,
+    value: (_host, value) => value ?? defaultValue,
+    connect: (host, key, invalidate) => {
+      const attributeName = key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+      const syncAttribute = () => {
+        const value = host.getAttribute(attributeName);
+        host[key] = value === null ? defaultValue : parse(value);
+      };
+      const observer = new MutationObserver(syncAttribute);
+
+      if (host.hasAttribute(attributeName)) syncAttribute();
+      observer.observe(host, { attributes: true, attributeFilter: [attributeName] });
+      const disconnect = connect?.(host, key, invalidate);
+
+      return () => {
+        observer.disconnect();
+        disconnect?.();
+      };
+    },
+  };
+}
+
 /**
  * @function debounce 防抖
  * @param func, delay

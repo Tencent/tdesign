@@ -67,7 +67,7 @@ export default define<LogoProps>({
     </style>
 
     <div class="TDesign-header-logo">
-      <td-doc-popup portalStyle="${portalStyle}" placement="bottom-start">
+      <td-doc-popup portal-style="${portalStyle}" placement="bottom-start">
         <div class="TDesign-header-logo__menu" innerHTML=${menuApplicationIcon}></div>
         <div slot="content" class="TDesign-header-logo__content">${renderMenu(menuList)}</div>
       </td-doc-popup>

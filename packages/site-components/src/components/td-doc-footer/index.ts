@@ -1,7 +1,7 @@
 import { html, define } from 'hybrids';
 import { getFooterConfig } from '@config/footer';
 import { getLocale } from '@config/locale';
-import { patchShadowDomIntoDom, mobileBodyStyle } from '@utils';
+import { attribute, patchShadowDomIntoDom, mobileBodyStyle } from '@utils';
 import { fetchEcosystemConfig, getEcosystemLinkTarget } from '@config/ecosystem';
 import type { FooterGroup } from '@config/types';
 import tencentCloudIcon from '@images/tencentcloud-logo.svg?raw';
@@ -60,8 +60,8 @@ interface FooterHost {
 
 export default define<FooterHost>({
   tag: 'td-doc-footer',
+  platform: attribute('web'),
   mobileBodyStyle,
-  platform: 'web',
   displayQrCode: '',
   footerLinks: {
     value: (_host, value) => value || getFooterConfig(),

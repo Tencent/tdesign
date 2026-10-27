@@ -1,7 +1,7 @@
 import { getLocale } from '@config/locale';
 import splineConfig from '@config/spline';
 import historyIcon from '@images/history.svg?raw';
-import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, parseBoolean, watchHtmlMode } from '@utils';
+import { attribute, isComponentPage, isGlobalConfigPage, mobileBodyStyle, parseBoolean, watchHtmlMode } from '@utils';
 import { define, html } from 'hybrids';
 import style from './style.less?inline';
 
@@ -87,8 +87,7 @@ function iframeOnload(host: HeaderHost & HTMLElement): void {
 
 export default define<HeaderHost>({
   tag: 'td-doc-header',
-  spline: {
-    value: (_host, v) => v || '',
+  spline: attribute<string, HeaderHost>('', undefined, {
     connect: (host) => {
       const observer = watchHtmlMode((themeMode) => handleModeChange(themeMode, host));
 
@@ -101,14 +100,10 @@ export default define<HeaderHost>({
         handleModeChange(themeMode, host);
       }, 600);
     },
-  },
-  platform: 'web',
-  changelog: {
-    value: (_host, v) => parseBoolean(v, true),
-  },
-  changelogEn: {
-    value: (_host, v) => parseBoolean(v, true),
-  },
+  }),
+  platform: attribute('web'),
+  changelog: attribute(true, (value) => parseBoolean(value, true)),
+  changelogEn: attribute(true, (value) => parseBoolean(value, true)),
   mobileBodyStyle,
   shouldShowPopup: {
     value: (_host, v) => v || false,
@@ -232,9 +227,7 @@ export default define<HeaderHost>({
       };
     },
   },
-  showIssue: {
-    value: (_host, v) => parseBoolean(v, true),
-  },
+  showIssue: attribute(true, (value) => parseBoolean(value, true)),
 
   render: (host) => {
     const { changelog, changelogEn, docInfo, spline, showIssue } = host;

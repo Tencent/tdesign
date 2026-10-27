@@ -1,4 +1,5 @@
 import { html, dispatch, define } from 'hybrids';
+import { attribute } from '@utils';
 import style from './style.less?inline';
 import copyIcon from '@images/copy.svg?raw';
 
@@ -41,7 +42,7 @@ function handleCopy(host: CopyHost & HTMLElement): void {
 
 export default define<CopyHost>({
   tag: 'td-doc-copy',
-  code: '',
+  code: attribute(''),
   render: () =>
     html`
       <td-tooltip duration="800">

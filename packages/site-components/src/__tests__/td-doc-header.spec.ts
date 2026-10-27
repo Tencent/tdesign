@@ -20,6 +20,10 @@ vi.mock('@config/locale', () => ({ getLocale: vi.fn(() => ({})) }));
 vi.mock('@config/spline', () => ({}));
 vi.mock('@images/history.svg?raw', () => ({ default: '' }));
 vi.mock('@utils', () => ({
+  attribute: vi.fn((value: unknown, _parse?: unknown, descriptor: Record<string, unknown> = {}) => ({
+    value,
+    ...descriptor,
+  })),
   isComponentPage: vi.fn(),
   isGlobalConfigPage: vi.fn(),
   mobileBodyStyle: {},

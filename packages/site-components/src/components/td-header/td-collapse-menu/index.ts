@@ -2,7 +2,7 @@ import { html, define } from 'hybrids';
 import style from './style.less?inline';
 import portalStyle from './portal.less?inline';
 import bulletpointIcon from '@images/bulletpoint.svg?raw';
-import { isIntranet } from '@utils/index';
+import { attribute, isIntranet, parseBoolean } from '@utils/index';
 import { gitPath, renderTag, handleLinkClick, type BaseComponentsLinks, type HeaderNavItem } from '../index';
 
 interface CollapseMenuProps {
@@ -79,13 +79,13 @@ export default define<CollapseMenuProps>({
   baseComponentsLinks: {
     value: (_host, value) => value || [],
   },
-  platform: 'web',
-  framework: 'vue',
-  disabledTheme: false,
+  platform: attribute('web'),
+  framework: attribute('vue'),
+  disabledTheme: attribute(false, (value) => parseBoolean(value, false)),
   render: (host) =>
     html`
       <div class="TDesign-collapse-menu">
-        <td-doc-popup portalStyle="${portalStyle}" trigger-type="click">
+        <td-doc-popup portal-style="${portalStyle}" trigger-type="click">
           <div class="collapse-icon" innerHTML="${bulletpointIcon}"></div>
           <div slot="content" class="TDesign-collapse-menu__list">
             ${renderLinks(host)} ${host.disabledTheme ? html`` : html`<td-theme-tabs></td-theme-tabs>`}

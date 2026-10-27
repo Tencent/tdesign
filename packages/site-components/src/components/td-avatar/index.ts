@@ -1,4 +1,5 @@
 import { html, define } from 'hybrids';
+import { attribute } from '@utils';
 import style from './style.less?inline';
 
 interface AvatarProps {
@@ -10,10 +11,10 @@ interface AvatarProps {
 
 export default define<AvatarProps>({
   tag: 'td-avatar',
-  content: '',
-  username: '',
-  src: '',
-  href: '',
+  content: attribute(''),
+  username: attribute(''),
+  src: attribute(''),
+  href: attribute(''),
   render: ({ content, username, src, href }) => {
     const defaultSrc = `https://avatars.githubusercontent.com/${username}`;
     const defaultHref = `https://github.com/${username}`;
