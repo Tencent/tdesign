@@ -1,4 +1,4 @@
-import { define, html } from 'hybrids';
+import { define, html } from '@utils/hybrids';
 import style from './style.less?inline';
 
 interface CodeProps {

@@ -1,4 +1,4 @@
-import { define, html, type UpdateFunctionWithMethods } from 'hybrids';
+import { define, html, type UpdateFunctionWithMethods } from '@utils/hybrids';
 import { getHeaderConfig } from '@config/header';
 import closeIcon from '@images/close.svg?raw';
 import fakeArrowIcon from '@images/fake-arrow.svg?raw';
@@ -133,7 +133,7 @@ function renderNotice(host: HeaderHost) {
 
 function renderLinksPopup(host: HeaderHost, trigger: UpdateFunctionWithMethods<unknown>) {
   return html`
-    <td-doc-popup placement="bottom" portalStyle="${portalStyle}">
+    <td-doc-popup placement="bottom" portal-style="${portalStyle}">
       ${trigger}
       <div slot="content" class="TDesign-base-components-links">
         <div class="TDesign-base-components-links__web">
@@ -316,11 +316,11 @@ export default define<HeaderProps>({
             ${collapseMenu
               ? html`
                   <td-collapse-menu
-                    disabledTheme="${disabledTheme}"
+                    disabled-theme="${disabledTheme}"
                     platform="${platform}"
                     framework="${framework}"
-                    headerList="${headerList}"
-                    baseComponentsLinks="${baseComponentsLinks}"
+                    header-list="${headerList}"
+                    base-components-links="${baseComponentsLinks}"
                   >
                   </td-collapse-menu>
                 `

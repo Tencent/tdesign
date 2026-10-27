@@ -1,4 +1,4 @@
-import { html, dispatch, define } from 'hybrids';
+import { html, dispatch, define } from '@utils/hybrids';
 import style from './style.less?inline';
 import copyIcon from '@images/copy.svg?raw';
 

@@ -1,4 +1,4 @@
-import { html, define, dispatch } from 'hybrids';
+import { html, define, dispatch } from '@utils/hybrids';
 import { createPopper, type Instance, type Placement } from '@popperjs/core';
 import { parseBoolean } from '@utils';
 import style from './style.less?inline';
@@ -57,7 +57,7 @@ export default define<DocPopupProps>({
   portal: null,
   popper: null,
   equalWidth: {
-    value: (_host, v) => parseBoolean(v, false),
+    value: (_host, value) => parseBoolean(value, false),
   },
   visible: {
     value: (host, v) => v || false,

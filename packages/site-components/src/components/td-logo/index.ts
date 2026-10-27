@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { html, define } from 'hybrids';
+import { html, define } from '@utils/hybrids';
 import logoIcon from '@images/logo.svg?raw';
 import menuApplicationIcon from '@images/menu-application.svg?raw';
 import chevronRightIcon from '@images/chevron-right.svg?raw';
@@ -67,7 +67,7 @@ export default define<LogoProps>({
     </style>
 
     <div class="TDesign-header-logo">
-      <td-doc-popup portalStyle="${portalStyle}" placement="bottom-start">
+      <td-doc-popup portal-style="${portalStyle}" placement="bottom-start">
         <div class="TDesign-header-logo__menu" innerHTML=${menuApplicationIcon}></div>
         <div slot="content" class="TDesign-header-logo__content">${renderMenu(menuList)}</div>
       </td-doc-popup>

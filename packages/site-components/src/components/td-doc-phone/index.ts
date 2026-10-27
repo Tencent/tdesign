@@ -1,4 +1,4 @@
-import { html, define } from 'hybrids';
+import { html, define } from '@utils/hybrids';
 import QRCode from 'qrcode';
 import style from './style.less?inline';
 import qrcodeIcon from '@images/qrcode.svg?raw';

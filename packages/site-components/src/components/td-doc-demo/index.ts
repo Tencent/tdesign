@@ -1,4 +1,4 @@
-import { html, define, dispatch } from 'hybrids';
+import { html, define, dispatch } from '@utils/hybrids';
 import Prism from 'prismjs';
 import { parseBoolean } from '@utils';
 import style from './style.less?inline';

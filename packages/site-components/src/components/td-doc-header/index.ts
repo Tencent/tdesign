@@ -2,7 +2,7 @@ import { getLocale } from '@config/locale';
 import splineConfig from '@config/spline';
 import historyIcon from '@images/history.svg?raw';
 import { isComponentPage, isGlobalConfigPage, mobileBodyStyle, parseBoolean, watchHtmlMode } from '@utils';
-import { define, html } from 'hybrids';
+import { define, html } from '@utils/hybrids';
 import style from './style.less?inline';
 
 interface DocInfo {
@@ -88,7 +88,7 @@ function iframeOnload(host: HeaderHost & HTMLElement): void {
 export default define<HeaderHost>({
   tag: 'td-doc-header',
   spline: {
-    value: (_host, v) => v || '',
+    value: (_host, value) => value || '',
     connect: (host) => {
       const observer = watchHtmlMode((themeMode) => handleModeChange(themeMode, host));
 

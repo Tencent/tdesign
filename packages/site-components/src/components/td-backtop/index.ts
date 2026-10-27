@@ -1,4 +1,4 @@
-import { html, define } from 'hybrids';
+import { html, define } from '@utils/hybrids';
 import style from './style.less?inline';
 import backTopIcon from '@images/backtop.svg?raw';
 

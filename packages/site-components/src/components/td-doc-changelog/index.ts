@@ -1,4 +1,4 @@
-import { define, html } from 'hybrids';
+import { define, html } from '@utils/hybrids';
 import { getLocale } from '@config/locale';
 import closeIcon from '@images/close.svg?raw';
 import { convert2PascalCase, isComponentPage, isEn, isGlobalConfigPage, parseBoolean } from '@utils';
