@@ -21,6 +21,7 @@ interface DemoHost {
   mode: string;
   currentLangIndex: number;
   languages: string | undefined;
+  currentRenderCode: string;
   theme: string;
   activeStyleMap: Record<string, TabStyle> | null | undefined;
 }
@@ -39,6 +40,7 @@ export default define<DemoHost>({
   mode: 'auto', // auto open
   currentLangIndex: 0,
   languages: undefined, // multiple languages display
+  currentRenderCode: '',
   theme: {
     value: (_host, v) => v || localStorage.getItem('--tdesign-theme') || 'light',
     connect(host, key, invalidate) {
@@ -101,6 +103,7 @@ export default define<DemoHost>({
     const currentLang = languageArr[currentLangIndex] || '';
     const currentCode = host.dataset?.[currentLang] || host.dataset?.[currentLang.toLocaleLowerCase()] || code;
     const highlightCode = Prism.highlight(currentCode, Prism.languages[language], language);
+    host.currentRenderCode = currentCode;
     const activeStyle =
       activeStyleMap && languageArr.length ? getTabStyle(activeStyleMap, languageArr[currentLangIndex]) : {};
     // mode 为 open 时始终保持展开，且不渲染切换按钮
