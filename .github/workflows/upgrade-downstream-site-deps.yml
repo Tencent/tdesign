@@ -1,4 +1,4 @@
-name: upgrade-site-deps
+name: upgrade-downstream-site-deps
 
 on:
   workflow_dispatch:
