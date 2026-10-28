@@ -1,0 +1,95 @@
+name: upgrade-downstream-site-deps
+
+on:
+  workflow_dispatch:
+    inputs:
+      upgrade-all-sites:
+        description: '升级全部站点（勾选后忽略下面的站点选择）'
+        type: boolean
+        default: true
+
+      vue-next:
+        description: 'tdesign-vue-next'
+        type: boolean
+        default: false
+      vue:
+        description: 'tdesign-vue'
+        type: boolean
+        default: false
+      react:
+        description: 'tdesign-react'
+        type: boolean
+        default: false
+      mobile-vue:
+        description: 'tdesign-mobile-vue'
+        type: boolean
+        default: false
+      mobile-react:
+        description: 'tdesign-mobile-react'
+        type: boolean
+        default: false
+      miniprogram:
+        description: 'tdesign-miniprogram'
+        type: boolean
+        default: false
+      flutter:
+        description: 'tdesign-flutter（站点子目录 tdesign-site）'
+        type: boolean
+        default: false
+      starter-docs:
+        description: 'tdesign-starter-docs'
+        type: boolean
+        default: false
+
+jobs:
+  upgrade-deps:
+    if: github.repository == 'Tencent/tdesign'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - repo: tdesign-vue-next
+            package-manager: pnpm
+            selected: ${{ (inputs['upgrade-all-sites'] || inputs['vue-next']) && 'yes' || 'no' }}
+          - repo: tdesign-vue
+            package-manager: npm
+            selected: ${{ (inputs['upgrade-all-sites'] || inputs.vue) && 'yes' || 'no' }}
+          - repo: tdesign-react
+            package-manager: pnpm
+            selected: ${{ (inputs['upgrade-all-sites'] || inputs.react) && 'yes' || 'no' }}
+          - repo: tdesign-mobile-vue
+            package-manager: npm
+            selected: ${{ (inputs['upgrade-all-sites'] || inputs['mobile-vue']) && 'yes' || 'no' }}
+          - repo: tdesign-mobile-react
+            package-manager: npm
+            selected: ${{ (inputs['upgrade-all-sites'] || inputs['mobile-react']) && 'yes' || 'no' }}
+          - repo: tdesign-miniprogram
+            package-manager: pnpm
+            selected: ${{ (inputs['upgrade-all-sites'] || inputs.miniprogram) && 'yes' || 'no' }}
+          # 站点位于 tdesign-site 子目录，需要 target-dir
+          - repo: tdesign-flutter
+            package-manager: pnpm
+            target-dir: tdesign-site
+            selected: ${{ (inputs['upgrade-all-sites'] || inputs.flutter) && 'yes' || 'no' }}
+          # 仓库属于 TDesignOteam，无 lock 文件，默认分支为 develop
+          - repo: tdesign-starter-docs
+            owner: TDesignOteam
+            package-manager: npm
+            selected: ${{ (inputs['upgrade-all-sites'] || inputs['starter-docs']) && 'yes' || 'no' }}
+    steps:
+      - name: Skip unselected site
+        if: matrix.selected != 'yes'
+        run: echo "skip ${{ matrix.repo }}"
+
+      - uses: TDesignOteam/workflows/actions/upgrade-deps@main
+        if: matrix.selected == 'yes'
+        with:
+          token: ${{ secrets.TDESIGN_BOT_TOKEN }}
+          owner: ${{ matrix.owner || 'Tencent' }}
+          repo: ${{ matrix.repo }}
+          package-manager: ${{ matrix.package-manager }}
+          target-dir: ${{ matrix.target-dir }}
+          dry-run: true
+          deps: '@tdesign/site-components @tdesign/theme-generator'
+          title: 'chore: upgrade tdesign site deps'
