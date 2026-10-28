@@ -8,6 +8,11 @@ on:
         type: boolean
         default: true
 
+      dry-run:
+        description: '试运行：不提交、不推送、不提 PR'
+        type: boolean
+        default: false
+
       vue-next:
         description: 'tdesign-vue-next'
         type: boolean
@@ -127,5 +132,6 @@ jobs:
           repo: ${{ matrix.repo }}
           package-manager: ${{ matrix.package-manager }}
           target-dir: ${{ matrix.target-dir }}
+          dry-run: ${{ inputs['dry-run'] }}
           deps: ${{ needs.resolve-deps.outputs.deps }}
           title: 'chore: upgrade tdesign site deps'
