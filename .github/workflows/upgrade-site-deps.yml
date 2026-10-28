@@ -1,4 +1,4 @@
-name: upgrade-deps
+name: upgrade-site-deps
 
 on:
   workflow_dispatch:
@@ -7,11 +7,6 @@ on:
         description: '升级全部站点（勾选后忽略下面的站点选择）'
         type: boolean
         default: true
-
-      dry-run:
-        description: '试运行：不提交、不推送、不提 PR'
-        type: boolean
-        default: false
 
       vue-next:
         description: 'tdesign-vue-next'
@@ -132,6 +127,6 @@ jobs:
           repo: ${{ matrix.repo }}
           package-manager: ${{ matrix.package-manager }}
           target-dir: ${{ matrix.target-dir }}
-          dry-run: ${{ inputs['dry-run'] }}
+          dry-run: true
           deps: ${{ needs.resolve-deps.outputs.deps }}
           title: 'chore: upgrade tdesign site deps'
