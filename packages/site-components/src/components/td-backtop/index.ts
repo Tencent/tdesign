@@ -25,6 +25,7 @@ export default define<BacktopProps>({
         invalidate();
       }
       document.addEventListener('scroll', toggleVisible);
+      toggleVisible();
 
       return () => document.removeEventListener('scroll', toggleVisible);
     },
