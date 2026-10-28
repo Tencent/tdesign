@@ -41,45 +41,8 @@ on:
         type: boolean
         default: false
 
-      site-components:
-        description: '@tdesign/site-components'
-        type: boolean
-        default: true
-      theme-generator:
-        description: '@tdesign/theme-generator'
-        type: boolean
-        default: true
-
 jobs:
-  resolve-deps:
-    if: github.repository == 'Tencent/tdesign'
-    runs-on: ubuntu-latest
-    outputs:
-      deps: ${{ steps.deps.outputs.deps }}
-    steps:
-      - id: deps
-        env:
-          SITE_COMPONENTS: ${{ inputs['site-components'] }}
-          THEME_GENERATOR: ${{ inputs['theme-generator'] }}
-        run: |
-          DEPS=""
-          for name in SITE_COMPONENTS THEME_GENERATOR; do
-            if [ "${!name}" = "true" ]; then
-              case "$name" in
-                SITE_COMPONENTS) pkg='@tdesign/site-components' ;;
-                THEME_GENERATOR) pkg='@tdesign/theme-generator' ;;
-              esac
-              DEPS="${DEPS:+$DEPS }$pkg"
-            fi
-          done
-          if [ -z "$DEPS" ]; then
-            echo "::error::至少需要勾选一个依赖包"
-            exit 1
-          fi
-          echo "deps=$DEPS" >> "$GITHUB_OUTPUT"
-
   upgrade-deps:
-    needs: resolve-deps
     if: github.repository == 'Tencent/tdesign'
     runs-on: ubuntu-latest
     strategy:
@@ -128,5 +91,5 @@ jobs:
           package-manager: ${{ matrix.package-manager }}
           target-dir: ${{ matrix.target-dir }}
           dry-run: true
-          deps: ${{ needs.resolve-deps.outputs.deps }}
+          deps: '@tdesign/site-components @tdesign/theme-generator'
           title: 'chore: upgrade tdesign site deps'
