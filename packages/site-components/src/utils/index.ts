@@ -5,7 +5,6 @@
 export function debounce<TThis, TArgs extends unknown[]>(func: (this: TThis, ...args: TArgs) => void, delay = 300) {
   let timer: ReturnType<typeof setTimeout> | undefined;
   return function (this: TThis, ...args: TArgs) {
-    func.apply(this, args);
     clearTimeout(timer);
     timer = setTimeout(() => func.apply(this, args), delay);
   };
