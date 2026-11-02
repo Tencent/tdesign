@@ -45,7 +45,7 @@ export default function mdToVue(options: MdToVueOptions): string {
       <td-doc-content ref="tdDocContent" page-status="hidden">
         ${docHeader}
         <div name="DOC">${mdSegment.docMd}</div>
-        <td-doc-footer slot="doc-footer"></td-doc-footer>
+        <td-doc-footer mode="site" slot="doc-footer"></td-doc-footer>
       </td-doc-content>
     </template>
 

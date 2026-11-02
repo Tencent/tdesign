@@ -83,7 +83,7 @@
         </div>
       </div>
     </div>
-    <td-doc-footer :style="footerStyle" />
+    <td-doc-footer mode="site" :style="footerStyle" />
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 /* global Aegis */
-import { html, define } from 'hybrids';
+import { html, define } from '@utils/hybrids';
 
 interface AegisProps {
   aegisId: string;

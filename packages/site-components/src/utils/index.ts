@@ -124,7 +124,8 @@ export function parseBoolean(value: unknown, defaultValue = true) {
     return defaultValue;
   }
   if (typeof value === 'string') {
-    return value === 'true';
+    // 空字符串来自布尔属性（如 <td-doc-demo show-code>），应视为 true
+    return value === '' || value === 'true';
   }
   return Boolean(value);
 }

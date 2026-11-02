@@ -1,4 +1,4 @@
-import { html, define } from 'hybrids';
+import { html, define } from '@utils/hybrids';
 import NProgress from 'nprogress';
 import style from './style.less?inline';
 

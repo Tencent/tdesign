@@ -1,4 +1,4 @@
-import { html, dispatch, define } from 'hybrids';
+import { html, dispatch, define } from '@utils/hybrids';
 import { isEn } from '@utils';
 import style from './style.less?inline';
 

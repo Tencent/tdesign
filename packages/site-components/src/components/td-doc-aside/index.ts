@@ -1,4 +1,4 @@
-import { html, dispatch, define, type Component } from 'hybrids';
+import { html, dispatch, define, type Component } from '@utils/hybrids';
 import menuFoldIcon from '@images/menu-fold.svg?raw';
 import menuUnfoldIcon from '@images/menu-unfold.svg?raw';
 import { patchShadowDomIntoDom } from '@utils';

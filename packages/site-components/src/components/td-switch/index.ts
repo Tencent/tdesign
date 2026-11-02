@@ -1,4 +1,4 @@
-import { html, define, dispatch } from 'hybrids';
+import { html, define, dispatch } from '@utils/hybrids';
 import style from './style.less?inline';
 
 type SwitchSize = 'small' | 'medium' | 'large';

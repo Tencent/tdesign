@@ -1,4 +1,4 @@
-import { define, html, type UpdateFunctionWithMethods } from 'hybrids';
+import { define, html, type UpdateFunctionWithMethods } from '@utils/hybrids';
 import { getHeaderConfig } from '@config/header';
 import closeIcon from '@images/close.svg?raw';
 import fakeArrowIcon from '@images/fake-arrow.svg?raw';
@@ -125,17 +125,15 @@ function renderNotice(host: HeaderHost) {
   return html`
     <div class="TDesign-header-notice ${noticeOption.type}">
       <div class="TDesign-header-notice__content" onclick="${handleNoticeAction}">${noticeOption.title}</div>
-      ${
-        noticeOption.closeable &&
-        html`<i class="TDesign-header-notice__close" innerHTML="${closeIcon}" onclick="${closeNotice}"></i>`
-      }
+      ${noticeOption.closeable &&
+      html`<i class="TDesign-header-notice__close" innerHTML="${closeIcon}" onclick="${closeNotice}"></i>`}
     </div>
   `;
 }
 
 function renderLinksPopup(host: HeaderHost, trigger: UpdateFunctionWithMethods<unknown>) {
   return html`
-    <td-doc-popup placement="bottom" portalStyle="${portalStyle}">
+    <td-doc-popup placement="bottom" portal-style="${portalStyle}">
       ${trigger}
       <div slot="content" class="TDesign-base-components-links">
         <div class="TDesign-base-components-links__web">
@@ -315,26 +313,24 @@ export default define<HeaderProps>({
             <td-logo></td-logo>
           </div>
           <div class="TDesign-header-nav">
-            ${
-              collapseMenu
-                ? html`
-                    <td-collapse-menu
-                      disabledTheme="${disabledTheme}"
-                      platform="${platform}"
-                      framework="${framework}"
-                      headerList="${headerList}"
-                      baseComponentsLinks="${baseComponentsLinks}"
-                    >
-                    </td-collapse-menu>
-                  `
-                : html`
-                    <div class="slot-search">
-                      <slot name="search"></slot>
-                    </div>
-                    ${renderLinks(host, headerList, platform, framework)}
-                    ${disabledTheme ? html`` : html`<td-theme-tabs></td-theme-tabs>`}
-                  `
-            }
+            ${collapseMenu
+              ? html`
+                  <td-collapse-menu
+                    disabled-theme="${disabledTheme}"
+                    platform="${platform}"
+                    framework="${framework}"
+                    header-list="${headerList}"
+                    base-components-links="${baseComponentsLinks}"
+                  >
+                  </td-collapse-menu>
+                `
+              : html`
+                  <div class="slot-search">
+                    <slot name="search"></slot>
+                  </div>
+                  ${renderLinks(host, headerList, platform, framework)}
+                  ${disabledTheme ? html`` : html`<td-theme-tabs></td-theme-tabs>`}
+                `}
           </div>
         </div>
       </header>

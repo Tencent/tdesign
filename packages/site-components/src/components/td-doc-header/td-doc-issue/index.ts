@@ -1,4 +1,4 @@
-import { html, define } from 'hybrids';
+import { html, define } from '@utils/hybrids';
 import style from './style.less?inline';
 import infoIcon from '@images/info.svg?raw';
 import checkIcon from '@images/check.svg?raw';

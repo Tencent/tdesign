@@ -1,4 +1,4 @@
-import { html, define } from 'hybrids';
+import { html, define } from '@utils/hybrids';
 import logoIcon from '@images/logo.svg?raw';
 import menuApplicationIcon from '@images/menu-application.svg?raw';
 import chevronRightIcon from '@images/chevron-right.svg?raw';
@@ -36,15 +36,13 @@ function renderMenu(list: EcosystemCategory[]) {
   const len = list.length;
   return list.map(
     (category, index) => html`
-      ${
-        category.categoryUrl && category.categoryUrl !== 'null'
-          ? html`
-              <a href="${category.categoryUrl}" class="title" target="${getEcosystemLinkTarget(category.categoryUrl)}">
-                ${category.categoryTitle} <i innerHTML="${chevronRightIcon}"></i>
-              </a>
-            `
-          : html` <span class="title"> ${category.categoryTitle} </span> `
-      }
+      ${category.categoryUrl && category.categoryUrl !== 'null'
+        ? html`
+            <a href="${category.categoryUrl}" class="title" target="${getEcosystemLinkTarget(category.categoryUrl)}">
+              ${category.categoryTitle} <i innerHTML="${chevronRightIcon}"></i>
+            </a>
+          `
+        : html` <span class="title"> ${category.categoryTitle} </span> `}
       ${renderList(category.items)} ${index < len - 1 ? html`<div class="line"></div>` : html``}
     `,
   );
@@ -68,7 +66,7 @@ export default define<LogoProps>({
     </style>
 
     <div class="TDesign-header-logo">
-      <td-doc-popup portalStyle="${portalStyle}" placement="bottom-start">
+      <td-doc-popup portal-style="${portalStyle}" placement="bottom-start">
         <div class="TDesign-header-logo__menu" innerHTML=${menuApplicationIcon}></div>
         <div slot="content" class="TDesign-header-logo__content">${renderMenu(menuList)}</div>
       </td-doc-popup>
