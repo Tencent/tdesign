@@ -24,6 +24,7 @@ interface MessageProps {
 }
 
 type MessageElement = HTMLElement & MessageProps;
+const timers = new WeakMap<MessageElement, ReturnType<typeof setTimeout>>();
 
 function isMessageTheme(value: string | undefined): value is MessageTheme {
   return value === 'info' || value === 'success' || value === 'warning' || value === 'error' || value === 'question';
@@ -42,20 +43,30 @@ export default define<MessageProps>({
   duration: 3000,
   zIndex: 5000,
   content: '',
-  showMessage: false,
+  showMessage: {
+    value: false,
+    connect: (host) => () => {
+      clearTimeout(timers.get(host));
+      timers.delete(host);
+      host.showMessage = false;
+    },
+  },
   show:
     (host) =>
     ({ content, theme, duration }) => {
+      clearTimeout(timers.get(host));
       Object.assign(host, {
         showMessage: true,
         content,
         theme: theme || host.theme,
       });
-      setTimeout(() => {
-        Object.assign(host, {
-          showMessage: false,
-        });
-      }, duration || host.duration);
+      timers.set(
+        host,
+        setTimeout(() => {
+          timers.delete(host);
+          host.showMessage = false;
+        }, duration || host.duration),
+      );
     },
   render: (host) => {
     const { theme, zIndex, content, showMessage } = host;
