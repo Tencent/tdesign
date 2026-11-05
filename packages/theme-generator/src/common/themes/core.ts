@@ -8,6 +8,7 @@ import {
   clearLocalItem,
   downloadFile,
   getThemeMode,
+  getTokenValue,
   parseRootCss,
   setUpModeObserver,
 } from '../utils';
@@ -20,6 +21,9 @@ import {
   TENCENT_BLUE_DARK_PALETTE,
   WEB_RECOMMEND_THEMES,
 } from './built-in';
+
+import { calculateLineHeightTokens } from './line-height';
+import { FONT_SIZE_STEPS } from './presets';
 
 import type {
   BrandPalette,
@@ -189,11 +193,13 @@ export function exportCustomStyleSheet(device: Device | string): void {
   downloadFile(blob, `theme.${fileSuffix}`);
 }
 
-export function modifyToken(tokenName: string, newVal: string, saveToLocal = true): void {
+// Apply CSS without changing persisted options or individual token overrides.
+export function applyTokenToStyle(tokenName: string, newVal: string): boolean {
   // 获取所有可能包含 token 的样式表
   const styleSheets = document.querySelectorAll(`#${CUSTOM_THEME_ID}, #${CUSTOM_DARK_ID}, #${CUSTOM_EXTRA_ID}`);
 
   let tokenFound = false;
+  let changed = false;
   styleSheets.forEach((styleSheet) => {
     // 匹配 `tokenName: <value>;`，容忍冒号后任意空白
     const reg = new RegExp(`${tokenName}:\\s*([^;]*);`);
@@ -211,12 +217,33 @@ export function modifyToken(tokenName: string, newVal: string, saveToLocal = tru
     styleSheet.textContent = styleSheet.textContent?.replace(replaceReg, `$1${newVal};`) ?? '';
     tokenFound = true;
 
-    updateLocalToken(tokenName, saveToLocal ? newVal : null);
+    changed = true;
   });
 
   if (!tokenFound) {
     console.warn(`CSS variable: ${tokenName} is not exist`);
   }
+  return changed;
+}
+
+export function modifyToken(tokenName: string, newVal: string, saveToLocal = true): void {
+  if (applyTokenToStyle(tokenName, newVal)) {
+    updateLocalToken(tokenName, saveToLocal ? newVal : null);
+  }
+}
+
+/** Apply calculated line heights; custom writers can avoid persistence during restoration. */
+export function updateLineHeightTokens(
+  commonVal: string | number,
+  type: 'plus' | 'time' = 'plus',
+  writeToken?: (name: string, value: string) => void,
+): void {
+  const fontSizes = Object.fromEntries(FONT_SIZE_STEPS[3].map(({ name }) => [name, getTokenValue(name)]));
+  const tokens = calculateLineHeightTokens(fontSizes, commonVal, type);
+  Object.entries(tokens).forEach(([name, value]) => {
+    if (writeToken) writeToken(name, value);
+    else modifyToken(name, value, false);
+  });
 }
 
 export function getOptionFromLocal(optionName: string): string | undefined {
@@ -243,7 +270,7 @@ export function getTokenFromLocal(tokenName?: string): Record<string, string> | 
  * @param value 传入 `null` 或 `undefined`，则表示清除掉之前的存储
  */
 export function updateLocalOption(optionName: string, value: string | number | null | undefined): void {
-  if (value) {
+  if (value !== null && value !== undefined && value !== '') {
     const options = localStorage.getItem(CUSTOM_OPTIONS_ID) || '{}';
     const optionObj = JSON.parse(options) as Record<string, string | number>;
     optionObj[optionName] = value;

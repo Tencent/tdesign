@@ -100,10 +100,6 @@ watch(
   },
 );
 
-watch(step, (newStep) => {
-  emit('update:modelValue', newStep);
-});
-
 watch(
   () => props.disabled,
   (val) => {
@@ -111,9 +107,13 @@ watch(
       step.value = Number(props.selectOptions.find((v) => v.disabled)?.value);
     }
   },
+  { immediate: true },
 );
 
-function handleSelectChange() {
+function handleSelectChange(value: unknown) {
+  if (typeof value === 'string' || typeof value === 'number' || value === undefined) {
+    emit('update:modelValue', value);
+  }
   emit('enable');
 }
 
@@ -127,6 +127,7 @@ function handleVisibleChange(val: boolean) {
 function handleSliderChange(v: SliderValue) {
   if (props.disabled) return;
   step.value = Array.isArray(v) ? v[0] : v;
+  emit('update:modelValue', step.value);
 }
 
 function renderLabel(): string {
