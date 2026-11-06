@@ -7,8 +7,6 @@
     "preview": "vite preview",
     "site": "run-s build",
     "site:preview": "vite build --mode preview",
-    "lint": "eslint --ext .vue,.js,.ts,.tsx ./src",
-    "lint:fix": "eslint --ext .vue,.js,.ts,.tsx ./src --fix",
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
@@ -27,36 +25,21 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.2.0",
-    "@commitlint/config-conventional": "^8.2.0",
     "@types/markdown-it": "^12.2.3",
-    "@typescript-eslint/eslint-plugin": "^5.6.0",
-    "@typescript-eslint/parser": "^5.6.0",
+    "@types/node": "^22.15.3",
     "@vitejs/plugin-vue": "^5.2.4",
     "autoprefixer": "^10.4.0",
     "cssnano": "^5.0.12",
-    "cz-conventional-changelog": "^3.0.2",
-    "eslint": "^7.32.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.2.0",
-    "eslint-plugin-vue": "^8.2.0",
     "gray-matter": "^4.0.3",
     "less": "^4.9.1",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.5",
-    "rimraf": "^3.0.2",
+    "rimraf": "^6.1.3",
     "standard-version": "^7.0.1",
     "typescript": "^5.8.3",
     "vite": "^6.3.1",
     "vite-plugin-tdoc": "^2.0.0",
     "vue-tsc": "^2.2.10"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   },
   "author": "tdesign",
   "license": "MIT"

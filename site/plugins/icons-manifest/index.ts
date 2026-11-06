@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import type { Plugin, ResolvedConfig } from 'vite';
 
-// @ts-ignore tdesign-icons-view/manifest has no type declarations
+// @ts-expect-error tdesign-icons-view/manifest has no type declarations
 import { manifest } from 'tdesign-icons-view/manifest';
 
 export default function iconsManifestPlugin(): Plugin {
@@ -26,7 +26,7 @@ export default function iconsManifestPlugin(): Plugin {
         console.log(`[plugin-icons-manifest] 已生成 ${target}`);
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        throw new Error(`[plugin-icons-manifest] 生成 icons-manifest.json 失败：${message}`);
+        throw new Error(`[plugin-icons-manifest] 生成 icons-manifest.json 失败：${message}`, { cause: error });
       }
     },
   };

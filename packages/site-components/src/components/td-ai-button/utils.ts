@@ -144,12 +144,11 @@ const createTooltips = (framework: string, generateDemo: boolean, selectedText: 
 
   tooltip.addEventListener('mousedown', () => {
     unmountTooltips();
-    let prompt = '';
-    if (generateDemo) {
-      prompt = generatePrompt(framework, component, selectedText);
-    } else {
-      prompt = component ? `请为我解释${component}的${selectedText}的定义` : `请为我解释${selectedText}的定义`;
-    }
+    const prompt = generateDemo
+      ? generatePrompt(framework, component, selectedText)
+      : component
+        ? `请为我解释${component}的${selectedText}的定义`
+        : `请为我解释${selectedText}的定义`;
     sendMessage(prompt);
   });
   return tooltip;

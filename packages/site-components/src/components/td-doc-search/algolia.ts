@@ -110,7 +110,7 @@ export async function searchAlgolia({
     });
   } catch (err) {
     if (err instanceof Error && err.name === 'AbortError') throw err;
-    // eslint-disable-next-line no-console
+
     console.warn('[td-doc-search] search failed:', err instanceof Error ? err.message : String(err));
     return [];
   }

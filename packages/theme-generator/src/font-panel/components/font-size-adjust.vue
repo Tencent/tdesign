@@ -3,20 +3,20 @@
     <!-- 顶部调整 -->
     <SegmentSelection
       v-model="step"
-      :selectOptions="FONT_SIZE_OPTIONS"
-      :suspendedLabels="FONT_SIZE_LABELS"
+      :select-options="FONT_SIZE_OPTIONS"
+      :suspended-labels="FONT_SIZE_LABELS"
       :disabled="segmentSelectionDisabled"
     >
-      <template v-slot:left>
+      <template #left>
         <div class="font-panel__round-tag-left">Aa</div>
       </template>
-      <template v-slot:right>
+      <template #right>
         <div class="font-panel__round-tag-right">Aa</div>
       </template>
     </SegmentSelection>
     <!-- Token List -->
     <div class="font-panel__token-list">
-      <t-radio-group variant="default-filled" v-model="tokenType">
+      <t-radio-group v-model="tokenType" variant="default-filled">
         <t-radio-button value="list">{{ lang.font.steppedMode }}</t-radio-button>
         <t-radio-button value="token">{{ lang.font.tokenMode }}</t-radio-button>
       </t-radio-group>
@@ -25,12 +25,12 @@
           v-for="(token, idx) in ladderTypeList"
           :key="idx"
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
+          :overlay-style="{ borderRadius: '9px' }"
           @visible-change="(v, ctx) => handleVisibleChange(v, ctx, idx)"
-          :overlayStyle="{ borderRadius: '9px' }"
         >
           <t-list-item
             :style="{
@@ -54,8 +54,8 @@
           <template #content
             ><size-slider
               title="font-size"
-              :sizeValue="token.value"
-              @changeSize="(v) => handleChangeFontSize(v, 'list', token.tokens, idx)"
+              :size-value="token.value"
+              @change-size="(v) => handleChangeFontSize(v, 'list', token.tokens, idx)"
           /></template>
         </t-popup>
       </t-list>
@@ -64,11 +64,11 @@
           v-for="(token, idx) in tokenTypeList"
           :key="idx"
           placement="left"
-          showArrow
+          show-arrow
           trigger="click"
-          :destroyOnClose="true"
+          :destroy-on-close="true"
           :attach="handleAttach"
-          :overlayStyle="{ borderRadius: '9px' }"
+          :overlay-style="{ borderRadius: '9px' }"
           @visible-change="(v, ctx) => handleVisibleChange(v, ctx, idx)"
         >
           <t-list-item
@@ -93,8 +93,8 @@
           <template #content
             ><size-slider
               title="font-size"
-              :sizeValue="token.value"
-              @changeSize="(v) => handleChangeFontSize(v, 'token', token.label, idx)"
+              :size-value="token.value"
+              @change-size="(v) => handleChangeFontSize(v, 'token', token.label, idx)"
           /></template>
         </t-popup>
       </t-list>
@@ -268,12 +268,14 @@ onMounted(() => {
     font-weight: 600;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
+
   &__round-tag-right {
     font-size: 18px;
     line-height: 32px;
     font-weight: 600;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
+
   &__token-list {
     margin-top: 8px;
     padding: 4px;
@@ -285,12 +287,14 @@ onMounted(() => {
       line-height: 12px;
       font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     }
+
     :deep(.t-radio-group) {
       width: 100%;
       border-radius: 6px;
       text-align: center;
       background-color: var(--bg-color-theme-radio);
     }
+
     :deep(.t-radio-button) {
       width: 50%;
       padding: 0;
@@ -298,6 +302,7 @@ onMounted(() => {
       justify-content: center;
       align-items: center;
     }
+
     :deep(.t-list__inner) {
       overflow: hidden;
     }
@@ -309,6 +314,7 @@ onMounted(() => {
       cursor: pointer;
       background-color: var(--bg-color-theme-surface);
     }
+
     :deep(.t-list-item__content) {
       width: 100%;
     }

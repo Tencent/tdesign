@@ -178,7 +178,9 @@ const {
   color: var(--text-primary);
   border-radius: 12px;
   background: var(--bg-color-card);
-  box-shadow: 0 30px 60px rgb(0 0 0 / 10%), 0 50px 100px rgb(0 0 0 / 5%);
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.1),
+    0 50px 100px rgba(0, 0, 0, 0.05);
 }
 
 @media screen and (min-width: 1920px) {
@@ -250,7 +252,7 @@ const {
     place-items: center;
     border-radius: 50%;
     background: var(--bg-color-card);
-    box-shadow: 0 8px 32px rgb(0 0 0 / 8%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
     transform: translate(-50%, -50%);
 
     img {
@@ -293,7 +295,7 @@ const {
     font-size: 28px;
     border: 5px solid var(--bg-color-card);
     border-radius: 50%;
-    box-shadow: 0 2px 8px rgb(0 0 0 / 6%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     pointer-events: auto;
     transform: translate(-50%, -50%);
 
@@ -305,7 +307,9 @@ const {
     }
 
     &--active {
-      box-shadow: 0 0 0 4px rgb(0 82 217 / 18%), 0 2px 8px rgb(0 0 0 / 6%);
+      box-shadow:
+        0 0 0 4px rgba(0, 82, 217, 0.18),
+        0 2px 8px rgba(0, 0, 0, 0.06);
       animation: avatar-pulse 6s cubic-bezier(0.38, 0, 0.24, 1) infinite;
     }
 
@@ -374,11 +378,11 @@ const {
 @keyframes avatar-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgb(0 82 217 / 22%);
+    box-shadow: 0 0 0 0 rgba(0, 82, 217, 0.22);
   }
 
   50% {
-    box-shadow: 0 0 0 8px rgb(0 82 217 / 0%);
+    box-shadow: 0 0 0 8px rgba(0, 82, 217, 0);
   }
 }
 
@@ -486,7 +490,14 @@ const {
 
   &__meta-full {
     display: block;
-    font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family:
+      BlinkMacSystemFont,
+      -apple-system,
+      'Segoe UI',
+      Roboto,
+      Helvetica,
+      Arial,
+      sans-serif;
   }
 
   &__meta-compact {

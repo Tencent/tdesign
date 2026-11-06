@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import TDesign from 'tdesign-vue-next';

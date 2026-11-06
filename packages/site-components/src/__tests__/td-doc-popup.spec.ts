@@ -2,13 +2,13 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { Mock } from 'vitest';
 import docPopup from '../components/td-doc-popup';
 
-type PopupHost = {
+interface PopupHost {
   reference: { offsetWidth: number };
   placement: string;
   portalClass: string;
   portalStyle: string;
   querySelector: Mock;
-};
+}
 
 const visibleProp = docPopup.visible as unknown as {
   connect: (host: PopupHost) => () => void;

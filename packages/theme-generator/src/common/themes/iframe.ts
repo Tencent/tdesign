@@ -422,7 +422,12 @@ function watchNestedIframes(
 
   handleWatch(owner);
 
-  let watcher: SharedWatcher;
+  const watcher: SharedWatcher = {
+    cleanup: () => {},
+    owners: new Set([owner]),
+    releases: new WeakMap(),
+    refreshes: new Map(),
+  };
   const observer = new MutationObserver(() => {
     watcher.refreshes?.forEach((refresh) => refresh());
   });
@@ -436,12 +441,7 @@ function watchNestedIframes(
     observer.disconnect();
     delete observedDoc[NESTED_OBSERVED_FLAG];
   };
-  watcher = {
-    cleanup,
-    owners: new Set([owner]),
-    releases: new WeakMap(),
-    refreshes: new Map(),
-  };
+  watcher.cleanup = cleanup;
   watcher.refreshes?.set(owner, () => handleWatch(owner));
   const release = () => {
     if (!watcher.owners.delete(owner)) return;

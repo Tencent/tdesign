@@ -311,7 +311,7 @@ const tableCheck = ref<HTMLTableElement | null>(null);
 const downloadBtn = ref<HTMLAnchorElement | null>(null);
 
 const loadAnimations = () => {
-  const animationConfigs: Array<[Ref<HTMLElement | null>, object]> = [
+  const animationConfigs: [Ref<HTMLElement | null>, object][] = [
     [axisX, xAxis],
     [axisXDark, xAxisDark],
     [axisY, yAxis],
