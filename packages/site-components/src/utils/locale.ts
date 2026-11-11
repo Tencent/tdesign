@@ -22,7 +22,13 @@ function registerLocaleChange(cb: EventListener = defaultChangeCallBack) {
 }
 
 function jumpLocation(url: string) {
-  return isEn() ? `${url}-en` : url;
+  if (!isEn()) return url;
+  // 英文路由的约定是把 -en 贴在最后一段路径上（/icons-en、/source-en），所以标记要加在 path
+  // 末尾而不是整个 URL 末尾：直接拼接会让 /starter/ 变成 /starter/-en，还会把 query/hash 一起改写。
+  const [path, ...rest] = url.split(/([?#])/);
+  const base = path.replace(/\/+$/, '');
+  if (!base) return url;
+  return `${base}-en${rest.join('')}`;
 }
 
 export { getLang, jumpLocation, registerLocaleChange };
