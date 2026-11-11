@@ -3,23 +3,23 @@
   flex-direction: column;
   position: relative;
   background: var(--bg-color-docpage);
-  
+
   &.hidden {
     opacity: 0;
     visibility: hidden;
   }
-  
+
   &.show {
     opacity: 1;
     visibility: visible;
-    transition: all .2s linear;
+    transition: all 0.2s linear;
   }
-  
+
   .TDesign-doc-body {
     min-height: calc(100vh - var(--footer-height));
     color: var(--text-primary);
     padding-right: var(--content-padding-right);
-    
+
     &__inner {
       width: 100%;
       padding: 64px var(--content-padding-left-right) 120px var(--content-padding-left-right);
@@ -42,7 +42,7 @@
     background-color: var(--bg-color-scroll);
     border-radius: 100%;
     cursor: pointer;
-    transition: all .2s linear;
+    transition: all 0.2s linear;
     opacity: 0;
     visibility: hidden;
     color: var(--text-secondary);

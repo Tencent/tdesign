@@ -33,7 +33,7 @@ export function createBusinessCasesLayout() {
     const canvas = section.querySelector<HTMLElement>('.business-cases__canvas');
     const headingCanvasGap = window.innerWidth < 960 ? 24 : 64;
     const canvasTop = heading ? heading.offsetTop + heading.offsetHeight + headingCanvasGap : 212 + headingCanvasGap;
-    const canvasLayoutHeight = window.innerWidth < 960 ? canvas?.offsetHeight ?? canvasHeight : canvasHeight;
+    const canvasLayoutHeight = window.innerWidth < 960 ? (canvas?.offsetHeight ?? canvasHeight) : canvasHeight;
 
     canvasScale.value = scale.toFixed(4);
     compactCanvasScale.value = compactScale.toFixed(4);

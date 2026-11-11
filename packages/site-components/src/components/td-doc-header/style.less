@@ -6,7 +6,6 @@
 
   @media screen and (max-width: 960px) {
     --spline-visible: hidden;
-
     --inner-padding-y: 12px;
     --info-top: 14px;
     --title-font-size: 32px;
@@ -93,7 +92,10 @@
       text-align: left;
       line-height: 42px;
       margin: 0;
-      transition: top 0.2s var(--anim-time-fn-easing), opacity 0.2s linear, visibility 0.2s linear;
+      transition:
+        top 0.2s var(--anim-time-fn-easing),
+        opacity 0.2s linear,
+        visibility 0.2s linear;
     }
 
     &-describe {
@@ -105,6 +107,7 @@
       width: 100%;
       box-sizing: border-box;
       transition: all 0.2s linear;
+
       &-line {
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -119,9 +122,8 @@
   }
 }
 
-#TDesign-doc-changelog__entry {
+.TDesign-doc-changelog__entry {
   all: unset;
-  height: 24px;
   display: inline-flex;
   align-items: center;
   justify-content: center;

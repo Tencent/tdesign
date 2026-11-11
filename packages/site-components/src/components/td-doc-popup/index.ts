@@ -64,11 +64,10 @@ export default define<DocPopupProps>({
     connect: (host) => {
       const { reference, placement } = host;
       let resizeObserver: ResizeObserver | undefined;
-      let portalFrameId: number | undefined;
       let popperFrameId: number | undefined;
       let isConnected = true;
 
-      portalFrameId = requestAnimationFrame(() => {
+      const portalFrameId = requestAnimationFrame(() => {
         if (!isConnected) return;
 
         host.portals = document.getElementById('__td_portals__');

@@ -1,0 +1,11 @@
+node_modules
+.pnpm-store
+
+# build output
+_site
+dist
+results
+static_site
+lib
+coverage
+_data

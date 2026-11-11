@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
@@ -72,7 +72,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        transition:
+          background-color 0.2s ease,
+          border-color 0.2s ease,
+          color 0.2s ease;
       }
       #dev-mode-toggle.dev-dark {
         background: #e0e0e0;
@@ -616,8 +619,7 @@
   &lt;t-input v-model="value" placeholder="输入框" /&gt;
   &lt;t-switch v-model="checked" /&gt;
   &lt;t-progress :percentage="60" /&gt;
-&lt;/template&gt;</pre
-      >
+&lt;/template&gt;</pre>
       <pre class="dev-code" data-fw="vue-mobile" hidden>
 &lt;template&gt;
   &lt;!-- 移动端组件默认 size="large"，触摸区域更大 --&gt;
@@ -627,8 +629,7 @@
   &lt;t-input v-model="value" placeholder="输入框" /&gt;
   &lt;t-switch v-model="checked" /&gt;
   &lt;t-progress :percentage="60" /&gt;
-&lt;/template&gt;</pre
-      >
+&lt;/template&gt;</pre>
       <pre class="dev-code" data-fw="react" hidden>
 import { Button, Tag, Input, Switch, Progress } from 'tdesign-react';
 import 'tdesign-react/es/style/index.css';
@@ -642,8 +643,7 @@ export default () =&gt; (
     &lt;Switch checked={checked} onChange={onChange} /&gt;
     &lt;Progress percentage={60} /&gt;
   &lt;/&gt;
-);</pre
-      >
+);</pre>
       <pre class="dev-code" data-fw="miniprogram" hidden>
 &lt;!-- index.wxml --&gt;
 &lt;t-button theme="primary"&gt;主操作&lt;/t-button&gt;
@@ -662,8 +662,7 @@ export default () =&gt; (
     "t-switch": "tdesign-miniprogram/switch/switch",
     "t-progress": "tdesign-miniprogram/progress/progress"
   }
-}</pre
-      >
+}</pre>
       <pre class="dev-code" data-fw="uniapp" hidden>
 &lt;template&gt;
   &lt;t-button theme="primary"&gt;主操作&lt;/t-button&gt;
@@ -680,8 +679,7 @@ export default () =&gt; (
     "autoscan": true,
     "custom": { "^t-(.*)": "tdesign-uniapp/$1/$1.vue" }
   }
-}</pre
-      >
+}</pre>
       <p class="dev-fw-note">
         以上 5 套 TDesign 共享同一套 --td-* 主题 Token，主题生成器输出的 CSS 变量可直接驱动各端组件换肤。
       </p>

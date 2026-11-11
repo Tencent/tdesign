@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { html, define } from '@utils/hybrids';
 import logoIcon from '@images/logo.svg?raw';
 import menuApplicationIcon from '@images/menu-application.svg?raw';

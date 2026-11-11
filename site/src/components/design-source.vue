@@ -5,7 +5,7 @@
         <h2 class="title">
           <slot name="title">基础资源<span>10</span></slot>
         </h2>
-        <div class="tdesign-source-block" v-for="item in baseList" :key="item.title">
+        <div v-for="item in baseList" :key="item.title" class="tdesign-source-block">
           <div class="tdesign-source-block-image">
             <div @click="download(item)">
               <img class="light" :src="item.imgUrl" />
@@ -27,7 +27,7 @@
         <h2 class="title">
           <slot name="title">其他<span>6</span></slot>
         </h2>
-        <div class="tdesign-source-block" v-for="item in utilList" :key="item.title">
+        <div v-for="item in utilList" :key="item.title" class="tdesign-source-block">
           <div class="tdesign-source-block-image">
             <div @click="download(item)">
               <img class="light" :src="item.imgUrl" />

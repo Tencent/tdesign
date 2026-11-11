@@ -24,12 +24,14 @@ export default define<HistoryHost>({
     return html`
       <div class="TDesign-doc-history">
         <i class="icon" innerHTML="${historyIcon}"></i>
-        ${content
-          ? content
-          : html`
-              <span class="text">Last Update: </span>
-              ${transformTime(time)}
-            `}
+        ${
+          content
+            ? content
+            : html`
+                <span class="text">Last Update: </span>
+                ${transformTime(time)}
+              `
+        }
       </div>
     `.css`${style}`;
   },

@@ -55,12 +55,7 @@ function checkDescribeLineOverflow(host: HeaderHost & HTMLElement): void {
 function handleModeChange(themeMode: string, host: HeaderHost & HTMLElement): void {
   if (!host.shadowRoot) return;
   const splineEl = host.shadowRoot.querySelector<HTMLIFrameElement>('#__iframe__');
-  let splineUrl = '';
-  if (themeMode === 'dark') {
-    splineUrl = getSplineUrl(`${host.spline}-dark`) || '';
-  } else {
-    splineUrl = getSplineUrl(host.spline) || '';
-  }
+  const splineUrl = themeMode === 'dark' ? getSplineUrl(`${host.spline}-dark`) || '' : getSplineUrl(host.spline) || '';
   if (splineEl && splineUrl && splineUrl !== splineEl.src) {
     clearTimeout(timer);
     splineEl.setAttribute('style', 'max-height: 0;');
@@ -73,7 +68,7 @@ function iframeOnload(host: HeaderHost & HTMLElement): void {
   const iframeEl = host.shadowRoot.querySelector<HTMLIFrameElement>('#__iframe__');
   clearTimeout(timer);
   timer = setTimeout(() => {
-    iframeEl &&
+    if (iframeEl)
       iframeEl.setAttribute(
         'style',
         `
@@ -142,7 +137,7 @@ export default define<HeaderHost>({
         const background =
           shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__background') ?? document.createElement('div');
         const changelogEntry =
-          shadowRoot.querySelector<HTMLElement>('#TDesign-doc-changelog__entry') ?? document.createElement('div');
+          shadowRoot.querySelector<HTMLElement>('.TDesign-doc-changelog__entry') ?? document.createElement('div');
         const title =
           shadowRoot.querySelector<HTMLElement>('.TDesign-doc-header__info-title') ?? document.createElement('div');
         const describe =
@@ -168,7 +163,7 @@ export default define<HeaderHost>({
             });
             Object.assign(changelogEntry.style, { opacity: 1, visibility: 'visible' });
             Object.assign(background.style, { position: 'fixed', top: '0', left: asideWidth });
-            tabs &&
+            if (tabs)
               Object.assign(tabs.style, {
                 position: 'fixed',
                 top: '64px',
@@ -184,7 +179,7 @@ export default define<HeaderHost>({
             Object.assign(describe.style, { opacity: 0, visibility: 'hidden' });
 
             Object.assign(background.style, { position: 'absolute', top: 'unset', left: '0' });
-            tabs && Object.assign(tabs.style, { position: 'absolute', top: '228px' });
+            if (tabs) Object.assign(tabs.style, { position: 'absolute', top: '228px' });
             Object.assign(issue.style, { position: 'absolute', top: 'calc(100% - 48px - 12px)' });
           }
         } else {
@@ -198,7 +193,7 @@ export default define<HeaderHost>({
             Object.assign(changelogEntry.style, { opacity: 1, visibility: 'visible' });
             Object.assign(describe.style, { opacity: 1, visibility: 'visible' });
             Object.assign(background.style, { position: 'absolute', top: 'unset', left: '0' });
-            tabs && Object.assign(tabs.style, { position: 'absolute', top: '228px' });
+            if (tabs) Object.assign(tabs.style, { position: 'absolute', top: '228px' });
             Object.assign(issue.style, { position: 'absolute', top: 'calc(100% - 48px - 12px)' });
             Object.assign(thumb.style, { opacity: 1, visibility: 'visible' });
           }
@@ -255,9 +250,11 @@ export default define<HeaderHost>({
     };
 
     return html`
-      ${splineUrl
-        ? html` <iframe id="__iframe__" class="TDesign-doc-header__thumb" onload="${iframeOnload}"></iframe>`
-        : html``}
+      ${
+        splineUrl
+          ? html` <iframe id="__iframe__" class="TDesign-doc-header__thumb" onload="${iframeOnload}"></iframe>`
+          : html``
+      }
       <div class="TDesign-doc-header" style="${mobileBodyStyle}">
         <div class="TDesign-doc-header__inner">
           <div class="TDesign-doc-header__badge">
@@ -265,33 +262,39 @@ export default define<HeaderHost>({
           </div>
           <div class="TDesign-doc-header__content">
             <div class="TDesign-doc-header__info">
-              ${docInfo
-                ? html`
-                    <div>
-                      <h1 class="TDesign-doc-header__info-title">${docInfo.title}</h1>
-                      ${changelog && isChangelogComponentRegistered && (isComponentPage() || isGlobalConfigPage())
-                        ? html`
-                            <button id="TDesign-doc-changelog__entry" onclick="${openChangelogDrawer}">
-                              <i innerHTML="${historyIcon}"></i>
-                              <span>${locale.changelog.title}</span>
-                            </button>
-                          `
-                        : html``}
-                    </div>
-                    <div class="TDesign-doc-header__info-describe">
-                      ${host.shouldShowPopup
-                        ? html`
-                            <td-doc-popup placement="top-end" equal-width="true">
-                              <div class="TDesign-doc-header__info-describe-line" innerHTML="${docInfo.desc}"></div>
-                              <div slot="content" innerHTML="${docInfo.desc}"></div>
-                            </td-doc-popup>
-                          `
-                        : html`
-                            <div class="TDesign-doc-header__info-describe-line" innerHTML="${docInfo.desc}"></div>
-                          `}
-                    </div>
-                  `
-                : html``}
+              ${
+                docInfo
+                  ? html`
+                      <div>
+                        <h1 class="TDesign-doc-header__info-title">${docInfo.title}</h1>
+                        ${
+                          changelog && isChangelogComponentRegistered && (isComponentPage() || isGlobalConfigPage())
+                            ? html`
+                                <button class="TDesign-doc-changelog__entry" onclick="${openChangelogDrawer}">
+                                  <i innerHTML="${historyIcon}"></i>
+                                  <span>${locale.changelog.title}</span>
+                                </button>
+                              `
+                            : html``
+                        }
+                      </div>
+                      <div class="TDesign-doc-header__info-describe">
+                        ${
+                          host.shouldShowPopup
+                            ? html`
+                                <td-doc-popup placement="top-end" equal-width="true">
+                                  <div class="TDesign-doc-header__info-describe-line" innerHTML="${docInfo.desc}"></div>
+                                  <div slot="content" innerHTML="${docInfo.desc}"></div>
+                                </td-doc-popup>
+                              `
+                            : html`
+                                <div class="TDesign-doc-header__info-describe-line" innerHTML="${docInfo.desc}"></div>
+                              `
+                        }
+                      </div>
+                    `
+                  : html``
+              }
             </div>
           </div>
         </div>
