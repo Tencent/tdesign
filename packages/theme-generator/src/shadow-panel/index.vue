@@ -11,7 +11,8 @@
       <div class="shadow-content__main">
         <p class="shadow-content__title">{{ lang.shadow.title }}</p>
         <SegmentSelection
-          v-model="step"
+          :modelValue="step"
+          @update:modelValue="handleStepChange"
           :selectOptions="selectOptions"
           :suspendedLabels="suspendedLabels"
           :disabled="forbidden"
@@ -41,7 +42,7 @@ import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import type { CSSProperties } from 'vue';
 import { SegmentSelection } from '@/common/components';
 import { useLang } from '@/common/i18n';
-import { getOptionFromLocal, modifyToken, updateLocalOption } from '@/common/themes';
+import { getOptionFromLocal, getTokenFromLocal, modifyToken, updateLocalOption } from '@/common/themes';
 import { getTokenValue } from '@/common/utils';
 
 import {
@@ -63,7 +64,7 @@ const { lang, isEn } = useLang();
 
 const selectOptions = ShadowSelect;
 const shadowTypeDetail = ShadowTypeDetail;
-const step = ref<string | number>(getOptionFromLocal('shadow') || ShadowSelectType.Default);
+const step = ref<string | number>(getOptionFromLocal('shadow') ?? ShadowSelectType.Default);
 const shadowPalette = ref<string[][]>([]);
 const suspendedLabels = ref<Record<number, string>>({});
 
@@ -96,7 +97,10 @@ const rightShadow = computed(() => {
   return shadowArray;
 });
 
-const forbidden = computed(() => step.value === ShadowSelectType.Self_Defined);
+const forbidden = ref(
+  step.value === ShadowSelectType.Self_Defined ||
+    ShadowTypeMap.some(({ name }) => getTokenFromLocal(name) !== undefined),
+);
 
 // 拆分 box-shadow 的值 0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%)
 function splitShadowValue(data: string): string[] {
@@ -121,7 +125,8 @@ function getCurrentPalette(): (string | string[])[] {
 }
 
 function change(value: string[], index: number) {
-  step.value = ShadowSelectType.Self_Defined;
+  // Keep the base preset in storage; the modified shadow tokens override it.
+  forbidden.value = true;
   const val = [...shadowPalette.value];
   val[index] = value;
   shadowPalette.value = val;
@@ -132,7 +137,10 @@ function setCurrentPalette() {
   shadowPalette.value = currentTokenArr.map((token) => splitShadowValue(String(token)));
 }
 
-watch(step, (nVal) => {
+function handleStepChange(nVal: string | number | undefined) {
+  if (nVal === undefined) return;
+  step.value = nVal;
+  forbidden.value = Number(nVal) === ShadowSelectType.Self_Defined;
   updateLocalOption('shadow', nVal !== ShadowSelectType.Default ? nVal : null);
   // 自定义时去当前系统值
   if (nVal === ShadowSelectType.Self_Defined) {
@@ -142,7 +150,7 @@ watch(step, (nVal) => {
   const shadows = ShadowSelectDetail[Number(nVal)];
   if (!shadows) return;
   shadowPalette.value = shadows.map((shadow) => splitShadowValue(shadow));
-});
+}
 
 watch(shadowPalette, (nVal) => {
   // shadowPalette 值变化时认为有编辑
@@ -154,7 +162,7 @@ watch(shadowPalette, (nVal) => {
     if (newShadow === current.join(',')) continue;
     const { name } = ShadowTypeMap[index];
 
-    const isCustom = step.value === ShadowSelectType.Self_Defined;
+    const isCustom = forbidden.value;
     modifyToken(name, newShadow, isCustom);
   }
 });

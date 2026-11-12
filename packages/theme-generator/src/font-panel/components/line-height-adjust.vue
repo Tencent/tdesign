@@ -3,7 +3,8 @@
     <!-- 顶部调整 -->
     <SegmentSelection
       v-if="tokenType === 'plus'"
-      v-model="step"
+      :modelValue="step"
+      @update:modelValue="handleStepChange"
       :style="{ margin: '8px 0' }"
       :selectOptions="lineHeightOptions"
       :suspendedLabels="lineHeightLabels"
@@ -89,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, nextTick } from 'vue';
+import { ref, watch } from 'vue';
 import {
   List as TList,
   ListItem as TListItem,
@@ -103,7 +104,12 @@ import { useLang } from '@/common/i18n';
 import { getOptionFromLocal, updateLocalOption } from '@/common/themes';
 import { getTokenValue, handleAttach } from '@/common/utils';
 
-import { LINE_HEIGHT_OPTIONS, LINE_HEIGHT_STEPS, updateLineHeightTokens } from '../built-in/line-height-map';
+import {
+  LINE_HEIGHT_OPTIONS,
+  LINE_HEIGHT_STEPS,
+  parseLineHeightOption,
+  updateLineHeightTokens,
+} from '../built-in/line-height-map';
 
 defineOptions({ name: 'LineHeightAdjust' });
 
@@ -112,58 +118,37 @@ const { lang } = useLang();
 const isHover = ref<boolean | null>(null);
 /* 存入 local 的 line-height 结构为 ${tokenType}_${lineHeightValue}
    例如：plus_8 和 time_1.5  */
-const tokenType = ref<'plus' | 'time'>('plus'); // 固定（plus） or 递增（time）
-const step = ref(3); // 默认
-const lineHeightValue = ref<string | number>(LINE_HEIGHT_STEPS[3]);
+const savedLineHeight = parseLineHeightOption(getOptionFromLocal('line-height'));
+const tokenType = ref<'plus' | 'time'>(savedLineHeight?.type ?? 'plus'); // 固定（plus） or 递增（time）
+const savedStep = Object.keys(LINE_HEIGHT_STEPS).find(
+  (key) => LINE_HEIGHT_STEPS[Number(key)] === savedLineHeight?.value,
+);
+const step = ref(savedLineHeight?.type === 'plus' && !savedStep ? 6 : savedStep ? Number(savedStep) : 3);
+const lineHeightValue = ref<string | number>(savedLineHeight?.value ?? LINE_HEIGHT_STEPS[3]);
 const lineHeightOptions = LINE_HEIGHT_OPTIONS;
 const lineHeightLabels: Record<number, string> = Object.fromEntries(
   LINE_HEIGHT_OPTIONS.map((item, index) => [index + 1, item.label]),
 );
-const segmentSelectionDisabled = ref(false);
+const segmentSelectionDisabled = ref(savedLineHeight?.type === 'plus' && !savedStep);
 
-watch(step, (v) => {
-  if (!LINE_HEIGHT_STEPS[v]) return;
-  lineHeightValue.value = LINE_HEIGHT_STEPS[v];
+function handleStepChange(v: string | number | undefined) {
+  if (v === undefined || !LINE_HEIGHT_STEPS[Number(v)]) return;
+  step.value = Number(v);
+  segmentSelectionDisabled.value = false;
+  lineHeightValue.value = LINE_HEIGHT_STEPS[Number(v)];
 
   updateLocalOption('line-height', v !== 3 ? `plus_${lineHeightValue.value}` : null);
   updateLineHeightTokens(lineHeightValue.value, tokenType.value);
-});
+}
 
 watch(tokenType, (type) => {
-  const defaultVal = type === 'time' ? 1.5 : 8;
-
-  const localLineHeight = getOptionFromLocal('line-height');
-  const lineHeightParts = localLineHeight?.split('_');
-
-  if (type === lineHeightParts?.[0]) {
-    const suffixVal = lineHeightParts[1];
-    lineHeightValue.value = suffixVal;
-  } else {
-    lineHeightValue.value = defaultVal;
-  }
-  updateLocalOption('line-height', step.value == 3 ? `${type}_${lineHeightValue.value}` : null);
+  // Switching calculation mode starts from its default and saves the active formula.
+  lineHeightValue.value = type === 'time' ? 1.5 : LINE_HEIGHT_STEPS[3];
+  step.value = 3;
+  segmentSelectionDisabled.value = false;
+  updateLocalOption('line-height', `${type}_${lineHeightValue.value}`);
   updateLineHeightTokens(lineHeightValue.value, type);
 });
-
-function initStep() {
-  const localLineHeight = getOptionFromLocal('line-height');
-  if (!localLineHeight) return;
-  const lineHeightParts = localLineHeight.split('_');
-  if (lineHeightParts[0].startsWith('time')) {
-    tokenType.value = 'time';
-    return;
-  } else {
-    tokenType.value = 'plus';
-  }
-
-  const suffixVal = lineHeightParts[1];
-  const stepKey = Number(
-    Object.keys(LINE_HEIGHT_STEPS).find((key) => LINE_HEIGHT_STEPS[Number(key)] == Number(suffixVal)),
-  );
-
-  if (stepKey >= 0) step.value = stepKey;
-  lineHeightValue.value = suffixVal;
-}
 
 function handleVisibleChange(v: boolean) {
   isHover.value = v;
@@ -181,12 +166,6 @@ function handleChangeFontSize(v: string | number) {
     segmentSelectionDisabled.value = true;
   }
 }
-
-onMounted(() => {
-  nextTick(() => {
-    initStep();
-  });
-});
 </script>
 
 <style lang="less" scoped>
