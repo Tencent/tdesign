@@ -84,7 +84,7 @@ git fetch upstream
 git rebase upstream/develop
 ```
 
-参考 [Configuring a remote for a fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/configuring-a-remote-for-a-fork)
+参考 [Configuring a remote for a fork](https://docs.github.com/en/pull-requests/how-tos/work-with-forks/configuring-a-remote-repository-for-a-fork)
 
 #### 创建 PR
 
