@@ -67,15 +67,16 @@
             </div>
           </div>
           <div
-            class="usage-card__chart"
+            :class="['usage-card__chart', { 'usage-card__chart--ready': chartLinePath }]"
             :style="{ '--hover-x': `${chartHoverX}px`, '--hover-y': `${chartHoverY}px` }"
             @pointermove="handleChartPointerMove"
           >
-            <div class="usage-card__tooltip">
-              <strong>{{ t('home.businessCases.downloadTrend') }}</strong>
-              <span>
-                {{ hoveredDownloadMonth }}，{{ t('home.businessCases.downloadCount', { count: hoveredDownloadCount }) }}
-              </span>
+            <div
+              v-if="chartLinePath"
+              :class="['usage-card__tooltip', { 'usage-card__tooltip--right': isChartTooltipOnRight }]"
+            >
+              <span>{{ hoveredDownloadMonth }}</span>
+              <strong>{{ hoveredDownloadCount }}</strong>
             </div>
             <div class="usage-card__grid" aria-hidden="true">
               <span v-for="month in months" :key="month">{{ month }}</span>
@@ -179,6 +180,7 @@ const {
   chartAreaPath,
   chartHoverX,
   chartHoverY,
+  isChartTooltipOnRight,
   hoveredDownloadMonth,
   hoveredDownloadCount,
   handleChartPointerMove,
@@ -545,7 +547,8 @@ const {
   &__chart {
     width: 308px;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+    --chart-top: 28px;
 
     &::after {
       width: 2px;
@@ -557,9 +560,13 @@ const {
       transform: translateX(-50%);
       background: var(--text-primary);
       content: '';
-      opacity: 1;
+      opacity: 0;
       pointer-events: none;
-      transition: opacity 0.2s ease;
+      transition: left 0.16s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+    }
+
+    &--ready::after {
+      opacity: 1;
     }
 
     > svg {
@@ -573,25 +580,45 @@ const {
   }
 
   &__tooltip {
+    width: max-content;
+    height: 44px;
     position: absolute;
-    z-index: 2;
-    top: 24px;
-    left: 24px;
+    z-index: 4;
+    top: calc(var(--chart-top) + var(--hover-y));
+    left: calc(var(--hover-x) - 10px);
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    padding: 4px 8px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transform: translate(-100%, -50%);
+    background: var(--td-mask-active);
+    backdrop-filter: blur(3px);
+    color: #fff;
+    opacity: 1;
+    pointer-events: none;
+    transition: top 0.16s cubic-bezier(0.22, 1, 0.36, 1), left 0.16s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+
+    &--right {
+      left: calc(var(--hover-x) + 10px);
+      transform: translate(0, -50%);
+    }
 
     strong {
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 22px;
+      font-family: 'TCloudNumber', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 20px;
+      white-space: nowrap;
     }
 
     span {
-      color: var(--text-secondary);
       font-family: 'TCloudNumberLight', sans-serif;
       font-size: 10px;
-      font-weight: 300;
+      font-weight: 400;
       line-height: 16px;
+      white-space: nowrap;
     }
   }
 
@@ -659,7 +686,7 @@ const {
     height: 10px;
     position: absolute;
     z-index: 3;
-    top: calc(28px + var(--hover-y));
+    top: calc(var(--chart-top) + var(--hover-y));
     left: var(--hover-x);
     transform: translate(-50%, -50%);
     border: 2px solid var(--text-anti);
@@ -668,7 +695,7 @@ const {
     background: var(--text-primary);
     opacity: 1;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: top 0.16s cubic-bezier(0.22, 1, 0.36, 1), left 0.16s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
   }
 }
 
@@ -1088,6 +1115,7 @@ const {
     &__chart {
       width: 285.52px;
       height: 241.02px;
+      --chart-top: 25.96px;
 
       &::after {
         height: 178.33px;
@@ -1098,21 +1126,6 @@ const {
         width: 285.52px;
         height: 196.53px;
         top: 25.96px;
-      }
-    }
-
-    &__tooltip {
-      top: 22.25px;
-      left: 22.25px;
-
-      strong {
-        font-size: 12.98px;
-        line-height: 20.39px;
-      }
-
-      span {
-        font-size: 11.12px;
-        line-height: 18.54px;
       }
     }
 
@@ -1136,7 +1149,6 @@ const {
     &__marker {
       width: 9.27px;
       height: 9.27px;
-      top: calc(25.96px + var(--hover-y));
     }
   }
 

@@ -51,6 +51,7 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
   const usageAnimationProgress = ref(0);
   const chartHoverX = ref(226);
   const chartHoverY = ref(65);
+  const isChartTooltipOnRight = ref(false);
   const hoveredDownloadIndex = ref(0);
   let usageAnimationFrame: number | null = null;
   let usageObserver: IntersectionObserver | null = null;
@@ -145,16 +146,24 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
   );
   const hoveredDownloadCount = computed(() => {
     const count = chartDownloads.value[hoveredDownloadIndex.value]?.totalDownloads;
-    return typeof count === 'number' ? String(count) : '';
+    return typeof count === 'number' ? formatWithThousandsSeparator(count) : '';
   });
+
+  function updateTooltipSide(chartElement: HTMLElement | null, pointX: number): void {
+    const tooltipWidth = chartElement?.querySelector<HTMLElement>('.usage-card__tooltip')?.offsetWidth ?? 0;
+    isChartTooltipOnRight.value = pointX < tooltipWidth + 10;
+  }
 
   function setDefaultChartHover(): void {
     const defaultIndex = Math.max(0, chartDownloads.value.length - 2);
     const defaultPoint = chartPoints.value[defaultIndex];
     hoveredDownloadIndex.value = defaultIndex;
     if (defaultPoint) {
-      chartHoverX.value = defaultPoint.x;
-      chartHoverY.value = defaultPoint.y;
+      const chartElement = usageCardRef.value?.querySelector<HTMLElement>('.usage-card__chart') ?? null;
+      const displayScale = (chartElement?.clientWidth ?? CHART_WIDTH) / CHART_WIDTH;
+      chartHoverX.value = defaultPoint.x * displayScale;
+      chartHoverY.value = defaultPoint.y * displayScale;
+      updateTooltipSide(chartElement, chartHoverX.value);
     }
   }
 
@@ -162,8 +171,10 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
     const points = chartPoints.value;
     if (points.length === 0) return;
 
-    const chartRect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    const chartElement = event.currentTarget as HTMLElement;
+    const chartRect = chartElement.getBoundingClientRect();
     const localX = ((event.clientX - chartRect.left) / chartRect.width) * CHART_WIDTH;
+    const displayScale = chartElement.clientWidth / CHART_WIDTH;
     const targetX = Math.min(CHART_WIDTH, Math.max(0, localX));
     const targetIndex = points.reduce(
       (closestIndex, point, index) =>
@@ -171,8 +182,9 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
       0,
     );
     hoveredDownloadIndex.value = targetIndex;
-    chartHoverX.value = points[targetIndex].x;
-    chartHoverY.value = points[targetIndex].y;
+    chartHoverX.value = points[targetIndex].x * displayScale;
+    chartHoverY.value = points[targetIndex].y * displayScale;
+    updateTooltipSide(chartElement, chartHoverX.value);
   }
 
   function startUsageAnimation(): void {
@@ -233,6 +245,7 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
     chartAreaPath,
     chartHoverX,
     chartHoverY,
+    isChartTooltipOnRight,
     hoveredDownloadMonth,
     hoveredDownloadCount,
     handleChartPointerMove,
