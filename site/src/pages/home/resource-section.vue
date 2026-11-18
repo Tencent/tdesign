@@ -407,7 +407,14 @@ const { resourceSectionRef, resourceLayoutRef, mobileSectionHeight, tabletLayout
   }
 
   &__updated {
-    font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family:
+      BlinkMacSystemFont,
+      -apple-system,
+      'Segoe UI',
+      Roboto,
+      Helvetica,
+      Arial,
+      sans-serif;
   }
 
   &__action {
@@ -565,8 +572,7 @@ const { resourceSectionRef, resourceLayoutRef, mobileSectionHeight, tabletLayout
       width: 100%;
       grid-template-columns: repeat(4, 200px);
       justify-content: space-between;
-      column-gap: 0;
-      row-gap: 8px;
+      gap: 8px 0;
     }
 
     &--mobile &__illustration {
@@ -617,8 +623,7 @@ const { resourceSectionRef, resourceLayoutRef, mobileSectionHeight, tabletLayout
     padding: 12px 24px 12px 16px;
     grid-template-columns: 40px 1fr;
     grid-template-rows: 24px 20px;
-    column-gap: 8px;
-    row-gap: 0;
+    gap: 0 8px;
 
     img {
       width: 40px;
@@ -726,8 +731,7 @@ const { resourceSectionRef, resourceLayoutRef, mobileSectionHeight, tabletLayout
     padding: 12px 24px 12px 16px;
     grid-template-columns: 40px 1fr;
     grid-template-rows: 24px 20px;
-    column-gap: 8px;
-    row-gap: 0;
+    gap: 0 8px;
 
     img {
       width: 40px;

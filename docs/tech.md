@@ -37,7 +37,7 @@ UI development is shared among multiple implementation frameworks such as React,
 ```js
 // button.tsx
 
-import "./button.less";
+import './button.less';
 ```
 
 ## Guidelines

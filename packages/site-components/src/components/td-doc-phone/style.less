@@ -3,7 +3,7 @@
   --phone-collapse-display: none;
   --phone-header-height: 48px;
   --phone-body-height: 667px;
-  
+
   @media screen and (max-width: 960px) {
     --phone-display: none;
     --phone-collapse-display: flex;
@@ -12,7 +12,7 @@
 
 .TDesign-doc-phone {
   width: 375px;
-  width: ~"min(75vw, 375px)";
+  width: ~'min(75vw, 375px)';
   border-radius: 6px;
   border: 1px solid var(--component-border);
   outline: 9999px solid transparent;
@@ -35,7 +35,7 @@
     background-color: var(--bg-color-container);
     visibility: hidden;
     opacity: 0;
-    transition: all .2s linear;
+    transition: all 0.2s linear;
 
     svg {
       color: var(--text-primary);
@@ -59,7 +59,7 @@
         width: 32px;
         height: 32px;
         border-radius: var(--border-radius);
-        transition: all .1s;
+        transition: all 0.1s;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -98,7 +98,7 @@
 }
 
 .TDesign-doc-phone-mask {
-  content: "";
+  content: '';
   position: fixed;
   left: 0;
   top: 0;
@@ -122,7 +122,10 @@
     top: 50% !important;
     transform: translate3d(-50%, -50%, 0);
     outline-color: var(--text-disabled);
-    transition: transform .2s var(--anim-time-fn-easing), opacity .2s linear, visibility .2s linear;
+    transition:
+      transform 0.2s var(--anim-time-fn-easing),
+      opacity 0.2s linear,
+      visibility 0.2s linear;
     visibility: visible;
     opacity: 1;
     z-index: 2500;
@@ -142,13 +145,13 @@
   top: 400px;
   z-index: 400;
   border-radius: 3px 0 0 3px;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, .26);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.26);
   width: 40px;
   height: 40px;
   align-items: center;
   justify-content: center;
   background-color: var(--bg-color-container);
-  transition: all .2s var(--anim-time-fn-easing);
+  transition: all 0.2s var(--anim-time-fn-easing);
   display: var(--phone-collapse-display);
   cursor: pointer;
 

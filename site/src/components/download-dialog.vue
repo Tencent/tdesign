@@ -44,9 +44,7 @@ const props = withDefaults(
     visible: false,
   },
 );
-const emit = defineEmits<{
-  (event: 'update:visible', value: boolean): void;
-}>();
+const emit = defineEmits<(event: 'update:visible', value: boolean) => void>();
 
 const email = ref('');
 const visibleSync = computed({
@@ -81,6 +79,7 @@ function downloadConfirm(): void {
     flex-direction: column;
     align-items: center;
   }
+
   .dialog-describe {
     font-weight: 600;
     font-size: 36px;
@@ -89,10 +88,12 @@ function downloadConfirm(): void {
     text-align: center;
     margin: 30px 0 24px;
   }
+
   .dialog-email {
     width: 100%;
     padding: 0 2px;
   }
+
   .dialog-footer {
     text-align: center;
   }

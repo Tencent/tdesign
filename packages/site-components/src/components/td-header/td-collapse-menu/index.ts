@@ -24,7 +24,7 @@ function renderLinks({ headerList, baseComponentsLinks, platform, framework }: C
   `;
   const isActive = (path: string): boolean => location.pathname.includes(path);
 
-  let baseLinks = [html`<div class="divider"></div>`];
+  const baseLinks = [html`<div class="divider"></div>`];
 
   const renderNavs = headerList
     .map((item) => {

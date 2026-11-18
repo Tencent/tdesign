@@ -42,7 +42,7 @@ watch(
 );
 
 const tokenList = computed(() => {
-  refreshKey.value;
+  void refreshKey.value;
   return SIZE_TOKENS.map((token) => ({ token, value: getTokenValue(token) }));
 });
 </script>

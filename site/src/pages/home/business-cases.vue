@@ -248,11 +248,13 @@ const {
   width: 340px;
   position: absolute;
   z-index: 1;
+
   --case-tint: #dcdcdc;
   --case-text: rgba(0, 0, 0, 0.6);
   --case-title: rgba(0, 0, 0, 0.9);
   --case-meta: rgba(0, 0, 0, 0.4);
   --case-noise-color: #fff;
+
   opacity: var(--spread-opacity);
   transform: rotate(var(--spread-rotation));
   transform-origin: center;
@@ -391,6 +393,7 @@ const {
   &--1 {
     top: 29px;
     left: 98px;
+
     --case-rotation: -7deg;
   }
 
@@ -405,6 +408,7 @@ const {
   &--2 {
     top: 342px;
     left: 59px;
+
     --case-rotation: -5deg;
     --case-tint: #d9e1ff;
   }
@@ -412,6 +416,7 @@ const {
   &--3 {
     top: 321px;
     left: 1091px;
+
     --case-rotation: 6deg;
     --case-tint: #ffd9c2;
   }
@@ -419,6 +424,7 @@ const {
   &--4 {
     top: 33px;
     left: 1072px;
+
     --case-rotation: 6deg;
     --case-tint: #d9e1ff;
   }
@@ -426,6 +432,7 @@ const {
   &--5 {
     top: 489px;
     left: 565px;
+
     --case-rotation: -4deg;
   }
 }
@@ -489,7 +496,7 @@ const {
     gap: 8px;
 
     strong {
-      font-family: 'TCloudNumber', sans-serif;
+      font-family: TCloudNumber, sans-serif;
       font-size: 56px;
       font-weight: 300;
       letter-spacing: -1.12px;
@@ -524,7 +531,7 @@ const {
     }
 
     strong {
-      font-family: 'TCloudNumber', sans-serif;
+      font-family: TCloudNumber, sans-serif;
       font-size: 20px;
       font-weight: 300;
       line-height: 20px;
@@ -534,7 +541,12 @@ const {
     small {
       display: inline-block;
       margin-left: 4px;
-      font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family:
+        'PingFang SC',
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        sans-serif;
       font-size: 12px;
       font-weight: 400;
       line-height: 18px;
@@ -588,7 +600,7 @@ const {
 
     span {
       color: var(--text-secondary);
-      font-family: 'TCloudNumberLight', sans-serif;
+      font-family: TCloudNumberLight, sans-serif;
       font-size: 10px;
       font-weight: 300;
       line-height: 16px;
@@ -612,7 +624,7 @@ const {
       justify-content: center;
       box-sizing: border-box;
       color: var(--text-placeholder);
-      font-family: 'TCloudNumberLight', sans-serif;
+      font-family: TCloudNumberLight, sans-serif;
       font-size: 8px;
       line-height: 11px;
       writing-mode: horizontal-tb;
@@ -632,7 +644,7 @@ const {
   }
 
   &__area {
-    fill: url(#business-cases-area);
+    fill: url('#business-cases-area');
   }
 
   &__line {
@@ -837,10 +849,8 @@ const {
       top: var(--compact-canvas-top);
       left: 50%;
       display: flex;
-      flex-wrap: wrap;
-      flex-direction: row;
-      align-content: start;
-      justify-content: center;
+      flex-flow: row wrap;
+      place-content: start center;
       gap: 24px;
       padding-top: 296px;
       box-sizing: border-box;
@@ -1010,8 +1020,7 @@ const {
       top: auto;
       left: auto;
       display: flex;
-      flex-direction: column;
-      flex-wrap: nowrap;
+      flex-flow: column nowrap;
       align-items: center;
       gap: 24px;
       padding: 0;

@@ -105,12 +105,12 @@ export default define<DemoHost>({
     },
   },
   render: (host) => {
-    let { language, showCode, mode, theme, currentLangIndex, languages, currentRenderCode, activeStyleMap } = host;
+    const { language, showCode, mode, theme, currentLangIndex, languages, currentRenderCode, activeStyleMap } = host;
     const languageArr = typeof languages === 'string' ? languages.split(',') : [];
 
     const tabsDisplay =
       languageArr.length > 0 &&
-      languageArr.filter((lang) => host.dataset?.[lang] || host.dataset?.[lang.toLocaleLowerCase()]).length ==
+      languageArr.filter((lang) => host.dataset?.[lang] || host.dataset?.[lang.toLocaleLowerCase()]).length ===
         languageArr.length;
 
     const highlightCode = Prism.highlight(currentRenderCode, Prism.languages[language], language);

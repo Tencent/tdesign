@@ -30,18 +30,18 @@ export function registerHotkeys({ onOpen, onClose }: HotkeyHandlers): () => void
     // Cmd/Ctrl + K
     if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
       e.preventDefault();
-      onOpen && onOpen();
+      if (onOpen) onOpen();
       return;
     }
     // "/"：不在输入态下触发
     if (e.key === '/' && !isEditable(document.activeElement)) {
       e.preventDefault();
-      onOpen && onOpen();
+      if (onOpen) onOpen();
       return;
     }
     // ESC：无论焦点在何处，都关闭 popover
     if (e.key === 'Escape') {
-      onClose && onClose();
+      if (onClose) onClose();
     }
   };
 

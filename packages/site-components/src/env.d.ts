@@ -5,15 +5,13 @@ interface WebChatSdkInstance {
   onChatEnd(callback: (payload: { content: string }) => void): void;
 }
 
-interface WebChatSdkConstructor {
-  new (options: {
-    logo: string;
-    logoLarge: string;
-    style: { background: string };
-    knowledgeBase: string;
-    keywords: string;
-  }): WebChatSdkInstance;
-}
+type WebChatSdkConstructor = new (options: {
+  logo: string;
+  logoLarge: string;
+  style: { background: string };
+  knowledgeBase: string;
+  keywords: string;
+}) => WebChatSdkInstance;
 
 interface Window {
   WebChatSdk?: WebChatSdkConstructor;
@@ -23,15 +21,15 @@ interface Window {
   aegis?: unknown;
   pgvMain?: () => void;
   showTdMessage?: (options: { content: string; duration?: number; theme?: string }) => void;
-  platforms?: Array<{ name: string; url: string }>;
+  platforms?: { name: string; url: string }[];
   routerList?: unknown[];
   docInfo?: { title: string; desc: string[] };
-  contributors?: Array<{ username: string }>;
+  contributors?: { username: string }[];
   code?: string;
   tsCode?: string;
   compositionCode?: string;
   usageConfig?: unknown[];
-  usagePanelList?: Array<{ label: string; value: string }>;
+  usagePanelList?: { label: string; value: string }[];
 }
 
 interface WindowEventMap {
@@ -40,15 +38,13 @@ interface WindowEventMap {
   storageChange: Event;
 }
 
-interface AegisConstructor {
-  new (options: {
-    id: string;
-    uin?: string;
-    reportApiSpeed: boolean;
-    reportAssetSpeed: boolean;
-    spa: boolean;
-    hostUrl?: string;
-  }): unknown;
-}
+type AegisConstructor = new (options: {
+  id: string;
+  uin?: string;
+  reportApiSpeed: boolean;
+  reportAssetSpeed: boolean;
+  spa: boolean;
+  hostUrl?: string;
+}) => unknown;
 
 declare const Aegis: AegisConstructor;

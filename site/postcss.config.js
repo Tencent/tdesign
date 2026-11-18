@@ -5,13 +5,13 @@ const plugins = [
       'default',
       {
         discardComments: {
-          removeAll: true
-        }
-      }
-    ]
-  })
-]
+          removeAll: true,
+        },
+      },
+    ],
+  }),
+];
 
 module.exports = {
-  plugins
-}
+  plugins,
+};

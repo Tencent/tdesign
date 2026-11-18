@@ -1,6 +1,6 @@
 <template>
   <section ref="homepageRef" class="tdesign-homepage">
-    <banner :themeMode="themeMode" data-board-section="before" />
+    <banner :theme-mode="themeMode" data-board-section="before" />
 
     <section class="main-page" data-board-section="before">
       <div class="banner-info">
@@ -54,11 +54,11 @@
     </section>
 
     <div
+      id="moduleBoard"
       ref="moduleBoardRef"
       class="module-board"
       :class="{ 'module-board--scroll-driven': moduleBoardScrollEnabled }"
       :style="moduleBoardStyle"
-      id="moduleBoard"
     >
       <div
         ref="moduleBoardViewportRef"
@@ -151,9 +151,9 @@
                   >
                     <t-option
                       v-for="item in componentSelectOptions"
+                      :key="item.value"
                       :value="item.value"
                       :label="item.label"
-                      :key="item.value"
                     ></t-option>
                   </t-select>
                   <t-tree :data="componentTreeData" hover checkable expand-all />
@@ -161,8 +161,8 @@
                 <div class="component-board-item">
                   <t-menu
                     :theme="themeMode"
-                    defaultValue="dashboard/base"
-                    :defaultExpanded="componentModel.menuExpanded"
+                    default-value="dashboard/base"
+                    :default-expanded="componentModel.menuExpanded"
                     width="256px"
                   >
                     <template #logo>
@@ -231,16 +231,16 @@
                     <t-button theme="default">{{ t('home.componentDemo.button') }}</t-button>
                   </div>
                   <div class="component-board-item-row">
-                    <t-slider v-model="componentModel.sliderValue" :inputNumberProps="false" />
+                    <t-slider v-model="componentModel.sliderValue" :input-number-props="false" />
                   </div>
                   <div class="component-board-item-row">
-                    <t-switch size="large" :defaultValue="true" />
+                    <t-switch size="large" :default-value="true" />
                     <t-switch size="large" />
                     <t-check-tag>{{ t('home.componentDemo.checkableTag') }}</t-check-tag>
                     <t-tag>{{ t('home.componentDemo.defaultTag') }}</t-tag>
                   </div>
                   <div>
-                    <t-radio-group class="component-theme-tabs" defaultValue="1" variant="default-filled">
+                    <t-radio-group class="component-theme-tabs" default-value="1" variant="default-filled">
                       <t-radio-button value="1">{{ t('home.componentDemo.light') }}</t-radio-button>
                       <t-radio-button value="2">{{ t('home.componentDemo.dark') }}</t-radio-button>
                       <t-radio-button value="3">{{ t('home.componentDemo.neutral') }}</t-radio-button>
@@ -248,17 +248,17 @@
                   </div>
                   <div class="color-block-wrapper">
                     <span
-                      class="color-block"
                       v-for="color in componentModel.colorList1"
                       :key="color"
+                      class="color-block"
                       :style="{ background: color }"
                     ></span>
                   </div>
                   <div class="color-block-wrapper">
                     <span
-                      class="color-block"
                       v-for="color in componentModel.colorList2"
                       :key="color"
+                      class="color-block"
                       :style="{ background: color }"
                     ></span>
                   </div>

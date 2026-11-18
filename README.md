@@ -24,10 +24,10 @@ The following are the repositories for TDesign：
 
 ### Repositories for Mobile Components
 
-| Repository                                                              | Description                                      | Status                                                                                                                                                                                                                    |
-| ----------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | Wechat MiniProgram UI components lib for TDesign | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-miniprogram/latest&color=blue)](https://npmjs.com/package/tdesign-miniprogram)         |
-| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue3.x Mobile UI components lib for TDesign      | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-mobile-vue/latest&color=blue)](https://npmjs.com/package/tdesign-mobile-vue)           |
+| Repository                                                              | Description                                      | Status                                                                                                                                                                                                              |
+| ----------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | Wechat MiniProgram UI components lib for TDesign | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-miniprogram/latest&color=blue)](https://npmjs.com/package/tdesign-miniprogram)   |
+| [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue3.x Mobile UI components lib for TDesign      | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-mobile-vue/latest&color=blue)](https://npmjs.com/package/tdesign-mobile-vue)     |
 | [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React Mobile UI components lib for TDesign       | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/tdesign-mobile-react/latest&color=blue)](https://npmjs.com/package/tdesign-mobile-react) |
 | [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | Flutter UI components lib for TDesign            | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=latest.version&url=https://pub.dev/api/packages/tdesign_flutter&color=blue)](https://pub.dev/packages/tdesign_flutter)          |
 | [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | Uniapp UI components lib for TDesign             | [![LTS](https://img.shields.io/badge/dynamic/json?style=flat-square&label=LTS&query=version&url=https://registry.npmjs.org/@tdesign/uniapp/latest&color=blue)](https://npmjs.com/package/@tdesign/uniapp)           |
@@ -138,7 +138,6 @@ For more information, refer to the guide section of each component, such as [But
 ❤️ Thanks for all the TDesign contributors. Visit our contributor photo wall to view all contributors
 
 https://tdesign.tencent.com/contributor.html
-
 
 ## Contributing Guide
 

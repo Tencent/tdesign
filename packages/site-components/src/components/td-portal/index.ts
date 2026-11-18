@@ -12,11 +12,13 @@ export default define<PortalProps>({
   portalStyle: '',
   render: (host) => {
     return html`
-      ${host.portalStyle
-        ? html`<style>
-            ${host.portalStyle}
-          </style>`
-        : ''}
+      ${
+        host.portalStyle
+          ? html`<style>
+              ${host.portalStyle}
+            </style>`
+          : ''
+      }
       <slot class="TDesign-portal" name="content"></slot>
     `.css`${style}`;
   },
