@@ -5,7 +5,7 @@ import '../components/td-select';
 interface SelectElement extends HTMLElement {
   borderless: boolean;
   value: string | number;
-  options: Array<{ label: string; value: string | number }>;
+  options: { label: string; value: string | number }[];
 }
 
 async function waitForRender(): Promise<void> {

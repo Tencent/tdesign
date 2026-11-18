@@ -125,8 +125,10 @@ function renderNotice(host: HeaderHost) {
   return html`
     <div class="TDesign-header-notice ${noticeOption.type}">
       <div class="TDesign-header-notice__content" onclick="${handleNoticeAction}">${noticeOption.title}</div>
-      ${noticeOption.closeable &&
-      html`<i class="TDesign-header-notice__close" innerHTML="${closeIcon}" onclick="${closeNotice}"></i>`}
+      ${
+        noticeOption.closeable &&
+        html`<i class="TDesign-header-notice__close" innerHTML="${closeIcon}" onclick="${closeNotice}"></i>`
+      }
     </div>
   `;
 }
@@ -313,24 +315,26 @@ export default define<HeaderProps>({
             <td-logo></td-logo>
           </div>
           <div class="TDesign-header-nav">
-            ${collapseMenu
-              ? html`
-                  <td-collapse-menu
-                    disabled-theme="${disabledTheme}"
-                    platform="${platform}"
-                    framework="${framework}"
-                    header-list="${headerList}"
-                    base-components-links="${baseComponentsLinks}"
-                  >
-                  </td-collapse-menu>
-                `
-              : html`
-                  <div class="slot-search">
-                    <slot name="search"></slot>
-                  </div>
-                  ${renderLinks(host, headerList, platform, framework)}
-                  ${disabledTheme ? html`` : html`<td-theme-tabs></td-theme-tabs>`}
-                `}
+            ${
+              collapseMenu
+                ? html`
+                    <td-collapse-menu
+                      disabled-theme="${disabledTheme}"
+                      platform="${platform}"
+                      framework="${framework}"
+                      header-list="${headerList}"
+                      base-components-links="${baseComponentsLinks}"
+                    >
+                    </td-collapse-menu>
+                  `
+                : html`
+                    <div class="slot-search">
+                      <slot name="search"></slot>
+                    </div>
+                    ${renderLinks(host, headerList, platform, framework)}
+                    ${disabledTheme ? html`` : html`<td-theme-tabs></td-theme-tabs>`}
+                  `
+            }
           </div>
         </div>
       </header>
