@@ -51,7 +51,7 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
   const usageAnimationProgress = ref(0);
   const chartHoverX = ref(226);
   const chartHoverY = ref(65);
-  const isChartHovered = ref(false);
+  const isChartTooltipOnRight = ref(false);
   const hoveredDownloadIndex = ref(0);
   let usageAnimationFrame: number | null = null;
   let usageObserver: IntersectionObserver | null = null;
@@ -149,13 +149,21 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
     return typeof count === 'number' ? formatWithThousandsSeparator(count) : '';
   });
 
+  function updateTooltipSide(chartElement: HTMLElement | null, pointX: number): void {
+    const tooltipWidth = chartElement?.querySelector<HTMLElement>('.usage-card__tooltip')?.offsetWidth ?? 0;
+    isChartTooltipOnRight.value = pointX < tooltipWidth + 10;
+  }
+
   function setDefaultChartHover(): void {
     const defaultIndex = Math.max(0, chartDownloads.value.length - 2);
     const defaultPoint = chartPoints.value[defaultIndex];
     hoveredDownloadIndex.value = defaultIndex;
     if (defaultPoint) {
-      chartHoverX.value = defaultPoint.x;
-      chartHoverY.value = defaultPoint.y;
+      const chartElement = usageCardRef.value?.querySelector<HTMLElement>('.usage-card__chart') ?? null;
+      const displayScale = (chartElement?.clientWidth ?? CHART_WIDTH) / CHART_WIDTH;
+      chartHoverX.value = defaultPoint.x * displayScale;
+      chartHoverY.value = defaultPoint.y * displayScale;
+      updateTooltipSide(chartElement, chartHoverX.value);
     }
   }
 
@@ -176,15 +184,7 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
     hoveredDownloadIndex.value = targetIndex;
     chartHoverX.value = points[targetIndex].x * displayScale;
     chartHoverY.value = points[targetIndex].y * displayScale;
-  }
-
-  function handleChartPointerEnter(event: PointerEvent): void {
-    isChartHovered.value = true;
-    handleChartPointerMove(event);
-  }
-
-  function handleChartPointerLeave(): void {
-    isChartHovered.value = false;
+    updateTooltipSide(chartElement, chartHoverX.value);
   }
 
   function startUsageAnimation(): void {
@@ -245,11 +245,9 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
     chartAreaPath,
     chartHoverX,
     chartHoverY,
-    isChartHovered,
+    isChartTooltipOnRight,
     hoveredDownloadMonth,
     hoveredDownloadCount,
-    handleChartPointerEnter,
-    handleChartPointerLeave,
     handleChartPointerMove,
   };
 }

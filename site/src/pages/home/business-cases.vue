@@ -67,13 +67,14 @@
             </div>
           </div>
           <div
-            :class="['usage-card__chart', { 'usage-card__chart--hovered': isChartHovered }]"
+            :class="['usage-card__chart', { 'usage-card__chart--ready': chartLinePath }]"
             :style="{ '--hover-x': `${chartHoverX}px`, '--hover-y': `${chartHoverY}px` }"
-            @pointerenter="handleChartPointerEnter"
-            @pointerleave="handleChartPointerLeave"
             @pointermove="handleChartPointerMove"
           >
-            <div class="usage-card__tooltip">
+            <div
+              v-if="chartLinePath"
+              :class="['usage-card__tooltip', { 'usage-card__tooltip--right': isChartTooltipOnRight }]"
+            >
               <span>{{ hoveredDownloadMonth }}</span>
               <strong>{{ hoveredDownloadCount }}</strong>
             </div>
@@ -179,11 +180,9 @@ const {
   chartAreaPath,
   chartHoverX,
   chartHoverY,
-  isChartHovered,
+  isChartTooltipOnRight,
   hoveredDownloadMonth,
   hoveredDownloadCount,
-  handleChartPointerEnter,
-  handleChartPointerLeave,
   handleChartPointerMove,
 } = createBusinessCasesChart({ locale, translate: t });
 const {
@@ -548,7 +547,7 @@ const {
   &__chart {
     width: 308px;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     --chart-top: 28px;
 
     &::after {
@@ -566,17 +565,8 @@ const {
       transition: left 0.16s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
     }
 
-    &--hovered {
-      overflow: visible;
-
-      &::after {
-        opacity: 1;
-      }
-
-      .usage-card__tooltip,
-      .usage-card__marker {
-        opacity: 1;
-      }
+    &--ready::after {
+      opacity: 1;
     }
 
     > svg {
@@ -607,9 +597,14 @@ const {
     background: var(--td-mask-active);
     backdrop-filter: blur(3px);
     color: #fff;
-    opacity: 0;
+    opacity: 1;
     pointer-events: none;
     transition: top 0.16s cubic-bezier(0.22, 1, 0.36, 1), left 0.16s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+
+    &--right {
+      left: calc(var(--hover-x) + 10px);
+      transform: translate(0, -50%);
+    }
 
     strong {
       font-family: 'TCloudNumber', sans-serif;
@@ -698,7 +693,7 @@ const {
     border-radius: 50%;
     box-sizing: border-box;
     background: var(--text-primary);
-    opacity: 0;
+    opacity: 1;
     pointer-events: none;
     transition: top 0.16s cubic-bezier(0.22, 1, 0.36, 1), left 0.16s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
   }
