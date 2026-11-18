@@ -163,8 +163,10 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
     const points = chartPoints.value;
     if (points.length === 0) return;
 
-    const chartRect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    const chartElement = event.currentTarget as HTMLElement;
+    const chartRect = chartElement.getBoundingClientRect();
     const localX = ((event.clientX - chartRect.left) / chartRect.width) * CHART_WIDTH;
+    const displayScale = chartElement.clientWidth / CHART_WIDTH;
     const targetX = Math.min(CHART_WIDTH, Math.max(0, localX));
     const targetIndex = points.reduce(
       (closestIndex, point, index) =>
@@ -172,8 +174,8 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
       0,
     );
     hoveredDownloadIndex.value = targetIndex;
-    chartHoverX.value = points[targetIndex].x;
-    chartHoverY.value = points[targetIndex].y;
+    chartHoverX.value = points[targetIndex].x * displayScale;
+    chartHoverY.value = points[targetIndex].y * displayScale;
   }
 
   function handleChartPointerEnter(event: PointerEvent): void {

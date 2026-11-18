@@ -549,6 +549,7 @@ const {
     width: 308px;
     position: relative;
     overflow: hidden;
+    --chart-top: 28px;
 
     &::after {
       width: 2px;
@@ -593,7 +594,7 @@ const {
     height: 44px;
     position: absolute;
     z-index: 4;
-    top: calc(28px + var(--hover-y));
+    top: calc(var(--chart-top) + var(--hover-y));
     left: calc(var(--hover-x) - 10px);
     display: flex;
     flex-direction: column;
@@ -690,7 +691,7 @@ const {
     height: 10px;
     position: absolute;
     z-index: 3;
-    top: calc(28px + var(--hover-y));
+    top: calc(var(--chart-top) + var(--hover-y));
     left: var(--hover-x);
     transform: translate(-50%, -50%);
     border: 2px solid var(--text-anti);
@@ -1119,6 +1120,7 @@ const {
     &__chart {
       width: 285.52px;
       height: 241.02px;
+      --chart-top: 25.96px;
 
       &::after {
         height: 178.33px;
@@ -1152,7 +1154,6 @@ const {
     &__marker {
       width: 9.27px;
       height: 9.27px;
-      top: calc(25.96px + var(--hover-y));
     }
   }
 
