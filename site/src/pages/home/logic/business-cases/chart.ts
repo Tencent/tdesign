@@ -51,6 +51,7 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
   const usageAnimationProgress = ref(0);
   const chartHoverX = ref(226);
   const chartHoverY = ref(65);
+  const isChartHovered = ref(false);
   const hoveredDownloadIndex = ref(0);
   let usageAnimationFrame: number | null = null;
   let usageObserver: IntersectionObserver | null = null;
@@ -145,7 +146,7 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
   );
   const hoveredDownloadCount = computed(() => {
     const count = chartDownloads.value[hoveredDownloadIndex.value]?.totalDownloads;
-    return typeof count === 'number' ? String(count) : '';
+    return typeof count === 'number' ? formatWithThousandsSeparator(count) : '';
   });
 
   function setDefaultChartHover(): void {
@@ -173,6 +174,15 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
     hoveredDownloadIndex.value = targetIndex;
     chartHoverX.value = points[targetIndex].x;
     chartHoverY.value = points[targetIndex].y;
+  }
+
+  function handleChartPointerEnter(event: PointerEvent): void {
+    isChartHovered.value = true;
+    handleChartPointerMove(event);
+  }
+
+  function handleChartPointerLeave(): void {
+    isChartHovered.value = false;
   }
 
   function startUsageAnimation(): void {
@@ -233,8 +243,11 @@ export function createBusinessCasesChart({ locale, translate }: BusinessCasesCha
     chartAreaPath,
     chartHoverX,
     chartHoverY,
+    isChartHovered,
     hoveredDownloadMonth,
     hoveredDownloadCount,
+    handleChartPointerEnter,
+    handleChartPointerLeave,
     handleChartPointerMove,
   };
 }

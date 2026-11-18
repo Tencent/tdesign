@@ -67,15 +67,15 @@
             </div>
           </div>
           <div
-            class="usage-card__chart"
+            :class="['usage-card__chart', { 'usage-card__chart--hovered': isChartHovered }]"
             :style="{ '--hover-x': `${chartHoverX}px`, '--hover-y': `${chartHoverY}px` }"
+            @pointerenter="handleChartPointerEnter"
+            @pointerleave="handleChartPointerLeave"
             @pointermove="handleChartPointerMove"
           >
             <div class="usage-card__tooltip">
-              <strong>{{ t('home.businessCases.downloadTrend') }}</strong>
-              <span>
-                {{ hoveredDownloadMonth }}，{{ t('home.businessCases.downloadCount', { count: hoveredDownloadCount }) }}
-              </span>
+              <span>{{ hoveredDownloadMonth }}</span>
+              <strong>{{ hoveredDownloadCount }}</strong>
             </div>
             <div class="usage-card__grid" aria-hidden="true">
               <span v-for="month in months" :key="month">{{ month }}</span>
@@ -179,8 +179,11 @@ const {
   chartAreaPath,
   chartHoverX,
   chartHoverY,
+  isChartHovered,
   hoveredDownloadMonth,
   hoveredDownloadCount,
+  handleChartPointerEnter,
+  handleChartPointerLeave,
   handleChartPointerMove,
 } = createBusinessCasesChart({ locale, translate: t });
 const {
@@ -557,9 +560,22 @@ const {
       transform: translateX(-50%);
       background: var(--text-primary);
       content: '';
-      opacity: 1;
+      opacity: 0;
       pointer-events: none;
-      transition: opacity 0.2s ease;
+      transition: left 0.16s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+    }
+
+    &--hovered {
+      overflow: visible;
+
+      &::after {
+        opacity: 1;
+      }
+
+      .usage-card__tooltip,
+      .usage-card__marker {
+        opacity: 1;
+      }
     }
 
     > svg {
@@ -573,25 +589,40 @@ const {
   }
 
   &__tooltip {
+    width: max-content;
+    height: 44px;
     position: absolute;
-    z-index: 2;
-    top: 24px;
-    left: 24px;
+    z-index: 4;
+    top: calc(28px + var(--hover-y));
+    left: calc(var(--hover-x) - 10px);
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transform: translate(-100%, -50%);
+    background: var(--td-mask-active);
+    backdrop-filter: blur(3px);
+    color: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transition: top 0.16s cubic-bezier(0.22, 1, 0.36, 1), left 0.16s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
 
     strong {
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 22px;
+      font-family: 'TCloudNumber', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 20px;
+      white-space: nowrap;
     }
 
     span {
-      color: var(--text-secondary);
-      font-family: 'TCloudNumberLight', sans-serif;
       font-size: 10px;
-      font-weight: 300;
+      font-weight: 400;
       line-height: 16px;
+      white-space: nowrap;
     }
   }
 
@@ -666,9 +697,9 @@ const {
     border-radius: 50%;
     box-sizing: border-box;
     background: var(--text-primary);
-    opacity: 1;
+    opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: top 0.16s cubic-bezier(0.22, 1, 0.36, 1), left 0.16s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
   }
 }
 
@@ -1098,21 +1129,6 @@ const {
         width: 285.52px;
         height: 196.53px;
         top: 25.96px;
-      }
-    }
-
-    &__tooltip {
-      top: 22.25px;
-      left: 22.25px;
-
-      strong {
-        font-size: 12.98px;
-        line-height: 20.39px;
-      }
-
-      span {
-        font-size: 11.12px;
-        line-height: 18.54px;
       }
     }
 
