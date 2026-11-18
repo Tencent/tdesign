@@ -86,7 +86,7 @@ git fetch upstream
 git rebase upstream/develop
 ```
 
-Refer tot [Configuring a remote for a fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/configuring-a-remote-for-a-fork)
+Refer tot [Configuring a remote for a fork](https://docs.github.com/en/pull-requests/how-tos/work-with-forks/configuring-a-remote-repository-for-a-fork)
 
 #### Create Pull Request
 
