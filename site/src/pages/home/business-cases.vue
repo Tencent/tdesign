@@ -589,7 +589,6 @@ const {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 2px;
     padding: 4px 8px;
     border-radius: 6px;
     box-sizing: border-box;
