@@ -615,6 +615,7 @@ const {
     }
 
     span {
+      font-family: 'TCloudNumberLight', sans-serif;
       font-size: 10px;
       font-weight: 400;
       line-height: 16px;
