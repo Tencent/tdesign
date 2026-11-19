@@ -19,14 +19,8 @@
       <div class="tdesign-source-content-box">
         <h2 class="tdesign-source-content__title">{{ t('source.preview') }}</h2>
       </div>
-      <div class="tdesign-source-content__iframe-wrap">
-        <iframe
-          class="tdesign-source-content__iframe"
-          :src="previewUrl[tab]"
-          width="100%"
-          height="100%"
-          allowfullscreen
-        ></iframe>
+      <div class="tdesign-source-content__gallery-wrap">
+        <FigmaGallery :manifest-url="galleryManifestUrl" />
       </div>
 
       <div class="tdesign-source-content-box">
@@ -103,6 +97,7 @@ import mdIcon from '@/assets/md-logo.svg';
 import mastergoIcon from '@/assets/mastergo-logo.svg';
 import ryIcon from '@/assets/ry-logo.svg';
 
+import FigmaGallery from '@/components/figma-gallery.vue';
 import { webSourceList, mobileSourceList, sourceDownloadUrl, webChartSourceList } from '@/constants';
 import messages from '@/locales/pages/design-shell';
 
@@ -164,11 +159,12 @@ const iconMap = {
   mastergo: mastergoIcon,
   ry: ryIcon,
 };
-const previewUrl = {
-  web: 'https://codesign.qq.com/s/705849079455594?menu_aside=null',
-  mobile: 'https://codesign.qq.com/s/705854516818782?menu_aside=null',
-  'web-chart': 'https://codesign.qq.com/s/705850116517658?menu_aside=null',
+const galleryManifestUrlMap: Record<ResourceTab, string> = {
+  web: 'https://tdesign.gtimg.com/design-source/figma/web/manifest.json',
+  mobile: 'https://tdesign.gtimg.com/design-source/figma/mobile/manifest.json',
+  'web-chart': 'https://tdesign.gtimg.com/design-source/figma/charts/manifest.json',
 };
+const galleryManifestUrl = computed(() => galleryManifestUrlMap[tab.value]);
 const tabList = computed<TabOption[]>(() => [
   { tab: 'web', name: t('source.tabs.web') },
   { tab: 'mobile', name: t('source.tabs.mobile') },
@@ -302,12 +298,6 @@ onMounted(() => {
     --source-page-padding: 24px;
   }
 
-  @media screen and (max-width: 1344px) {
-    --iframe-height: calc((100vw - 48px * 2) * (632 / 1344));
-    --iframe-border: none;
-    --iframe-border-radius: 0;
-  }
-
   .tdesign-source-header {
     box-shadow: var(--header-box-shadow);
 
@@ -337,24 +327,10 @@ onMounted(() => {
       color: var(--text-primary);
     }
 
-    &__iframe {
-      border-radius: var(--iframe-border-radius, 6px);
-      padding: 0;
-      border: 0;
-      height: var(--iframe-height, 576px);
-      min-height: 376px;
-      max-height: 576px;
-      display: block;
-      margin-top: -56px;
-
-      &-wrap {
-        border-radius: var(--iframe-border-radius, 6px);
-        overflow: hidden;
-        margin: 24px auto 48px;
-        max-width: 1344px;
-        border: var(--iframe-border, 1px solid var(--component-border));
-        box-sizing: border-box;
-      }
+    &__gallery-wrap {
+      margin: 24px auto 48px;
+      max-width: 1344px;
+      box-sizing: border-box;
     }
 
     &__list {
