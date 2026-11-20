@@ -179,3 +179,17 @@ export const webChartSourceList = [
     id: 'tvision_charts_web_sketch_down',
   },
 ];
+
+export const iconSourceList = [
+  {
+    title: 'Figma 设计资源',
+    eventLabel: 'TDesign Icon for Figma',
+    actionUrl: 'https://www.figma.com/community/file/1543189085651776104/tdesign-icon-svg-file',
+    description: '完整图标资源，官方标准，持续更新',
+    descriptionEn: 'Official standards, continuous updates',
+    status: 1,
+    icon: 'figma',
+    actionType: 'jump',
+    id: 'icon_figma_down',
+  },
+];

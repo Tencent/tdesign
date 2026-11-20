@@ -15,51 +15,55 @@
     </div>
 
     <div v-else class="gallery__body" :class="{ 'gallery__body--collapsed': sidebarCollapsed }">
-      <!-- v-show：收起后保留树的展开状态和搜索词 -->
-      <nav v-show="!sidebarCollapsed" class="gallery__sidebar" aria-label="页面列表">
-        <t-input v-model="keyword" class="gallery__search" size="small" placeholder="搜索页面" clearable>
-          <template #prefix-icon><SearchIcon /></template>
-        </t-input>
-        <div class="gallery__tree-head">
-          <span>全部</span>
-          <span class="gallery__count">{{ searchText ? `${matchedPageCount} / ${pages.length}` : pages.length }}</span>
-          <t-tooltip content="收起目录">
-            <t-button
-              class="gallery__fold"
-              shape="square"
-              variant="text"
-              size="small"
-              aria-label="收起目录"
-              @click="sidebarCollapsed = true"
-            >
-              <template #icon><MenuFoldIcon /></template>
-            </t-button>
-          </t-tooltip>
-        </div>
+      <!-- v-show：收起后保留树的展开状态和搜索词；Transition：收起 / 展开时从左上角的展开按钮处缩放 -->
+      <Transition name="gallery-sidebar">
+        <nav v-show="!sidebarCollapsed" class="gallery__sidebar" aria-label="页面列表">
+          <t-input v-model="keyword" class="gallery__search" size="small" placeholder="搜索页面" clearable>
+            <template #prefix-icon><SearchIcon /></template>
+          </t-input>
+          <div class="gallery__tree-head">
+            <span>全部</span>
+            <span class="gallery__count">{{
+              searchText ? `${matchedPageCount} / ${pages.length}` : pages.length
+            }}</span>
+            <t-tooltip content="收起目录">
+              <t-button
+                class="gallery__fold"
+                shape="square"
+                variant="text"
+                size="small"
+                aria-label="收起目录"
+                @click="sidebarCollapsed = true"
+              >
+                <template #icon><MenuFoldIcon /></template>
+              </t-button>
+            </t-tooltip>
+          </div>
 
-        <t-tree
-          class="gallery__tree"
-          :data="treeData"
-          :expanded="expandedKeys"
-          :actived="activedKeys"
-          activable
-          hover
-          empty="没有匹配的页面"
-          @expand="onTreeExpand"
-          @click="onTreeClick"
-        >
-          <template #label="{ node }">
-            <span
-              class="gallery__node"
-              :class="{ 'gallery__node--current': isCurrentNode(node.data) }"
-              :title="node.label"
-            >
-              <component :is="nodeIcon(node.data)" class="gallery__node-icon" />
-              <span class="gallery__node-name">{{ node.label }}</span>
-            </span>
-          </template>
-        </t-tree>
-      </nav>
+          <t-tree
+            class="gallery__tree narrow-scrollbar"
+            :data="treeData"
+            :expanded="expandedKeys"
+            :actived="activedKeys"
+            activable
+            hover
+            empty="没有匹配的页面"
+            @expand="onTreeExpand"
+            @click="onTreeClick"
+          >
+            <template #label="{ node }">
+              <span
+                class="gallery__node"
+                :class="{ 'gallery__node--current': isCurrentNode(node.data) }"
+                :title="node.label"
+              >
+                <component :is="nodeIcon(node.data)" class="gallery__node-icon" />
+                <span class="gallery__node-name">{{ node.label }}</span>
+              </span>
+            </template>
+          </t-tree>
+        </nav>
+      </Transition>
 
       <div v-if="activePage" class="gallery__stage">
         <!-- 目录收起后悬浮在画布左上角，点击展开 -->
@@ -69,7 +73,8 @@
             <span class="gallery__unfold-name">{{ activePage.label }}</span>
           </t-button>
         </t-tooltip>
-        <div ref="canvasRef" class="gallery__canvas">
+        <!-- narrow-scrollbar：TDesign 全局的细滚动条样式（tdesign-common _global.less） -->
+        <div ref="canvasRef" class="gallery__canvas narrow-scrollbar">
           <div ref="artboardRef" class="gallery__artboard" :style="artboardStyle" @click="onPointerClick">
             <!-- 每个顶层图层一块，进入可视区才请求；SVG 插入真实 DOM -->
             <div
@@ -128,7 +133,7 @@
           </div>
         </div>
 
-        <aside v-if="selectedNode" class="gallery__inspector" aria-label="图层属性">
+        <aside v-if="selectedNode" class="gallery__inspector narrow-scrollbar" aria-label="图层属性">
           <div class="gallery__inspector-head">
             <t-tag size="small" variant="light">{{ selectedNode.type }}</t-tag>
             <span class="gallery__inspector-name" :title="selectedNode.name">{{ selectedNode.name }}</span>
@@ -153,7 +158,7 @@
                 </span>
                 <span v-if="row.value">{{ row.value }}</span>
               </span>
-              <span v-else :class="{ gallery__text: row.multiline }">{{ row.value }}</span>
+              <span v-else :class="{ 'gallery__text narrow-scrollbar': row.multiline }">{{ row.value }}</span>
             </t-descriptions-item>
           </t-descriptions>
 
@@ -203,7 +208,7 @@
               <template #icon><ZoomInIcon /></template>
             </t-button>
           </t-tooltip>
-          <t-button variant="text" size="small" :disabled="zoom === 'fit'" @click="zoom = 'fit'">适应</t-button>
+          <t-button variant="text" size="small" :disabled="zoom === 'fit'" @click="zoom = 'fit'">适应画布</t-button>
         </div>
       </div>
     </div>
@@ -233,6 +238,8 @@ const props = defineProps({
   manifestUrl: { type: String, default: '/figma-assets/web/manifest.json' },
   /** Figma 文件类型，用于拼接跳转 Figma 的链接 */
   fileType: { type: String, default: 'design' },
+  /** 默认打开的页面：页面 id，或页面名（忽略大小写的包含匹配）；找不到时打开第一页 */
+  defaultPage: { type: String, default: '' },
 });
 
 /** 缩放档位，100% = 设计稿 1:1 */
@@ -247,8 +254,8 @@ const loadStatus = ref('loading');
 const errorMessage = ref('');
 const manifest = ref(null);
 const keyword = ref('');
-/** 左侧目录收起：收起后只在画布左上角悬浮一个展开按钮 */
-const sidebarCollapsed = ref(false);
+/** 左侧目录收起：收起后只在画布左上角悬浮一个展开按钮；默认收起 */
+const sidebarCollapsed = ref(true);
 const activeId = ref('');
 
 const canvasRef = ref(null);
@@ -965,9 +972,10 @@ function updateViewport() {
   // 内边距随侧栏展开 / 收起变化，按实际值扣除
   const style = getComputedStyle(canvas);
   const paddingX = Number.parseFloat(style.paddingLeft) + Number.parseFloat(style.paddingRight);
+  const paddingY = Number.parseFloat(style.paddingTop) + Number.parseFloat(style.paddingBottom);
   viewport.value = {
     width: Math.max(0, canvas.clientWidth - paddingX),
-    height: window.innerHeight * 0.7,
+    height: Math.max(0, canvas.clientHeight - paddingY),
   };
 }
 
@@ -987,6 +995,15 @@ watch(canvasRef, (element, previous) => {
 });
 
 // ---------- manifest ----------
+
+function findDefaultPage() {
+  const target = props.defaultPage.trim().toLowerCase();
+  return (
+    (target &&
+      pages.value.find((page) => page.id === props.defaultPage || page.label.toLowerCase().includes(target))) ||
+    pages.value[0]
+  );
+}
 
 /** 每次加载递增；manifestUrl 连续切换时只采用最后一次请求的结果 */
 let manifestRequestId = 0;
@@ -1008,7 +1025,7 @@ async function loadManifest() {
     fullParts.value = new Set();
     manifest.value = payload;
     if (!pages.value.some((page) => page.id === activeId.value)) {
-      activeId.value = pages.value[0]?.id ?? '';
+      activeId.value = findDefaultPage()?.id ?? '';
     }
     loadStatus.value = 'ready';
   } catch (error) {
@@ -1041,7 +1058,7 @@ watch(
   },
 );
 
-// 换了页面：缩放回到适应，画布滚回左上角
+// 换了页面：缩放回到适应画布，画布滚回左上角
 watch(
   () => activePage.value?.id,
   () => {
@@ -1079,6 +1096,9 @@ onBeforeUnmount(() => {
 }
 
 .gallery__body {
+  --gallery-anim-duration: var(--td-anim-duration-base, 0.2s);
+  --gallery-anim-easing: var(--td-anim-time-fn-easing, cubic-bezier(0.38, 0, 0.24, 1));
+
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -1104,6 +1124,23 @@ onBeforeUnmount(() => {
   border: 1px solid var(--td-component-stroke, #e7e7e7);
   border-radius: var(--td-radius-medium, 6px);
   box-shadow: var(--td-shadow-2, 0 3px 14px 2px rgba(0, 0, 0, 0.05), 0 8px 10px 1px rgba(0, 0, 0, 0.06));
+}
+
+/*
+ * 收起 / 展开动画：用 clip-path 把侧栏裁到左上角展开按钮的大小，宽高一起收缩，内容不重排。
+ * 展开态用负的 inset，避免过渡期间裁掉阴影
+ */
+.gallery-sidebar-enter-active,
+.gallery-sidebar-leave-active {
+  clip-path: inset(-24px round var(--td-radius-medium, 6px));
+  transition: clip-path var(--gallery-anim-duration) var(--gallery-anim-easing),
+    opacity var(--gallery-anim-duration) var(--gallery-anim-easing);
+}
+
+.gallery-sidebar-enter-from,
+.gallery-sidebar-leave-to {
+  clip-path: inset(0 calc(100% - 104px) calc(100% - 30px) 0 round var(--td-radius-default, 3px));
+  opacity: 0;
 }
 
 .gallery__search {
@@ -1191,8 +1228,20 @@ onBeforeUnmount(() => {
   left: 16px;
   z-index: 2;
   max-width: min(240px, calc(100% - 32px));
+  /* t-button 小号固定 24px 高，改成由内边距撑开 */
+  height: auto;
+  padding: 4px 8px;
   background: var(--td-bg-color-container, #fff);
   box-shadow: var(--td-shadow-1, 0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 0.08));
+  /* 等侧栏基本收到按钮大小后再淡入，衔接收起动画 */
+  animation: gallery-fade-in var(--gallery-anim-duration) var(--gallery-anim-easing)
+    calc(var(--gallery-anim-duration) * 0.6) both;
+}
+
+@keyframes gallery-fade-in {
+  from {
+    opacity: 0;
+  }
 }
 
 .gallery__unfold-name {
@@ -1203,13 +1252,17 @@ onBeforeUnmount(() => {
 
 .gallery__canvas {
   display: flex;
-  flex: 1;
-  max-height: calc(70vh + 32px);
+  /* 固定高度：缩放只改变内部画板大小，超出部分在画布内滚动（flex: none，避免 flex 基准值覆盖 height、被内容撑高） */
+  flex: none;
+  box-sizing: border-box;
+  height: calc(70vh + 32px);
   padding: 16px;
   overflow: auto;
+  /* 让位的内边距跟着侧栏动画变化；「适应画布」比例随画布尺寸逐帧跟上 */
+  transition: padding-left var(--gallery-anim-duration) var(--gallery-anim-easing);
 }
 
-/* 目录展开时给悬浮侧栏让出位置（16 + 260 + 16），「适应」缩放不会被侧栏挡住 */
+/* 目录展开时给悬浮侧栏让出位置（16 + 260 + 16），「适应画布」缩放不会被侧栏挡住 */
 .gallery__body:not(.gallery__body--collapsed) .gallery__canvas {
   padding-left: 292px;
 }
@@ -1397,7 +1450,7 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  padding: 2px 4px;
+  padding: 4px 8px;
   font-size: 12px;
   color: var(--td-text-color-secondary, rgba(0, 0, 0, 0.6));
   background: var(--td-bg-color-container, #fff);
@@ -1434,6 +1487,12 @@ onBeforeUnmount(() => {
 
   .gallery__body:not(.gallery__body--collapsed) .gallery__canvas {
     padding-left: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery__body {
+    --gallery-anim-duration: 0s;
   }
 }
 </style>
