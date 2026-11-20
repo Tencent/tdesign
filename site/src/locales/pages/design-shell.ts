@@ -13,9 +13,9 @@ export default {
         upcoming: '待上线',
       },
       tabs: {
-        web: '桌面端组件库',
-        mobile: '移动端组件库',
-        webChart: '桌面端图表库',
+        web: '桌面端资源',
+        mobile: '移动端资源',
+        webChart: '图表资源',
         icons: '图标资源',
       },
       resourceTitles: {
@@ -33,6 +33,7 @@ export default {
         sketch_mobile_down: 'Sketch 设计资源',
         tvision_charts_web_figma_down: 'Figma 设计资源',
         tvision_charts_web_sketch_down: 'Sketch 设计资源',
+        icon_figma_down: 'Figma 设计资源',
       },
     },
   },
@@ -71,6 +72,7 @@ export default {
         sketch_mobile_down: 'Sketch Design Resources',
         tvision_charts_web_figma_down: 'Figma Design Resources',
         tvision_charts_web_sketch_down: 'Sketch Design Resources',
+        icon_figma_down: 'Figma Design Resources',
       },
     },
   },
