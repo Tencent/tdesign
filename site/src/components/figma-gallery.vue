@@ -44,7 +44,7 @@
             class="gallery__tree narrow-scrollbar"
             :data="treeData"
             :expanded="expandedKeys"
-            :actived="activedKeys"
+            :actived="highlightedKeys"
             activable
             hover
             empty="没有匹配的页面"
@@ -400,11 +400,11 @@ const activeKey = computed(() => (activePage.value ? pageKey(activePage.value.id
  * 高亮的节点。t-tree 点击时会先改内部状态（再次点击会取消高亮、点分组也会高亮分组），
  * 所以每次点击后都重新赋一个新数组，让它按当前页面同步回来
  */
-const activedKeys = ref([]);
-function syncActived() {
-  activedKeys.value = activeKey.value ? [activeKey.value] : [];
+const highlightedKeys = ref([]);
+function syncHighlighted() {
+  highlightedKeys.value = activeKey.value ? [activeKey.value] : [];
 }
-watch(activeKey, syncActived, { immediate: true });
+watch(activeKey, syncHighlighted, { immediate: true });
 
 function setExpanded(key, expanded) {
   const has = expandedKeys.value.includes(key);
@@ -425,7 +425,7 @@ function onTreeClick({ node }) {
     activeId.value = data.pageId;
     selectedId.value = '';
   }
-  syncActived();
+  syncHighlighted();
 }
 
 /** 当前页加粗；收起的分组里有当前页时，分组也加粗提示 */
