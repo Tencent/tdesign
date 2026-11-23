@@ -1,7 +1,7 @@
 <template>
   <section class="gallery">
     <div v-if="loadStatus === 'loading'" class="gallery__placeholder">
-      <t-loading size="small" text="正在加载 manifest…" />
+      <t-loading size="small" text="正在加载设计资源…" />
     </div>
     <div v-else-if="loadStatus === 'error'" class="gallery__placeholder">
       <t-empty type="fail" title="加载失败" :description="errorMessage">
@@ -82,32 +82,33 @@
               :key="part.id"
               v-observe-part="part.id"
               class="gallery__part"
-              :class="{ 'gallery__part--pending': !partPainted(part) }"
               :style="rectStyle(part.box)"
             >
               <div v-if="svgOf(part)" v-mount-element="svgOf(part)" class="gallery__svg" />
+              <!-- 缩略图：看整页时先用它；完整图下载完之前垫在下面，下载完再移除 -->
               <img
-                v-else-if="showFullRaster(part)"
-                class="gallery__image"
-                :src="part.src"
-                :alt="part.label"
-                decoding="async"
-                draggable="false"
-                @error="onImageError(part, part.src)"
-              />
-              <!-- 缩略图：看整页时先用它，完整图加载好后被替换 -->
-              <img
-                v-else-if="showThumb(part)"
+                v-if="!svgOf(part) && showThumb(part) && !fullRasterReady(part)"
                 class="gallery__image"
                 :src="part.thumbSrc"
                 :alt="part.label"
                 decoding="async"
                 draggable="false"
+                @load="onImageLoad(part.thumbSrc)"
                 @error="onImageError(part, part.thumbSrc)"
+              />
+              <img
+                v-if="!svgOf(part) && showFullRaster(part)"
+                class="gallery__image gallery__image--full"
+                :src="part.src"
+                :alt="part.label"
+                decoding="async"
+                draggable="false"
+                @load="onImageLoad(part.src)"
+                @error="onImageError(part, part.src)"
               />
               <!-- 没有渲染图（或加载失败）时，用节点树画线框 -->
               <svg
-                v-else-if="needsWireframe(part) && treeOf(part)"
+                v-if="!svgOf(part) && needsWireframe(part) && treeOf(part)"
                 class="gallery__wireframe"
                 :viewBox="`${part.box.x} ${part.box.y} ${part.box.w} ${part.box.h}`"
                 preserveAspectRatio="none"
@@ -123,6 +124,13 @@
                   vector-effect="non-scaling-stroke"
                 />
               </svg>
+              <!-- 还没进入可视区 / 要显示的内容还没下载完：骨架屏占位 -->
+              <t-skeleton
+                v-if="!partPainted(part)"
+                class="gallery__skeleton"
+                animation="gradient"
+                :row-col="SKELETON_ROW_COL"
+              />
             </div>
             <div v-if="selectedNode" class="gallery__box" :style="rectStyle(selectedNode)">
               <span class="gallery__box-label">{{ selectedNode.name }}</span>
@@ -133,10 +141,9 @@
           </div>
         </div>
 
-        <aside v-if="selectedNode" class="gallery__inspector narrow-scrollbar" aria-label="图层属性">
+        <aside v-if="inspectorKind" class="gallery__inspector narrow-scrollbar" aria-label="图层属性">
           <div class="gallery__inspector-head">
-            <t-tag size="small" variant="light">{{ selectedNode.type }}</t-tag>
-            <span class="gallery__inspector-name" :title="selectedNode.name">{{ selectedNode.name }}</span>
+            <span class="gallery__inspector-name" :title="componentName">{{ componentName }}</span>
             <t-tooltip content="取消选中（Esc）">
               <t-button shape="square" variant="text" size="small" @click="selectedId = ''">
                 <template #icon><CloseIcon /></template>
@@ -144,33 +151,36 @@
             </t-tooltip>
           </div>
 
-          <t-descriptions
-            class="gallery__props"
-            :column="1"
-            size="small"
-            :colon="false"
-            :label-style="{ width: '72px' }"
-          >
-            <t-descriptions-item v-for="row in propRows" :key="row.key" :label="row.label">
-              <span v-if="row.colors" class="gallery__colors">
-                <span v-for="(color, i) in row.colors" :key="i" class="gallery__color">
-                  <i v-if="color.startsWith('#')" class="gallery__swatch" :style="{ background: color }" />{{ color }}
+          <template v-for="group in inspectorGroups" :key="group.key">
+            <div class="gallery__props-title">{{ group.title }}</div>
+            <t-descriptions
+              class="gallery__props"
+              :column="1"
+              size="small"
+              :colon="false"
+              :label-style="{ width: group.labelWidth }"
+            >
+              <t-descriptions-item v-for="row in group.rows" :key="row.key" :label="row.label">
+                <span v-if="row.colors" class="gallery__colors">
+                  <span v-for="(color, i) in row.colors" :key="i" class="gallery__color">
+                    <i v-if="color.startsWith('#')" class="gallery__swatch" :style="{ background: color }" />{{ color }}
+                  </span>
                 </span>
-                <span v-if="row.value">{{ row.value }}</span>
-              </span>
-              <span v-else :class="{ 'gallery__text narrow-scrollbar': row.multiline }">{{ row.value }}</span>
-            </t-descriptions-item>
-          </t-descriptions>
+                <span v-else>{{ row.value }}</span>
+              </t-descriptions-item>
+            </t-descriptions>
+          </template>
 
           <div class="gallery__inspector-actions">
             <t-button
+              v-if="inspectorKind === 'icon'"
               variant="text"
               theme="primary"
               size="small"
-              @click="copyText(JSON.stringify(selectedNode, null, 2), 'JSON')"
+              @click="copyText(componentName, '名称')"
             >
               <template #icon><CopyIcon /></template>
-              复制 JSON
+              复制名称
             </t-button>
             <t-button
               variant="text"
@@ -240,6 +250,8 @@ const props = defineProps({
   fileType: { type: String, default: 'design' },
   /** 默认打开的页面：页面 id，或页面名（忽略大小写的包含匹配）；找不到时打开第一页 */
   defaultPage: { type: String, default: '' },
+  /** 图标资源：点击时选中单个图标，并展示只有名称和操作的信息浮层 */
+  iconMode: { type: Boolean, default: false },
 });
 
 /** 缩放档位，100% = 设计稿 1:1 */
@@ -247,6 +259,8 @@ const ZOOM_STEPS = [0.05, 0.1, 0.25, 0.5, 0.75, 1, 1.5, 2];
 const MAX_WIREFRAME_NODES = 4000;
 /** 图层块进入画布可视区前多少像素就开始加载 */
 const PRELOAD_MARGIN = '200px';
+/** 图层块骨架屏：一整块铺满 */
+const SKELETON_ROW_COL = [{ type: 'rect', width: '100%', height: '100%' }];
 /** 下载脚本按顶层图层拆分后的 manifest 版本 */
 const MANIFEST_SCHEMA = 2;
 
@@ -537,8 +551,16 @@ function showThumb(part) {
   return Boolean(part.thumbSrc) && wantedParts.value.has(part.id) && assetStatus(part.thumbSrc) !== 'error';
 }
 
+/** 完整位图已下载完（img 触发了 load），可以移除垫在下面的缩略图 */
+function fullRasterReady(part) {
+  return showFullRaster(part) && assetStatus(part.src) === 'ready';
+}
+
+/** 图层块上已有下载完的内容可看；否则显示骨架屏 */
 function partPainted(part) {
-  return Boolean(svgOf(part) || showFullRaster(part) || showThumb(part) || (needsWireframe(part) && treeOf(part)));
+  if (svgOf(part) || fullRasterReady(part)) return true;
+  if (showThumb(part) && assetStatus(part.thumbSrc) === 'ready') return true;
+  return Boolean(needsWireframe(part) && treeOf(part));
 }
 
 /** 图层块进入了可视区：先显示缩略图；完整图是否加载由 needsFull 决定 */
@@ -558,6 +580,10 @@ function requestFull(part) {
       if (!svg && needsWireframe(part)) loadPartTree(part);
     });
   }
+}
+
+function onImageLoad(src) {
+  assets.set(src, { status: 'ready' });
 }
 
 function onImageError(part, src) {
@@ -657,42 +683,44 @@ function locateNode(id) {
 const selected = computed(() => (selectedId.value ? locateNode(selectedId.value) : null));
 const selectedNode = computed(() => selected.value?.node ?? null);
 
-/** 与 Figma 一致：坐标相对父级；顶层画板相对 page */
-const relativePosition = computed(() => {
-  const info = selected.value;
-  if (!info) return { x: 0, y: 0 };
-  const { node } = info;
-  const parent = info.tree?.parentMap.get(node.id);
-  return parent ? { x: node.x - parent.x, y: node.y - parent.y } : { x: node.x, y: node.y };
+/** 检查器标题：组件名。变体（COMPONENT）的名字是变体属性串，取所在组件集的名字（如「Button 按钮」） */
+const componentName = computed(() => {
+  const node = selectedNode.value;
+  if (!node) return '';
+  const parent = selected.value?.tree?.parentMap.get(node.id);
+  return node.type === 'COMPONENT' && parent?.type === 'COMPONENT_SET' ? parent.name : node.name;
 });
 
-/** 检查器里 t-descriptions 的行；colors 行渲染色块 */
-const propRows = computed(() => {
+/** 「variant 类型=base 基础, size 尺寸=medium 中尺寸」→ [[key, value], …]；不是变体时返回空数组 */
+function parseVariant(text) {
+  if (!text?.includes('=')) return [];
+  return text
+    .split(/,\s*/)
+    .map((pair) => pair.split('='))
+    .filter((pair) => pair.length === 2 && pair[0].trim())
+    .map(([key, value]) => [key.trim(), value.trim()]);
+}
+
+/** 组件内所有文字图层用到的颜色（去重） */
+function textColors(node) {
+  const colors = new Set();
+  const stack = [...(node.children ?? [])];
+  while (stack.length) {
+    const child = stack.pop();
+    if (child.type === 'TEXT') child.fills?.forEach((color) => colors.add(color));
+    if (child.children) stack.push(...child.children);
+  }
+  return [...colors];
+}
+
+/** 检查器的样式属性：尺寸、填充、文字颜色、圆角；colors 行渲染色块 */
+const styleRows = computed(() => {
   const node = selectedNode.value;
   if (!node) return [];
-  const { x, y } = relativePosition.value;
-  const rows = [
-    { key: 'position', label: '位置', value: `X ${formatNumber(x)} · Y ${formatNumber(y)}` },
-    { key: 'size', label: '尺寸', value: `${formatNumber(node.w)} × ${formatNumber(node.h)}` },
-  ];
-  if (node.component) rows.push({ key: 'component', label: '组件', value: node.component });
-  for (const [key, value] of Object.entries(node.props ?? {})) {
-    rows.push({ key: `prop-${key}`, label: key, value: String(value) });
-  }
-  if (node.text !== undefined) rows.push({ key: 'text', label: '文本', value: node.text, multiline: true });
-  if (node.font) {
-    const { family, weight, size, lineHeight } = node.font;
-    rows.push({ key: 'font', label: '字体', value: `${family} ${weight} · ${size}/${formatNumber(lineHeight)}` });
-  }
-  if (node.fills) rows.push({ key: 'fills', label: '填充', colors: node.fills });
-  if (node.strokes) {
-    rows.push({
-      key: 'strokes',
-      label: '描边',
-      colors: node.strokes,
-      value: node.strokeWeight ? `${node.strokeWeight}px` : '',
-    });
-  }
+  const rows = [{ key: 'size', label: '尺寸', value: `${formatNumber(node.w)} × ${formatNumber(node.h)}` }];
+  if (node.fills?.length) rows.push({ key: 'fills', label: '填充', colors: node.fills });
+  const texts = textColors(node);
+  if (texts.length) rows.push({ key: 'text-color', label: '文字颜色', colors: texts });
   if (node.radius !== undefined) {
     rows.push({
       key: 'radius',
@@ -700,22 +728,31 @@ const propRows = computed(() => {
       value: Array.isArray(node.radius) ? node.radius.join(' / ') : String(node.radius),
     });
   }
-  if (node.opacity !== undefined)
-    rows.push({ key: 'opacity', label: '不透明度', value: `${Math.round(node.opacity * 100)}%` });
-  if (node.effects) rows.push({ key: 'effects', label: '效果', value: node.effects.join(', ') });
-  if (node.layout) {
-    const { mode, gap, padding } = node.layout;
-    rows.push({
-      key: 'layout',
-      label: '自动布局',
-      value: `${mode === 'HORIZONTAL' ? '水平' : '垂直'} · 间距 ${gap} · 内边距 ${padding.join(' ')}`,
-    });
-  }
-  for (const [kind, styleName] of Object.entries(node.styles ?? {})) {
-    rows.push({ key: `style-${kind}`, label: `样式 · ${kind}`, value: styleName });
-  }
   return rows;
 });
+
+/** 检查器的变体属性（variant、size …）：实例取所用变体，变体取自身名字 */
+const variantRows = computed(() => {
+  const node = selectedNode.value;
+  if (!node) return [];
+  const source = node.type === 'INSTANCE' ? node.component : node.name;
+  return parseVariant(source).map(([key, value]) => ({
+    key: `variant-${key}`,
+    // Figma 用「⬑」标记依赖上一个属性的子属性，展示时去掉
+    label: key.replace(/^⬑\s*/, ''),
+    value,
+  }));
+});
+
+/** 检查器分组；没有变体属性时不显示该分组；单个图标只展示名称和操作 */
+const inspectorGroups = computed(() =>
+  inspectorKind.value === 'icon'
+    ? []
+    : [
+        { key: 'style', title: '样式', rows: styleRows.value, labelWidth: '64px' },
+        { key: 'variant', title: '变体属性', rows: variantRows.value, labelWidth: '128px' },
+      ].filter((group) => group.rows.length),
+);
 
 /** 取点击位置最上层、最深的节点；clip 的容器外部不可命中其子节点 */
 function hitTest(node, x, y) {
@@ -729,6 +766,61 @@ function hitTest(node, x, y) {
     }
   }
   return inside ? node : null;
+}
+
+/** 只有组件（COMPONENT）和组件实例（INSTANCE）出现信息浮层；其他节点只显示选中框 */
+function isComponentNode(node) {
+  return node?.type === 'INSTANCE' || node?.type === 'COMPONENT';
+}
+
+const ICON_CONTAINER_TYPES = new Set(['FRAME', 'COMPONENT', 'INSTANCE', 'GROUP']);
+const ICON_SHAPE_TYPES = new Set([
+  'VECTOR',
+  'BOOLEAN_OPERATION',
+  'ELLIPSE',
+  'RECTANGLE',
+  'LINE',
+  'STAR',
+  'REGULAR_POLYGON',
+  'GROUP',
+]);
+/** 图标最大边长；图标资源里的图标都是 24 × 24 */
+const ICON_MAX_SIZE = 64;
+
+/** 单个图标：尺寸不大、内部只有矢量图形的容器（图标资源里每个图标是一个 24 × 24 的 FRAME） */
+function isIconNode(node) {
+  if (!node || !ICON_CONTAINER_TYPES.has(node.type) || !node.children?.length) return false;
+  if (node.w > ICON_MAX_SIZE || node.h > ICON_MAX_SIZE) return false;
+  const stack = [...node.children];
+  while (stack.length) {
+    const child = stack.pop();
+    if (!ICON_SHAPE_TYPES.has(child.type)) return false;
+    if (child.children) stack.push(...child.children);
+  }
+  return true;
+}
+
+/** 信息浮层类型：'icon'（图标资源里的单个图标）、'component'，或不显示 */
+const inspectorKind = computed(() => {
+  const node = selectedNode.value;
+  if (props.iconMode && isIconNode(node)) return 'icon';
+  return isComponentNode(node) ? 'component' : '';
+});
+
+/**
+ * 点击命中的节点：图标资源里点到图标内部时取整个图标；
+ * 在组件 / 实例内部时取最外层的组件（点到按钮里的文字、图标，也选中整个按钮）；
+ * 否则取最深的节点。没点到这个图层块返回 null
+ */
+function pickNode(tree, x, y) {
+  const hit = hitTest(tree.root, x, y);
+  let icon = null;
+  let found = hit;
+  for (let node = hit; node; node = tree.parentMap.get(node.id)) {
+    if (props.iconMode && isIconNode(node)) icon = node;
+    if (isComponentNode(node)) found = node;
+  }
+  return icon ?? found;
 }
 
 /** 点击位置换算成 page 坐标 */
@@ -753,12 +845,10 @@ function onPointerClick(event) {
     const part = parts.value[i];
     const tree = treeOf(part);
     if (tree) {
-      const hit = hitTest(tree.root, point.x, point.y);
-      if (hit) {
-        selectedId.value = hit.id;
-        return;
-      }
-      continue;
+      const hit = pickNode(tree, point.x, point.y);
+      if (!hit) continue;
+      selectedId.value = hit.id;
+      return;
     }
     const inside = point.x >= part.x && point.x <= part.x + part.w && point.y >= part.y && point.y <= part.y + part.h;
     if (!inside) continue;
@@ -782,7 +872,7 @@ function resolvePendingPick(partId) {
   const tree = part && treeOf(part);
   // 等待期间用户换了选中，就不再覆盖
   if (!tree || selectedId.value !== partId) return;
-  selectedId.value = hitTest(tree.root, pick.x, pick.y)?.id ?? partId;
+  selectedId.value = pickNode(tree, pick.x, pick.y)?.id ?? partId;
 }
 
 /** page 坐标的矩形 → 相对画板的百分比定位 */
@@ -1280,12 +1370,23 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 
-/* 还没进入可视区 / 正在加载的图层块：淡色占位 */
-.gallery__part--pending {
-  background: var(--td-bg-color-container, #fff);
-  outline: 1px dashed var(--td-component-border, #dcdcdc);
-  outline-offset: -1px;
-  opacity: 0.6;
+/* 还没进入可视区 / 内容没下载完的图层块：骨架屏铺满整块 */
+.gallery__skeleton,
+.gallery__skeleton :deep(.t-skeleton__row) {
+  height: 100%;
+}
+
+.gallery__skeleton {
+  position: absolute;
+  inset: 0;
+}
+
+.gallery__skeleton :deep(.t-skeleton__row) {
+  margin: 0;
+}
+
+.gallery__skeleton :deep(.t-skeleton__col) {
+  border-radius: 0;
 }
 
 .gallery__svg {
@@ -1298,6 +1399,12 @@ onBeforeUnmount(() => {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+/* 完整图盖在缩略图上，下载完之前还能看到缩略图 */
+.gallery__image--full {
+  position: absolute;
+  inset: 0;
 }
 
 .gallery__wireframe {
@@ -1385,8 +1492,11 @@ onBeforeUnmount(() => {
   white-space: nowrap;
 }
 
-.gallery__props {
-  margin-top: 8px;
+.gallery__props-title {
+  margin-top: 12px;
+  margin-bottom: 4px;
+  font-weight: 600;
+  color: var(--td-text-color-primary, rgba(0, 0, 0, 0.9));
 }
 
 /* 检查器很窄：压缩 t-descriptions 的行距和字号 */
@@ -1401,13 +1511,6 @@ onBeforeUnmount(() => {
 
 .gallery__props :deep(.t-descriptions__label) {
   color: var(--td-text-color-secondary, rgba(0, 0, 0, 0.6));
-}
-
-.gallery__text {
-  display: block;
-  max-height: 96px;
-  overflow-y: auto;
-  white-space: pre-wrap;
 }
 
 .gallery__colors {

@@ -20,7 +20,11 @@
         <h2 class="tdesign-source-content__title">{{ t('source.preview') }}</h2>
       </div>
       <div class="tdesign-source-content__gallery-wrap">
-        <FigmaGallery :manifest-url="galleryManifestUrl" :default-page="galleryDefaultPage" />
+        <FigmaGallery
+          :manifest-url="galleryManifestUrl"
+          :default-page="galleryDefaultPage"
+          :icon-mode="tab === 'icons'"
+        />
       </div>
 
       <div class="tdesign-source-content-box" v-if="sourceList.length">
