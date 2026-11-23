@@ -745,14 +745,14 @@ const variantRows = computed(() => {
 });
 
 /** 检查器分组；没有变体属性时不显示该分组；单个图标只展示名称和操作 */
-const inspectorGroups = computed(() =>
-  inspectorKind.value === 'icon'
-    ? []
-    : [
-        { key: 'style', title: '样式', rows: styleRows.value, labelWidth: '64px' },
-        { key: 'variant', title: '变体属性', rows: variantRows.value, labelWidth: '128px' },
-      ].filter((group) => group.rows.length),
-);
+const inspectorGroups = computed(() => {
+  if (inspectorKind.value === 'icon') return [];
+  const groups = [
+    { key: 'style', title: '样式', rows: styleRows.value, labelWidth: '64px' },
+    { key: 'variant', title: '变体属性', rows: variantRows.value, labelWidth: '128px' },
+  ];
+  return groups.filter((group) => group.rows.length);
+});
 
 /** 取点击位置最上层、最深的节点；clip 的容器外部不可命中其子节点 */
 function hitTest(node, x, y) {
