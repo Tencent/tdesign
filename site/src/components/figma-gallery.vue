@@ -181,9 +181,8 @@
             </t-descriptions>
           </template>
 
-          <div class="gallery__inspector-actions">
+          <div v-if="inspectorKind === 'icon'" class="gallery__inspector-actions">
             <t-button
-              v-if="inspectorKind === 'icon'"
               variant="text"
               theme="primary"
               size="small"
@@ -192,26 +191,6 @@
               <template #icon><CopyIcon /></template>
               {{ t('figmaGallery.copyName') }}
             </t-button>
-            <t-button
-              variant="text"
-              theme="primary"
-              size="small"
-              @click="copyText(figmaNodeUrl(selectedNode.id), t('figmaGallery.copiedLink'))"
-            >
-              <template #icon><LinkIcon /></template>
-              {{ t('figmaGallery.copyLink') }}
-            </t-button>
-            <t-link
-              theme="primary"
-              size="small"
-              hover="color"
-              :href="figmaNodeUrl(selectedNode.id)"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Figma
-              <template #suffix-icon><JumpIcon /></template>
-            </t-link>
           </div>
         </aside>
 
@@ -231,6 +210,13 @@
           <t-button variant="text" size="small" :disabled="zoom === 'fit'" @click="zoom = 'fit'">{{
             t('figmaGallery.fitCanvas')
           }}</t-button>
+          <template v-if="figmaUrl">
+            <span class="gallery__zoom-divider" />
+            <t-button variant="text" size="small" :href="figmaUrl" target="_blank" rel="noopener noreferrer">
+              {{ t('figmaGallery.openInFigma') }}
+              <template #suffix><JumpIcon /></template>
+            </t-button>
+          </template>
         </div>
       </div>
     </div>
@@ -248,7 +234,6 @@ import {
   FolderIcon,
   FolderOpenIcon,
   JumpIcon,
-  LinkIcon,
   MenuFoldIcon,
   MenuUnfoldIcon,
   SearchIcon,
@@ -261,12 +246,12 @@ import messages from '@/locales/components/figma-gallery';
 const props = defineProps({
   /** manifest.json 地址；开发时由 Vite 从 client/public 映射 */
   manifestUrl: { type: String, default: '/figma-assets/web/manifest.json' },
-  /** Figma 文件类型，用于拼接跳转 Figma 的链接 */
-  fileType: { type: String, default: 'design' },
   /** 默认打开的页面：页面 id，或页面名（忽略大小写的包含匹配）；找不到时打开第一页 */
   defaultPage: { type: String, default: '' },
   /** 图标资源：点击时选中单个图标，并展示只有名称和操作的信息浮层 */
   iconMode: { type: Boolean, default: false },
+  /** 画布右下角「在 Figma 中打开」按钮的地址；不传则不显示该按钮 */
+  figmaUrl: { type: String, default: '' },
 });
 
 const { t } = useI18n({ messages });
@@ -506,14 +491,6 @@ function revealActivePage() {
   const page = activePage.value;
   if (!page || searchResult.value) return;
   if (page.groupName) setExpanded(groupKey(page.groupName), true);
-}
-
-function figmaNodeUrl(nodeId) {
-  const fileKey = manifest.value?.fileKey;
-  if (!fileKey) return 'https://www.figma.com';
-  return `https://www.figma.com/${props.fileType}/${fileKey}?node-id=${encodeURIComponent(
-    nodeId.replaceAll(':', '-'),
-  )}`;
 }
 
 function formatNumber(value) {
@@ -1606,6 +1583,14 @@ onBeforeUnmount(() => {
   min-width: 44px;
   text-align: center;
   font-variant-numeric: tabular-nums;
+}
+
+.gallery__zoom-divider {
+  flex: none;
+  width: 1px;
+  height: 16px;
+  margin: 0 4px;
+  background: var(--td-component-stroke, #e7e7e7);
 }
 
 .gallery__placeholder {

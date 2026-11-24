@@ -23,6 +23,7 @@
         <FigmaGallery
           :manifest-url="galleryManifestUrl"
           :default-page="galleryDefaultPage"
+          :figma-url="galleryFigmaUrl"
           :icon-mode="tab === 'icons'"
         />
       </div>
@@ -172,12 +173,20 @@ const galleryManifestUrlMap: Record<ResourceTab, string> = {
 const galleryManifestUrl = computed(() => galleryManifestUrlMap[tab.value]);
 /** 各资源默认打开的 Figma 页面（按页面名匹配） */
 const galleryDefaultPageMap: Record<ResourceTab, string> = {
-  web: 'Button 按钮',
-  mobile: 'Button 按钮',
-  'web-chart': 'Column chart 柱状图',
+  web: 'Styles 全局样式',
+  mobile: 'Styles 全局样式',
+  'web-chart': 'Styles 全局样式',
   icons: 'Icon 图标',
 };
 const galleryDefaultPage = computed(() => galleryDefaultPageMap[tab.value]);
+/** 画布右下角「在 Figma 中打开」：源文件需要团队权限，统一跳到公开的 Community 页 */
+const galleryFigmaUrlMap: Record<ResourceTab, string> = {
+  web: 'https://www.figma.com/community/file/1053279236128724321',
+  mobile: 'https://www.figma.com/community/file/1053279585699097956',
+  'web-chart': 'https://www.figma.com/community/file/1202507505468414219',
+  icons: 'https://www.figma.com/community/file/1543189085651776104',
+};
+const galleryFigmaUrl = computed(() => galleryFigmaUrlMap[tab.value]);
 const tabList = computed<TabOption[]>(() => [
   { tab: 'web', name: t('source.tabs.web') },
   { tab: 'mobile', name: t('source.tabs.mobile') },
