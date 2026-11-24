@@ -80,7 +80,7 @@
           </t-button>
         </t-tooltip>
         <!-- narrow-scrollbar：TDesign 全局的细滚动条样式（tdesign-common _global.less） -->
-        <div ref="canvasRef" class="gallery__canvas narrow-scrollbar">
+        <div ref="canvasRef" class="gallery__canvas narrow-scrollbar" :class="{ 'gallery__canvas--panning': panning }">
           <div ref="artboardRef" class="gallery__artboard" :style="artboardStyle" @click="onPointerClick">
             <!-- 每个顶层图层一块，进入可视区才请求；SVG 插入真实 DOM -->
             <div
@@ -1062,10 +1062,67 @@ function onGestureChange(event) {
   zoomAt(gestureBaseScale * event.scale, event.clientX, event.clientY);
 }
 
+/** 鼠标拖拽平移画布 */
+const PAN_THRESHOLD = 4;
+const panning = ref(false);
+let pan = null;
+let suppressClick = false;
+
+function onPanStart(event) {
+  suppressClick = false;
+  if (event.pointerType !== 'mouse' || (event.button !== 0 && event.button !== 1)) return;
+  const canvas = canvasRef.value;
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  if (event.clientX - rect.left >= canvas.clientLeft + canvas.clientWidth) return;
+  if (event.clientY - rect.top >= canvas.clientTop + canvas.clientHeight) return;
+  if (event.button === 1) event.preventDefault();
+  pan = {
+    pointerId: event.pointerId,
+    x: event.clientX,
+    y: event.clientY,
+    scrollLeft: canvas.scrollLeft,
+    scrollTop: canvas.scrollTop,
+  };
+}
+
+function onPanMove(event) {
+  const canvas = canvasRef.value;
+  if (!pan || !canvas || event.pointerId !== pan.pointerId) return;
+  const dx = event.clientX - pan.x;
+  const dy = event.clientY - pan.y;
+  if (!panning.value) {
+    if (Math.hypot(dx, dy) < PAN_THRESHOLD) return;
+    panning.value = true;
+    canvas.setPointerCapture(event.pointerId);
+  }
+  canvas.scrollLeft = pan.scrollLeft - dx;
+  canvas.scrollTop = pan.scrollTop - dy;
+}
+
+function onPanEnd(event) {
+  if (!pan || event.pointerId !== pan.pointerId) return;
+  suppressClick = panning.value;
+  pan = null;
+  panning.value = false;
+}
+
+function onPanClick(event) {
+  if (!suppressClick) return;
+  suppressClick = false;
+  event.stopPropagation();
+}
+
 const CANVAS_LISTENERS = [
-  ['wheel', onCanvasWheel],
-  ['gesturestart', onGestureStart],
-  ['gesturechange', onGestureChange],
+  // passive: false 才能 preventDefault 拦下浏览器缩放
+  ['wheel', onCanvasWheel, { passive: false }],
+  ['gesturestart', onGestureStart, { passive: false }],
+  ['gesturechange', onGestureChange, { passive: false }],
+  ['pointerdown', onPanStart],
+  ['pointermove', onPanMove],
+  ['pointerup', onPanEnd],
+  ['pointercancel', onPanEnd],
+  ['click', onPanClick, { capture: true }],
 ];
 
 function updateViewport() {
@@ -1086,12 +1143,11 @@ const resizeObserver = typeof ResizeObserver === 'undefined' ? null : new Resize
 watch(canvasRef, (element, previous) => {
   if (previous) {
     resizeObserver?.unobserve(previous);
-    for (const [type, listener] of CANVAS_LISTENERS) previous.removeEventListener(type, listener);
+    for (const [type, listener, options] of CANVAS_LISTENERS) previous.removeEventListener(type, listener, options);
   }
   if (element) {
     resizeObserver?.observe(element);
-    // passive: false 才能 preventDefault 拦下浏览器缩放
-    for (const [type, listener] of CANVAS_LISTENERS) element.addEventListener(type, listener, { passive: false });
+    for (const [type, listener, options] of CANVAS_LISTENERS) element.addEventListener(type, listener, options);
     updateViewport();
   }
 });
@@ -1367,6 +1423,14 @@ onBeforeUnmount(() => {
   overflow: auto;
   /* 让位的内边距跟着侧栏动画变化；「适应画布」比例随画布尺寸逐帧跟上 */
   transition: padding-left var(--gallery-anim-duration) var(--gallery-anim-easing);
+}
+
+.gallery__canvas--panning {
+  cursor: grabbing;
+}
+
+.gallery__canvas--panning .gallery__artboard {
+  pointer-events: none;
 }
 
 /* 目录展开时给悬浮侧栏让出位置（16 + 260 + 16），「适应画布」缩放不会被侧栏挡住 */
