@@ -5,7 +5,7 @@
     <td-doc-content ref="tdDocContent" page-status="hidden">
       <td-doc-header ref="tdDocHeader" slot="doc-header" key="header" />
       <router-view />
-      <td-doc-footer slot="doc-footer" />
+      <td-doc-footer mode="site" slot="doc-footer" />
     </td-doc-content>
   </td-doc-layout>
 </template>

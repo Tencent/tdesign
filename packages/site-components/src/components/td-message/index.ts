@@ -1,4 +1,4 @@
-import { html, define } from 'hybrids';
+import { html, define } from '@utils/hybrids';
 import InfoCircleFilled from 'tdesign-icons-svg/src/info-circle-filled.svg?raw';
 import ErrorCircleFilled from 'tdesign-icons-svg/src/error-circle-filled.svg?raw';
 import CheckCircleFilled from 'tdesign-icons-svg/src/check-circle-filled.svg?raw';

@@ -21,7 +21,7 @@
  * }
  */
 
-import { html, type UpdateFunctionWithMethods } from 'hybrids';
+import { html, type UpdateFunctionWithMethods } from '@utils/hybrids';
 import SearchIcon from 'tdesign-icons-svg/src/search.svg?raw';
 import CloseIcon from 'tdesign-icons-svg/src/close.svg?raw';
 
@@ -143,8 +143,7 @@ function renderHitItem(
       <a
         class="TDesign-docsearch-hit__link"
         href=${item.url}
-        onclick=${(currentHost: DocSearchHost, event: MouseEvent) =>
-          handlers.onHitClick(currentHost, item, event)}
+        onclick=${(currentHost: DocSearchHost, event: MouseEvent) => handlers.onHitClick(currentHost, item, event)}
       >
         ${titleNode}${subtitleNode}${removeBtn}
       </a>

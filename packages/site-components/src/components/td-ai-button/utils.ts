@@ -156,7 +156,8 @@ const createTooltips = (framework: string, generateDemo: boolean, selectedText: 
 };
 
 const webChatInteraction = (framework: string, demoRequestBody: string) => {
-  const codeRegex = isFramework(framework) && framework in regExp ? regExp[framework as keyof typeof regExp] : undefined;
+  const codeRegex =
+    isFramework(framework) && framework in regExp ? regExp[framework as keyof typeof regExp] : undefined;
   let body = JSON.parse(demoRequestBody) as DemoRequestBody;
   if (window.webChatSdk && sdkInstance && codeRegex) {
     sdkInstance.onChatEnd((payload: { content: string }) => {

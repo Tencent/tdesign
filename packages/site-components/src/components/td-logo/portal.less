@@ -1,10 +1,11 @@
+/* stylelint-disable */
 .TDesign-header-logo__content {
-  --menu-list-width: 400px;
+  --menu-list-width: 440px;
   --list-direction: row;
 
   @media screen and (max-width: 750px) {
     --list-direction: column;
-    --menu-list-width: 212px;
+    --menu-list-width: 232px;
   }
 
   padding: 16px;
@@ -15,7 +16,6 @@
   span.title:hover {
     cursor: auto;
     color: var(--text-primary);
-    font-family: TencentSansW7;
   }
 
   .title {
@@ -26,7 +26,6 @@
     line-height: 22px;
     transition: color 0.2s linear;
     text-decoration: none;
-    font-family: TencentSansW7;
 
     &:hover {
       color: var(--brand-main);
@@ -50,7 +49,7 @@
     .item {
       text-decoration: none;
       padding: 8px;
-      width: 180px;
+      width: 200px;
       border-radius: var(--border-radius);
       box-sizing: border-box;
       display: flex;
@@ -72,6 +71,8 @@
       .icon {
         width: 40px;
         height: 40px;
+        flex: none;
+        object-fit: contain;
       }
 
       .details {

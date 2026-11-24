@@ -1,4 +1,4 @@
-import { html, define } from 'hybrids';
+import { html, define } from '@utils/hybrids';
 import style from './style.less?inline';
 
 const apiUrl = import.meta.env.VITE_CONTRIBUTORS_API_URL;

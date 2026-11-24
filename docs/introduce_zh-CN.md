@@ -20,7 +20,7 @@ TDesign 具有统一的 [价值观](https://tdesign.tencent.com/design/values)�
 
 TDesign 在创建之初就严格按照开源协作的原则运作，包括源代码在内的协作方案讨论、组件设计及 API 制定的过程也完全在公司内源上开放。也得到了公司内开发和设计同学的广泛关注，无论以什么身份参与，TDesign 都同样遵循平等、公开且严格的原则来对待，很多同学从个人项目中试用组件库开始，到提交第一个 `Bug Issue`，再到提交第一个 `Feature MR`，最后逐步参与到 `MR Review` 和方案制定工作中，成为核心贡献者。在过去的一年中，TDesign 关闭了 1k+ `Issue`，进行了 5k+ 次 `CR`，保持 [每周迭代](https://tdesign.tencent.com/vue/components/changelog) 发布新版本。
 
-组件库目前支持多个业界主流的开发技术栈，桌面端 Vue2、Vue3、React 和移动端 Vue3、微信小程序均已发布 1.x 版本，移动端 React、Flutter 和 Uniapp 已发布 `Alpha` 内测版本：
+组件库目前支持多个业界主流的开发技术栈，桌面端 Vue2、Vue3、React 和移动端 Vue3、React、微信小程序、Flutter、Uniapp 均已发布 1.0 LTS / Stable 版本：
 
 ### 桌面端
 
@@ -36,9 +36,9 @@ TDesign 在创建之初就严格按照开源协作的原则运作，包括源代
 | ----------------------------------------------------------------------- | ----------------- | --------- |
 | [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     | Vue 3.x 技术栈    | `1.0 LTS` |
 | [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   | 微信小程序        | `1.0 LTS` |
-| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React 18.x 技术栈 | `Alpha`   |
-| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | 1.17.0            | `Alpha`   |
-| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | -                 | `Alpha`   |
+| [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) | React 18.x 技术栈 | `1.0 LTS` |
+| [tdesign-flutter](https://github.com/Tencent/tdesign-flutter)           | Flutter           | `1.0 LTS` |
+| [tdesign-uniapp](https://github.com/Tencent/tdesign-miniprogram)        | Uniapp            | `1.0 LTS` |
 
 同时，TDesign 与腾讯内部在各自的领域具有丰富行业经验业务团队正协作中，提供更多具有业务属性的组件库产品，未来会有包括政务、零售等多个不同风格及组件类型的组件库产品开放出来，敬请期待！
 
@@ -48,7 +48,7 @@ TDesign 后续发展详细规划请参阅 [后续计划](/about/roadmap)。
 
 ### 完整
 
-TDesign 官方提供了多种业界主流的开发技术栈支持。目前，TDesign 已经支持了 [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/react) 和移动端 [Vue 3](https://tdesign.tencent.com/vue-mobile/)、[微信小程序](https://tdesign.tencent.com/miniprogram/) 的开发，其他技术栈如 Flutter 正在开发中。
+TDesign 官方提供了多种业界主流的开发技术栈支持。目前，TDesign 已经支持了 [Vue 2](https://tdesign.tencent.com/vue/)、[Vue 3](https://tdesign.tencent.com/vue-next/)、[React](https://tdesign.tencent.com/react) 和移动端 [Vue 3](https://tdesign.tencent.com/vue-mobile/)、[React](https://tdesign.tencent.com/mobile-react/)、[微信小程序](https://tdesign.tencent.com/miniprogram/)、[Flutter](https://tdesign.tencent.com/flutter/)、[Uniapp](https://tdesign.tencent.com/uniapp/) 的开发。
 
 为了实现开发与设计之间的高效协同，TDesign 中包含了丰富可复用的设计组件资源，如[色彩体系](https://tdesign.tencent.com/design/color)、[文字系统](https://tdesign.tencent.com/design/fonts)、[动效设计](https://tdesign.tencent.com/design/motion)、[图标元素](https://tdesign.tencent.com/design/icon)、[布局结构](https://tdesign.tencent.com/design/layout)等，覆盖支持 [Axure、Sketch、Figma、Adobe XD](https://tdesign.tencent.com/source) 等各大产品设计软件，将设计和开发者从重复劳动中释放出来。
 

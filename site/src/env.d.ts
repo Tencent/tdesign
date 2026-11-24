@@ -15,6 +15,8 @@ declare module '*.md' {
 }
 
 declare module '@tdesign/site-components' {
+  export function isIntranet(): boolean;
+  export function jumpLocation(url: string): string;
   export function registerLocaleChange(callback?: EventListener): void;
 }
 

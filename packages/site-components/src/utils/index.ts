@@ -1,12 +1,8 @@
-/* eslint-disable prefer-rest-params */
 /**
  * @function debounce 防抖
  * @param func, delay
  */
-export function debounce<TThis, TArgs extends unknown[]>(
-  func: (this: TThis, ...args: TArgs) => void,
-  delay = 300,
-) {
+export function debounce<TThis, TArgs extends unknown[]>(func: (this: TThis, ...args: TArgs) => void, delay = 300) {
   let timer: ReturnType<typeof setTimeout> | undefined;
   return function (this: TThis, ...args: TArgs) {
     func.apply(this, args);
@@ -19,14 +15,12 @@ export function debounce<TThis, TArgs extends unknown[]>(
  * @function throttle 节流
  * @param func, delay
  */
-export function throttle(this: unknown, func: (...args: unknown[]) => void, delay = 300) {
+export function throttle<TThis, TArgs extends unknown[]>(func: (this: TThis, ...args: TArgs) => void, delay = 300) {
   let last = 0;
-  const context = this;
-  const invocationArgs = Array.from(arguments);
-  return () => {
+  return function (this: TThis, ...args: TArgs) {
     const curr = +new Date();
     if (curr - last > delay) {
-      func.apply(context, invocationArgs);
+      func.apply(this, args);
       last = curr;
     }
   };
@@ -91,9 +85,9 @@ export const mobileBodyStyle = {
   },
 };
 
-// 判断是否内网
+// 根据当前页面是否为 WOA 域名选择内外网内容。
 export function isIntranet() {
-  return location.host.includes('oa.com');
+  return location.hostname === 'woa.com' || location.hostname.endsWith('.woa.com');
 }
 
 // 监听暗黑模式
@@ -130,7 +124,8 @@ export function parseBoolean(value: unknown, defaultValue = true) {
     return defaultValue;
   }
   if (typeof value === 'string') {
-    return value === 'true';
+    // 空字符串来自布尔属性（如 <td-doc-demo show-code>），应视为 true
+    return value === '' || value === 'true';
   }
   return Boolean(value);
 }

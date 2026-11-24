@@ -7,14 +7,6 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: 'module',
   },
-  overrides: [
-    {
-      files: ['test/**/*.ts'],
-      env: {
-        jest: true,
-      },
-    },
-  ],
   rules: {
     'no-undef': 'off',
     'no-unused-vars': 'off',

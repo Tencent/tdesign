@@ -38,6 +38,7 @@ export interface FooterLink {
 export interface FooterGroup {
   title: string;
   links: FooterLink[];
+  desktopOnly?: boolean;
 }
 
 export interface SiteLocale {
@@ -46,6 +47,12 @@ export interface SiteLocale {
     emptyInfo: string;
   };
   footer: {
+    brandDescription: string;
+    navigationLabel: string;
+    communityDescription: string;
+    scanQrCode: string;
+    communityQrCode: string;
+    tencentCloud: string;
     copyright: string;
     weComGroup: string;
     weComGroupDesc: string;

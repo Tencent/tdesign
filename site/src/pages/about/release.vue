@@ -22,7 +22,7 @@
     </div>
     <t-loading v-else />
 
-    <td-doc-footer slot="doc-footer"></td-doc-footer>
+    <td-doc-footer mode="site" slot="doc-footer"></td-doc-footer>
   </td-doc-content>
 </template>
 
@@ -123,7 +123,7 @@ onMounted(() => {
 <style lang="less">
 .release {
   &__time {
-    font-family: PingFang SC;
+    font-family: TCloudNumberDigits, 'PingFang SC', sans-serif;
     font-weight: 500;
     font-size: 20px;
     line-height: 28px;
@@ -218,7 +218,7 @@ onMounted(() => {
           }
 
           &[name^='Uniapp'] {
-            background-image: url(@/assets/uniapp-logo.png);
+            background-image: url(@/assets/uniapp-logo.svg);
           }
 
           &[name^='Figma'] {

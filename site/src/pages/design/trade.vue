@@ -24,7 +24,7 @@
         </t-button>
       </div>
     </div>
-    <td-doc-footer :style="footerStyle" />
+    <td-doc-footer mode="site" :style="footerStyle" />
   </div>
 </template>
 
@@ -269,13 +269,13 @@ const footerStyle = computed<CSSProperties>(() => ({
       font-size: 36px;
       line-height: 44px;
       margin-bottom: 16px;
-      color: rgba(0, 0, 0, 0.9);
+      color: var(--text-primary);
     }
 
     .description {
       font-size: 14px;
       line-height: 22px;
-      color: rgba(0, 0, 0, 0.6);
+      color: var(--text-secondary);
     }
   }
 

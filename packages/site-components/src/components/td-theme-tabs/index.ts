@@ -1,4 +1,4 @@
-import { html, define } from 'hybrids';
+import { html, define } from '@utils/hybrids';
 import style from './style.less?inline';
 import moonIcon from '@images/moon.svg?raw';
 import sunIcon from '@images/sun.svg?raw';
@@ -20,6 +20,7 @@ interface ThemeTabsProps {
 }
 
 type ThemeTabsHost = ThemeTabsProps & HTMLElement;
+const blockStylePendingHosts = new WeakSet<ThemeTabsHost>();
 
 function isTheme(value: string | null): value is Theme {
   return value === 'light' || value === 'dark';
@@ -41,7 +42,10 @@ function handleTabClick(host: ThemeTabsHost, currentTheme: Theme) {
 }
 
 function initBlockStyleMap(host: ThemeTabsHost) {
+  if (blockStylePendingHosts.has(host)) return;
+  blockStylePendingHosts.add(host);
   requestAnimationFrame(() => {
+    blockStylePendingHosts.delete(host);
     const { shadowRoot } = host;
     if (!shadowRoot) return;
     const items = shadowRoot.querySelectorAll<HTMLElement>('.item');

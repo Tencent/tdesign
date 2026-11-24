@@ -29,7 +29,7 @@ jobs:
       tdesign_uniapp_domain: ${{ steps.site-domain.outputs.tdesign_uniapp_domain }}
     steps:
       - name: Download pr id
-        uses: dawidd6/action-download-artifact@v26
+        uses: dawidd6/action-download-artifact@v27
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -62,10 +62,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     needs: preview-context
-    environment:
-      name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v26
+      - uses: dawidd6/action-download-artifact@v27
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -78,10 +76,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v26
+      - uses: dawidd6/action-download-artifact@v27
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -95,10 +91,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v26
+      - uses: dawidd6/action-download-artifact@v27
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -112,10 +106,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v26
+      - uses: dawidd6/action-download-artifact@v27
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -129,10 +121,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v26
+      - uses: dawidd6/action-download-artifact@v27
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -146,10 +136,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v26
+      - uses: dawidd6/action-download-artifact@v27
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -163,10 +151,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v26
+      - uses: dawidd6/action-download-artifact@v27
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -180,10 +166,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v26
+      - uses: dawidd6/action-download-artifact@v27
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -196,10 +180,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     needs: preview-context
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
-      - uses: dawidd6/action-download-artifact@v26
+      - uses: dawidd6/action-download-artifact@v27
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
@@ -223,8 +205,6 @@ jobs:
       - tdesign-vue-next-chat
       - tdesign-uniapp
     runs-on: ubuntu-latest
-    environment:
-      name: preview
     steps:
       - name: jobs report
         id: report

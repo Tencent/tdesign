@@ -1,3 +1,5 @@
+import { isRecord } from '@/utils/type';
+
 const CONTRIBUTORS_API = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
 
 interface Contributor {
@@ -27,10 +29,6 @@ function renderList(userList: string[]) {
   });
 
   list.replaceChildren(fragment);
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 fetch(CONTRIBUTORS_API)

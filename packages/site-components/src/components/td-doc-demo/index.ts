@@ -1,5 +1,6 @@
-import { html, define, dispatch } from 'hybrids';
+import { html, define, dispatch } from '@utils/hybrids';
 import Prism from 'prismjs';
+import { parseBoolean } from '@utils';
 import style from './style.less?inline';
 import codeIcon from '@images/code.svg?raw';
 import 'prismjs/components/prism-markup.js';
@@ -20,25 +21,39 @@ interface DemoHost {
   mode: string;
   currentLangIndex: number;
   languages: string | undefined;
+  currentRenderCode: string;
   theme: string;
-  activeStyleMap: object | null | undefined;
+  activeStyleMap: Record<string, TabStyle> | null | undefined;
 }
 
-function getTabStyle(styleMap: object | null | undefined, tab: string): TabStyle | undefined {
-  const value = Object.entries(styleMap ?? {}).find(([key]) => key === tab)?.[1];
-  if (typeof value !== 'object' || value === null) return undefined;
-  const { width, transform } = value as Partial<TabStyle>;
-  return typeof width === 'string' && typeof transform === 'string' ? { width, transform } : undefined;
+function getTabStyle(styleMap: Record<string, TabStyle> | null | undefined, tab: string): TabStyle | undefined {
+  return styleMap?.[tab];
 }
 
 export default define<DemoHost>({
   tag: 'td-doc-demo',
   code: '',
   language: 'jsx',
-  showCode: false,
+  showCode: {
+    value: (_host, v) => parseBoolean(v, false),
+  },
   mode: 'auto', // auto open
   currentLangIndex: 0,
   languages: undefined, // multiple languages display
+  currentRenderCode: {
+    value: (host) => {
+      const languageArr = typeof host.languages === 'string' ? host.languages.split(',') : [];
+      const currentLang = languageArr[host.currentLangIndex] || '';
+      return host.dataset?.[currentLang] || host.dataset?.[currentLang.toLocaleLowerCase()] || host.code;
+    },
+    connect: (host, _key, invalidate) => {
+      const observer = new MutationObserver((mutations) => {
+        if (mutations.some(({ attributeName }) => attributeName?.startsWith('data-'))) invalidate();
+      });
+      observer.observe(host, { attributes: true });
+      return () => observer.disconnect();
+    },
+  },
   theme: {
     value: (_host, v) => v || localStorage.getItem('--tdesign-theme') || 'light',
     connect(host, key, invalidate) {
@@ -63,22 +78,17 @@ export default define<DemoHost>({
         }
 
         const items = host.shadowRoot.querySelectorAll<HTMLElement>('.TDesign-doc-demo-tabs__item');
-        let styleMap: object | null = {};
+        let styleMap: Record<string, TabStyle> | null = {};
         items.forEach((item) => {
           if (!item.offsetWidth) {
             styleMap = null;
-          } else {
+          } else if (styleMap) {
             const { tab } = item.dataset;
-            if (tab && styleMap) {
-              Object.defineProperty(styleMap, tab, {
-                value: {
-                  width: `${item.offsetWidth}px`,
-                  transform: `translate3d(${item.offsetLeft}px, 0, 0)`,
-                },
-                enumerable: true,
-                configurable: true,
-                writable: true,
-              });
+            if (tab) {
+              styleMap[tab] = {
+                width: `${item.offsetWidth}px`,
+                transform: `translate3d(${item.offsetLeft}px, 0, 0)`,
+              };
             }
           }
         });
@@ -95,7 +105,7 @@ export default define<DemoHost>({
     },
   },
   render: (host) => {
-    let { code, language, showCode, mode, theme, currentLangIndex, languages, activeStyleMap } = host;
+    let { language, showCode, mode, theme, currentLangIndex, languages, currentRenderCode, activeStyleMap } = host;
     const languageArr = typeof languages === 'string' ? languages.split(',') : [];
 
     const tabsDisplay =
@@ -103,15 +113,15 @@ export default define<DemoHost>({
       languageArr.filter((lang) => host.dataset?.[lang] || host.dataset?.[lang.toLocaleLowerCase()]).length ==
         languageArr.length;
 
-    const currentLang = languageArr[currentLangIndex] || '';
-    const currentCode = host.dataset?.[currentLang] || host.dataset?.[currentLang.toLocaleLowerCase()] || code;
-    const highlightCode = Prism.highlight(currentCode, Prism.languages[language], language);
+    const highlightCode = Prism.highlight(currentRenderCode, Prism.languages[language], language);
     const activeStyle =
       activeStyleMap && languageArr.length ? getTabStyle(activeStyleMap, languageArr[currentLangIndex]) : {};
+    // mode 为 open 时始终保持展开，且不渲染切换按钮
+    const expanded = mode === 'open' || showCode;
     const showCodeStyle = {
       transitionDuration: '.2s',
-      maxHeight: showCode ? '560px' : 0,
-      transitionTimingFunction: showCode ? 'cubic-bezier(.82, 0, 1, .9)' : 'ease',
+      maxHeight: expanded ? '560px' : 0,
+      transitionTimingFunction: expanded ? 'cubic-bezier(.82, 0, 1, .9)' : 'ease',
     };
 
     const handleClick = (index: number) => {
@@ -125,9 +135,7 @@ export default define<DemoHost>({
         <div class="TDesign-doc-demo__footer">
           <div class="TDesign-doc-demo__btns">
             <slot name="action"></slot>
-            <td-doc-copy code=${
-              host.dataset?.[currentLang] || host.dataset?.[currentLang.toLocaleLowerCase()] || code
-            } theme=${mode === 'open' ? 'dark' : 'light'}></td-doc-copy>
+            <td-doc-copy code=${currentRenderCode} theme=${mode === 'open' ? 'dark' : 'light'}></td-doc-copy>
             ${
               mode === 'open'
                 ? html``

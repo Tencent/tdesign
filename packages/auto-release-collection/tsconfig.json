@@ -11,5 +11,5 @@
     "sourceMap": false,
     "esModuleInterop": true
   },
-  "include": ["src"],
+  "include": ["src"]
 }

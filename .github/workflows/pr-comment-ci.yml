@@ -1,0 +1,18 @@
+name: pr-comment-ci
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  call-comment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3
+        with:
+          runtime: node@22
+          version: v12
+
+      - uses: TDesignOteam/tdesign-pr-trigger-action@main
+        with:
+          token: ${{ secrets.TDESIGN_BOT_TOKEN }}
