@@ -1,3 +1,7 @@
+[default]
+# TDesign 组件 API 的属性名（如 Tree 的 actived），拼写由组件库决定，只在模板属性绑定处放行
+extend-ignore-re = [":actived="]
+
 [default.extend-words]
 hd = "hd"
 metalness="metalness"
