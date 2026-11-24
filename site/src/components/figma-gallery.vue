@@ -1,38 +1,44 @@
 <template>
   <section class="gallery">
     <div v-if="loadStatus === 'loading'" class="gallery__placeholder">
-      <t-loading size="small" text="正在加载设计资源…" />
+      <t-loading size="small" :text="t('figmaGallery.loading')" />
     </div>
     <div v-else-if="loadStatus === 'error'" class="gallery__placeholder">
-      <t-empty type="fail" title="加载失败" :description="errorMessage">
+      <t-empty type="fail" :title="t('figmaGallery.loadFailed')" :description="errorMessage">
         <template #action>
-          <t-button size="small" @click="loadManifest">重试</t-button>
+          <t-button size="small" @click="loadManifest">{{ t('figmaGallery.retry') }}</t-button>
         </template>
       </t-empty>
     </div>
     <div v-else-if="!pages.length" class="gallery__placeholder">
-      <t-empty title="该 manifest 里没有可展示的页面" />
+      <t-empty :title="t('figmaGallery.emptyPages')" />
     </div>
 
     <div v-else class="gallery__body" :class="{ 'gallery__body--collapsed': sidebarCollapsed }">
       <!-- v-show：收起后保留树的展开状态和搜索词；Transition：收起 / 展开时从左上角的展开按钮处缩放 -->
       <Transition name="gallery-sidebar">
-        <nav v-show="!sidebarCollapsed" class="gallery__sidebar" aria-label="页面列表">
-          <t-input v-model="keyword" class="gallery__search" size="small" placeholder="搜索页面" clearable>
+        <nav v-show="!sidebarCollapsed" class="gallery__sidebar" :aria-label="t('figmaGallery.pageList')">
+          <t-input
+            v-model="keyword"
+            class="gallery__search"
+            size="small"
+            :placeholder="t('figmaGallery.searchPlaceholder')"
+            clearable
+          >
             <template #prefix-icon><SearchIcon /></template>
           </t-input>
           <div class="gallery__tree-head">
-            <span>全部</span>
+            <span>{{ t('figmaGallery.all') }}</span>
             <span class="gallery__count">{{
               searchText ? `${matchedPageCount} / ${pages.length}` : pages.length
             }}</span>
-            <t-tooltip content="收起目录">
+            <t-tooltip :content="t('figmaGallery.collapseSidebar')">
               <t-button
                 class="gallery__fold"
                 shape="square"
                 variant="text"
                 size="small"
-                aria-label="收起目录"
+                :aria-label="t('figmaGallery.collapseSidebar')"
                 @click="sidebarCollapsed = true"
               >
                 <template #icon><MenuFoldIcon /></template>
@@ -47,7 +53,7 @@
             :actived="highlightedKeys"
             activable
             hover
-            empty="没有匹配的页面"
+            :empty="t('figmaGallery.noMatchedPages')"
             @expand="onTreeExpand"
             @click="onTreeClick"
           >
@@ -67,7 +73,7 @@
 
       <div v-if="activePage" class="gallery__stage">
         <!-- 目录收起后悬浮在画布左上角，点击展开 -->
-        <t-tooltip v-if="sidebarCollapsed" content="展开目录" placement="right">
+        <t-tooltip v-if="sidebarCollapsed" :content="t('figmaGallery.expandSidebar')" placement="right">
           <t-button class="gallery__unfold" variant="outline" size="small" @click="sidebarCollapsed = false">
             <template #icon><MenuUnfoldIcon /></template>
             <span class="gallery__unfold-name">{{ activePage.label }}</span>
@@ -141,10 +147,14 @@
           </div>
         </div>
 
-        <aside v-if="inspectorKind" class="gallery__inspector narrow-scrollbar" aria-label="图层属性">
+        <aside
+          v-if="inspectorKind"
+          class="gallery__inspector narrow-scrollbar"
+          :aria-label="t('figmaGallery.inspector.label')"
+        >
           <div class="gallery__inspector-head">
             <span class="gallery__inspector-name" :title="componentName">{{ componentName }}</span>
-            <t-tooltip content="取消选中（Esc）">
+            <t-tooltip :content="t('figmaGallery.inspector.deselect')">
               <t-button shape="square" variant="text" size="small" @click="selectedId = ''">
                 <template #icon><CloseIcon /></template>
               </t-button>
@@ -177,19 +187,19 @@
               variant="text"
               theme="primary"
               size="small"
-              @click="copyText(componentName, '名称')"
+              @click="copyText(componentName, t('figmaGallery.copiedName'))"
             >
               <template #icon><CopyIcon /></template>
-              复制名称
+              {{ t('figmaGallery.copyName') }}
             </t-button>
             <t-button
               variant="text"
               theme="primary"
               size="small"
-              @click="copyText(figmaNodeUrl(selectedNode.id), '链接')"
+              @click="copyText(figmaNodeUrl(selectedNode.id), t('figmaGallery.copiedLink'))"
             >
               <template #icon><LinkIcon /></template>
-              复制链接
+              {{ t('figmaGallery.copyLink') }}
             </t-button>
             <t-link
               theme="primary"
@@ -207,18 +217,20 @@
 
         <!-- 缩放控件悬浮在画布右下角 -->
         <div class="gallery__zoom">
-          <t-tooltip content="缩小">
+          <t-tooltip :content="t('figmaGallery.zoomOut')">
             <t-button shape="square" variant="text" size="small" @click="stepZoom(-1)">
               <template #icon><ZoomOutIcon /></template>
             </t-button>
           </t-tooltip>
           <span class="gallery__zoom-value">{{ zoomText }}</span>
-          <t-tooltip content="放大">
+          <t-tooltip :content="t('figmaGallery.zoomIn')">
             <t-button shape="square" variant="text" size="small" @click="stepZoom(1)">
               <template #icon><ZoomInIcon /></template>
             </t-button>
           </t-tooltip>
-          <t-button variant="text" size="small" :disabled="zoom === 'fit'" @click="zoom = 'fit'">适应画布</t-button>
+          <t-button variant="text" size="small" :disabled="zoom === 'fit'" @click="zoom = 'fit'">{{
+            t('figmaGallery.fitCanvas')
+          }}</t-button>
         </div>
       </div>
     </div>
@@ -227,6 +239,7 @@
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowReactive, watch, watchEffect } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { MessagePlugin } from 'tdesign-vue-next';
 import {
   CloseIcon,
@@ -243,6 +256,8 @@ import {
   ZoomOutIcon,
 } from 'tdesign-icons-vue-next';
 
+import messages from '@/locales/components/figma-gallery';
+
 const props = defineProps({
   /** manifest.json 地址；开发时由 Vite 从 client/public 映射 */
   manifestUrl: { type: String, default: '/figma-assets/web/manifest.json' },
@@ -254,6 +269,8 @@ const props = defineProps({
   iconMode: { type: Boolean, default: false },
 });
 
+const { t } = useI18n({ messages });
+
 /** 缩放档位，100% = 设计稿 1:1 */
 const ZOOM_STEPS = [0.05, 0.1, 0.25, 0.5, 0.75, 1, 1.5, 2];
 const MAX_WIREFRAME_NODES = 4000;
@@ -263,9 +280,20 @@ const PRELOAD_MARGIN = '200px';
 const SKELETON_ROW_COL = [{ type: 'rect', width: '100%', height: '100%' }];
 /** 下载脚本按顶层图层拆分后的 manifest 版本 */
 const MANIFEST_SCHEMA = 2;
+/** manifest 加载失败时提示运行的下载命令 */
+const DOWNLOAD_COMMAND = 'npm run download:figma -- --all-pages --format svg';
 
 const loadStatus = ref('loading');
-const errorMessage = ref('');
+/** manifest 加载失败的原因：{ key, params } 为本地化文案，{ raw } 为原始错误信息；切换语言时提示跟着更新 */
+const loadError = ref(null);
+const errorMessage = computed(() => {
+  const error = loadError.value;
+  if (!error) return '';
+  return t('figmaGallery.errors.hint', {
+    reason: error.key ? t(error.key, error.params ?? {}) : error.raw,
+    command: `${DOWNLOAD_COMMAND} <${t('figmaGallery.figmaLink')}>`,
+  });
+});
 const manifest = ref(null);
 const keyword = ref('');
 /** 左侧目录收起：收起后只在画布左上角悬浮一个展开按钮；默认收起 */
@@ -296,7 +324,7 @@ const fullRequested = new Set();
 const pendingPick = ref(null);
 
 function cleanName(name) {
-  return String(name ?? '').trim() || '未命名';
+  return String(name ?? '').trim() || t('figmaGallery.untitled');
 }
 
 const manifestBase = computed(() => props.manifestUrl.slice(0, props.manifestUrl.lastIndexOf('/') + 1));
@@ -500,7 +528,7 @@ function requestAsset(src, parse) {
     assets.set(src, { status: 'loading' });
     const request = fetch(src)
       .then(async (response) => {
-        if (!response.ok) throw new Error(`加载失败（${response.status}）`);
+        if (!response.ok) throw new Error(t('figmaGallery.errors.http', { status: response.status }));
         return parse(response);
       })
       .then(
@@ -717,14 +745,20 @@ function textColors(node) {
 const styleRows = computed(() => {
   const node = selectedNode.value;
   if (!node) return [];
-  const rows = [{ key: 'size', label: '尺寸', value: `${formatNumber(node.w)} × ${formatNumber(node.h)}` }];
-  if (node.fills?.length) rows.push({ key: 'fills', label: '填充', colors: node.fills });
+  const rows = [
+    {
+      key: 'size',
+      label: t('figmaGallery.inspector.size'),
+      value: `${formatNumber(node.w)} × ${formatNumber(node.h)}`,
+    },
+  ];
+  if (node.fills?.length) rows.push({ key: 'fills', label: t('figmaGallery.inspector.fills'), colors: node.fills });
   const texts = textColors(node);
-  if (texts.length) rows.push({ key: 'text-color', label: '文字颜色', colors: texts });
+  if (texts.length) rows.push({ key: 'text-color', label: t('figmaGallery.inspector.textColor'), colors: texts });
   if (node.radius !== undefined) {
     rows.push({
       key: 'radius',
-      label: '圆角',
+      label: t('figmaGallery.inspector.radius'),
       value: Array.isArray(node.radius) ? node.radius.join(' / ') : String(node.radius),
     });
   }
@@ -748,8 +782,8 @@ const variantRows = computed(() => {
 const inspectorGroups = computed(() => {
   if (inspectorKind.value === 'icon') return [];
   const groups = [
-    { key: 'style', title: '样式', rows: styleRows.value, labelWidth: '64px' },
-    { key: 'variant', title: '变体属性', rows: variantRows.value, labelWidth: '128px' },
+    { key: 'style', title: t('figmaGallery.inspector.style'), rows: styleRows.value, labelWidth: '64px' },
+    { key: 'variant', title: t('figmaGallery.inspector.variant'), rows: variantRows.value, labelWidth: '128px' },
   ];
   return groups.filter((group) => group.rows.length);
 });
@@ -888,12 +922,12 @@ function rectStyle(rect) {
   };
 }
 
-async function copyText(text, label) {
+async function copyText(text, successMessage) {
   try {
     await navigator.clipboard.writeText(text);
-    MessagePlugin.success(`已复制${label}`);
+    MessagePlugin.success(successMessage);
   } catch {
-    MessagePlugin.error('复制失败，请检查浏览器权限');
+    MessagePlugin.error(t('figmaGallery.copyFailed'));
   }
 }
 
@@ -918,7 +952,8 @@ function sanitizeSvg(root) {
 function parseSvg(source) {
   const doc = new DOMParser().parseFromString(source, 'image/svg+xml');
   const parsed = doc.documentElement;
-  if (parsed.localName !== 'svg' || doc.querySelector('parsererror')) throw new Error('SVG 解析失败');
+  if (parsed.localName !== 'svg' || doc.querySelector('parsererror'))
+    throw new Error(t('figmaGallery.errors.svgParse'));
   const svg = document.adoptNode(parsed);
   sanitizeSvg(svg);
 
@@ -952,10 +987,10 @@ const artboardStyle = computed(() => {
 const zoomText = computed(() => (displayScale.value ? `${Math.round(displayScale.value * 1000) / 10}%` : '-'));
 
 /**
- * 缩略图够不够清晰：屏幕上的显示倍率（含设备像素比）超过缩略图倍率的 1.5 倍就会明显发糊，
+ * 缩略图够不够清晰：屏幕上的显示倍率（含设备像素比）一超过缩略图倍率，缩略图就要被拉伸、会发糊，
  * 这时进入可视区的图层块改用完整图
  */
-const THUMB_UPSCALE_LIMIT = 1.5;
+const THUMB_UPSCALE_LIMIT = 1;
 const detailZoom = computed(() => {
   const thumbScale = Number(manifest.value?.thumbScale) || 0;
   const scale = displayScale.value ?? 0;
@@ -1098,17 +1133,22 @@ function findDefaultPage() {
 /** 每次加载递增；manifestUrl 连续切换时只采用最后一次请求的结果 */
 let manifestRequestId = 0;
 
+/** 带文案 key 的错误，展示时再按当前语言翻译 */
+function localizedError(key, params) {
+  return Object.assign(new Error(key), { i18n: { key, params } });
+}
+
 async function loadManifest() {
   const requestId = ++manifestRequestId;
   loadStatus.value = 'loading';
-  errorMessage.value = '';
+  loadError.value = null;
   try {
     const response = await fetch(props.manifestUrl, { cache: 'no-cache' });
-    if (!response.ok) throw new Error(`加载失败（${response.status}）`);
+    if (!response.ok) throw localizedError('figmaGallery.errors.http', { status: response.status });
     const payload = await response.json();
     if (requestId !== manifestRequestId) return;
-    if (!Array.isArray(payload.pages)) throw new Error('manifest 格式不正确：缺少 pages');
-    if (payload.schema !== MANIFEST_SCHEMA) throw new Error('manifest 是旧格式（没有按图层拆分）');
+    if (!Array.isArray(payload.pages)) throw localizedError('figmaGallery.errors.missingPages');
+    if (payload.schema !== MANIFEST_SCHEMA) throw localizedError('figmaGallery.errors.legacySchema');
     assets.clear();
     assetRequests.clear();
     fullRequested.clear();
@@ -1120,7 +1160,7 @@ async function loadManifest() {
     loadStatus.value = 'ready';
   } catch (error) {
     if (requestId !== manifestRequestId) return;
-    errorMessage.value = `${error.message}。请先运行 npm run download:figma -- --all-pages --format svg <链接>`;
+    loadError.value = error.i18n ?? { raw: error.message };
     loadStatus.value = 'error';
   }
 }
