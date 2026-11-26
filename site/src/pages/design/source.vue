@@ -19,17 +19,16 @@
       <div class="tdesign-source-content-box">
         <h2 class="tdesign-source-content__title">{{ t('source.preview') }}</h2>
       </div>
-      <div class="tdesign-source-content__iframe-wrap">
-        <iframe
-          class="tdesign-source-content__iframe"
-          :src="previewUrl[tab]"
-          width="100%"
-          height="100%"
-          allowfullscreen
-        ></iframe>
+      <div class="tdesign-source-content__gallery-wrap">
+        <FigmaGallery
+          :manifest-url="galleryManifestUrl"
+          :default-page="galleryDefaultPage"
+          :figma-url="galleryFigmaUrl"
+          :icon-mode="tab === 'icons'"
+        />
       </div>
 
-      <div class="tdesign-source-content-box">
+      <div class="tdesign-source-content-box" v-if="sourceList.length">
         <ul class="tdesign-source-content__list">
           <li
             class="tdesign-source-content__list-item"
@@ -66,7 +65,7 @@
         </ul>
       </div>
 
-      <div class="tdesign-source-content-box">
+      <div class="tdesign-source-content-box" v-if="tab !== 'icons'">
         <h2 class="tdesign-source-content__title">{{ t('source.contributors') }}</h2>
         <div class="contributor-list">
           <a
@@ -103,12 +102,13 @@ import mdIcon from '@/assets/md-logo.svg';
 import mastergoIcon from '@/assets/mastergo-logo.svg';
 import ryIcon from '@/assets/ry-logo.svg';
 
-import { webSourceList, mobileSourceList, sourceDownloadUrl, webChartSourceList } from '@/constants';
+import FigmaGallery from '@/components/figma-gallery.vue';
+import { webSourceList, mobileSourceList, sourceDownloadUrl, webChartSourceList, iconSourceList } from '@/constants';
 import messages from '@/locales/pages/design-shell';
 
 const contributorsUrl = 'https://service-edbzjd6y-1257786608.hk.apigw.tencentcs.com/release/github-contributors/list';
 
-type ResourceTab = 'web' | 'mobile' | 'web-chart';
+type ResourceTab = 'web' | 'mobile' | 'web-chart' | 'icons';
 type SourceIcon = 'figma' | 'sketch' | 'xd' | 'axure' | 'codesign' | 'jssj' | 'pixso' | 'md' | 'mastergo' | 'ry';
 type SourceActionType = 'download' | 'jump';
 
@@ -126,7 +126,7 @@ interface SourceItem {
 }
 
 interface TabOption {
-  tab: ResourceTab | 'icons';
+  tab: ResourceTab;
   name: string;
 }
 
@@ -164,18 +164,36 @@ const iconMap = {
   mastergo: mastergoIcon,
   ry: ryIcon,
 };
-const previewUrl = {
-  web: 'https://codesign.qq.com/s/705849079455594?menu_aside=null',
-  mobile: 'https://codesign.qq.com/s/705854516818782?menu_aside=null',
-  'web-chart': 'https://codesign.qq.com/s/705850116517658?menu_aside=null',
+const galleryManifestUrlMap: Record<ResourceTab, string> = {
+  web: 'https://tdesign.gtimg.com/design-source/figma/web/manifest.json',
+  mobile: 'https://tdesign.gtimg.com/design-source/figma/mobile/manifest.json',
+  'web-chart': 'https://tdesign.gtimg.com/design-source/figma/charts/manifest.json',
+  icons: 'https://tdesign.gtimg.com/design-source/figma/icons/manifest.json',
 };
+const galleryManifestUrl = computed(() => galleryManifestUrlMap[tab.value]);
+/** 各资源默认打开的 Figma 页面（按页面名匹配） */
+const galleryDefaultPageMap: Record<ResourceTab, string> = {
+  web: 'Styles 全局样式',
+  mobile: 'Styles 全局样式',
+  'web-chart': 'Styles 全局样式',
+  icons: 'Icon 图标',
+};
+const galleryDefaultPage = computed(() => galleryDefaultPageMap[tab.value]);
+/** 画布右下角「在 Figma 中打开」：源文件需要团队权限，统一跳到公开的 Community 页 */
+const galleryFigmaUrlMap: Record<ResourceTab, string> = {
+  web: 'https://www.figma.com/community/file/1053279236128724321',
+  mobile: 'https://www.figma.com/community/file/1053279585699097956',
+  'web-chart': 'https://www.figma.com/community/file/1202507505468414219',
+  icons: 'https://www.figma.com/community/file/1543189085651776104',
+};
+const galleryFigmaUrl = computed(() => galleryFigmaUrlMap[tab.value]);
 const tabList = computed<TabOption[]>(() => [
   { tab: 'web', name: t('source.tabs.web') },
   { tab: 'mobile', name: t('source.tabs.mobile') },
   { tab: 'web-chart', name: t('source.tabs.webChart') },
   { tab: 'icons', name: t('source.tabs.icons') },
 ]);
-const resourceTabs: ResourceTab[] = ['web', 'mobile', 'web-chart'];
+const resourceTabs: ResourceTab[] = ['web', 'mobile', 'web-chart', 'icons'];
 const isResourceTab = (value: unknown): value is ResourceTab =>
   typeof value === 'string' && resourceTabs.includes(value as ResourceTab);
 const tab = computed<ResourceTab>({
@@ -189,6 +207,7 @@ const designContributor = computed<string[]>(() => {
     web: webDesignContributor.value,
     mobile: mobileDesignContributor.value,
     'web-chart': webChartDesignContributor.value,
+    icons: [],
   };
   return map[tab.value];
 });
@@ -197,6 +216,11 @@ const sourceList = computed<SourceItem[]>(() => {
     web: currentWebSourceList.value,
     mobile: currentMobileSourceList.value,
     'web-chart': webChartSourceList.map((item) => ({
+      ...item,
+      icon: item.icon as SourceIcon,
+      actionType: item.actionType as SourceActionType,
+    })),
+    icons: iconSourceList.map((item) => ({
       ...item,
       icon: item.icon as SourceIcon,
       actionType: item.actionType as SourceActionType,
@@ -282,7 +306,6 @@ onMounted(() => {
     tabs.value.onchange = (event: Event) => {
       const { detail: currentTab } = event as CustomEvent<string>;
       if (isResourceTab(currentTab)) tab.value = currentTab;
-      else if (currentTab === 'icons') window.open(locale.value === 'en-US' ? '/icons-en' : '/icons', '_blank');
     };
   }
   fetchDesignContributors();
@@ -300,12 +323,6 @@ onMounted(() => {
 
   @media screen and (max-width: 959px) {
     --source-page-padding: 24px;
-  }
-
-  @media screen and (max-width: 1344px) {
-    --iframe-height: calc((100vw - 48px * 2) * (632 / 1344));
-    --iframe-border: none;
-    --iframe-border-radius: 0;
   }
 
   .tdesign-source-header {
@@ -330,6 +347,10 @@ onMounted(() => {
       max-width: 1440px;
       margin: 0 auto;
       box-sizing: border-box;
+
+      &:last-child {
+        padding-bottom: 80px;
+      }
     }
 
     &__title {
@@ -337,24 +358,10 @@ onMounted(() => {
       color: var(--text-primary);
     }
 
-    &__iframe {
-      border-radius: var(--iframe-border-radius, 6px);
-      padding: 0;
-      border: 0;
-      height: var(--iframe-height, 576px);
-      min-height: 376px;
-      max-height: 576px;
-      display: block;
-      margin-top: -56px;
-
-      &-wrap {
-        border-radius: var(--iframe-border-radius, 6px);
-        overflow: hidden;
-        margin: 24px auto 48px;
-        max-width: 1344px;
-        border: var(--iframe-border, 1px solid var(--component-border));
-        box-sizing: border-box;
-      }
+    &__gallery-wrap {
+      margin: 24px auto 48px;
+      max-width: 1344px;
+      box-sizing: border-box;
     }
 
     &__list {
@@ -554,7 +561,6 @@ onMounted(() => {
 
   .contributor-list {
     margin-top: 24px;
-    margin-bottom: 80px;
     display: flex;
     flex-wrap: wrap;
     row-gap: 16px;
