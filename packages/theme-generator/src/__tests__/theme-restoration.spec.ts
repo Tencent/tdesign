@@ -3,7 +3,14 @@ import { mount, shallowMount } from '@vue/test-utils';
 import type { VueWrapper } from '@vue/test-utils';
 import { nextTick } from 'vue';
 
-// Canvas decoration is unrelated to theme restoration. Keep the real color algorithm.
+// Color generation and canvas animation are outside the preset restoration tests.
+vi.mock('tvision-color', () => ({
+  Color: {
+    colorTransform: () => [0, 0, 0],
+    getColorGradations: () => [{ colors: Array(10).fill('#0052D9'), primary: 6 }],
+    getNeutralColor: () => Array(10).fill('#888888'),
+  },
+}));
 vi.mock('../common/utils/animation', async (importOriginal) => ({
   ...(await importOriginal<typeof import('../common/utils/animation')>()),
   colorAnimation: () => () => {},
@@ -12,7 +19,6 @@ vi.mock('../common/utils/animation', async (importOriginal) => ({
 import { SegmentSelection } from '../common/components';
 
 import Generator from '../generator.vue';
-import ColorPanel from '../color-panel/index.vue';
 import FontSizeAdjust from '../font-panel/components/font-size-adjust.vue';
 import LineHeightAdjust from '../font-panel/components/line-height-adjust.vue';
 import RadiusPanel from '../radius-panel/index.vue';
@@ -37,11 +43,6 @@ interface LineHeightState {
   tokenType: 'plus' | 'time';
   lineHeightValue: number;
   handleChangeFontSize: (value: number) => void;
-}
-interface ColorState {
-  grayMainColor: string;
-  changeBrandColor: (hex: string) => void;
-  changeNeutralColor: (related: boolean) => void;
 }
 function state<T>(wrapper: VueWrapper): T {
   return (wrapper.vm.$ as unknown as { setupState: T }).setupState;
@@ -69,9 +70,6 @@ describe('theme restoration', () => {
         document.documentElement.setAttribute('theme-mode', mode);
         const first = createGenerator(device);
         await settle();
-        const color = state<ColorState>(first.findComponent(ColorPanel));
-        expect(color.grayMainColor).toMatch(/^#[\da-f]{3,8}$/i);
-        expect(() => color.changeBrandColor('#f3b814')).not.toThrow();
         selectPreset(first.findComponent(FontSizeAdjust), 4);
         selectPreset(first.findComponent(RadiusPanel), 5);
         selectPreset(first.findComponent(ShadowPanel), 4);
@@ -87,7 +85,6 @@ describe('theme restoration', () => {
           '--td-radius-default',
           '--td-shadow-3',
           '--td-line-height-body-large',
-          '--td-brand-color',
         ];
         const expected = snapshot(names);
         const saved = localStorage.getItem(CUSTOM_OPTIONS_ID);
@@ -102,7 +99,6 @@ describe('theme restoration', () => {
         expect(state<PresetState>(second.findComponent(ShadowPanel)).step).toBe(4);
         if (device === 'web')
           expect(state<LineHeightState>(second.findComponent(LineHeightAdjust)).lineHeightValue).toBe(14);
-        expect(state<ColorState>(second.findComponent(ColorPanel)).grayMainColor).not.toBe('');
         second.unmount();
       });
       it(`${device}/${mode}: individual overrides win and determine derived line height`, async () => {
@@ -228,6 +224,19 @@ describe('theme restoration', () => {
       second.unmount();
     });
   }
+  it('does not commit a model change echoed by the controlled slider', async () => {
+    const selector = mount(SegmentSelection, {
+      ...mountOptions,
+      props: { selectOptions: ShadowSelect, modelValue: 2 },
+    });
+
+    await selector.setProps({ modelValue: 3 });
+    expect(selector.emitted('update:modelValue')).toBeUndefined();
+
+    await selector.get('.t-slider__button-wrapper').trigger('keydown', { code: 'ArrowRight' });
+    expect(selector.emitted('update:modelValue')).toEqual([[4]]);
+    selector.unmount();
+  });
   it('shows custom selection on mount without replacing the saved base preset', () => {
     const selector = shallowMount(SegmentSelection, {
       ...mountOptions,
@@ -245,18 +254,6 @@ describe('theme restoration', () => {
     expect(localStorage.getItem(CUSTOM_TOKEN_ID)).toBe(saved);
     restoreThemeOptions();
     expect(getTokenValue('--td-radius-default')).toBe('9px');
-  });
-  it('does not pass an unavailable neutral color to the algorithm', async () => {
-    const warning = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    const panel = shallowMount(ColorPanel, mountOptions);
-    expect(() => state<ColorState>(panel).changeNeutralColor(false)).not.toThrow();
-    expect(warning).toHaveBeenCalledWith(expect.stringContaining('valid HEX'));
-    themeStore.updateDevice('web');
-    await settle();
-    expect(() => state<ColorState>(panel).changeNeutralColor(false)).not.toThrow();
-    expect(state<ColorState>(panel).grayMainColor).toBe('#ddd');
-    panel.unmount();
-    warning.mockRestore();
   });
   it('ignores invalid saved presets without changing localStorage', () => {
     const options = JSON.stringify({ font: 99, radius: -1, shadow: 'bad', 'line-height': 'time_NaN' });

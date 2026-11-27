@@ -8,11 +8,6 @@ export default mergeConfig(
       environment: 'happy-dom',
       globals: true,
       css: true,
-      deps: {
-        optimizer: {
-          client: { enabled: true, include: ['tvision-color'] },
-        },
-      },
       setupFiles: ['./src/__tests__/setup.ts'],
       include: ['src/**/*.{spec,test}.ts'],
       server: {

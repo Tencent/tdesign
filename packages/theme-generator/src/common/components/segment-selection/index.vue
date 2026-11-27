@@ -126,8 +126,11 @@ function handleVisibleChange(val: boolean) {
 
 function handleSliderChange(v: SliderValue) {
   if (props.disabled) return;
-  step.value = Array.isArray(v) ? v[0] : v;
-  emit('update:modelValue', step.value);
+  const value = Array.isArray(v) ? v[0] : v;
+  // Slider also emits change when its controlled value is synchronized.
+  if (value === sliderValue.value) return;
+  step.value = value;
+  emit('update:modelValue', value);
 }
 
 function renderLabel(): string {
