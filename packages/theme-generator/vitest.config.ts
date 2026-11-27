@@ -7,6 +7,7 @@ export default mergeConfig(
     test: {
       environment: 'happy-dom',
       globals: true,
+      css: true,
       setupFiles: ['./src/__tests__/setup.ts'],
       include: ['src/**/*.{spec,test}.ts'],
       server: {

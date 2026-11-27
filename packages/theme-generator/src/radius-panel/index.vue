@@ -11,7 +11,8 @@
       <div class="radius-content__main">
         <p class="radius-content__title">{{ lang.borderRadius.radiusSize }}</p>
         <SegmentSelection
-          v-model="step"
+          :modelValue="step"
+          @update:modelValue="handleStepChange"
           :selectOptions="RADIUS_OPTIONS"
           :suspendedLabels="RADIUS_LABELS"
           :disabled="segmentSelectionDisabled"
@@ -115,28 +116,29 @@ const contentStyle = computed<CSSProperties>(() => {
 });
 
 watch(radiusTypeList, (list) => {
-  const currentRadiusList = list.map((v) => v.value);
-  const existStep = RADIUS_STEP_ARRAY.find((steps) => {
-    const arr = steps.filter((v, i) => {
-      const stepVal = typeof v === 'number' ? `${v}px` : v;
-      const currentRadius =
-        typeof currentRadiusList[i] === 'number' ? `${currentRadiusList[i]}px` : currentRadiusList[i]?.trim();
-      return stepVal === currentRadius;
-    });
-    return arr.length === steps.length;
-  });
+  const existStep = RADIUS_STEP_ARRAY.find((steps) =>
+    list.every((item) => {
+      const index = RADIUS_TOKEN_LIST.findIndex((token) => token.token === item.token);
+      const expected = typeof steps[index] === 'number' ? `${steps[index]}px` : steps[index];
+      const current = typeof item.value === 'number' ? `${item.value}px` : item.value?.trim();
+      return current === expected;
+    }),
+  );
 
   if (!existStep) segmentSelectionDisabled.value = true;
 });
 
-watch(step, (val) => {
+function handleStepChange(val: string | number | undefined) {
+  if (val === undefined) return;
+  step.value = val;
   updateLocalOption('radius', val !== 3 ? val : null);
   const isCustom = val === 6;
   segmentSelectionDisabled.value = isCustom;
   if (!RADIUS_STEP_ARRAY[Number(val) - 1]) return;
 
   // 批量修改 radius
-  radiusTypeList.value = radiusTypeList.value.map((item, index) => {
+  radiusTypeList.value = radiusTypeList.value.map((item) => {
+    const index = RADIUS_TOKEN_LIST.findIndex((token) => token.token === item.token);
     const preVal = RADIUS_STEP_ARRAY?.[Number(val) - 1]?.[index];
     const formattedVal = typeof preVal === 'number' ? `${preVal}px` : String(preVal);
     modifyToken(item.token, formattedVal, isCustom);
@@ -146,7 +148,7 @@ watch(step, (val) => {
       value: RADIUS_STEP_ARRAY[Number(val) - 1][index],
     };
   });
-});
+}
 
 function handleVisibleChange(v: boolean, ctx: { trigger?: string }, idx: number) {
   if (v) hoverIdx.value = idx;
@@ -161,7 +163,8 @@ function handleChangeRadius(val: number | string, idx: number) {
   });
   modifyToken(radiusTypeList.value[idx]['token'], `${val}px`);
 
-  if (val !== RADIUS_STEP_ARRAY[Number(step.value) - 1]?.[idx]) {
+  const tokenIndex = RADIUS_TOKEN_LIST.findIndex((token) => token.token === radiusTypeList.value[idx].token);
+  if (val !== RADIUS_STEP_ARRAY[Number(step.value) - 1]?.[tokenIndex]) {
     segmentSelectionDisabled.value = true;
   }
 }
@@ -181,10 +184,9 @@ function initRadiusToken() {
       const regex = new RegExp(`${v.token}\\s*:\\s*([^;]+);`);
       const match = regex.exec(radiusStyle?.innerText ?? '');
       // 获取 token 对应的实际值
-      if (match) v.value = match[1].trim();
-      return v;
+      return { ...v, value: match?.[1].trim() };
     })
-    .filter((v) => v.value !== null);
+    .filter((v) => v.value !== undefined);
 }
 
 onMounted(() => {
